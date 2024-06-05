@@ -25,7 +25,7 @@ class DossierController extends Controller
        
             $user = auth()->user();
             $client = Client::where('id', $user->client_id)->first();
-        
+      
 
         $dossiers = Dossier::where('id', '>', 0);
   

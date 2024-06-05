@@ -31,9 +31,9 @@ class LoginController extends Controller
     {
         $user = auth()->user();
 
-   
+       
             return '/dashboard';
-        
+    
 
     }
 
@@ -43,7 +43,7 @@ class LoginController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect('/');
+        return redirect('/login');
     }
 }
 
