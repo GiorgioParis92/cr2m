@@ -15,6 +15,8 @@ class Dossier extends Model
         'fiche_id',
         'etape_id',
         'status_id',
+        'mar',
+        'mandataire_financier'
     ];
 
     public function beneficiaire()
@@ -32,11 +34,20 @@ class Dossier extends Model
 
     public function etape()
     {
-        return $this->belongsTo(Etape::class, 'etape_id');
+        return $this->belongsTo(Etape::class, 'etape_number');
     }
 
     public function status()
     {
         return $this->belongsTo(Status::class, 'status_id');
+    }
+    public function getMarClientAttribute()
+    {
+        return Client::find($this->mar);
+    }
+
+    public function getMandataireFinancierClientAttribute()
+    {
+        return Client::find($this->mandataire_financier);
     }
 }

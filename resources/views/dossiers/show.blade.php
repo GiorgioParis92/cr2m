@@ -56,6 +56,7 @@ if(session('result')) {
                     </div>
                 </div>
                 <hr>
+        
                 <div class="card form-register">
                     <div class="steps clearfix">
                         <ul role="tablist" id="etapeTabs">

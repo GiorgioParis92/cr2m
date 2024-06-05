@@ -6,7 +6,30 @@ use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 
 
+if (!function_exists('format_date')) {
+    function format_date($value)
+    {
+        $value=str_replace('/','-',$value);
+        $value=str_replace('.','-',$value);
+        $value=str_replace(' ','-',$value);
+       
+        $value=strtotime($value);
+       
+        $value=date("d/m/Y",$value);
+        return $value;
+    }
+}
 
+if (!function_exists('strtotime_date')) {
+    function strtotime_date($value)
+    {
+        $value=str_replace('/','-',$value);
+        $value=str_replace('.','-',$value);
+        $value=str_replace(' ','-',$value);
+        $value=strtotime($value);
+        return $value;
+    }
+}
 
 if (!function_exists('store_image')) {
     /**

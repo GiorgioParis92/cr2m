@@ -7,6 +7,7 @@ use App\Models\Client;
 use App\Models\Fiche;
 use App\Models\Dossier;
 use App\Models\Etape;
+use App\Models\Status;
 use App\FormModel\FormConfigHandler;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
@@ -28,12 +29,22 @@ class DossierController extends Controller
 
         $dossiers = $dossiers->with('beneficiaire', 'fiche', 'etape', 'status');
         $dossiers = $dossiers->get();
+        foreach ($dossiers as $dossier) {
+            $dossier->mar = $dossier->mar_client; 
+            $mandataireFinancierClient = $dossier->mandataire_financier_client; // Access the mandataire_financier client
 
+            $dossier->mandataire_financier = $mandataireFinancierClient; 
+        }
         $etapes = Etape::all();
+        $mars = Client::where('type_client',1)->get();
+        $financiers = Client::where('type_client',3)->get();
+        $fiches = Fiche::all();
 
+        $status = Status::select(DB::raw('MIN(id) as id'), 'status_desc')
+            ->groupBy('status_desc')
+            ->get();
 
-
-        return view('dossiers.index', compact('dossiers', 'etapes'));
+        return view('dossiers.index', compact('dossiers', 'etapes','status','mars','financiers','fiches'));
     }
 
     public function show($id)

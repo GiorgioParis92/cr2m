@@ -484,7 +484,28 @@
     margin: auto;
     z-index: 22222222;
  }
-
+ .step-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    -o-border-radius: 50%;
+    -ms-border-radius: 50%;
+    -moz-border-radius: 50%;
+    -webkit-border-radius: 50%;
+    background: #ccc;
+    margin: 0 auto;
+    position: relative;
+    outline: none;
+    -o-outline: none;
+    -ms-outline: none;
+    -moz-outline: none;
+    -webkit-outline: none;
+    color: #fff;
+    font-size: 25.6px;
+    margin-right: 108px;
+    margin: auto;
+    z-index: 22222222;
+ }
  .form-register .steps li a .step-icon i {
      position: absolute;
      top: 50%;
@@ -495,7 +516,16 @@
      -moz-transform: translate(-50%, -50%);
      -webkit-transform: translate(-50%, -50%)
  }
-
+ .step-icon i {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    -o-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    -moz-transform: translate(-50%, -50%);
+    -webkit-transform: translate(-50%, -50%)
+}
  .form-register .steps li .step-icon::before,
  .form-register .steps li:last-child .step-icon::after {
      /* position: absolute;
@@ -944,4 +974,32 @@
      text-align: center;
      padding-top: 8px;
  }
+ .badge_button {
+    width: 30px;
+    height: 30px;
+    background: -webkit-linear-gradient(136deg, rgb(242, 113, 33) 0%, rgb(233, 64, 87) 50%, rgb(138, 35, 135) 100%);
+    border-radius: 100% !important;
+    line-height: 32px !important;
+    margin-right: 5px;
+    font-size: 18px !important;
+    text-align: center !important;
+    padding: 0 !important;
+    position: absolute;
+    margin-top: 2px;
+    margin-left: -8px;
+}
+
+span.select2-selection.select2-selection--single {
+    min-height: 38px!important;
+    border: 1px solid #d2d6da!important;
+    line-height: 38px!important;
+}
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+        color: #495057!important;
+    line-height: 38px!important;
+}
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+        color: #495057!important;
+    line-height: 38px!important;
+}
 
