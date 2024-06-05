@@ -10,11 +10,14 @@ if (!function_exists('format_date')) {
     function format_date($value)
     {
         $value=str_replace('/','-',$value);
+        dump($value);
         $value=str_replace('.','-',$value);
+        dump($value);
         $value=str_replace(' ','-',$value);
+        dump($value);
        
         $value=strtotime($value);
-       dump($value);
+      
         $value=date("d/m/Y",$value);
         return $value;
     }
