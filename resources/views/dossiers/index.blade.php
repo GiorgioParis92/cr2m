@@ -8,7 +8,7 @@
                 {{ session('success') }}
             </div>
         @endif
-@dump($dossier)
+@dump($dossiers)
         <div class="row form-group">
 
 
