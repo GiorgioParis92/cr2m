@@ -8,6 +8,20 @@
                 {{ session('success') }}
             </div>
         @endif
+
+<div class="row">
+  
+        <div class="col-sm-4 col-lg-4"><input type="text" data-column="0" placeholder="Filter Client"></div>
+        <div class="col-sm-4 col-lg-4"><input type="text" data-column="1" placeholder="Filter Adresse"></div>
+        <div class="col-sm-4 col-lg-4"><input type="text" data-column="2" placeholder="Filter Téléphone"></div>
+        <div class="col-sm-4 col-lg-4"><input type="text" data-column="3" placeholder="Filter Email"></div>
+        <div class="col-sm-4 col-lg-4"><input type="text" data-column="4" placeholder="Filter Menage MPR"></div>
+        <div class="col-sm-4 col-lg-4"><input type="text" data-column="5" placeholder="Filter Chauffage"></div>
+        <div class="col-sm-4 col-lg-4"><input type="text" data-column="6" placeholder="Filter Occupation"></div>
+        <div class="col-sm-4 col-lg-4"></th>
+    
+</div>
+
         <table id="dossiersTable" class="table table-bordered responsive-table table-responsive">
             <thead>
                 <tr>
@@ -20,16 +34,7 @@
                     <th>Occupation</th>
                     <th></th>
                 </tr>
-                <tr>
-                    <th><input type="text" data-column="0" placeholder="Filter Client"></th>
-                    <th><input type="text" data-column="1" placeholder="Filter Adresse"></th>
-                    <th><input type="text" data-column="2" placeholder="Filter Téléphone"></th>
-                    <th><input type="text" data-column="3" placeholder="Filter Email"></th>
-                    <th><input type="text" data-column="4" placeholder="Filter Menage MPR"></th>
-                    <th><input type="text" data-column="5" placeholder="Filter Chauffage"></th>
-                    <th><input type="text" data-column="6" placeholder="Filter Occupation"></th>
-                    <th></th>
-                </tr>
+
             </thead>
             <tbody>
                 @foreach ($dossiers as $dossier)

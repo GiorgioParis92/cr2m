@@ -64,23 +64,7 @@ class DossierController extends Controller
 
         $forms_configs = $this->forms_configs;
 
-        $docs = DB::table('docs')->where('fiche_id', $dossier->fiche_id)->get();
-        $directory = "dossiers/{$id}";
-        if (Storage::disk('public')->exists($directory)) {
-            $files = Storage::disk('public')->files($directory);
 
-            $existingFiles = array_map(function ($filePath) use ($directory) {
-                $extension = pathinfo($filePath, PATHINFO_EXTENSION);
-                if (in_array(strtolower($extension), ['pdf', 'gif', 'jpg', 'jpeg', 'png'])) {
-                    return [
-                        'name' => pathinfo($filePath, PATHINFO_FILENAME),
-                        'size' => Storage::disk('public')->size($filePath),
-                        'extension' => pathinfo($filePath, PATHINFO_EXTENSION),
-                        'url' => asset('storage/' . $filePath)
-                    ];
-                }
-            }, $files);
-        }
 
         $distinctEtapes = DB::table('forms')
             ->select('etape_id', DB::raw('MIN(id) as min_id'))
@@ -96,7 +80,7 @@ class DossierController extends Controller
             ->get();
 
 
-        return view('dossiers.show', compact('dossier', 'etapes', 'forms', 'forms_configs', 'docs', 'existingFiles'));
+        return view('dossiers.show', compact('dossier', 'etapes', 'forms', 'forms_configs', 'docs'));
     }
     public function save_form(Request $request)
     {
