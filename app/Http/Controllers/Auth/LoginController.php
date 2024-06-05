@@ -31,11 +31,10 @@ class LoginController extends Controller
     {
         $user = auth()->user();
 
-        if ($user->client_id > 0) {
+   
             return '/dashboard';
-        }
+        
 
-        return $this->redirectTo;
     }
 
     public function logout(Request $request)
