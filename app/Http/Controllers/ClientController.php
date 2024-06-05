@@ -1,0 +1,132 @@
+<?php 
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use App\Services\FileUploadService;
+use App\Models\ClientType;
+use App\Models\Client;
+use Illuminate\Support\Facades\Storage;
+
+class ClientController extends Controller
+{
+    protected $fileUploadService;
+
+    public function __construct(FileUploadService $fileUploadService)
+    {
+        $this->fileUploadService = $fileUploadService;
+    }
+
+    public function index()
+    {
+
+        if(auth()->user()->client_id>0) {abort(403);}
+        $clients = Client::with('type')->get();
+        return view('clients.index', compact('clients'));
+    }
+
+    public function uploadLogo(Request $request)
+    {
+        if ($request->hasFile('file')) {
+            $file = $request->file('file');
+            $path = store_image($file, 'clients'); // Store file in the 'public/clients/temp' directory
+
+            return response()->json(['file_path' => $path]);
+        }
+
+        return response()->json(['error' => 'File not uploaded'], 400);
+    }
+
+    public function create()
+    {
+        $clientTypes = ClientType::all();
+        return view('clients.create', compact('clientTypes'));
+    }
+
+    public function store(Request $request)
+    {
+        // Validate the form data
+        $request->validate([
+            'client_title' => 'required|string|max:255',
+            'type_client' => 'required|integer|exists:clients_type,id',
+            'main_logo' => 'required|string',
+            // Add other validation rules as needed
+        ]);
+
+        // Manually create the client data array, excluding '_token'
+        $clientData = $request->except('_token', 'main_logo');
+
+        // Store the client data and get the client ID
+        $client = Client::create($clientData);
+        $clientId = $client->id;
+
+        // Move the temporary file to the final location
+        $tempPath = $request->input('main_logo');
+        $finalPath = str_replace('temp/', "{$clientId}/", $tempPath);
+        Storage::disk('public')->move($tempPath, $finalPath);
+
+        // Update the client with the final path
+        $client->main_logo = $finalPath;
+        $client->save();
+
+        return redirect()->route('clients.index')->with('success', 'Client created successfully.');
+    }
+
+    public function edit($id)
+    {
+        $client = Client::findOrFail($id);
+        $clientTypes = ClientType::all();
+        return view('clients.edit', compact('client', 'clientTypes'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        // Validate the form data
+        $request->validate([
+            'client_title' => 'required|string|max:255',
+            'type_client' => 'required|integer|exists:clients_type,id',
+            'main_logo' => 'nullable|string',
+            // Add other validation rules as needed
+        ]);
+
+        // Find the client
+        $client = Client::findOrFail($id);
+
+        // Manually create the client data array, excluding '_token' and 'main_logo'
+        $clientData = $request->except('_token', 'main_logo');
+
+        // Update the client data
+        $client->update($clientData);
+
+        // Handle the logo file
+        if ($request->has('main_logo') && $request->input('main_logo') != $client->main_logo) {
+            // Move the temporary file to the final location
+            $tempPath = $request->input('main_logo');
+            $finalPath = str_replace('temp/', "{$client->id}/", $tempPath);
+            Storage::disk('public')->move($tempPath, $finalPath);
+
+            // Update the client with the final path
+            $client->main_logo = $finalPath;
+            $client->save();
+        }
+
+        return redirect()->route('clients.index')->with('success', __('messages.client_updated'));
+    }
+
+    public function destroy($id)
+    {
+        $client = Client::findOrFail($id);
+
+        // Delete the client's main logo file from storage
+        if ($client->main_logo && Storage::disk('public')->exists($client->main_logo)) {
+            Storage::disk('public')->delete($client->main_logo);
+        }
+
+        // Delete the client record from the database
+        $client->delete();
+
+        return redirect()->route('clients.index')->with('success', __('messages.client_deleted').'.');
+    }
+
+}
+

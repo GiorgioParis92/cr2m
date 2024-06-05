@@ -1,0 +1,28 @@
+<?php
+
+return [
+    'client_title' => 'Raison sociale',
+    'type_client' => 'Type de client',
+    'main_logo' => 'Logo principal',
+    'address' => 'Adresse',
+    'postal_code' => 'Code postal',
+    'city' => 'Ville',
+    'email' => 'Email',
+    'telephone' => 'Téléphone',
+    'siret' => 'SIRET',
+    'siren' => 'SIREN',
+    'tva_intracommunautaire' => 'TVA Intracommunautaire',
+    'type_societe' => 'Type de société',
+    'rcs' => 'RCS',
+    'naf' => 'NAF',
+    'agrement' => 'Agrément',
+    'choose_type_client' => 'Choisir un type de client',
+    'edit_client' => 'Nouveau client',
+    'add_client' => 'Nouveau client',
+    'new_client' => 'Nouveau client',
+    'submit' => 'Enregistrer',
+    'edit' => 'Modifier',
+    'delete' => 'Supprimer',
+    'choose' => 'Choisir',
+    'add_beneficiaire' => 'Nouveau bénéficiaire',
+];

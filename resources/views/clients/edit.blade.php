@@ -1,0 +1,122 @@
+@extends('layouts.app')
+
+@section('content')
+<div class="container">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <h1>@lang('forms.edit_client')</h1>
+            @if ($errors->any())
+                <div class="alert alert-danger">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+            <form action="{{ route('clients.update', $client->id) }}" method="POST" enctype="multipart/form-data" id="client-form">
+                @csrf
+                @method('PUT')
+                <div class="mb-3">
+                    <label for="client_title" class="form-label">{{ __('forms.client_title') }}</label>
+                    <input type="text" class="form-control" id="client_title" name="client_title" value="{{ $client->client_title }}" required>
+                </div>
+                <div class="mb-3">
+                    <label for="type_client" class="form-label">{{ __('forms.type_client') }}</label>
+                    <select class="form-control" id="type_client" name="type_client" required>
+                        <option value="">-- Select Client Type --</option>
+                        @foreach($clientTypes as $type)
+                            <option value="{{ $type->id }}" @if($client->type_client == $type->id) selected @endif>{{ $type->type_desc }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="main_logo" class="form-label">{{ __('forms.main_logo') }}</label>
+                    <div class="dropzone" id="mainLogoDropzone"></div>
+                    <input type="hidden" name="main_logo" id="main_logo_input" value="{{ $client->main_logo }}">
+                </div>
+                <div class="mb-3">
+                    <label for="adresse" class="form-label">{{ __('forms.address') }}</label>
+                    <input type="text" class="form-control" id="adresse" name="adresse" value="{{ $client->adresse }}">
+                </div>
+                <div class="mb-3">
+                    <label for="cp" class="form-label">{{ __('forms.postal_code') }}</label>
+                    <input type="text" class="form-control" id="cp" name="cp" value="{{ $client->cp }}">
+                </div>
+                <div class="mb-3">
+                    <label for="ville" class="form-label">{{ __('forms.city') }}</label>
+                    <input type="text" class="form-control" id="ville" name="ville" value="{{ $client->ville }}">
+                </div>
+                <div class="mb-3">
+                    <label for="email" class="form-label">{{ __('forms.email') }}</label>
+                    <input type="email" class="form-control" id="email" name="email" value="{{ $client->email }}">
+                </div>
+                <div class="mb-3">
+                    <label for="telephone" class="form-label">{{ __('forms.telephone') }}</label>
+                    <input type="text" class="form-control" id="telephone" name="telephone" value="{{ $client->telephone }}">
+                </div>
+                <div class="mb-3">
+                    <label for="siret" class="form-label">{{ __('forms.siret') }}</label>
+                    <input type="text" class="form-control" id="siret" name="siret" value="{{ $client->siret }}">
+                </div>
+                <div class="mb-3">
+                    <label for="siren" class="form-label">{{ __('forms.siren') }}</label>
+                    <input type="text" class="form-control" id="siren" name="siren" value="{{ $client->siren }}">
+                </div>
+                <div class="mb-3">
+                    <label for="tva_intracomm" class="form-label">{{ __('forms.tva_intracommunautaire') }}</label>
+                    <input type="text" class="form-control" id="tva_intracomm" name="tva_intracomm" value="{{ $client->tva_intracomm }}" required>
+                </div>
+                <div class="mb-3">
+                    <label for="type_societe" class="form-label">{{ __('forms.type_societe') }}</label>
+                    <input type="text" class="form-control" id="type_societe" name="type_societe" value="{{ $client->type_societe }}" required>
+                </div>
+                <div class="mb-3">
+                    <label for="rcs" class="form-label">{{ __('forms.rcs') }}</label>
+                    <input type="text" class="form-control" id="rcs" name="rcs" value="{{ $client->rcs }}" required>
+                </div>
+                <div class="mb-3">
+                    <label for="naf" class="form-label">{{ __('forms.naf') }}</label>
+                    <input type="text" class="form-control" id="naf" name="naf" value="{{ $client->naf }}" required>
+                </div>
+                <div class="mb-3">
+                    <label for="agrement" class="form-label">{{ __('forms.agrement') }}</label>
+                    <input type="text" class="form-control" id="agrement" name="agrement" value="{{ $client->agrement }}" required>
+                </div>
+                <button type="submit" class="btn btn-primary">{{ __('forms.submit') }}</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+@endsection
+
+@section('scripts')
+<script>
+    Dropzone.autoDiscover = false;
+
+    var mainLogoDropzone = new Dropzone("#mainLogoDropzone", {
+        url: "{{ route('clients.upload_logo') }}", // Route to handle the file upload
+        paramName: "file",
+        maxFilesize: 2, // MB
+        acceptedFiles: ".jpeg,.jpg,.png,.gif,.pdf,.heic",
+        headers: {
+            'X-CSRF-TOKEN': "{{ csrf_token() }}"
+        },
+        success: function(file, response) {
+            // Update the hidden input field with the path of the uploaded file
+            document.getElementById('main_logo_input').value = response.file_path;
+        }
+    });
+
+    @if($client->main_logo)
+        var mockFile = { name: "{{ basename($client->main_logo) }}", size: 12345 }; // Mock file object
+        mainLogoDropzone.emit("addedfile", mockFile);
+        mainLogoDropzone.emit("thumbnail", mockFile, "{{ asset('storage/' . $client->main_logo) }}"); // Use asset() to generate the correct URL
+        mainLogoDropzone.emit("complete", mockFile);
+
+        // Prevent Dropzone from removing the file on click
+        mainLogoDropzone.files.push(mockFile);
+    @endif
+</script>
+@endsection
