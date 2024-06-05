@@ -80,7 +80,7 @@ class DossierController extends Controller
             ->get();
 
 
-        return view('dossiers.show', compact('dossier', 'etapes', 'forms', 'forms_configs', 'docs'));
+        return view('dossiers.show', compact('dossier', 'etapes', 'forms', 'forms_configs'));
     }
     public function save_form(Request $request)
     {
