@@ -28,6 +28,7 @@
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="{{ asset('frontend/assets/js/index.global.js') }}"></script>
+    <script src='{{ asset('frontend/assets/js/fullcalendar/core/locales/es.global.js') }}'></script>
     <link href="{{ asset('frontend/assets/css/calendar.css') }}" rel="stylesheet" />
 
     <link rel="stylesheet"
@@ -51,7 +52,6 @@
     <script src="{{ asset('frontend/assets/js/fullcalendar/packages/core/main.js') }}"></script>
     <script src="{{ asset('frontend/assets/js/fullcalendar/packages/daygrid/main.js') }}"></script>
     <script src="{{ asset('frontend/assets/js/fullcalendar/packages/interaction/main.js') }}"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid@6.1.14/index.global.min.js"></script>
     <link rel="stylesheet" href="{{ asset('frontend/assets/js/fullcalendar/packages/core/main.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend/assets/js/fullcalendar/packages/daygrid/main.css') }}">
 
