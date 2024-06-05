@@ -50,4 +50,8 @@ class Dossier extends Model
     {
         return Client::find($this->mandataire_financier);
     }
+    public function getInstallateurAttribute()
+    {
+        return Client::find($this->installateur);
+    }
 }

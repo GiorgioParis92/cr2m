@@ -9,7 +9,7 @@ class Checkbox extends AbstractFormData
     public function render(bool $is_error)
     {
 
-        $jsonString = str_replace(["\n", ' ', "\r"], '', $this->config->options);
+        $jsonString = str_replace(["\n", '', "\r"], '', $this->config->options);
         $optionsArray = json_decode($jsonString, true);
         if (!is_array($optionsArray)) {
             $optionsArray = [];

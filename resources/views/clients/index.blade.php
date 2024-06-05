@@ -4,8 +4,8 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <h4>Clients</h4>
-                <a href="{{ route('clients.create') }}" class="btn btn-primary mb-3">Nouveau client</a>
+                <h4>Partenaires</h4>
+                <a href="{{ route('clients.create') }}" class="btn btn-primary mb-3">Nouveau partenaire</a>
                 @if (session('success'))
                     <div class="alert alert-success">
                         {{ session('success') }}

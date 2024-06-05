@@ -182,7 +182,7 @@
                         </td>
 
                         <td>
-                            @if (Storage::disk('public')->exists($dossier->mandataire_financier->main_logo))
+                            @if (isset($dossier->mandataire_financier->main_logo) && Storage::disk('public')->exists($dossier->mandataire_financier->main_logo))
                                 <img class="logo_table"
                                     src="{{ asset('storage/' . $dossier->mandataire_financier->main_logo) }}">
                             @endif

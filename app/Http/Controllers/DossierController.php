@@ -21,30 +21,45 @@ class DossierController extends Controller
 
     public function index()
     {
-        $dossiers = Dossier::where('id', '>', 0);
 
-        if (auth()->user()->client_id > 0) {
+       
+            $user = auth()->user();
+            $client = Client::where('id', $user->client_id)->first();
+        
+
+        $dossiers = Dossier::where('id', '>', 0);
+  
+        
+        if (auth()->user()->client_id > 0 && ($client->type_client==1 )) {
             $dossiers = $dossiers->where('client_id', auth()->user()->client_id);
         }
-
+        if (auth()->user()->client_id > 0 && ($client->type_client==2 )) {
+            $dossiers = $dossiers->where('mandataire_financier', auth()->user()->client_id);
+        }
+        if (auth()->user()->client_id > 0 && ($client->type_client==3 )) {
+            $dossiers = $dossiers->where('installateur', auth()->user()->client_id);
+        }
         $dossiers = $dossiers->with('beneficiaire', 'fiche', 'etape', 'status');
         $dossiers = $dossiers->get();
         foreach ($dossiers as $dossier) {
             $dossier->mar = $dossier->mar_client; 
             $mandataireFinancierClient = $dossier->mandataire_financier_client; // Access the mandataire_financier client
+            $installateur = $dossier->installateur_client; // Access the mandataire_financier client
 
             $dossier->mandataire_financier = $mandataireFinancierClient; 
+            $dossier->installateur = $installateur; 
         }
         $etapes = Etape::all();
         $mars = Client::where('type_client',1)->get();
-        $financiers = Client::where('type_client',3)->get();
+        $financiers = Client::where('type_client',2)->get();
+        $installateurs = Client::where('type_client',3)->get();
         $fiches = Fiche::all();
 
         $status = Status::select(DB::raw('MIN(id) as id'), 'status_desc')
             ->groupBy('status_desc')
             ->get();
 
-        return view('dossiers.index', compact('dossiers', 'etapes','status','mars','financiers','fiches'));
+        return view('dossiers.index', compact('dossiers', 'etapes','status','mars','financiers','fiches','installateurs'));
     }
 
     public function show($id)
