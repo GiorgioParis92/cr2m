@@ -14,7 +14,7 @@ if (!function_exists('format_date')) {
         $value=str_replace(' ','-',$value);
        
         $value=strtotime($value);
-       
+       dump($value);
         $value=date("d/m/Y",$value);
         return $value;
     }
