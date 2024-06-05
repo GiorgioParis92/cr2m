@@ -27,7 +27,7 @@ class ClientController extends Controller
 
     public function uploadLogo(Request $request)
     {
-        if ($request->hasFile('file')) {
+        if ($request->hasFile('file') && $request->main_logo) {
             $file = $request->file('file');
             $path = store_image($file, 'clients'); // Store file in the 'public/clients/temp' directory
 
@@ -49,7 +49,6 @@ class ClientController extends Controller
         $request->validate([
             'client_title' => 'required|string|max:255',
             'type_client' => 'required|integer|exists:clients_type,id',
-            'main_logo' => 'required|string',
             // Add other validation rules as needed
         ]);
 
@@ -59,11 +58,12 @@ class ClientController extends Controller
         // Store the client data and get the client ID
         $client = Client::create($clientData);
         $clientId = $client->id;
-
-        // Move the temporary file to the final location
-        $tempPath = $request->input('main_logo');
-        $finalPath = str_replace('temp/', "{$clientId}/", $tempPath);
-        Storage::disk('public')->move($tempPath, $finalPath);
+        $finalPath='';
+        if ($request->main_logo) {
+            $tempPath = $request->input('main_logo');
+            $finalPath = str_replace('temp/', "{$clientId}/", $tempPath);
+            Storage::disk('public')->move($tempPath, $finalPath);
+        }        
 
         // Update the client with the final path
         $client->main_logo = $finalPath;
@@ -85,7 +85,6 @@ class ClientController extends Controller
         $request->validate([
             'client_title' => 'required|string|max:255',
             'type_client' => 'required|integer|exists:clients_type,id',
-            'main_logo' => 'nullable|string',
             // Add other validation rules as needed
         ]);
 
@@ -99,7 +98,7 @@ class ClientController extends Controller
         $client->update($clientData);
 
         // Handle the logo file
-        if ($request->has('main_logo') && $request->input('main_logo') != $client->main_logo) {
+        if ($request->main_logo && !empty($request->input('main_logo')) && $request->input('main_logo') != $client->main_logo) {
             // Move the temporary file to the final location
             $tempPath = $request->input('main_logo');
             $finalPath = str_replace('temp/', "{$client->id}/", $tempPath);

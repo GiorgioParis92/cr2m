@@ -63,23 +63,23 @@
                 </div>
                 <div class="mb-3">
                     <label for="tva_intracomm" class="form-label">{{ __('forms.tva_intracommunautaire') }}</label>
-                    <input type="text" class="form-control" id="tva_intracomm" name="tva_intracomm" required>
+                    <input type="text" class="form-control" id="tva_intracomm" name="tva_intracomm" >
                 </div>
                 <div class="mb-3">
                     <label for="type_societe" class="form-label">{{ __('forms.type_societe') }}</label>
-                    <input type="text" class="form-control" id="type_societe" name="type_societe" required>
+                    <input type="text" class="form-control" id="type_societe" name="type_societe" >
                 </div>
                 <div class="mb-3">
                     <label for="rcs" class="form-label">{{ __('forms.rcs') }}</label>
-                    <input type="text" class="form-control" id="rcs" name="rcs" required>
+                    <input type="text" class="form-control" id="rcs" name="rcs" >
                 </div>
                 <div class="mb-3">
                     <label for="naf" class="form-label">{{ __('forms.naf') }}</label>
-                    <input type="text" class="form-control" id="naf" name="naf" required>
+                    <input type="text" class="form-control" id="naf" name="naf" >
                 </div>
                 <div class="mb-3">
                     <label for="agrement" class="form-label">{{ __('forms.agrement') }}</label>
-                    <input type="text" class="form-control" id="agrement" name="agrement" required>
+                    <input type="text" class="form-control" id="agrement" name="agrement" >
                 </div>
                 <input type="hidden" name="main_logo" id="main_logo_input">
                 <button type="submit" class="btn btn-primary">{{ __('forms.submit') }}</button>

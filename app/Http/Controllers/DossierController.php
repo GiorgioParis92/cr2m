@@ -29,7 +29,7 @@ class DossierController extends Controller
 
         $dossiers = Dossier::where('id', '>', 0);
   
-        
+
         if (auth()->user()->client_id > 0 && ($client->type_client==1 )) {
             $dossiers = $dossiers->where('client_id', auth()->user()->client_id);
         }
@@ -41,14 +41,18 @@ class DossierController extends Controller
         }
         $dossiers = $dossiers->with('beneficiaire', 'fiche', 'etape', 'status');
         $dossiers = $dossiers->get();
+
         foreach ($dossiers as $dossier) {
             $dossier->mar = $dossier->mar_client; 
             $mandataireFinancierClient = $dossier->mandataire_financier_client; // Access the mandataire_financier client
-            $installateur = $dossier->installateur_client; // Access the mandataire_financier client
-
+            $installateur = $dossier->installateur_client; // Access the installateur client
+        
             $dossier->mandataire_financier = $mandataireFinancierClient; 
-            $dossier->installateur = $installateur; 
+            if ($dossier->installateur_client) {
+                $dossier->installateur = $installateur;
+            }
         }
+   
         $etapes = Etape::all();
         $mars = Client::where('type_client',1)->get();
         $financiers = Client::where('type_client',2)->get();
