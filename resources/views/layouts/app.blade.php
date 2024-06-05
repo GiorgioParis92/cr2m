@@ -36,7 +36,6 @@
     <script src="https://cdn.tiny.cloud/1/3wjbcf76icbvo12wykh2qn03z2aqpej8z6gkkbhv1ay5ie8b/tinymce/6/tinymce.min.js"
     referrerpolicy="origin"></script>
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
 
     
