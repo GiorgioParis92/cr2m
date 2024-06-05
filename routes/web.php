@@ -18,6 +18,8 @@ use setasign\Fpdi\TcpdfFpdi;
 use App\Services\FileUploadService;
 use App\FormModel\FormConfigHandler;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\CalendarController;
+use App\Http\Controllers\EventController;
 
 
 
@@ -93,6 +95,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/fill-pdf', [PDFController::class, 'fillPdf']);
 
     Route::post('upload_file', [FileUploadService::class, 'storeImage'])->name('upload_file');
+
+
+    // routes/web.php
+Route::get('/calendar', [App\Http\Controllers\CalendarController::class, 'index']);
+Route::get('/events', [App\Http\Controllers\EventController::class, 'getEvents']);
+
 
 });
 

@@ -13,19 +13,21 @@ class Db_select extends AbstractFormData
         $optionsArray = json_decode($jsonString, true);
 
         $sql_command = $optionsArray['sql'];
+
         if (isset($optionsArray['arguments'])) {
             foreach ($optionsArray['arguments'] as $key => $data) {
                 $sql_command = str_replace($key, eval($data), $sql_command);
             }
         }
 
+     
         $request=DB::select($sql_command);
 
-        $data = '<div class="form-group';
+        $data = '<div class="form-group ';
         $data .= $this->config->class ?? '';
         $data .= '">';
         $data .='<label>'.$this->config->title.'</label><br />';
-        $data .='<select ';
+        $data .='<select id="form_config_'.$this->name.'"';
         if($this->config->required==1) {$data.=' required '; } 
         $data .='name="'.$this->config->name.'" class="form-control">';
         $data.='<option value="">Choisir</option>';

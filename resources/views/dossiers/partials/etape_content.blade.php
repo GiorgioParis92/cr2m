@@ -1,20 +1,21 @@
-
-<div id="step-{{ $etape->etape_number  }}" class="tab-pane step-content"
+<div id="step-{{ $etape->etape_number }}" class="tab-pane step-content"
     style="{{ $isActive ? 'display: block;' : 'display: none;' }}">
+
     <div class="row">
 
         <div class="col-lg-4">
             <h3 class="border-bottom border-gray pb-2">{{ $etape->etape_desc }}</h3>
         </div>
-        @if($etape->etape_number==$dossier->etape_number)
-        <div class="col-lg-6">
-            <a class="btn btn-primary" href="{{ route('dossiers.next_step', $dossier->id) }}">Valider l'étape</a>
-        </div>
+        @if ($etape->etape_number == $dossier->etape_number)
+            <div class="col-lg-6">
+                <a class="btn btn-primary" href="{{ route('dossiers.next_step', $dossier->id) }}">Valider l'étape</a>
+            </div>
         @endif
     </div>
 
-    
+
     <div class="row">
+
         <div class="col-lg-6 col-sm-12">
             <div class="card">
                 <div class="card-header p-3 pb-0">
@@ -44,6 +45,7 @@
                 </div>
             </div>
         </div>
+
         <div class="col-sm-12 col-lg-6">
             <div class="card ">
                 <div class="card-header pb-0 p-3">
@@ -51,18 +53,14 @@
                         <h6 class="mb-2">Documents</h6>
                     </div>
                 </div>
+
                 <div class="table-responsive">
                     <table class="table align-items-center ">
                         <tbody>
 
                             @foreach ($forms_configs as $index => $form)
                                 @if ($form->form->etape_number == $etape->etape_number && $form->form->type == 'document')
-                               
-                                  
-                                 
-                                            {!! $form->render($errors) !!}
-                                      
-                                    
+                                    {!! $form->render($errors) !!}
                                 @endif
                             @endforeach
 
@@ -73,45 +71,54 @@
             </div>
         </div>
 
-   
+
     </div>
 
 
     <div class="container row mt-3">
-        <div class="col-lg-12">
+        <div class="">
             <div class="tab-content">
                 @foreach ($forms_configs as $index => $form)
                     @if ($form->form->etape_number == $etape->etape_number && $form->form->type == 'form')
-                        <div class="tab-pane fade {{ $index == 0 ? 'show active' : '' }}"
+                        <div class="tab-pane fade {{ $index == 0 ? 'show active' : '' }}   "
                             id="tab-{{ $form->form->id }}" role="tabpanel"
                             aria-labelledby="tab-{{ $form->form->id }}-tab">
+                            <div class="row">
+                                <div class="">
 
-                            <div>
-
-                                <form
-                                    action="{{ route('form.save', ['dossierId' => $dossier->id, 'form_id' => $form->form->id]) }}"
-                                    method="POST">
-                                    @csrf
-                                    <input type="hidden" name="form_id" value="{{ $form->form->id }}">
-                                    <input type="hidden" name="dossier_id" value="{{ $dossier->id }}">
-
-
-                                    {!! $form->render($errors) !!}
+                                    <form
+                                        action="{{ route('form.save', ['dossierId' => $dossier->id, 'form_id' => $form->form->id]) }}"
+                                        method="POST">
+                                        @csrf
+                                        <input type="hidden" name="form_id" value="{{ $form->form->id }}">
+                                        <input type="hidden" name="dossier_id" value="{{ $dossier->id }}">
 
 
-                                    <div class="row">
-                                        <div class="form-group">
-                                            <button class="btn btn-secondary" type="submit">Enregistrer</button>
+                                        {!! $form->render($errors) !!}
+
+
+                                        <div class="row">
+                                            <div class="form-group">
+                                                <button class="btn btn-secondary" type="submit">Enregistrer</button>
+                                            </div>
                                         </div>
-                                    </div>
-                                </form>
-                            </div>
+                                    </form>
+                                </div>
 
+
+                            </div>
                         </div>
+
+                        @if ($etape->etape_name == 'planification_mar')
+                            @include('calendar')
+                        @endif
                     @endif
                 @endforeach
             </div>
         </div>
+
+
+
     </div>
 
 </div>
@@ -131,33 +138,46 @@
     <script>
         Dropzone.autoDiscover = false;
         $(document).ready(function() {
+
             @foreach ($forms_configs as $index => $form)
                 @if ($form->form->etape_number == $etape->etape_number && $form->form->type == 'document')
-                @foreach($form->formData as $key=>$value)
-                    var dropzone{{ $key }} = new Dropzone("#dropzone-{{ $key }}", {
+                    @foreach ($form->formData as $key => $value)
+                        var dropzone{{ $key }} = new Dropzone("#dropzone-{{ $key }}", {
 
-                        method: 'post',
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        },
-                        paramName: 'file', // The name that will be used to transfer the file
-                        sending: function(file, xhr, formData) {
-                            formData.append('folder', 'dossiers'); // Ensure folder is sent correctly
-                            formData.append('template',
-                                '{{ $key }}'); // Include template name
-                        },
-                        init: function() {
-                            this.on("success", function(file, response) {
-                                console.log('Successfully uploaded:', response);
-                            });
-                            this.on("error", function(file, response) {
-                                console.log('Upload error:', response);
-                            });
-                        }
-                    });
+                            method: 'post',
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            },
+                            paramName: 'file', // The name that will be used to transfer the file
+                            sending: function(file, xhr, formData) {
+                                formData.append('folder',
+                                    'dossiers'); // Ensure folder is sent correctly
+                                formData.append('template',
+                                    '{{ $key }}'); // Include template name
+                            },
+                            init: function() {
+                                this.on("success", function(file, response) {
+                                    console.log('Successfully uploaded:', response);
+                                });
+                                this.on("error", function(file, response) {
+                                    console.log('Upload error:', response);
+                                });
+                            }
+                        });
                     @endforeach
                 @endif
             @endforeach
+
+
+
+
+
+
+
+
+
+
+
         });
     </script>
 @endsection

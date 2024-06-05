@@ -1,31 +1,31 @@
 @extends('layouts.app')
 
 @section('content')
+    @php
+        $errors = [];
+        $is_valid = true;
+        if (session('result')) {
+            $result = json_decode(session('result'));
 
-@php
- $errors=[];
- $is_valid=true;
-if(session('result')) {
-    $result=json_decode(session('result'));
-
-    foreach($result as $key=>$value) {
-        $errors[$key]=$value;
-        if($value==false) {
-            $is_valid=false;
+            foreach ($result as $key => $value) {
+                $errors[$key] = $value;
+                if ($value == false) {
+                    $is_valid = false;
+                }
+            }
         }
-    }
 
-}
-
-@endphp
+    @endphp
 
     <div class="container">
-        @if(!$is_valid)
+     
+
+        @if (!$is_valid)
             <div class="alert alert-danger">
                 Erreur dans le remplissage de votre formulaire
             </div>
         @endif
-        @if(session('result') && $is_valid)
+        @if (session('result') && $is_valid)
             <div class="alert alert-success">
                 Données sauvegardées
             </div>
@@ -56,7 +56,7 @@ if(session('result')) {
                     </div>
                 </div>
                 <hr>
-        
+
                 <div class="card form-register">
                     <div class="steps clearfix">
                         <ul role="tablist" id="etapeTabs">
@@ -66,7 +66,10 @@ if(session('result')) {
                                     $isClickable = $etape->etape_number <= $dossier->etape_number;
                                     $isActive =
                                         $etape->etape_number <=
-                                        array_search($dossier->etape_number, array_column($etapes->toArray(), 'etape_number'));
+                                        array_search(
+                                            $dossier->etape_number,
+                                            array_column($etapes->toArray(), 'etape_number'),
+                                        );
                                     $isCurrent = $etape->etape_number == $dossier->etape_number;
                                 @endphp
 
@@ -75,7 +78,7 @@ if(session('result')) {
                                     aria-selected="true"><a id="form-total-t-0" href="#form-total-h-0"
                                         aria-controls="form-total-p-0"><span class="current-info audible nav-link"> </span>
                                         <div class="title">
-                                            <span class="step-icon">{{ $etape->etape_number  }}</span>
+                                            <span class="step-icon">{{ $etape->etape_number }}</span>
                                             <span class="step-text">
                                                 {{ strtoupper_extended($etape->etape_desc) }}
                                                 <small>
@@ -105,8 +108,11 @@ if(session('result')) {
                                     'errors' => $errors,
                                     'isActive' =>
                                         $etape->etape_number ==
-                                        array_search($dossier->etape_number, array_column($etapes->toArray(), 'etape_number')),
+                                        array_search(
+                                            $dossier->etape_number,
+                                            array_column($etapes->toArray(), 'etape_number')),
                                 ])
+                         
                             @endforeach
                         </div>
 
