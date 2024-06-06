@@ -97,7 +97,7 @@
 @else
 <div class="form-group">
     <label for="installateur">Installateur</label>
-    <select class="form-control" id="installateur" name="installateur">
+    <select required class="form-control" id="installateur" name="installateur">
         <option value=""></option>
         @foreach($installateurs as $installateur)
         <option value="{{$installateur->id}}">{{$installateur->client_title}}</option>
