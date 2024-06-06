@@ -91,7 +91,10 @@
     </select>
 </div>
 
-@dump($user)
+@if($user->client && $user->client->type_client==3) 
+
+<input type="hidden" name="installateur" value="{{$user->client->id}}">
+@else
 <div class="form-group">
     <label for="installateur">Installateur</label>
     <select class="form-control" id="installateur" name="installateur">
@@ -101,4 +104,6 @@
         @endforeach
     </select>
 </div>
+@endif
+
 @endif
