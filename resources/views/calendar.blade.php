@@ -21,6 +21,8 @@
 <script>
        $(document).ready(function() {
         var calendarEl = document.getElementById('calendar');
+        var token = $('meta[name="api-token"]').attr('content'); // Get token from meta tag
+
             var calendar = new FullCalendar.Calendar(calendarEl, {
                 plugins: ['interaction', 'dayGrid', 'timeGrid'],
                 initialView: 'timeGridWeek',
@@ -53,7 +55,7 @@
                     url: '/api/rdvs',
                     type: 'GET',
                     headers: {
-                        'Authorization': 'Bearer YOUR_ACCESS_TOKEN' // Replace with your actual access token
+                        'Authorization': 'Bearer ' + token // Include bearer token
                     },
                     data: { user_id: userId },
                     success: function(data) {
