@@ -31,36 +31,42 @@
                     // Transform the data to fit FullCalendar's event structure
                     var events = data.map(function(rdv) {
                         return {
-                            title: rdv.nom + ' ' + rdv.prenom, // Use name and surname for the title
-                            start: rdv.date_rdv, // Start time from the date_rdv field
-                            end: new Date(new Date(rdv.date_rdv).getTime() + 60 * 60 * 1000).toISOString(), // End time 1 hour later
-                            description: 'Address: ' + rdv.adresse + ', ' + rdv.ville // Additional details if needed
+                            title: rdv.title, // Adjust according to your API response
+                            start: rdv.start, // Adjust according to your API response
+                            end: rdv.end,     // Adjust according to your API response
+                            url: rdv.url      // Adjust according to your API response if you have URLs
                         };
                     });
 
                     var calendar = new FullCalendar.Calendar(calendarEl, {
-                        plugins: ['interaction', 'dayGrid', 'timeGrid'], // Added timeGrid plugin for week and day views
-                        initialView: 'timeGridWeek', // Set initial view to week
+                        plugins: [ 'interaction', 'dayGrid', 'timeGrid' ], // Added timeGrid plugin for week and day views
+                        defaultView: 'timeGrid',  // Set default view to week
                         editable: true,
-                        locale: 'fr', // Set locale to French
-
-                        headerToolbar: {
-                            left: 'prev,next today',
-                            center: 'title',
-                            right: 'dayGridMonth,timeGridWeek,timeGridDay' // Buttons for month, week, and day views
+                        locale: 'fr',  // Set locale to French
+                        header: {
+            left: 'prev,next today',
+            center: 'title',
+            right: 'dayGridMonth,timeGridWeek,timeGridDay'  // Buttons for month, week, and day views
+        },
+                        week: {
+                            dow: 1, // Monday is the first day of the week.
+                            doy: 4  // The week that contains Jan 4th is the first week of the year.
                         },
                         buttonText: {
                             prev: 'Précédent',
                             next: 'Suivant',
                             today: "Aujourd'hui",
+                            year: 'Année',
                             month: 'Mois',
                             week: 'Semaine',
-                            day: 'Jour'
+                            day: 'Jour',
+                            list: 'Planning'
                         },
                         weekText: 'Sem.',
                         allDayText: 'Toute la journée',
                         moreLinkText: 'en plus',
                         noEventsText: 'Aucun événement à afficher',
+
                         events: events // Use the transformed events array
                     });
 
@@ -68,7 +74,8 @@
                 },
                 error: function(xhr, status, error) {
                     console.error('Error fetching RDVs:', error);
+                    $('#rdvs-list').append('<p>Error fetching RDVs.</p>');
                 }
             });
         });
-        </script>
+</script>
