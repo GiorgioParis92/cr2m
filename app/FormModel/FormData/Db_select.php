@@ -23,7 +23,7 @@ class Db_select extends AbstractFormData
      
         $request=DB::select($sql_command);
 
-        $data = '<div class="form-group ';
+        $data = '<div class="form-group  col-sm-12 ';
         $data .= $this->config->class ?? '';
         $data .= '">';
         $data .='<label>'.$this->config->title.'</label><br />';

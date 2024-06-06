@@ -20,7 +20,7 @@ class Date extends AbstractFormData
     public function render(bool $is_error)
     {
 
-        $data = '<div class="form-group '.($this->config->class ?? "").'">';
+        $data = '<div class="form-group  col-sm-12 '.($this->config->class ?? "").'">';
         $data .= '<label>'.$this->config->title.'</label>';
         $data .= '<input class="form-control datepicker ';
         if($is_error) {

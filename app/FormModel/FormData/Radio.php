@@ -9,7 +9,7 @@ class Radio extends AbstractFormData
     public function render(bool $is_error)
     {
 
-        $data = '<div class="form-group '.($this->config->class ?? "").'">';
+        $data = '<div class="form-group  col-sm-12 '.($this->config->class ?? "").'">';
         $data .= '<div class="form-group">';
 
        
