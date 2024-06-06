@@ -26,9 +26,8 @@
     $.ajax({
         url: '/api/rdvs',
         type: 'GET',
-        data: {
-            "user_id":user_id
-        },
+        data: { user_id: userId },
+
         headers: {
             'Authorization': 'Bearer ' + token // Include bearer token
         },
@@ -86,5 +85,12 @@ var events = data.map(function(rdv) {
     });
     $('.fc-timeGridWeek-button').click()
     calendar.render();
+    fetchAndRenderEvents($('#form_config_user_id').val());
+
+// Fetch and render events when the dropdown value changes
+$('#form_config_user_id').change(function() {
+    var selectedUserId = $(this).val();
+    fetchAndRenderEvents(selectedUserId);
+});
 });
 </script>
