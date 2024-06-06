@@ -123,6 +123,13 @@
             </div>
         </div>
     </div>
+    <script>
+        @if(session('form_id'))
+           alert({{session('form_id')}})
+        @endif
+        
+        
+            </script>
 @endsection
 @section('scripts')
     <script>
