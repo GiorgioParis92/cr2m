@@ -10,7 +10,7 @@
     <label for="adresse">Address</label>
     <input type="text" class="form-control" id="adresse" name="adresse" value="{{ old('adresse', $beneficiaire->adresse ?? '') }}" required>
 </div>
-<div class="form-group">
+<div class="form-group col-lg-3">
     <label for="cp">Postal Code</label>
     <input type="text" class="form-control" id="cp" name="cp" value="{{ old('cp', $beneficiaire->cp ?? '') }}" required>
 </div>

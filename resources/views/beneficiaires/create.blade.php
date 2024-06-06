@@ -8,9 +8,11 @@
     <div id="errorMessage" class="alert alert-danger" style="display:none;"></div>
 
     <form id="beneficiaireForm">
+        <div class="row">
         @csrf
         @include('beneficiaires.partials.form', ['beneficiaire' => new App\Models\Beneficiaire, 'isCreate' => true])
-        <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+        <button type="submit" class="btn btn-primary">Enregistrer</button>
     </form>
 
 </div>
