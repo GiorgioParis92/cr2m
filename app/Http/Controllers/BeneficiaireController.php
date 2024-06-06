@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Beneficiaire;
 use App\Models\Client;
 use App\Models\Fiche;
+use App\Models\User;
 use App\Models\Dossier;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
@@ -19,6 +20,8 @@ class BeneficiaireController extends Controller
 
     public function create()
     {
+        $user = User::where('id',auth()->user()->id)->with('client')->first();
+        dump($user);
         $fiches = Fiche::all();
         $financiers = Client::where('type_client',1)->get();
         $administratifs = Client::where('type_client',2)->get();
