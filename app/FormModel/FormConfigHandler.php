@@ -95,7 +95,7 @@ class FormConfigHandler
     {
 
         $data = '<div class="row">';
-        dd($this->formData);
+        dd($this);
 
         foreach ($this->formData as $tag => $data_form) {
             $is_error = false;
