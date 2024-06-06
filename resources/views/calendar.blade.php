@@ -22,10 +22,13 @@
        $(document).ready(function() {
     var calendarEl = document.getElementById('calendar');
     var token = $('meta[name="api-token"]').attr('content'); // Get token from meta tag
-        console.log(token)
+    var user_id=$('#form_config_user_id').val();
     $.ajax({
         url: '/api/rdvs',
         type: 'GET',
+        data: {
+            "user_id":user_id
+        },
         headers: {
             'Authorization': 'Bearer ' + token // Include bearer token
         },
