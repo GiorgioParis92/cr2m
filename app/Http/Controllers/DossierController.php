@@ -131,7 +131,7 @@ class DossierController extends Controller
 
         $result_save = $this->forms_configs[$request->form_id]->save();
 
-
+dd($request->etape_id);
 
         return redirect()->route('dossiers.show', ['id' => $request->dossier_id])
         ->with('result', json_encode($result_save))
