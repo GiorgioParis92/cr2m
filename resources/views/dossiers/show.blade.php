@@ -126,5 +126,12 @@
 @endsection
 
 @section('scripts')
-    <script></script>
+    <script>
+
+@if(isset($request->form_id))
+alert('{{$request->form_id}}')
+@endif
+
+
+    </script>
 @endsection
