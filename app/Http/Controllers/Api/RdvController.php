@@ -11,8 +11,13 @@ class RdvController extends \App\Http\Controllers\Controller
 {
     public function index(Request $request): \Illuminate\Http\JsonResponse
     {
-        dd($request);
+       
        $rdvs=DB::table('rdv');
+
+        if(isset($request->user_id) && $request->user_id>0) {
+            $rdvs=$rdvs->where('user_id',$request->user_id);
+        }
+
        $rdvs=$rdvs->get();
 
         $data=$rdvs;
