@@ -284,7 +284,7 @@
             $etapeTabs.on('click', function(event) {
 
                 event.preventDefault();
-
+                $('.fc-timeGridWeek-button').click()
                 const $parent = $(this).parent();
 
                 if (!$(this).hasClass('active') && !$(this).hasClass('current')) return;
