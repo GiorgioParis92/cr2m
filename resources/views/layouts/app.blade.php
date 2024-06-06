@@ -285,6 +285,7 @@
 
                 event.preventDefault();
                 $('.fc-timeGridWeek-button').click()
+               
                 const $parent = $(this).parent();
 
                 if (!$(this).hasClass('active') && !$(this).hasClass('current')) return;
@@ -307,6 +308,7 @@
 
                 // Show the content corresponding to the clicked tab
                 $stepContents.eq(index - 1).show();
+                $('.fc-timeGridWeek-button').click()
             });
 
             $('input.choice_checked').trigger('click');
