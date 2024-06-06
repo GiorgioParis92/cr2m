@@ -6,6 +6,7 @@
         <div class="col-lg-4">
             <h3 class="border-bottom border-gray pb-2">{{ $etape->etape_desc }}</h3>
         </div>
+        @dd($dossier)
         @if ($etape->etape_number == $dossier->etape_number && $dossier->status_id != 15)
             <div class="col-lg-6">
                 <a class="btn btn-primary" href="{{ route('dossiers.next_step', $dossier->id) }}">Valider l'étape</a>
