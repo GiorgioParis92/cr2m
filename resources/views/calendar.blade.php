@@ -36,6 +36,7 @@
                             end: rdv.end,     // Adjust according to your API response
                             url: rdv.url      // Adjust according to your API response if you have URLs
                         };
+                        console.log(events)
                     });
 
                     var calendar = new FullCalendar.Calendar(calendarEl, {
