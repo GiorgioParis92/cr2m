@@ -1,6 +1,6 @@
 <!-- <?= $_message = sprintf('%s (%d %s)', $exceptionMessage, $statusCode, $statusText); ?> -->
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
     <head>
         <meta charset="<?= $this->charset; ?>" />
         <meta name="robots" content="noindex,nofollow" />
