@@ -11,6 +11,7 @@
 <script src='https://unpkg.com/@fullcalendar/daygrid@4.3.0/main.min.js'></script>
 <script src='https://unpkg.com/@fullcalendar/timegrid@4.3.0/main.min.js'></script>
 <script src='https://unpkg.com/@fullcalendar/core@4.3.1/locales-all.min.js'></script>
+<meta name="api-token" content="{{ Auth::user()->api_token }}">
 
 <div class="row">
     <div class="col-6">
@@ -20,12 +21,13 @@
 <script>
        $(document).ready(function() {
     var calendarEl = document.getElementById('calendar');
-alert('ok')
+    var token = $('meta[name="api-token"]').attr('content'); // Get token from meta tag
+
     $.ajax({
         url: '/api/rdvs',
         type: 'GET',
         headers: {
-            'Authorization': {{@csrf}} // Replace with your actual access token
+            'Authorization': 'Bearer ' + token // Include bearer token
         },
         success: function(data) {
             // Transform the data to fit FullCalendar's event structure
