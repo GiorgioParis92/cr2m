@@ -209,11 +209,12 @@
                             {{ $dossier->mandataire_financier->id ?? '' }}
                         </td>
                         <td>
+                            @if(isset($dossier->installateur))
                             @if (Storage::disk('public')->exists($dossier->installateur->main_logo))
                                 <img class="logo_table" src="{{ asset('storage/' . $dossier->installateur->main_logo) }}">
                             @endif
                             {{ $dossier->installateur->client_title ?? '' }}
-
+                            @endif
                         </td>
                         <td>
 
