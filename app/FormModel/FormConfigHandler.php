@@ -106,7 +106,6 @@ class FormConfigHandler
     
         }
 
-        $data .= '<input type="hidden" name="etape_id" value="'.$this->form->etape_id.'">';
         $data .= '</div>';
 
         return $data;
