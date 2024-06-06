@@ -1,4 +1,3 @@
-
 <script src="{{ asset('frontend/assets/js/fullcalendar/packages/core/main.js') }}"></script>
 <script src="{{ asset('frontend/assets/js/fullcalendar/packages/daygrid/main.js') }}"></script>
 <script src="{{ asset('frontend/assets/js/fullcalendar/packages/interaction/main.js') }}"></script>
@@ -19,7 +18,7 @@
     </div>
 </div>
 <script>
-       $(document).ready(function() {
+         $(document).ready(function() {
             var calendarEl = document.getElementById('calendar');
 
             $.ajax({
@@ -34,20 +33,21 @@
                         return {
                             title: rdv.nom + ' ' + rdv.prenom, // Use name and surname for the title
                             start: rdv.date_rdv, // Start time from the date_rdv field
-                            end: new Date(new Date(rdv.date_rdv).getTime() + 60*60*1000).toISOString(), // End time 1 hour later
+                            end: new Date(new Date(rdv.date_rdv).getTime() + 60 * 60 * 1000).toISOString(), // End time 1 hour later
                             description: 'Address: ' + rdv.adresse + ', ' + rdv.ville // Additional details if needed
                         };
                     });
 
                     var calendar = new FullCalendar.Calendar(calendarEl, {
-                        plugins: [ 'interaction', 'dayGrid', 'timeGrid' ], // Added timeGrid plugin for week and day views
-                        initialView: 'timeGridWeek',  // Set initial view to week
+                        plugins: ['interaction', 'dayGrid', 'timeGrid'], // Added timeGrid plugin for week and day views
+                        initialView: 'timeGridWeek', // Set initial view to week
                         editable: true,
-                        locale: 'fr',  // Set locale to French
+                        locale: 'fr', // Set locale to French
+
                         headerToolbar: {
                             left: 'prev,next today',
                             center: 'title',
-                            right: 'dayGridMonth,timeGridWeek,timeGridDay'  // Buttons for month, week, and day views
+                            right: 'dayGridMonth,timeGridWeek,timeGridDay' // Buttons for month, week, and day views
                         },
                         buttonText: {
                             prev: 'Précédent',
@@ -55,7 +55,7 @@
                             today: "Aujourd'hui",
                             month: 'Mois',
                             week: 'Semaine',
-                            day: 'Jour',
+                            day: 'Jour'
                         },
                         weekText: 'Sem.',
                         allDayText: 'Toute la journée',
@@ -68,9 +68,7 @@
                 },
                 error: function(xhr, status, error) {
                     console.error('Error fetching RDVs:', error);
-                    $('#rdvs-list').append('<p>Error fetching RDVs.</p>');
                 }
             });
         });
-
-    </script>
+        </script>
