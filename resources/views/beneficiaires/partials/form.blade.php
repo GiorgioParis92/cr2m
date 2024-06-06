@@ -91,9 +91,9 @@
     </select>
 </div>
 
-
+@dump($client)
 <div class="form-group">
-    <label for="installateur">Mandataire Financier</label>
+    <label for="installateur">Installateur</label>
     <select class="form-control" id="installateur" name="installateur">
         <option value=""></option>
         @foreach($installateurs as $installateur)
