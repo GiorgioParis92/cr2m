@@ -26,10 +26,10 @@
                 initialView: 'timeGridWeek',
                 editable: true,
                 locale: 'fr',
-                headerToolbar: {
+                header: {
                     left: 'prev,next today',
                     center: 'title',
-                    right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay'  // Buttons for month, week, and day views
                 },
                 buttonText: {
                     prev: 'Précédent',
