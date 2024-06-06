@@ -33,8 +33,8 @@
                     center: 'title',
                     right: 'dayGridMonth,timeGridWeek,timeGridDay'  // Buttons for month, week, and day views
                 },
-                minTime  : 8, // Set start hour to 8:00 AM
-                maxTime : 20, // Set end hour to 6:00 PM
+                minTime  : "08:00", // Set start hour to 8:00 AM
+                maxTime : "20:00", // Set end hour to 6:00 PM
 
                 buttonText: {
                     prev: 'Précédent',
