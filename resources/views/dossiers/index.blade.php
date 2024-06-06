@@ -131,6 +131,7 @@
             </thead>
             <tbody>
                 @foreach ($dossiers as $dossier)
+                    @dd($dossier)
                     <tr>
                         <td>{{ format_date($dossier->created_at) }}</td>
                         <td>{{ strtotime_date($dossier->created_at) }}</td>
