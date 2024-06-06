@@ -59,6 +59,7 @@
                     },
                     data: { user_id: userId },
                     success: function(data) {
+                        console.log(data)
                         var events = data.map(function(rdv) {
                             var startDate = new Date(rdv.date_rdv);
                             var endDate = new Date(startDate.getTime() + 60 * 60 * 1000); // Add 1 hour to the start date
@@ -70,7 +71,7 @@
                                 description: 'Address: ' + rdv.adresse + ', ' + rdv.ville
                             };
                         });
-
+                        console.log(events)
                         calendar.removeAllEvents(); // Clear existing events
                         calendar.addEventSource(events); // Add new events
                         calendar.refetchEvents(); // Refetch the events to render them
