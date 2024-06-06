@@ -22,7 +22,8 @@ class BeneficiaireController extends Controller
         $fiches = Fiche::all();
         $financiers = Client::where('type_client',1)->get();
         $administratifs = Client::where('type_client',2)->get();
-        return view('beneficiaires.create',compact('fiches','financiers','administratifs'));
+        $installateurs = Client::where('type_client',3)->get();
+        return view('beneficiaires.create',compact('fiches','financiers','administratifs','installateurs'));
     }
 
     public function store(Request $request): JsonResponse
@@ -39,6 +40,7 @@ class BeneficiaireController extends Controller
             'menage_mpr' => 'required|in:bleu,jaune,violet,rose',
             'chauffage' => 'required|in:gaz,fioul,bois,charbon,electricite',
             'occupation' => 'required|in:locataire,proprietaire',
+         
         ]);
 
         $beneficiaire = Beneficiaire::create($validated);
@@ -52,6 +54,7 @@ class BeneficiaireController extends Controller
                 'client_id' => $request->input('client_id') ?? 0,
                 'mandataire_administratif' => $request->input('mandataire_administratif') ?? 0,
                 'mandataire_financier' => $request->input('mandataire_financier') ?? 0,
+                'installateur' => $request->input('installateur') ?? 0,
             ]);
             $dossier_id = $dossier->id;
         }

@@ -41,7 +41,7 @@
     </select>
 </div>
 <div class="form-group">
-    <label for="chauffage">Heating</label>
+    <label for="chauffage">Type de chauffage</label>
     <select class="form-control" id="chauffage" name="chauffage" required>
         <option value="" {{ old('chauffage', $beneficiaire->chauffage ?? '') == '' ? 'selected' : '' }}></option>
         <option value="gaz" {{ old('chauffage', $beneficiaire->chauffage ?? '') == 'gaz' ? 'selected' : '' }}>Gaz</option>
@@ -72,7 +72,7 @@
 </div>
 
 <div class="form-group">
-    <label for="mandataire_financier">Mandataire Financier</label>
+    <label for="mandataire_financier">Mon Accompagnateur Renov MAR</label>
     <select class="form-control" id="mandataire_financier" name="mandataire_financier">
         <option value=""></option>
         @foreach($financiers as $financier)
@@ -82,7 +82,7 @@
 </div>
 
 <div class="form-group">
-    <label for="mandataire_administratif">Mandataire Administratif</label>
+    <label for="mandataire_administratif">Mandataire Financier</label>
     <select class="form-control" id="mandataire_administratif" name="mandataire_administratif">
         <option value=""></option>
         @foreach($administratifs as $administratif)
@@ -91,4 +91,14 @@
     </select>
 </div>
 
+
+<div class="form-group">
+    <label for="installateur">Mandataire Financier</label>
+    <select class="form-control" id="installateur" name="installateur">
+        <option value=""></option>
+        @foreach($installateurs as $installateur)
+        <option value="{{$installateur->id}}">{{$installateur->client_title}}</option>
+        @endforeach
+    </select>
+</div>
 @endif
