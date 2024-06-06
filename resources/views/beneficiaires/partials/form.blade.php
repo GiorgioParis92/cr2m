@@ -91,7 +91,7 @@
     </select>
 </div>
 
-@dump($client)
+@dump($user)
 <div class="form-group">
     <label for="installateur">Installateur</label>
     <select class="form-control" id="installateur" name="installateur">

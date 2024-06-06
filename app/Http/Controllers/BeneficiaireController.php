@@ -21,12 +21,11 @@ class BeneficiaireController extends Controller
     public function create()
     {
         $user = User::where('id',auth()->user()->id)->with('client')->first();
-        dump($user);
         $fiches = Fiche::all();
         $financiers = Client::where('type_client',1)->get();
         $administratifs = Client::where('type_client',2)->get();
         $installateurs = Client::where('type_client',3)->get();
-        return view('beneficiaires.create',compact('fiches','financiers','administratifs','installateurs'));
+        return view('beneficiaires.create',compact('fiches','financiers','administratifs','installateurs','user'));
     }
 
     public function store(Request $request): JsonResponse
