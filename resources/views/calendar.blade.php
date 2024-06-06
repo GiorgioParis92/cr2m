@@ -78,5 +78,6 @@ var events = data.map(function(rdv) {
             $('#rdvs-list').append('<p>Error fetching RDVs.</p>');
         }
     });
+    calendar.render();
 });
 </script>
