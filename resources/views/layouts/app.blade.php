@@ -308,6 +308,8 @@
 
                 // Show the content corresponding to the clicked tab
                 $stepContents.eq(index - 1).show();
+                
+                $('.fc-dayGridMonth-button').click()
                 $('.fc-timeGridWeek-button').click()
             });
 
