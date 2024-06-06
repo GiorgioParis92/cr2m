@@ -1010,3 +1010,7 @@ main {
 .modal {
     z-index: 999999999!important;
 }
+.nav.nav-pills .nav-link.active {
+    animation: 0.2s ease;
+    background: #56eda8;
+}
