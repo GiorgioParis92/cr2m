@@ -13,7 +13,7 @@ class RdvController extends \App\Http\Controllers\Controller
     {
        
        $rdvs=DB::table('rdv');
-dd($request->user_id);
+
         if(isset($request->user_id) && $request->user_id>0) {
             $rdvs=$rdvs->where('user_id',$request->user_id);
         }
