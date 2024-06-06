@@ -188,22 +188,28 @@
                         </td>
 
                         <td>
+                            @if(isset($dossier->mar))
+
                             @if (Storage::disk('public')->exists($dossier->mar->main_logo))
                                 <img class="logo_table" src="{{ asset('storage/' . $dossier->mar->main_logo) }}">
                             @endif
                             {{ $dossier->mar->client_title }}
+                            @endif
                         </td>
                         <td>
                             {{ $dossier->mar->id }}
                         </td>
 
                         <td>
+                            @if(isset($dossier->mandataire_financier))
+
                             @if (isset($dossier->mandataire_financier->main_logo) &&
                                     Storage::disk('public')->exists($dossier->mandataire_financier->main_logo))
                                 <img class="logo_table"
                                     src="{{ asset('storage/' . $dossier->mandataire_financier->main_logo) }}">
                             @endif
                             {{ $dossier->mandataire_financier->client_title ?? 'Aucun' }}
+                            @endif
                         </td>
                         <td>
                             {{ $dossier->mandataire_financier->id ?? '' }}
