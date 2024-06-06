@@ -40,7 +40,7 @@
 
                     var calendar = new FullCalendar.Calendar(calendarEl, {
                         plugins: [ 'interaction', 'dayGrid', 'timeGrid' ], // Added timeGrid plugin for week and day views
-                        defaultView: 'timeGrid',  // Set default view to week
+                        defaultView: 'timeGridWeek',  // Set default view to week
                         editable: true,
                         locale: 'fr',  // Set locale to French
                         header: {
