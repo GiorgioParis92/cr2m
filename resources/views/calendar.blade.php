@@ -20,12 +20,12 @@
 <script>
        $(document).ready(function() {
     var calendarEl = document.getElementById('calendar');
-
+alert('ok')
     $.ajax({
         url: '/api/rdvs',
         type: 'GET',
         headers: {
-            'Authorization': 'Bearer YOUR_ACCESS_TOKEN' // Replace with your actual access token
+            'Authorization': {{@csrf}} // Replace with your actual access token
         },
         success: function(data) {
             // Transform the data to fit FullCalendar's event structure
