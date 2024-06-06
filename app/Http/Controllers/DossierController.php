@@ -135,7 +135,8 @@ class DossierController extends Controller
 
         return redirect()->route('dossiers.show', ['id' => $request->dossier_id])
         ->with('result', json_encode($result_save))
-        ->with('form_id', $request->form_id);
+        ->with('form_id', $request->form_id)
+        ->with('etape_id', $request->etape_id);
     }
     public function next_step($id)
     {

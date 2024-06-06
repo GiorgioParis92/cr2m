@@ -124,8 +124,11 @@
         </div>
     </div>
     <script>
-        @if(session('form_id'))
-           alert({{session('form_id')}})
+        @if(session('etape_id'))
+        document.addEventListener('DOMContentLoaded', function() {
+    document.querySelector('[data-index="{{session('etape_id')}}"]').click();
+});
+           alert({{session('etape_id')}})
         @endif
         
         
