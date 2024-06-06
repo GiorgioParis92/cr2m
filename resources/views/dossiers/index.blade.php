@@ -197,7 +197,11 @@
                             @endif
                         </td>
                         <td>
+                            @if(isset($dossier->mar))
+
                             {{ $dossier->mar->id }}
+
+                            @endif
                         </td>
 
                         <td>
@@ -212,7 +216,11 @@
                             @endif
                         </td>
                         <td>
+                            @if(isset($dossier->mandataire_financier))
+
                             {{ $dossier->mandataire_financier->id ?? '' }}
+
+                            @endif
                         </td>
                         <td>
                             @if(isset($dossier->installateur))
@@ -223,9 +231,10 @@
                             @endif
                         </td>
                         <td>
+                            @if(isset($dossier->installateur))
 
                             {{ $dossier->installateur->id ?? '' }}
-
+                            @endif
                         </td>
                         <td>
                             <a target="_blank" href="{{ route('dossiers.show', $dossier->id) }}" class="btn btn-primary">
