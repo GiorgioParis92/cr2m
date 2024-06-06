@@ -22,7 +22,7 @@
        $(document).ready(function() {
     var calendarEl = document.getElementById('calendar');
     var token = $('meta[name="api-token"]').attr('content'); // Get token from meta tag
-
+        console.log(token)
     $.ajax({
         url: '/api/rdvs',
         type: 'GET',
@@ -30,7 +30,7 @@
             'Authorization': 'Bearer ' + token // Include bearer token
         },
         success: function(data) {
-            // Transform the data to fit FullCalendar's event structure
+console.log(data)
             var events = data.map(function(rdv) {
                 return {
                     title: rdv.title, // Adjust according to your API response
@@ -39,7 +39,7 @@
                     url: rdv.url      // Adjust according to your API response if you have URLs
                 };
             });
-
+            console.log(events)
             var calendar = new FullCalendar.Calendar(calendarEl, {
                 plugins: ['interaction', 'dayGrid', 'timeGrid'], // Added timeGrid plugin for week and day views
                 defaultView: 'timeGridWeek',  // Set default view to week
