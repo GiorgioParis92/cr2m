@@ -131,7 +131,12 @@
             </thead>
             <tbody>
                 @foreach ($dossiers as $dossier)
-                    @dd($dossier)
+                @php
+                if (!isset($dossier->beneficiaire->nom)) {
+                    dd[$dossier);
+                }
+                    @endphp
+            
                     <tr>
                         <td>{{ format_date($dossier->created_at) }}</td>
                         <td>{{ strtotime_date($dossier->created_at) }}</td>
