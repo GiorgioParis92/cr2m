@@ -94,8 +94,8 @@ class FormConfigHandler
     public function render_form($errors)
     {
 
-        dd($this->formData);
         $data = '<div class="row">';
+        dd($this->formData);
 
         foreach ($this->formData as $tag => $data_form) {
             $is_error = false;
@@ -106,7 +106,7 @@ class FormConfigHandler
     
         }
 
-        $data .= '<input type="text" name="form_id" value="'.$this->.'">';
+        // $data .= '<input type="text" name="form_id" value="'.$this->.'">';
         $data .= '</div>';
 
         return $data;
