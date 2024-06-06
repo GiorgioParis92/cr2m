@@ -133,7 +133,7 @@
                 @foreach ($dossiers as $dossier)
                 @php
                 if (!isset($dossier->beneficiaire->nom)) {
-                    dd[$dossier);
+                    dd($dossier);
                 }
                     @endphp
             
