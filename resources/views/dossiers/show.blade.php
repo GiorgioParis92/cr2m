@@ -128,7 +128,7 @@
 @section('scripts')
     <script>
 
-@if(isset($form_id))
+@if(isset($result_save))
 alert('{{$form_id}}')
 @endif
 
