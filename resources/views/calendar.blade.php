@@ -31,12 +31,12 @@
         },
         success: function(data) {
 console.log(data)
-            var events = data.map(function(rdv) {
+var events = data.map(function(rdv) {
                 return {
-                    title: rdv.title, // Adjust according to your API response
-                    start: rdv.start, // Adjust according to your API response
-                    end: rdv.end,     // Adjust according to your API response
-                    url: rdv.url      // Adjust according to your API response if you have URLs
+                    title: rdv.nom + ' ' + rdv.prenom, // Example: using the name as the title
+                    start: rdv.date_rdv, // Use date_rdv as the start date
+                    end: rdv.date_rdv,   // Assuming same end date for simplicity
+                    url: '#',            // You can adjust this if you have a URL field
                 };
             });
             console.log(events)
