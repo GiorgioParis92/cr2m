@@ -124,13 +124,9 @@
         </div>
     </div>
 @endsection
-@dd($result)
 @section('scripts')
     <script>
 
-@if(isset($result_save))
-alert('{{$form_id}}')
-@endif
 
 
     </script>
