@@ -14,7 +14,7 @@
 <meta name="api-token" content="{{ Auth::user()->api_token }}">
 
 <div class="row">
-    <div class="col-6">
+    <div class="col-12">
         <div id="calendar"></div>
     </div>
 </div>
