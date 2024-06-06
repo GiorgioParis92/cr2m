@@ -124,7 +124,7 @@
         </div>
     </div>
 @endsection
-
+@dd($result_save)
 @section('scripts')
     <script>
 
