@@ -20,77 +20,73 @@
 </div>
 <script>
        $(document).ready(function() {
-    var calendarEl = document.getElementById('calendar');
-    var token = $('meta[name="api-token"]').attr('content'); // Get token from meta tag
-    var user_id=$('#form_config_user_id').val();
-    $.ajax({
-        url: '/api/rdvs',
-        type: 'GET',
-        data: { user_id: userId },
-
-        headers: {
-            'Authorization': 'Bearer ' + token // Include bearer token
-        },
-        success: function(data) {
-console.log(data)
-var events = data.map(function(rdv) {
-    var startDate = new Date(rdv.date_rdv);
-                        var endDate = new Date(startDate.getTime() + 60 * 60 * 1000); // Add 1 hour to the start date
-
-                return {
-                    title: rdv.nom + ' ' + rdv.prenom, // Example: using the name as the title
-                    start: rdv.date_rdv, // Use date_rdv as the start date
-                    end: rdv.date_rdv,   // Assuming same end date for simplicity
-                    url: '#',            // You can adjust this if you have a URL field
-                };
-            });
-            console.log(events)
+        var calendarEl = document.getElementById('calendar');
             var calendar = new FullCalendar.Calendar(calendarEl, {
-                plugins: ['interaction', 'dayGrid', 'timeGrid'], // Added timeGrid plugin for week and day views
-                defaultView: 'timeGridWeek',  // Set default view to week
+                plugins: ['interaction', 'dayGrid', 'timeGrid'],
+                initialView: 'timeGridWeek',
                 editable: true,
-                locale: 'fr',  // Set locale to French
-                header: {
+                locale: 'fr',
+                headerToolbar: {
                     left: 'prev,next today',
                     center: 'title',
-                    right: 'dayGridMonth,timeGridWeek,timeGridDay'  // Buttons for month, week, and day views
-                },
-                week: {
-                    dow: 1, // Monday is the first day of the week.
-                    doy: 4  // The week that contains Jan 4th is the first week of the year.
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay'
                 },
                 buttonText: {
                     prev: 'Précédent',
                     next: 'Suivant',
                     today: "Aujourd'hui",
-                    year: 'Année',
                     month: 'Mois',
                     week: 'Semaine',
-                    day: 'Jour',
-                    list: 'Planning'
+                    day: 'Jour'
                 },
                 weekText: 'Sem.',
                 allDayText: 'Toute la journée',
                 moreLinkText: 'en plus',
                 noEventsText: 'Aucun événement à afficher',
-                events: events // Use the transformed events array
+                events: [] // Initialize with an empty array
             });
 
             calendar.render();
-        },
-        error: function(xhr, status, error) {
-            console.error('Error fetching RDVs:', error);
-            $('#rdvs-list').append('<p>Error fetching RDVs.</p>');
-        }
-    });
-    $('.fc-timeGridWeek-button').click()
-    calendar.render();
-    fetchAndRenderEvents($('#form_config_user_id').val());
 
-// Fetch and render events when the dropdown value changes
-$('#form_config_user_id').change(function() {
-    var selectedUserId = $(this).val();
-    fetchAndRenderEvents(selectedUserId);
-});
-});
+            function fetchAndRenderEvents(userId) {
+                $.ajax({
+                    url: '/api/rdvs',
+                    type: 'GET',
+                    headers: {
+                        'Authorization': 'Bearer YOUR_ACCESS_TOKEN' // Replace with your actual access token
+                    },
+                    data: { user_id: userId },
+                    success: function(data) {
+                        var events = data.map(function(rdv) {
+                            var startDate = new Date(rdv.date_rdv);
+                            var endDate = new Date(startDate.getTime() + 60 * 60 * 1000); // Add 1 hour to the start date
+
+                            return {
+                                title: rdv.nom + ' ' + rdv.prenom,
+                                start: rdv.date_rdv,
+                                end: endDate.toISOString(),
+                                description: 'Address: ' + rdv.adresse + ', ' + rdv.ville
+                            };
+                        });
+
+                        calendar.removeAllEvents(); // Clear existing events
+                        calendar.addEventSource(events); // Add new events
+                        calendar.refetchEvents(); // Refetch the events to render them
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error fetching RDVs:', error);
+                    }
+                });
+            }
+
+            // Initial fetch
+            fetchAndRenderEvents($('#form_config_user_id').val());
+
+            // Fetch and render events when the dropdown value changes
+            $('#form_config_user_id').change(function() {
+                var selectedUserId = $(this).val();
+                fetchAndRenderEvents(selectedUserId);
+            });
+        });
+
 </script>
