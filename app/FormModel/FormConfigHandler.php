@@ -95,7 +95,7 @@ class FormConfigHandler
     {
 
         $data = '<div class="row">';
-        dd($this);
+        
 
         foreach ($this->formData as $tag => $data_form) {
             $is_error = false;
@@ -106,7 +106,8 @@ class FormConfigHandler
     
         }
 
-        // $data .= '<input type="text" name="form_id" value="'.$this->.'">';
+        $data .= '<input type="text" name="form_id" value="'.$this->form->id.'">';
+        $data .= '<input type="text" name="etape_id" value="'.$this->form->etape_id.'">';
         $data .= '</div>';
 
         return $data;
