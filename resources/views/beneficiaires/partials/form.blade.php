@@ -1,9 +1,9 @@
-<div class="form-group">
-    <label for="nom">Name</label>
+<div class="form-group col-lg-6">
+    <label for="nom">Nom</label>
     <input type="text" class="form-control" id="nom" name="nom" value="{{ old('nom', $beneficiaire->nom ?? '') }}" required>
 </div>
-<div class="form-group">
-    <label for="prenom">First Name</label>
+<div class="form-group col-lg-6">
+    <label for="prenom">Prénom</label>
     <input type="text" class="form-control" id="prenom" name="prenom" value="{{ old('prenom', $beneficiaire->prenom ?? '') }}" required>
 </div>
 <div class="form-group">
@@ -14,7 +14,7 @@
     <label for="cp">Postal Code</label>
     <input type="text" class="form-control" id="cp" name="cp" value="{{ old('cp', $beneficiaire->cp ?? '') }}" required>
 </div>
-<div class="form-group">
+<div class="form-group col-lg-9">
     <label for="ville">City</label>
     <input type="text" class="form-control" id="ville" name="ville" value="{{ old('ville', $beneficiaire->ville ?? '') }}" required>
 </div>
