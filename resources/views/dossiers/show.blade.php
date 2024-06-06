@@ -128,8 +128,8 @@
 @section('scripts')
     <script>
 
-@if(isset($request->form_id))
-alert('{{$request->form_id}}')
+@if(isset($form_id))
+alert('{{$form_id}}')
 @endif
 
 
