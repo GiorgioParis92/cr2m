@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BeneficiaireController;
 use App\Http\Controllers\PDFController;
+use App\Http\Controllers\Api\RdvController;
 
 
 /*
@@ -29,3 +30,9 @@ Route::post('/generate-pdf', [PDFController::class, 'generatePDF']);
 
 Route::get('/fill-pdf', [PDFController::class, 'fillPdf']);
 Route::post('/fill-pdf', [PDFController::class, 'fillPdf']);
+Route::get('/rdvs', [RdvController::class, 'index']);
+Route::post('/rdvs', [RdvController::class, 'index']);
+Route::middleware('auth:api')->group(function () {
+
+    // Add other RdvController routes here as needed
+});
