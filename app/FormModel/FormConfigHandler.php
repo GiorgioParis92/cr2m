@@ -52,15 +52,16 @@ class FormConfigHandler
 
     public function save()
     {
-
         $saved = [];
         foreach ($this->formData as $tag => $data_form) {
-            $saved[$tag] = $data_form->save_value();
+            if ($data_form !== null) {
+                $saved[$tag] = $data_form->save_value();
+            } else {
+                // Debug: Log the problematic tag
+                $saved[$tag] = null;
+            }
         }
-
         return $saved;
-    
-
     }
     public function render($errors)
     {

@@ -124,14 +124,14 @@ class DossierController extends Controller
         $this->forms_configs = $cached_forms_configs[$request->dossier_id];
 
         foreach ($request->all() as $key => $data) {
-            if ($key != "_token" && $key != "form_id" && $key != "dossier_id") {
+            if ($key != "_token" && $key != "form_id" && $key != "dossier_id"  && $key != "etape_id") {
                 $this->forms_configs[$request->form_id]->formData[$key]->value = $data;
             }
         }
 
         $result_save = $this->forms_configs[$request->form_id]->save();
 
-dd($request->etape_id);
+dd($this->forms_configs[$request->form_id]->formData);
 
         return redirect()->route('dossiers.show', ['id' => $request->dossier_id])
         ->with('result', json_encode($result_save))
