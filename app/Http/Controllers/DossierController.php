@@ -63,7 +63,7 @@ class DossierController extends Controller
             ->groupBy('status_desc')
             ->get();
 
-        return view('dossiers.index', compact('request','dossiers', 'etapes', 'status', 'mars', 'financiers', 'fiches', 'installateurs'));
+        return view('dossiers.index', compact('dossiers', 'etapes', 'status', 'mars', 'financiers', 'fiches', 'installateurs'));
     }
 
     public function show($id)
