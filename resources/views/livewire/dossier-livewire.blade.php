@@ -119,6 +119,18 @@
 
                                                     {!! $form_handler->render([]) !!} <!-- Render without error array -->
                                                     @endif
+                                                    <script>
+                                                          $('.pdfModal').on('click', function(event) {
+
+var imgSrc = $(this).data('img-src');
+alert(imgSrc)
+console.log(imgSrc)
+$('#pdfModal').css('display', 'block');
+$('#pdfModal').modal('show');
+$('#pdfFrame').attr('src', imgSrc);
+
+});
+</script>
                                                 @endforeach
                                             </tbody>
                                         </table>
