@@ -55,7 +55,7 @@
     <link rel="stylesheet" href="{{ asset('frontend/assets/js/fullcalendar/packages/core/main.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend/assets/js/fullcalendar/packages/daygrid/main.css') }}">
 
-
+@livewireStyles
 </head>
 
 <body class="g-sidenav-show bg-gray-100">
@@ -249,84 +249,14 @@
             });
 
         });
-        $(document).ready(function() {
-
-            const $etapeTabs = $('#etapeTabs .nav-link');
-            const $stepContents = $('.tab-pane.step-content');
-            const $tabItems = $('#etapeTabs .nav-item');
-
-            const currentEtapeId = {{ $dossier->etape_number ?? 0 }};
-            const etapes = @json($etapes ?? '');
-            const currentEtapeIndex = etapes.findIndex(etape => etape.etape_number === currentEtapeId);
-
-            // Initialize tab states
-            $tabItems.each(function(index) {
-                if (index < currentEtapeIndex) {
-                    $(this).addClass('active');
-                } else if (index === currentEtapeIndex) {
-                    $(this).addClass('current active');
-                } else {
-                    $(this).addClass('disabled');
-                }
-            });
-
-
-            // Show the current step content
-            $stepContents.each(function(index) {
-                if (index === currentEtapeIndex) {
-                    $(this).show();
-
-                } else {
-                    $(this).hide();
-                }
-            });
-
-            $etapeTabs.on('click', function(event) {
-
-                event.preventDefault();
-                $('.fc-timeGridWeek-button').click()
-               
-                const $parent = $(this).parent();
-
-                if (!$(this).hasClass('active') && !$(this).hasClass('current')) return;
-
-                const index = parseInt($(this).data('index'));
-
-                // Remove active and current class from all tab items
-                $tabItems.removeClass('active current');
-
-                // Hide all contents
-                $stepContents.hide();
-
-                // Add active class to the current <li> and all previous <li> elements
-                for (let i = 0; i <= index; i++) {
-                    $tabItems.eq(i).addClass('active');
-                }
-
-                // Add current class to the clicked <li>
-                $parent.addClass('current');
-
-                // Show the content corresponding to the clicked tab
-                $stepContents.eq(index - 1).show();
-                
-                $('.fc-dayGridMonth-button').click()
-                $('.fc-timeGridWeek-button').click()
-            });
-
-            $('input.choice_checked').trigger('click');
-
-            $('#form_config_user_id').change(function() {
-
-
-            });
-
-            
-        });
+       
+       
     </script>
     <!-- Github buttons -->
     <script async defer src="https://buttons.github.io/buttons.js"></script>
     <!-- Control Center for Soft Dashboard: parallax effects, scripts for the example pages etc -->
     <script src="{{ asset('frontend/assets/js/soft-ui-dashboard.min.js?v=1.0.7') }}"></script>
+@livewireScripts
 </body>
 
 </html>

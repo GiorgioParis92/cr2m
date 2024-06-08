@@ -74,43 +74,10 @@ class DossierController extends Controller
             ->with('beneficiaire', 'fiche', 'etape', 'status')
             ->first();
 
-        $etapes = Etape::all();
-
-        $forms = DB::table('forms')->where('fiche_id', $dossier->fiche_id)->get();
-        $this->forms_configs = [];
-        foreach ($forms as $form) {
-            $this->forms_configs[$form->id] = new FormConfigHandler($dossier, $form);
-        }
-        session()->forget('forms_configs');
-        $cached_forms_configs = session('forms_configs', []);
-
-        if (!in_array($id, $cached_forms_configs)) {
-            $cached_forms_configs[$id] = [];
-        }
-
-        $cached_forms_configs[$id] = $this->forms_configs;
-
-        session(['forms_configs' => $cached_forms_configs]);
-
-        $forms_configs = $this->forms_configs;
+       
 
 
-
-        $distinctEtapes = DB::table('forms')
-            ->select('etape_id', DB::raw('MIN(id) as min_id'))
-            ->groupBy('etape_id');
-
-        $etapes = DB::table('forms')
-            ->join('etapes', 'forms.etape_id', '=', 'etapes.id')
-            ->joinSub($distinctEtapes, 'distinctEtapes', function ($join) {
-                $join->on('forms.id', '=', 'distinctEtapes.min_id');
-            })
-            ->select('forms.*', 'etapes.etape_name', 'etapes.etape_desc')
-            ->orderBy('forms.etape_number')
-            ->get();
-
-
-        return view('dossiers.show', compact('dossier', 'etapes', 'forms', 'forms_configs'));
+        return view('dossiers.show', compact('id'));
     }
     public function save_form(Request $request)
     {
@@ -131,7 +98,6 @@ class DossierController extends Controller
 
         $result_save = $this->forms_configs[$request->form_id]->save();
 
-dd($this->forms_configs[$request->form_id]->formData);
 
         return redirect()->route('dossiers.show', ['id' => $request->dossier_id])
         ->with('result', json_encode($result_save))
