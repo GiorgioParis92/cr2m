@@ -66,7 +66,7 @@ class Upload extends AbstractFormData
 
 
     public function check_value() {
-
+dump(Storage::disk('public')->exists($this->value));
         return Storage::disk('public')->exists($this->value);
     }
 
