@@ -11,7 +11,7 @@ class Text extends AbstractFormData
 
         $data = '<div class="form-group  col-sm-12 '.($this->config->class ?? "").'">';
         $data .= '<label>'.$this->config->title.'</label>';
-        $data .= '<input class="form-control" type="text" name="'.$this->config->name.'"';
+        $data .= '<input  class="form-control" type="text" name="'.$this->config->name.'"';
         if ($this->config->required) {
             $data .= ' required ';
          } 
