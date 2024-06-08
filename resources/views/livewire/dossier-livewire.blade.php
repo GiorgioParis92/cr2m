@@ -174,7 +174,7 @@
                     var imgSrc = event.target.dataset.imgSrc;
                     console.log(imgSrc);
                     // Show the modal with the PDF
-                    $('#pdfModal').css('display', 'block');
+                    // $('#pdfModal').css('display', 'block');
                     $('#pdfModal').modal('show');
                     $('#pdfFrame').attr('src', imgSrc);
                 });
