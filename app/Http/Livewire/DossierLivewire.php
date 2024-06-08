@@ -90,11 +90,12 @@ class DossierLivewire extends Component
             $forms = DB::table('forms')->where('fiche_id', $this->dossier->fiche_id);
             
             if(isset($this->etape_display)) {
-                $forms=$forms->where('etape_number', $this->etape_display);
+                $forms=$forms->where('etape_number', $this->etape_display->id);
 
             }
 
             $forms=$forms->get();
+
             $this->forms_configs = [];
 
             foreach ($forms as $form) {
