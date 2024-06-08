@@ -118,4 +118,9 @@ class DossierLivewire extends Component
     {
         return json_decode(json_encode($array));
     }
+
+    public function showPdfModal($pdfUrl)
+{
+    $this->emit('pdfModalShow', $pdfUrl);
+}
 }

@@ -165,20 +165,14 @@
     </div>
 </div>
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        // Use Livewire's hook to run scripts after DOM updates
-        Livewire.hook('message.processed', (message, component) => {
-            // Attach the click event to elements with class 'pdfModal' after each Livewire update
-            document.querySelectorAll('.pdfModal').forEach(function (element) {
-                element.addEventListener('click', function (event) {
-                    var imgSrc = event.target.dataset.imgSrc;
-                    console.log(imgSrc);
-                    // Show the modal with the PDF
-                    $('#pdfModal').css('display', 'block');
-                    // $('#pdfModal').modal('show');
-                    $('#pdfFrame').attr('src', imgSrc);
-                });
-            });
+       document.addEventListener('DOMContentLoaded', function () {
+        // Listen for the event from Livewire
+        Livewire.on('pdfModalShow', (imgSrc) => {
+            console.log(imgSrc);
+            // Show the modal with the PDF
+            $('#pdfModal').css('display', 'block');
+            $('#pdfModal').modal('show');
+            $('#pdfFrame').attr('src', imgSrc);
         });
     });
 </script>

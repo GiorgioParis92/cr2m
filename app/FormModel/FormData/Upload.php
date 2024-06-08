@@ -31,8 +31,8 @@ class Upload extends AbstractFormData
             <i class="fas fa-eye"></i>
         </button>';
         } else {
-            $data .= '<button type="button" class="btn btn-primary btn-view pdfModal"
-            data-toggle="modal" data-target="pdfModal"
+            $data .= '<button type="button" class="btn btn-primary btn-view "
+            data-toggle="modal" wire:click="showPdfModal('.asset('storage/' . $this->value).')" 
             data-img-src="'.asset('storage/' . $this->value).'"
             data-name="'.$this->config->title.'">
             <i class="fas fa-file-pdf"></i>';
