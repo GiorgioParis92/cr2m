@@ -221,7 +221,17 @@
             });
         });
 
-        $(document).ready(function() {
+       
+       
+       
+    </script>
+    <!-- Github buttons -->
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+    <!-- Control Center for Soft Dashboard: parallax effects, scripts for the example pages etc -->
+    <script src="{{ asset('frontend/assets/js/soft-ui-dashboard.min.js?v=1.0.7') }}"></script>
+@livewireScripts
+<script>
+     $(document).ready(function() {
             $('select').select2();
             $('.datepicker').datepicker();
             $('.imageModal').on('click', function(event) {
@@ -249,14 +259,7 @@ alert(imgSrc)
             });
 
         });
-       
-       
-    </script>
-    <!-- Github buttons -->
-    <script async defer src="https://buttons.github.io/buttons.js"></script>
-    <!-- Control Center for Soft Dashboard: parallax effects, scripts for the example pages etc -->
-    <script src="{{ asset('frontend/assets/js/soft-ui-dashboard.min.js?v=1.0.7') }}"></script>
-@livewireScripts
+        </script>
 </body>
 
 </html>
