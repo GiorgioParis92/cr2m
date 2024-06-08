@@ -168,7 +168,7 @@
        document.addEventListener('DOMContentLoaded', function () {
         // Listen for the event from Livewire
         Livewire.on('pdfModalShow', (imgSrc) => {
-            console.log(imgSrc);
+            alert(imgSrc);
             // Show the modal with the PDF
             $('#pdfModal').css('display', 'block');
             $('#pdfModal').modal('show');
