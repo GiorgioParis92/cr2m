@@ -87,7 +87,14 @@ class DossierLivewire extends Component
     {
         // Check if dossier is set and not null
         if (isset($this->dossier) && $this->dossier->fiche_id) {
-            $forms = DB::table('forms')->where('fiche_id', $this->dossier->fiche_id)->get();
+            $forms = DB::table('forms')->where('fiche_id', $this->dossier->fiche_id);
+            
+            if(isset($this->etape_display)) {
+                $forms=$forms->where('etape_number', $this->etape_display);
+
+            }
+
+            $forms=$forms->get();
             $this->forms_configs = [];
 
             foreach ($forms as $form) {
