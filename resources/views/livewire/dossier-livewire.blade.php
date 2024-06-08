@@ -138,9 +138,7 @@
                         <div class="">
 
                             @php $form=$forms_configs[$form_id] @endphp
-                            <form
-                                action="{{ route('form.save', ['dossierId' => $dossier->id, 'form_id' => $form->form->id]) }}"
-                                method="POST">
+                            <form wire:submit.prevent="submit" >
                                 @csrf
                                 <input type="hidden" name="form_id" value="{{ $form->form->id }}">
                                 <input type="hidden" name="dossier_id" value="{{ $dossier->id }}">
