@@ -25,9 +25,7 @@ class AbstractFormData
             ->where('dossier_id', $dossier_id)
             ->where('meta_key', $name)
             ->first();
-            if($form_id==5) {
-                dump($config);
-            }
+           
         $this->name = $name;
         $this->value = $config->meta_value ?? '';
 

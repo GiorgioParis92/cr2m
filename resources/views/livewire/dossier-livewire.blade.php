@@ -116,7 +116,7 @@
                                             <tbody>
                                                 @foreach ($forms_configs as $index => $form_handler)
                                                     @if ($form_handler->form->etape_number == $tab && $form_handler->form->type == 'document')
-                                                    @dump($form_handler)   
+
                                                     {!! $form_handler->render([]) !!} <!-- Render without error array -->
                                                     @endif
                                                 @endforeach
