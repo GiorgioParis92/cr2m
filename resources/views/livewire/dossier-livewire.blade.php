@@ -119,6 +119,7 @@
 
                                                     {!! $form_handler->render([]) !!} <!-- Render without error array -->
                                                     @endif
+                                                    @section('scripts')
                                                     <script>
                                                           $('.pdfModal').on('click', function(event) {
 
@@ -131,6 +132,7 @@ $('#pdfFrame').attr('src', imgSrc);
 
 });
 </script>
+@endsection
                                                 @endforeach
                                             </tbody>
                                         </table>
