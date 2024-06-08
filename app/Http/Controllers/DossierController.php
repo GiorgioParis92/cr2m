@@ -89,7 +89,7 @@ class DossierController extends Controller
             $cached_forms_configs[$request->dossier_id] = [];
         }
         $this->forms_configs = $cached_forms_configs[$request->dossier_id];
-
+        dd($request->all);
         foreach ($request->all() as $key => $data) {
             if ($key != "_token" && $key != "form_id" && $key != "dossier_id"  && $key != "etape_id") {
                 $this->forms_configs[$request->form_id]->formData[$key]->value = $data;
