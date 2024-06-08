@@ -119,20 +119,7 @@
 
                                                     {!! $form_handler->render([]) !!} <!-- Render without error array -->
                                                     @endif
-                                                    @section('scripts')
-                                                    <script>
-                                                          $('.pdfModal').on('click', function(event) {
-
-var imgSrc = $(this).data('img-src');
-alert(imgSrc)
-console.log(imgSrc)
-$('#pdfModal').css('display', 'block');
-$('#pdfModal').modal('show');
-$('#pdfFrame').attr('src', imgSrc);
-
-});
-</script>
-@endsection
+                                                    
                                                 @endforeach
                                             </tbody>
                                         </table>
@@ -180,3 +167,17 @@ $('#pdfFrame').attr('src', imgSrc);
         </div>
     </div>
 </div>
+@section('scripts')
+                                                    <script>
+                                                          $('.pdfModal').on('click', function(event) {
+
+var imgSrc = $(this).data('img-src');
+alert(imgSrc)
+console.log(imgSrc)
+$('#pdfModal').css('display', 'block');
+$('#pdfModal').modal('show');
+$('#pdfFrame').attr('src', imgSrc);
+
+});
+</script>
+@endsection
