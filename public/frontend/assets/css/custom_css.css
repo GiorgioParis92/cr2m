@@ -1014,3 +1014,15 @@ main {
     animation: 0.2s ease;
     background: #56eda8;
 }
+
+.nav.nav-pills .nav-item {
+    z-index: 3;
+    min-width: 100%;
+    margin-top: 10px;
+    border: 3px solid white;
+    border-radius: 10px;
+    cursor: pointer;
+}
+.nav.nav-pills .nav-item .active {
+color:white
+}
