@@ -230,6 +230,8 @@
     <!-- Control Center for Soft Dashboard: parallax effects, scripts for the example pages etc -->
     <script src="{{ asset('frontend/assets/js/soft-ui-dashboard.min.js?v=1.0.7') }}"></script>
 @livewireScripts
+@yield('scripts')
+
 <script>
      $(document).ready(function() {
             $('select').select2();
