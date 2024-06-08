@@ -18,7 +18,10 @@ class AbstractFormData
         $this->form_id = $form_id;
         $this->dossier_id = $dossier_id;
         $this->config = $config;
-dump($config);
+if($form_id==5) {
+    dump($config);
+}
+        
         $config = \DB::table('forms_data')
             ->where('form_id', $form_id)
             ->where('dossier_id', $dossier_id)
