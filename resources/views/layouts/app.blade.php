@@ -240,10 +240,10 @@
             $('.pdfModal').on('click', function(event) {
 
                 var imgSrc = $(this).data('img-src');
-
+alert(imgSrc)
                 console.log(imgSrc)
                 $('#pdfModal').css('display', 'block');
-                //   $('#pdfModal').modal('show');
+                $('#pdfModal').modal('show');
                 $('#pdfFrame').attr('src', imgSrc);
 
             });
