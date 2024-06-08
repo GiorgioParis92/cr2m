@@ -116,10 +116,8 @@
                                             <tbody>
                                                 @foreach ($forms_configs as $index => $form_handler)
                                                     @if ($form_handler->form->etape_number == $tab && $form_handler->form->type == 'document')
-
-                                                    {!! $form_handler->render([]) !!} <!-- Render without error array -->
+                                                        {!! $form_handler->render([]) !!} <!-- Render without error array -->
                                                     @endif
-                                                    
                                                 @endforeach
                                             </tbody>
                                         </table>
@@ -135,49 +133,52 @@
     <div class="row">
         <div class="col-12">
             <div class="card form-register container mt-5">
-                @if(isset($form_id))
+                @if (isset($form_id))
+                    <div class="row">
+                        <div class="">
 
-                <div class="row">
-                    <div class="">
-
-                      @php $form=$forms_configs[$form_id] @endphp
-                      <form
-                                        action="{{ route('form.save', ['dossierId' => $dossier->id, 'form_id' => $form->form->id]) }}"
-                                        method="POST">
-                                        @csrf
-                                        <input type="hidden" name="form_id" value="{{ $form->form->id }}">
-                                        <input type="hidden" name="dossier_id" value="{{ $dossier->id }}">
-
-
-                                        {!! $form->render([]) !!}
+                            @php $form=$forms_configs[$form_id] @endphp
+                            <form
+                                action="{{ route('form.save', ['dossierId' => $dossier->id, 'form_id' => $form->form->id]) }}"
+                                method="POST">
+                                @csrf
+                                <input type="hidden" name="form_id" value="{{ $form->form->id }}">
+                                <input type="hidden" name="dossier_id" value="{{ $dossier->id }}">
 
 
-                                        <div class="row">
-                                            <div class="form-group">
-                                                <button class="btn btn-secondary" type="submit">Enregistrer</button>
-                                            </div>
-                                        </div>
-                                    </form>   
+                                {!! $form->render([]) !!}
+
+
+                                <div class="row">
+                                    <div class="form-group">
+                                        <button class="btn btn-secondary" type="submit">Enregistrer</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+
+
                     </div>
-
-
-                </div>
                 @endif
             </div>
         </div>
     </div>
 </div>
-@section('scripts')
-                                                    <script>
-                                                          $('.pdfModal').on('click', function(event) {
-
-var imgSrc = $(this).data('img-src');
-alert(imgSrc)
-console.log(imgSrc)
-$('#pdfModal').css('display', 'block');
-$('#pdfModal').modal('show');
-$('#pdfFrame').attr('src', imgSrc);
-
-});
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Use Livewire's hook to run scripts after DOM updates
+        Livewire.hook('message.processed', (message, component) => {
+            // Attach the click event to elements with class 'pdfModal' after each Livewire update
+            document.querySelectorAll('.pdfModal').forEach(function (element) {
+                element.addEventListener('click', function (event) {
+                    var imgSrc = event.target.dataset.imgSrc;
+                    console.log(imgSrc);
+                    // Show the modal with the PDF
+                    $('#pdfModal').css('display', 'block');
+                    $('#pdfModal').modal('show');
+                    $('#pdfFrame').attr('src', imgSrc);
+                });
+            });
+        });
+    });
 </script>
-@endsection

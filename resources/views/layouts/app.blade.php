@@ -230,38 +230,7 @@
     <!-- Control Center for Soft Dashboard: parallax effects, scripts for the example pages etc -->
     <script src="{{ asset('frontend/assets/js/soft-ui-dashboard.min.js?v=1.0.7') }}"></script>
 @livewireScripts
-@yield('scripts')
 
-<script>
-     $(document).ready(function() {
-            $('select').select2();
-            $('.datepicker').datepicker();
-            $('.imageModal').on('click', function(event) {
-
-                var imgSrc = $(this).data('img-src');
-
-
-                $('#imageModal').css('display', 'block');
-                $('#imageModal').modal('show');
-                $('#imageInModal').attr('src', imgSrc);
-                $('#imageModalLabel').html($(this).data('name'))
-            });
-
-
-
-            $('.pdfModal').on('click', function(event) {
-
-                var imgSrc = $(this).data('img-src');
-alert(imgSrc)
-                console.log(imgSrc)
-                $('#pdfModal').css('display', 'block');
-                $('#pdfModal').modal('show');
-                $('#pdfFrame').attr('src', imgSrc);
-
-            });
-
-        });
-        </script>
 </body>
 
 </html>
