@@ -190,7 +190,7 @@
 console.log('initializeDropzones ok ')
         // Remove existing Dropzones to prevent multiple instances
         Dropzone.instances.forEach(instance => instance.destroy());
-        console.log(@dump($forms_configs))
+
         @foreach ($forms_configs as $index => $form)
             @if ($form->form->type == 'document')
                 @foreach ($form->formData as $key => $value)
