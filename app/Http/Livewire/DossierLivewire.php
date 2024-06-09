@@ -109,6 +109,7 @@ class DossierLivewire extends Component
             foreach ($forms as $form) {
                 $this->forms_configs[$form->id] = new FormConfigHandler($this->dossier, $this->convertArrayToStdClass((array) $form));
             }
+
         } else {
             // Log or handle the case where dossier or fiche_id is not set
             $this->forms_configs = [];

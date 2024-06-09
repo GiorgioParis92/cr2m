@@ -1,5 +1,6 @@
 <div>
     <div class="row">
+
         <div class="col-12">
             <div class="card form-register">
                 <div class="card-header pb-0 clearfix">
@@ -134,13 +135,13 @@
         <div class="col-12">
             <div class="card form-register container mt-5">
                 @if (isset($form_id))
-                @php $form=$forms_configs[$form_id] @endphp
+                    @php $form=$forms_configs[$form_id] @endphp
 
                     <div class="row">
                         <div class="">
-                            <h4>{{$form->form->form_title}}</h4>
+                            <h4>{{ $form->form->form_title }}</h4>
 
-                            <form 
+                            <form
                                 action="{{ route('form.save', ['dossierId' => $dossier->id, 'form_id' => $form->form->id]) }}"
                                 method="POST">
                                 @csrf
@@ -166,16 +167,22 @@
         </div>
     </div>
 </div>
+
 <script>
-      document.addEventListener('DOMContentLoaded', function () {
-        // Initial setup
-        initializeDropzones();
+    document.addEventListener('DOMContentLoaded', function() {
+
+        console.log(@json($forms_configs))
+
+        initializeDropzones(@json($forms_configs));
         initializePdfModals();
 
         // Listen for the Livewire event to reinitialize Dropzone
         Livewire.on('initializeDropzones', () => {
             console.log('initializeDropzones')
-            initializeDropzones();
+            Dropzone.autoDiscover = false;
+            console.log('initializeDropzones ok ')
+            // Remove existing Dropzones to prevent multiple instances
+         
         });
 
         // Use Livewire's hook to run scripts after DOM updates
@@ -185,46 +192,14 @@
         });
     });
 
-    function initializeDropzones() {
-        Dropzone.autoDiscover = false;
-console.log('initializeDropzones ok ')
-        // Remove existing Dropzones to prevent multiple instances
-        Dropzone.instances.forEach(instance => instance.destroy());
-
-        @foreach ($forms_configs as $index => $form)
-            @if ($form->form->type == 'document')
-                @foreach ($form->formData as $key => $value)
-                    var dropzoneElementId = `#dropzone-{{ $key }}`;
-                    if ($(dropzoneElementId).is(':visible')) {
-                        var dropzone{{ $key }} = new Dropzone(dropzoneElementId, {
-                            method: 'post',
-                            headers: {
-                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                            },
-                            paramName: 'file',
-                            sending: function(file, xhr, formData) {
-                                formData.append('folder', 'dossiers');
-                                formData.append('template', '{{ $key }}');
-                            },
-                            init: function() {
-                                this.on("success", function(file, response) {
-                                    console.log('Successfully uploaded:', response);
-                                });
-                                this.on("error", function(file, response) {
-                                    console.log('Upload error:', response);
-                                });
-                            }
-                        });
-                    }
-                @endforeach
-            @endif
-        @endforeach
+    function initializeDropzones(@json($forms_configs)) {
+    console.log(configs)
     }
 
     function initializePdfModals() {
         // Attach the click event to elements with class 'pdfModal' after each Livewire update
-        document.querySelectorAll('.pdfModal').forEach(function (element) {
-            element.addEventListener('click', function (event) {
+        document.querySelectorAll('.pdfModal').forEach(function(element) {
+            element.addEventListener('click', function(event) {
                 var imgSrc = event.target.dataset.imgSrc;
                 $('#pdfModal').css('display', 'block');
                 $('#pdfFrame').attr('src', imgSrc);
