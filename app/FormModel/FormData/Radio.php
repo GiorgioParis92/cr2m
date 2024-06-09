@@ -8,6 +8,7 @@ class Radio extends AbstractFormData
 {
     public function render(bool $is_error)
     {
+        $wireModel = "formData.{$this->form_id}.{$this->name}";
 
         $data = '<div class="form-group  col-sm-12 '.($this->config->class ?? "").'">';
         $data .= '<div class="form-group">';
@@ -26,7 +27,7 @@ class Radio extends AbstractFormData
             $data .= '<div>';
             if (is_array($optionsArray)) {
                 foreach ($optionsArray as $key => $element) {
-                    $data .= '<input ';
+                    $data .= '<input wire:model="'.$wireModel.'" ';
                     if ($this->value == $element['value']) {
                         $data .= 'checked';
                     }

@@ -20,14 +20,15 @@ class Db_select extends AbstractFormData
             }
         }
 
-     
+        $wireModel = "formData.{$this->form_id}.{$this->name}";
+
         $request=DB::select($sql_command);
 
         $data = '<div class="form-group  col-sm-12 ';
         $data .= $this->config->class ?? '';
         $data .= '">';
         $data .='<label>'.$this->config->title.'</label><br />';
-        $data .='<select id="form_config_'.$this->name.'"';
+        $data .='<select wire:model="'.$wireModel.'" id="form_config_'.$this->name.'"';
         if($this->config->required==1) {$data.=' required '; } 
         $data .='name="'.$this->config->name.'" class="form-control">';
         $data.='<option value="">Choisir</option>';

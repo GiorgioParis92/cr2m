@@ -135,34 +135,29 @@
         <div class="col-12">
             <div class="card form-register container mt-5">
                 @if (isset($form_id))
-                    @php $form=$forms_configs[$form_id] @endphp
-
-                    <div class="row">
-                        <div class="">
-                            <h4>{{ $form->form->form_title }}</h4>
-
-                            <form wire:submit.prevent="submit"
-                                {{-- action="{{ route('form.save', ['dossierId' => $dossier->id, 'form_id' => $form->form->id]) }}" --}}
-                                method="POST">
-                                @csrf
-                                <input type="hidden" name="form_id" value="{{ $form->form->id }}">
-                                <input type="hidden" name="dossier_id" value="{{ $dossier->id }}">
-
-
-                                {!! $form->render([]) !!}
-
-
-                                <div class="row">
-                                    <div class="form-group">
-                                        <button class="btn btn-secondary" type="submit">Enregistrer</button>
-                                    </div>
+                @php $form = $forms_configs[$form_id] @endphp
+            
+                <div class="row">
+                    <div class="">
+                        <h4>{{ $form->form->form_title }}</h4>
+            
+                        <form wire:submit.prevent="submit">
+                            @csrf
+                            <input type="hidden" name="form_id" value="{{ $form->form->id }}">
+                            <input type="hidden" name="dossier_id" value="{{ $dossier->id }}">
+            
+                            {!! $form->render([]) !!}
+            
+                            <div class="row">
+                                <div class="form-group">
+                                    <button class="btn btn-secondary" type="submit">Enregistrer</button>
                                 </div>
-                            </form>
-                        </div>
-
-
+                            </div>
+                        </form>
                     </div>
-                @endif
+                </div>
+            @endif
+            
             </div>
         </div>
     </div>

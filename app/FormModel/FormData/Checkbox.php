@@ -15,6 +15,9 @@ class Checkbox extends AbstractFormData
             $optionsArray = [];
         }
 
+        $wireModel = "formData.{$this->form_id}.{$this->name}";
+
+ 
 
 
         $data = '<div class="form-group col-sm-12';
@@ -25,7 +28,7 @@ class Checkbox extends AbstractFormData
         $data .= '</label><br />';
         if (is_array($optionsArray)) {
             $data .= '<label class="switch">';
-            $data .= '<input type="hidden" name="';
+            $data .= '<input wire:model="'.$wireModel.'"  type="hidden" name="';
             $data .= $this->config->name;
             $data .= '" value="';
             $data .= $optionsArray[0]['value'];

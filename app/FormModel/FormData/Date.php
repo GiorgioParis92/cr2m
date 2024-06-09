@@ -20,9 +20,11 @@ class Date extends AbstractFormData
     public function render(bool $is_error)
     {
 
+        $wireModel = "formData.{$this->form_id}.{$this->name}";
+
         $data = '<div class="form-group  col-sm-12 '.($this->config->class ?? "").'">';
         $data .= '<label>'.$this->config->title.'</label>';
-        $data .= '<input class="form-control datepicker ';
+        $data .= '<input wire:model="'.$wireModel.'"  class="form-control datepicker ';
         if($is_error) {
             $data .=' error is-invalid';
         }

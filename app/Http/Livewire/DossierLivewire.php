@@ -15,6 +15,7 @@ class DossierLivewire extends Component
     public $etapes;
     public $forms_configs;
     public $tab;
+    public $formData = [];
 
     public function mount($id)
     {
@@ -42,6 +43,7 @@ class DossierLivewire extends Component
             ->get();
 
         $this->etapes = $this->convertArrayToStdClass($etapes->toArray());
+
         $this->setTab($this->dossier['etape_number']);
         $this->reinitializeFormsConfigs();
     }
@@ -50,76 +52,104 @@ class DossierLivewire extends Component
     {
         $this->tab = $tab;
 
+        // Fetch and convert to array
         $etape_display = Etape::where('id', $tab)->first();
-
-        $this->etape_display = $etape_display ?? $this->convertArrayToStdClass($etape_display->toArray());
-        $etapes = [];
-        foreach ($this->etapes as $etape) {
-            $etapes[] = $this->convertArrayToStdClass((array) $etape);
-
-        }
-        $this->etapes = $etapes;
+        $this->etape_display = $etape_display ? $this->convertObjectToArray($etape_display) : [];
+        $this->etapes = $this->convertArrayToStdClass($this->etapes);
 
         $this->reinitializeFormsConfigs();
-
         $this->emit('initializeDropzones');
-
 
         $firstKey = array_key_first($this->forms_configs);
         $this->display_form($firstKey);
     }
 
+    public function hydrate()
+{
+    $this->etapes = $this->convertArrayToStdClass($this->etapes);
+    $this->reinitializeFormsConfigs();
+}
+public function updated($propertyName, $value)
+{
+    if (strpos($propertyName, 'formData.') === 0) {
+        $this->updatedFormData($propertyName, $value);
+    }
+}
+
+public function updatedFormData($propertyName, $value)
+{
+    // Parse the property name
+    // Example property name: formData.3.nom
+    $pattern = '/^formData\.(\d+)\.(\w+)$/';
+    if (preg_match($pattern, $propertyName, $matches)) {
+        $formId = $matches[1]; // Extract formId
+        $key = $matches[2]; // Extract key
+
+        // Ensure the formId and key exist
+        if (isset($this->forms_configs[$formId]) && isset($this->forms_configs[$formId]->formData[$key])) {
+            $this->forms_configs[$formId]->formData[$key]->value = $value;
+        }
+    }
+    $result_save=[];
+    foreach ($this->forms_configs as $formId => $config) {
+        $result_save[$formId] = $config->save();
+    }
+
+}
+
     public function display_form($form_id)
     {
-
         $this->form_id = $form_id;
 
-
+        // Fetch and convert to array
         $etape_display = Etape::where('id', $this->tab)->first();
-
-        $this->etape_display = $etape_display ?? $this->convertArrayToStdClass($etape_display->toArray());
-        $etapes = [];
-        foreach ($this->etapes as $etape) {
-            $etapes[] = $this->convertArrayToStdClass((array) $etape);
-
-        }
-        $this->etapes = $etapes;
+        $this->etape_display = $etape_display ? $this->convertObjectToArray($etape_display) : [];
+        $this->etapes = $this->convertArrayToStdClass($this->etapes);
 
         $this->reinitializeFormsConfigs();
-
         $this->emit('initializeDropzones');
-
-
     }
+
     public function reinitializeFormsConfigs()
     {
-        // Check if dossier is set and not null
         if (isset($this->dossier) && $this->dossier->fiche_id) {
             $forms = DB::table('forms')->where('fiche_id', $this->dossier->fiche_id);
 
-            if (isset($this->etape_display)) {
-                $forms = $forms->where('etape_number', $this->etape_display->id);
-
+            if (!empty($this->etape_display)) {
+                $forms = $forms->where('etape_number', $this->etape_display['id']);
             }
 
             $forms = $forms->get();
 
             $this->forms_configs = [];
+            $this->formData = [];
 
             foreach ($forms as $form) {
-                $this->forms_configs[$form->id] = new FormConfigHandler($this->dossier, $this->convertArrayToStdClass((array) $form));
-            }
+                $handler = new FormConfigHandler($this->dossier, $this->convertArrayToStdClass((array) $form));
+                $this->forms_configs[$form->id] = $handler;
 
+                foreach ($handler->formData as $key => $field) {
+                    $this->formData[$form->id][$key] = $field->value;
+                }
+            }
         } else {
-            // Log or handle the case where dossier or fiche_id is not set
             $this->forms_configs = [];
+            $this->formData = [];
+        }
+    }
+
+    public function updateFormData($formId, $key, $value)
+    {
+        $this->formData[$formId][$key] = $value;
+        if (isset($this->forms_configs[$formId])) {
+            $this->forms_configs[$formId]->formData[$key]->value = $value;
         }
     }
 
     public function render()
     {
         return view('livewire.dossier-livewire', [
-            'dossier' => $this->dossier, // Pass as a parameter to the view
+            'dossier' => $this->dossier,
         ]);
     }
 
@@ -128,36 +158,33 @@ class DossierLivewire extends Component
         return json_decode(json_encode($array));
     }
 
+    private function convertObjectToArray($object)
+    {
+        return json_decode(json_encode($object), true);
+    }
+
     public function showPdfModal($pdfUrl)
     {
         $this->emit('pdfModalShow', $pdfUrl);
     }
 
-
-    public function submit(Request $request)
+    public function submit()
     {
+        $this->etapes = $this->convertArrayToStdClass($this->etapes);
 
-        $cached_forms_configs = session('forms_configs', []);
-        dump($request);
-        dd($this->forms_configs);
-
-        if (!array_key_exists($request->dossier_id, $cached_forms_configs)) {
-            $cached_forms_configs[$request->dossier_id] = [];
-        }
-        $this->forms_configs = $cached_forms_configs[$request->dossier_id];
-
-        foreach ($request->all() as $key => $data) {
-            if ($key != "_token" && $key != "form_id" && $key != "dossier_id" && $key != "etape_id") {
-                $this->forms_configs[$request->form_id]->formData[$key]->value = $data;
+        foreach ($this->formData as $formId => $fields) {
+            foreach ($fields as $key => $value) {
+                if (isset($this->forms_configs[$formId])) {
+                    $this->forms_configs[$formId]->formData[$key]->value = $value;
+                }
             }
         }
 
-        $result_save = $this->forms_configs[$request->form_id]->save();
+        $result_save = [];
+        foreach ($this->forms_configs as $formId => $config) {
+            $result_save[$formId] = $config->save();
+        }
 
-
-        return redirect()->route('dossiers.show', ['id' => $request->dossier_id])
-            ->with('result', json_encode($result_save))
-            ->with('form_id', $request->form_id)
-            ->with('etape_id', $request->etape_id);
+        session()->flash('message', 'Data saved successfully.');
     }
 }

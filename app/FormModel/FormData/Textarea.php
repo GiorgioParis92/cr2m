@@ -8,10 +8,11 @@ class Textarea extends AbstractFormData
 {
     public function render(bool $is_error)
     {
+        $wireModel = "formData.{$this->form_id}.{$this->name}";
 
         $data = '<div class="form-group  col-sm-12 '.($this->config->class ?? "").'">';
         $data .= '<label>'.$this->config->title.'</label>';
-        $data .= '<textarea class="form-control" name="'.$this->config->name.'">'.($this->value ?? "") .'</textarea>';
+        $data .= '<textarea wire:model="'.$wireModel.'" class="form-control" name="'.$this->config->name.'">'.($this->value ?? "") .'</textarea>';
 
         $data .= '</div>';
 
