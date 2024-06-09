@@ -138,7 +138,7 @@ class DossierLivewire extends Component
     {
 
         $cached_forms_configs = session('forms_configs', []);
-        dump($cached_forms_configs);
+        dump($request);
         dd($this->forms_configs);
 
         if (!array_key_exists($request->dossier_id, $cached_forms_configs)) {
