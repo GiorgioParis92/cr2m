@@ -82,6 +82,7 @@ class DossierController extends Controller
     public function save_form(Request $request)
     {
 
+        dd($request);
         $cached_forms_configs = session('forms_configs', []);
 
         if (!array_key_exists($request->dossier_id, $cached_forms_configs)) {
