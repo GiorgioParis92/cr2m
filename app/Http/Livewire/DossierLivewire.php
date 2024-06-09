@@ -42,7 +42,7 @@ class DossierLivewire extends Component
             ->get();
 
         $this->etapes = $this->convertArrayToStdClass($etapes->toArray());
-            $this->setTab($this->dossier['etape_number']);
+        $this->setTab($this->dossier['etape_number']);
         $this->reinitializeFormsConfigs();
     }
 
@@ -71,8 +71,8 @@ class DossierLivewire extends Component
 
     public function display_form($form_id)
     {
-        
-        $this->form_id=$form_id;
+
+        $this->form_id = $form_id;
 
 
         $etape_display = Etape::where('id', $this->tab)->first();
@@ -89,20 +89,20 @@ class DossierLivewire extends Component
 
         $this->emit('initializeDropzones');
 
-       
+
     }
     public function reinitializeFormsConfigs()
     {
         // Check if dossier is set and not null
         if (isset($this->dossier) && $this->dossier->fiche_id) {
             $forms = DB::table('forms')->where('fiche_id', $this->dossier->fiche_id);
-            
-            if(isset($this->etape_display)) {
-                $forms=$forms->where('etape_number', $this->etape_display->id);
+
+            if (isset($this->etape_display)) {
+                $forms = $forms->where('etape_number', $this->etape_display->id);
 
             }
 
-            $forms=$forms->get();
+            $forms = $forms->get();
 
             $this->forms_configs = [];
 
@@ -129,33 +129,35 @@ class DossierLivewire extends Component
     }
 
     public function showPdfModal($pdfUrl)
-{
-    $this->emit('pdfModalShow', $pdfUrl);
-}
-
-
-public function submit(Request $request)
-{
-
-    $cached_forms_configs = session('forms_configs', []);
-
-    if (!array_key_exists($request->dossier_id, $cached_forms_configs)) {
-        $cached_forms_configs[$request->dossier_id] = [];
+    {
+        $this->emit('pdfModalShow', $pdfUrl);
     }
-    $this->forms_configs = $cached_forms_configs[$request->dossier_id];
 
-    foreach ($request->all() as $key => $data) {
-        if ($key != "_token" && $key != "form_id" && $key != "dossier_id"  && $key != "etape_id") {
-            $this->forms_configs[$request->form_id]->formData[$key]->value = $data;
+
+    public function submit(Request $request)
+    {
+
+        $cached_forms_configs = session('forms_configs', []);
+        dump($cached_forms_configs);
+        dd($this->forms_configs);
+
+        if (!array_key_exists($request->dossier_id, $cached_forms_configs)) {
+            $cached_forms_configs[$request->dossier_id] = [];
         }
+        $this->forms_configs = $cached_forms_configs[$request->dossier_id];
+
+        foreach ($request->all() as $key => $data) {
+            if ($key != "_token" && $key != "form_id" && $key != "dossier_id" && $key != "etape_id") {
+                $this->forms_configs[$request->form_id]->formData[$key]->value = $data;
+            }
+        }
+
+        $result_save = $this->forms_configs[$request->form_id]->save();
+
+
+        return redirect()->route('dossiers.show', ['id' => $request->dossier_id])
+            ->with('result', json_encode($result_save))
+            ->with('form_id', $request->form_id)
+            ->with('etape_id', $request->etape_id);
     }
-
-    $result_save = $this->forms_configs[$request->form_id]->save();
-
-
-    return redirect()->route('dossiers.show', ['id' => $request->dossier_id])
-    ->with('result', json_encode($result_save))
-    ->with('form_id', $request->form_id)
-    ->with('etape_id', $request->etape_id);
-}
 }
