@@ -141,8 +141,8 @@
                         <div class="">
                             <h4>{{ $form->form->form_title }}</h4>
 
-                            <form
-                                action="{{ route('form.save', ['dossierId' => $dossier->id, 'form_id' => $form->form->id]) }}"
+                            <form wire:submit.prevent="submit"
+                                {{-- action="{{ route('form.save', ['dossierId' => $dossier->id, 'form_id' => $form->form->id]) }}" --}}
                                 method="POST">
                                 @csrf
                                 <input type="hidden" name="form_id" value="{{ $form->form->id }}">
