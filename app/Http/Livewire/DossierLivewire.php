@@ -58,7 +58,6 @@ class DossierLivewire extends Component
         $this->etapes = $this->convertArrayToStdClass($this->etapes);
 
         $this->reinitializeFormsConfigs();
-        $this->emit('initializeDropzones');
 
         $firstKey = array_key_first($this->forms_configs);
         $this->display_form($firstKey);
@@ -105,9 +104,12 @@ public function updatedFormData($propertyName, $value)
         $etape_display = Etape::where('id', $this->tab)->first();
         $this->etape_display = $etape_display ? $this->convertObjectToArray($etape_display) : [];
         $this->etapes = $this->convertArrayToStdClass($this->etapes);
-
+        $this->forms_configs = array_filter($this->forms_configs, function ($config) use ($etape_display) {
+            return isset($config->form->etape_id) && $config->form->etape_id == $etape_display['id'];
+        });
         $this->reinitializeFormsConfigs();
-        $this->emit('initializeDropzones');
+
+        $this->emit('initializeDropzones', ['forms_configs' => $this->forms_configs]);
     }
 
     public function reinitializeFormsConfigs()

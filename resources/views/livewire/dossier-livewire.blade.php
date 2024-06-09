@@ -166,19 +166,61 @@
 <script>
     document.addEventListener('DOMContentLoaded', function() {
 
-        console.log(@json($forms_configs))
 
-        initializeDropzones(@json($forms_configs));
+        initializeDropzones();
         initializePdfModals();
 
         // Listen for the Livewire event to reinitialize Dropzone
-        Livewire.on('initializeDropzones', () => {
-            console.log('initializeDropzones')
-            Dropzone.autoDiscover = false;
-            console.log('initializeDropzones ok ')
-            // Remove existing Dropzones to prevent multiple instances
-         
-        });
+        Livewire.on('initializeDropzones', (data) => {
+    console.log('initializeDropzones');
+
+    // Retrieve and parse the forms_configs
+    var configs = data.forms_configs;
+
+    // Remove existing Dropzones to prevent multiple instances
+    if (Dropzone.instances.length > 0) {
+        Dropzone.instances.forEach(instance => instance.destroy());
+    }
+
+    Dropzone.autoDiscover = false;
+
+    // Convert object to array and loop through configs
+    Object.values(configs).forEach((formConfig) => {
+        console.log(formConfig)
+        if (formConfig.form.type === 'document' ) {
+            Object.keys(formConfig.formData).forEach((key) => {
+                console.log(key)
+
+                var dropzoneElementId = `#dropzone-${key}`;
+                var dropzoneElement = document.querySelector(dropzoneElementId);
+                if (!dropzoneElement) {
+                    console.warn(`Element ${dropzoneElementId} not found.`);
+                    return;
+                }
+                new Dropzone(dropzoneElement, {
+                    method: 'post',
+                    headers: {
+                        // 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    },
+                    paramName: 'file',
+                    sending: function(file, xhr, formData) {
+                        formData.append('folder', 'dossiers');
+                        formData.append('template', key);
+                    },
+                    init: function() {
+                        this.on("success", function(file, response) {
+                            console.log('Successfully uploaded:', response);
+                        });
+                        this.on("error", function(file, response) {
+                            console.log('Upload error:', response);
+                        });
+                    }
+                });
+            });
+        }
+    });
+});
+
 
         // Use Livewire's hook to run scripts after DOM updates
         Livewire.hook('message.processed', (message, component) => {
@@ -187,8 +229,8 @@
         });
     });
 
-    function initializeDropzones(@json($forms_configs)) {
-    console.log(configs)
+    function initializeDropzones() {
+    
     }
 
     function initializePdfModals() {
