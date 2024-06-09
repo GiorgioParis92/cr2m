@@ -61,6 +61,10 @@ class DossierLivewire extends Component
         $this->etapes = $etapes;
 
         $this->reinitializeFormsConfigs();
+
+        $this->emit('initializeDropzones');
+
+
         $firstKey = array_key_first($this->forms_configs);
         $this->display_form($firstKey);
     }
@@ -82,6 +86,9 @@ class DossierLivewire extends Component
         $this->etapes = $etapes;
 
         $this->reinitializeFormsConfigs();
+
+        $this->emit('initializeDropzones');
+
        
     }
     public function reinitializeFormsConfigs()
@@ -126,4 +133,28 @@ class DossierLivewire extends Component
 }
 
 
+public function submit(Request $request)
+{
+
+    $cached_forms_configs = session('forms_configs', []);
+
+    if (!array_key_exists($request->dossier_id, $cached_forms_configs)) {
+        $cached_forms_configs[$request->dossier_id] = [];
+    }
+    $this->forms_configs = $cached_forms_configs[$request->dossier_id];
+
+    foreach ($request->all() as $key => $data) {
+        if ($key != "_token" && $key != "form_id" && $key != "dossier_id"  && $key != "etape_id") {
+            $this->forms_configs[$request->form_id]->formData[$key]->value = $data;
+        }
+    }
+
+    $result_save = $this->forms_configs[$request->form_id]->save();
+
+
+    return redirect()->route('dossiers.show', ['id' => $request->dossier_id])
+    ->with('result', json_encode($result_save))
+    ->with('form_id', $request->form_id)
+    ->with('etape_id', $request->etape_id);
+}
 }

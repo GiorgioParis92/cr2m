@@ -134,10 +134,12 @@
         <div class="col-12">
             <div class="card form-register container mt-5">
                 @if (isset($form_id))
+                @php $form=$forms_configs[$form_id] @endphp
+
                     <div class="row">
                         <div class="">
+                            <h4>{{$form->form->form_title}}</h4>
 
-                            @php $form=$forms_configs[$form_id] @endphp
                             <form 
                                 action="{{ route('form.save', ['dossierId' => $dossier->id, 'form_id' => $form->form->id]) }}"
                                 method="POST">
@@ -165,51 +167,96 @@
     </div>
 </div>
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
+      document.addEventListener('DOMContentLoaded', function () {
+        // Initial setup
+        initializeDropzones();
+        initializePdfModals();
+
+        // Listen for the Livewire event to reinitialize Dropzone
+        Livewire.on('initializeDropzones', () => {
+            console.log('initializeDropzones')
+            initializeDropzones();
+        });
+
         // Use Livewire's hook to run scripts after DOM updates
         Livewire.hook('message.processed', (message, component) => {
-            // Attach the click event to elements with class 'pdfModal' after each Livewire update
-            document.querySelectorAll('.pdfModal').forEach(function (element) {
-                element.addEventListener('click', function (event) {
-                    var imgSrc = event.target.dataset.imgSrc;
-                    console.log(imgSrc);
-                    // Show the modal with the PDF
-                    $('#pdfModal').css('display', 'block');
-                    // $('#pdfModal').modal('show');
-                    $('#pdfFrame').attr('src', imgSrc);
-                });
-            });
-
-            
-            $('.fillPDF').click(function() {
-                var form_id = $(this).data('form_id'); // Get the template from data attribute
-                var dossier_id = $(this).data('dossier_id'); // Get the dossier ID from data attribute
-                var name = $(this).data('name'); // Get the dossier ID from data attribute
-                alert('ok')
-                $.ajax({
-                    url: '/api/fill-pdf', // Adjust this URL to your actual API endpoint
-                    type: 'GET',
-                    data: {
-                        dossier_id: dossier_id,
-                        form_id: form_id,
-                        name: name
-                    },
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr(
-                            'content') // Include CSRF token if using Laravel's CSRF protection
-                    },
-                    success: function(response) {
-                        if (response.file_path) {
-                            // Display the PDF in an iframe if a file path is returned
-                            $('#pdfFrame').attr('src', response.file_path);
-                            $('#pdfModal').css('display', 'block');
-                        }
-                    },
-                    error: function(xhr, status, error) {
-                        console.error('Error generating PDF:', error);
-                    }
-                });
-            });
+            initializeDropzones();
+            initializePdfModals();
         });
     });
+
+    function initializeDropzones() {
+        Dropzone.autoDiscover = false;
+console.log('initializeDropzones ok ')
+        // Remove existing Dropzones to prevent multiple instances
+        Dropzone.instances.forEach(instance => instance.destroy());
+        console.log(@dump($forms_configs))
+        @foreach ($forms_configs as $index => $form)
+            @if ($form->form->type == 'document')
+                @foreach ($form->formData as $key => $value)
+                    var dropzoneElementId = `#dropzone-{{ $key }}`;
+                    if ($(dropzoneElementId).is(':visible')) {
+                        var dropzone{{ $key }} = new Dropzone(dropzoneElementId, {
+                            method: 'post',
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            },
+                            paramName: 'file',
+                            sending: function(file, xhr, formData) {
+                                formData.append('folder', 'dossiers');
+                                formData.append('template', '{{ $key }}');
+                            },
+                            init: function() {
+                                this.on("success", function(file, response) {
+                                    console.log('Successfully uploaded:', response);
+                                });
+                                this.on("error", function(file, response) {
+                                    console.log('Upload error:', response);
+                                });
+                            }
+                        });
+                    }
+                @endforeach
+            @endif
+        @endforeach
+    }
+
+    function initializePdfModals() {
+        // Attach the click event to elements with class 'pdfModal' after each Livewire update
+        document.querySelectorAll('.pdfModal').forEach(function (element) {
+            element.addEventListener('click', function (event) {
+                var imgSrc = event.target.dataset.imgSrc;
+                $('#pdfModal').css('display', 'block');
+                $('#pdfFrame').attr('src', imgSrc);
+            });
+        });
+
+        $('.fillPDF').click(function() {
+            var form_id = $(this).data('form_id');
+            var dossier_id = $(this).data('dossier_id');
+            var name = $(this).data('name');
+
+            $.ajax({
+                url: '/api/fill-pdf',
+                type: 'GET',
+                data: {
+                    dossier_id: dossier_id,
+                    form_id: form_id,
+                    name: name
+                },
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(response) {
+                    if (response.file_path) {
+                        $('#pdfFrame').attr('src', response.file_path);
+                        $('#pdfModal').css('display', 'block');
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error generating PDF:', error);
+                }
+            });
+        });
+    }
 </script>

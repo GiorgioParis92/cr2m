@@ -102,28 +102,28 @@
         <table id="dossiersTable" class="table table-bordered responsive-table table-responsive">
             <thead>
                 <tr>
-                    <th>Date</th>
-                    <th>Date str</th>
-                    <th>Client</th>
-                    <th>Coordonnées</th>
+                    <th style="max-width:10%">Date</th>
+                    <th style="max-width:10%">Date str</th>
+                    <th style="max-width:10%">Client</th>
+                    <th style="max-width:10%">Coordonnées</th>
 
-                    <th>Ménage</th>
-                    <th>Détails</th>
-                    <th>Détails</th>
-                    <th>Détails</th>
-                    <th>Etape</th>
-                    <th>Détails</th>
-                    <th>Statut</th>
-                    <th>Statut</th>
-                    <th>Accompagnateur</th>
+                    <th style="max-width:10%">Ménage</th>
+                    <th style="max-width:10%">Détails</th>
+                    <th style="max-width:10%">Détails</th>
+                    <th style="max-width:10%">Détails</th>
+                    <th style="max-width:10%">Etape</th>
+                    <th style="max-width:10%">Détails</th>
+                    <th style="max-width:10%">Statut</th>
+                    <th style="max-width:10%">Statut</th>
+                    <th style="max-width:10%">Accompagnateur</th>
 
-                    <th>Mandataire</th>
-                    <th>Mandataire</th>
-                    <th>Type de dossier</th>
-                    <th>Installateur</th>
-                    <th>Détails</th>
-                    <th>Détails</th>
-                    <th>Détails</th>
+                    <th style="max-width:10%">Mandataire</th>
+                    <th style="max-width:10%">Mandataire</th>
+                    <th style="max-width:10%">Type de dossier</th>
+                    <th style="max-width:10%">Installateur</th>
+                    <th style="max-width:10%">Détails</th>
+                    <th style="max-width:10%">Détails</th>
+                    <th style="max-width:10%">Détails</th>
 
 
                 </tr>
@@ -157,10 +157,17 @@
                         </td>
                         <td>{{ $dossier->beneficiaire->occupation }}</td>
                         <td>
-                            <a target="_blank" href="{{ route('dossiers.show', $dossier->id) }}">
+                            <a style="max-width:80px" target="_blank" href="{{ route('dossiers.show', $dossier->id) }}">
                                 <span class="badge badge-primary badge_button">{{ $dossier->etape_number }}</span>
 
-                                <div style="    margin-top: 12px;"
+                                <div style="    margin-top: 13px;
+    max-width: 80px;
+    text-wrap: wrap;
+    font-size: 9px;
+    padding: 8px !important;
+    background-size: 0;
+    /* margin: auto !important; */
+    padding-top: 13px !important;"
                                     class="btn btn-{{ $dossier->etape->etape_style ?? 'default' }}">
 
                                     {{ $dossier->etape->etape_desc ?? '' }}

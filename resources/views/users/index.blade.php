@@ -11,11 +11,13 @@
                         {{ session('success') }}
                     </div>
                 @endif
-                <table class="table table-bordered responsive-table">
+                <table class="table datatable table-bordered responsive-table">
                     <thead>
                         <tr>
                             <th>Nom</th>
+                            <th>Type d'utilisateur</th>
                             <th>Email</th>
+
                             <th>Téléphone</th>
                             <th>Client</th>
                             <th>Actions</th>
@@ -28,6 +30,7 @@
                       
                                    <a href="{{ route('users.edit', $user->id) }}">{{ $user->name }}</a>
                                 </td>
+                                <td data-label="Type">{{ $user->type->type_desc ?? '' }}</td>
                                 <td data-label="Type">{{ $user->email }}</td>
                            
                                 <td data-label="">

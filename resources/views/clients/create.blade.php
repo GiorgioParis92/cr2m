@@ -18,14 +18,14 @@
                 @csrf
                 <div class="mb-3">
                     <label for="client_title" class="form-label">{{ __('forms.client_title') }}</label>
-                    <input type="text" class="form-control" id="client_title" name="client_title" required>
+                    <input value="{{ old('client_title') }}" type="text" class="form-control" id="client_title" name="client_title" required>
                 </div>
                 <div class="mb-3">
                     <label for="type_client" class="form-label">{{ __('forms.type_client') }}</label>
                     <select class="form-control" id="type_client" name="type_client" required>
                         <option value="">-- Select Client Type --</option>
                         @foreach($clientTypes as $type)
-                            <option value="{{ $type->id }}">{{ $type->type_desc }}</option>
+                            <option @if(old('type_client')==$type->id) selected @endif value="{{ $type->id }}">{{ $type->type_desc }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -34,52 +34,52 @@
                     <div class="dropzone" id="mainLogoDropzone"></div>
                 </div>
                 <div class="mb-3">
-                    <label for="adresse" class="form-label">{{ __('forms.address') }}</label>
-                    <input type="text" class="form-control" id="adresse" name="adresse">
+                    <label for="adresse" class="form-label">Adresse</label>
+                    <input value="{{ old('adresse') }}" type="text" class="form-control" id="adresse" name="adresse">
                 </div>
                 <div class="mb-3">
                     <label for="cp" class="form-label">{{ __('forms.postal_code') }}</label>
-                    <input type="text" class="form-control" id="cp" name="cp">
+                    <input value="{{ old('cp') }}" type="text" class="form-control" id="cp" name="cp">
                 </div>
                 <div class="mb-3">
                     <label for="ville" class="form-label">{{ __('forms.city') }}</label>
-                    <input type="text" class="form-control" id="ville" name="ville">
+                    <input value="{{ old('ville') }}" type="text" class="form-control" id="ville" name="ville">
                 </div>
                 <div class="mb-3">
                     <label for="email" class="form-label">{{ __('forms.email') }}</label>
-                    <input type="email" class="form-control" id="email" name="email">
+                    <input value="{{ old('email') }}" type="email" class="form-control" id="email" name="email">
                 </div>
                 <div class="mb-3">
                     <label for="telephone" class="form-label">{{ __('forms.telephone') }}</label>
-                    <input type="text" class="form-control" id="telephone" name="telephone">
+                    <input value="{{ old('telephone') }}" type="text" class="form-control" id="telephone" name="telephone">
                 </div>
                 <div class="mb-3">
                     <label for="siret" class="form-label">{{ __('forms.siret') }}</label>
-                    <input type="text" class="form-control" id="siret" name="siret">
+                    <input value="{{ old('siret') }}" type="text" class="form-control" id="siret" name="siret">
                 </div>
                 <div class="mb-3">
                     <label for="siren" class="form-label">{{ __('forms.siren') }}</label>
-                    <input type="text" class="form-control" id="siren" name="siren">
+                    <input value="{{ old('siren') }}" type="text" class="form-control" id="siren" name="siren">
                 </div>
                 <div class="mb-3">
                     <label for="tva_intracomm" class="form-label">{{ __('forms.tva_intracommunautaire') }}</label>
-                    <input type="text" class="form-control" id="tva_intracomm" name="tva_intracomm" >
+                    <input value="{{ old('tva_intracomm') }}" type="text" class="form-control" id="tva_intracomm" name="tva_intracomm" >
                 </div>
                 <div class="mb-3">
                     <label for="type_societe" class="form-label">{{ __('forms.type_societe') }}</label>
-                    <input type="text" class="form-control" id="type_societe" name="type_societe" >
+                    <input value="{{ old('type_societe') }}" type="text" class="form-control" id="type_societe" name="type_societe" >
                 </div>
                 <div class="mb-3">
                     <label for="rcs" class="form-label">{{ __('forms.rcs') }}</label>
-                    <input type="text" class="form-control" id="rcs" name="rcs" >
+                    <input value="{{ old('rcs') }}" type="text" class="form-control" id="rcs" name="rcs" >
                 </div>
                 <div class="mb-3">
                     <label for="naf" class="form-label">{{ __('forms.naf') }}</label>
-                    <input type="text" class="form-control" id="naf" name="naf" >
+                    <input value="{{ old('naf') }}" type="text" class="form-control" id="naf" name="naf" >
                 </div>
                 <div class="mb-3">
                     <label for="agrement" class="form-label">{{ __('forms.agrement') }}</label>
-                    <input type="text" class="form-control" id="agrement" name="agrement" >
+                    <input value="{{ old('agrement') }}" type="text" class="form-control" id="agrement" name="agrement" >
                 </div>
                 <input type="hidden" name="main_logo" id="main_logo_input">
                 <button type="submit" class="btn btn-primary">{{ __('forms.submit') }}</button>

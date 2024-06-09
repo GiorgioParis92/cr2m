@@ -133,7 +133,7 @@
         });
 
         $(document).ready(function() {
-
+            $('.datatable').DataTable()
 
             $('.fillPDF').click(function() {
                 var form_id = $(this).data('form_id'); // Get the template from data attribute

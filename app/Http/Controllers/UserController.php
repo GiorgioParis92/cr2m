@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Client;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
 
 class UserController extends Controller
 {
@@ -14,7 +16,7 @@ class UserController extends Controller
     public function index(Request $request)
     {
 
-        $users = User::with('client.type');
+        $users = User::with('client.type')->with('type');
         if(auth()->user()->client_id>0) {
             $users=$users->where('client_id',auth()->user()->client_id);
         }
@@ -42,7 +44,14 @@ class UserController extends Controller
 
         return response()->json(['user' => $user], 201);
     }
+    public function edit(Request $request, $id)
+    {
+        $user = User::find($id);
+        $clients = Client::all();
+        $types=DB::table('users_type')->where('type_client_id','>',0)->get();
+        return view('users.edit',compact('user','clients','types'));
 
+    }
     public function editUser(Request $request, $id)
     {
         $user = User::find($id);
@@ -67,13 +76,19 @@ class UserController extends Controller
         if ($request->has('email')) {
             $user->email = $request->email;
         }
+        if ($request->has('client_id')) {
+            $user->client_id = $request->client_id;
+        }
+        if ($request->has('type_id')) {
+            $user->type_id = $request->type_id;
+        }
         if ($request->has('password')) {
             $user->password = Hash::make($request->password);
         }
 
         $user->save();
 
-        return response()->json(['user' => $user], 200);
+        return redirect()->route('users.index')->with('success', 'Utilisateur modifié.');
     }
 
     public function resetPassword(Request $request)

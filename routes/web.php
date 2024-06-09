@@ -20,7 +20,8 @@ use App\FormModel\FormConfigHandler;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CalendarController;
 use App\Http\Controllers\EventController;
-
+use App\Http\Controllers\Auth\ForgotPasswordController;
+use App\Http\Controllers\Auth\ResetPasswordController;
 
 
 /*
@@ -33,6 +34,10 @@ use App\Http\Controllers\EventController;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+// Auth::routes(['verify' => true]);
+
+// Password reset routes
+
 Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('login', [LoginController::class, 'login']);
 
@@ -44,12 +49,20 @@ Route::middleware('auth')->group(function () {
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('logout', [LoginController::class, 'logout']);
 
+
+    Route::get('password/reset', [ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request');
+
+    Route::get('password/reset/{token}', [ResetPasswordController::class, 'showResetForm'])->name('password.reset');
+    Route::post('password/email', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
+    Route::post('password/reset', [ResetPasswordController::class, 'reset'])->name('password.update');
+    
     // Route::get('/dashboard', function () {
     //     return view('dashboard');
     // })->name('dashboard');
 
     Route::get('/users/index', [UserController::class, 'index'])->name('users.index');
     Route::post('/user/create', [UserController::class, 'createUser'])->name('users.create');
+    Route::get('/user/edit/{id}', [UserController::class, 'edit'])->name('users.editform');
     Route::put('/user/edit/{id}', [UserController::class, 'editUser'])->name('users.edit');
     Route::put('/user/destroy/{id}', [UserController::class, 'editUser'])->name('users.destroy');
     Route::post('/password/reset', [UserController::class, 'resetPassword']);
@@ -110,3 +123,11 @@ Route::get('/events', [App\Http\Controllers\EventController::class, 'getEvents']
 
 // Include auth routes like login, register, password reset, etc.
 require __DIR__ . '/auth.php';
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

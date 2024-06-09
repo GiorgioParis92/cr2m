@@ -7,6 +7,11 @@ use App\Services\FileUploadService;
 use App\Models\ClientType;
 use App\Models\Client;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Str;
+use App\Notifications\UserCreatedNotification;
+use App\Models\User;
 
 class ClientController extends Controller
 {
@@ -49,27 +54,45 @@ class ClientController extends Controller
         $request->validate([
             'client_title' => 'required|string|max:255',
             'type_client' => 'required|integer|exists:clients_type,id',
+            'email' => 'required|email|unique:users,email', // Ensure email is unique
             // Add other validation rules as needed
         ]);
-
+    
         // Manually create the client data array, excluding '_token'
-        $clientData = $request->except('_token', 'main_logo');
-
+        $clientData = $request->except('_token', 'main_logo', 'client_email');
+    
         // Store the client data and get the client ID
         $client = Client::create($clientData);
         $clientId = $client->id;
-        $finalPath='';
+        $finalPath = '';
+    
         if ($request->main_logo) {
             $tempPath = $request->input('main_logo');
             $finalPath = str_replace('temp/', "{$clientId}/", $tempPath);
             Storage::disk('public')->move($tempPath, $finalPath);
-        }        
-
+        }
+    
         // Update the client with the final path
         $client->main_logo = $finalPath;
         $client->save();
-
-        return redirect()->route('clients.index')->with('success', 'Client created successfully.');
+    
+        // Generate a temporary password
+        $temporaryPassword = Str::random(12);
+    
+        // Create the user associated with the client
+        $user = User::create([
+            'name' => $clientData['client_title'],
+            'email' => $request->input('email'),
+            'password' => Hash::make($temporaryPassword),
+            'client_id' => $clientId,
+            'type_id' => 1,
+            // Add other fields as necessary
+        ]);
+    
+        // Send email notification to the user
+        Notification::route('mail', $user->email)->notify(new UserCreatedNotification($user, $temporaryPassword));
+    
+        return redirect()->route('clients.index')->with('success', 'Client and associated user created successfully.');
     }
 
     public function edit($id)

@@ -14,14 +14,30 @@
             <label for="email">Email:</label>
             <input type="email" class="form-control" id="email" name="email" value="{{ $user->email }}" required>
         </div>
+        @if(auth()->user()->client_id==0)
         <div class="form-group">
-            <label for="password">New Password:</label>
-            <input type="password" class="form-control" id="password" name="password">
-        </div>
+            <label for="client_id">Client associé</label>
+            <select class="form-control" id="client_id" name="client_id" >
+            <option value="">Choisir un client</option>
+            @foreach($clients as $client)
+            <option @if($client->id==$user->client_id) selected @endif value="{{$client->id}}">{{$client->client_title}}</option>
+            @endforeach
+            </select>
+        </div>  
+        @else
+        <input type="hidden"  id="client_id" name="client_id" value="{{ $user->client_id }}" required>
+
+        @endif
         <div class="form-group">
-            <label for="password_confirmation">Confirm Password:</label>
-            <input type="password" class="form-control" id="password_confirmation" name="password_confirmation">
-        </div>
+            <label for="type_id">Client associé</label>
+            <select class="form-control" id="type_id" name="type_id" >
+            <option value="">Choisir un type d'utilisateur</option>
+            @foreach($types as $type)
+            <option @if($type->id==$user->type_id) selected @endif value="{{$type->id}}">{{$type->type_desc}}</option>
+            @endforeach
+            </select>
+        </div> 
+
         <button type="submit" class="btn btn-primary">Update User</button>
     </form>
 </div>

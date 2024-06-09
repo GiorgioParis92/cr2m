@@ -5,7 +5,7 @@
             aria-hidden="true" id="iconSidenav"></i>
         <a class="navbar-brand m-0" href="{{ route('dashboard') }}" target="_blank">
 
-            @if (auth()->user()->client_id > 0 && isset($client->main_logo))
+            @if (auth()->user() && auth()->user()->client_id > 0 && isset($client->main_logo))
                 @if (Storage::disk('public')->exists($client->main_logo))
                     <div class="text-center">
                         <img src="{{ asset('storage/' . $client->main_logo) }}" class="navbar-brand-img h-100"
