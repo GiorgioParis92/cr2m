@@ -265,7 +265,7 @@
     function get_calendar() {
     var calendarEl = document.getElementById('calendar');
     var token = $('meta[name="api-token"]').attr('content'); // Get token from meta tag
-alert('ok')
+
     var calendar = new FullCalendar.Calendar(calendarEl, {
         // plugins: [ 'interaction', 'dayGrid', 'timeGrid' ], // Ensure all required plugins are listed here
         initialView: 'timeGridWeek', // Set default view to timeGridWeek
