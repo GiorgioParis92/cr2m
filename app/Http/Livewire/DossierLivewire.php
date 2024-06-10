@@ -47,6 +47,7 @@ class DossierLivewire extends Component
 
         $this->setTab($this->dossier['etape_number']);
         $this->reinitializeFormsConfigs();
+        $this->emit('initializeDropzones', ['forms_configs' => $this->forms_configs]);
 
         $auditeurs=User::where('type_id',4);
         
