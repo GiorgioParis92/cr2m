@@ -253,6 +253,7 @@
             });
             console.log('get calendar')
             if($('#form_config_user_id').is(':visible')) {
+                alert('visible')
                 get_calendar();
             }
             
