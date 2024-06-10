@@ -336,7 +336,7 @@
         }
     });
 
-    // calendar.render();
+    calendar.render();
 
     function fetchAndRenderEvents(userId) {
         $.ajax({
@@ -374,13 +374,13 @@
         fetchAndRenderEvents(selectedUserId);
     });
 
-    function openEventModal(event) {
-        document.getElementById('eventTitle').textContent = event.title;
-        document.getElementById('eventDescription').textContent = event.extendedProps.description;
-        document.getElementById('eventStart').textContent = new Date(event.start).toLocaleString();
-        document.getElementById('eventEnd').textContent = new Date(event.end).toLocaleString();
-        $('#eventModal').modal('show');
-    }
+    // function openEventModal(event) {
+    //     document.getElementById('eventTitle').textContent = event.title;
+    //     document.getElementById('eventDescription').textContent = event.extendedProps.description;
+    //     document.getElementById('eventStart').textContent = new Date(event.start).toLocaleString();
+    //     document.getElementById('eventEnd').textContent = new Date(event.end).toLocaleString();
+    //     $('#eventModal').modal('show');
+    // }
 }
 
 
