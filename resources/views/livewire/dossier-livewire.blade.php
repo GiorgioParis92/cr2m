@@ -161,7 +161,9 @@
                     @endif
                     @if ($form->form->type == 'rdv')
                         {!! $form->render([]) !!}
-
+                        <script>
+                            get_calendar()
+                        </script>
                         @include('calendar')
                     @endif
 
