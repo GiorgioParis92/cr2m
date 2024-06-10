@@ -26,7 +26,7 @@ class Upload extends AbstractFormData
         if(end($extension)!='pdf') {
             $data .= '<button type="button" class="btn btn-primary btn-view imageModal"
             data-toggle="modal" data-target="imageModal"
-            data-img-src="'.asset('storage/' . $this->value).'"
+            data-img-src="'.asset('storage/' . $this->value).'?time='.strtotime('now').'"
             data-name="'.$this->config->title.'">
             <i class="fas fa-eye"></i>
         </button>';
@@ -34,7 +34,7 @@ class Upload extends AbstractFormData
             $data .= '<div class="btn btn-primary btn-view pdfModal"
             data-toggle="modal" 
              
-            data-img-src="'.asset('storage/' . $this->value).'"
+            data-img-src="'.asset('storage/' . $this->value).'?time='.strtotime('now').'"
             data-name="'.$this->config->title.'">
             <i class="fas fa-file-pdf"></i></div>';
         }
