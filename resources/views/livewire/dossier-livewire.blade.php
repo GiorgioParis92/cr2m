@@ -336,7 +336,7 @@
         }
     });
 
-    // calendar.render();
+     calendar.render();
 
     function fetchAndRenderEvents(userId) {
         $.ajax({
