@@ -9,7 +9,9 @@
     <title>
         GENIUS MARKET
     </title>
-    <!-- Fonts and icons -->
+    <script src="{{ mix('js/app.js') }}"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
     <!-- Nucleo Icons -->
     <link href="{{ asset('frontend/assets/css/nucleo-icons.css') }}" rel="stylesheet" />
@@ -21,15 +23,13 @@
     <!-- CSS Files -->
     <link id="pagestyle" href="{{ asset('frontend/assets/css/soft-ui-dashboard.css?v=1.0.7') }}" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.2/dropzone.min.css" rel="stylesheet">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <link id="pagestyle" href="{{ asset('frontend/assets/css/jquery-radiocharm.css') }}" rel="stylesheet" />
     <script src="{{ asset('frontend/assets/js/jquery-radiocharm.js') }}"></script>
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-    <script src="{{ asset('frontend/assets/js/index.global.js') }}"></script>
-    <script src='{{ asset('frontend/assets/js/fullcalendar/core/locales/es.global.js') }}'></script>
-    <link href="{{ asset('frontend/assets/css/calendar.css') }}" rel="stylesheet" />
+   
+    
 
     <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.10.0/css/bootstrap-datepicker.min.css"
@@ -39,8 +39,7 @@
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/base/jquery-ui.css">
 
     <link rel="stylesheet" href="{{ asset('css/fontawesome.css') }}">
-    <script src="https://cdn.tiny.cloud/1/3wjbcf76icbvo12wykh2qn03z2aqpej8z6gkkbhv1ay5ie8b/tinymce/6/tinymce.min.js"
-        referrerpolicy="origin"></script>
+  
 
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
 
@@ -49,12 +48,7 @@
 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/4.2.0/bootstrap/main.css" rel="stylesheet">
 
-    <script src="{{ asset('frontend/assets/js/fullcalendar/packages/core/main.js') }}"></script>
-    <script src="{{ asset('frontend/assets/js/fullcalendar/packages/daygrid/main.js') }}"></script>
-    <script src="{{ asset('frontend/assets/js/fullcalendar/packages/interaction/main.js') }}"></script>
-    <link rel="stylesheet" href="{{ asset('frontend/assets/js/fullcalendar/packages/core/main.css') }}">
-    <link rel="stylesheet" href="{{ asset('frontend/assets/js/fullcalendar/packages/daygrid/main.css') }}">
-
+  
 @livewireStyles
 </head>
 
@@ -120,19 +114,13 @@
 
     @yield('scripts')
     <script>
-        var win = navigator.platform.indexOf('Win') > -1;
-        if (win && document.querySelector('#sidenav-scrollbar')) {
-            var options = {
-                damping: '0.5'
-            }
-            Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
-        }
+      
 
-        $('input:radio').radiocharm({
-
-        });
-
+     
         $(document).ready(function() {
+            $('select').select2();
+            $('.datepicker').datepicker();        
+
             $('.datatable').DataTable()
 
             $('.fillPDF').click(function() {

@@ -5,6 +5,7 @@ namespace App\Http\Livewire;
 use Livewire\Component;
 use App\Models\Dossier;
 use App\Models\Etape;
+use App\Models\User;
 use App\FormModel\FormConfigHandler;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
@@ -46,6 +47,18 @@ class DossierLivewire extends Component
 
         $this->setTab($this->dossier['etape_number']);
         $this->reinitializeFormsConfigs();
+
+        $auditeurs=User::where('type_id',4);
+        
+        if(auth()->user()->client_id>0) {
+            $auditeurs=$auditeurs->where('client_id',auth()->user()->client_id);
+
+        }
+
+        $auditeurs=$auditeurs->get();
+
+        $this->auditeurs=$auditeurs;
+
     }
 
     public function setTab($tab)

@@ -8,6 +8,7 @@ use App\Models\Fiche;
 use App\Models\Dossier;
 use App\Models\Etape;
 use App\Models\Status;
+use App\Models\User;
 use App\FormModel\FormConfigHandler;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
@@ -74,10 +75,10 @@ class DossierController extends Controller
             ->with('beneficiaire', 'fiche', 'etape', 'status')
             ->first();
 
-       
+        $auditeurs=User::where('type_id',4)->get();
 
 
-        return view('dossiers.show', compact('id'));
+        return view('dossiers.show', compact('id','auditeurs'));
     }
     public function save_form(Request $request)
     {
