@@ -247,7 +247,7 @@
                     });
                 }
             });
-
+            console.log('get calendar')
             get_calendar();
         });
 
