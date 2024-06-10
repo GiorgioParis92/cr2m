@@ -185,6 +185,7 @@
 
         initializeDropzones();
         initializePdfModals();
+        get_calendar();
 
         // Listen for the Livewire event to reinitialize Dropzone
         Livewire.on('initializeDropzones', (data) => {
