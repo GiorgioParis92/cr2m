@@ -187,8 +187,7 @@
     document.addEventListener('DOMContentLoaded', function() {
 
 
-        initializeDropzones();
-        initializePdfModals();
+       
         // get_calendar();
 
         // Listen for the Livewire event to reinitialize Dropzone
@@ -200,6 +199,9 @@
             $('input.choice_checked').trigger('click');
             $('select').select2();
             $('.datepicker').datepicker();
+
+            initializeDropzones();
+            initializePdfModals();
             // Retrieve and parse the forms_configs
             var configs = data.forms_configs;
 
@@ -394,7 +396,6 @@
         // Attach the click event to elements with class 'pdfModal' after each Livewire update
         document.querySelectorAll('.pdfModal').forEach(function(element) {
             element.addEventListener('click', function(event) {
-                alert('click')
                 var imgSrc = event.target.dataset.imgSrc;
                 $('#pdfModal').css('display', 'block');
                 $('#pdfFrame').attr('src', imgSrc);
