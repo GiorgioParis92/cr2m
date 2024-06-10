@@ -336,7 +336,7 @@
         }
     });
 
-    calendar.render();
+    // calendar.render();
 
     function fetchAndRenderEvents(userId) {
         $.ajax({
@@ -347,6 +347,7 @@
             success: function(data) {
                 console.log(data)
                 var events = data.map(function(rdv) {
+                    console.log(rdv)
                     var startDate = new Date(rdv.date_rdv);
                     var endDate = new Date(startDate.getTime() + 60 * 60 * 1000);
 
