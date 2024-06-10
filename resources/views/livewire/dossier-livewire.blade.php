@@ -263,7 +263,6 @@
     function initializeDropzones() {}
 
     function get_calendar() {
-        alert('ok')
     var calendarEl = document.getElementById('calendar');
     var token = $('meta[name="api-token"]').attr('content');
 
@@ -337,7 +336,7 @@
         }
     });
 
-    // calendar.render();
+    calendar.render();
 
     function fetchAndRenderEvents(userId) {
         $.ajax({
