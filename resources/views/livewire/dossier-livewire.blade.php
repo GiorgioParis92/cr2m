@@ -241,7 +241,7 @@ $('.datepicker').datepicker();
             });
         }
     });
-
+    console.log('loaded')
         var calendarEl = document.getElementById('calendar');
         var token = $('meta[name="api-token"]').attr('content'); // Get token from meta tag
 
