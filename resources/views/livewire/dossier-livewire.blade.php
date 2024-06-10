@@ -250,7 +250,10 @@
                 }
             });
             console.log('get calendar')
-            get_calendar();
+            if($('#form_config_user_id').is(':visible')) {
+                get_calendar();
+            }
+            
         });
 
 
@@ -279,7 +282,7 @@
         },
         slotMinTime: "08:00:00",
         slotMaxTime: "20:00:00",
-        slotDuration: '01:00:00',
+        slotDuration: '00:30:00',
         allDaySlot: false,
         buttonText: {
             prev: 'Précédent',
