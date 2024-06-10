@@ -74,6 +74,8 @@ class DossierLivewire extends Component
 
         $firstKey = array_key_first($this->forms_configs);
         $this->display_form($firstKey);
+        $this->emit('initializeDropzones', ['forms_configs' => $this->forms_configs]);
+
     }
 
     public function hydrate()
