@@ -73,6 +73,7 @@ public function updated($propertyName, $value)
     if (strpos($propertyName, 'formData.') === 0) {
         $this->updatedFormData($propertyName, $value);
     }
+
 }
 
 public function updatedFormData($propertyName, $value)
@@ -93,7 +94,6 @@ public function updatedFormData($propertyName, $value)
     foreach ($this->forms_configs as $formId => $config) {
         $result_save[$formId] = $config->save();
     }
-
 }
 
     public function display_form($form_id)

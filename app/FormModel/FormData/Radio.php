@@ -10,52 +10,40 @@ class Radio extends AbstractFormData
     {
         $wireModel = "formData.{$this->form_id}.{$this->name}";
 
-        $data = '<div class="form-group  col-sm-12 '.($this->config->class ?? "").'">';
+        $data = '<div class="form-group col-sm-12 '.($this->config->class ?? "").'">';
         $data .= '<div class="form-group">';
 
-       
-            $jsonString = str_replace(["\n", '', "\r"], '', $this->config->options);
-            $optionsArray = json_decode($jsonString, true);
-    
-            if (is_array($optionsArray)) {
-            } else {
-            }
-            $colors = ['3498DB', 'F1C40F', 'C0392B'];
-   
-    
-            $data .= '<label>'.$this->config->title.'</label>';
-            $data .= '<div>';
-            if (is_array($optionsArray)) {
-                foreach ($optionsArray as $key => $element) {
-                    $data .= '<input wire:model="'.$wireModel.'" ';
-                    if ($this->value == $element['value']) {
-                        $data .= 'checked';
-                    }
-                    $data .= 'value="'.$element['value'].'" style="width:100%"
+        // Clean and decode the JSON options
+        $jsonString = str_replace(["\n", "\r"], '', $this->config->options);
+        $optionsArray = json_decode($jsonString, true);
+
+        $colors = ['3498DB', 'F1C40F', 'C0392B'];
+
+        $data .= '<label>'.$this->config->title.'</label>';
+        $data .= '<div>';
+
+        if (is_array($optionsArray)) {
+            foreach ($optionsArray as $key => $element) {
+                $isChecked = $this->value == $element['value'] ? 'checked' : '';
+                $backgroundColor = $element['color'] ?? ($colors[$key] ?? '3498DB');
+
+                $data .= '<input id="'.$this->name.'_'.$key.'"
+                    wire:model="'.$wireModel.'" 
+                    value="'.$element['value'].'"
                     name="'.$this->config->name.'"
-                    class="';
-                    if ($this->value == $element['value']) 
-                    {
-                        $data.='choice_checked';
-                    }
-                    $data.='"
-                    data-radiocharm-background-color="'.($element['color'] ?? ($colors[$key] ?? '3498DB')) .'"
-                    data-radiocharm-text-color="FFF" data-radiocharm-label="'.$element['label'] .'" type="radio">
-                    ';
-                }
-   
+                    class="'.($this->value == $element['value'] ? 'choice_checked' : '').'"
+                    data-radiocharm-background-color="'.$backgroundColor.'"
+                    data-radiocharm-text-color="FFF" 
+                    data-radiocharm-label="'.$element['label'].'" 
+                    type="radio" '.$isChecked.'>';
+                $data .= '<label  for="'.$this->name.'_'.$key.'">'.$element['label'].'</label><br>';
             }
-    
-            $data .= '</div>';
-            $data .= '</div>';
-    
+        }
+
         $data .= '</div>';
-
-
+        $data .= '</div>';
+        $data .= '</div>';
 
         return $data;
     }
-
-    
-
 }

@@ -173,9 +173,12 @@
         // Listen for the Livewire event to reinitialize Dropzone
         Livewire.on('initializeDropzones', (data) => {
     console.log('initializeDropzones');
-    $('input:radio').radiocharm({
+//     $('input:radio').radiocharm({
 
-});
+// });
+$('input.choice_checked').trigger('click');
+$('select').select2();
+$('.datepicker').datepicker();
     // Retrieve and parse the forms_configs
     var configs = data.forms_configs;
 

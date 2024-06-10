@@ -28,24 +28,11 @@ class Checkbox extends AbstractFormData
         $data .= '</label><br />';
         if (is_array($optionsArray)) {
             $data .= '<label class="switch">';
-            $data .= '<input wire:model="'.$wireModel.'"  type="hidden" name="';
-            $data .= $this->config->name;
-            $data .= '" value="';
-            $data .= $optionsArray[0]['value'];
-            $data .= '">';
-            $data .= '<input type="checkbox" id="';
-            $data .= $this->config->name;
-            $data .= '" name="';
-            $data .= $this->config->name;
-            $data .= '"';
-            $data .= ' value="';
-            $data .= $optionsArray[1]['value'];
-            $data .= '"';
-
-            if ($this->value == $optionsArray[1]['value']) {
-                $data .= ' checked';
-            }
-            $data .= ">";
+            $data .= '<input type="checkbox" 
+            wire:model="'.$wireModel.'"
+            value="1"
+            name="'.$this->config->name.'"
+            class="" '.($this->value ? 'checked' : '').'>';
             $data .= '<span class="slider round"></span>';
             $data .= '</label>';
             $data .= '<label class="custom-control-label" for="';
