@@ -263,6 +263,7 @@
         Livewire.hook('message.processed', (message, component) => {
             initializeDropzones();
             initializePdfModals();
+            get_calendar();
         });
     });
 
