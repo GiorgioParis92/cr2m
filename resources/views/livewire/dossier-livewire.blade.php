@@ -73,7 +73,8 @@
                             </div>
                             @if ($tab == $dossier->etape_number && $dossier->status->status_name != 'Refusé')
                                 <div class="col-lg-6">
-                                    <a class="btn btn-primary" href="{{ route('dossiers.next_step', $dossier->id) }}">Valider l'étape</a>
+                                    <a class="btn btn-primary"
+                                        href="{{ route('dossiers.next_step', $dossier->id) }}">Valider l'étape</a>
                                 </div>
                             @endif
                         </div>
@@ -135,37 +136,35 @@
             <div class="card form-register container mt-5">
                 @if (isset($form_id))
 
-                @php $form = $forms_configs[$form_id] @endphp
+                    @php $form = $forms_configs[$form_id] @endphp
 
-                @if($form->form->type=='form')
-                <div class="row">
-                    <div class="">
-                        <h4>{{ $form->form->form_title }}</h4>
-            
-                        <form wire:submit.prevent="submit">
-                            @csrf
-                            <input type="hidden" name="form_id" value="{{ $form->form->id }}">
-                            <input type="hidden" name="dossier_id" value="{{ $dossier->id }}">
-            
-                            {!! $form->render([]) !!}
-            
-                            <div class="row">
-                                <div class="form-group">
-                                    <button class="btn btn-secondary" type="submit">Enregistrer</button>
-                                </div>
+                    @if ($form->form->type == 'form')
+                        <div class="row">
+                            <div class="">
+                                <h4>{{ $form->form->form_title }}</h4>
+
+                                <form wire:submit.prevent="submit">
+                                    @csrf
+                                    <input type="hidden" name="form_id" value="{{ $form->form->id }}">
+                                    <input type="hidden" name="dossier_id" value="{{ $dossier->id }}">
+
+                                    {!! $form->render([]) !!}
+
+                                    <div class="row">
+                                        <div class="form-group">
+                                            <button class="btn btn-secondary" type="submit">Enregistrer</button>
+                                        </div>
+                                    </div>
+                                </form>
                             </div>
-                        </form>
-                    </div>
-                </div>
-                @endif
-                @if($form->form->type=='rdv')
-
-                @include('calendar')
+                        </div>
+                    @endif
+                    @if ($form->form->type == 'rdv')
+                        @include('calendar')
+                    @endif
 
                 @endif
 
-            @endif
-            
             </div>
         </div>
     </div>
@@ -189,136 +188,65 @@
 
         // Listen for the Livewire event to reinitialize Dropzone
         Livewire.on('initializeDropzones', (data) => {
-    console.log('initializeDropzones');
-//     $('input:radio').radiocharm({
+            console.log('initializeDropzones');
+            //     $('input:radio').radiocharm({
 
-// });
-$('input.choice_checked').trigger('click');
-$('select').select2();
-$('.datepicker').datepicker();
-    // Retrieve and parse the forms_configs
-    var configs = data.forms_configs;
+            // });
+            $('input.choice_checked').trigger('click');
+            $('select').select2();
+            $('.datepicker').datepicker();
+            // Retrieve and parse the forms_configs
+            var configs = data.forms_configs;
 
-    // Remove existing Dropzones to prevent multiple instances
-    if (Dropzone.instances.length > 0) {
-        Dropzone.instances.forEach(instance => instance.destroy());
-    }
+            // Remove existing Dropzones to prevent multiple instances
+            if (Dropzone.instances.length > 0) {
+                Dropzone.instances.forEach(instance => instance.destroy());
+            }
 
-    Dropzone.autoDiscover = false;
+            Dropzone.autoDiscover = false;
 
-    // Convert object to array and loop through configs
-    Object.values(configs).forEach((formConfig) => {
-        console.log(formConfig)
-        if (formConfig.form.type === 'document' ) {
-            Object.keys(formConfig.formData).forEach((key) => {
-                console.log(key)
+            // Convert object to array and loop through configs
+            Object.values(configs).forEach((formConfig) => {
+                console.log(formConfig)
+                if (formConfig.form.type === 'document') {
+                    Object.keys(formConfig.formData).forEach((key) => {
+                        console.log(key)
 
-                var dropzoneElementId = `#dropzone-${key}`;
-                var dropzoneElement = document.querySelector(dropzoneElementId);
-                if (!dropzoneElement) {
-                    console.warn(`Element ${dropzoneElementId} not found.`);
-                    return;
-                }
-                new Dropzone(dropzoneElement, {
-                    method: 'post',
-                    headers: {
-                        // 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                    },
-                    paramName: 'file',
-                    sending: function(file, xhr, formData) {
-                        formData.append('folder', 'dossiers');
-                        formData.append('template', key);
-                    },
-                    init: function() {
-                        this.on("success", function(file, response) {
-                            console.log('Successfully uploaded:', response);
+                        var dropzoneElementId = `#dropzone-${key}`;
+                        var dropzoneElement = document.querySelector(dropzoneElementId);
+                        if (!dropzoneElement) {
+                            console.warn(`Element ${dropzoneElementId} not found.`);
+                            return;
+                        }
+                        new Dropzone(dropzoneElement, {
+                            method: 'post',
+                            headers: {
+                                // 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                            },
+                            paramName: 'file',
+                            sending: function(file, xhr, formData) {
+                                formData.append('folder', 'dossiers');
+                                formData.append('template', key);
+                            },
+                            init: function() {
+                                this.on("success", function(file,
+                                response) {
+                                    console.log(
+                                        'Successfully uploaded:',
+                                        response);
+                                });
+                                this.on("error", function(file, response) {
+                                    console.log('Upload error:',
+                                        response);
+                                });
+                            }
                         });
-                        this.on("error", function(file, response) {
-                            console.log('Upload error:', response);
-                        });
-                    }
-                });
-            });
-        }
-    });
-    console.log('loaded')
-        var calendarEl = document.getElementById('calendar');
-        var token = $('meta[name="api-token"]').attr('content'); // Get token from meta tag
-
-      
-        var calendar = new FullCalendar.Calendar(calendarEl, {
-            // plugins: [ 'interaction', 'dayGrid', 'timeGrid' ], // Ensure all required plugins are listed here
-            initialView: 'timeGridWeek', // Set default view to timeGridWeek
-            editable: true,
-            locale: 'fr',
-            headerToolbar: {  // Use headerToolbar for header configuration
-                start: 'title', // will normally be on the left. if RTL, will be on the right
-  center: '',
-  end: 'today prev,next timeGrid timeGridWeek dayGridMonth' // will normally be on the right. if RTL, will be on the left
-            },
-            slotMinTime: "08:00:00", // Set start hour to 8:00 AM
-    slotMaxTime: "20:00:00", // Set end hour to 8:00 PM
-    slotDuration: '01:00:00', // Set slot duration to 1 hour
-
-            buttonText: {
-                prev: 'Précédent',
-                next: 'Suivant',
-                today: "Aujourd'hui",
-                month: 'Mois',
-                timeGrid: 'Journée',
-                week: 'Semaine',
-                day: 'Jour'
-            },
-            weekText: 'Sem.',
-            allDayText: 'Toute la journée',
-            moreLinkText: 'en plus',
-            noEventsText: 'Aucun événement à afficher',
-            events: [] // Initialize with an empty array
-        });
-
-        calendar.render();
-
-        function fetchAndRenderEvents(userId) {
-            $.ajax({
-                url: '/api/rdvs',
-                type: 'GET',
-                headers: {
-                    'Authorization': 'Bearer ' + token // Include bearer token
-                },
-                data: { user_id: userId },
-                success: function(data) {
-                    console.log(data);
-                    var events = data.map(function(rdv) {
-                        var startDate = new Date(rdv.date_rdv);
-                        var endDate = new Date(startDate.getTime() + 60 * 60 * 1000); // Add 1 hour to the start date
-
-                        return {
-                            title: rdv.nom + ' ' + rdv.prenom,
-                            start: rdv.date_rdv,
-                            end: endDate.toISOString(),
-                            description: 'Address: ' + rdv.adresse + ', ' + rdv.ville
-                        };
                     });
-                    console.log(events);
-                    calendar.removeAllEvents(); // Clear existing events
-                    calendar.addEventSource(events); // Add new events
-                    calendar.refetchEvents(); // Refetch the events to render them
-                },
-                error: function(xhr, status, error) {
-                    console.error('Error fetching RDVs:', error);
                 }
             });
-        }
-
-        // Initial fetch
-        fetchAndRenderEvents($('#form_config_user_id').val());
-
-        // Fetch and render events when the dropdown value changes
-        $('#form_config_user_id').change(function() {
-            var selectedUserId = $(this).val();
-            fetchAndRenderEvents(selectedUserId);
+            
+            get_calendar();
         });
-      });
 
 
 
@@ -328,9 +256,89 @@ $('.datepicker').datepicker();
             initializePdfModals();
         });
     });
-
     function initializeDropzones() {
-    
+    }
+    function get_calendar() {
+        var calendarEl = document.getElementById('calendar');
+            var token = $('meta[name="api-token"]').attr('content'); // Get token from meta tag
+
+
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                // plugins: [ 'interaction', 'dayGrid', 'timeGrid' ], // Ensure all required plugins are listed here
+                initialView: 'timeGridWeek', // Set default view to timeGridWeek
+                editable: true,
+                locale: 'fr',
+                headerToolbar: { // Use headerToolbar for header configuration
+                    start: 'title', // will normally be on the left. if RTL, will be on the right
+                    center: '',
+                    end: 'today prev,next timeGrid timeGridWeek dayGridMonth' // will normally be on the right. if RTL, will be on the left
+                },
+                slotMinTime: "08:00:00", // Set start hour to 8:00 AM
+                slotMaxTime: "20:00:00", // Set end hour to 8:00 PM
+                slotDuration: '01:00:00', // Set slot duration to 1 hour
+
+                buttonText: {
+                    prev: 'Précédent',
+                    next: 'Suivant',
+                    today: "Aujourd'hui",
+                    month: 'Mois',
+                    timeGrid: 'Journée',
+                    week: 'Semaine',
+                    day: 'Jour'
+                },
+                weekText: 'Sem.',
+                allDayText: 'Toute la journée',
+                moreLinkText: 'en plus',
+                noEventsText: 'Aucun événement à afficher',
+                events: [] // Initialize with an empty array
+            });
+
+            calendar.render();
+
+            function fetchAndRenderEvents(userId) {
+                $.ajax({
+                    url: '/api/rdvs',
+                    type: 'GET',
+                    headers: {
+                        'Authorization': 'Bearer ' + token // Include bearer token
+                    },
+                    data: {
+                        user_id: userId
+                    },
+                    success: function(data) {
+                        console.log(data);
+                        var events = data.map(function(rdv) {
+                            var startDate = new Date(rdv.date_rdv);
+                            var endDate = new Date(startDate.getTime() + 60 * 60 *
+                                1000); // Add 1 hour to the start date
+
+                            return {
+                                title: rdv.nom + ' ' + rdv.prenom,
+                                start: rdv.date_rdv,
+                                end: endDate.toISOString(),
+                                description: 'Address: ' + rdv.adresse + ', ' + rdv
+                                    .ville
+                            };
+                        });
+                        console.log(events);
+                        calendar.removeAllEvents(); // Clear existing events
+                        calendar.addEventSource(events); // Add new events
+                        calendar.refetchEvents(); // Refetch the events to render them
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error fetching RDVs:', error);
+                    }
+                });
+            }
+
+            // Initial fetch
+            fetchAndRenderEvents($('#form_config_user_id').val());
+
+            // Fetch and render events when the dropdown value changes
+            $('#form_config_user_id').change(function() {
+                var selectedUserId = $(this).val();
+                fetchAndRenderEvents(selectedUserId);
+            });
     }
 
     function initializePdfModals() {
