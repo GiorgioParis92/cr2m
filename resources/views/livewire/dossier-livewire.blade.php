@@ -173,7 +173,9 @@
         // Listen for the Livewire event to reinitialize Dropzone
         Livewire.on('initializeDropzones', (data) => {
     console.log('initializeDropzones');
+    $('input:radio').radiocharm({
 
+});
     // Retrieve and parse the forms_configs
     var configs = data.forms_configs;
 

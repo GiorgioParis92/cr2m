@@ -1026,3 +1026,6 @@ main {
 .nav.nav-pills .nav-item .active {
 color:white
 }
+.moving-tab.position-absolute.nav-link {
+    display: none;
+}
