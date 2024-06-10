@@ -187,7 +187,7 @@
 
         initializeDropzones();
         initializePdfModals();
-        get_calendar();
+        // get_calendar();
 
         // Listen for the Livewire event to reinitialize Dropzone
         Livewire.on('initializeDropzones', (data) => {
@@ -330,13 +330,13 @@
 
             return { domNodes: [eventDiv] };
         },
-        // eventClick: function(info) {
-        //     info.jsEvent.preventDefault();
-        //     openEventModal(info.event);
-        // }
+        eventClick: function(info) {
+            info.jsEvent.preventDefault();
+            openEventModal(info.event);
+        }
     });
 
-    calendar.render();
+    // calendar.render();
 
     function fetchAndRenderEvents(userId) {
         $.ajax({
@@ -347,7 +347,6 @@
             success: function(data) {
                 console.log(data)
                 var events = data.map(function(rdv) {
-                    console.log(rdv)
                     var startDate = new Date(rdv.date_rdv);
                     var endDate = new Date(startDate.getTime() + 60 * 60 * 1000);
 
@@ -374,13 +373,13 @@
         fetchAndRenderEvents(selectedUserId);
     });
 
-    // function openEventModal(event) {
-    //     document.getElementById('eventTitle').textContent = event.title;
-    //     document.getElementById('eventDescription').textContent = event.extendedProps.description;
-    //     document.getElementById('eventStart').textContent = new Date(event.start).toLocaleString();
-    //     document.getElementById('eventEnd').textContent = new Date(event.end).toLocaleString();
-    //     $('#eventModal').modal('show');
-    // }
+    function openEventModal(event) {
+        document.getElementById('eventTitle').textContent = event.title;
+        document.getElementById('eventDescription').textContent = event.extendedProps.description;
+        document.getElementById('eventStart').textContent = new Date(event.start).toLocaleString();
+        document.getElementById('eventEnd').textContent = new Date(event.end).toLocaleString();
+        $('#eventModal').modal('show');
+    }
 }
 
 
