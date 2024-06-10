@@ -330,10 +330,10 @@
 
             return { domNodes: [eventDiv] };
         },
-        eventClick: function(info) {
-            info.jsEvent.preventDefault();
-            openEventModal(info.event);
-        }
+        // eventClick: function(info) {
+        //     info.jsEvent.preventDefault();
+        //     openEventModal(info.event);
+        // }
     });
 
     calendar.render();
