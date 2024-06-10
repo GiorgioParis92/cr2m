@@ -11,6 +11,7 @@
     </title>
     <script src="{{ mix('js/app.js') }}"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
 
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
     <!-- Nucleo Icons -->
@@ -101,7 +102,29 @@
         </div>
     </div>
 
-
+<!-- Bootstrap Modal -->
+<div class="modal fade" id="eventModal" tabindex="-1" role="dialog" aria-labelledby="eventModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="eventModalLabel">Event Details</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p><strong>Title:</strong> <span id="eventTitle"></span></p>
+          <p><strong>Description:</strong> <span id="eventDescription"></span></p>
+          <p><strong>Start:</strong> <span id="eventStart"></span></p>
+          <p><strong>End:</strong> <span id="eventEnd"></span></p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
     @include('frontend.fixed-plugin')
 
     <!-- Core JS Files -->

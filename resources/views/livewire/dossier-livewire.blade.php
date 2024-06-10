@@ -160,6 +160,8 @@
                         </div>
                     @endif
                     @if ($form->form->type == 'rdv')
+                        {!! $form->render([]) !!}
+
                         @include('calendar')
                     @endif
 
@@ -231,7 +233,7 @@
                             },
                             init: function() {
                                 this.on("success", function(file,
-                                response) {
+                                    response) {
                                     console.log(
                                         'Successfully uploaded:',
                                         response);
@@ -245,7 +247,7 @@
                     });
                 }
             });
-            
+
             get_calendar();
         });
 
@@ -257,90 +259,151 @@
             initializePdfModals();
         });
     });
-    function initializeDropzones() {
-    }
+
+    function initializeDropzones() {}
+
     function get_calendar() {
-        var calendarEl = document.getElementById('calendar');
-            var token = $('meta[name="api-token"]').attr('content'); // Get token from meta tag
+    var calendarEl = document.getElementById('calendar');
+    var token = $('meta[name="api-token"]').attr('content'); // Get token from meta tag
 
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+        // plugins: [ 'interaction', 'dayGrid', 'timeGrid' ], // Ensure all required plugins are listed here
+        initialView: 'timeGridWeek', // Set default view to timeGridWeek
+        editable: true,
+        locale: 'fr',
+        headerToolbar: { // Use headerToolbar for header configuration
+            start: 'title', // will normally be on the left. if RTL, will be on the right
+            center: '',
+            end: 'today prev,next timeGrid timeGridWeek dayGridMonth' // will normally be on the right. if RTL, will be on the left
+        },
+        slotMinTime: "08:00:00", // Set start hour to 8:00 AM
+        slotMaxTime: "20:00:00", // Set end hour to 8:00 PM
+        slotDuration: '01:00:00', // Set slot duration to 1 hour
+        allDaySlot: false, // Hide the all-day row
 
-            var calendar = new FullCalendar.Calendar(calendarEl, {
-                // plugins: [ 'interaction', 'dayGrid', 'timeGrid' ], // Ensure all required plugins are listed here
-                initialView: 'timeGridWeek', // Set default view to timeGridWeek
-                editable: true,
-                locale: 'fr',
-                headerToolbar: { // Use headerToolbar for header configuration
-                    start: 'title', // will normally be on the left. if RTL, will be on the right
-                    center: '',
-                    end: 'today prev,next timeGrid timeGridWeek dayGridMonth' // will normally be on the right. if RTL, will be on the left
+        buttonText: {
+            prev: 'Précédent',
+            next: 'Suivant',
+            today: "Aujourd'hui",
+            month: 'Mois',
+            timeGrid: 'Journée',
+            week: 'Semaine',
+            day: 'Jour'
+        },
+        weekText: 'Sem.',
+        allDayText: 'Toute la journée',
+        moreLinkText: 'en plus',
+        noEventsText: 'Aucun événement à afficher',
+        events: [], // Initialize with an empty array
+
+        dateClick: function(info) {
+            console.log(info)
+            var date = moment(new Date(info.dateStr));
+            var formattedDate = date.format('YYYY-MM-DD HH:mm:ss');
+            console.log(formattedDate)
+            $.ajax({
+                url: '/api/rdvs/save', // Replace with your server endpoint
+                method: 'POST',
+                data: {
+                    dossier_id: {{$dossier->id ?? ''}},
+                    start: formattedDate,
+                    user_id: $('#form_config_user_id').val(),
+                    type_rdv: $('#type_rdv').val(),
                 },
-                slotMinTime: "08:00:00", // Set start hour to 8:00 AM
-                slotMaxTime: "20:00:00", // Set end hour to 8:00 PM
-                slotDuration: '01:00:00', // Set slot duration to 1 hour
-
-                buttonText: {
-                    prev: 'Précédent',
-                    next: 'Suivant',
-                    today: "Aujourd'hui",
-                    month: 'Mois',
-                    timeGrid: 'Journée',
-                    week: 'Semaine',
-                    day: 'Jour'
-                },
-                weekText: 'Sem.',
-                allDayText: 'Toute la journée',
-                moreLinkText: 'en plus',
-                noEventsText: 'Aucun événement à afficher',
-                events: [] // Initialize with an empty array
-            });
-
-            calendar.render();
-
-            function fetchAndRenderEvents(userId) {
-                $.ajax({
-                    url: '/api/rdvs',
-                    type: 'GET',
-                    headers: {
-                        'Authorization': 'Bearer ' + token // Include bearer token
-                    },
-                    data: {
-                        user_id: userId
-                    },
-                    success: function(data) {
-                        console.log(data);
-                        var events = data.map(function(rdv) {
-                            var startDate = new Date(rdv.date_rdv);
-                            var endDate = new Date(startDate.getTime() + 60 * 60 *
-                                1000); // Add 1 hour to the start date
-
-                            return {
-                                title: rdv.nom + ' ' + rdv.prenom,
-                                start: rdv.date_rdv,
-                                end: endDate.toISOString(),
-                                description: 'Address: ' + rdv.adresse + ', ' + rdv
-                                    .ville
-                            };
+                success: function(response) {
+                    if (response.success) {
+                        // Add event to calendar
+                        calendar.addEvent({
+                            start: formattedDate,
                         });
-                        console.log(events);
-                        calendar.removeAllEvents(); // Clear existing events
-                        calendar.addEventSource(events); // Add new events
-                        calendar.refetchEvents(); // Refetch the events to render them
-                    },
-                    error: function(xhr, status, error) {
-                        console.error('Error fetching RDVs:', error);
+                    } else {
+                        alert('Failed to save event');
                     }
-                });
-            }
-
-            // Initial fetch
-            fetchAndRenderEvents($('#form_config_user_id').val());
-
-            // Fetch and render events when the dropdown value changes
-            $('#form_config_user_id').change(function() {
-                var selectedUserId = $(this).val();
-                fetchAndRenderEvents(selectedUserId);
+                },
+                error: function() {
+                    alert('Error occurred while saving event');
+                }
             });
+        },
+        eventContent: function(arg) {
+            // Custom rendering for events with description
+            var eventDiv = document.createElement('div');
+            var titleDiv = document.createElement('div');
+            var descriptionDiv = document.createElement('div');
+
+            titleDiv.innerHTML = arg.event.title;
+            descriptionDiv.innerHTML = arg.event.extendedProps.description;
+
+            eventDiv.appendChild(titleDiv);
+            eventDiv.appendChild(descriptionDiv);
+
+            return { domNodes: [eventDiv] };
+        },
+        eventClick: function(info) {
+            info.jsEvent.preventDefault(); // Prevents the browser from following the click URL if any
+            openEventModal(info.event); // Open modal with event data
+        }
+    });
+
+    calendar.render();
+
+    function fetchAndRenderEvents(userId) {
+        $.ajax({
+            url: '/api/rdvs',
+            type: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + token // Include bearer token
+            },
+            data: {
+                user_id: userId
+            },
+            success: function(data) {
+                console.log(data);
+                var events = data.map(function(rdv) {
+                    var startDate = new Date(rdv.date_rdv);
+                    var endDate = new Date(startDate.getTime() + 60 * 60 * 1000); // Add 1 hour to the start date
+
+                    return {
+                        title: rdv.nom + ' ' + rdv.prenom,
+                        start: rdv.date_rdv,
+                        end: endDate.toISOString(),
+                        description: 'Address: ' + rdv.adresse + ', ' + rdv.ville
+                    };
+                });
+                console.log(events);
+                calendar.removeAllEvents(); // Clear existing events
+                calendar.addEventSource(events); // Add new events
+                calendar.refetchEvents(); // Refetch the events to render them
+            },
+            error: function(xhr, status, error) {
+                console.error('Error fetching RDVs:', error);
+            }
+        });
     }
+
+    // Initial fetch
+    fetchAndRenderEvents($('#form_config_user_id').val());
+
+    // Fetch and render events when the dropdown value changes
+    $('#form_config_user_id').change(function() {
+        var selectedUserId = $(this).val();
+        fetchAndRenderEvents(selectedUserId);
+    });
+
+    function openEventModal(event) {
+    // Populate modal fields with event data
+    document.getElementById('eventTitle').textContent = event.title;
+    document.getElementById('eventDescription').textContent = event.extendedProps.description;
+    document.getElementById('eventStart').textContent = new Date(event.start).toLocaleString();
+    document.getElementById('eventEnd').textContent = new Date(event.end).toLocaleString();
+
+    // Open the modal (for Bootstrap)
+    $('#eventModal').modal('show');
+}
+
+}
+
+
 
     function initializePdfModals() {
         // Attach the click event to elements with class 'pdfModal' after each Livewire update

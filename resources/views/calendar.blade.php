@@ -13,7 +13,7 @@
     <div class="row">
         <div class="form-group">
             <select class="form-control" id="form_config_user_id">
-                <option value="">Choisir un auditeur</option>
+                <option value="">Choisir un auditeur / Voir tous les auditeurs</option>
                 @foreach($auditeurs as $auditeur)
                 <option value="{{$auditeur->id}}">{{$auditeur->name}}</option>
 

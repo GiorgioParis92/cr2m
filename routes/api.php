@@ -32,6 +32,7 @@ Route::get('/fill-pdf', [PDFController::class, 'fillPdf']);
 Route::post('/fill-pdf', [PDFController::class, 'fillPdf']);
 Route::get('/rdvs', [RdvController::class, 'index']);
 Route::post('/rdvs', [RdvController::class, 'index']);
+Route::post('/rdvs/save', [RdvController::class, 'save']);
 Route::middleware('auth:api')->group(function () {
 
     // Add other RdvController routes here as needed

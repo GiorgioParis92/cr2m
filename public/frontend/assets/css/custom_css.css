@@ -1029,3 +1029,10 @@ color:white
 .moving-tab.position-absolute.nav-link {
     display: none;
 }
+/* .fc-view-harness.fc-view-harness-active {
+    max-height: 463px;
+} */
+.fc-timegrid-event-harness>.fc-timegrid-event {
+    position: relative!important;
+    height: auto;
+}
