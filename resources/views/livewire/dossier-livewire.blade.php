@@ -263,24 +263,23 @@
     function initializeDropzones() {}
 
     function get_calendar() {
+        alert('ok')
     var calendarEl = document.getElementById('calendar');
-    var token = $('meta[name="api-token"]').attr('content'); // Get token from meta tag
+    var token = $('meta[name="api-token"]').attr('content');
 
     var calendar = new FullCalendar.Calendar(calendarEl, {
-        // plugins: [ 'interaction', 'dayGrid', 'timeGrid' ], // Ensure all required plugins are listed here
-        initialView: 'timeGridWeek', // Set default view to timeGridWeek
+        initialView: 'timeGridWeek',
         editable: true,
         locale: 'fr',
-        headerToolbar: { // Use headerToolbar for header configuration
-            start: 'title', // will normally be on the left. if RTL, will be on the right
+        headerToolbar: {
+            start: 'title',
             center: '',
-            end: 'today prev,next timeGrid timeGridWeek dayGridMonth' // will normally be on the right. if RTL, will be on the left
+            end: 'today prev,next timeGrid timeGridWeek dayGridMonth'
         },
-        slotMinTime: "08:00:00", // Set start hour to 8:00 AM
-        slotMaxTime: "20:00:00", // Set end hour to 8:00 PM
-        slotDuration: '01:00:00', // Set slot duration to 1 hour
-        allDaySlot: false, // Hide the all-day row
-
+        slotMinTime: "08:00:00",
+        slotMaxTime: "20:00:00",
+        slotDuration: '01:00:00',
+        allDaySlot: false,
         buttonText: {
             prev: 'Précédent',
             next: 'Suivant',
@@ -294,28 +293,22 @@
         allDayText: 'Toute la journée',
         moreLinkText: 'en plus',
         noEventsText: 'Aucun événement à afficher',
-        events: [], // Initialize with an empty array
-
+        events: [],
         dateClick: function(info) {
-            console.log(info)
             var date = moment(new Date(info.dateStr));
             var formattedDate = date.format('YYYY-MM-DD HH:mm:ss');
-            console.log(formattedDate)
             $.ajax({
-                url: '/api/rdvs/save', // Replace with your server endpoint
+                url: '/api/rdvs/save',
                 method: 'POST',
                 data: {
-                    dossier_id: {{$dossier->id ?? ''}},
+                    dossier_id: {{ $dossier->id ?? '' }},
                     start: formattedDate,
                     user_id: $('#form_config_user_id').val(),
                     type_rdv: $('#type_rdv').val(),
                 },
                 success: function(response) {
                     if (response.success) {
-                        // Add event to calendar
-                        calendar.addEvent({
-                            start: formattedDate,
-                        });
+                        calendar.addEvent({ start: formattedDate });
                     } else {
                         alert('Failed to save event');
                     }
@@ -326,7 +319,6 @@
             });
         },
         eventContent: function(arg) {
-            // Custom rendering for events with description
             var eventDiv = document.createElement('div');
             var titleDiv = document.createElement('div');
             var descriptionDiv = document.createElement('div');
@@ -340,40 +332,34 @@
             return { domNodes: [eventDiv] };
         },
         eventClick: function(info) {
-            info.jsEvent.preventDefault(); // Prevents the browser from following the click URL if any
-            openEventModal(info.event); // Open modal with event data
+            info.jsEvent.preventDefault();
+            openEventModal(info.event);
         }
     });
 
-    calendar.render();
+    // calendar.render();
 
     function fetchAndRenderEvents(userId) {
         $.ajax({
             url: '/api/rdvs',
             type: 'GET',
-            headers: {
-                'Authorization': 'Bearer ' + token // Include bearer token
-            },
-            data: {
-                user_id: userId
-            },
+            headers: { 'Authorization': 'Bearer ' + token },
+            data: { user_id: userId },
             success: function(data) {
-                console.log(data);
+                console.log(data)
                 var events = data.map(function(rdv) {
                     var startDate = new Date(rdv.date_rdv);
-                    var endDate = new Date(startDate.getTime() + 60 * 60 * 1000); // Add 1 hour to the start date
+                    var endDate = new Date(startDate.getTime() + 60 * 60 * 1000);
 
                     return {
                         title: rdv.nom + ' ' + rdv.prenom,
-                        start: rdv.date_rdv,
+                        start: startDate.toISOString(),
                         end: endDate.toISOString(),
                         description: 'Address: ' + rdv.adresse + ', ' + rdv.ville
                     };
                 });
-                console.log(events);
-                calendar.removeAllEvents(); // Clear existing events
-                calendar.addEventSource(events); // Add new events
-                calendar.refetchEvents(); // Refetch the events to render them
+                calendar.removeAllEvents();
+                calendar.addEventSource(events);
             },
             error: function(xhr, status, error) {
                 console.error('Error fetching RDVs:', error);
@@ -381,27 +367,22 @@
         });
     }
 
-    // Initial fetch
     fetchAndRenderEvents($('#form_config_user_id').val());
 
-    // Fetch and render events when the dropdown value changes
     $('#form_config_user_id').change(function() {
         var selectedUserId = $(this).val();
         fetchAndRenderEvents(selectedUserId);
     });
 
     function openEventModal(event) {
-    // Populate modal fields with event data
-    document.getElementById('eventTitle').textContent = event.title;
-    document.getElementById('eventDescription').textContent = event.extendedProps.description;
-    document.getElementById('eventStart').textContent = new Date(event.start).toLocaleString();
-    document.getElementById('eventEnd').textContent = new Date(event.end).toLocaleString();
-
-    // Open the modal (for Bootstrap)
-    $('#eventModal').modal('show');
+        document.getElementById('eventTitle').textContent = event.title;
+        document.getElementById('eventDescription').textContent = event.extendedProps.description;
+        document.getElementById('eventStart').textContent = new Date(event.start).toLocaleString();
+        document.getElementById('eventEnd').textContent = new Date(event.end).toLocaleString();
+        $('#eventModal').modal('show');
+    }
 }
 
-}
 
 
 
