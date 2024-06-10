@@ -394,6 +394,7 @@
         // Attach the click event to elements with class 'pdfModal' after each Livewire update
         document.querySelectorAll('.pdfModal').forEach(function(element) {
             element.addEventListener('click', function(event) {
+                alert('click')
                 var imgSrc = event.target.dataset.imgSrc;
                 $('#pdfModal').css('display', 'block');
                 $('#pdfFrame').attr('src', imgSrc);
