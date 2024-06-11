@@ -186,7 +186,8 @@
 <script>
     document.addEventListener('DOMContentLoaded', function() {
 
-
+        alert('ok')
+        $('.current').click()
        
         // get_calendar();
 
