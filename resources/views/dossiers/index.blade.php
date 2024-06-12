@@ -157,7 +157,7 @@
                         </td>
                         <td>{{ $dossier->beneficiaire->occupation }}</td>
                         <td>
-                            <a style="max-width:80px" target="_blank" href="{{ route('dossiers.show', $dossier->id) }}">
+                            <a style="max-width:80px"  href="{{ route('dossiers.show', $dossier->id) }}">
                                 <span class="badge badge-primary badge_button">{{ $dossier->etape_number }}</span>
 
                                 <div style="    margin-top: 13px;
@@ -180,7 +180,7 @@
                             {{ $dossier->etape_number ?? '' }}
                         </td>
                         <td>
-                            <a target="_blank" href="{{ route('dossiers.show', $dossier->id) }}">
+                            <a  href="{{ route('dossiers.show', $dossier->id) }}">
                                 <div style="    margin-top: 12px;"
                                     class="btn btn-{{ $dossier->status->status_style ?? 'default' }}">
 
@@ -244,7 +244,7 @@
                             @endif
                         </td>
                         <td>
-                            <a target="_blank" href="{{ route('dossiers.show', $dossier->id) }}" class="btn btn-primary">
+                            <a  href="{{ route('dossiers.show', $dossier->id) }}" class="btn btn-primary">
                                 {!! $dossier->fiche->fiche_name . '<br/>' ?? 'N/A' !!}
                             </a>
                         </td>
