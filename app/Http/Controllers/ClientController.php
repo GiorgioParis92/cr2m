@@ -125,6 +125,7 @@ class ClientController extends Controller
             // Move the temporary file to the final location
             $tempPath = $request->input('main_logo');
             $finalPath = str_replace('temp/', "clients/{$client->id}/", $tempPath);
+            dd($finalPath);
             Storage::disk('public')->move($tempPath, $finalPath);
 
             // Update the client with the final path
