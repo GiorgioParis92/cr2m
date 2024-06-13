@@ -24,6 +24,7 @@
 </div>
 @endsection
 
+
 @section('scripts')
 <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.css" rel="stylesheet">
 <!-- jQuery -->

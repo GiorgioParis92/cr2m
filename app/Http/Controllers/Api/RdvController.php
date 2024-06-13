@@ -24,6 +24,7 @@ class RdvController extends \App\Http\Controllers\Controller
         $rdvs = $rdvs->where('rdv.user_id', $request->user_id);
     }
     
+    
     $rdvs = $rdvs->get();
 
         $data=$rdvs;

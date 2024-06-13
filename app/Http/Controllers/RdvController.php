@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 class RdvController extends Controller
 {
+    
     public function index()
     {
 

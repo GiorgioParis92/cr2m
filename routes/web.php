@@ -19,6 +19,7 @@ use App\Services\FileUploadService;
 use App\FormModel\FormConfigHandler;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CalendarController;
+use App\Http\Controllers\RdvController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\ResetPasswordController;
@@ -115,9 +116,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 
     // routes/web.php
+Route::get('/rdvs', [App\Http\Controllers\RdvController::class, 'index']);
 Route::get('/calendar', [App\Http\Controllers\CalendarController::class, 'index']);
 Route::get('/events', [App\Http\Controllers\EventController::class, 'getEvents']);
-
 
 });
 

@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace App\Http\Controllers;
 
@@ -9,6 +9,8 @@ use App\Models\User;
 use App\Models\Dossier;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Http; 
+use Illuminate\Http\RedirectResponse;
 
 class BeneficiaireController extends Controller
 {
@@ -20,15 +22,16 @@ class BeneficiaireController extends Controller
 
     public function create()
     {
-        $user = User::where('id',auth()->user()->id)->with('client')->first();
+        $user = User::where('id', auth()->user()->id)->with('client')->first();
         $fiches = Fiche::all();
-        $financiers = Client::where('type_client',1)->get();
-        $administratifs = Client::where('type_client',2)->get();
-        $installateurs = Client::where('type_client',3)->get();
-        return view('beneficiaires.create',compact('fiches','financiers','administratifs','installateurs','user'));
+        $financiers = Client::where('type_client', 1)->get();
+        $administratifs = Client::where('type_client', 2)->get();
+        $installateurs = Client::where('type_client', 3)->get();
+        return view('beneficiaires.create', compact('fiches', 'financiers', 'administratifs', 'installateurs', 'user'));
     }
 
-    public function store(Request $request): JsonResponse
+    
+    public function store(Request $request): RedirectResponse
     {
         $validated = $request->validate([
             'nom' => 'required|max:200',
@@ -42,14 +45,39 @@ class BeneficiaireController extends Controller
             'menage_mpr' => 'required|in:bleu,jaune,violet,rose',
             'chauffage' => 'required|in:gaz,fioul,bois,charbon,electricite',
             'occupation' => 'required|in:locataire,proprietaire',
-         
         ]);
-
+    
+        // Concatenate and encode the full address
+        $fullAddress = urlencode("{$validated['adresse']} {$validated['cp']} {$validated['ville']} France");
+        $nominatimUrl = "https://nominatim.openstreetmap.org/search?q={$fullAddress}&format=geojson";
+    
+        // Send the request to Nominatim API
+        try {
+            $response = Http::withOptions(['verify' => false])->get($nominatimUrl);
+    
+            if ($response->successful()) {
+                $geoData = $response->json();
+                $latitude = $geoData['features'][0]['geometry']['coordinates'][1] ?? null;
+                $longitude = $geoData['features'][0]['geometry']['coordinates'][0] ?? null;
+    
+                // Include latitude and longitude in the validated data
+                $validated['lat'] = $latitude;
+                $validated['lng'] = $longitude;
+            } else {
+                return redirect()->back()->with('error', 'Failed to fetch geolocation data.');
+            }
+        } catch (\Exception $e) {
+            // Handle the exception and return
+            return redirect()->back()->with('error', 'An error occurred while trying to geolocate the address.');
+        }
+    
+        // Create the beneficiaire
         $beneficiaire = Beneficiaire::create($validated);
-
+    
+        // Create the dossier if fiche_id is provided
         if ($request->has('fiche_id')) {
             $dossier = Dossier::create([
-                'beneficiaire_id' => $beneficiaire->id,  // This will be updated once the beneficiaire is created
+                'beneficiaire_id' => $beneficiaire->id,
                 'fiche_id' => $request->input('fiche_id'),
                 'etape_id' => 1,
                 'status_id' => 1,
@@ -57,13 +85,24 @@ class BeneficiaireController extends Controller
                 'mandataire_administratif' => $request->input('mandataire_administratif') ?? 0,
                 'mandataire_financier' => $request->input('mandataire_financier') ?? 0,
                 'installateur' => $request->input('installateur') ?? 0,
+                'lat' => $validated['lat'] ?? 0,
+                'lng' => $validated['lng'] ?? 0,
             ]);
-            $dossier_id = $dossier->id;
+    
+            // Ensure dossier is created before redirecting
+            if ($dossier) {
+                return redirect()->route('dossiers.show', ['id' => $dossier->id])
+                    ->with('success', 'Beneficiaire et dossier créés avec succès.');
+            } else {
+                // Handle failure to create dossier
+                return redirect()->back()->with('error', 'Failed to create dossier.');
+            }
         }
-
-
-        return response()->json(['success' => 'Beneficiaire created successfully.', 'beneficiaire' => $beneficiaire], 201);
+    
+        // Fallback if no dossier is created
+        return redirect()->back()->with('success', 'Beneficiaire created successfully, but no dossier was created.');
     }
+    
 
     public function show(Beneficiaire $beneficiaire)
     {
@@ -90,7 +129,7 @@ class BeneficiaireController extends Controller
             'chauffage' => 'required|in:gaz,fioul,bois,charbon,electricite',
             'occupation' => 'required|in:locataire,proprietaire',
         ]);
-    
+
         $beneficiaire->update($validated);
         return redirect()->route('beneficiaires.index')->with('success', 'Beneficiaire mis à jour.');
     }

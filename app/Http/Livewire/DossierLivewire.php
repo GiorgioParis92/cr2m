@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 
 class DossierLivewire extends Component
 {
+    
     public $etape_display;
     public $etapes;
     public $forms_configs;

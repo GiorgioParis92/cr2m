@@ -7,7 +7,6 @@
     <title>FullCalendar Example</title>
     <!-- FullCalendar CSS -->
    
-
 </head>
 <body>
     <div class="row">

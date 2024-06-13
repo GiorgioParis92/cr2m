@@ -29,6 +29,7 @@
 
     @include('frontend.content')
 
+    
     @include('frontend.footer')
   </main>
 
