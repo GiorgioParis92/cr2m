@@ -20,7 +20,7 @@ class Checkbox extends AbstractFormData
  
 
 
-        $data = '<div class="form-group col-sm-12';
+        $data = '<div class="form-group col-sm-12 ';
         $data .= $this->config->class ?? '';
         $data .= '">';
         $data .= '<label>';
