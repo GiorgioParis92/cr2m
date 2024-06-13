@@ -32,12 +32,40 @@ class ClientController extends Controller
 
     public function uploadLogo(Request $request)
     {
-        if ($request->hasFile('file') && $request->main_logo) {
+        if ($request->hasFile('file')) {
+            // Get the file from the request
             $file = $request->file('file');
-            $path = store_image($file, 'clients'); // Store file in the 'public/clients/temp' directory
-
-            return response()->json(['file_path' => $path]);
+        
+            // Define the path
+            $tempPath = 'public/clients/temp';
+            $clientFolder = "public/clients/{$request->client_id}";
+        
+            // Ensure the client directory exists
+            if (!Storage::exists($clientFolder)) {
+                Storage::makeDirectory($clientFolder);
+            }
+        
+            // Store the file in the temp directory
+            $tempFilePath = $file->store($tempPath);
+        
+            // Move the file to the client directory
+            $finalPath = str_replace('temp/', "{$request->client_id}/", $tempFilePath);
+            Storage::move($tempFilePath, $finalPath);
+        
+            // Remove 'public/' from the final path to make it accessible via URL
+            $finalPath = str_replace('public/', '', $finalPath);
+        
+            // Find the client by ID
+            $client = Client::findOrFail($request->client_id);
+        
+            // Update the main logo path
+            $client->main_logo = $finalPath;
+            $client->save();
+        
+            // Return the file path in the response
+            return response()->json(['file_path' => $finalPath]);
         }
+        
 
         return response()->json(['error' => 'File not uploaded'], 400);
     }
@@ -125,7 +153,7 @@ class ClientController extends Controller
             // Move the temporary file to the final location
             $tempPath = $request->input('main_logo');
             $finalPath = str_replace('temp/', "clients/{$client->id}/", $tempPath);
-            dd($finalPath);
+
             Storage::disk('public')->move($tempPath, $finalPath);
 
             // Update the client with the final path

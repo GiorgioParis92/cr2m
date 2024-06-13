@@ -98,11 +98,14 @@
     var mainLogoDropzone = new Dropzone("#mainLogoDropzone", {
         url: "{{ route('clients.upload_logo') }}", // Route to handle the file upload
         paramName: "file",
-        maxFilesize: 2, // MB
+        maxFilesize: 1, // MB
         acceptedFiles: ".jpeg,.jpg,.png,.gif,.pdf,.heic",
         headers: {
             'X-CSRF-TOKEN': "{{ csrf_token() }}"
         },
+        params: {
+        client_id: {{$client->id}},
+    },
         success: function(file, response) {
             // Update the hidden input field with the path of the uploaded file
             document.getElementById('main_logo_input').value = response.file_path;
