@@ -544,6 +544,13 @@
 
     function initializePdfModals() {
         // Attach the click event to elements with class 'pdfModal' after each Livewire update
+        document.querySelectorAll('.imageModal').forEach(function(element) {
+            element.addEventListener('click', function(event) {
+                var imgSrc = event.target.dataset.imgSrc;
+                $('#imageModal').css('display', 'block');
+                $('#imageInModal').attr('src', imgSrc);
+            });
+        });
         document.querySelectorAll('.pdfModal').forEach(function(element) {
             element.addEventListener('click', function(event) {
                 var imgSrc = event.target.dataset.imgSrc;
