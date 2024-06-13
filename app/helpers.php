@@ -5,6 +5,18 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 
+function getColorForType($type)
+{
+    $colors = [
+        '1' => '#FF5733',
+        '2' => '#33FF57',
+        '3' => '#3357FF',
+        // Add more mappings as necessary
+    ];
+
+    return $colors[$type] ?? '#FF5733'; // Default color if type is not found
+}
+
 
 if (!function_exists('format_date')) {
     function format_date($value)

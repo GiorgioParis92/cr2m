@@ -24,7 +24,13 @@ class RdvController extends Controller
         }
 
         $auditeurs=$auditeurs->get();
+        $departments = DB::table('departement')
+        ->select('region_id', 'region_name', 'departement_id', 'departement_nom','departement_code')
+        ->orderBy('region_name')
+        ->orderBy('departement_nom')
+        ->get()
+        ->groupBy('region_id');
 
-        return view('rdv.index',compact('auditeurs'));
+        return view('rdv.index',compact('auditeurs','departments'));
     }
 }

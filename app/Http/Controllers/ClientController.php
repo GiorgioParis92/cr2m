@@ -68,7 +68,7 @@ class ClientController extends Controller
     
         if ($request->main_logo) {
             $tempPath = $request->input('main_logo');
-            $finalPath = str_replace('temp/', "{$clientId}/", $tempPath);
+            $finalPath = str_replace('clients/', "{$clientId}/", $tempPath);
             Storage::disk('public')->move($tempPath, $finalPath);
         }
     
