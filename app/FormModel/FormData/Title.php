@@ -9,7 +9,7 @@ class Title extends AbstractFormData
     public function render(bool $is_error)
     {
 
-        $data= '<div class="row"><div class="col-4"><h6>'.$this->config->title.'</h6></div></div>';
+        $data= '<div class="row"><div class="col-12"><h6>'.$this->config->title.'</h6></div></div>';
 
 
 
