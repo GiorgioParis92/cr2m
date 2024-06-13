@@ -68,7 +68,7 @@ class ClientController extends Controller
     
         if ($request->main_logo) {
             $tempPath = $request->input('main_logo');
-            $finalPath = str_replace('clients/', "{$clientId}/", $tempPath);
+            $finalPath = str_replace('temp/', "{$clientId}/", $tempPath);
             Storage::disk('public')->move($tempPath, $finalPath);
         }
     
@@ -124,7 +124,7 @@ class ClientController extends Controller
         if ($request->main_logo && !empty($request->input('main_logo')) && $request->input('main_logo') != $client->main_logo) {
             // Move the temporary file to the final location
             $tempPath = $request->input('main_logo');
-            $finalPath = str_replace('temp/', "{$client->id}/", $tempPath);
+            $finalPath = str_replace('temp/', "clients/{$client->id}/", $tempPath);
             Storage::disk('public')->move($tempPath, $finalPath);
 
             // Update the client with the final path
