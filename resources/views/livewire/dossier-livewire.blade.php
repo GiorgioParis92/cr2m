@@ -548,7 +548,7 @@
             element.addEventListener('click', function(event) {
 
                 console.log(event);
-                var imgSrc = event.target.dataset.imgSrc;
+                var imgSrc = $(this).data('img-src');
                 console.log(imgSrc);
                 $('#imageInModal').attr('src', imgSrc);
                 $('#imageModal').modal('show');
