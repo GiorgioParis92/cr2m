@@ -547,8 +547,9 @@
         document.querySelectorAll('.imageModal').forEach(function(element) {
             element.addEventListener('click', function(event) {
                 var imgSrc = event.target.dataset.imgSrc;
-                $('#imageModal').css('display', 'block');
                 $('#imageInModal').attr('src', imgSrc);
+                $('#imageModal').modal('show');
+
             });
         });
         document.querySelectorAll('.pdfModal').forEach(function(element) {
