@@ -409,7 +409,55 @@
         });
     });
 
-    function initializeDropzones() {}
+    function initializeDropzones() {
+
+        if (Dropzone.instances.length > 0) {
+                Dropzone.instances.forEach(instance => instance.destroy());
+            }
+
+            Dropzone.autoDiscover = false;
+
+            // Convert object to array and loop through configs
+            Object.values(configs).forEach((formConfig) => {
+                console.log(formConfig)
+                if (formConfig.form.type === 'document') {
+                    Object.keys(formConfig.formData).forEach((key) => {
+                        console.log(key)
+
+                        var dropzoneElementId = `#dropzone-${key}`;
+                        var dropzoneElement = document.querySelector(dropzoneElementId);
+                        if (!dropzoneElement) {
+                            console.warn(`Element ${dropzoneElementId} not found.`);
+                            return;
+                        }
+                        new Dropzone(dropzoneElement, {
+                            method: 'post',
+                            headers: {
+                                // 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                            },
+                            paramName: 'file',
+                            sending: function(file, xhr, formData) {
+                                formData.append('folder', 'dossiers');
+                                formData.append('template', key);
+                            },
+                            init: function() {
+                                this.on("success", function(file,
+                                    response) {
+                                    console.log(
+                                        'Successfully uploaded:',
+                                        response);
+                                });
+                                this.on("error", function(file, response) {
+                                    console.log('Upload error:',
+                                        response);
+                                });
+                            }
+                        });
+                    });
+                }
+            });
+
+    }
 
     function get_calendar() {
         var calendarEl = document.getElementById('calendar');
