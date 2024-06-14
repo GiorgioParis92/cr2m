@@ -12,6 +12,7 @@ class AbstractFormData
     protected $form_id;
     protected $dossier_id;
     protected $config;
+    public $prediction;
 
     public function __construct($config, $name, $form_id, $dossier_id)
     {
@@ -26,8 +27,27 @@ class AbstractFormData
             ->where('meta_key', $name)
             ->first();
            
+
+        $config_dossier = \DB::table('dossiers_data')
+            ->where('dossier_id', $dossier_id)
+            ->where('meta_key', $name)
+            ->first();
+    
+        // Initialize value with the first table's value or an empty string
         $this->name = $name;
         $this->value = $config->meta_value ?? '';
+        $this->prediction='';
+
+        // If the value from the second table exists and is not null, use it
+        if ($config_dossier && isset($config_dossier->meta_value)) {
+            $this->prediction=$config_dossier->meta_value;
+
+            if($this->value=='') {
+                $this->value = $config_dossier->meta_value;
+            }
+           
+
+        }
 
 
         if (!$this->check_value()) {

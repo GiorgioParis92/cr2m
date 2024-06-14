@@ -22,6 +22,11 @@ class Text extends AbstractFormData
         $data .= ' value="'.($this->value).'">';
         $data .= '</div>';
 
+        if($this->prediction) {
+            $data.='okkkk';
+        }
+
+
         return $data;
     }
 }

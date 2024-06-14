@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BeneficiaireController;
 use App\Http\Controllers\PDFController;
 use App\Http\Controllers\Api\RdvController;
+use App\Http\Controllers\Api\OcrAnalyze;
 
 
 /*
@@ -33,6 +34,9 @@ Route::post('/fill-pdf', [PDFController::class, 'fillPdf']);
 Route::get('/rdvs', [RdvController::class, 'index']);
 Route::post('/rdvs', [RdvController::class, 'index']);
 Route::post('/rdvs/save', [RdvController::class, 'save']);
+
+Route::post('/ocr-analyze', [OcrAnalyze::class, 'index']);
+
 Route::middleware('auth:api')->group(function () {
 
     // Add other RdvController routes here as needed

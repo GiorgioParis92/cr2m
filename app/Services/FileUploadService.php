@@ -5,6 +5,8 @@ namespace App\Services;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http; // Add this line
+use App\Http\Controllers\Api\OcrAnalyze; // Import the OcrAnalyze controller
 
 class FileUploadService
 {
@@ -17,18 +19,56 @@ class FileUploadService
      * @param string $inputName
      * @return string|false
      */
-    public function storeImage(Request $request, string $folder=null, int $clientId=null, string $inputName = 'file')
+    public function storeImage(Request $request, string $folder = null, int $clientId = null, string $inputName = 'file')
     {
-      
-        if(isset($request->folder)) {
-            $folder=$request->folder;
-            
+
+        if ($request->folder == 'dossiers') {
+            $ocrResponse = $this->callOcrAnalyzeDirectly($request);
+
+            if (!$ocrResponse) {
+                return false; // Handle OCR failure as needed
+            } else {
+                $result = $ocrResponse['result']['data']['analyze_result'];
+                $array_result = $result;
+                foreach ($array_result as $key => $value) {
+                    $meta_value='';
+              
+                    // Check if the value is an array and convert to JSON string if true
+                    if(isset($value['value'])) {
+                   
+                        if (is_array($value['value'])) {
+                            $meta_value = json_encode($value['value']);
+                        } else {
+                            $meta_value = $value['value'];
+                        }
+                    }
+
+
+                    \DB::table('dossiers_data')->updateOrInsert(
+                        [
+                            'dossier_id' => $request->clientId,
+                            'meta_key' => $key
+                        ],
+                        [
+                            'meta_value' => $meta_value,
+                            'created_at' => now(),
+                            'updated_at' => now()
+                        ]
+                    );
+                }
+
+            }
         }
-        if(isset($request->clientId)) {
-            $clientId=$request->clientId;
+
+        if (isset($request->folder)) {
+            $folder = $request->folder;
+
         }
-        if(isset($request->form_id)) {
-            $form_id=$request->form_id;
+        if (isset($request->clientId)) {
+            $clientId = $request->clientId;
+        }
+        if (isset($request->form_id)) {
+            $form_id = $request->form_id;
         }
         if ($request->hasFile($inputName)) {
             $file = $request->file($inputName);
@@ -45,14 +85,14 @@ class FileUploadService
             }
             $fileName = $file->getClientOriginalName();
             if ($request->has('template')) {
-                
+
                 $fileName = $request->input('template') . '.' . $extension;
             }
 
             $filePath = $file->storeAs($directory, $fileName, 'public');
 
 
-            if(isset($request->form_id)) {
+            if (isset($request->form_id)) {
                 DB::table('forms_data')->updateOrInsert(
                     [
                         'dossier_id' => $clientId,
@@ -66,11 +106,24 @@ class FileUploadService
                     ]
                 );
 
-        
+
 
             }
 
             return $filePath;
+        }
+
+        return false;
+    }
+    protected function callOcrAnalyzeDirectly(Request $request)
+    {
+        $ocrController = new OcrAnalyze();
+        $response = $ocrController->index($request);
+
+        if ($response->getStatusCode() === 200) {
+            $responseData = json_decode($response->getContent(), true);
+            // Add your custom logic here based on the OCR response
+            return $responseData;
         }
 
         return false;

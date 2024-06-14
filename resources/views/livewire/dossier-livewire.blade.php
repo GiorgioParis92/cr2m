@@ -54,7 +54,7 @@
                                             {{ strtoupper_extended($e->etape_desc) }}
                                             <small>
                                                 @if ($dossier->etape_number == $e->etape_number)
-                                                    <p>Status: {{ $dossier->status->status_name }}</p>
+                                                    <p>Status: {{ $dossier->status->status_name ?? '' }}</p>
                                                 @endif
                                             </small>
                                         </span>
@@ -71,7 +71,7 @@
                             <div class="col-lg-4">
                                 <h3 class="border-bottom border-gray pb-2">{{ $etape_display['etape_desc'] }}</h3>
                             </div>
-                            @if ($tab == $dossier->etape_number && $dossier->status->status_name != 'Refusé')
+                            @if (isset($dossier->status->status_name) && $tab == $dossier->etape_number && $dossier->status->status_name != 'Refusé')
                                 <div class="col-lg-6">
                                     <a class="btn btn-primary"
                                         href="{{ route('dossiers.next_step', $dossier->id) }}">Valider l'étape</a>
@@ -143,7 +143,7 @@
                             <div class="">
                                 <h4>{{ $form->form->form_title }}</h4>
 
-                                <form wire:submit.prevent="submit">
+                                <form wire:submit.prevent="submit" wire:poll.visible>
                                     @csrf
                                     <input type="hidden" name="form_id" value="{{ $form->form->id }}">
                                     <input type="hidden" name="dossier_id" value="{{ $dossier->id }}">

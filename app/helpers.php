@@ -5,6 +5,47 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 
+
+function makeRequest($url, $data)
+{
+    // Initialize cURL
+    $ch = curl_init();
+
+    // Set cURL options
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_POST, true);
+
+    // Build the multipart/form-data payload
+    $multipartData = [];
+
+    foreach ($data as $key => $value) {
+        if ($key === 'file' && $value!='{}' && $value!=null) {
+            
+            $multipartData[$key] = new CURLFile($value->getRealPath(), $value->getClientMimeType(), $value->getClientOriginalName());
+        } else {
+            $multipartData[$key] = $value;
+        }
+    }
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $multipartData);
+
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+    // Execute cURL request
+    $response = curl_exec($ch);
+
+    // Check for errors
+    if ($response === false) {
+        echo 'cURL error: ' . curl_error($ch);
+    }
+
+    // Close cURL session
+    curl_close($ch);
+
+    return $response;
+}
+
+
+
 function getColorForType($type)
 {
     $colors = [
