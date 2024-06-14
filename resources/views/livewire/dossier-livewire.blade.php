@@ -341,11 +341,11 @@
             $('select').select2();
             $('.datepicker').datepicker();
 
-            initializeDropzones();
+          
             initializePdfModals();
             // Retrieve and parse the forms_configs
             var configs = data.forms_configs;
-
+            initializeDropzones(configs);
             // Remove existing Dropzones to prevent multiple instances
             if (Dropzone.instances.length > 0) {
                 Dropzone.instances.forEach(instance => instance.destroy());
@@ -409,8 +409,7 @@
         });
     });
 
-    function initializeDropzones() {
-        var configs = data.forms_configs;
+    function initializeDropzones(configs) {
 
         if (Dropzone.instances.length > 0) {
                 Dropzone.instances.forEach(instance => instance.destroy());
