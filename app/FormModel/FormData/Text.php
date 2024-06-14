@@ -12,19 +12,25 @@ class Text extends AbstractFormData
         // Constructing the wire:model directive
         $wireModel = "formData.{$this->form_id}.{$this->name}";
 
-        $data = '<div class="form-group col-sm-12 '.($this->config->class ?? "").'">';
+        $class_prediction='';
+        if($this->prediction) {
+            $class_prediction.='prediction';
+        }
+
+        $data = '<div class="form-group col-sm-12 '.($this->config->class ?? "").'  group_'.$class_prediction.'">';
         $data .= '<label>'.$this->config->title.'</label>';
-        $data .= '<input wire:model="'.$wireModel.'" class="form-control" type="text" name="'.$this->name.'"';
+        $data .= '<input wire:model="'.$wireModel.'" class="form-control '.$class_prediction.'" type="text" name="'.$this->name.'"';
 
         if ($this->config->required) {
             $data .= ' required ';
         }
         $data .= ' value="'.($this->value).'">';
+        if($this->prediction) {
+            $data.='<span class="prediction">Predicted by OCEER</span>';
+        }
         $data .= '</div>';
 
-        if($this->prediction) {
-            $data.='okkkk';
-        }
+
 
 
         return $data;

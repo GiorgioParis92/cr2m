@@ -1036,3 +1036,14 @@ color:white
     position: relative!important;
     height: auto;
 }
+
+input.form-control.prediction {
+    border-color: #88bdff45;
+    background: #88bdff1f;
+}
+
+span.prediction {
+    color: #88bdff9e;
+    font-size: 11px;
+    font-style: italic;
+}
