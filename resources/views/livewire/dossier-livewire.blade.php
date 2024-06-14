@@ -410,6 +410,7 @@
     });
 
     function initializeDropzones() {
+        var configs = data.forms_configs;
 
         if (Dropzone.instances.length > 0) {
                 Dropzone.instances.forEach(instance => instance.destroy());
