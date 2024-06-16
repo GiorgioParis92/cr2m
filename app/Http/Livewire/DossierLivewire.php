@@ -12,7 +12,7 @@ use Illuminate\Http\Request;
 
 class DossierLivewire extends Component
 {
-    
+
     public $etape_display;
     public $etapes;
     public $forms_configs;
@@ -32,17 +32,17 @@ class DossierLivewire extends Component
 
         // Fetch distinct etapes
         $distinctEtapes = DB::table('forms')
-            ->select('etape_id', DB::raw('MIN(id) as min_id'))
-            ->groupBy('etape_id');
-
+            ->select('etape_number', DB::raw('MIN(id) as min_id'))
+            ->groupBy('etape_number');
         $etapes = DB::table('forms')
-            ->join('etapes', 'forms.etape_id', '=', 'etapes.id')
+            ->join('etapes', 'forms.etape_number', '=', 'etapes.id')
             ->joinSub($distinctEtapes, 'distinctEtapes', function ($join) {
                 $join->on('forms.id', '=', 'distinctEtapes.min_id');
             })
             ->select('forms.*', 'etapes.etape_name', 'etapes.etape_desc')
-            ->orderBy('forms.etape_number')
+            ->orderBy('etapes.order_column')
             ->get();
+
 
         $this->etapes = $this->convertArrayToStdClass($etapes->toArray());
 
@@ -50,16 +50,22 @@ class DossierLivewire extends Component
         $this->reinitializeFormsConfigs();
         $this->emit('initializeDropzones', ['forms_configs' => $this->forms_configs]);
 
-        $auditeurs=User::where('type_id',4);
-        
-        if(auth()->user()->client_id>0) {
-            $auditeurs=$auditeurs->where('client_id',auth()->user()->client_id);
+        $auditeurs = User::where('type_id', 4);
+
+        if (auth()->user()->client_id > 0) {
+            $auditeurs = $auditeurs->where('client_id', auth()->user()->client_id);
 
         }
 
-        $auditeurs=$auditeurs->get();
+        $auditeurs = $auditeurs->get();
 
-        $this->auditeurs=$auditeurs;
+        $this->auditeurs = $auditeurs;
+
+        $this->departments = DB::table('departement')->get()->map(function($department) {
+            return (array) $department; // Convert stdClass to array
+        })->toArray();
+
+        dump($this->forms_configs);
 
     }
 
@@ -77,43 +83,44 @@ class DossierLivewire extends Component
         $firstKey = array_key_first($this->forms_configs);
         $this->display_form($firstKey);
         $this->emit('initializeDropzones', ['forms_configs' => $this->forms_configs]);
+        $this->emit('setTab');
 
     }
 
     public function hydrate()
-{
-    $this->etapes = $this->convertArrayToStdClass($this->etapes);
-    $this->reinitializeFormsConfigs();
-    $this->emit('initializeDropzones', ['forms_configs' => $this->forms_configs]);
+    {
+        $this->etapes = $this->convertArrayToStdClass($this->etapes);
+        $this->reinitializeFormsConfigs();
+        $this->emit('initializeDropzones', ['forms_configs' => $this->forms_configs]);
 
-}
-public function updated($propertyName, $value)
-{
-    if (strpos($propertyName, 'formData.') === 0) {
-        $this->updatedFormData($propertyName, $value);
+    }
+    public function updated($propertyName, $value)
+    {
+        if (strpos($propertyName, 'formData.') === 0) {
+            $this->updatedFormData($propertyName, $value);
+        }
+
     }
 
-}
+    public function updatedFormData($propertyName, $value)
+    {
+        // Parse the property name
+        // Example property name: formData.3.nom
+        $pattern = '/^formData\.(\d+)\.(\w+)$/';
+        if (preg_match($pattern, $propertyName, $matches)) {
+            $formId = $matches[1]; // Extract formId
+            $key = $matches[2]; // Extract key
 
-public function updatedFormData($propertyName, $value)
-{
-    // Parse the property name
-    // Example property name: formData.3.nom
-    $pattern = '/^formData\.(\d+)\.(\w+)$/';
-    if (preg_match($pattern, $propertyName, $matches)) {
-        $formId = $matches[1]; // Extract formId
-        $key = $matches[2]; // Extract key
-
-        // Ensure the formId and key exist
-        if (isset($this->forms_configs[$formId]) && isset($this->forms_configs[$formId]->formData[$key])) {
-            $this->forms_configs[$formId]->formData[$key]->value = $value;
+            // Ensure the formId and key exist
+            if (isset($this->forms_configs[$formId]) && isset($this->forms_configs[$formId]->formData[$key])) {
+                $this->forms_configs[$formId]->formData[$key]->value = $value;
+            }
+        }
+        $result_save = [];
+        foreach ($this->forms_configs as $formId => $config) {
+            $result_save[$formId] = $config->save();
         }
     }
-    $result_save=[];
-    foreach ($this->forms_configs as $formId => $config) {
-        $result_save[$formId] = $config->save();
-    }
-}
 
     public function display_form($form_id)
     {

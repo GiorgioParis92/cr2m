@@ -5,6 +5,8 @@ namespace App\Notifications;
 use Illuminate\Notifications\Notification;
 use Illuminate\Notifications\Messages\MailMessage;
 use App\Models\User;
+use Illuminate\Support\Facades\URL;
+
 
 class UserCreatedNotification extends Notification
 {
@@ -24,13 +26,16 @@ class UserCreatedNotification extends Notification
 
     public function toMail($notifiable)
     {
+        $url = URL::temporarySignedRoute(
+            'temporary.password.reset', now()->addMinutes(60), ['email' => urlencode($this->user->email)]
+        );
+
         return (new MailMessage)
-            ->subject('Your Account has been Created')
-            ->greeting('Hello ' . $this->user->name . ',')
-            ->line('An account has been created for you. Here are your login details:')
-            ->line('**Email:** ' . $this->user->email)
-            ->line('**Temporary Password:** ' . $this->temporaryPassword)
-            ->line('Please change your password after logging in.')
-            ->action('Reset Password', url('/password/reset', ['email' => $this->user->email]));
+            ->subject('Compte créé')
+            ->view('emails.user-created', [
+                'user' => $this->user,
+                'temporaryPassword' => $this->temporaryPassword,
+                'url' => $url
+            ]);
     }
 }

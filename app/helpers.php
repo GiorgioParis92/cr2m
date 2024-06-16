@@ -49,8 +49,8 @@ function makeRequest($url, $data)
 function getColorForType($type)
 {
     $colors = [
-        '1' => '#FF5733',
-        '2' => '#33FF57',
+        '1' => '#cb0c9f',
+        '2' => '#8392AB',
         '3' => '#3357FF',
         // Add more mappings as necessary
     ];

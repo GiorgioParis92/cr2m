@@ -23,7 +23,9 @@ class RdvController extends \App\Http\Controllers\Controller
         if (isset($request->user_id) && $request->user_id > 0) {
             $rdvs = $rdvs->where('rdv.user_id', $request->user_id);
         }
-
+        if (isset($request->dpt) ) {
+            $rdvs = $rdvs->where(DB::raw('substr(rdv.cp, 1, 2)'), $request->dpt);
+        }
 
         $rdvs = $rdvs->get();
 

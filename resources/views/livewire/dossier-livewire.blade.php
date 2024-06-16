@@ -68,8 +68,8 @@
                 <div class="card-body px-0 pb-0">
                     @if (isset($tab))
                         <div class="row">
-                            <div class="col-lg-4">
-                                <h3 class="border-bottom border-gray pb-2">{{ $etape_display['etape_desc'] }}</h3>
+                            <div class="col-lg-12">
+                                <h3 class="border-bottom border-gray pb-2 p-5">{{ $etape_display['etape_desc'] }}</h3>
                             </div>
                             @if (isset($dossier->status->status_name) && $tab == $dossier->etape_number && $dossier->status->status_name != 'Refusé')
                                 <div class="col-lg-6">
@@ -78,7 +78,6 @@
                                 </div>
                             @endif
                         </div>
-
                         <div class="row">
                             <div class="col-lg-6 col-sm-12">
                                 <div class="card">
@@ -126,6 +125,7 @@
                                 </div>
                             </div>
                         </div>
+
                     @endif
                 </div>
             </div>
@@ -133,7 +133,7 @@
     </div>
     <div class="row">
         <div class="col-12">
-            <div class="card form-register container mt-5">
+            <div class="card form-register container mt-5 pt-5">
                 @if (isset($form_id))
 
                     @php $form = $forms_configs[$form_id] @endphp
@@ -161,8 +161,10 @@
                     @endif
                     @if ($form->form->type == 'rdv')
                         {!! $form->render([]) !!}
+                        <div class="card container mt-5 pd-5">
 
                         @include('calendar')
+                    </div>
                     @endif
 
                 @endif
@@ -327,8 +329,10 @@
     });
     document.addEventListener('DOMContentLoaded', function() {
 
+        Livewire.on('initializeDropzones', (data) => {
+            initializePdfModals();
 
-
+        });
         // get_calendar();
 
         // Listen for the Livewire event to reinitialize Dropzone
@@ -337,12 +341,13 @@
             //     $('input:radio').radiocharm({
 
             // });
+
             $('input.choice_checked').trigger('click');
             $('select').select2();
             $('.datepicker').datepicker();
 
-          
-            initializePdfModals();
+
+            // initializePdfModals();
             // Retrieve and parse the forms_configs
             var configs = data.forms_configs;
             initializeDropzones(configs);
@@ -399,12 +404,12 @@
         });
 
 
-        
+
 
         // Use Livewire's hook to run scripts after DOM updates
         Livewire.hook('message.processed', (message, component) => {
-            initializeDropzones();
-            initializePdfModals();
+            // initializeDropzones();
+            // initializePdfModals();
             get_calendar();
         });
     });
@@ -412,50 +417,50 @@
     function initializeDropzones(configs) {
 
         if (Dropzone.instances.length > 0) {
-                Dropzone.instances.forEach(instance => instance.destroy());
-            }
+            Dropzone.instances.forEach(instance => instance.destroy());
+        }
 
-            Dropzone.autoDiscover = false;
+        Dropzone.autoDiscover = false;
 
-            // Convert object to array and loop through configs
-            Object.values(configs).forEach((formConfig) => {
-                console.log(formConfig)
-                if (formConfig.form.type === 'document') {
-                    Object.keys(formConfig.formData).forEach((key) => {
-                        console.log(key)
+        // Convert object to array and loop through configs
+        Object.values(configs).forEach((formConfig) => {
+            console.log(formConfig)
+            if (formConfig.form.type === 'document') {
+                Object.keys(formConfig.formData).forEach((key) => {
+                    console.log(key)
 
-                        var dropzoneElementId = `#dropzone-${key}`;
-                        var dropzoneElement = document.querySelector(dropzoneElementId);
-                        if (!dropzoneElement) {
-                            console.warn(`Element ${dropzoneElementId} not found.`);
-                            return;
+                    var dropzoneElementId = `#dropzone-${key}`;
+                    var dropzoneElement = document.querySelector(dropzoneElementId);
+                    if (!dropzoneElement) {
+                        console.warn(`Element ${dropzoneElementId} not found.`);
+                        return;
+                    }
+                    new Dropzone(dropzoneElement, {
+                        method: 'post',
+                        headers: {
+                            // 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                        },
+                        paramName: 'file',
+                        sending: function(file, xhr, formData) {
+                            formData.append('folder', 'dossiers');
+                            formData.append('template', key);
+                        },
+                        init: function() {
+                            this.on("success", function(file,
+                                response) {
+                                console.log(
+                                    'Successfully uploaded:',
+                                    response);
+                            });
+                            this.on("error", function(file, response) {
+                                console.log('Upload error:',
+                                    response);
+                            });
                         }
-                        new Dropzone(dropzoneElement, {
-                            method: 'post',
-                            headers: {
-                                // 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                            },
-                            paramName: 'file',
-                            sending: function(file, xhr, formData) {
-                                formData.append('folder', 'dossiers');
-                                formData.append('template', key);
-                            },
-                            init: function() {
-                                this.on("success", function(file,
-                                    response) {
-                                    console.log(
-                                        'Successfully uploaded:',
-                                        response);
-                                });
-                                this.on("error", function(file, response) {
-                                    console.log('Upload error:',
-                                        response);
-                                });
-                            }
-                        });
                     });
-                }
-            });
+                });
+            }
+        });
 
     }
 
@@ -590,28 +595,25 @@
 
 
 
+
     function initializePdfModals() {
-        // Attach the click event to elements with class 'pdfModal' after each Livewire update
-        document.querySelectorAll('.imageModal').forEach(function(element) {
-            element.addEventListener('click', function(event) {
+        // Remove existing event listeners to prevent multiple bindings
+        $(document).off('click', '.pdfModal').off('click', '.imageModal').off('click', '.fillPDF');
 
-                console.log(event);
-                var imgSrc = $(this).data('img-src');
-                console.log(imgSrc);
-                $('#imageInModal').attr('src', imgSrc);
-                $('#imageModal').modal('show');
-
-            });
-        });
-        document.querySelectorAll('.pdfModal').forEach(function(element) {
-            element.addEventListener('click', function(event) {
-                var imgSrc = event.target.dataset.imgSrc;
-                $('#pdfModal').css('display', 'block');
-                $('#pdfFrame').attr('src', imgSrc);
-            });
+        // Attach new event listeners
+        $(document).on('click', '.imageModal', function(event) {
+            var imgSrc = $(this).data('img-src');
+            $('#imageInModal').attr('src', imgSrc);
+            $('#imageModal').modal('show');
         });
 
-        $('.fillPDF').click(function() {
+        $(document).on('click', '.pdfModal', function(event) {
+            var imgSrc = $(this).data('img-src');
+            $('#pdfFrame').attr('src', imgSrc);
+            $('#pdfModal').css('display', 'block');
+        });
+
+        $(document).on('click', '.fillPDF', function(event) {
             var form_id = $(this).data('form_id');
             var dossier_id = $(this).data('dossier_id');
             var name = $(this).data('name');

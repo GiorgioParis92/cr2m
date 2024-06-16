@@ -14,6 +14,7 @@
             <label for="email">Email:</label>
             <input type="email" class="form-control" id="email" name="email" value="{{ $user->email }}" required>
         </div>
+        
         @if(auth()->user()->client_id==0)
         <div class="form-group">
             <label for="client_id">Client associé</label>
@@ -29,7 +30,7 @@
 
         @endif
         <div class="form-group">
-            <label for="type_id">Client associé</label>
+            <label for="type_id">Type d'utilisateur</label>
             <select class="form-control" id="type_id" name="type_id" >
             <option value="">Choisir un type d'utilisateur</option>
             @foreach($types as $type)

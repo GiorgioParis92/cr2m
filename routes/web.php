@@ -21,6 +21,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\CalendarController;
 use App\Http\Controllers\RdvController;
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\EtapesController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 
@@ -45,7 +46,15 @@ Route::post('login', [LoginController::class, 'login']);
 Route::middleware('auth')->group(function () {
     Route::get('/', 'App\Http\Controllers\DashboardController@index')->name('dashboard');
     Route::get('/dashboard', 'App\Http\Controllers\DashboardController@index')->name('dashboard');
+
+
+    Route::get('temporary-password/reset/{email}', [UserController::class, 'showTemporaryPasswordForm'])->name('temporary.password.reset');
+Route::post('temporary-password/update', [UserController::class, 'updateTemporaryPassword'])->name('temporary.password.update');
 });
+// Route::middleware(['auth', 'temp_password'])->group(function () {
+//     Route::get('temporary-password/reset', [UserController::class, 'showTemporaryPasswordForm'])->name('temporary.password.reset');
+//     Route::post('temporary-password/update', [UserController::class, 'updateTemporaryPassword'])->name('temporary.password.update');
+// });
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('logout', [LoginController::class, 'logout']);
@@ -62,7 +71,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // })->name('dashboard');
 
     Route::get('/users/index', [UserController::class, 'index'])->name('users.index');
-    Route::post('/user/create', [UserController::class, 'createUser'])->name('users.create');
+    Route::get('/user/create', [UserController::class, 'create'])->name('users.create');
+    Route::post('/user/store', [UserController::class, 'createUser'])->name('users.store');
     Route::get('/user/edit/{id}', [UserController::class, 'edit'])->name('users.editform');
     Route::put('/user/edit/{id}', [UserController::class, 'editUser'])->name('users.edit');
     Route::put('/user/destroy/{id}', [UserController::class, 'editUser'])->name('users.destroy');
@@ -113,10 +123,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/fill-pdf', [PDFController::class, 'fillPdf']);
 
     Route::post('upload_file', [FileUploadService::class, 'storeImage'])->name('upload_file');
+    Route::get('etapes-controller', [EtapesController::class, 'show'])->name('etapes-controller');
+    Route::get('edit-etape/{id}', [EtapesController::class, 'edit'])->name('edit-etape');
 
 
     // routes/web.php
-Route::get('/rdvs', [App\Http\Controllers\RdvController::class, 'index']);
+Route::get('/rdvs', [App\Http\Controllers\RdvController::class, 'index'])->name('rdvs');
 Route::get('/calendar', [App\Http\Controllers\CalendarController::class, 'index']);
 Route::get('/events', [App\Http\Controllers\EventController::class, 'getEvents']);
 

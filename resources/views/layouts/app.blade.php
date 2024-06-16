@@ -49,7 +49,8 @@
 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/4.2.0/bootstrap/main.css" rel="stylesheet">
 
-  
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.14.0/Sortable.min.js"></script>
+
 @livewireStyles
 </head>
 

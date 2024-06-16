@@ -14,6 +14,7 @@ class Etape extends Model
         'etape_desc',
         'etape_style',
         'etape_icon',
+        'order_column',
     ];
 
     public function dossiers()
