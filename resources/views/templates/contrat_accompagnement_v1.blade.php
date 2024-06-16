@@ -202,7 +202,7 @@
             Demeurant: {{ $dossier->beneficiaire->adresse }} {{ $dossier->beneficiaire->cp }}
             {{ $dossier->beneficiaire->ville }}<br />
             Agissant pour son compte propre :<br />
-            Ci-après nommé « Le bénéficiaire »<br />
+            Ci-après nommé <b>« Le bénéficiaire »</b><br />
         </p>
     </div>
 
@@ -215,13 +215,13 @@
 
     <div class="my-4">
         <p>
-            Le bureau d'études {{ $dossier->client->client_title }} {{ $dossier->client->type_societe }} ayant
+            Le bureau d'études <b>{{ $dossier->client->client_title }}</b> {{ $dossier->client->type_societe }} ayant
             pour SIRET {{ $dossier->client->siret }}<br />
             dont le siège social est situé<br />
             au {{ $dossier->client->adresse }} {{ $dossier->client->cp }} {{ $dossier->client->ville }}<br />
             représenté par {{ $dossier->client->representant ?? '' }}<br />
             agissant en qualité de {{ $dossier->client->qualite ?? '' }}<br />
-            Ci-après, désigné « Mon Accompagnateur Rénov »<br />
+            Ci-après, désigné <b>« Mon Accompagnateur Rénov »</b><br />
             Numéro d'agrément numéro : {{ $dossier->client->agrement ?? '' }}</p>
 
     </div>
