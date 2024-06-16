@@ -134,7 +134,9 @@
                     <tr>
                         <td>{{ format_date($dossier->created_at) }}</td>
                         <td>{{ strtotime_date($dossier->created_at) }}</td>
-                        <td><b>{{ $dossier->beneficiaire->nom }} {{ $dossier->beneficiaire->prenom }}</>
+                        <td><b><a href="{{ route('dossiers.show', $dossier->id) }}">{{ $dossier->beneficiaire->nom }} {{ $dossier->beneficiaire->prenom }}</a></b><br/>
+                            <i>Ménage :{{ $dossier->beneficiaire->menage_mpr }}</i>
+
                         </td>
                         <td>
                             {{ $dossier->beneficiaire->adresse }}<br />
@@ -194,7 +196,7 @@
                             {{ $dossier->status->status_desc ?? '' }}
                         </td>
 
-                        <td>
+                        <td class="text-center">
                             @if(isset($dossier->mar))
 
                             @if (Storage::disk('public')->exists($dossier->mar->main_logo))
@@ -211,7 +213,7 @@
                             @endif
                         </td>
 
-                        <td>
+                        <td class="text-center">
                             @if(isset($dossier->mandataire_financier))
 
                             @if (isset($dossier->mandataire_financier->main_logo) &&
@@ -267,7 +269,7 @@
         $(document).ready(function() {
             var table = $('#dossiersTable').DataTable({
                 columnDefs: [{
-                        targets: [1, 5, 6, 7, 9, 11, 13, 15, 17, 19],
+                        targets: [1,4, 5, 6, 7, 9, 11, 13, 15, 17, 19],
                         visible: false
                     },
 

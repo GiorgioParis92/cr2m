@@ -58,6 +58,8 @@
                                                 @endif
                                             </small>
                                         </span>
+                                        <div class="inter_line"></div>
+
                                     </div>
                                 </a>
                             </li>

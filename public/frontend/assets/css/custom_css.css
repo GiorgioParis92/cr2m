@@ -28,6 +28,8 @@
      max-width: 100%;
      max-width: 60px;
      border-radius: 5px;
+     display: block;
+     margin: auto;
  }
 
  @media (max-width: 767.98px) {
@@ -964,6 +966,7 @@
 
  #etapeTabs .active .step-icon {
      background-image: -webkit-linear-gradient(136deg, rgb(33 242 99) 0%, rgb(64 233 202) 50%, rgb(82 238 146) 100%);
+     z-index: 2;
  }
 
  #etapeTabs .current .step-icon {
@@ -1032,10 +1035,10 @@ color:white
 /* .fc-view-harness.fc-view-harness-active {
     max-height: 463px;
 } */
-.fc-timegrid-event-harness>.fc-timegrid-event {
+/* .fc-timegrid-event-harness>.fc-timegrid-event {
     position: relative!important;
     height: auto;
-}
+} */
 
 input.form-control.prediction {
     border-color: #88bdff45;
@@ -1046,4 +1049,14 @@ span.prediction {
     color: #88bdff9e;
     font-size: 11px;
     font-style: italic;
+}
+
+.inter_line {
+    border-bottom: 2px solid #ccc;
+    margin-top: 0;
+    position: absolute;
+    top: 20%;
+    width: 100%;
+    z-index: 1;
+    left: 30%;
 }

@@ -29,11 +29,14 @@
         <input type="hidden"  id="client_id" name="client_id" value="{{ $user->client_id }}" required>
 
         @endif
+      
+        
         <div class="form-group">
             <label for="type_id">Type d'utilisateur</label>
             <select class="form-control" id="type_id" name="type_id" >
             <option value="">Choisir un type d'utilisateur</option>
             @foreach($types as $type)
+            @dump($type)
             <option @if($type->id==$user->type_id) selected @endif value="{{$type->id}}">{{$type->type_desc}}</option>
             @endforeach
             </select>

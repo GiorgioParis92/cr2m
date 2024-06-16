@@ -22,7 +22,7 @@ class UserController extends Controller
     public function index(Request $request)
     {
 
-        if(auth()->user()->type_id!=1) {
+        if(auth()->user()->type_id>2) {
             abort('403');
         }
         $users = User::with('client.type')->with('type');

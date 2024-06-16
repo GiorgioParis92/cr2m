@@ -65,7 +65,7 @@ class DossierLivewire extends Component
             return (array) $department; // Convert stdClass to array
         })->toArray();
 
-        dump($this->forms_configs);
+        // dump($this->forms_configs);
 
     }
 
