@@ -426,9 +426,10 @@
      display: flex;
      display: -webkit-flex;
      list-style: none;
-     padding-left: 108px
  }
-
+ .form-register li:last-child .inter_line {
+    display: none;
+}
  .form-register .steps li,
  .form-register .steps li.current {
     outline: none;
@@ -441,7 +442,12 @@
     min-width: 10%;
     max-width: 100%;
  }
-
+ .current .inter_line {
+    border-color: rgb(227 71 74);
+}
+.active .inter_line {
+    border-color: rgb(82 238 146);
+}
  .form-register .steps li .current-info {
      display: none
  }
