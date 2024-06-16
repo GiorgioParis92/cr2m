@@ -35,13 +35,22 @@ class PDFController extends Controller
         }
 
 
-
         // Generate the PDF using Html2Pdf
         $html2pdf = new Html2Pdf();
 
         $html2pdf->writeHTML($htmlContent);
 
         $pdfOutput = $html2pdf->output('', 'S'); // Output as string
+
+        if($request->display) {
+            header('Content-Type: application/pdf');
+            header('Content-Disposition: inline; filename="document.pdf"');
+            header('Cache-Control: private, max-age=0, must-revalidate');
+            header('Pragma: public');
+            echo $pdfOutput;
+        }
+      
+
 
         // Check if dossier_id is provided
         if (isset($validated['dossier_id'])) {
@@ -131,7 +140,7 @@ class PDFController extends Controller
                     $font = isset($fill_data_config["font"]) ? $fill_data_config["font"] : 'Helvetica';
                     $pdf->SetFont($font);
 
-                    
+
                     $font_size = isset($fill_data_config["font_size"]) ? $fill_data_config["font_size"] : 12;
                     $pdf->SetFontSize($font_size);
 

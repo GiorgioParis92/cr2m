@@ -600,7 +600,7 @@
 
     function initializePdfModals() {
         // Remove existing event listeners to prevent multiple bindings
-        $(document).off('click', '.pdfModal').off('click', '.imageModal').off('click', '.fillPDF');
+        $(document).off('click', '.pdfModal').off('click', '.imageModal').off('click', '.fillPDF').off('click', '.generatePdfButton');
 
         // Attach new event listeners
         $(document).on('click', '.imageModal', function(event) {
@@ -642,5 +642,45 @@
                 }
             });
         });
+        $(document).on('click', '.generatePdfButton', function(event) {
+
+            var template = $(this).data('template'); // Get the template from data attribute
+                var dossier_id = $(this).data('dossier_id'); // Get the dossier ID from data attribute
+
+                $.ajax({
+                    url: '/api/generate-pdf', // Adjust this URL to your actual API endpoint
+                    type: 'GET',
+                    data: {
+                        dossier_id: dossier_id,
+                        template: template
+                    },
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr(
+                            'content') // Include CSRF token if using Laravel's CSRF protection
+                    },
+                    success: function(response) {
+                        if (response.file_path) {
+                            // Display the PDF in an iframe if a file path is returned
+                            $('#pdfFrame').attr('src', response.file_path);
+                            $('#pdfModal').css('display', 'block');
+                        } else {
+                            // Handle the response where the PDF content is returned directly
+                            var blob = new Blob([response], {
+                                type: 'application/pdf'
+                            });
+                            var url = URL.createObjectURL(blob);
+                            var link = document.createElement('a');
+                            link.href = url;
+                            link.download = 'document.pdf';
+                            document.body.appendChild(link);
+                            link.click();
+                            document.body.removeChild(link);
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error generating PDF:', error);
+                    }
+                });
+            });
     }
 </script>

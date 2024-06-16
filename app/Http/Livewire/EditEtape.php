@@ -44,12 +44,15 @@ class EditEtape extends Component
     
     public function addStatus()
     {
-        $data['status_desc']=$this->newStatus;
-        $data['status_name']=$this->newStatus;
-        $data['etape_id']=$this->editingEtapeId;
-        Status::create($data);
-        $this->loadStatus();
-        $this->newStatus='';
+        if(isset($this->newStatus) && $this->newStatus!='') {
+            $data['status_desc']=$this->newStatus;
+            $data['status_name']=$this->newStatus;
+            $data['etape_id']=$this->editingEtapeId;
+            Status::create($data);
+            $this->loadStatus();
+            $this->newStatus='';
+        }
+      
     }
 
     public function updated()
