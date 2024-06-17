@@ -27,7 +27,7 @@ class Checkbox extends AbstractFormData
         $data .= $this->config->title;
         $data .= '</label><br />';
         if (is_array($optionsArray)) {
-            $data .= '<label class="switch" for="checkbox_'.$this->config->name.'">';
+            $data .= '<label class="switch" >';
             $data .= '<input type="checkbox" 
             id="checkbox_'.$this->config->name.'"
             wire:model="'.$wireModel.'"
@@ -36,14 +36,14 @@ class Checkbox extends AbstractFormData
             class="" '.(($this->value>0 && $this->value!="0") ? 'checked="true"' : 'unchecked"').'>';
             $data .= '<span class="slider round"></span>';
             $data .= '</label>';
-            $data .= '<label class="custom-control-label" for="';
+            $data .= '<label class="custom-control-label" for="checkbox_'.$this->config->name.'"';
             $data .= $this->config->name;
             $data .= '">';
             $data .= $optionsArray[1]['label'];
             $data .= '</label>';
         }
-        $data .= ($this->config->name);
-        $data .= ($this->value);
+        // $data .= ($this->config->name);
+        // $data .= ($this->value);
         $data .= '</div>';
         return $data;
     }
