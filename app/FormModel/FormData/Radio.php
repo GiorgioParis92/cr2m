@@ -46,4 +46,15 @@ class Radio extends AbstractFormData
 
         return $data;
     }
+
+
+    
+    public function check_value() {
+
+        if($this->config->required && $this->value=='') {
+            return false;
+        }
+
+        return true;
+    }
 }

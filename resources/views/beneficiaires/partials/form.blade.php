@@ -72,8 +72,8 @@
 </div>
 
 <div class="form-group">
-    <label for="mandataire_financier">Mon Accompagnateur Renov MAR</label>
-    <select class="form-control" id="mandataire_financier" name="mandataire_financier">
+    <label for="mar">Mon Accompagnateur Renov MAR</label>
+    <select class="form-control" id="mar" name="mar">
         <option value=""></option>
         @foreach($financiers as $financier)
         <option value="{{$financier->id}}">{{$financier->client_title}}</option>
@@ -82,8 +82,8 @@
 </div>
 
 <div class="form-group">
-    <label for="mandataire_administratif">Mandataire Financier</label>
-    <select class="form-control" id="mandataire_administratif" name="mandataire_administratif">
+    <label for="mandataire_financier">Mandataire Financier</label>
+    <select class="form-control" id="mandataire_financier" name="mandataire_financier">
         <option value=""></option>
         @foreach($administratifs as $administratif)
         <option value="{{$administratif->id}}">{{$administratif->client_title}}</option>
@@ -97,7 +97,7 @@
 @else
 <div class="form-group">
     <label for="installateur">Installateur</label>
-    <select required class="form-control" id="installateur" name="installateur">
+    <select class="form-control" id="installateur" name="installateur">
         <option value=""></option>
         @foreach($installateurs as $installateur)
         <option value="{{$installateur->id}}">{{$installateur->client_title}}</option>
