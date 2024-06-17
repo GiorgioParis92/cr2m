@@ -14,10 +14,11 @@ class Text extends AbstractFormData
 
         $class_prediction='';
         if($this->prediction) {
-            $class_prediction.='prediction';
+            $class_prediction=' prediction';
         }
-
-        // dump($this->prediction);
+        if(!$this->check_value()) {
+            $class_prediction=' is-invalid';
+        }
 
         $data = '<div class="form-group col-sm-12 '.($this->config->class ?? "").'  group_'.$class_prediction.'">';
         $data .= '<label>'.$this->config->title.'</label>';
@@ -27,8 +28,14 @@ class Text extends AbstractFormData
             $data .= ' required ';
         }
         $data .= ' value="'.($this->value).'">';
-        if($this->prediction) {
-            $data.='<span class="prediction">Predicted by OCEER</span>';
+
+        if(!$this->check_value()) {
+            $data.='<div  class="invalid-feedback">'.$this->get_error_message().'</div>';
+   
+        } else {
+            if($this->prediction) {
+                $data.='<span class="prediction">Predicted by OCEER</span>';
+            }
         }
         $data .= '</div>';
 
@@ -37,4 +44,21 @@ class Text extends AbstractFormData
 
         return $data;
     }
+    public function check_value() {
+
+        if($this->config->required && $this->value=='') {
+            return false;
+        }
+
+        return true;
+    }
+
+    public function get_error_message() {
+        if($this->config->required && $this->value=='') {
+            return 'La valeur ne peut pas être vide';
+        }
+
+        return 'Erreur';
+    }
+     
 }

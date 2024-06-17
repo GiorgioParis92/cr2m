@@ -53,4 +53,10 @@ class Db_select extends AbstractFormData
         return $data;
     }
 
+    public function check_value() {
+
+ 
+
+        return true;
+    }
 }

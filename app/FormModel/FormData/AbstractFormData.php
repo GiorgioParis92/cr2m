@@ -20,35 +20,45 @@ class AbstractFormData
         $this->dossier_id = $dossier_id;
         $this->config = $config;
 
-        
         $config = \DB::table('forms_data')
             ->where('form_id', $form_id)
             ->where('dossier_id', $dossier_id)
             ->where('meta_key', $name)
             ->first();
-           
 
- 
-    
+
+        $config_dossiers = \DB::table('dossiers_data')
+            ->where('dossier_id', $dossier_id)
+            ->where('meta_key', $name)
+            ->first();
+
         // Initialize value with the first table's value or an empty string
         $this->name = $name;
         $this->value = $config->meta_value ?? '';
-        $this->prediction='';
-        $this->global_data='';
+
+        
+        $this->prediction = $config_dossiers->meta_value ?? '';
 
 
+        $this->global_data = '';
 
 
-        if (!$this->check_value()) {
-            $this->value = '';
+        if($this->value=='') {
+            $this->value=$this->prediction;
+
         }
+
+        // if (!$this->check_value()) {
+        //     $this->value = '';
+        // }
+
     }
 
     public function check_value()
     {
-
+  
         return true;
-        
+
     }
 
     public function generate_value()
@@ -58,12 +68,9 @@ class AbstractFormData
     public function save_value()
     {
         $value = $this->generate_value();
-     
 
-        if (!$this->check_value()) {
-            return false;
-        }
-  
+
+
         DB::table('forms_data')->updateOrInsert(
             [
                 'dossier_id' => $this->dossier_id,
@@ -77,15 +84,15 @@ class AbstractFormData
             ]
         );
 
-        return true;
+        return $this->check_value();
     }
 
 
     public function render(bool $is_error)
     {
 
-        return '<div>'.$this->value.'</div>';
-        
+        return '<div>' . $this->value . '</div>';
+
     }
 
 
@@ -93,6 +100,6 @@ class AbstractFormData
     {
 
         return 'Mauvaise valeur';
-        
+
     }
 }
