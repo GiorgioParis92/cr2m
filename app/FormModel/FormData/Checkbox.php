@@ -18,8 +18,7 @@ class Checkbox extends AbstractFormData
         $wireModel = "formData.{$this->form_id}.{$this->name}";
 
  
-dump($this->config->name);
-dump($this->value);
+
 
         $data = '<div class="form-group col-sm-12 ';
         $data .= $this->config->class ?? '';
@@ -42,7 +41,8 @@ dump($this->value);
             $data .= $optionsArray[1]['label'];
             $data .= '</label>';
         }
-
+        $data .= ($this->config->name);
+        $data .= ($this->value);
         $data .= '</div>';
         return $data;
     }
