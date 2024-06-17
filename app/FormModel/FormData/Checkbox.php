@@ -32,7 +32,7 @@ class Checkbox extends AbstractFormData
             wire:model="'.$wireModel.'"
             value="1"
             name="'.$this->config->name.'"
-            class="" '.($this->value!=0 ? 'checked' : '').'>';
+            class="" '.(($this->value>0 && $this->value!="0") ? 'checked' : '').'>';
             $data .= '<span class="slider round"></span>';
             $data .= '</label>';
             $data .= '<label class="custom-control-label" for="';
