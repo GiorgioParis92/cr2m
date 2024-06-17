@@ -16,6 +16,7 @@ class DossierLivewire extends Component
     public $etape_display;
     public $etapes;
     public $forms_configs;
+    public $global_data = [];
     public $tab;
     public $formData = [];
 
@@ -61,7 +62,7 @@ class DossierLivewire extends Component
 
         $this->auditeurs = $auditeurs;
 
-        $this->departments = DB::table('departement')->get()->map(function($department) {
+        $this->departments = DB::table('departement')->get()->map(function ($department) {
             return (array) $department; // Convert stdClass to array
         })->toArray();
 
@@ -119,6 +120,11 @@ class DossierLivewire extends Component
         $result_save = [];
         foreach ($this->forms_configs as $formId => $config) {
             $result_save[$formId] = $config->save();
+            foreach ($config->formData as $tag => $data_form) {
+                if ($this->global_data[$tag] != $data_form-> value) {
+                    $this->global_data[$tag]= $data_form-> value;
+                }
+            }
         }
     }
 
@@ -157,7 +163,13 @@ class DossierLivewire extends Component
                 $this->forms_configs[$form->id] = $handler;
 
                 foreach ($handler->formData as $key => $field) {
-                    $this->formData[$form->id][$key] = $field->value;
+                    if (!isset($this->global_data[$key])) {
+                        $this->formData[$form->id][$key] = $field->value;
+                        $this->global_data[$key] = $field->value;
+                    } else {
+                        $this->formData[$form->id][$key] = $this->global_data[$key];
+                        $field->value = $this->global_data[$key];
+                    }
                 }
             }
         } else {

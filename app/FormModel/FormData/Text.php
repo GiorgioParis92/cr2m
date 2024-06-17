@@ -17,6 +17,8 @@ class Text extends AbstractFormData
             $class_prediction.='prediction';
         }
 
+        // dump($this->prediction);
+
         $data = '<div class="form-group col-sm-12 '.($this->config->class ?? "").'  group_'.$class_prediction.'">';
         $data .= '<label>'.$this->config->title.'</label>';
         $data .= '<input wire:model="'.$wireModel.'" class="form-control '.$class_prediction.'" type="text" name="'.$this->name.'"';

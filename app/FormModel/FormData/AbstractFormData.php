@@ -28,26 +28,15 @@ class AbstractFormData
             ->first();
            
 
-        $config_dossier = \DB::table('dossiers_data')
-            ->where('dossier_id', $dossier_id)
-            ->where('meta_key', $name)
-            ->first();
+ 
     
         // Initialize value with the first table's value or an empty string
         $this->name = $name;
         $this->value = $config->meta_value ?? '';
         $this->prediction='';
+        $this->global_data='';
 
-        // If the value from the second table exists and is not null, use it
-        if ($config_dossier && isset($config_dossier->meta_value)) {
-            $this->prediction=$config_dossier->meta_value;
 
-            if($this->value=='') {
-                $this->value = $config_dossier->meta_value;
-            }
-           
-
-        }
 
 
         if (!$this->check_value()) {
@@ -69,10 +58,12 @@ class AbstractFormData
     public function save_value()
     {
         $value = $this->generate_value();
+     
+
         if (!$this->check_value()) {
             return false;
         }
-
+  
         DB::table('forms_data')->updateOrInsert(
             [
                 'dossier_id' => $this->dossier_id,

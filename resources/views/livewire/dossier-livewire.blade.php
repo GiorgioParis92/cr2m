@@ -145,7 +145,7 @@
                             <div class="">
                                 <h4>{{ $form->form->form_title }}</h4>
 
-                                <form wire:submit.prevent="submit" wire:poll.visible>
+                                <form wire:submit.prevent="submit" >
                                     @csrf
                                     <input type="hidden" name="form_id" value="{{ $form->form->id }}">
                                     <input type="hidden" name="dossier_id" value="{{ $dossier->id }}">
