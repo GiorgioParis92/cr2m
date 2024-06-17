@@ -2,7 +2,7 @@
 <page_footer>
    
     <div class="footer_bande">
-        {{ $dossier->client->tye_societe }}  - RCS {{ $dossier->client->type_societe }} <br/>
+        {{ $dossier->client->type_societe }}  - RCS {{ $dossier->client->rcs }} <br/>
         {{ $dossier->client->naf }} - N° TVA intracommunautaire {{ $dossier->client->tva_intracomm }}<br/>
  N° d'Agréement Mon Accompagnateur Rénov': {{ $dossier->client->agrement }}
     </div>
