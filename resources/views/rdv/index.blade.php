@@ -31,7 +31,6 @@
     <!-- FullCalendar Locale -->
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/locales/fr.js"></script>
     <!-- Google Maps JavaScript API -->
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCzcaFvxwi1XLyRHmPRnlKO4zcJXPOT5gM&callback=initMap"></script>
 
     <script>
         var calendarEl = document.getElementById('calendar');

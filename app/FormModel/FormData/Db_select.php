@@ -20,6 +20,8 @@ class Db_select extends AbstractFormData
             }
         }
 
+
+
         $wireModel = "formData.{$this->form_id}.{$this->name}";
 
         $request=DB::select($sql_command);
@@ -47,6 +49,7 @@ class Db_select extends AbstractFormData
         }
         $data .= '</select>';
         $data .= '</div>';
+
   
 
         

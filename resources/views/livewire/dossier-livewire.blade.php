@@ -10,6 +10,10 @@
                                 <b>{{ $dossier['beneficiaire']['nom'] }}
                                     {{ $dossier['beneficiaire']['prenom'] }}</b><br />
                                 {{ strtoupper_extended($dossier['beneficiaire']['adresse'] . ' ' . $dossier['beneficiaire']['cp'] . ' ' . $dossier['beneficiaire']['ville']) }}<br />
+                                    @if($dossier['lat']==0)
+                                    <span class="invalid-feedback" style="font-size:9px;display:block">Adresse non géolocalisée</span>
+                                    @endif
+                               
                             </h5>
 
                             <h6 class="mb-0">
@@ -202,131 +206,288 @@
         });
 
         function get_calendar() {
+            // var calendarEl = document.getElementById('calendar');
+            // var token = $('meta[name="api-token"]').attr('content');
+
+            // var calendar = new FullCalendar.Calendar(calendarEl, {
+            //     initialView: 'timeGridWeek',
+            //     editable: true,
+            //     locale: 'fr',
+            //     headerToolbar: {
+            //         start: 'title',
+            //         center: '',
+            //         end: 'today prev,next timeGrid timeGridWeek dayGridMonth'
+            //     },
+            //     slotMinTime: "08:00:00",
+            //     slotMaxTime: "20:00:00",
+            //     slotDuration: '00:30:00',
+            //     allDaySlot: false,
+            //     buttonText: {
+            //         prev: 'Précédent',
+            //         next: 'Suivant',
+            //         today: "Aujourd'hui",
+            //         month: 'Mois',
+            //         timeGrid: 'Journée',
+            //         week: 'Semaine',
+            //         day: 'Jour'
+            //     },
+            //     weekText: 'Sem.',
+            //     allDayText: 'Toute la journée',
+            //     moreLinkText: 'en plus',
+            //     noEventsText: 'Aucun événement à afficher',
+            //     events: [],
+            //     dateClick: function(info) {
+            //         var date = moment(new Date(info.dateStr));
+            //         var formattedDate = date.format('YYYY-MM-DD HH:mm:ss');
+            //         $.ajax({
+            //             url: '/api/rdvs/save',
+            //             method: 'POST',
+            //             data: {
+            //                 dossier_id: {{ $dossier->id ?? '' }},
+            //                 start: formattedDate,
+            //                 user_id: $('#form_config_user_id').val(),
+            //                 type_rdv: $('#type_rdv').val(),
+            //             },
+            //             success: function(response) {
+            //                 if (response.success) {
+            //                     calendar.addEvent({
+            //                         start: formattedDate
+            //                     });
+            //                 } else {
+            //                     alert('Failed to save event');
+            //                 }
+            //             },
+            //             error: function() {
+            //                 alert('Error occurred while saving event');
+            //             }
+            //         });
+            //     },
+            //     eventContent: function(arg) {
+            //         var eventDiv = document.createElement('div');
+            //         var titleDiv = document.createElement('div');
+            //         var descriptionDiv = document.createElement('div');
+
+            //         titleDiv.innerHTML = arg.event.title;
+            //         descriptionDiv.innerHTML = arg.event.extendedProps.description;
+
+            //         eventDiv.appendChild(titleDiv);
+            //         eventDiv.appendChild(descriptionDiv);
+
+            //         return {
+            //             domNodes: [eventDiv]
+            //         };
+            //     },
+            //     eventClick: function(info) {
+            //         info.jsEvent.preventDefault();
+            //         openEventModal(info.event);
+            //     }
+            // });
+
+            // calendar.render();
+
+            // function fetchAndRenderEvents(userId) {
+            //     $.ajax({
+            //         url: '/api/rdvs',
+            //         type: 'GET',
+            //         headers: {
+            //             'Authorization': 'Bearer ' + token
+            //         },
+            //         data: {
+            //             user_id: userId
+            //         },
+            //         success: function(data) {
+            //             console.log(data)
+            //             var events = data.map(function(rdv) {
+            //                 var startDate = new Date(rdv.date_rdv);
+            //                 var endDate = new Date(startDate.getTime() + 60 * 60 * 1000);
+
+            //                 return {
+            //                     title: rdv.nom + ' ' + rdv.prenom,
+            //                     start: startDate.toISOString(),
+            //                     end: endDate.toISOString(),
+            //                     description: 'Address: ' + rdv.adresse + ', ' + rdv.ville
+            //                 };
+            //             });
+            //             calendar.removeAllEvents();
+            //             calendar.addEventSource(events);
+            //         },
+            //         error: function(xhr, status, error) {
+            //             console.error('Error fetching RDVs:', error);
+            //         }
+            //     });
+            // }
+
+            // fetchAndRenderEvents($('#form_config_user_id').val());
+
+            // $('#form_config_user_id').change(function() {
+            //     var selectedUserId = $(this).val();
+            //     fetchAndRenderEvents(selectedUserId);
+            // });
+
+            // function openEventModal(event) {
+            //     document.getElementById('eventTitle').textContent = event.title;
+            //     document.getElementById('eventDescription').textContent = event.extendedProps.description;
+            //     document.getElementById('eventStart').textContent = new Date(event.start).toLocaleString();
+            //     document.getElementById('eventEnd').textContent = new Date(event.end).toLocaleString();
+            //     $('#eventModal').modal('show');
+            // }
+
             var calendarEl = document.getElementById('calendar');
-            var token = $('meta[name="api-token"]').attr('content');
+        var token = $('meta[name="api-token"]').attr('content'); // Get token from meta tag
 
-            var calendar = new FullCalendar.Calendar(calendarEl, {
-                initialView: 'timeGridWeek',
-                editable: true,
-                locale: 'fr',
-                headerToolbar: {
-                    start: 'title',
-                    center: '',
-                    end: 'today prev,next timeGrid timeGridWeek dayGridMonth'
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'timeGridWeek',
+            editable: true,
+            locale: 'fr',
+            headerToolbar: {
+                start: 'title',
+                center: '',
+                end: 'today prev,next timeGrid timeGridWeek dayGridMonth'
+            },
+            slotMinTime: "07:00:00",
+            slotMaxTime: "21:00:00",
+            slotDuration: '00:15:00',
+            eventColor: '#cb0c9f',
+            buttonText: {
+                prev: 'Précédent',
+                next: 'Suivant',
+                today: "Aujourd'hui",
+                month: 'Mois',
+                timeGrid: 'Journée',
+                week: 'Semaine',
+                day: 'Jour'
+            },
+            allDaySlot: false,
+            weekText: 'Sem.',
+            allDayText: 'Toute la journée',
+            moreLinkText: 'en plus',
+            noEventsText: 'Aucun événement à afficher',
+            events: [],
+            eventContent: function(arg) {
+                var eventDiv = document.createElement('div');
+                var content = getEventContent(arg.event.title, arg.event.extendedProps.description);
+                eventDiv.innerHTML = content;
+                return {
+                    domNodes: [eventDiv]
+                };
+            },
+            datesSet: function(info) {
+                fetchAndRenderEvents(info.start, info.end); // Fetch events for the visible date range
+            }
+        });
+
+        calendar.render();
+
+        var map;
+        var markers = [];
+
+        function initMap() {
+            map = new google.maps.Map(document.getElementById('map'), {
+                center: { lat: 48.8566, lng: 2.3522 },
+                zoom: 5
+            });
+        }
+
+        function fetchAndRenderEvents(start, end) {
+            $.ajax({
+                url: '/api/rdvs',
+                type: 'GET',
+                headers: {
+                    'Authorization': 'Bearer ' + token
                 },
-                slotMinTime: "08:00:00",
-                slotMaxTime: "20:00:00",
-                slotDuration: '00:30:00',
-                allDaySlot: false,
-                buttonText: {
-                    prev: 'Précédent',
-                    next: 'Suivant',
-                    today: "Aujourd'hui",
-                    month: 'Mois',
-                    timeGrid: 'Journée',
-                    week: 'Semaine',
-                    day: 'Jour'
+                data: {
+                    user_id: $('#form_config_user_id').val(),
+                    dpt: $('#dpt').val(),
                 },
-                weekText: 'Sem.',
-                allDayText: 'Toute la journée',
-                moreLinkText: 'en plus',
-                noEventsText: 'Aucun événement à afficher',
-                events: [],
-                dateClick: function(info) {
-                    var date = moment(new Date(info.dateStr));
-                    var formattedDate = date.format('YYYY-MM-DD HH:mm:ss');
-                    $.ajax({
-                        url: '/api/rdvs/save',
-                        method: 'POST',
-                        data: {
-                            dossier_id: {{ $dossier->id ?? '' }},
-                            start: formattedDate,
-                            user_id: $('#form_config_user_id').val(),
-                            type_rdv: $('#type_rdv').val(),
-                        },
-                        success: function(response) {
-                            if (response.success) {
-                                calendar.addEvent({
-                                    start: formattedDate
-                                });
-                            } else {
-                                alert('Failed to save event');
-                            }
-                        },
-                        error: function() {
-                            alert('Error occurred while saving event');
+                success: function(data) {
+                    clearMarkers(); // Clear existing markers
+                    var events = data.map(function(rdv) {
+                        var eventStart = new Date(rdv.date_rdv);
+                        var eventEnd = new Date(eventStart.getTime() + 60 * 60 * 1000); // Add 1 hour to the start date
+
+                        // Check if event is within the current calendar view
+                        if (eventStart >= start && eventEnd <= end) {
+                            // Create event object for FullCalendar
+                            var event = {
+                                title: rdv.nom + ' ' + rdv.prenom,
+                                start: rdv.date_rdv,
+                                end: eventEnd.toISOString(),
+                                description: rdv.adresse + '<br/>'+ rdv.cp + ' '+rdv.ville,
+                                backgroundColor: rdv.color,
+                                borderColor: rdv.color
+                            };
+
+                            // Create marker for Google Maps
+                            var content = getEventContent(rdv.nom + ' ' + rdv.prenom, rdv.adresse + '<br/>'+ rdv.cp + ' '+rdv.ville);
+                            var marker = new google.maps.Marker({
+                                position: {
+                                    lat: parseFloat(rdv.lat),
+                                    lng: parseFloat(rdv.lng)
+                                },
+                                map: map,
+                                title: rdv.nom + ' ' + rdv.prenom
+                            });
+
+                            var infowindow = new google.maps.InfoWindow({
+                                content: content
+                            });
+
+                            marker.addListener('click', function() {
+                                infowindow.open(map, marker);
+                            });
+
+                            markers.push(marker);
+
+                            return event;
                         }
-                    });
+                    }).filter(event => event !== undefined);
+
+                    calendar.removeAllEvents();
+                    calendar.addEventSource(events);
+                    calendar.refetchEvents();
                 },
-                eventContent: function(arg) {
-                    var eventDiv = document.createElement('div');
-                    var titleDiv = document.createElement('div');
-                    var descriptionDiv = document.createElement('div');
-
-                    titleDiv.innerHTML = arg.event.title;
-                    descriptionDiv.innerHTML = arg.event.extendedProps.description;
-
-                    eventDiv.appendChild(titleDiv);
-                    eventDiv.appendChild(descriptionDiv);
-
-                    return {
-                        domNodes: [eventDiv]
-                    };
-                },
-                eventClick: function(info) {
-                    info.jsEvent.preventDefault();
-                    openEventModal(info.event);
+                error: function(xhr, status, error) {
+                    console.error('Error fetching RDVs:', error);
                 }
             });
+        }
 
-            calendar.render();
+        // Clear markers from map
+        function clearMarkers() {
+            markers.forEach(marker => marker.setMap(null));
+            markers = [];
+        }
 
-            function fetchAndRenderEvents(userId) {
-                $.ajax({
-                    url: '/api/rdvs',
-                    type: 'GET',
-                    headers: {
-                        'Authorization': 'Bearer ' + token
-                    },
-                    data: {
-                        user_id: userId
-                    },
-                    success: function(data) {
-                        console.log(data)
-                        var events = data.map(function(rdv) {
-                            var startDate = new Date(rdv.date_rdv);
-                            var endDate = new Date(startDate.getTime() + 60 * 60 * 1000);
+        // Generate HTML content for events and markers
+        function getEventContent(title, description) {
+            return `<div>
+                        <strong>${title}</strong>
+                        <br>
+                        <span>${description}</span>
+                    </div>`;
+        }
 
-                            return {
-                                title: rdv.nom + ' ' + rdv.prenom,
-                                start: startDate.toISOString(),
-                                end: endDate.toISOString(),
-                                description: 'Address: ' + rdv.adresse + ', ' + rdv.ville
-                            };
-                        });
-                        calendar.removeAllEvents();
-                        calendar.addEventSource(events);
-                    },
-                    error: function(xhr, status, error) {
-                        console.error('Error fetching RDVs:', error);
-                    }
-                });
-            }
+        // Fetch and render events when the dropdown value changes
+        $('#form_config_user_id').change(function() {
+            var start = calendar.view.activeStart;
+            var end = calendar.view.activeEnd;
+            clearMarkers();
+            fetchAndRenderEvents(new Date(start), new Date(end));
+        });
 
-            fetchAndRenderEvents($('#form_config_user_id').val());
+        function handleSelectionChange(select) {
+            var start = calendar.view.activeStart;
+            var end = calendar.view.activeEnd;
+            fetchAndRenderEvents(new Date(start), new Date(end));
+        }
 
-            $('#form_config_user_id').change(function() {
-                var selectedUserId = $(this).val();
-                fetchAndRenderEvents(selectedUserId);
-            });
+        // Initial fetch
+        $(document).ready(function() {
+            var start = calendar.view.activeStart;
+            var end = calendar.view.activeEnd;
+            fetchAndRenderEvents(new Date(start), new Date(end));
+        });
 
-            function openEventModal(event) {
-                document.getElementById('eventTitle').textContent = event.title;
-                document.getElementById('eventDescription').textContent = event.extendedProps.description;
-                document.getElementById('eventStart').textContent = new Date(event.start).toLocaleString();
-                document.getElementById('eventEnd').textContent = new Date(event.end).toLocaleString();
-                $('#eventModal').modal('show');
-            }
         }
     });
     document.addEventListener('DOMContentLoaded', function() {
