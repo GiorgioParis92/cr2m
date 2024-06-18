@@ -53,7 +53,7 @@
                                 <a id="form-total-t-0" href="#form-total-h-0" aria-controls="form-total-p-0">
                                     <span class="current-info audible nav-link"></span>
                                     <div class="title">
-                                        <span class="step-icon">{{ $index }}</span>
+                                        <span class="step-icon">{{ $index+1 }}</span>
                                         <span class="step-text">
                                             {{ strtoupper_extended($e->etape_desc) }}
                                             <small>
