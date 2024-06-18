@@ -89,6 +89,20 @@ class BeneficiaireController extends Controller
                 'lng' => $validated['lng'] ?? 0,
             ]);
     
+            foreach($validated as $key=>$value) {
+                \DB::table('dossiers_data')->updateOrInsert(
+                    [
+                        'dossier_id' => $dossier->id,
+                        'meta_key' => $key
+                    ],
+                    [
+                        'meta_value' => $value ?? '',
+                        'created_at' => now(),
+                        'updated_at' => now()
+                    ]
+                );
+            }
+
             // Ensure dossier is created before redirecting
             if ($dossier) {
                 return redirect()->route('dossiers.show', ['id' => $dossier->id])
@@ -104,7 +118,7 @@ class BeneficiaireController extends Controller
     }
     
 
-    public function show(Beneficiaire $beneficiaire)
+    public function show($id)
     {
         return view('beneficiaires.show', compact('beneficiaire'));
     }

@@ -7,6 +7,7 @@ use App\Models\Dossier;
 use App\Models\Etape;
 use App\Models\User;
 use App\FormModel\FormConfigHandler;
+use App\FormModel\EtapeValidator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 
@@ -19,6 +20,7 @@ class DossierLivewire extends Component
     public $global_data = [];
     public $tab;
     public $formData = [];
+    public $validators = [];
 
     public function mount($id)
     {
@@ -44,11 +46,15 @@ class DossierLivewire extends Component
             ->orderBy('etapes.order_column')
             ->get();
 
+        $this->reinitializeFormsConfigs();
 
         $this->etapes = $this->convertArrayToStdClass($etapes->toArray());
+        foreach ($this->etapes as $etape) {
+            $this->validators[$etape->etape_id] = new EtapeValidator($etape->etape_id);
+        }
+
 
         $this->setTab($this->dossier['etape_number']);
-        $this->reinitializeFormsConfigs();
         $this->emit('initializeDropzones', ['forms_configs' => $this->forms_configs]);
 
         $auditeurs = User::where('type_id', 4);
@@ -65,8 +71,6 @@ class DossierLivewire extends Component
         $this->departments = DB::table('departement')->get()->map(function ($department) {
             return (array) $department; // Convert stdClass to array
         })->toArray();
-
-        // dump($this->forms_configs);
 
     }
 
@@ -121,11 +125,13 @@ class DossierLivewire extends Component
         foreach ($this->forms_configs as $formId => $config) {
             $result_save[$formId] = $config->save();
             foreach ($config->formData as $tag => $data_form) {
-                if ($this->global_data[$tag] != $data_form-> value) {
-                    $this->global_data[$tag]= $data_form-> value;
+                if ($this->global_data[$tag] != $data_form->value) {
+                    $this->global_data[$tag] = $data_form->value;
                 }
             }
         }
+
+
     }
 
     public function display_form($form_id)
@@ -170,11 +176,43 @@ class DossierLivewire extends Component
                         $this->formData[$form->id][$key] = $this->global_data[$key];
                         $field->value = $this->global_data[$key];
                     }
+                    if($field->value) {
+                        $field->save_value();
+                    }
+                 
+
                 }
             }
         } else {
             $this->forms_configs = [];
             $this->formData = [];
+        }
+        if (isset($this->etape_display["id"])) {
+
+            $distinctEtapes = DB::table('forms')
+                ->select('etape_number', DB::raw('MIN(id) as min_id'))
+                ->groupBy('etape_number');
+
+            $etapes = DB::table('forms')
+                ->join('etapes', 'forms.etape_number', '=', 'etapes.id')
+                ->joinSub($distinctEtapes, 'distinctEtapes', function ($join) {
+                    $join->on('forms.id', '=', 'distinctEtapes.min_id');
+                })
+                ->select('forms.*', 'etapes.etape_name', 'etapes.etape_desc')
+                ->orderBy('etapes.order_column')
+                ->get();
+
+            $this->etapes = $this->convertArrayToStdClass($etapes->toArray());
+            $this->validators = [];
+            foreach ($this->etapes as $etape) {
+                $this->validators[$etape->etape_id] = new EtapeValidator($etape->etape_id);
+            }
+
+            $new_status = $this->validators[$this->etape_display["id"]]->get_last_validate_status($this->forms_configs);
+
+            if (isset($new_status) && $this->dossier->etape_number==$this->etape_display['id']) {
+                Dossier::where('id',$this->dossier->id)->update(['status_id'=> $new_status]);
+            }
         }
     }
 
