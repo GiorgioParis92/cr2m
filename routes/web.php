@@ -106,6 +106,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 
     Route::resource('beneficiaires', BeneficiaireController::class);
+    Route::post('beneficiaires/store', [BeneficiaireController::class, 'store'])->name('beneficiaires.store');
+
 
     Route::get('dossier/', [DossierController::class, 'index'])->name('dossiers.index');
 
