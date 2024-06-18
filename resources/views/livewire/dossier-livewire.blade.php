@@ -113,7 +113,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="table-responsive">
+                                    <div class="table-responsive"  wire:poll.visible>
                                         <table class="table align-items-center">
                                             <tbody>
                                                 @foreach ($forms_configs as $index => $form_handler)
