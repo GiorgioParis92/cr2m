@@ -306,6 +306,7 @@
                     },
                     error: function(xhr) {
                         // Handle AJAX error
+                        console.log(xhr)
                         alert('An error occurred: ' + xhr.message);
                     }
                 });
