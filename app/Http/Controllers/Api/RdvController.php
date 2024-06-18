@@ -114,7 +114,7 @@ class RdvController extends \App\Http\Controllers\Controller
         $rdvId = $request->input('rdv_id');
 
         if(empty($request->date_rdv)) {
-            return response()->json(['success' => false, 'message' => 'Entrez une date'], 404);
+            return response()->json(['success' => false, 'message' => 'Entrez une date'], 200);
 
         }
 
