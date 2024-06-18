@@ -17,7 +17,7 @@ class Upload extends AbstractFormData
 
 
         $data = '<tr>';
-        $data .= '<td class="w-30">';
+        $data .= '<td class="w-30" wire:poll.visible>';
 
         $extension=explode('.',$this->value);
 
