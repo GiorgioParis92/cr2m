@@ -223,8 +223,10 @@ class DossierLivewire extends Component
             foreach ($this->etapes as $etape) {
                 $this->validators[$etape->etape_id] = new EtapeValidator($etape->etape_id);
             }
+            if($this->validators[$this->etape_display["id"]]) {
+                $new_status = $this->validators[$this->etape_display["id"]]->get_last_validate_status($this->forms_configs);
 
-            $new_status = $this->validators[$this->etape_display["id"]]->get_last_validate_status($this->forms_configs);
+            }
 
             if (isset($new_status) && $this->dossier->etape_number==$this->etape_display['id']) {
                 Dossier::where('id',$this->dossier->id)->update(['status_id'=> $new_status]);
