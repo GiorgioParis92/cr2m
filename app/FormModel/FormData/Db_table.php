@@ -44,6 +44,10 @@ class Db_table extends AbstractFormData
         $data.='Type de rdv';
 
         $data.='</th>';
+        $data.='<th>';
+        $data.='';
+
+        $data.='</th>';
  
         $data.='</thead>';
         foreach( $request as $key => $value) {
@@ -69,14 +73,44 @@ class Db_table extends AbstractFormData
 
             $data.='</td>';
 
+            $data.='<td>';
+            $data.='<div data-rdv_id="'.$value->rdv_id.'" class="btn btn-primary show_rdv"><i class="fa fa-eye"></i></div>';
+
+            $data.='</td>';
+
             $data.='</tr>';
         }
+        $data.='<tr>';
 
+        $data.='<td>';
+
+        $data.='</td>';
+        $data.='<td>';
+
+        $data.='</td>';
+
+        $data.='<td>';
+
+        $data.='</td>';
+
+
+        $data.='<td>';
+
+        $data.='</td>';
+
+        $data.='<td>';
+        $data.='<div data-rdv_id="" class="btn btn-secondary show_rdv"><i class="fa fa-plus"></i></div>';
+
+        $data.='</td>';
+
+        $data.='</tr>';
         $data.='</table>';
         
 
         $data .= '</div>';
+        $data .= '<script>';
 
+        $data .= '</script>';
 
         return $data;
     }

@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\View;
 use App\View\Components\FormComponent;
 use App\Models\Client;
 use Illuminate\Support\Facades\Auth;
+use App\Http\ViewComposers\AuditeursComposer;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -39,5 +40,8 @@ class AppServiceProvider extends ServiceProvider
                 View::share('client', $client);
             }
         }
+
+        view()->composer('app', AuditeursComposer::class);
+
     }
 }

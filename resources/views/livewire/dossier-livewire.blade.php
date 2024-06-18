@@ -10,10 +10,11 @@
                                 <b>{{ $dossier['beneficiaire']['nom'] }}
                                     {{ $dossier['beneficiaire']['prenom'] }}</b><br />
                                 {{ strtoupper_extended($dossier['beneficiaire']['adresse'] . ' ' . $dossier['beneficiaire']['cp'] . ' ' . $dossier['beneficiaire']['ville']) }}<br />
-                                    @if($dossier['lat']==0)
-                                    <span class="invalid-feedback" style="font-size:9px;display:block">Adresse non géolocalisée</span>
-                                    @endif
-                               
+                                @if ($dossier['lat'] == 0)
+                                    <span class="invalid-feedback" style="font-size:9px;display:block">Adresse non
+                                        géolocalisée</span>
+                                @endif
+
                             </h5>
 
                             <h6 class="mb-0">
@@ -30,6 +31,7 @@
                 </div>
             </div>
             <hr>
+ 
 
             <div class="card form-register">
                 <div class="steps clearfix">
@@ -53,7 +55,7 @@
                                 <a id="form-total-t-0" href="#form-total-h-0" aria-controls="form-total-p-0">
                                     <span class="current-info audible nav-link"></span>
                                     <div class="title">
-                                        <span class="step-icon">{{ $index+1 }}</span>
+                                        <span class="step-icon">{{ $index + 1 }}</span>
                                         <span class="step-text">
                                             {{ strtoupper_extended($e->etape_desc) }}
                                             <small>
@@ -100,9 +102,10 @@
                                                                 class="nav-link mb-0 px-0 py-1 {{ $form_handler->form->id == $form_id ? 'active' : '' }}">
                                                                 {{ $form_handler->form->form_title }}
 
-                                                                @if(auth()->user()->id==1)
-                                                                <span style="font-size:12px;font-style:italic">(Form id : {{$form_handler->form->id}})</span>
-                                                                @endif
+                                                                {{-- @if (auth()->user()->id == 1)
+                                                                    <span style="font-size:12px;font-style:italic">(Form
+                                                                        id : {{ $form_handler->form->id }})</span>
+                                                                @endif --}}
                                                             </a>
                                                         </li>
                                                     @endif
@@ -121,7 +124,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="table-responsive"  >
+                                    <div class="table-responsive">
                                         <table class="table align-items-center">
                                             <tbody>
                                                 @foreach ($forms_configs as $index => $form_handler)
@@ -173,8 +176,8 @@
                         {!! $form->render([]) !!}
                         <div class="card container mt-5 pd-5">
 
-                        @include('calendar')
-                    </div>
+                            @include('calendar')
+                        </div>
                     @endif
 
                 @endif
@@ -183,6 +186,7 @@
         </div>
     </div>
 </div>
+
 <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.css" rel="stylesheet">
 <!-- jQuery -->
 <!-- FullCalendar Core JS -->
@@ -332,164 +336,173 @@
             // }
 
             var calendarEl = document.getElementById('calendar');
-        var token = $('meta[name="api-token"]').attr('content'); // Get token from meta tag
+            var token = $('meta[name="api-token"]').attr('content'); // Get token from meta tag
 
-        var calendar = new FullCalendar.Calendar(calendarEl, {
-            initialView: 'timeGridWeek',
-            editable: true,
-            locale: 'fr',
-            headerToolbar: {
-                start: 'title',
-                center: '',
-                end: 'today prev,next timeGrid timeGridWeek dayGridMonth'
-            },
-            slotMinTime: "07:00:00",
-            slotMaxTime: "21:00:00",
-            slotDuration: '00:15:00',
-            eventColor: '#cb0c9f',
-            buttonText: {
-                prev: 'Précédent',
-                next: 'Suivant',
-                today: "Aujourd'hui",
-                month: 'Mois',
-                timeGrid: 'Journée',
-                week: 'Semaine',
-                day: 'Jour'
-            },
-            allDaySlot: false,
-            weekText: 'Sem.',
-            allDayText: 'Toute la journée',
-            moreLinkText: 'en plus',
-            noEventsText: 'Aucun événement à afficher',
-            events: [],
-            eventContent: function(arg) {
-                var eventDiv = document.createElement('div');
-                var content = getEventContent(arg.event.title, arg.event.extendedProps.description);
-                eventDiv.innerHTML = content;
-                return {
-                    domNodes: [eventDiv]
-                };
-            },
-            datesSet: function(info) {
-                fetchAndRenderEvents(info.start, info.end); // Fetch events for the visible date range
-            }
-        });
-
-        calendar.render();
-
-        var map;
-        var markers = [];
-
-        function initMap() {
-            map = new google.maps.Map(document.getElementById('map'), {
-                center: { lat: 48.8566, lng: 2.3522 },
-                zoom: 5
-            });
-        }
-
-        function fetchAndRenderEvents(start, end) {
-            $.ajax({
-                url: '/api/rdvs',
-                type: 'GET',
-                headers: {
-                    'Authorization': 'Bearer ' + token
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'timeGridWeek',
+                editable: true,
+                locale: 'fr',
+                headerToolbar: {
+                    start: 'title',
+                    center: '',
+                    end: 'today prev,next timeGrid timeGridWeek dayGridMonth'
                 },
-                data: {
-                    user_id: $('#form_config_user_id').val(),
-                    dpt: $('#dpt').val(),
+                slotMinTime: "07:00:00",
+                slotMaxTime: "21:00:00",
+                slotDuration: '00:15:00',
+                eventColor: '#cb0c9f',
+                buttonText: {
+                    prev: 'Précédent',
+                    next: 'Suivant',
+                    today: "Aujourd'hui",
+                    month: 'Mois',
+                    timeGrid: 'Journée',
+                    week: 'Semaine',
+                    day: 'Jour'
                 },
-                success: function(data) {
-                    clearMarkers(); // Clear existing markers
-                    var events = data.map(function(rdv) {
-                        var eventStart = new Date(rdv.date_rdv);
-                        var eventEnd = new Date(eventStart.getTime() + 60 * 60 * 1000); // Add 1 hour to the start date
-
-                        // Check if event is within the current calendar view
-                        if (eventStart >= start && eventEnd <= end) {
-                            // Create event object for FullCalendar
-                            var event = {
-                                title: rdv.nom + ' ' + rdv.prenom,
-                                start: rdv.date_rdv,
-                                end: eventEnd.toISOString(),
-                                description: rdv.adresse + '<br/>'+ rdv.cp + ' '+rdv.ville,
-                                backgroundColor: rdv.color,
-                                borderColor: rdv.color
-                            };
-
-                            // Create marker for Google Maps
-                            var content = getEventContent(rdv.nom + ' ' + rdv.prenom, rdv.adresse + '<br/>'+ rdv.cp + ' '+rdv.ville);
-                            var marker = new google.maps.Marker({
-                                position: {
-                                    lat: parseFloat(rdv.lat),
-                                    lng: parseFloat(rdv.lng)
-                                },
-                                map: map,
-                                title: rdv.nom + ' ' + rdv.prenom
-                            });
-
-                            var infowindow = new google.maps.InfoWindow({
-                                content: content
-                            });
-
-                            marker.addListener('click', function() {
-                                infowindow.open(map, marker);
-                            });
-
-                            markers.push(marker);
-
-                            return event;
-                        }
-                    }).filter(event => event !== undefined);
-
-                    calendar.removeAllEvents();
-                    calendar.addEventSource(events);
-                    calendar.refetchEvents();
+                allDaySlot: false,
+                weekText: 'Sem.',
+                allDayText: 'Toute la journée',
+                moreLinkText: 'en plus',
+                noEventsText: 'Aucun événement à afficher',
+                events: [],
+                eventContent: function(arg) {
+                    var eventDiv = document.createElement('div');
+                    var content = getEventContent(arg.event.title, arg.event.extendedProps
+                        .description);
+                    eventDiv.innerHTML = content;
+                    return {
+                        domNodes: [eventDiv]
+                    };
                 },
-                error: function(xhr, status, error) {
-                    console.error('Error fetching RDVs:', error);
+                datesSet: function(info) {
+                    fetchAndRenderEvents(info.start, info
+                        .end); // Fetch events for the visible date range
                 }
             });
-        }
 
-        // Clear markers from map
-        function clearMarkers() {
-            markers.forEach(marker => marker.setMap(null));
-            markers = [];
-        }
+            calendar.render();
 
-        // Generate HTML content for events and markers
-        function getEventContent(title, description) {
-            return `<div>
+            var map;
+            var markers = [];
+
+            function initMap() {
+                map = new google.maps.Map(document.getElementById('map'), {
+                    center: {
+                        lat: 48.8566,
+                        lng: 2.3522
+                    },
+                    zoom: 5
+                });
+            }
+
+            function fetchAndRenderEvents(start, end) {
+                $.ajax({
+                    url: '/api/rdvs',
+                    type: 'GET',
+                    headers: {
+                        'Authorization': 'Bearer ' + token
+                    },
+                    data: {
+                        user_id: $('#form_config_user_id').val(),
+                        dpt: $('#dpt').val(),
+                    },
+                    success: function(data) {
+                        clearMarkers(); // Clear existing markers
+                        var events = data.map(function(rdv) {
+                            var eventStart = new Date(rdv.date_rdv);
+                            var eventEnd = new Date(eventStart.getTime() + 60 * 60 *
+                                1000); // Add 1 hour to the start date
+
+                            // Check if event is within the current calendar view
+                            if (eventStart >= start && eventEnd <= end) {
+                                // Create event object for FullCalendar
+                                var event = {
+                                    title: rdv.nom + ' ' + rdv.prenom,
+                                    start: rdv.date_rdv,
+                                    end: eventEnd.toISOString(),
+                                    description: rdv.adresse + '<br/>' + rdv.cp + ' ' +
+                                        rdv.ville,
+                                    backgroundColor: rdv.color,
+                                    borderColor: rdv.color
+                                };
+
+                                // Create marker for Google Maps
+                                var content = getEventContent(rdv.nom + ' ' + rdv.prenom,
+                                    rdv.adresse + '<br/>' + rdv.cp + ' ' + rdv.ville);
+                                var marker = new google.maps.Marker({
+                                    position: {
+                                        lat: parseFloat(rdv.lat),
+                                        lng: parseFloat(rdv.lng)
+                                    },
+                                    map: map,
+                                    title: rdv.nom + ' ' + rdv.prenom
+                                });
+
+                                var infowindow = new google.maps.InfoWindow({
+                                    content: content
+                                });
+
+                                marker.addListener('click', function() {
+                                    infowindow.open(map, marker);
+                                });
+
+                                markers.push(marker);
+
+                                return event;
+                            }
+                        }).filter(event => event !== undefined);
+
+                        calendar.removeAllEvents();
+                        calendar.addEventSource(events);
+                        calendar.refetchEvents();
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error fetching RDVs:', error);
+                    }
+                });
+            }
+
+            // Clear markers from map
+            function clearMarkers() {
+                markers.forEach(marker => marker.setMap(null));
+                markers = [];
+            }
+
+            // Generate HTML content for events and markers
+            function getEventContent(title, description) {
+                return `<div>
                         <strong>${title}</strong>
                         <br>
                         <span>${description}</span>
                     </div>`;
-        }
+            }
 
-        // Fetch and render events when the dropdown value changes
-        $('#form_config_user_id').change(function() {
-            var start = calendar.view.activeStart;
-            var end = calendar.view.activeEnd;
-            clearMarkers();
-            fetchAndRenderEvents(new Date(start), new Date(end));
-        });
+            // Fetch and render events when the dropdown value changes
+            $('#form_config_user_id').change(function() {
+                var start = calendar.view.activeStart;
+                var end = calendar.view.activeEnd;
+                clearMarkers();
+                fetchAndRenderEvents(new Date(start), new Date(end));
+            });
 
-        function handleSelectionChange(select) {
-            var start = calendar.view.activeStart;
-            var end = calendar.view.activeEnd;
-            fetchAndRenderEvents(new Date(start), new Date(end));
-        }
+            function handleSelectionChange(select) {
+                var start = calendar.view.activeStart;
+                var end = calendar.view.activeEnd;
+                fetchAndRenderEvents(new Date(start), new Date(end));
+            }
 
-        // Initial fetch
-        $(document).ready(function() {
-            var start = calendar.view.activeStart;
-            var end = calendar.view.activeEnd;
-            fetchAndRenderEvents(new Date(start), new Date(end));
-        });
+            // Initial fetch
+            $(document).ready(function() {
+                var start = calendar.view.activeStart;
+                var end = calendar.view.activeEnd;
+                fetchAndRenderEvents(new Date(start), new Date(end));
+            });
 
         }
     });
     document.addEventListener('DOMContentLoaded', function() {
+
 
 
         // 
@@ -502,12 +515,16 @@
             // });
 
             $('input.choice_checked').trigger('click');
-            $('select').select2();
+            $('select').each(function() {
+                if ($(this).closest('.modal').length === 0) {
+                    $(this).select2();
+                }
+            });
             $('.datepicker').datepicker();
 
             initializePdfModals();
-       
-            
+
+
             var configs = data.forms_configs;
             initializeDropzones(configs);
             // // Remove existing Dropzones to prevent multiple instances
@@ -569,11 +586,14 @@
         Livewire.hook('message.processed', (message, component) => {
             // initializeDropzones();
             // initializePdfModals();
-            
+
         });
     });
 
     function initializeDropzones(configs) {
+
+
+
 
         if (Dropzone.instances.length > 0) {
             Dropzone.instances.forEach(instance => instance.destroy());
@@ -623,21 +643,82 @@
 
     }
 
- 
 
 
 
 
 
     function initializePdfModals() {
+
+        $('.close').on('click', function() {
+
+            $('.modal').modal('hide');
+        });
         // Remove existing event listeners to prevent multiple bindings
-        $(document).off('click', '.pdfModal').off('click', '.imageModal').off('click', '.fillPDF').off('click', '.generatePdfButton');
+        $(document).off('click', '.pdfModal').off('click', '.imageModal').off('click', '.fillPDF').off('click',
+            '.generatePdfButton').off('rdv_modal', '.generatePdfButton');
 
         // Attach new event listeners
         $(document).on('click', '.imageModal', function(event) {
             var imgSrc = $(this).data('img-src');
             $('#imageInModal').attr('src', imgSrc);
             $('#imageModal').modal('show');
+        });
+        // Attach new event listeners
+        $(document).on('click', '.show_rdv', function(event) {
+            var rdv_id = $(this).data('rdv_id');
+
+            if (rdv_id == undefined || rdv_id == '') {
+                rdv_id = 0
+            }
+
+            $.ajax({
+                url: '/api/rdvs', // Adjust this URL to your actual API endpoint
+                type: 'GET',
+                data: {
+                    rdv_id: rdv_id
+                },
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr(
+                        'content') // Include CSRF token if using Laravel's CSRF protection
+                },
+                success: function(response) {
+
+                    // Clear previous data
+                    $('#rdv_id').val('0');
+                    $('#rdv_french_date').val('');
+                    $('#rdv_hour').val('');
+                    $('#rdv_minute').val('');
+                    $('#rdv_user_id').val('');
+                    $('#rdv_type_rdv').val(1);
+                    $('#rdv_nom').val("{!!$dossier['beneficiaire']['nom'] ?? '' !!}");
+                    $('#rdv_prenom').val("{!!$dossier['beneficiaire']['prenom'] ?? '' !!}");
+                    $('#rdv_adresse').val("{!!$dossier['beneficiaire']['adresse'] ?? '' !!}");
+                    $('#rdv_cp').val("{!!$dossier['beneficiaire']['cp'] ?? '' !!}");
+                    $('#rdv_ville').val("{!!$dossier['beneficiaire']['ville'] ?? '' !!}");
+                    $('#rdv_telephone').val("{!!$dossier['beneficiaire']['telephone'] ?? '' !!}");
+                    $('#rdv_email').val("{!!$dossier['beneficiaire']['email'] ?? '' !!}");
+                    $('#rdv_telephone_2').val("{!!$dossier['beneficiaire']['telephone_2'] ?? '' !!}");
+                    $('#rdv_dossier_id').val("{!!$dossier['id'] ?? '' !!}");
+                    $('#rdv_client_id').val("{!!$dossier['client_id'] ?? '' !!}");
+                    $('#rdv_lat').val("{!!$dossier['beneficiaire']['lat'] ?? '' !!}");
+                    $('#rdv_lng').val("{!!$dossier['beneficiaire']['lng'] ?? '' !!}");
+
+                    if (response && response.length > 0) {
+                        console.log(response)
+                        var rdv = response[0];
+                        $.each(rdv, function(key, value) {
+                            // Populate form fields
+                            $('#rdv_' + key).val(value);
+                        });
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error loading rdv data:', error);
+                }
+            });
+
+            $('#rdv_modal').modal('show');
         });
 
         $(document).on('click', '.pdfModal', function(event) {
@@ -676,42 +757,42 @@
         $(document).on('click', '.generatePdfButton', function(event) {
 
             var template = $(this).data('template'); // Get the template from data attribute
-                var dossier_id = $(this).data('dossier_id'); // Get the dossier ID from data attribute
+            var dossier_id = $(this).data('dossier_id'); // Get the dossier ID from data attribute
 
-                $.ajax({
-                    url: '/api/generate-pdf', // Adjust this URL to your actual API endpoint
-                    type: 'GET',
-                    data: {
-                        dossier_id: dossier_id,
-                        template: template
-                    },
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr(
-                            'content') // Include CSRF token if using Laravel's CSRF protection
-                    },
-                    success: function(response) {
-                        if (response.file_path) {
-                            // Display the PDF in an iframe if a file path is returned
-                            $('#pdfFrame').attr('src', response.file_path);
-                            $('#pdfModal').css('display', 'block');
-                        } else {
-                            // Handle the response where the PDF content is returned directly
-                            var blob = new Blob([response], {
-                                type: 'application/pdf'
-                            });
-                            var url = URL.createObjectURL(blob);
-                            var link = document.createElement('a');
-                            link.href = url;
-                            link.download = 'document.pdf';
-                            document.body.appendChild(link);
-                            link.click();
-                            document.body.removeChild(link);
-                        }
-                    },
-                    error: function(xhr, status, error) {
-                        console.error('Error generating PDF:', error);
+            $.ajax({
+                url: '/api/generate-pdf', // Adjust this URL to your actual API endpoint
+                type: 'GET',
+                data: {
+                    dossier_id: dossier_id,
+                    template: template
+                },
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr(
+                        'content') // Include CSRF token if using Laravel's CSRF protection
+                },
+                success: function(response) {
+                    if (response.file_path) {
+                        // Display the PDF in an iframe if a file path is returned
+                        $('#pdfFrame').attr('src', response.file_path);
+                        $('#pdfModal').css('display', 'block');
+                    } else {
+                        // Handle the response where the PDF content is returned directly
+                        var blob = new Blob([response], {
+                            type: 'application/pdf'
+                        });
+                        var url = URL.createObjectURL(blob);
+                        var link = document.createElement('a');
+                        link.href = url;
+                        link.download = 'document.pdf';
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
                     }
-                });
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error generating PDF:', error);
+                }
             });
+        });
     }
 </script>

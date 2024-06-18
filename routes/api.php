@@ -33,7 +33,8 @@ Route::get('/fill-pdf', [PDFController::class, 'fillPdf']);
 Route::post('/fill-pdf', [PDFController::class, 'fillPdf']);
 Route::get('/rdvs', [RdvController::class, 'index']);
 Route::post('/rdvs', [RdvController::class, 'index']);
-Route::post('/rdvs/save', [RdvController::class, 'save']);
+Route::post('/rdvs/save', [RdvController::class, 'save'])->name('rdv.save');
+Route::post('/rdvs/update', [RdvController::class, 'update'])->name('rdv.update');
 
 Route::post('/ocr-analyze', [OcrAnalyze::class, 'index']);
 

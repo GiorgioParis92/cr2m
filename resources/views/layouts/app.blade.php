@@ -29,8 +29,8 @@
     <script src="{{ asset('frontend/assets/js/jquery-radiocharm.js') }}"></script>
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-   
-    
+
+
 
     <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.10.0/css/bootstrap-datepicker.min.css"
@@ -40,7 +40,7 @@
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/base/jquery-ui.css">
 
     <link rel="stylesheet" href="{{ asset('css/fontawesome.css') }}">
-  
+
 
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
 
@@ -50,9 +50,10 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/4.2.0/bootstrap/main.css" rel="stylesheet">
 
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.14.0/Sortable.min.js"></script>
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCzcaFvxwi1XLyRHmPRnlKO4zcJXPOT5gM&callback=initMap"></script>
+    <script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCzcaFvxwi1XLyRHmPRnlKO4zcJXPOT5gM&callback=initMap"></script>
 
-@livewireStyles
+    @livewireStyles
 </head>
 
 <body class="g-sidenav-show bg-gray-100">
@@ -89,7 +90,7 @@
     </div>
 
     <div class="modal fade" id="calendar_modal" tabindex="-1" aria-labelledby="" aria-hidden="true">
-        <div class="modal-dialog"     style="min-width: 90%;">
+        <div class="modal-dialog" style="min-width: 90%;">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="">Calendrier</h5>
@@ -98,35 +99,115 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    
+
                 </div>
             </div>
         </div>
     </div>
 
-<!-- Bootstrap Modal -->
-<div class="modal fade" id="eventModal" tabindex="-1" role="dialog" aria-labelledby="eventModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="eventModalLabel">Event Details</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
+    <!-- Bootstrap Modal -->
+    <div class="modal fade" id="eventModal" tabindex="-1" role="dialog" aria-labelledby="eventModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="eventModalLabel">Event Details</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p><strong>Title:</strong> <span id="eventTitle"></span></p>
+                    <p><strong>Description:</strong> <span id="eventDescription"></span></p>
+                    <p><strong>Start:</strong> <span id="eventStart"></span></p>
+                    <p><strong>End:</strong> <span id="eventEnd"></span></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
         </div>
-        <div class="modal-body">
-          <p><strong>Title:</strong> <span id="eventTitle"></span></p>
-          <p><strong>Description:</strong> <span id="eventDescription"></span></p>
-          <p><strong>Start:</strong> <span id="eventStart"></span></p>
-          <p><strong>End:</strong> <span id="eventEnd"></span></p>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        </div>
-      </div>
     </div>
-  </div>
-  
+
+
+    <div class="modal fade" id="rdv_modal" tabindex="-1" role="dialog" aria-labelledby="eventModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="">Rdv</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <input class="form-control" type="hidden" id="rdv_id" name="rdv_id">
+                            <input class="form-control" type="hidden" id="rdv_dossier_id" name="dossier_id">
+                            <input class="form-control" type="hidden" id="rdv_client_id" name="client_id">
+                            <input class="form-control" type="hidden" id="rdv_telephone" name="telephone">
+                            <input class="form-control" type="hidden" id="rdv_telephone_2" name="telephone_2">
+                            <input class="form-control" type="hidden" id="rdv_email" name="email">
+                            <input class="form-control" type="hidden" id="rdv_nom" name="nom">
+                            <input class="form-control" type="hidden" id="rdv_prenom" name="prenom">
+                            <input class="form-control" type="hidden" id="rdv_adresse" name="adresse">
+                            <input class="form-control" type="hidden" id="rdv_cp" name="cp">
+                            <input class="form-control" type="hidden" id="rdv_ville" name="ville">
+                            <input class="form-control" type="hidden" id="rdv_lat" name="lat">
+                            <input class="form-control" type="hidden" id="rdv_lng" name="lng">
+                            <input class="form-control" type="hidden" id="rdv_type_rdv" name="type_rdv">
+                            <label>Date</label>
+                            <input class="form-control datepicker" type="text" id="rdv_french_date"
+                                name="date_rdv">
+                        </div>
+                        <div class="form-group">
+                            <label>Heure</label>
+                            <div class="row">
+                                <div class="col-6">
+                                    <select class="form-control" id="rdv_hour" name="hour">
+                                        @for ($hour = 0; $hour < 24; $hour++)
+                                            <option value="{{ sprintf('%02d', $hour) }}">{{ sprintf('%02d', $hour) }}
+                                            </option>
+                                        @endfor
+                                    </select>
+                                </div>
+                                <div class="col-6">
+                                    <select class="form-control" id="rdv_minute" name="minute">
+
+                                        @for ($minute = 0; $minute < 60; $minute += 5)
+                                            <option value="{{ sprintf('%02d', $minute) }}">
+                                                {{ sprintf('%02d', $minute) }}</option>
+                                        @endfor
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Auditeur</label>
+                                <select class="form-control" id="rdv_user_id" name="user_id">
+                                    <option value="">Choisir un auditeur</option>
+                                    @foreach ($auditeurs as $auditeur)
+                                        <option value="{{ $auditeur->id }}">{{ $auditeur->name }}</option>
+                                    @endforeach
+                                </select>
+
+                            </div>
+                            <div class="form-group">
+
+
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+                <div class="modal-footer">
+                    <div id="save_rdv" class="btn btn-primary">Enregistrer</div>
+
+                    <button type="button" class="btn btn-secondary close" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
     @include('frontend.fixed-plugin')
 
     <!-- Core JS Files -->
@@ -139,12 +220,15 @@
 
     @yield('scripts')
     <script>
-      
-
-     
         $(document).ready(function() {
-            $('select').select2();
-            $('.datepicker').datepicker();        
+
+
+            $('select').each(function() {
+                if ($(this).closest('.modal').length === 0) {
+                    $(this).select2();
+                }
+            });
+            $('.datepicker').datepicker();
 
             $('.datatable').DataTable()
 
@@ -177,7 +261,55 @@
             //         }
             //     });
             // });
+            $('#save_rdv').click(function() {
+                // Collect form data
+                var formData = {
+                    rdv_id: $('#rdv_id').val(),
+                    date_rdv: $('#rdv_french_date').val(),
+                    hour: $('#rdv_hour').val(),
+                    minute: $('#rdv_minute').val(),
+                    user_id: $('#rdv_user_id').val(),
+                    type_rdv: $('#rdv_type_rdv').val(),
+                    nom: $('#rdv_nom').val(),
+                    prenom: $('#rdv_prenom').val(),
+                    adresse: $('#rdv_adresse').val(),
+                    cp: $('#rdv_cp').val(),
+                    ville: $('#rdv_ville').val(),
+                    telephone: $('#rdv_telephone').val(),
+                    telephone_2: $('#rdv_telephone_2').val(),
+                    email: $('#rdv_email').val(),
+                    dossier_id: $('#rdv_dossier_id').val(),
+                    client_id: $('#rdv_client_id').val(),
+                    lat: $('#rdv_lat').val(),
+                    lng: $('#rdv_lng').val(),
+                    // Include additional fields if present
+                };
 
+                // Perform AJAX call
+                updateRdv(formData);
+            });
+
+            function updateRdv(data) {
+                $.ajax({
+                    url: '/api/rdvs/update', // Adjust the URL to match your endpoint
+                    type: 'POST',
+                    data: data,
+                    success: function(response) {
+                        if (response.success) {
+                            // Close modal and refresh parent page or redirect
+                            $('#rdv_modal').modal('hide');
+                            location.reload(); // Or redirect to previous page
+                        } else {
+                            // Handle error
+                            alert(response.message);
+                        }
+                    },
+                    error: function(xhr) {
+                        // Handle AJAX error
+                        alert('An error occurred: ' + xhr.statusText);
+                    }
+                });
+            }
 
             $('.generatePdfButton').click(function() {
                 var template = $(this).data('template'); // Get the template from data attribute
@@ -233,16 +365,12 @@
                 }
             });
         });
-
-       
-       
-       
     </script>
     <!-- Github buttons -->
     <script async defer src="https://buttons.github.io/buttons.js"></script>
     <!-- Control Center for Soft Dashboard: parallax effects, scripts for the example pages etc -->
     <script src="{{ asset('frontend/assets/js/soft-ui-dashboard.min.js?v=1.0.7') }}"></script>
-@livewireScripts
+    @livewireScripts
 
 </body>
 
