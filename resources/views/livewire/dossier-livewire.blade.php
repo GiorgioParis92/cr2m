@@ -101,7 +101,7 @@
                                                                 {{ $form_handler->form->form_title }}
 
                                                                 @if(auth()->user()->id==1)
-                                                                <span style="font-size:8px;font-style:italic">(Form id : {{$form_handler->form->id}})</span>
+                                                                <span style="font-size:12px;font-style:italic">(Form id : {{$form_handler->form->id}})</span>
                                                                 @endif
                                                             </a>
                                                         </li>
