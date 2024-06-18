@@ -165,6 +165,8 @@ class DossierLivewire extends Component
             $this->forms_configs = [];
             $this->formData = [];
 
+
+
             foreach ($forms as $form) {
                 $handler = new FormConfigHandler($this->dossier, $this->convertArrayToStdClass((array) $form));
                 $this->forms_configs[$form->id] = $handler;
@@ -186,18 +188,7 @@ class DossierLivewire extends Component
 
                 }
             }
-            foreach($this->dossier->beneficiaire->getAttributes() as $key=>$value) {
-                if($value!='') {
-                    $this->global_data[$key]=$value;
-                }
-               
-            }
-            foreach($this->dossier->getAttributes() as $key=>$value) {
-     
-                if($value!='') {
-                    $this->global_data[$key]=$value;
-                }
-            }
+
 
 
         } else {
