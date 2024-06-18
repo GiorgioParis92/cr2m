@@ -331,10 +331,7 @@
     });
     document.addEventListener('DOMContentLoaded', function() {
 
-        Livewire.on('initializeDropzones', (data) => {
-            initializePdfModals();
 
-        });
         // get_calendar();
 
         // Listen for the Livewire event to reinitialize Dropzone
@@ -348,9 +345,9 @@
             $('select').select2();
             $('.datepicker').datepicker();
 
-
-            // initializePdfModals();
-            // Retrieve and parse the forms_configs
+            initializePdfModals();
+       
+            
             var configs = data.forms_configs;
             initializeDropzones(configs);
             // // Remove existing Dropzones to prevent multiple instances
