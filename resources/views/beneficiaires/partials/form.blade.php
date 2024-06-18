@@ -7,6 +7,10 @@
     <input type="text" class="form-control" id="prenom" name="prenom" value="{{ old('prenom', $beneficiaire->prenom ?? '') }}" required>
 </div>
 <div class="form-group">
+    <label for="numero_voie">Numéro de la voie</label>
+    <input type="text" class="form-control" id="numero_voie" name="numero_voie" value="{{ old('numero_voie', $beneficiaire->numero_voie ?? '') }}" required>
+</div>
+<div class="form-group col-lg-2">
     <label for="adresse">Address</label>
     <input type="text" class="form-control" id="adresse" name="adresse" value="{{ old('adresse', $beneficiaire->adresse ?? '') }}" required>
 </div>

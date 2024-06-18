@@ -36,6 +36,7 @@ class BeneficiaireController extends Controller
         $validated = $request->validate([
             'nom' => 'required|max:200',
             'prenom' => 'required|max:200',
+            'numero_voie' => 'required|max:250',
             'adresse' => 'required|max:250',
             'cp' => 'required|max:10',
             'ville' => 'required|max:200',
