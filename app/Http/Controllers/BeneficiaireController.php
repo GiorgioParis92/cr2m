@@ -50,7 +50,8 @@ class BeneficiaireController extends Controller
         // Concatenate and encode the full address
         $fullAddress = urlencode("{$validated['adresse']} {$validated['cp']} {$validated['ville']} France");
         $nominatimUrl = "https://nominatim.openstreetmap.org/search?q={$fullAddress}&format=geojson";
-    
+        $validated['lat'] = 0;
+        $validated['lng'] = 0;
         // Send the request to Nominatim API
         try {
             $response = Http::withOptions(['verify' => false])->get($nominatimUrl);
@@ -63,12 +64,9 @@ class BeneficiaireController extends Controller
                 // Include latitude and longitude in the validated data
                 $validated['lat'] = $latitude;
                 $validated['lng'] = $longitude;
-            } else {
-                return redirect()->back()->with('error', 'Failed to fetch geolocation data.');
             }
         } catch (\Exception $e) {
-            // Handle the exception and return
-            return redirect()->back()->with('error', 'An error occurred while trying to geolocate the address.');
+
         }
     
         // Create the beneficiaire
