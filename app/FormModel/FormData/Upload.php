@@ -17,7 +17,7 @@ class Upload extends AbstractFormData
 
 
         $data = '<tr>';
-        $data .= '<td class="w-30" wire:poll.visible>';
+        $data .= '<td class="w-30" ><div wire:poll.visible>';
 
         $extension=explode('.',$this->value);
 
@@ -44,7 +44,7 @@ class Upload extends AbstractFormData
 
 
 
-        $data .= '</td>';
+        $data .= '</div></td>';
         $data .= '<td>';
         $data .= '<div class="d-flex px-2 py-1 align-items-center">';
         $data .= $this->config->title;
