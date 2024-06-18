@@ -16,13 +16,8 @@ class Listing extends AbstractFormData
         if($optionsArray['elements']) {
             $elements=$optionsArray['elements'];
         }
-        if(unserialize($this->value)) {
-            foreach(unserialize($this->value) as $key=>&$value) {
-                dump($key);
-                dump($value);
-            }
-        }
-        dd('ok');
+
+     
         $data = '<div class="form-group  col-sm-12 '.($this->config->class ?? "").'">';
 
         // $data .= '<textarea  class="form-control" name="'.$this->config->name.'">'.$optionsArray['prompt'].'</textarea>';

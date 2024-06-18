@@ -99,6 +99,10 @@
                                                             <a wire:click="display_form({{ $form_handler->form->id }})"
                                                                 class="nav-link mb-0 px-0 py-1 {{ $form_handler->form->id == $form_id ? 'active' : '' }}">
                                                                 {{ $form_handler->form->form_title }}
+
+                                                                @if(auth()->user()->id==1)
+                                                                <span style="font-size:8px;font-style:italic">(Form id : {{$form_handler->form->id}})</span>
+                                                                @endif
                                                             </a>
                                                         </li>
                                                     @endif

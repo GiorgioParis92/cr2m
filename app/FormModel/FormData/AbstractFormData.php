@@ -35,15 +35,9 @@ class AbstractFormData
         // Initialize value with the first table's value or an empty string
         $this->name = $name;
 
-        if(is_array(@unserialize($config->meta_value))) {
-
-            foreach(@unserialize($config->meta_value) as $key => $value) {
-            $this->value = $value;
-            }
-
-        } else {
+   
             $this->value = $config->meta_value ?? '';
-        }
+        
        
       
 
