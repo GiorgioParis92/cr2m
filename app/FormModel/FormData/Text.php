@@ -30,7 +30,7 @@ class Text extends AbstractFormData
             $data .= $this->generate_loading();
        
 
-        $data .= '<input wire:model="'.$wireModel.'" class="form-control '.$class_prediction.'" type="text" name="'.$this->name.'"';
+        $data .= '<input wire:model.lazy="'.$wireModel.'" class="form-control '.$class_prediction.'" type="text" name="'.$this->name.'"';
 
         if ($this->config->required) {
             $data .= ' required ';
