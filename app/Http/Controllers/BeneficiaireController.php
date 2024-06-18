@@ -49,7 +49,8 @@ class BeneficiaireController extends Controller
         ]);
     
         // Concatenate and encode the full address
-        $fullAddress = urlencode("{$validated['adresse']} {$validated['cp']} {$validated['ville']} France");
+        $fullAddress = urlencode("{$validated['numero_voie']} {$validated['adresse']} {$validated['cp']} {$validated['ville']} France");
+        $fullAddress=str_replace(' ','+', $fullAddress);
         $nominatimUrl = "https://nominatim.openstreetmap.org/search?q={$fullAddress}&format=geojson";
         $validated['lat'] = 0;
         $validated['lng'] = 0;
