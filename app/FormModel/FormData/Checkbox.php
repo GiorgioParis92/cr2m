@@ -18,7 +18,9 @@ class Checkbox extends AbstractFormData
         $wireModel = "formData.{$this->form_id}.{$this->name}";
 
  
-
+        // if($this->name=='chaudiere_condensation_gaz') {
+        //     dd($optionsArray);
+        // }
 
         $data = '<div class="form-group col-sm-12 ';
         $data .= $this->config->class ?? '';
@@ -33,12 +35,12 @@ class Checkbox extends AbstractFormData
             wire:model="'.$wireModel.'"
             value="1"
             name="'.$this->config->name.'"
-            class="" '.(($this->value>0 && $this->value!="0") ? 'checked="true"' : 'unchecked"').'>';
+             >';
             $data .= '<span class="slider round"></span>';
             $data .= '</label>';
             $data .= '<label class="custom-control-label" for="checkbox_'.$this->config->name.'"';
             $data .= $this->config->name;
-            $data .= '">';
+            $data .= '>';
             $data .= $optionsArray[1]['label'];
             $data .= '</label>';
         }

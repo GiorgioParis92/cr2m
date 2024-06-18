@@ -115,15 +115,16 @@ class DossierLivewire extends Component
         if (preg_match($pattern, $propertyName, $matches)) {
             $formId = $matches[1]; // Extract formId
             $key = $matches[2]; // Extract key
-
+            $this->forms_configs[$formId]->formData[$key]->updating=true;
             // Ensure the formId and key exist
             if (isset($this->forms_configs[$formId]) && isset($this->forms_configs[$formId]->formData[$key])) {
                 $this->forms_configs[$formId]->formData[$key]->value = $value;
             }
         }
-        $result_save = [];
+ 
         foreach ($this->forms_configs as $formId => $config) {
-            $result_save[$formId] = $config->save();
+       
+            $config->save();
             foreach ($config->formData as $tag => $data_form) {
                 if ($this->global_data[$tag] != $data_form->value) {
                     $this->global_data[$tag] = $data_form->value;

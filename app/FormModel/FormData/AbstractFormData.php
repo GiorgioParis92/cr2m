@@ -13,6 +13,7 @@ class AbstractFormData
     protected $dossier_id;
     protected $config;
     public $prediction;
+    public $updating=false;
 
     public function __construct($config, $name, $form_id, $dossier_id)
     {
@@ -36,7 +37,7 @@ class AbstractFormData
         $this->name = $name;
 
    
-            $this->value = $config->meta_value ?? '';
+        $this->value = $config->meta_value ?? '';
         
        
       
@@ -73,8 +74,9 @@ class AbstractFormData
     public function save_value()
     {
         $value = $this->generate_value();
+ 
 
-
+        
 
         DB::table('forms_data')->updateOrInsert(
             [

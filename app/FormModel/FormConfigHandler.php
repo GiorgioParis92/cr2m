@@ -86,6 +86,7 @@ class FormConfigHandler
     public function save()
     {
         $saved = [];
+       
         foreach ($this->formData as $tag => $data_form) {
             if ($data_form !== null) {
                 $saved[$tag] = $data_form->save_value();

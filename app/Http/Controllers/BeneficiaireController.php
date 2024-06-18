@@ -52,6 +52,8 @@ class BeneficiaireController extends Controller
         $fullAddress = urlencode("{$validated['numero_voie']} {$validated['adresse']} {$validated['cp']} {$validated['ville']} France");
         $fullAddress=str_replace(' ','+', $fullAddress);
         $nominatimUrl = "https://nominatim.openstreetmap.org/search?q={$fullAddress}&format=geojson";
+
+
         $validated['lat'] = 0;
         $validated['lng'] = 0;
         // Send the request to Nominatim API
@@ -62,11 +64,12 @@ class BeneficiaireController extends Controller
                 $geoData = $response->json();
                 $latitude = $geoData['features'][0]['geometry']['coordinates'][1] ?? null;
                 $longitude = $geoData['features'][0]['geometry']['coordinates'][0] ?? null;
-    
+               
                 // Include latitude and longitude in the validated data
                 $validated['lat'] = $latitude;
                 $validated['lng'] = $longitude;
             }
+        
         } catch (\Exception $e) {
 
         }

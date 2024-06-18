@@ -197,15 +197,10 @@
     document.addEventListener('DOMContentLoaded', function() {
         // Existing initialization code
         console.log('DOM fully loaded and parsed');
-        console.log(calendar)
-        get_calendar();
-        console.log(calendar)
+
         // Listen for the custom event from Livewire
         Livewire.on('loadCalendar', function() {
 
-            console.log(calendar)
-            get_calendar();
-            console.log(calendar)
 
         });
 
@@ -497,7 +492,7 @@
     document.addEventListener('DOMContentLoaded', function() {
 
 
-        // get_calendar();
+        // 
 
         // Listen for the Livewire event to reinitialize Dropzone
         Livewire.on('initializeDropzones', (data) => {
@@ -574,7 +569,7 @@
         Livewire.hook('message.processed', (message, component) => {
             // initializeDropzones();
             // initializePdfModals();
-            get_calendar();
+            
         });
     });
 
@@ -628,133 +623,7 @@
 
     }
 
-    function get_calendar() {
-        var calendarEl = document.getElementById('calendar');
-        var token = $('meta[name="api-token"]').attr('content');
-
-        var calendar = new FullCalendar.Calendar(calendarEl, {
-            initialView: 'timeGridWeek',
-            editable: true,
-            locale: 'fr',
-            headerToolbar: {
-                start: 'title',
-                center: '',
-                end: 'today prev,next timeGrid timeGridWeek dayGridMonth'
-            },
-            slotMinTime: "08:00:00",
-            slotMaxTime: "20:00:00",
-            slotDuration: '00:30:00',
-            allDaySlot: false,
-            buttonText: {
-                prev: 'Précédent',
-                next: 'Suivant',
-                today: "Aujourd'hui",
-                month: 'Mois',
-                timeGrid: 'Journée',
-                week: 'Semaine',
-                day: 'Jour'
-            },
-            weekText: 'Sem.',
-            allDayText: 'Toute la journée',
-            moreLinkText: 'en plus',
-            noEventsText: 'Aucun événement à afficher',
-            events: [],
-            dateClick: function(info) {
-                var date = moment(new Date(info.dateStr));
-                var formattedDate = date.format('YYYY-MM-DD HH:mm:ss');
-                $.ajax({
-                    url: '/api/rdvs/save',
-                    method: 'POST',
-                    data: {
-                        dossier_id: {{ $dossier->id ?? '' }},
-                        start: formattedDate,
-                        user_id: $('#form_config_user_id').val(),
-                        type_rdv: $('#type_rdv').val(),
-                    },
-                    success: function(response) {
-                        if (response.success) {
-                            calendar.addEvent({
-                                start: formattedDate
-                            });
-                        } else {
-                            alert('Failed to save event');
-                        }
-                    },
-                    error: function() {
-                        alert('Error occurred while saving event');
-                    }
-                });
-            },
-            eventContent: function(arg) {
-                var eventDiv = document.createElement('div');
-                var titleDiv = document.createElement('div');
-                var descriptionDiv = document.createElement('div');
-
-                titleDiv.innerHTML = arg.event.title;
-                descriptionDiv.innerHTML = arg.event.extendedProps.description;
-
-                eventDiv.appendChild(titleDiv);
-                eventDiv.appendChild(descriptionDiv);
-
-                return {
-                    domNodes: [eventDiv]
-                };
-            },
-            eventClick: function(info) {
-                info.jsEvent.preventDefault();
-                openEventModal(info.event);
-            }
-        });
-
-        calendar.render();
-
-        function fetchAndRenderEvents(userId) {
-            $.ajax({
-                url: '/api/rdvs',
-                type: 'GET',
-                headers: {
-                    'Authorization': 'Bearer ' + token
-                },
-                data: {
-                    user_id: userId
-                },
-                success: function(data) {
-                    console.log(data)
-                    var events = data.map(function(rdv) {
-                        var startDate = new Date(rdv.date_rdv);
-                        var endDate = new Date(startDate.getTime() + 60 * 60 * 1000);
-
-                        return {
-                            title: rdv.nom + ' ' + rdv.prenom,
-                            start: startDate.toISOString(),
-                            end: endDate.toISOString(),
-                            description: 'Address: ' + rdv.adresse + ', ' + rdv.ville
-                        };
-                    });
-                    calendar.removeAllEvents();
-                    calendar.addEventSource(events);
-                },
-                error: function(xhr, status, error) {
-                    console.error('Error fetching RDVs:', error);
-                }
-            });
-        }
-
-        fetchAndRenderEvents($('#form_config_user_id').val());
-
-        $('#form_config_user_id').change(function() {
-            var selectedUserId = $(this).val();
-            fetchAndRenderEvents(selectedUserId);
-        });
-
-        function openEventModal(event) {
-            document.getElementById('eventTitle').textContent = event.title;
-            document.getElementById('eventDescription').textContent = event.extendedProps.description;
-            document.getElementById('eventStart').textContent = new Date(event.start).toLocaleString();
-            document.getElementById('eventEnd').textContent = new Date(event.end).toLocaleString();
-            $('#eventModal').modal('show');
-        }
-    }
+ 
 
 
 
