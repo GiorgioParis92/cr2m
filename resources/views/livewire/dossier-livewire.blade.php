@@ -31,7 +31,7 @@
                 </div>
             </div>
             <hr>
- 
+
 
             <div class="card form-register">
                 <div class="steps clearfix">
@@ -176,7 +176,7 @@
                         {!! $form->render([]) !!}
                         <div class="card container mt-5 pd-5">
 
-                            @include('calendar')
+                            {{-- @include('calendar') --}}
                         </div>
                     @endif
 
@@ -520,7 +520,11 @@
                     $(this).select2();
                 }
             });
-            $('.datepicker').datepicker();
+            $('.datepicker').datepicker({
+                language: 'fr',
+                dateFormat: 'dd/mm/yy', // See format options on parseDate
+
+            });
 
             initializePdfModals();
 
@@ -654,6 +658,10 @@
 
             $('.modal').modal('hide');
         });
+        $('.close_button').on('click', function() {
+
+$('.modal').modal('hide');
+});
         // Remove existing event listeners to prevent multiple bindings
         $(document).off('click', '.pdfModal').off('click', '.imageModal').off('click', '.fillPDF').off('click',
             '.generatePdfButton').off('rdv_modal', '.generatePdfButton');
@@ -691,18 +699,18 @@
                     $('#rdv_minute').val('');
                     $('#rdv_user_id').val('');
                     $('#rdv_type_rdv').val(1);
-                    $('#rdv_nom').val("{!!$dossier['beneficiaire']['nom'] ?? '' !!}");
-                    $('#rdv_prenom').val("{!!$dossier['beneficiaire']['prenom'] ?? '' !!}");
-                    $('#rdv_adresse').val("{!!$dossier['beneficiaire']['adresse'] ?? '' !!}");
-                    $('#rdv_cp').val("{!!$dossier['beneficiaire']['cp'] ?? '' !!}");
-                    $('#rdv_ville').val("{!!$dossier['beneficiaire']['ville'] ?? '' !!}");
-                    $('#rdv_telephone').val("{!!$dossier['beneficiaire']['telephone'] ?? '' !!}");
-                    $('#rdv_email').val("{!!$dossier['beneficiaire']['email'] ?? '' !!}");
-                    $('#rdv_telephone_2').val("{!!$dossier['beneficiaire']['telephone_2'] ?? '' !!}");
-                    $('#rdv_dossier_id').val("{!!$dossier['id'] ?? '' !!}");
-                    $('#rdv_client_id').val("{!!$dossier['client_id'] ?? '' !!}");
-                    $('#rdv_lat').val("{!!$dossier['beneficiaire']['lat'] ?? '' !!}");
-                    $('#rdv_lng').val("{!!$dossier['beneficiaire']['lng'] ?? '' !!}");
+                    $('#rdv_nom').val("{!! $dossier['beneficiaire']['nom'] ?? '' !!}");
+                    $('#rdv_prenom').val("{!! $dossier['beneficiaire']['prenom'] ?? '' !!}");
+                    $('#rdv_adresse').val("{!! $dossier['beneficiaire']['adresse'] ?? '' !!}");
+                    $('#rdv_cp').val("{!! $dossier['beneficiaire']['cp'] ?? '' !!}");
+                    $('#rdv_ville').val("{!! $dossier['beneficiaire']['ville'] ?? '' !!}");
+                    $('#rdv_telephone').val("{!! $dossier['beneficiaire']['telephone'] ?? '' !!}");
+                    $('#rdv_email').val("{!! $dossier['beneficiaire']['email'] ?? '' !!}");
+                    $('#rdv_telephone_2').val("{!! $dossier['beneficiaire']['telephone_2'] ?? '' !!}");
+                    $('#rdv_dossier_id').val("{!! $dossier['id'] ?? '' !!}");
+                    $('#rdv_client_id').val("{!! $dossier['client_id'] ?? '' !!}");
+                    $('#rdv_lat').val("{!! $dossier['beneficiaire']['lat'] ?? '' !!}");
+                    $('#rdv_lng').val("{!! $dossier['beneficiaire']['lng'] ?? '' !!}");
 
                     if (response && response.length > 0) {
                         console.log(response)

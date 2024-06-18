@@ -1134,3 +1134,9 @@ span.prediction {
       transform: translate(24px, 0);
     }
   }
+
+  button.close {
+    background: transparent;
+    border: 0;
+    font-size: 27px;
+}

@@ -132,8 +132,8 @@
 
     <div class="modal fade" id="rdv_modal" tabindex="-1" role="dialog" aria-labelledby="eventModalLabel"
         aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
+        <div class="modal-dialog" role="document" style="    min-width: 50%;">
+            <div class="modal-content" style="    height: auto;    min-height: auto !important;">
                 <div class="modal-header">
                     <h5 class="modal-title" id="">Rdv</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -203,7 +203,7 @@
                 <div class="modal-footer">
                     <div id="save_rdv" class="btn btn-primary">Enregistrer</div>
 
-                    <button type="button" class="btn btn-secondary close" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary close_button" data-dismiss="modal">Fermer</button>
                 </div>
             </div>
         </div>
@@ -223,13 +223,24 @@
         $(document).ready(function() {
 
 
+            $('.close').on('click', function() {
+
+                $('.modal').modal('hide');
+            });
+            $('.close_button').on('click', function() {
+
+                $('.modal').modal('hide');
+            });
             $('select').each(function() {
                 if ($(this).closest('.modal').length === 0) {
                     $(this).select2();
                 }
             });
-            $('.datepicker').datepicker();
+            $('.datepicker').datepicker({
+                language: 'fr',
+                dateFormat: 'dd/mm/yy', // See format options on parseDate
 
+            });
             $('.datatable').DataTable()
 
             // $('.fillPDF').click(function() {
