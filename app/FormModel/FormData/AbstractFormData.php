@@ -13,7 +13,7 @@ class AbstractFormData
     protected $dossier_id;
     protected $config;
     public $prediction;
-    public $updating=false;
+    public $updating = false;
 
     public function __construct($config, $name, $form_id, $dossier_id)
     {
@@ -36,21 +36,21 @@ class AbstractFormData
         // Initialize value with the first table's value or an empty string
         $this->name = $name;
 
-   
-        $this->value = $config->meta_value ?? '';
-        
-       
-      
 
-        
+        $this->value = $config->meta_value ?? '';
+
+
+
+
+
         $this->prediction = $config_dossiers->meta_value ?? '';
 
 
         $this->global_data = '';
 
 
-        if($this->value=='') {
-            $this->value=$this->prediction;
+        if ($this->value == '') {
+            $this->value = $this->prediction;
 
         }
 
@@ -62,11 +62,19 @@ class AbstractFormData
 
     public function check_value()
     {
-  
+
         return true;
 
     }
 
+
+    public function generate_loading()
+    {
+        if ($this->updating) {
+            return '<div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>';
+        }
+        return '';
+    }
     public function generate_value()
     {
         return $this->value;
@@ -74,9 +82,9 @@ class AbstractFormData
     public function save_value()
     {
         $value = $this->generate_value();
- 
 
-        
+
+
 
         DB::table('forms_data')->updateOrInsert(
             [

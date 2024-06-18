@@ -22,11 +22,14 @@ class Text extends AbstractFormData
 
         $data = '<div class="form-group col-sm-12 '.($this->config->class ?? "").'  group_'.$class_prediction.'">';
 
-        if($this->updating) {
-            $data .= 'updating';
-        }
 
-        $data .= '<label>'.$this->config->title.'</label>';
+
+        $data .= '<label style="display:inline-block">'.$this->config->title.'</label>';
+
+       
+            $data .= $this->generate_loading();
+       
+
         $data .= '<input wire:model="'.$wireModel.'" class="form-control '.$class_prediction.'" type="text" name="'.$this->name.'"';
 
         if ($this->config->required) {
