@@ -99,7 +99,7 @@ class Db_table extends AbstractFormData
         $data.='</td>';
 
         $data.='<td>';
-        $data.='<div data-rdv_id="" class="btn btn-secondary show_rdv"><i class="fa fa-plus"></i></div>';
+        $data.='<div data-rdv_id="" class="btn btn-secondary show_rdv">Ajouter un Rdv/div>';
 
         $data.='</td>';
 
