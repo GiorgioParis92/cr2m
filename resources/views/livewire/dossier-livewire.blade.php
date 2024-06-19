@@ -515,6 +515,7 @@
 
        
         Livewire.on('setTab', (data) => {
+            var configs = data.forms_configs;
         initializeDropzones(configs);
         
         });
