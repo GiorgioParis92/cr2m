@@ -139,7 +139,7 @@ class BeneficiaireController extends Controller
                 'fiche_id' => $request->input('fiche_id'),
                 'etape_id' => 1,
                 'status_id' => 1,
-                'client_id' => $request->input('client_id') ?? 0,
+                'client_id' => $request->input('mar') ?? 0,
                 'mandataire_financier' => $request->input('mandataire_financier') ?? 0,
                 'mar' => $request->input('mar') ?? 0,
                 'installateur' => $request->input('installateur') ?? 0,

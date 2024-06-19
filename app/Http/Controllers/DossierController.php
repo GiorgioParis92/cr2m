@@ -109,24 +109,22 @@ class DossierController extends Controller
         $dossier = Dossier::where('id', $id)
             ->with('beneficiaire', 'fiche', 'etape', 'status')
             ->first();
+       
+            $current=DB::table('etapes')->where('id', $dossier->etape_number)->first();
+        
+            $current_plus=(($current->order_column)+1);
+           
 
-        $distinctEtapes = DB::table('forms')
-            ->select('etape_id', DB::raw('MIN(id) as min_id'))
-            ->groupBy('etape_id');
+        $next=DB::table('etapes')->where('order_column', ($current->order_column+1))->first();
+        
+        if($next) {
+            $next_etape = $next->id;
 
-        $etapes = DB::table('forms')
-            ->join('etapes', 'forms.etape_id', '=', 'etapes.id')
-            ->joinSub($distinctEtapes, 'distinctEtapes', function ($join) {
-                $join->on('forms.id', '=', 'distinctEtapes.min_id');
-            })
-            ->select('forms.*', 'etapes.etape_name', 'etapes.etape_desc')
-            ->orderBy('forms.etape_number', 'desc')
-            ->first();
-
-        $next_etape = $dossier->etape_number + 1;
-        if (($next_etape <= $etapes->etape_number)) {
+       
             Dossier::where('id', $id)->update(['etape_number' => $next_etape]);
         }
+
+          
         return redirect()->route('dossiers.show', ['id' => $id]);
 
     }
