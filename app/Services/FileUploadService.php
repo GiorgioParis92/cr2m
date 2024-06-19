@@ -106,8 +106,7 @@ class FileUploadService
             DB::enableQueryLog();
 
 
-            $check=DB::table('forms_data')->where('dossier_id','=', $clientId)->where('form_id','=',$form_id)->where('meta_key',$request->input('template'))->first();
-            dd($check);
+    
 
             $update=DB::table('forms_data')->updateOrInsert(
                 [
@@ -120,10 +119,7 @@ class FileUploadService
                 ]
             );
         
-            dd(DB::getQueryLog());
-
-            dump($update);
-            dd($filePath);
+  
 
 
             return $filePath;
