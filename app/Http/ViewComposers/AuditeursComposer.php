@@ -9,7 +9,7 @@ class AuditeursComposer
 {
     public function compose(View $view)
     {
-        $auditeurs = User::where('id','>',0);
+        $auditeurs = User::where('type_id','=',4);
         if(auth()->user()->client_id>0){
             $auditeurs = $auditeurs->where('client_id',auth()->user()->client_id);
         }

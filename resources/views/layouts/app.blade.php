@@ -182,6 +182,7 @@
                                     </select>
                                 </div>
                             </div>
+                            @if($auditeurs)
                             <div class="form-group">
                                 <label>Auditeur</label>
                                 <select class="form-control" id="rdv_user_id" name="user_id">
@@ -192,6 +193,7 @@
                                 </select>
 
                             </div>
+                            @endif
                             <div class="form-group">
 
 
