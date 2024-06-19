@@ -757,8 +757,11 @@
         $(document).on('click', '.pdfModal', function(event) {
             alert('ok')
             $('#pdfFrame').attr('src', '');
+            newSrc += `?time=${new Date().getTime()}`;
 
             var imgSrc = $(this).data('img-src');
+            imgSrc += `?time=${new Date().getTime()}`;
+
             $('#pdfFrame').attr('src', imgSrc);
             $('#pdfModal').css('display', 'block');
         });
