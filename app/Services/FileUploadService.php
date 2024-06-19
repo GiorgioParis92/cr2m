@@ -113,8 +113,6 @@ class FileUploadService
                 ],
                 [
                     'meta_value' => ''.$filePath.'',
-                    'created_at' => now(),
-                    'updated_at' => now()
                 ]
             );
         
