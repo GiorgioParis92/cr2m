@@ -103,6 +103,7 @@ class FileUploadService
             $filePath = $file->storeAs($directory, $fileName, 'public');
 
 
+            DB::enableQueryLog();
 
             $update=DB::table('forms_data')->updateOrInsert(
                 [
@@ -117,6 +118,7 @@ class FileUploadService
                 ]
             );
         
+            dd(DB::getQueryLog());
 
             dump($update);
             dd($filePath);
