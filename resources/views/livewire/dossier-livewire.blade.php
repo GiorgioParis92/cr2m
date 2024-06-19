@@ -38,6 +38,7 @@
                     <ul role="tablist" id="etapeTabs">
                    
                         @foreach ($etapes as $index => $e)
+                        @dump($e)
                             @php
                                 $isActive = false;
                                 $isCurrent = false;
