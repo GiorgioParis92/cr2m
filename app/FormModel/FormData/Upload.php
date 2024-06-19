@@ -14,7 +14,6 @@ class Upload extends AbstractFormData
 
 
 
-        dd($this);
 
         $data = '<tr>';
 

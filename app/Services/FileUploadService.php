@@ -111,7 +111,7 @@ class FileUploadService
                     'meta_key' => ''.$request->input('template').''
                 ],
                 [
-                    'meta_value' => $filePath,
+                    'meta_value' => ''.$filePath.'',
                     'created_at' => now(),
                     'updated_at' => now()
                 ]
