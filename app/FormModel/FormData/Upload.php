@@ -31,7 +31,9 @@ class Upload extends AbstractFormData
         $data .= '</td>';
 
         $data .= '<td class="w-30" ><div wire:poll.visible>';
+        if($this->value) {
 
+      
         $extension = explode('.', $this->value);
 
       
@@ -63,7 +65,9 @@ class Upload extends AbstractFormData
 
 
 
-        $data .= '</div></td>';
+        $data .= '</div>';
+    }
+        $data .= '</td>';
 
 
         $data .= '<td class="align-middle text-sm">';
