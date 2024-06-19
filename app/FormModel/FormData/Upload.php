@@ -86,4 +86,10 @@ class Upload extends AbstractFormData
         return false;
     }
 
+    public function save_value()
+    {
+
+        return false;
+    }
+
 }
