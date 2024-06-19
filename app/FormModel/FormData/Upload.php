@@ -40,7 +40,7 @@ class Upload extends AbstractFormData
             $filePath = storage_path('app/public/' . $this->value);  // File system path
 
         // $data.=$filePath;
-            // $data.=(asset('storage/' . $this->value));
+            $data.=(asset('storage/' . $this->value));
             if (file_exists($filePath)) {
                 if (end($extension) != 'pdf') {
                     $data .= '<button type="button" class="btn btn-success btn-view imageModal"
