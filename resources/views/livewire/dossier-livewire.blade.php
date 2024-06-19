@@ -80,7 +80,7 @@
                             <div class="col-lg-12">
                                 <h3 class="border-bottom border-gray pb-2 p-5">{{ $etape_display['etape_desc'] }}</h3>
                             </div>
-                            @if (isset($dossier->status->status_name) && $tab == $dossier->etape_number && $dossier->status->status_name != 'Refusé')
+                            @if ($tab == $dossier->etape_number)
                                 <div class="col-lg-6">
                                     <a class="btn btn-primary"
                                         href="{{ route('dossiers.next_step', $dossier->id) }}">Valider l'étape</a>
@@ -668,7 +668,7 @@
 $('.modal').modal('hide');
 });
         // Remove existing event listeners to prevent multiple bindings
-        // $(document).off('click', '.pdfModal').off('click', '.imageModal').off('click', '.fillPDF').off('click','.generatePdfButton').off('rdv_modal', '.generatePdfButton');
+        $(document).off('click', '.pdfModal').off('click', '.imageModal').off('click', '.fillPDF').off('click','.generatePdfButton').off('rdv_modal', '.generatePdfButton');
 
         // Attach new event listeners
         $(document).on('click', '.imageModal', function(event) {
