@@ -31,7 +31,7 @@ class Upload extends AbstractFormData
         $data .= '</td>';
 
         $data .= '<td class="w-30" ><div wire:poll.visible>';
-        if(Storage::disk('public')->exists($this->value)) {
+   
 
             
         $extension = explode('.', $this->value);
@@ -66,7 +66,7 @@ class Upload extends AbstractFormData
 
 
         $data .= '</div>';
-    }
+    
         $data .= '</td>';
 
 
