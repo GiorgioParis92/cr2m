@@ -12,11 +12,12 @@ class Prompt extends AbstractFormData
 
         $jsonString = str_replace(["\n", "\r"], '', $this->config->options);
         $optionsArray = json_decode($jsonString, true);
+        $content = nl2br($optionsArray['prompt'], false);
 
 
         $data = '<div style="margin-bottom:20px" class="form-group  col-sm-12 '.($this->config->class ?? "").'">';
         $data .= '<label>'.$this->config->title.'</label>';
-        $data .= '<textarea  style="min-height:300px" class="form-control" name="'.$this->config->name.'">'.nl2br($optionsArray['prompt']).'</textarea>';
+        $data .= '<textarea  style="min-height:300px" class="form-control" name="'.$this->config->name.'">'.$content.'</textarea>';
 
         $data .= '</div>';
 
