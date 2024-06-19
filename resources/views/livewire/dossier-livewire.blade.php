@@ -1,4 +1,4 @@
-<div>
+<div wire:poll.1000ms>
     <div class="row">
 
         <div class="col-12">
@@ -35,24 +35,28 @@
 
             <div class="card form-register">
                 <div class="steps clearfix">
-                    <ul role="tablist" id="etapeTabs">
-
+                    <ul role="tablist" id="etapeTabs" wire:poll>
                         @foreach ($etapes as $index => $e)
-                       
                             @php
                                 $isActive = false;
                                 $isCurrent = false;
-                                if ((($e->order_column)) <= $dossier->etape->order_column) {
+                                $isTab = false;
+                                if ($e->order_column <= $dossier->etape->order_column) {
                                     $isActive = true;
                                 }
-                                if ((($e->order_column)) == $dossier->etape->order_column) {
+                                if ($e->order_column == $dossier->etape->order_column) {
                                     $isCurrent = true;
                                 }
+
+                                if ($e->etape_number == $etape_display['id'] || $e->etape_number == $etape_display) {
+                                    $isTab = true;
+                                }
+
                             @endphp
 
                             <li @if ($isActive) wire:click="setTab({{ $e->etape_number }})" @endif
                                 role="tab" aria-disabled="false"
-                                class="nav-link {{ $isActive ? 'active' : '' }} {{ $isCurrent ? 'current' : '' }}"
+                                class="nav-link {{ $isActive ? 'active' : '' }} {{ $isCurrent ? 'current' : '' }} {{ $isTab ? 'isTab' : '' }}"
                                 aria-selected="true">
                                 <a id="form-total-t-0" href="#form-total-h-0" aria-controls="form-total-p-0">
                                     <span class="current-info audible nav-link"></span>
@@ -127,7 +131,7 @@
                                     </div>
 
                                     <div class="table-responsive" wire:poll>
-                                        <table class="table align-items-center" >
+                                        <table class="table align-items-center">
                                             <tbody>
                                                 @foreach ($forms_configs as $index => $form_handler)
                                                     @if ($form_handler->form->etape_number == $tab && $form_handler->form->type == 'document')
@@ -503,10 +507,17 @@
 
         }
     });
+
+    $(document).ready(function() {
+    $('.current').click();
+});
     document.addEventListener('DOMContentLoaded', function() {
 
-
-
+       
+        Livewire.on('setTab', (data) => {
+        initializeDropzones(configs);
+        
+        });
         // 
 
         // Listen for the Livewire event to reinitialize Dropzone
@@ -525,10 +536,11 @@
 
             $("textarea").keyup(function(e) {
                 console.log('airo')
-    while($(this).outerHeight() < this.scrollHeight + parseFloat($(this).css("borderTopWidth")) + parseFloat($(this).css("borderBottomWidth"))) {
-        $(this).height($(this).height()+1);
-    };
-});
+                while ($(this).outerHeight() < this.scrollHeight + parseFloat($(this).css(
+                        "borderTopWidth")) + parseFloat($(this).css("borderBottomWidth"))) {
+                    $(this).height($(this).height() + 1);
+                };
+            });
 
             $('.datepicker').datepicker({
                 language: 'fr',
@@ -642,8 +654,9 @@
                         init: function() {
                             this.on("success", function(file,
                                 response) {
-                                    console.log('success')
-                                    Livewire.emit('fileUploaded');
+                                console.log('success')
+
+                                Livewire.emit('fileUploaded');
 
                                 console.log(
                                     'Successfully uploaded:',
@@ -674,10 +687,11 @@
         });
         $('.close_button').on('click', function() {
 
-$('.modal').modal('hide');
-});
+            $('.modal').modal('hide');
+        });
         // Remove existing event listeners to prevent multiple bindings
-        $(document).off('click', '.pdfModal').off('click', '.imageModal').off('click', '.fillPDF').off('click','.generatePdfButton').off('rdv_modal', '.generatePdfButton');
+        $(document).off('click', '.pdfModal').off('click', '.imageModal').off('click', '.fillPDF').off('click',
+            '.generatePdfButton').off('rdv_modal', '.generatePdfButton');
 
         // Attach new event listeners
         $(document).on('click', '.imageModal', function(event) {
@@ -752,7 +766,7 @@ $('.modal').modal('hide');
             var form_id = $(this).data('form_id');
             var dossier_id = $(this).data('dossier_id');
             var name = $(this).data('name');
-         
+
             $.ajax({
                 url: '/api/fill-pdf',
                 type: 'GET',
@@ -776,7 +790,7 @@ $('.modal').modal('hide');
             });
         });
         $(document).on('click', '.generatePdfButton', function(event) {
-          
+
             var template = $(this).data('template'); // Get the template from data attribute
             var dossier_id = $(this).data('dossier_id'); // Get the dossier ID from data attribute
 

@@ -61,6 +61,7 @@ class DossierLivewire extends Component
 
 
         $this->setTab($this->dossier['etape_number']);
+        $this->emit('setTab');
         // $this->emit('initializeDropzones', ['forms_configs' => $this->forms_configs]);
 
         $auditeurs = User::where('type_id', 4);
@@ -87,6 +88,7 @@ class DossierLivewire extends Component
         // Fetch and convert to array
         $etape_display = Etape::where('id', $tab)->first();
         $this->etape_display = $etape_display ? $this->convertObjectToArray($etape_display) : [];
+
         $this->etapes = $this->convertArrayToStdClass($this->etapes);
 
         $this->reinitializeFormsConfigs();
@@ -101,6 +103,8 @@ class DossierLivewire extends Component
 
     public function handleFileUploaded()
     {
+        $this->reinitializeFormsConfigs();
+
         $this->emit('initializeDropzones', ['forms_configs' => $this->forms_configs]);
 
     }

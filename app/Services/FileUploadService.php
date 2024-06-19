@@ -23,42 +23,47 @@ class FileUploadService
     {
 
         if ($request->folder == 'dossiers') {
-            $ocrResponse = $this->callOcrAnalyzeDirectly($request);
-            // $ocrResponse = false;
-
-            if (!$ocrResponse) {
-                return false; // Handle OCR failure as needed
+            if (isset($request->analyze)) {
+                // $ocrResponse = $this->callOcrAnalyzeDirectly($request);
             } else {
-                $result = $ocrResponse['result']['data']['analyze_result'];
-                $array_result = $result;
-                foreach ($array_result as $key => $value) {
-                    $meta_value='';
-              
-                    // Check if the value is an array and convert to JSON string if true
-                    if(isset($value['value'])) {
-                   
-                        if (is_array($value['value'])) {
-                            $meta_value = json_encode($value['value']);
-                        } else {
-                            $meta_value = $value['value'];
-                        }
-                    }
-
-
-                    \DB::table('dossiers_data')->updateOrInsert(
-                        [
-                            'dossier_id' => $request->clientId,
-                            'meta_key' => $key
-                        ],
-                        [
-                            'meta_value' => $meta_value,
-                            'created_at' => now(),
-                            'updated_at' => now()
-                        ]
-                    );
-                }
-
+                // $ocrResponse = false;
             }
+
+            // 
+
+            // if (!$ocrResponse) {
+            //     return false; // Handle OCR failure as needed
+            // } else {
+            //     $result = $ocrResponse['result']['data']['analyze_result'];
+            //     $array_result = $result;
+            //     foreach ($array_result as $key => $value) {
+            //         $meta_value='';
+
+            //         // Check if the value is an array and convert to JSON string if true
+            //         if(isset($value['value'])) {
+
+            //             if (is_array($value['value'])) {
+            //                 $meta_value = json_encode($value['value']);
+            //             } else {
+            //                 $meta_value = $value['value'];
+            //             }
+            //         }
+
+
+            //         \DB::table('dossiers_data')->updateOrInsert(
+            //             [
+            //                 'dossier_id' => $request->clientId,
+            //                 'meta_key' => $key
+            //             ],
+            //             [
+            //                 'meta_value' => $meta_value,
+            //                 'created_at' => now(),
+            //                 'updated_at' => now()
+            //             ]
+            //         );
+            //     }
+
+            // }
         }
 
         if (isset($request->folder)) {
@@ -74,7 +79,8 @@ class FileUploadService
         if ($request->hasFile($inputName)) {
             $file = $request->file($inputName);
             $allowedExtensions = ['jpeg', 'jpg', 'png', 'gif', 'pdf'];
-            $extension = $file->getClientOriginalExtension();
+            $extension = strtolower($file->getClientOriginalExtension());
+
 
             if (!in_array($extension, $allowedExtensions)) {
                 return false;
@@ -89,27 +95,31 @@ class FileUploadService
 
                 $fileName = $request->input('template') . '.' . $extension;
             }
-
+            // dump($file);
+            // dump($extension);
+            // dump($form_id);
+            // dump($request->input('template'));
+            // dd($fileName);
             $filePath = $file->storeAs($directory, $fileName, 'public');
 
 
-            if (isset($request->form_id)) {
-                DB::table('forms_data')->updateOrInsert(
-                    [
-                        'dossier_id' => $clientId,
-                        'form_id' => $form_id,
-                        'meta_key' => $request->input('template')
-                    ],
-                    [
-                        'meta_value' => $filePath,
-                        'created_at' => now(),
-                        'updated_at' => now()
-                    ]
-                );
+
+            $update=DB::table('forms_data')->updateOrInsert(
+                [
+                    'dossier_id' => ''.$clientId.'',
+                    'form_id' => ''.$form_id.'',
+                    'meta_key' => ''.$request->input('template').''
+                ],
+                [
+                    'meta_value' => $fileName,
+                    'created_at' => now(),
+                    'updated_at' => now()
+                ]
+            );
+        
 
 
 
-            }
 
             return $filePath;
         }

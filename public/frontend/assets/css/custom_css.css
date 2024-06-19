@@ -439,8 +439,8 @@
     -webkit-outline: none;
     position: relative;
     margin-top: 17px;
-    min-width: 10%;
-    max-width: 100%;
+    min-width: 11%;
+    max-width: 12%;
  }
  .current .inter_line {
     border-color: rgb(227 71 74);
@@ -1139,4 +1139,8 @@ span.prediction {
     background: transparent;
     border: 0;
     font-size: 27px;
+}
+
+.isTab .step-icon {
+    border: 3px solid rgb(233, 64, 87);
 }
