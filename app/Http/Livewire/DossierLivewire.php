@@ -30,6 +30,9 @@ class DossierLivewire extends Component
             ->with('beneficiaire', 'fiche', 'etape', 'status')
             ->first();
 
+            $current=DB::table('etapes')->where('id', $this->dossier->etape_number)->first();
+        $this->dossier->order_column = $current->order_column;
+
         if (!$this->dossier) {
             abort(404, 'Dossier not found');
         }
