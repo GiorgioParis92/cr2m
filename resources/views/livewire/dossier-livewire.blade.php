@@ -42,7 +42,7 @@
                             @php
                                 $isActive = false;
                                 $isCurrent = false;
-                                if ((($e->order_column)) < $dossier->etape->order_column) {
+                                if ((($e->order_column)) <= $dossier->etape->order_column) {
                                     $isActive = true;
                                 }
                                 if ((($e->order_column)) == $dossier->etape->order_column) {
