@@ -90,16 +90,26 @@ class FileUploadService
             if (!Storage::disk('public')->exists($directory)) {
                 Storage::disk('public')->makeDirectory($directory);
             }
-            $fileName = $file->getClientOriginalName();
-            if ($request->has('template')) {
+            $originalFileName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
 
-                $fileName = $request->input('template') . '.' . $extension;
+            // Directory path where files will be stored
+            $directoryPath = storage_path('app/public/' . $directory);
+            
+            // Find all files with the same base name in the directory
+            foreach (glob($directoryPath . '/' . $originalFileName . '.*') as $existingFile) {
+                // Delete the existing file
+                unlink($existingFile);
             }
-            // dump($file);
-            // dump($extension);
-            // dump($form_id);
-            // dump($request->input('template'));
-            // dd($fileName);
+            
+            // Prepare the new file name with the template if provided
+            if ($request->has('template')) {
+                $extension = $file->getClientOriginalExtension();
+                $fileName = $request->input('template') . '.' . $extension;
+            } else {
+                $fileName = $file->getClientOriginalName();
+            }
+            
+            // Save the new file
             $filePath = $file->storeAs($directory, $fileName, 'public');
 
 
