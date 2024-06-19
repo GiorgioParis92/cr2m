@@ -30,7 +30,7 @@ class Upload extends AbstractFormData
 
         $data .= '</td>';
 
-        $data .= '<td class="w-30" ><div wire:poll.visible>'.$this->value;
+        $data .= '<td class="w-30" ><div wire:poll.visible>';
 
         $extension = explode('.', $this->value);
 
@@ -39,7 +39,7 @@ class Upload extends AbstractFormData
             $filePath = storage_path('app/public/' . $this->value);  // File system path
 
         // $data.=$filePath;
-            $data.=$this->value;
+      
             if (file_exists($filePath)) {
                 if (end($extension) != 'pdf') {
                     $data .= '<button type="button" class="btn btn-success btn-view imageModal"
