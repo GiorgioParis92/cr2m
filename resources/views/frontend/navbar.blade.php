@@ -33,7 +33,7 @@
             <li class="nav-item d-flex align-items-center">
               <a  class="nav-link text-body font-weight-bold px-0">
                 
-                <span class="d-sm-inline d-none"> <span class="btn btn-tertiary"><i class="fa fa-user me-sm-1"></i>{{auth()->user()->name}} ({{auth()->user()->type->type_desc ?? ''}})</span> <span class="btn btn-secondary">{{strtoupper(auth()->user()->client->client_title)}}</span></span>
+                <span class="d-sm-inline d-none"> <span class="btn btn-tertiary"><i class="fa fa-user me-sm-1"></i>{{auth()->user()->name}} ({{auth()->user()->type->type_desc ?? ''}})</span> <span class="btn btn-secondary">{{strtoupper(auth()->user()->client->client_title ?? '')}}</span></span>
               </a>
             </li>
 
