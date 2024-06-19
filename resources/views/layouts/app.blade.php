@@ -313,6 +313,7 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
                 success: function(response) {
+
                     if (response.file_path) {
                         $('#pdfFrame').attr('src', response.file_path);
                         $('#pdfModal').css('display', 'block');
@@ -376,6 +377,22 @@
                     $('#pdfModal').modal('hide');
                 }
             });
+
+            $(document).on('click', '.pdfModal', function(event) {
+            $('#pdfFrame').attr('src', '');
+
+            var imgSrc = $(this).data('img-src');
+            $('#pdfFrame').attr('src', imgSrc);
+            $('#pdfModal').css('display', 'block');
+        });
+
+        $(document).on('click', '.imageModal', function(event) {
+            $('#imageInModal').attr('src', '');
+
+            var imgSrc = $(this).data('img-src');
+            $('#imageInModal').attr('src', imgSrc);
+            $('#imageModal').modal('show');
+        });
         });
     </script>
     <!-- Github buttons -->
