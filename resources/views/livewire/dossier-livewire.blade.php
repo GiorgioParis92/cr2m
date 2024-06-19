@@ -691,6 +691,8 @@
 
         // Attach new event listeners
         $(document).on('click', '.imageModal', function(event) {
+            $('#imageInModal').attr('src', '');
+
             var imgSrc = $(this).data('img-src');
             $('#imageInModal').attr('src', imgSrc);
             $('#imageModal').modal('show');
@@ -753,6 +755,8 @@
         });
 
         $(document).on('click', '.pdfModal', function(event) {
+            $('#pdfFrame').attr('src', '');
+
             var imgSrc = $(this).data('img-src');
             $('#pdfFrame').attr('src', imgSrc);
             $('#pdfModal').css('display', 'block');
