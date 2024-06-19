@@ -21,6 +21,7 @@ class DossierLivewire extends Component
     public $tab;
     public $formData = [];
     public $validators = [];
+    protected $listeners = ['fileUploaded' => 'handleFileUploaded'];
 
     public function mount($id)
     {
@@ -89,6 +90,13 @@ class DossierLivewire extends Component
         $this->display_form($firstKey);
         $this->emit('initializeDropzones', ['forms_configs' => $this->forms_configs]);
         $this->emit('setTab');
+
+    }
+
+
+    public function handleFileUploaded()
+    {
+        $this->emit('initializeDropzones', ['forms_configs' => $this->forms_configs]);
 
     }
 

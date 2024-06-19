@@ -24,6 +24,7 @@ class FileUploadService
 
         if ($request->folder == 'dossiers') {
             $ocrResponse = $this->callOcrAnalyzeDirectly($request);
+            // $ocrResponse = false;
 
             if (!$ocrResponse) {
                 return false; // Handle OCR failure as needed

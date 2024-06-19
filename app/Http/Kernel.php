@@ -21,6 +21,8 @@ class Kernel extends HttpKernel
         \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
         \App\Http\Middleware\TrimStrings::class,
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
+        \App\Http\Middleware\LoadUserRelations::class,
+
     ];
 
     /**
@@ -39,6 +41,8 @@ class Kernel extends HttpKernel
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
             \App\Http\Middleware\SetLocale::class,
             \App\Http\Middleware\ShareClientData::class,
+            \App\Http\Middleware\LoadUserRelations::class,
+
 
         ],
 
@@ -67,6 +71,7 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'check.client.id' => \App\Http\Middleware\CheckClientId::class,
         'temp_password' => \App\Http\Middleware\CheckTemporaryPassword::class,
+        'loadUserRelations' => \App\Http\Middleware\LoadUserRelations::class,
 
 
     ];

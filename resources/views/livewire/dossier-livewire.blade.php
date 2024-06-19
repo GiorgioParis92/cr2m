@@ -124,8 +124,8 @@
                                         </div>
                                     </div>
 
-                                    <div class="table-responsive">
-                                        <table class="table align-items-center">
+                                    <div class="table-responsive" wire:poll>
+                                        <table class="table align-items-center" >
                                             <tbody>
                                                 @foreach ($forms_configs as $index => $form_handler)
                                                     @if ($form_handler->form->etape_number == $tab && $form_handler->form->type == 'document')
@@ -625,12 +625,16 @@
                         },
                         paramName: 'file',
                         sending: function(file, xhr, formData) {
+                            console.log('hhhhhhh')
                             formData.append('folder', 'dossiers');
                             formData.append('template', key);
                         },
                         init: function() {
                             this.on("success", function(file,
                                 response) {
+                                    console.log('success')
+                                    Livewire.emit('fileUploaded');
+
                                 console.log(
                                     'Successfully uploaded:',
                                     response);
