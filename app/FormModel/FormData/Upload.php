@@ -39,7 +39,7 @@ class Upload extends AbstractFormData
 
             $filePath = storage_path('app/public/' . $this->value);  // File system path
 
-        $data.=$filePath;
+        // $data.=$filePath;
             // $data.=(asset('storage/' . $this->value));
             if (file_exists($filePath)) {
                 if (end($extension) != 'pdf') {
@@ -67,7 +67,7 @@ class Upload extends AbstractFormData
         $data .= '</div></td>';
 
 
-        $data .= '<td class="align-middle text-sm">'.$this->form_id;
+        $data .= '<td class="align-middle text-sm">';
         $data .= '<form action="' . route("upload_file", ["form_id" => $this->form_id, "folder" => "dossiers", "clientId" => $this->dossier_id, "template" => $this->name]) . '" class="dropzone dropzone_button" id="dropzone-' . $this->name . '">';
         $data .= csrf_field(); // This will generate the CSRF token input field
         $data .= '<div class="dz-message"><i class="fas fa-arrow-up"></i> Upload';
