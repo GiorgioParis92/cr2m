@@ -694,6 +694,7 @@
             $('#imageInModal').attr('src', '');
 
             var imgSrc = $(this).data('img-src');
+            imgSrc += `?time=${new Date().getTime()}`;
             $('#imageInModal').attr('src', imgSrc);
             $('#imageModal').modal('show');
         });
