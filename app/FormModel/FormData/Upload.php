@@ -12,7 +12,7 @@ class Upload extends AbstractFormData
 
         $data = '';
 
-
+        $wireModel = "formData.{$this->form_id}.{$this->name}";
 
 
         $data = '<tr>';
@@ -30,7 +30,7 @@ class Upload extends AbstractFormData
 
         $data .= '</td>';
 
-        $data .= '<td class="w-30" ><div wire:poll.visible>';
+        $data .= '<td class="w-30" ><div wire:model.lazy="' . $wireModel . '">';
    
 
             
