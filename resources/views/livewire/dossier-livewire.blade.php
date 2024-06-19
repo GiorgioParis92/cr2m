@@ -668,8 +668,7 @@
 $('.modal').modal('hide');
 });
         // Remove existing event listeners to prevent multiple bindings
-        $(document).off('click', '.pdfModal').off('click', '.imageModal').off('click', '.fillPDF').off('click',
-            '.generatePdfButton').off('rdv_modal', '.generatePdfButton');
+        $(document).off('click', '.pdfModal').off('click', '.imageModal').off('click', '.fillPDF').off('click','.generatePdfButton').off('rdv_modal', '.generatePdfButton');
 
         // Attach new event listeners
         $(document).on('click', '.imageModal', function(event) {
@@ -768,7 +767,7 @@ $('.modal').modal('hide');
             });
         });
         $(document).on('click', '.generatePdfButton', function(event) {
-
+            alert('2')
             var template = $(this).data('template'); // Get the template from data attribute
             var dossier_id = $(this).data('dossier_id'); // Get the dossier ID from data attribute
 
