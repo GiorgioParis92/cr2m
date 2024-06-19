@@ -36,7 +36,7 @@
             <div class="card form-register">
                 <div class="steps clearfix">
                     <ul role="tablist" id="etapeTabs">
-                   @dump($dossier)
+                   @dump($dossier->etape)
                         @foreach ($etapes as $index => $e)
                        
                             @php
