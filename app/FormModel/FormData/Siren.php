@@ -2,7 +2,7 @@
 
 namespace App\FormModel\FormData;
 
-class Siren extends Regex
+class Siren extends _Regex
 {
 
     public function __construct($config, $name, $form_id, $dossier_id)

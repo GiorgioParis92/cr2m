@@ -2,7 +2,7 @@
 
 namespace App\FormModel\FormData;
 
-class Email extends Regex
+class Email extends _Regex
 {
 
     public function __construct($config, $name, $form_id, $dossier_id)

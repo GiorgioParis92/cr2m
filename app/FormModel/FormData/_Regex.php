@@ -2,7 +2,7 @@
 
 namespace App\FormModel\FormData;
 
-class Regex extends Text
+class _Regex extends Text
 {
     protected $regex;
 

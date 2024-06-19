@@ -2,7 +2,7 @@
 
 namespace App\FormModel\FormData;
 
-class Siret extends Regex
+class Siret extends _Regex
 {
 
     public function __construct($config, $name, $form_id, $dossier_id)

@@ -2,7 +2,7 @@
 
 namespace App\FormModel\FormData;
 
-class TVA extends Regex
+class TVA extends _Regex
 {
 
     public function __construct($config, $name, $form_id, $dossier_id)
