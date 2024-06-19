@@ -668,7 +668,7 @@
 $('.modal').modal('hide');
 });
         // Remove existing event listeners to prevent multiple bindings
-        $(document).off('click', '.pdfModal').off('click', '.imageModal').off('click', '.fillPDF').off('click','.generatePdfButton').off('rdv_modal', '.generatePdfButton');
+        // $(document).off('click', '.pdfModal').off('click', '.imageModal').off('click', '.fillPDF').off('click','.generatePdfButton').off('rdv_modal', '.generatePdfButton');
 
         // Attach new event listeners
         $(document).on('click', '.imageModal', function(event) {
