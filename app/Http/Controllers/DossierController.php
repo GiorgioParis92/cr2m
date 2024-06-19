@@ -75,6 +75,11 @@ class DossierController extends Controller
             ->with('beneficiaire', 'fiche', 'etape', 'status')
             ->first();
 
+
+        if(! $dossier) {
+            abort(404);
+        }
+
         $auditeurs=User::where('type_id',4)->get();
 
 

@@ -522,6 +522,14 @@
                     $(this).select2();
                 }
             });
+
+            $("textarea").keyup(function(e) {
+                console.log('airo')
+    while($(this).outerHeight() < this.scrollHeight + parseFloat($(this).css("borderTopWidth")) + parseFloat($(this).css("borderBottomWidth"))) {
+        $(this).height($(this).height()+1);
+    };
+});
+
             $('.datepicker').datepicker({
                 language: 'fr',
                 dateFormat: 'dd/mm/yy', // See format options on parseDate
