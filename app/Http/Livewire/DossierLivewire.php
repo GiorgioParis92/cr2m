@@ -38,12 +38,14 @@ class DossierLivewire extends Component
         $distinctEtapes = DB::table('forms')
             ->select('etape_number', DB::raw('MIN(id) as min_id'))
             ->groupBy('etape_number');
+           
+            
         $etapes = DB::table('forms')
             ->join('etapes', 'forms.etape_number', '=', 'etapes.id')
             ->joinSub($distinctEtapes, 'distinctEtapes', function ($join) {
                 $join->on('forms.id', '=', 'distinctEtapes.min_id');
             })
-            ->select('forms.*', 'etapes.etape_name', 'etapes.etape_desc')
+            ->select('forms.*', 'etapes.etape_name', 'etapes.etape_desc', 'etapes.order_column')
             ->orderBy('etapes.order_column')
             ->get();
 
@@ -213,13 +215,13 @@ class DossierLivewire extends Component
             $distinctEtapes = DB::table('forms')
                 ->select('etape_number', DB::raw('MIN(id) as min_id'))
                 ->groupBy('etape_number');
-
+       
             $etapes = DB::table('forms')
                 ->join('etapes', 'forms.etape_number', '=', 'etapes.id')
                 ->joinSub($distinctEtapes, 'distinctEtapes', function ($join) {
                     $join->on('forms.id', '=', 'distinctEtapes.min_id');
                 })
-                ->select('forms.*', 'etapes.etape_name', 'etapes.etape_desc')
+                ->select('forms.*', 'etapes.etape_name', 'etapes.etape_desc', 'etapes.order_column')
                 ->orderBy('etapes.order_column')
                 ->get();
 

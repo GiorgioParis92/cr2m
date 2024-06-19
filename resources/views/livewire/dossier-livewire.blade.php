@@ -36,14 +36,15 @@
             <div class="card form-register">
                 <div class="steps clearfix">
                     <ul role="tablist" id="etapeTabs">
+                   
                         @foreach ($etapes as $index => $e)
                             @php
                                 $isActive = false;
                                 $isCurrent = false;
-                                if ($e->etape_number <= $dossier['etape_number']) {
+                                if ($e->order_column <= $dossier['etape_number']) {
                                     $isActive = true;
                                 }
-                                if ($e->etape_number == $dossier['etape_number']) {
+                                if ($e->order_column == $dossier['etape_number']) {
                                     $isCurrent = true;
                                 }
                             @endphp
