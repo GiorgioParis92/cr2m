@@ -744,7 +744,7 @@ $('.modal').modal('hide');
             var form_id = $(this).data('form_id');
             var dossier_id = $(this).data('dossier_id');
             var name = $(this).data('name');
-
+            alert('ok')
             $.ajax({
                 url: '/api/fill-pdf',
                 type: 'GET',
