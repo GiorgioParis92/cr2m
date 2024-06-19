@@ -19,7 +19,9 @@ class Beneficiaire extends Model
         'email',
         'menage_mpr',
         'chauffage',
-        'occupation'
+        'occupation',
+        'lat',
+        'lng'
     ];
 
     public function dossiers()

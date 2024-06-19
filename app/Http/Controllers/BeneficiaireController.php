@@ -46,37 +46,92 @@ class BeneficiaireController extends Controller
             'menage_mpr' => 'required|in:bleu,jaune,violet,rose',
             'chauffage' => 'required|in:gaz,fioul,bois,charbon,electricite',
             'occupation' => 'required|in:locataire,proprietaire',
+            'lat' => '',
+            'lng' => '',
         ]);
-    
-        // Concatenate and encode the full address
-        $fullAddress = urlencode("{$validated['numero_voie']} {$validated['adresse']} {$validated['cp']} {$validated['ville']} France");
-        $fullAddress=str_replace(' ','+', $fullAddress);
+        $validated['lat'] = 0;
+        $validated['lng'] = 0;
+
+       
+        
+        $fullAddress = urlencode("{{$validated['cp']}+{$validated['ville']} France");
         $nominatimUrl = "https://nominatim.openstreetmap.org/search?q={$fullAddress}&format=geojson";
 
 
-        $validated['lat'] = 0;
-        $validated['lng'] = 0;
+
         // Send the request to Nominatim API
         try {
             $response = Http::withOptions(['verify' => false])->get($nominatimUrl);
-    
+           
             if ($response->successful()) {
                 $geoData = $response->json();
                 $latitude = $geoData['features'][0]['geometry']['coordinates'][1] ?? null;
                 $longitude = $geoData['features'][0]['geometry']['coordinates'][0] ?? null;
-               
-                // Include latitude and longitude in the validated data
-                $validated['lat'] = $latitude;
-                $validated['lng'] = $longitude;
+        
+
+                if($latitude!=0) {
+                    $validated['lat'] = $latitude;
+                    $validated['lng'] = $longitude;
+                }
             }
         
         } catch (\Exception $e) {
 
         }
-    
+        $fullAddress = urlencode("{{$validated['adresse']}+{$validated['cp']}+{$validated['ville']}+France");
+        $nominatimUrl = "https://nominatim.openstreetmap.org/search?q={$fullAddress}&format=geojson";
+
+
+
+        // Send the request to Nominatim API
+        try {
+            $response = Http::withOptions(['verify' => false])->get($nominatimUrl);
+         
+
+            if ($response->successful()) {
+                $geoData = $response->json();
+                
+                $latitude = $geoData['features'][0]['geometry']['coordinates'][1] ?? null;
+                $longitude = $geoData['features'][0]['geometry']['coordinates'][0] ?? null;
+                if($latitude!=0) {
+                    $validated['lat'] = $latitude;
+                    $validated['lng'] = $longitude;
+                }
+
+            }
+        
+        } catch (\Exception $e) {
+
+        }
+        // Concatenate and encode the full address
+        $fullAddress = urlencode("{$validated['numero_voie']}+{$validated['adresse']}+{$validated['cp']}+{$validated['ville']}+France");
+        $nominatimUrl = "https://nominatim.openstreetmap.org/search?q={$fullAddress}&format=geojson";
+
+
+
+        // Send the request to Nominatim API
+        try {
+            $response = Http::withOptions(['verify' => false])->get($nominatimUrl);
+       
+
+            if ($response->successful()) {
+                $geoData = $response->json();
+                $latitude = $geoData['features'][0]['geometry']['coordinates'][1] ?? null;
+                $longitude = $geoData['features'][0]['geometry']['coordinates'][0] ?? null;
+               
+                if($latitude!=0) {
+                    $validated['lat'] = $latitude;
+                    $validated['lng'] = $longitude;
+                }
+            }
+        
+        } catch (\Exception $e) {
+
+        }
         // Create the beneficiaire
         $beneficiaire = Beneficiaire::create($validated);
-    
+   
+
         // Create the dossier if fiche_id is provided
         if ($request->has('fiche_id')) {
             $dossier = Dossier::create([

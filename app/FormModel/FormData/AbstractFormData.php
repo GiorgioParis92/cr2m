@@ -27,13 +27,15 @@ class AbstractFormData
             ->where('meta_key', $name)
             ->first();
 
+   
 
         $config_dossiers = \DB::table('dossiers_data')
             ->where('dossier_id', $dossier_id)
             ->where('meta_key', $name)
             ->first();
 
-        // Initialize value with the first table's value or an empty string
+
+            // Initialize value with the first table's value or an empty string
         $this->name = $name;
 
 

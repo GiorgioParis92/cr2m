@@ -16,7 +16,9 @@ class Dossier extends Model
         'etape_id',
         'status_id',
         'mar',
-        'mandataire_financier'
+        'mandataire_financier',
+        'lat',
+        'lng'
     ];
 
     public function beneficiaire()
