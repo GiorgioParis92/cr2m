@@ -245,35 +245,7 @@
             });
             $('.datatable').DataTable()
 
-            // $('.fillPDF').click(function() {
-            //     var form_id = $(this).data('form_id'); // Get the template from data attribute
-            //     var dossier_id = $(this).data('dossier_id'); // Get the dossier ID from data attribute
-            //     var name = $(this).data('name'); // Get the dossier ID from data attribute
-
-            //     $.ajax({
-            //         url: '/api/fill-pdf', // Adjust this URL to your actual API endpoint
-            //         type: 'GET',
-            //         data: {
-            //             dossier_id: dossier_id,
-            //             form_id: form_id,
-            //             name: name
-            //         },
-            //         headers: {
-            //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr(
-            //                 'content') // Include CSRF token if using Laravel's CSRF protection
-            //         },
-            //         success: function(response) {
-            //             if (response.file_path) {
-            //                 // Display the PDF in an iframe if a file path is returned
-            //                 $('#pdfFrame').attr('src', response.file_path);
-            //                 $('#pdfModal').css('display', 'block');
-            //             }
-            //         },
-            //         error: function(xhr, status, error) {
-            //             console.error('Error generating PDF:', error);
-            //         }
-            //     });
-            // });
+    
             $('#save_rdv').click(function() {
                 // Collect form data
                 var formData = {
@@ -324,7 +296,33 @@
                     }
                 });
             }
-
+            $(document).on('click', '.fillPDF', function(event) {
+            var form_id = $(this).data('form_id');
+            var dossier_id = $(this).data('dossier_id');
+            var name = $(this).data('name');
+            alert('ok')
+            $.ajax({
+                url: '/api/fill-pdf',
+                type: 'GET',
+                data: {
+                    dossier_id: dossier_id,
+                    form_id: form_id,
+                    name: name
+                },
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(response) {
+                    if (response.file_path) {
+                        $('#pdfFrame').attr('src', response.file_path);
+                        $('#pdfModal').css('display', 'block');
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error generating PDF:', error);
+                }
+            });
+        });
             $('.generatePdfButton').click(function() {
                 var template = $(this).data('template'); // Get the template from data attribute
                 var dossier_id = $(this).data('dossier_id'); // Get the dossier ID from data attribute
