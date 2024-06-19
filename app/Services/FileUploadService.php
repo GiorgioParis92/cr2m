@@ -105,9 +105,6 @@ class FileUploadService
 
             DB::enableQueryLog();
 
-
-    
-
             $update=DB::table('forms_data')->updateOrInsert(
                 [
                     'dossier_id' => ''.$clientId.'',
@@ -116,10 +113,12 @@ class FileUploadService
                 ],
                 [
                     'meta_value' => ''.$filePath.'',
+                    'created_at' => now(),
+                    'updated_at' => now()
                 ]
             );
         
-  
+    
 
 
             return $filePath;
