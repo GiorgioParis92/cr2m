@@ -41,10 +41,10 @@
                             @php
                                 $isActive = false;
                                 $isCurrent = false;
-                                if ($e->order_column < $dossier['etape_number']) {
+                                if (($e->order_column+1) < $dossier['etape_number']) {
                                     $isActive = true;
                                 }
-                                if ($e->order_column == $dossier['etape_number']) {
+                                if (($e->order_column+1) == $dossier['etape_number']) {
                                     $isCurrent = true;
                                 }
                             @endphp
