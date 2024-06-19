@@ -378,7 +378,8 @@
                 }
             });
 
-            $(document).on('click', '.pdfModal', function(event) {
+            $('.pdfModal').click(function() {
+                alert('ok')
             $('#pdfFrame').attr('src', '');
 
             var imgSrc = $(this).data('img-src');
