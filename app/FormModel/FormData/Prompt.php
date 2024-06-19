@@ -13,7 +13,7 @@ class Prompt extends AbstractFormData
         $jsonString = str_replace(["\n", "\r"], '', $this->config->options);
         $optionsArray = json_decode($jsonString, true);
         $content = nl2br($optionsArray['prompt'], false);
-        $content=str_replace('<br/>','"\n\n"', $content);
+        $content=str_replace('<br/>',"\n", $content);
 
         $data = '<div style="margin-bottom:20px" class="form-group  col-sm-12 '.($this->config->class ?? "").'">';
         $data .= '<label>'.$this->config->title.'</label>';
