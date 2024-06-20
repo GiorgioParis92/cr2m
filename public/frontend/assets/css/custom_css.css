@@ -1245,3 +1245,7 @@ label.custom-control-label {
     z-index: 1;
     left: 0;
 }
+
+.progress-bar {
+    background: darkgray;
+}
