@@ -10,7 +10,13 @@ class Radio extends AbstractFormData
     {
         $wireModel = "formData.{$this->form_id}.{$this->name}";
 
-        $data = '<div class="form-group col-sm-12 '.($this->config->class ?? "").'">';
+        $class_prediction = '';
+
+        if (!$this->check_value()) {
+            $class_prediction = 'is-invalid';
+        }
+
+        $data = '<div class="form-group col-sm-12 '.($this->config->class ?? "").' group_' . $class_prediction . '">';
         $data .= '<div class="form-group">';
 
         // Clean and decode the JSON options
@@ -25,23 +31,31 @@ class Radio extends AbstractFormData
         if (is_array($optionsArray)) {
             foreach ($optionsArray as $key => $element) {
                 $isChecked = $this->value == $element['value'] ? 'checked' : '';
-                $backgroundColor = $element['color'] ?? ($colors[$key] ?? '3498DB');
-
+                $backgroundColor = $element['color'] ?? ($colors[$key-1] ?? '3498DB');
+                $backgroundColor = '';
+                $data.='<div class="radio_line" style="background:#'.$backgroundColor.' ">';
                 $data .= '<input id="'.$this->name.'_'.$key.'"
                     wire:model="'.$wireModel.'" 
                     value="'.$element['value'].'"
                     name="'.$this->config->name.'"
-                    class="'.($this->value == $element['value'] ? 'choice_checked' : '').'"
+                    class="'.($this->value == $element['value'] ? 'choice_checked' : '').' "
                     data-radiocharm-background-color="'.$backgroundColor.'"
                     data-radiocharm-text-color="FFF" 
                     data-radiocharm-label="'.$element['label'].'" 
                     type="radio" '.$isChecked.'>';
                 $data .= '<label  for="'.$this->name.'_'.$key.'">'.$element['label'].'</label><br>';
+                $data .= '</div>';
             }
         }
 
         $data .= '</div>';
         $data .= '</div>';
+
+        if (!$this->check_value()) {
+            $data .= '<div  class="invalid-feedback">' . $this->get_error_message() . '</div>';
+
+        }
+
         $data .= '</div>';
 
         return $data;
@@ -57,4 +71,15 @@ class Radio extends AbstractFormData
 
         return true;
     }
+
+
+    public function get_error_message()
+    {
+        if ($this->config->required && $this->value == '') {
+            return 'La valeur ne peut pas être vide';
+        }
+
+        return 'Erreur';
+    }
+
 }

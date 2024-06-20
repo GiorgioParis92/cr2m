@@ -1144,3 +1144,42 @@ span.prediction {
 .isTab .step-icon {
     border: 3px solid rgb(233, 64, 87);
 }
+
+
+.group_is-invalid .invalid-feedback {
+    display: block;
+}
+
+.radio_line {
+    display: inline-block;
+    margin-right: 20px;
+    background: #8392ab;
+    padding-right: 10px;
+    padding-left: 5px;
+    border-radius: 7px;
+    line-height: normal;
+    padding-top: 3px;
+    margin-bottom: 11px;
+}
+
+.radio_line input {
+    position: relative;
+    top: 3px;
+}
+
+.radio_line label {
+    color: white;
+}
+
+.col-12.form_title {
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 9px;
+}
+
+.form_title h6 {
+    margin-top: 56px;
+}
+
+label.custom-control-label {
+    display: inline;
+}

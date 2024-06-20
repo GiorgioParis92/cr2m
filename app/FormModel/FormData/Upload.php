@@ -34,6 +34,8 @@ class Upload extends AbstractFormData
    
         $data.='<input type="hidden" id="doc-'.$this->form_id.$this->name.'" wire:model="' . $wireModel . '">';
             
+
+        if($this->value) {
         $extension = explode('.', $this->value);
 
       
@@ -66,7 +68,7 @@ class Upload extends AbstractFormData
 
 
         $data .= '</div>';
-    
+        }
         $data .= '</td>';
 
 

@@ -4,16 +4,21 @@ namespace App\FormModel\FormData;
 use Illuminate\Support\Facades\DB;
 use App\Models\Dossier;
 
-class Title extends AbstractFormData
+class Blank extends AbstractFormData
 {
     public function render(bool $is_error)
     {
+ 
+        $data = '<div class="form-group   '.($this->config->class ?? "").'">';
+ 
 
-        $data= '<div class="row"><div class="col-12 form_title"><h6>'.$this->config->title.'</h6></div></div>';
-
+        $data .= '</div>';
 
 
         return $data;
     }
+
+
+
 
 }

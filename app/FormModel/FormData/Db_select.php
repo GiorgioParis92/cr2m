@@ -16,50 +16,71 @@ class Db_select extends AbstractFormData
 
         if (isset($optionsArray['arguments'])) {
             foreach ($optionsArray['arguments'] as $key => $data) {
-                $sql_command = str_replace($key, eval($data), $sql_command);
+                $sql_command = str_replace($key, eval ($data), $sql_command);
             }
         }
-
-
+        $class_prediction = '';
+        if (!$this->check_value()) {
+            $class_prediction = ' is-invalid';
+        }
 
         $wireModel = "formData.{$this->form_id}.{$this->name}";
 
-        $request=DB::select($sql_command);
+        $request = DB::select($sql_command);
 
-        $data = '<div class="form-group  col-sm-12 ';
+        $data = '<div class="form-group  col-sm-12 group_' . $class_prediction . '';
         $data .= $this->config->class ?? '';
         $data .= '">';
-        $data .='<label>'.$this->config->title.'</label><br />';
-        $data .='<select wire:model="'.$wireModel.'" id="form_config_'.$this->name.'"';
-        if($this->config->required==1) {$data.=' required '; } 
-        $data .='name="'.$this->config->name.'" class="form-control">';
-        $data.='<option value="">Choisir</option>';
-        
-        foreach($request as $result) {
+        $data .= '<label>' . $this->config->title . '</label><br />';
+        $data .= '<select wire:model="' . $wireModel . '" id="form_config_' . $this->name . '"';
+        if ($this->config->required == 1) {
+            $data .= ' required ';
+        }
+        $data .= 'name="' . $this->config->name . '" class="form-control ' . $class_prediction . '">';
+        $data .= '<option value="">Choisir</option>';
+
+        foreach ($request as $result) {
             $fieldValue = $optionsArray['value'];
             $fieldLabel = $optionsArray['label'];
-            $data.='<option ';
-            
-            if($this->value==$result->$fieldValue) {
-                $data.=' selected ';
-            }
-  
+            $data .= '<option ';
 
-            $data.=' value="'.$result->$fieldValue.'">'.$result->$fieldLabel.'</option>'; 
+            if ($this->value == $result->$fieldValue) {
+                $data .= ' selected ';
+            }
+
+
+            $data .= ' value="' . $result->$fieldValue . '">' . $result->$fieldLabel . '</option>';
         }
         $data .= '</select>';
+
+        if (!$this->check_value()) {
+            $data .= '<div  class="invalid-feedback">' . $this->get_error_message() . '</div>';
+
+        }
+
         $data .= '</div>';
 
-  
 
-        
+
+
         return $data;
     }
 
-    public function check_value() {
-
- 
-
+    public function check_value()
+    {
+        if ($this->config->required && $this->value == '') {
+            return false;
+        }
         return true;
     }
+
+    public function get_error_message()
+    {
+        if ($this->config->required && $this->value == '') {
+            return 'La valeur ne peut pas être vide';
+        }
+
+        return 'Erreur';
+    }
+
 }

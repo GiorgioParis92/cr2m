@@ -25,9 +25,9 @@ class Checkbox extends AbstractFormData
         $data = '<div class="form-group col-sm-12 ';
         $data .= $this->config->class ?? '';
         $data .= '">';
-        $data .= '<label >';
-        $data .= $this->config->title;
-        $data .= '</label><br />';
+        // $data .= '<label >';
+        // $data .= $this->config->title;
+        // $data .= '</label><br />';
         if (is_array($optionsArray)) {
             $data .= '<label class="switch" >';
             $data .= '<input type="checkbox" 

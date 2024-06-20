@@ -30,7 +30,7 @@
     @include('frontend.content')
 
     
-    @include('frontend.footer')
+    {{-- @include('frontend.footer') --}}
   </main>
 
   @include('frontend.fixed-plugin')

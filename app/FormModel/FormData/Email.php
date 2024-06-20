@@ -9,5 +9,8 @@ class Email extends _Regex
     {
         parent::__construct($config, $name, $form_id, $dossier_id, '/[\w.+-]+@[\w-]+\.[\w.-]+/');
     }
+    public function get_error_message() {
 
+        return 'Veuillez entre une adresse email valide';
+    }
 }
