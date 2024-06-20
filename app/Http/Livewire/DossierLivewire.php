@@ -95,13 +95,8 @@ class DossierLivewire extends Component
         $this->etapes = $this->convertArrayToStdClass($this->etapes);
 
         $this->reinitializeFormsConfigs();
-
-        foreach ($this->forms_configs as $form_id => $form) {
-            if ($form->form->type != 'document' && !empty($form->formData) && $form->form->etape_id==$tab) {
-                $this->display_form($form->form->id);
-                break;
-            }
-        }
+        $firstKey = array_key_first($this->forms_configs);
+        $this->display_form($firstKey);
 
         $this->emit('initializeDropzones', ['forms_configs' => $this->forms_configs]);
         $this->emit('setTab', ['forms_configs' => $this->forms_configs]);
