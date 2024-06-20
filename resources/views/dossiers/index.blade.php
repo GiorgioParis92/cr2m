@@ -160,7 +160,7 @@
                         <td>{{ $dossier->beneficiaire->occupation }}</td>
                         <td>
                             <a style="max-width:80px"  href="{{ route('dossiers.show', $dossier->folder) }}">
-                                <span class="badge badge-primary badge_button">{{ $dossier->etape->order_column }}</span>
+                                <span class="badge badge-primary badge_button">{{ ($dossier->etape->order_column)+1 }}</span>
 
                                 <div style="    margin-top: 13px;
     max-width: 80px;
