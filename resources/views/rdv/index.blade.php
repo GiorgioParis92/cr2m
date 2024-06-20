@@ -121,7 +121,7 @@
                                 end: eventEnd.toISOString(),
                                 description: rdv.adresse + '<br/>'+ rdv.cp + ' '+rdv.ville,
                                 backgroundColor: rdv.color,
-                                borderColor: rdv.color
+                                borderColor: rdv.color,
                                 dossier_id: rdv.dossier_id
                             };
 
