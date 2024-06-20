@@ -658,6 +658,7 @@
                         this.on("success", function(file, response) {
                             console.log(response)
                             $('#doc-'+formConfig.form.id+key).val(response)
+                            $('#doc-'+formConfig.form.id+key).blur()
 
                             
 
