@@ -33,7 +33,7 @@
                     <option value="">Filtrer par étape</option>
 
                     @foreach ($etapes as $etape)
-                        <option value="{{ $etape->id }}">{{ $etape->etape_desc }}</option>
+                        <option value="{{ $etape->order_column}}">{{ $etape->etape_desc }}</option>
                     @endforeach
 
                 </select>
@@ -160,7 +160,7 @@
                         <td>{{ $dossier->beneficiaire->occupation }}</td>
                         <td>
                             <a style="max-width:80px"  href="{{ route('dossiers.show', $dossier->folder) }}">
-                                <span class="badge badge-primary badge_button">{{ $dossier->etape_number }}</span>
+                                <span class="badge badge-primary badge_button">{{ $dossier->etape->order_column }}</span>
 
                                 <div style="    margin-top: 13px;
     max-width: 80px;
@@ -179,7 +179,7 @@
                         </td>
 
                         <td>
-                            {{ $dossier->etape_number ?? '' }}
+                            {{ $dossier->etape->order_column ?? '' }}
                         </td>
                         <td>
                             <a  href="{{ route('dossiers.show', $dossier->folder) }}">
