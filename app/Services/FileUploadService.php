@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http; // Add this line
 use App\Http\Controllers\Api\OcrAnalyze; // Import the OcrAnalyze controller
+use App\Models\Dossier;
 
 class FileUploadService
 {
@@ -72,6 +73,13 @@ class FileUploadService
         }
         if (isset($request->clientId)) {
             $clientId = $request->clientId;
+
+            if(isset($request->folder) && $request->folder=='dossiers') {
+                $dossier=Dossier::where('id',$request->clientId)->first();
+                $clientId=$dossier->folder;
+            }
+           
+
         }
         if (isset($request->form_id)) {
             $form_id = $request->form_id;
@@ -117,7 +125,7 @@ class FileUploadService
 
             $update=DB::table('forms_data')->updateOrInsert(
                 [
-                    'dossier_id' => ''.$clientId.'',
+                    'dossier_id' => ''.$request->clientId.'',
                     'form_id' => ''.$form_id.'',
                     'meta_key' => ''.$request->input('template').''
                 ],

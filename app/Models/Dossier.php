@@ -12,6 +12,7 @@ class Dossier extends Model
     protected $fillable = [
         'beneficiaire_id',
         'client_id',
+        'folder',
         'fiche_id',
         'etape_id',
         'status_id',

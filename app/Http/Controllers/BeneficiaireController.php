@@ -51,33 +51,34 @@ class BeneficiaireController extends Controller
         ]);
         $validated['lat'] = 0;
         $validated['lng'] = 0;
-
+        $new_lat = 0;
+        $new_lng = 0;
        
         
         $fullAddress = urlencode("{{$validated['cp']}+{$validated['ville']} France");
         $nominatimUrl = "https://nominatim.openstreetmap.org/search?q={$fullAddress}&format=geojson";
-
-
-
         // Send the request to Nominatim API
         try {
             $response = Http::withOptions(['verify' => false])->get($nominatimUrl);
-           
+
             if ($response->successful()) {
+
                 $geoData = $response->json();
+
                 $latitude = $geoData['features'][0]['geometry']['coordinates'][1] ?? null;
                 $longitude = $geoData['features'][0]['geometry']['coordinates'][0] ?? null;
-        
 
                 if($latitude!=0) {
-                    $validated['lat'] = $latitude;
-                    $validated['lng'] = $longitude;
+                    $new_lat = $latitude;
+                    $new_lng = $longitude;
                 }
             }
         
         } catch (\Exception $e) {
 
         }
+      
+
         $fullAddress = urlencode("{{$validated['adresse']}+{$validated['cp']}+{$validated['ville']}+France");
         $nominatimUrl = "https://nominatim.openstreetmap.org/search?q={$fullAddress}&format=geojson";
 
@@ -93,9 +94,11 @@ class BeneficiaireController extends Controller
                 
                 $latitude = $geoData['features'][0]['geometry']['coordinates'][1] ?? null;
                 $longitude = $geoData['features'][0]['geometry']['coordinates'][0] ?? null;
+             
+
                 if($latitude!=0) {
-                    $validated['lat'] = $latitude;
-                    $validated['lng'] = $longitude;
+                    $new_lat = $latitude;
+                    $new_lng = $longitude;
                 }
 
             }
@@ -103,10 +106,10 @@ class BeneficiaireController extends Controller
         } catch (\Exception $e) {
 
         }
+      
         // Concatenate and encode the full address
         $fullAddress = urlencode("{$validated['numero_voie']}+{$validated['adresse']}+{$validated['cp']}+{$validated['ville']}+France");
         $nominatimUrl = "https://nominatim.openstreetmap.org/search?q={$fullAddress}&format=geojson";
-
 
 
         // Send the request to Nominatim API
@@ -118,16 +121,20 @@ class BeneficiaireController extends Controller
                 $geoData = $response->json();
                 $latitude = $geoData['features'][0]['geometry']['coordinates'][1] ?? null;
                 $longitude = $geoData['features'][0]['geometry']['coordinates'][0] ?? null;
-               
+
                 if($latitude!=0) {
-                    $validated['lat'] = $latitude;
-                    $validated['lng'] = $longitude;
+                    $new_lat = $latitude;
+                    $new_lng = $longitude;
                 }
             }
         
         } catch (\Exception $e) {
 
         }
+     
+        $validated['lat']=$new_lat;
+        $validated['lng']=$new_lng;
+    
         // Create the beneficiaire
         $beneficiaire = Beneficiaire::create($validated);
    
@@ -137,6 +144,7 @@ class BeneficiaireController extends Controller
             $dossier = Dossier::create([
                 'beneficiaire_id' => $beneficiaire->id,
                 'fiche_id' => $request->input('fiche_id'),
+                'folder' => generateRandomString(),
                 'etape_id' => 1,
                 'status_id' => 1,
                 'client_id' => $request->input('mar') ?? 0,
@@ -163,7 +171,7 @@ class BeneficiaireController extends Controller
 
             // Ensure dossier is created before redirecting
             if ($dossier) {
-                return redirect()->route('dossiers.show', ['id' => $dossier->id])
+                return redirect()->route('dossiers.show', ['id' => $dossier->folder])
                     ->with('success', 'Beneficiaire et dossier créés avec succès.');
             } else {
                 // Handle failure to create dossier

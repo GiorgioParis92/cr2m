@@ -70,12 +70,20 @@ class DossierController extends Controller
     public function show($id)
     {
 
+        $dossier_by_folder = Dossier::where('folder', $id)
+        ->with('beneficiaire', 'fiche', 'etape', 'status')
+        ->first();
 
+        if(! $dossier_by_folder) {
         $dossier = Dossier::where('id', $id)
             ->with('beneficiaire', 'fiche', 'etape', 'status')
             ->first();
-
-
+        } else {
+            $dossier = Dossier::where('id', $dossier_by_folder->id)
+            ->with('beneficiaire', 'fiche', 'etape', 'status')
+            ->first(); 
+        }
+        $id= $dossier->id;
         if(! $dossier) {
             abort(404);
         }

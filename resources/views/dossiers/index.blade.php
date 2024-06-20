@@ -134,7 +134,7 @@
                     <tr>
                         <td>{{ format_date($dossier->created_at) }}</td>
                         <td>{{ strtotime_date($dossier->created_at) }}</td>
-                        <td><b><a href="{{ route('dossiers.show', $dossier->id) }}">{{ $dossier->beneficiaire->nom }} {{ $dossier->beneficiaire->prenom }}</a></b><br/>
+                        <td><b><a href="{{ route('dossiers.show', $dossier->folder) }}">{{ $dossier->beneficiaire->nom }} {{ $dossier->beneficiaire->prenom }}</a></b><br/>
                             <i>Ménage :{{ $dossier->beneficiaire->menage_mpr }}</i>
 
                         </td>
@@ -159,7 +159,7 @@
                         </td>
                         <td>{{ $dossier->beneficiaire->occupation }}</td>
                         <td>
-                            <a style="max-width:80px"  href="{{ route('dossiers.show', $dossier->id) }}">
+                            <a style="max-width:80px"  href="{{ route('dossiers.show', $dossier->folder) }}">
                                 <span class="badge badge-primary badge_button">{{ $dossier->etape_number }}</span>
 
                                 <div style="    margin-top: 13px;
@@ -182,7 +182,7 @@
                             {{ $dossier->etape_number ?? '' }}
                         </td>
                         <td>
-                            <a  href="{{ route('dossiers.show', $dossier->id) }}">
+                            <a  href="{{ route('dossiers.show', $dossier->folder) }}">
                                 <div style="    margin-top: 12px;"
                                     class="btn btn-{{ $dossier->status->status_style ?? 'default' }}">
 
@@ -246,7 +246,7 @@
                             @endif
                         </td>
                         <td>
-                            <a  href="{{ route('dossiers.show', $dossier->id) }}" class="btn btn-primary">
+                            <a  href="{{ route('dossiers.show', $dossier->folder) }}" class="btn btn-primary">
                                 {!! $dossier->fiche->fiche_name . '<br/>' ?? 'N/A' !!}
                             </a>
                         </td>
