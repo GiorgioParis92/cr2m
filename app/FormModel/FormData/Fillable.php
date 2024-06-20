@@ -64,7 +64,7 @@ class Fillable extends AbstractFormData
 
 
         $data .= '<td class="align-middle text-sm">';
-        $data .= '<form action="' . route("upload_file", ["form_id" => $this->form_id, "folder" => "dossiers", "clientId" => $this->dossier_id, "template" => $this->name]) . '" class="dropzone dropzone_button" id="dropzone-' . $this->name . '">';
+        $data .= '<form action="' . route("upload_file", ["form_id" => $this->form_id, "folder" => "dossiers", "clientId" => $this->dossier_id, "template" => $this->name]) . '" class="dropzone dropzone_button bg-primary" id="dropzone-' . $this->name . '">';
         $data .= csrf_field(); // This will generate the CSRF token input field
         $data .= '<div class="dz-message"><i class="fas fa-arrow-up"></i> Upload';
         $data .= '</div>';
