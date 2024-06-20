@@ -657,7 +657,7 @@
                     init: function() {
                         this.on("success", function(file, response) {
                             console.log(response)
-                            $('#doc-'+formConfig.form.id+key).val(response.split('/').pop())
+                            $('#doc-'+formConfig.form.id+key).val(response)
 
                             
 
