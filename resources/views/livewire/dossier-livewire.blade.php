@@ -6,6 +6,7 @@
                 <div class="card-header pb-0 clearfix">
                     <div class="d-lg-flex">
                         <div>
+
                             <h5 class="mb-0">
                                 <b>{{ $dossier['beneficiaire']['nom'] }}
                                     {{ $dossier['beneficiaire']['prenom'] }}</b><br />
@@ -83,21 +84,30 @@
                     @if (isset($tab))
                         <div class="row">
                             <div class="col-lg-12">
-                                <h3 class="border-bottom border-gray pb-2 p-5">{{ $etape_display['etape_desc'] }}</h3>
-                            </div>
-                            @if ($tab == $dossier->etape_number)
+                                <h3 class="border-bottom border-gray pb-2 p-5">{{ $etape_display['etape_desc'] }}
+                                @if ($tab == $dossier->etape_number)
                                 <div class="col-lg-6">
                                     <a class="btn btn-primary"
                                         href="{{ route('dossiers.next_step', $dossier->id) }}">Valider l'étape</a>
                                 </div>
                             @endif
+                                <div class="progress">
+                                    <div class="progress-bar" role="progressbar" style="width: 25%;"
+                                        aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                            </h3>
+                            </div>
+
                         </div>
                         <div class="row">
                             <div class="col-lg-6 col-sm-12">
                                 <div class="card">
                                     <div class="card-header p-3 pb-0">
                                         <h6 class="mb-0">Formulaires</h6>
+                                     
                                     </div>
+
+
                                     <div class="card-body border-radius-lg p-3">
                                         <div class="nav-wrapper position-relative end-0">
                                             <ul class="nav nav-pills nav-fill p-1" role="tablist">
@@ -113,6 +123,14 @@
                                                                         id : {{ $form_handler->form->id }})</span>
                                                                 @endif --}}
                                                             </a>
+                                                            <div class="progress">
+                                                                <div class="progress-bar" role="progressbar"
+                                                                    style="width: {{ $score_info['form_score'][$form_handler->form->id] ?? '100' }}%;"
+                                                                    aria-valuenow="{{ $score_info['form_score'][$form_handler->form->id] ?? '100' }}"
+                                                                    aria-valuemin="0" aria-valuemax="100">
+                                                                    
+                                                                </div>
+                                                            </div>
                                                         </li>
                                                     @endif
                                                 @endforeach
@@ -131,7 +149,7 @@
                                     </div>
 
                                     <div class="table-responsive" wire:poll>
-                                     
+
 
                                         <table class="table align-items-center">
                                             <tbody>
@@ -511,15 +529,15 @@
     });
 
     $(document).ready(function() {
-    $('.current').click();
-});
+        $('.current').click();
+    });
     document.addEventListener('DOMContentLoaded', function() {
 
-       
+
         Livewire.on('setTab', (data) => {
             var configs = data.forms_configs;
-        initializeDropzones(configs);
-        
+            initializeDropzones(configs);
+
         });
         // 
 
@@ -620,62 +638,64 @@
     });
 
     function initializeDropzones(configs) {
-    // Destroy existing Dropzone instances
-    if (Dropzone.instances.length > 0) {
-        Dropzone.instances.forEach(instance => instance.destroy());
-    }
-
-    Dropzone.autoDiscover = false;
-
-    // Convert object to array and loop through configs
-    Object.values(configs).forEach((formConfig) => {
-        if (formConfig.form.type === 'document') {
-            Object.keys(formConfig.formData).forEach((key) => {
-                var dropzoneElementId = `#dropzone-${key}`;
-                var dropzoneElement = document.querySelector(dropzoneElementId);
-
-                if (!dropzoneElement) {
-                    console.warn(`Element ${dropzoneElementId} not found.`);
-                    return;
-                }
-
-                // Check if Dropzone is already attached
-                if (dropzoneElement.dropzone) {
-                    console.warn(`Dropzone already attached to ${dropzoneElementId}.`);
-                    return;
-                }
-
-                new Dropzone(dropzoneElement, {
-                    method: 'post',
-                    headers: {
-                        // Uncomment if CSRF token is needed
-                        // 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                    },
-                    paramName: 'file',
-                    sending: function(file, xhr, formData) {
-                        formData.append('folder', 'dossiers');
-                        formData.append('template', key);
-                    },
-                    init: function() {
-                        this.on("success", function(file, response) {
-                            console.log(response)
-                            $('#doc-'+formConfig.form.id+key).val(response)
-                            $('#doc-'+formConfig.form.id+key).blur()
-
-                   
-                            Livewire.emit('fileUploaded', [formConfig.form.id, key,response]);
-
-                            console.log('Successfully uploaded:', response);
-                        });
-                        this.on("error", function(file, response) {
-                            console.log('Upload error:', response);
-                        });
-                    }
-                });
-            });
+        // Destroy existing Dropzone instances
+        if (Dropzone.instances.length > 0) {
+            Dropzone.instances.forEach(instance => instance.destroy());
         }
-    });
-}
+
+        Dropzone.autoDiscover = false;
+
+        // Convert object to array and loop through configs
+        Object.values(configs).forEach((formConfig) => {
+            if (formConfig.form.type === 'document') {
+                Object.keys(formConfig.formData).forEach((key) => {
+                    var dropzoneElementId = `#dropzone-${key}`;
+                    var dropzoneElement = document.querySelector(dropzoneElementId);
+
+                    if (!dropzoneElement) {
+                        console.warn(`Element ${dropzoneElementId} not found.`);
+                        return;
+                    }
+
+                    // Check if Dropzone is already attached
+                    if (dropzoneElement.dropzone) {
+                        console.warn(`Dropzone already attached to ${dropzoneElementId}.`);
+                        return;
+                    }
+
+                    new Dropzone(dropzoneElement, {
+                        method: 'post',
+                        headers: {
+                            // Uncomment if CSRF token is needed
+                            // 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                        },
+                        paramName: 'file',
+                        sending: function(file, xhr, formData) {
+                            formData.append('folder', 'dossiers');
+                            formData.append('template', key);
+                        },
+                        init: function() {
+                            this.on("success", function(file, response) {
+                                console.log(response)
+                                $('#doc-' + formConfig.form.id + key).val(response)
+                                $('#doc-' + formConfig.form.id + key).blur()
+
+
+                                Livewire.emit('fileUploaded', [formConfig.form.id,
+                                    key, response
+                                ]);
+
+                                console.log('Successfully uploaded:', response);
+                            });
+                            this.on("error", function(file, response) {
+                                console.log('Upload error:', response);
+                            });
+                        }
+                    });
+                });
+            }
+        });
+    }
 
 
 

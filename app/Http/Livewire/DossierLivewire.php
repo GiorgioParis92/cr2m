@@ -20,6 +20,7 @@ class DossierLivewire extends Component
     public $forms_configs;
     public $global_data = [];
     public $tab;
+    public $score_info;
     public $formData = [];
     public $validators = [];
     protected $listeners = ['fileUploaded' => 'handleFileUploaded'];
@@ -54,7 +55,6 @@ class DossierLivewire extends Component
             ->select('forms.*', 'etapes.etape_name', 'etapes.etape_desc', 'etapes.order_column')
             ->orderBy('etapes.order_column')
             ->get();
-
         $this->reinitializeFormsConfigs();
 
         $this->etapes = $this->convertArrayToStdClass($etapes->toArray());
@@ -258,6 +258,8 @@ class DossierLivewire extends Component
 
 
         }
+
+        $this->get_score_per_etape();
     }
 
     public function updateFormData($formId, $key, $value)
@@ -291,6 +293,31 @@ class DossierLivewire extends Component
     {
         $this->emit('pdfModalShow', $pdfUrl);
     }
+
+
+    public function get_score_per_etape() {
+        $scores = [];
+        $global_score = 0;
+        $total_forms = 0;
+    
+        foreach ($this->formData as $formId => $fields) {
+            $score = $this->forms_configs[$formId]->get_form_progression_percent()*100;
+            $formatted_score = number_format($score, 2) . ''; // Formater le score à deux décimales et ajouter '%'
+            $scores[$formId] = $formatted_score;
+            $total_forms ++;
+            $global_score += $score;
+        }
+    
+        if ($total_forms == 0){
+            $global_score = '0.00%';
+        } else {
+            $global_score = number_format($global_score / $total_forms, 2) . ''; // Formater le score global à deux décimales et ajouter '%'
+        }
+    
+        $this->score_info = ["form_score" => $scores, "etape_score" => $global_score];
+    }
+    
+    
 
     public function submit()
     {

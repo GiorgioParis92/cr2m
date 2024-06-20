@@ -69,6 +69,27 @@ class FormConfigHandler
         return $data;
     }
 
+
+    public function get_form_progression_percent()
+    {
+        $total = 0;
+        $valid = 0;
+
+        foreach ($this->formData as $tag => $data_form) {
+            $total ++;
+            if ($data_form->check_value()) {
+                $valid++;
+            }
+        }
+
+        if ($total == 0)
+            return 0;
+
+        return $valid / $total;
+        
+    }
+
+
     public function render_document($errors)
     {
         $data = '';

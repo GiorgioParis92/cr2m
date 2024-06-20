@@ -79,7 +79,7 @@ class Fillable extends AbstractFormData
 
     public function check_value() {
 
-        return Storage::disk('public')->exists($this->value);
+        return true;
     }
 
 }

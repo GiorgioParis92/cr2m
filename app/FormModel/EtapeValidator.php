@@ -59,8 +59,6 @@ class EtapeValidator
 
 
             // FOR OR
-
-
         }
 
         return True;
