@@ -1183,3 +1183,65 @@ span.prediction {
 label.custom-control-label {
     display: inline;
 }
+
+.etapes_row .active .step-icon {
+    background-image: -webkit-linear-gradient(136deg, rgb(33 242 99) 0%, rgb(64 233 202) 50%, rgb(82 238 146) 100%);
+    z-index: 2;
+}
+
+.form-register .title .step-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    -o-border-radius: 50%;
+    -ms-border-radius: 50%;
+    -moz-border-radius: 50%;
+    -webkit-border-radius: 50%;
+    background: #ccc;
+    margin: 0 auto;
+    position: relative;
+    outline: none;
+    -o-outline: none;
+    -ms-outline: none;
+    -moz-outline: none;
+    -webkit-outline: none;
+    color: #fff;
+    font-size: 25.6px;
+    margin-right: 108px;
+    margin: auto;
+    z-index: 22222222;
+}
+
+.form-register a .title span {
+    display: block;
+}
+
+.etapes_row .active span.step-icon {
+    background-image: -webkit-linear-gradient(136deg, rgb(33 242 99) 0%, rgb(64 233 202) 50%, rgb(82 238 146) 100%) !important;
+    z-index: 2;
+}
+
+.etapes_row .current span.step-icon {
+    background-image: -webkit-linear-gradient(136deg, rgb(242, 113, 33) 0%, rgb(233, 64, 87) 50%, rgb(138, 35, 135) 100%)!important;
+}
+
+.settab {
+    cursor: pointer;
+}
+
+.etapes_row .step-text {
+    color: #999;
+    font-weight: 400;
+    font-size: 10px;
+    padding: 5%;
+    vertical-align: top;
+}
+.etapes_row .inter_line {
+    border-bottom: 2px solid #ccc;
+    margin-top: 0;
+    position: relative;
+    top: 30px;
+    width: 160px;
+    z-index: 1;
+    left: 0;
+}

@@ -36,7 +36,7 @@
 
             <div class="card form-register">
                 <div class="steps clearfix">
-                    <ul role="tablist" id="etapeTabs" wire:poll>
+                    {{-- <ul role="tablist" id="etapeTabs" class="row " wire:poll>
                         @foreach ($etapes as $index => $e)
                             @php
                                 $isActive = false;
@@ -57,7 +57,7 @@
 
                             <li @if ($isActive) wire:click="setTab({{ $e->etape_number }})" @endif
                                 role="tab" aria-disabled="false"
-                                class="nav-link {{ $isActive ? 'active' : '' }} {{ $isCurrent ? 'current' : '' }} {{ $isTab ? 'isTab' : '' }}"
+                                class="col-lg-2 nav-link {{ $isActive ? 'active' : '' }} {{ $isCurrent ? 'current' : '' }} {{ $isTab ? 'isTab' : '' }}"
                                 aria-selected="true">
                                 <a id="form-total-t-0" href="#form-total-h-0" aria-controls="form-total-p-0">
                                     <span class="current-info audible nav-link"></span>
@@ -77,7 +77,53 @@
                                 </a>
                             </li>
                         @endforeach
-                    </ul>
+                    </ul> --}}
+
+
+                    <div  class="row etapes_row mt-5" wire:poll>
+                        @foreach ($etapes as $index => $e)
+                            @php    
+                                $isActive = false;
+                                $isCurrent = false;
+                                $isTab = false;
+                                if ($e->order_column <= $dossier->etape->order_column) {
+                                    $isActive = true;
+                                }
+                                if ($e->order_column == $dossier->etape->order_column) {
+                                    $isCurrent = true;
+                                }
+
+                                if ($e->etape_number == $etape_display['id'] || $e->etape_number == $etape_display) {
+                                    $isTab = true;
+                                }
+
+                            @endphp
+
+                            <div @if ($isActive) wire:click="setTab({{ $e->etape_number }})" @endif
+                                aria-disabled="false"
+                                class="@if($isActive) settab @endif col-lg-1  {{ $isActive ? 'active' : '' }} {{ $isCurrent ? 'current' : '' }} {{ $isTab ? 'isTab' : '' }}"
+                                aria-selected="true">
+                                <a id="form-total-t-0"  aria-controls="form-total-p-0">
+                                    <div class="inter_line"></div>
+                                    <span class="current-info audible nav-link"></span>
+                                    <div class="title">
+                                        <span class="step-icon">{{ $index + 1 }}</span>
+                                        <span class="step-text">
+                                            {{ strtoupper_extended($e->etape_desc) }}
+                                            <small>
+                                                @if ($dossier->etape_number == $e->etape_number)
+                                                    <p>Status: {{ $dossier->status->status_name ?? '' }}</p>
+                                                @endif
+                                            </small>
+                                        </span>
+
+                                    </div>
+                                </a>
+                            </div>
+                        @endforeach
+                       
+                        </div>
+
                 </div>
 
                 <div class="card-body px-0 pb-0">
