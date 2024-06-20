@@ -11,7 +11,7 @@
                 </div>
                 <div class="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
                     <div class="max-w-xl">
-                        <div id="map" style="height: 600px;"></div> <!-- Set a height for the map -->
+                        <div id="map" style="height: 600px;"></div>
                     </div>
                 </div>
             </div>
@@ -74,6 +74,12 @@
             },
             datesSet: function(info) {
                 fetchAndRenderEvents(info.start, info.end); // Fetch events for the visible date range
+            },
+            dateClick: function(info) {
+                handleDateClick(info); // Redirect on slot click
+            },
+            eventClick: function(info) {
+                handleEventClick(info.event); // Redirect on event click
             }
         });
 
@@ -116,6 +122,7 @@
                                 description: rdv.adresse + '<br/>'+ rdv.cp + ' '+rdv.ville,
                                 backgroundColor: rdv.color,
                                 borderColor: rdv.color
+                                dossier_id: rdv.dossier_id
                             };
 
                             // Create marker for Google Maps
@@ -188,5 +195,16 @@
             var end = calendar.view.activeEnd;
             fetchAndRenderEvents(new Date(start), new Date(end));
         });
+
+        // function handleDateClick(info) {
+        //     // Redirect to URL on date click
+        //     var dateStr = info.dateStr;
+        //     window.location.href = `/dossier/${dateStr}`;
+        // }
+
+        function handleEventClick(event) {
+            // Redirect to event details page
+            window.location.href = `/dossier/show/${event.dossier_id}`;
+        }
     </script>
 @endsection
