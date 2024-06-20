@@ -141,7 +141,7 @@ class DossierController extends Controller
         }
 
           
-        return redirect()->route('dossiers.show', ['id' => $id]);
+        return redirect()->route('dossiers.show', ['id' => $dossier->folder]);
 
     }
 }
