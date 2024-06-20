@@ -204,6 +204,7 @@
 
         function handleEventClick(event) {
             console.log(event)
+            alert('ok')
             window.location.href = `/dossier/show/${event.dossier_id}`;
         }
     </script>
