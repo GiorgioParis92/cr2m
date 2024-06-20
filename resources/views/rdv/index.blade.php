@@ -124,7 +124,7 @@
                                 borderColor: rdv.color,
                                 dossier_id: rdv.dossier_id
                             };
-
+                            console.log(event)
                             // Create marker for Google Maps
                             var content = getEventContent(rdv.nom + ' ' + rdv.prenom, rdv.adresse + '<br/>'+ rdv.cp + ' '+rdv.ville);
                             var marker = new google.maps.Marker({
@@ -203,7 +203,7 @@
         // }
 
         function handleEventClick(event) {
-            // Redirect to event details page
+            console.log(event)
             window.location.href = `/dossier/show/${event.dossier_id}`;
         }
     </script>
