@@ -1,4 +1,4 @@
-<div wire:poll.1000ms>
+<div wire:poll>
     <div class="row">
 
         <div class="col-12">
@@ -131,6 +131,8 @@
                                     </div>
 
                                     <div class="table-responsive" wire:poll>
+                                     
+
                                         <table class="table align-items-center">
                                             <tbody>
                                                 @foreach ($forms_configs as $index => $form_handler)
@@ -660,11 +662,9 @@
                             $('#doc-'+formConfig.form.id+key).val(response)
                             $('#doc-'+formConfig.form.id+key).blur()
 
-                            
+                   
+                            Livewire.emit('fileUploaded', [formConfig.form.id, key,response]);
 
-
-
-                            // Livewire.emit('fileUploaded');
                             console.log('Successfully uploaded:', response);
                         });
                         this.on("error", function(file, response) {

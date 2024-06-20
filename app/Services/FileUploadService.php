@@ -128,7 +128,6 @@ class FileUploadService
                 ]
             );
         
-    
 
 
             return $filePath;

@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 
 class DossierLivewire extends Component
 {
+    public $time;
 
     public $etape_display;
     public $etapes;
@@ -25,6 +26,8 @@ class DossierLivewire extends Component
 
     public function mount($id)
     {
+        $this->time = now()->format('H:i:s');
+
         // Fetch dossier with related data
         $this->dossier = Dossier::where('id', $id)
             ->with('beneficiaire', 'fiche', 'etape', 'status')
@@ -101,18 +104,25 @@ class DossierLivewire extends Component
     }
 
 
-    public function handleFileUploaded()
+    public function handleFileUploaded($request)
     {
-        // $this->reinitializeFormsConfigs();
+  
+        $this->forms_configs[$request[0]]->formData[$request[1]]->value = $request[2];
+        $this->forms_configs[$request[0]]->formData[$request[1]]->save_value();
 
-        // $this->emit('initializeDropzones', ['forms_configs' => $this->forms_configs]);
+        $this->formData[$request[0]][$request[1]] = $request[2];
+        $this->global_data[$request[1]] = $request[2];
+        $this->reinitializeFormsConfigs(false);
+
+        $this->emit('initializeDropzones', ['forms_configs' => $this->forms_configs]);
 
     }
 
     public function hydrate()
     {
         $this->etapes = $this->convertArrayToStdClass($this->etapes);
-        $this->reinitializeFormsConfigs();
+
+        $this->reinitializeFormsConfigs(false);
         // $this->emit('initializeDropzones', ['forms_configs' => $this->forms_configs]);
 
     }
@@ -168,7 +178,7 @@ class DossierLivewire extends Component
         // $this->emit('initializeDropzones', ['forms_configs' => $this->forms_configs]);
     }
 
-    public function reinitializeFormsConfigs()
+    public function reinitializeFormsConfigs($should_save=true)
     {
         if (isset($this->dossier) && $this->dossier->fiche_id) {
             $forms = DB::table('forms')->where('fiche_id', $this->dossier->fiche_id);
@@ -183,22 +193,24 @@ class DossierLivewire extends Component
             $this->formData = [];
 
 
-
+         
             foreach ($forms as $form) {
                 $handler = new FormConfigHandler($this->dossier, $this->convertArrayToStdClass((array) $form));
                 $this->forms_configs[$form->id] = $handler;
 
                 foreach ($handler->formData as $key => $field) {
-                    if (!isset($this->global_data[$key])) {
+             
+                    if (!isset($this->global_data[$key]) ) {
                         $this->formData[$form->id][$key] = $field->value;
                    
                         $this->global_data[$key] = $field->value;
                     } else {
-                        $this->formData[$form->id][$key] = $this->global_data[$key];
+
+                        $this->formData[$form->id][$key] = $this->global_data[$key] ;
                      
                         $field->value = $this->global_data[$key];
                     }
-                    if($field->value) {
+                    if($field->value && $should_save) {
                         $field->save_value();
                     }
                  
@@ -258,6 +270,8 @@ class DossierLivewire extends Component
 
     public function render()
     {
+        $this->time = now()->format('H:i:s');
+
         return view('livewire.dossier-livewire', [
             'dossier' => $this->dossier,
         ]);

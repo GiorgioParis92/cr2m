@@ -14,7 +14,7 @@ class Number extends AbstractFormData
         $data .= '<label>'.$this->config->title.'</label>';
         $data .= '<input wire:model="'.$wireModel.'" class="form-control ';
 
-        if($is_error) {
+        if(!$this->check_value()) {
             $data .=' error is-invalid';
         }
 
@@ -23,7 +23,7 @@ class Number extends AbstractFormData
             $data .= ' required ';
          } 
         $data .= 'value="'.($this->value).'">';
-        if($is_error) {
+        if(!$this->check_value()) {
         $data .='<div id="validationServerUsernameFeedback" class="invalid-feedback">'.$this->get_error_message().'</div>';
         }
         $data .= '</div>';
