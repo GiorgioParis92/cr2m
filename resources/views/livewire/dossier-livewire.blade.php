@@ -657,7 +657,7 @@
                     init: function() {
                         this.on("success", function(file, response) {
 
-                            console.log(formConfig)
+                            console.log('#doc-'+formConfig.form.id+key)
 
                             Livewire.emit('fileUploaded');
                             console.log('Successfully uploaded:', response);
