@@ -30,9 +30,9 @@ class Upload extends AbstractFormData
 
         $data .= '</td>';
 
-        $data .= '<td class="w-30" ><div wire:model.lazy="' . $wireModel . '">';
+        $data .= '<td class="w-30" ><div >';
    
-
+        $data.'<input type="text" wire:model.lazy="' . $wireModel . '">';
             
         $extension = explode('.', $this->value);
 
