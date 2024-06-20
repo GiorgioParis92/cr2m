@@ -663,7 +663,7 @@
 
 
 
-                            Livewire.emit('fileUploaded');
+                            // Livewire.emit('fileUploaded');
                             console.log('Successfully uploaded:', response);
                         });
                         this.on("error", function(file, response) {
