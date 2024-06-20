@@ -75,9 +75,12 @@ class DossierController extends Controller
         ->first();
 
         if(! $dossier_by_folder) {
-        $dossier = Dossier::where('id', $id)
-            ->with('beneficiaire', 'fiche', 'etape', 'status')
-            ->first();
+            if(auth()->user()->client_id==0) {
+                $dossier = Dossier::where('id', $id)
+                ->with('beneficiaire', 'fiche', 'etape', 'status')
+                ->first();
+            }
+ 
         } else {
             $dossier = Dossier::where('id', $dossier_by_folder->id)
             ->with('beneficiaire', 'fiche', 'etape', 'status')
