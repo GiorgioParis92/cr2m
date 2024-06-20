@@ -657,7 +657,11 @@
                     init: function() {
                         this.on("success", function(file, response) {
                             console.log(response)
-                            console.log('#doc-'+formConfig.form.id+key)
+                            $('#doc-'+formConfig.form.id+key).val(response.split('/').pop())
+
+                            
+
+
 
                             Livewire.emit('fileUploaded');
                             console.log('Successfully uploaded:', response);
