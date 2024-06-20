@@ -103,9 +103,9 @@ class DossierLivewire extends Component
 
     public function handleFileUploaded()
     {
-        $this->reinitializeFormsConfigs();
+        // $this->reinitializeFormsConfigs();
 
-        $this->emit('initializeDropzones', ['forms_configs' => $this->forms_configs]);
+        // $this->emit('initializeDropzones', ['forms_configs' => $this->forms_configs]);
 
     }
 
