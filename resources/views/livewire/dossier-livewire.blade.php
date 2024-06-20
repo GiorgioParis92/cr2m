@@ -153,13 +153,14 @@
                         </div>
                         <div class="row">
                             <div class="col-lg-6 col-sm-12">
+                                @if(isset($form_id))
                                 <div class="card">
                                     <div class="card-header p-3 pb-0">
                                         <h6 class="mb-0">Formulaires</h6>
                                      
                                     </div>
 
-
+                                    
                                     <div class="card-body border-radius-lg p-3">
                                         <div class="nav-wrapper position-relative end-0">
                                             <ul class="nav nav-pills nav-fill p-1" role="tablist">
@@ -189,7 +190,9 @@
                                             </ul>
                                         </div>
                                     </div>
+                                    
                                 </div>
+                                @endif
                             </div>
 
                             <div class="col-sm-12 col-lg-6">
@@ -250,6 +253,7 @@
                             </div>
                         </div>
                     @endif
+                
                     @if ($form->form->type == 'rdv')
                         {!! $form->render([]) !!}
                         <div class="card container mt-5 pd-5">

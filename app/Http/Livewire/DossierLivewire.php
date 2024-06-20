@@ -96,10 +96,13 @@ class DossierLivewire extends Component
 
         $this->reinitializeFormsConfigs();
 
-        if (is_array($this->forms_configs) && isset($this->forms_configs['type']) && $this->forms_configs['type'] === 'form') {
-            $firstKey = array_key_first($this->forms_configs);
-            $this->display_form($firstKey);
+        foreach ($this->forms_configs as $form_id => $form) {
+            if ($form->form->type != 'document' && !empty($form->formData)) {
+                $this->display_form($form->form->id);
+                break;
+            }
         }
+
         $this->emit('initializeDropzones', ['forms_configs' => $this->forms_configs]);
         $this->emit('setTab', ['forms_configs' => $this->forms_configs]);
 

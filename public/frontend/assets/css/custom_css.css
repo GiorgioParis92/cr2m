@@ -1247,5 +1247,5 @@ label.custom-control-label {
 }
 
 .progress-bar {
-    background: darkgray;
+    background: darkgray!important;
 }
