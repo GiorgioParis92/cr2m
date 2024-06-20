@@ -22,7 +22,7 @@ class Number extends AbstractFormData
         if ($this->config->required) {
             $data .= ' required ';
          } 
-        $data .= 'value="'.($this->value).'">';
+        $data .= 'value="'.($this->generate_value()).'">';
         if(!$this->check_value()) {
         $data .='<div id="validationServerUsernameFeedback" class="invalid-feedback">'.$this->get_error_message().'</div>';
         }
