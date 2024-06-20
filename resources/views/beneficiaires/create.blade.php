@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container">
-    <h4>Add Beneficiaire</h4>
+    <h4>Nouveau dossier</h4>
     
     <div id="successMessage" class="alert alert-success" style="display:none;"></div>
     <div id="errorMessage" class="alert alert-danger" style="display:none;"></div>
