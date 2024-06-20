@@ -19,12 +19,12 @@
         value="{{ old('adresse', $beneficiaire->adresse ?? '') }}" required>
 </div>
 <div class="form-group col-sm-12 col-lg-6">
-    <label for="cp">Postal Code</label>
+    <label for="cp">Code Postal </label>
     <input type="text" class="form-control" id="cp" name="cp"
         value="{{ old('cp', $beneficiaire->cp ?? '') }}" required>
 </div>
 <div class="form-group col-sm-12 col-lg-6">
-    <label for="ville">City</label>
+    <label for="ville">Ville</label>
     <input type="text" class="form-control" id="ville" name="ville"
         value="{{ old('ville', $beneficiaire->ville ?? '') }}" required>
 </div>
