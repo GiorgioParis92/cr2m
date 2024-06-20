@@ -107,7 +107,7 @@
                                     <div class="inter_line"></div>
                                     <span class="current-info audible nav-link"></span>
                                     <div class="title">
-                                        <span class="step-icon">{{ $index + 1 }}</span>
+                                        <span class="step-icon {{ $isActive ? 'bg-success' : 'bg-tertiary' }}">{{ $index + 1 }}</span>
                                         <span class="step-text">
                                             {{ strtoupper_extended($e->etape_desc) }}
                                             <small>
@@ -130,7 +130,7 @@
                     @if (isset($tab))
                         <div class="row">
                             <div class="col-lg-12">
-                                <h3 class="border-bottom border-gray pb-2 p-5">{{ $etape_display['etape_desc'] }}
+                                <h3 class="border-bottom border-gray pb-2 p-2">{{ $etape_display['etape_desc'] }}
                                 @if ($tab == $dossier->etape_number)
                                 <div class="col-lg-6">
                                     <a class="btn btn-primary"
