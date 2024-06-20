@@ -99,7 +99,11 @@
             @endforeach
         </select>
     </div>
+    @if($user->client->id>0)
 
+    <input type="hidden" name="mar" value="{{ $user->client->id }}">
+
+    @else
     <div class="form-group">
         <label for="mar">Mon Accompagnateur Renov MAR</label>
         <select class="form-control" id="mar" name="mar">
@@ -109,7 +113,7 @@
             @endforeach
         </select>
     </div>
-
+    @endif
     <div class="form-group">
         <label for="mandataire_financier">Mandataire Financier</label>
         <select class="form-control" id="mandataire_financier" name="mandataire_financier">
