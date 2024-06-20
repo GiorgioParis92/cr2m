@@ -97,7 +97,7 @@ class DossierLivewire extends Component
         $this->reinitializeFormsConfigs();
 
         foreach ($this->forms_configs as $form_id => $form) {
-            if ($form->form->type != 'document' && !empty($form->formData)) {
+            if ($form->form->type != 'document' && !empty($form->formData) && $form->form->etape_id==$tab) {
                 $this->display_form($form->form->id);
                 break;
             }
