@@ -90,7 +90,10 @@
 
         function initMap() {
             map = new google.maps.Map(document.getElementById('map'), {
-                center: { lat: 48.8566, lng: 2.3522 },
+                center: {
+                    lat: 48.8566,
+                    lng: 2.3522
+                },
                 zoom: 5
             });
         }
@@ -110,7 +113,8 @@
                     clearMarkers(); // Clear existing markers
                     var events = data.map(function(rdv) {
                         var eventStart = new Date(rdv.date_rdv);
-                        var eventEnd = new Date(eventStart.getTime() + 60 * 60 * 1000); // Add 1 hour to the start date
+                        var eventEnd = new Date(eventStart.getTime() + 60 * 60 *
+                        1000); // Add 1 hour to the start date
 
                         // Check if event is within the current calendar view
                         if (eventStart >= start && eventEnd <= end) {
@@ -119,14 +123,15 @@
                                 title: rdv.nom + ' ' + rdv.prenom,
                                 start: rdv.date_rdv,
                                 end: eventEnd.toISOString(),
-                                description: rdv.adresse + '<br/>'+ rdv.cp + ' '+rdv.ville,
+                                description: rdv.adresse + '<br/>' + rdv.cp + ' ' + rdv.ville,
                                 backgroundColor: rdv.color,
                                 borderColor: rdv.color,
                                 dossier_id: rdv.dossier_id
                             };
                             console.log(event)
                             // Create marker for Google Maps
-                            var content = getEventContent(rdv.nom + ' ' + rdv.prenom, rdv.adresse + '<br/>'+ rdv.cp + ' '+rdv.ville);
+                            var content = getEventContent(rdv.nom + ' ' + rdv.prenom, rdv.adresse +
+                                '<br/>' + rdv.cp + ' ' + rdv.ville);
                             var marker = new google.maps.Marker({
                                 position: {
                                     lat: parseFloat(rdv.lat),
@@ -203,8 +208,9 @@
         // }
 
         function handleEventClick(event) {
-            console.log(event)
-            // window.location.href = `/dossier/show/${event.dossier_id}`;
+            var dossierId = event.extendedProps.dossier_id; // Access the dossier_id
+            console.log(dossierId); // Log the dossier_id
+            window.location.href = `/dossier/show/${dossierId}`; // Redirect to the desired URL
         }
     </script>
 @endsection
