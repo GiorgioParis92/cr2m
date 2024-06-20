@@ -201,7 +201,7 @@ class DossierLivewire extends Component
                 foreach ($handler->formData as $key => $field) {
              
                     if (!isset($this->global_data[$key]) ) {
-                        $this->formData[$form->id][$key] = $field->value;
+                        $this->formData[$form->id][$key] =  $field->generate_value();
                    
                         $this->global_data[$key] = $field->generate_value();
                     } else {
