@@ -203,7 +203,7 @@ class DossierLivewire extends Component
                     if (!isset($this->global_data[$key]) ) {
                         $this->formData[$form->id][$key] = $field->value;
                    
-                        $this->global_data[$key] = $field->value;
+                        $this->global_data[$key] = $field->generate_value();
                     } else {
 
                         $this->formData[$form->id][$key] = $this->global_data[$key] ;
