@@ -1249,3 +1249,26 @@ label.custom-control-label {
 .progress-bar {
     background: darkgray!important;
 }
+
+.btn.bg-primary.bg-bleu {
+    background: cyan !important;
+}
+
+.btn.bg-primary.bg-jaune {
+    background: yellow !important;
+}
+.btn.bg-primary.bg-rose {
+    background: pink !important;
+}
+.btn.bg-primary.bg-violet {
+    background: purple !important;
+    color:white;
+}
+.main-content {
+    margin-left: 0px!important ;
+}
+
+.sidenav-header {
+    height: 4.875rem;
+    max-width: 65px;
+}

@@ -22,6 +22,9 @@
                                 <b>Tél : {{ $dossier['beneficiaire']['telephone'] }}</b> -
                                 Email : {{ $dossier['beneficiaire']['email'] }}<br />
                             </h6>
+
+                            <div class="btn bg-primary bg-{{$dossier['beneficiaire']['menage_mpr']}}">{{strtoupper($dossier['beneficiaire']['menage_mpr'])}}</div>
+
                         </div>
                         <div class="ms-auto my-auto mt-lg-0 mt-4">
                             <div class="ms-auto my-auto">

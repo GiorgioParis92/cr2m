@@ -1,6 +1,28 @@
  <nav class="navbar navbar-main navbar-expand-lg px-0 mx-4 shadow-none border-radius-xl" id="navbarBlur" navbar-scroll="true">
       <div class="container-fluid py-1 px-3">
-
+        <div class="sidenav-header">
+          <i class="fas fa-times p-3 cursor-pointer text-secondary opacity-5 position-absolute end-0 top-0 d-none d-xl-none"
+              aria-hidden="true" id="iconSidenav"></i>
+          <a class="navbar-brand m-0" href="{{ route('dashboard') }}" target="_blank">
+  
+              @if (auth()->user() && auth()->user()->client_id > 0 && isset($client->main_logo))
+                  @if (Storage::disk('public')->exists($client->main_logo))
+                      <div class="text-center">
+                          <img src="{{ asset('storage/' . $client->main_logo) }}" class="navbar-brand-img h-100"
+                              alt="main_logo">
+                          <br /><span class="ms-1 font-weight-bold">{{ $client->client_title }}</span>
+                      </div>
+                  @endif
+              @else
+                  <div class="text-center">
+                      <img src="{{ asset('frontend/assets/img/logo genius.png') }}" class="navbar-brand-img h-100"
+                          alt="main_logo"><br />
+                      <span class="ms-1 font-weight-bold">Genius Market</span>
+                  </div>
+              @endif
+  
+          </a>
+      </div>
         <li class="nav-item d-xl-none ps-3 d-flex align-items-center">
           <a href="javascript:;" class="nav-link text-body p-0" id="iconNavbarSidenav">
             <div class="sidenav-toggler-inner">
@@ -126,3 +148,43 @@
         </div>
       </div>
     </nav>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <div class="container-fluid">
+          {{-- <a class="navbar-brand" href="http://genius/dashboard" target="_blank">
+              <img src="http://genius/frontend/assets/img/logo genius.png" alt="main_logo" class="d-inline-block align-top" height="30">
+              Genius Market
+          </a> --}}
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon">bb</span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNav">
+              <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                  <li class="nav-item">
+                      <a class="nav-link" href="http://genius/dossier">Dossiers</a>
+                  </li>
+                  <li class="nav-item dropdown">
+                      <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                          Bénéficiaires
+                      </a>
+                      <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                          <li><a class="dropdown-item" href="http://genius/beneficiaires">Liste des bénéficiaires</a></li>
+                          <li><a class="dropdown-item" href="http://genius/beneficiaires/create">Nouveau bénéficiaire</a></li>
+                      </ul>
+                  </li>
+                  <li class="nav-item">
+                      <a class="nav-link" href="http://genius/rdvs">Liste des RDV</a>
+                  </li>
+                  <li class="nav-item">
+                      <a class="nav-link" href="http://genius/users/index">Utilisateurs</a>
+                  </li>
+                  <li class="nav-item">
+                      <a class="nav-link" href="http://genius/clients">MAR/INSTALLATEURS</a>
+                  </li>
+                  <li class="nav-item">
+                      <a class="nav-link" href="http://genius/etapes-controller">Gestion des étapes</a>
+                  </li>
+              </ul>
+          </div>
+      </div>
+  </nav>
+  
