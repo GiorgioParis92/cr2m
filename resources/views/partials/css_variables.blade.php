@@ -1,7 +1,7 @@
 @if(isset($cssVariables) && !empty($cssVariables))
     <style>
         :root {
-            $cssVariables
+            {{$cssVariables}}
         }
     </style>
 @endif

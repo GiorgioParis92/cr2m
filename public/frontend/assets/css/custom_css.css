@@ -1287,3 +1287,7 @@ label.custom-control-label {
 .show {
     display:block!important
 }
+
+.table> :not(:last-child)> :last-child>* {
+    background-repeat: no-repeat;
+}
