@@ -86,8 +86,11 @@ class DossierController extends Controller
             ->with('beneficiaire', 'fiche', 'etape', 'status')
             ->first(); 
         }
-        $id= $dossier->id;
-        if(! $dossier) {
+        if(isset($dossier->id)) {
+            $id= $dossier->id;
+        }
+        
+        if(!isset($dossier)) {
             abort(404);
         }
 

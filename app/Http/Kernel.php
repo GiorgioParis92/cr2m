@@ -42,6 +42,8 @@ class Kernel extends HttpKernel
             \App\Http\Middleware\SetLocale::class,
             \App\Http\Middleware\ShareClientData::class,
             \App\Http\Middleware\LoadUserRelations::class,
+            \App\Http\Middleware\SetCssVariables::class,
+
 
 
         ],
