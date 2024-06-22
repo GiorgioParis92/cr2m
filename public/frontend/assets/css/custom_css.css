@@ -1277,3 +1277,13 @@ label.custom-control-label {
         max-width: 100%!important;
     }
 }
+
+@media all and (min-width: 992px) {
+    .navbar .nav-item .dropdown-menu { display: none; }
+    .navbar .nav-item.show .dropdown-menu { display: block; }
+    .navbar .nav-item .dropdown-menu { margin-top: 0; }
+}
+
+.show {
+    display:block!important
+}

@@ -237,6 +237,45 @@
 
     @yield('scripts')
     <script>
+ document.addEventListener("DOMContentLoaded", function() {
+    if (window.innerWidth > 992) {
+        let submenuTimeout;
+
+        document.querySelectorAll('.navbar .nav-item').forEach(function(everyitem) {
+            let el_link = everyitem.querySelector('a[data-bs-toggle]');
+            if (el_link != null) {
+                let nextEl = el_link.nextElementSibling;
+
+                everyitem.addEventListener('mouseenter', function(e) {
+                    el_link.classList.add('show');
+                    nextEl.classList.add('show');
+                });
+
+                everyitem.addEventListener('mouseleave', function(e) {
+                    submenuTimeout = setTimeout(function() {
+                        el_link.classList.remove('show');
+                        nextEl.classList.remove('show');
+                    }, 100); // delay of 100ms before hiding
+                });
+
+                nextEl.addEventListener('mouseenter', function(e) {
+                    clearTimeout(submenuTimeout); // prevent hiding if submenu is hovered
+                    el_link.classList.add('show');
+                    nextEl.classList.add('show');
+                });
+
+                nextEl.addEventListener('mouseleave', function(e) {
+                    submenuTimeout = setTimeout(function() {
+                        el_link.classList.remove('show');
+                        nextEl.classList.remove('show');
+                    }, 100); // delay of 100ms before hiding
+                });
+            }
+        });
+    }
+});
+
+
         $(document).ready(function() {
 
 

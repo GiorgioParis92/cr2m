@@ -22,108 +22,109 @@
 
             </a>
         </div>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon">
-              <div class="sidenav-toggler-inner">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#main_nav"
+            aria-expanded="false" aria-label="Toggle navigation">
+            <div class="sidenav-toggler-inner">
                 <i class="sidenav-toggler-line"></i>
                 <i class="sidenav-toggler-line"></i>
                 <i class="sidenav-toggler-line"></i>
-              </div>
-            </span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav">
-            <li class="nav-item">
-                <a data-bs-toggle="collapse" href="#dossiers" class="nav-link "
-                    aria-controls="dossiers" role="button" aria-expanded="false">
-                   
-                    <span class="nav-link-text ms-1">Dossiers</span>
-                </a>
-                <div class="collapse " id="dossiers">
-                    <ul class="nav ms-4 ps-3">
-                        <li class="nav-item ">
-                            <a class="nav-link" href="{{route('dossiers.index')}}">
-                                <span class="sidenav-mini-icon"> L </span>
-                                <span class="sidenav-normal"> Liste des dossiers </span>
-                            </a>
-                        </li>
-               
-                    </ul>
-                </div>
-            </li>
-            <li class="nav-item">
-                <a data-bs-toggle="collapse" href="#beneficiaires" class="nav-link "
-                    aria-controls="beneficiaires" role="button" aria-expanded="false">
-                 
-                    <span class="nav-link-text ms-1">Bénéficiaires</span>
-                </a>
-                <div class="collapse " id="beneficiaires">
-                    <ul class="nav ms-4 ps-3">
-                        <li class="nav-item ">
-                            <a class="nav-link" href="{{route('beneficiaires.index')}}">
-                                <span class="sidenav-mini-icon"> B </span>
-                                <span class="sidenav-normal"> Liste des bénéficiaires </span>
-                            </a>
-                        </li>
-                        <li class="nav-item ">
-                            <a class="nav-link" href="{{route('beneficiaires.create')}}">
-                                <span class="sidenav-mini-icon"> B </span>
-                                <span class="sidenav-normal"> Nouveau bénéficiaire </span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </li>
-           
-            <li class="nav-item">
-                <a class="nav-link  " href="{{ route('clients.index') }}">
-                   
-                    <span class="nav-link-text ms-1">MAR/INSTALLATEURS</span>
-                </a>
-            </li>
-           
-
-            <li class="nav-item">
-                <a class="nav-link  " href="{{ route('users.index') }}">
-    
-                    <span class="nav-link-text ms-1">Utilisateurs</span>
-                </a>
-            </li>
-           
-
-         
-        </ul>
-            <div class="ms-md-auto pe-md-3 d-flex align-items-center">
-              <div class="input-group">
-                <span class="input-group-text text-body"><i class="fas fa-search" aria-hidden="true"></i></span>
-                <input type="text" class="form-control" placeholder="Type here...">
-              </div>
             </div>
-          
-            
-            <ul class="navbar-nav  justify-content-end">
-              <li class="nav-item d-flex align-items-center">
-                <a  class="nav-link text-body font-weight-bold px-0">
+        </button>
+
+
+
+        <div class="collapse navbar-collapse" id="main_nav">
+            <ul class="navbar-nav">
+                <li class="nav-item active"> <a class="nav-link" href="{{ route('dashboard') }}"
+                        target="_blank">Dashboard </a>
+                </li>
+                <li class="nav-item ">
+                    <a class="nav-link" href="{{ route('beneficiaires.create') }}">
+                        <span class="sidenav-mini-icon"> B </span>
+                        <span class="sidenav-normal"> Nouveau bénéficiaire </span>
+                    </a>
+                </li>
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link  dropdown-toggle" href="{{ route('dossiers.index') }}" data-bs-toggle="dropdown">
+                        Dossiers </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="{{ route('dossiers.index') }}"> Liste complete des
+                                dossiers</a></li>
+
+                    </ul>
+                </li>
+
+                <li class="nav-item ">
+                    <a class="nav-link" href="{{ route('rdvs') }}">
+                        <span class="sidenav-normal"> Planning </span>
+                    </a>
+                </li>
+
+
+                @if (auth()->user()->type_id == 1)
+                    <li class="nav-item">
+                        <a class="nav-link  " href="{{ route('users.index') }}">
+
+                            <span class="nav-link-text ms-1">Utilisateurs</span>
+                        </a>
+                    </li>
+                @endif
+
+                @if (auth()->user() && auth()->user()->client_id == 0)
+                    <li class="nav-item dropdown">
+                        <a class="nav-link  dropdown-toggle" data-bs-toggle="dropdown">
+                            Admin </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a class="dropdown-item" href="{{ route('clients.index') }}">
+                                    Partenaires
+                                </a>
+                            </li>
+
+                        </ul>
+                    </li>
+
+
                   
-                  <span class="d-sm-inline d-none"> <span class="btn btn-tertiary"><i class="fa fa-user me-sm-1"></i>{{auth()->user()->name}} ({{auth()->user()->type->type_desc ?? ''}})</span> <span class="btn btn-secondary">{{strtoupper(auth()->user()->client->client_title ?? '')}}</span></span>
-                </a>
-              </li>
-  
-  
-   
-              <li class="nav-item px-3 d-flex align-items-center">
-                <a href="javascript:;" class="nav-link text-body p-0">
-                  <i class="fa fa-cog fixed-plugin-button-nav cursor-pointer"></i>
-                </a>
-              </li>
-              <li class="nav-item d-flex align-items-center">
-                <a href="{{ route('logout') }}" class="nav-link text-body font-weight-bold px-0">
-                  <span class="d-sm-inline d-none">Logout</span>
-                </a>
-              </li>
-              
+                @endif
+
+
             </ul>
-        </div>
-    </div>
+        </div> <!-- navbar-collapse.// -->
+
+        <div class="ms-md-auto pe-md-3 d-flex align-items-center">
+          <div class="input-group">
+              <span class="input-group-text text-body"><i class="fas fa-search" aria-hidden="true"></i></span>
+              <input type="text" class="form-control" placeholder="Type here...">
+          </div>
+      </div>
+
+
+      <ul class="navbar-nav  justify-content-end">
+          <li class="nav-item d-flex align-items-center">
+              <a class="nav-link text-body font-weight-bold px-0">
+
+                  <span class="d-sm-inline d-none"> <span class="btn btn-tertiary"><i
+                              class="fa fa-user me-sm-1"></i>{{ auth()->user()->name }}
+                          ({{ auth()->user()->type->type_desc ?? '' }})</span> <span
+                          class="btn btn-secondary">{{ strtoupper(auth()->user()->client->client_title ?? '') }}</span></span>
+              </a>
+          </li>
+
+
+
+          <li class="nav-item px-3 d-flex align-items-center">
+              <a href="javascript:;" class="nav-link text-body p-0">
+                  <i class="fa fa-cog fixed-plugin-button-nav cursor-pointer"></i>
+              </a>
+          </li>
+          <li class="nav-item d-flex align-items-center">
+              <a href="{{ route('logout') }}" class="nav-link text-body font-weight-bold px-0">
+                  <span class="d-sm-inline d-none">Logout</span>
+              </a>
+          </li>
+
+      </ul>
+    </div> <!-- container-fluid.// -->
 </nav>
