@@ -1294,5 +1294,5 @@ label.custom-control-label {
 
 img.navbar-brand-img {
     max-width: 100%;
-    max-height: 100px;
+    height: auto;
 }
