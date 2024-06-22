@@ -105,7 +105,7 @@
           <li class="nav-item d-flex align-items-center">
               <a class="nav-link text-body font-weight-bold px-0">
 
-                  <span class="d-sm-inline d-none"> <span class="btn btn-tertiary"><i
+                  <span class="d-sm-inline "> <span class="btn btn-tertiary"><i
                               class="fa fa-user me-sm-1"></i>{{ auth()->user()->name }}
                           ({{ auth()->user()->type->type_desc ?? '' }})</span> <span
                           class="btn btn-secondary">{{ strtoupper(auth()->user()->client->client_title ?? '') }}</span></span>
@@ -114,7 +114,7 @@
 
 
 
-          <li class="nav-item px-3 d-flex align-items-center">
+          <li class="nav-item px-3 d-flex align-items-center d-none">
               <a href="javascript:;" class="nav-link text-body p-0">
                   <i class="fa fa-cog fixed-plugin-button-nav cursor-pointer"></i>
               </a>

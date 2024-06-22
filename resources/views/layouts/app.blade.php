@@ -239,6 +239,71 @@
 
     @yield('scripts')
     <script>
+        document.addEventListener("DOMContentLoaded", function() {
+    let isTouchDevice = 'ontouchstart' in document.documentElement;
+    let submenuTimeout;
+
+    document.querySelectorAll('.navbar .nav-item').forEach(function(everyitem) {
+        let el_link = everyitem.querySelector('a[data-bs-toggle]');
+        if (el_link != null) {
+            let nextEl = el_link.nextElementSibling;
+
+            everyitem.addEventListener('mouseenter', function(e) {
+                if (!isTouchDevice) {
+                    el_link.classList.add('show');
+                    nextEl.classList.add('show');
+                }
+            });
+
+            everyitem.addEventListener('mouseleave', function(e) {
+                if (!isTouchDevice) {
+                    submenuTimeout = setTimeout(function() {
+                        el_link.classList.remove('show');
+                        nextEl.classList.remove('show');
+                    }, 100); // delay of 100ms before hiding
+                }
+            });
+
+            nextEl.addEventListener('mouseenter', function(e) {
+                if (!isTouchDevice) {
+                    clearTimeout(submenuTimeout); // prevent hiding if submenu is hovered
+                    el_link.classList.add('show');
+                    nextEl.classList.add('show');
+                }
+            });
+
+            nextEl.addEventListener('mouseleave', function(e) {
+                if (!isTouchDevice) {
+                    submenuTimeout = setTimeout(function() {
+                        el_link.classList.remove('show');
+                        nextEl.classList.remove('show');
+                    }, 100); // delay of 100ms before hiding
+                }
+            });
+
+            if (isTouchDevice) {
+                el_link.addEventListener('click', function(e) {
+                    e.preventDefault(); // prevent the default action
+                    el_link.classList.toggle('show');
+                    nextEl.classList.toggle('show');
+                });
+
+                nextEl.addEventListener('click', function(e) {
+                    e.stopPropagation(); // prevent hiding when submenu is tapped
+                });
+
+                document.addEventListener('click', function(e) {
+                    // Hide submenu if clicked outside
+                    if (!everyitem.contains(e.target)) {
+                        el_link.classList.remove('show');
+                        nextEl.classList.remove('show');
+                    }
+                });
+            }
+        }
+    });
+});
+
  document.addEventListener("DOMContentLoaded", function() {
     if (window.innerWidth > 992) {
         let submenuTimeout;
