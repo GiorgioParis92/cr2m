@@ -1291,3 +1291,8 @@ label.custom-control-label {
 .table> :not(:last-child)> :last-child>* {
     background-repeat: no-repeat;
 }
+
+img.navbar-brand-img {
+    max-width: 100%;
+    max-height: 100px;
+}
