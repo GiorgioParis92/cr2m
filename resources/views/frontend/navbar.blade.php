@@ -10,7 +10,7 @@
                         <div class="text-center">
                             <img src="{{ asset('storage/' . $client->main_logo) }}" class="navbar-brand-img h-100"
                                 alt="main_logo">
-                            <br /><span class="ms-1 font-weight-bold">{{ $client->client_title }}</span>
+                   
                         </div>
                     @endif
                 @else
