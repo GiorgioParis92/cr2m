@@ -54,6 +54,8 @@
     <script async defer
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCzcaFvxwi1XLyRHmPRnlKO4zcJXPOT5gM&callback=initMap"></script>
 
+
+
     @livewireStyles
 </head>
 
@@ -61,12 +63,11 @@
 
      {{-- @include('frontend.sidebar')  --}}
 
-    {{-- <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg"> --}}
-    <main class=" max-height-vh-100 h-100 border-radius-lg">
+    <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg">
         @include('frontend.navbar')
-
+        <div class="pt-5">
         @yield('content')
-
+        </div>
         @include('frontend.footer')
     </main>
     <div id="pdfModal" class="modal">
@@ -216,12 +217,23 @@
     @include('frontend.fixed-plugin')
 
     <!-- Core JS Files -->
-    <script src="{{ asset('frontend/assets/js/core/popper.min.js') }}"></script>
-    <script src="{{ asset('frontend/assets/js/core/bootstrap.min.js') }}"></script>
-    <script src="{{ asset('frontend/assets/js/plugins/perfect-scrollbar.min.js') }}"></script>
-    <script src="{{ asset('frontend/assets/js/plugins/smooth-scrollbar.min.js') }}"></script>
+    {{-- <script src="{{ asset('frontend/assets/js/core/popper.min.js') }}"></script> --}}
+
+    {{-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script src="{{ asset('frontend/assets/js/core/bootstrap.min.js') }}"></script> --}}
+
+
+    {{-- <script src="{{ asset('frontend/assets/js/plugins/perfect-scrollbar.min.js') }}"></script>
+    <script src="{{ asset('frontend/assets/js/plugins/smooth-scrollbar.min.js') }}"></script> --}}
     <script src="{{ asset('frontend/assets/js/plugins/chartjs.min.js') }}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.2/dropzone.min.js"></script>
+<!-- Bootstrap CSS -->
+<script src="{{ asset('frontend/assets/js/soft-ui-dashboard.min.js?v=1.0.7') }}"></script>
+
+
+<!-- Bootstrap Bundle with Popper -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
     @yield('scripts')
     <script>
@@ -404,7 +416,6 @@
     <!-- Github buttons -->
     <script async defer src="https://buttons.github.io/buttons.js"></script>
     <!-- Control Center for Soft Dashboard: parallax effects, scripts for the example pages etc -->
-    <script src="{{ asset('frontend/assets/js/soft-ui-dashboard.min.js?v=1.0.7') }}"></script>
     @livewireScripts
 
 </body>

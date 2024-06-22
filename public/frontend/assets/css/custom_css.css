@@ -1272,3 +1272,8 @@ label.custom-control-label {
     height: 4.875rem;
     max-width: 65px;
 }
+@media (min-width: 1400px) {
+    .container, .container-lg, .container-md, .container-sm, .container-xl, .container-xxl {
+        max-width: 100%!important;
+    }
+}
