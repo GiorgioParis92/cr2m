@@ -35,8 +35,8 @@
 
         <div class="collapse navbar-collapse" id="main_nav">
             <ul class="navbar-nav">
-                <li class="nav-item active"> <a class="nav-link" href="{{ route('dashboard') }}"
-                        target="_blank">Dashboard </a>
+                <li class="nav-item active"> 
+                  <a class="nav-link" href="{{ route('dashboard') }}">Dashboard </a>
                 </li>
                 <li class="nav-item ">
                     <a class="nav-link" href="{{ route('beneficiaires.create') }}">

@@ -53,6 +53,7 @@
          text-align: center;
          padding-left: 50%;
          position: relative;
+         padding: 2px !important;
      }
 
      .responsive-table td::before {
