@@ -169,7 +169,8 @@
     padding: 8px !important;
     background-size: 0;
     /* margin: auto !important; */
-    padding-top: 13px !important;"
+    padding-top: 13px !important;    width: 100%;
+    max-width: 100%;"
                                     class="btn btn-{{ $dossier->etape->etape_style ?? 'default' }}">
 
                                     {{ $dossier->etape->etape_desc ?? '' }}
@@ -183,7 +184,7 @@
                         </td>
                         <td>
                             <a  href="{{ route('dossiers.show', $dossier->folder) }}">
-                                <div style="    margin-top: 12px;"
+                                <div style="    margin-top: 12px; width: 100%;    max-width: 100%;"
                                     class="btn btn-{{ $dossier->status->status_style ?? 'default' }}">
 
                                     {{ $dossier->status->status_desc ?? '' }}
