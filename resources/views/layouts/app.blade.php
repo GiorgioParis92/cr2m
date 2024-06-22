@@ -239,7 +239,7 @@
 
     @yield('scripts')
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
+  document.addEventListener("DOMContentLoaded", function() {
     let isTouchDevice = 'ontouchstart' in document.documentElement;
     let submenuTimeout;
 
@@ -300,6 +300,20 @@
                     }
                 });
             }
+        }
+    });
+
+    // Handle navbar-toggler for mobile devices
+    let navbarToggler = document.querySelector('.navbar-toggler');
+    let mainNav = document.querySelector('#main_nav');
+
+    navbarToggler.addEventListener('click', function(e) {
+        mainNav.classList.toggle('show');
+    });
+
+    document.addEventListener('click', function(e) {
+        if (!navbarToggler.contains(e.target) && !mainNav.contains(e.target)) {
+            mainNav.classList.remove('show');
         }
     });
 });

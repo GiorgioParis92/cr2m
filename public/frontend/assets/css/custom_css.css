@@ -1305,3 +1305,16 @@ label.custom-control-label {
     height: 4.875rem;
     max-height: 70px;
 }
+
+@media all and (min-width: 992px) {
+    .navbar .nav-item .dropdown-menu { display: none; }
+    .navbar .nav-item.show .dropdown-menu { display: block; }
+    .navbar .nav-item .dropdown-menu { margin-top: 0; }
+}
+
+/* Additional styles to support touch interactions */
+.navbar .nav-item .dropdown-menu.show { display: block; }
+
+/* Mobile specific styles */
+.navbar-collapse { display: none; }
+.navbar-collapse.show { display: block; }
