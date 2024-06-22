@@ -1296,3 +1296,8 @@ img.navbar-brand-img {
     max-width: 100%;
     height: auto;
 }
+
+.sidenav-header {
+    height: 4.875rem;
+    max-height: 70px;
+}
