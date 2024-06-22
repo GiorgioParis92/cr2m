@@ -22,7 +22,7 @@
 
             </a>
         </div>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#main_nav"
+        <button class="navbar-toggler" type="button" 
             aria-expanded="false" aria-label="Toggle navigation">
             <div class="sidenav-toggler-inner">
                 <i class="sidenav-toggler-line"></i>
