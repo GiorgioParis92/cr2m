@@ -31,14 +31,14 @@
      display: block;
      margin: auto;
  }
-
+ img.navbar-brand-img {
+    max-width: 100%;
+    height: auto;
+    max-height: 70px;
+}
  @media (max-width: 767.98px) {
 
-    img.navbar-brand-img {
-        max-width: 100%;
-        height: auto;
-        max-height: 70px;
-    }
+
 
      .responsive-table thead {
          display: none;
