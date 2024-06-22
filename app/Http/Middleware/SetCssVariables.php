@@ -20,10 +20,12 @@ class SetCssVariables
     {
         if (Auth::check()) {
             $client_id = Auth::user()->client_id;
-
+            $variables='';
             $cssVariables = CssVariable::where('client_id', $client_id)->first();
+            if(isset($cssVariables)) {
+                $variables = $cssVariables->variables;
 
-            $variables = $cssVariables->variables;
+            }
             // dd($variables);
             // Share the variables with all views
             view()->share('cssVariables', $variables);
