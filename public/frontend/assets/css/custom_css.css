@@ -50,10 +50,9 @@
      }
 
      .responsive-table td {
-         text-align: right;
+         text-align: center;
          padding-left: 50%;
          position: relative;
-         min-height: 70px;
      }
 
      .responsive-table td::before {
