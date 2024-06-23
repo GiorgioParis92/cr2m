@@ -36,20 +36,20 @@
         <div class="collapse navbar-collapse" id="main_nav">
             <ul class="navbar-nav">
                 <li class="nav-item active"> 
-                  <a class="nav-link" href="{{ route('dashboard') }}">Dashboard </a>
+                  <a class="nav-link" href="{{ route('dashboard') }}"><i class="fa fa-house"></i> Dashboard </a>
                 </li>
                 <li class="nav-item ">
                     <a class="nav-link" href="{{ route('beneficiaires.create') }}">
-                        <span class="sidenav-mini-icon"> B </span>
-                        <span class="sidenav-normal"> Nouveau bénéficiaire </span>
+                        
+                        <span class="sidenav-normal"><i class="fa fa-user-plus"></i>  Nouveau bénéficiaire </span>
                     </a>
                 </li>
 
                 <li class="nav-item dropdown">
                     <a class="nav-link  dropdown-toggle" href="{{ route('dossiers.index') }}" data-bs-toggle="dropdown">
-                        Dossiers </a>
+                      <i class="fa fa-folder-open"></i>  Dossiers </a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="{{ route('dossiers.index') }}"> Liste complete des
+                        <li><a class="dropdown-item" href="{{ route('dossiers.index') }}"><i class="fa fa-list"></i>  Liste complete des
                                 dossiers</a></li>
 
                     </ul>
@@ -57,20 +57,20 @@
 
                 <li class="nav-item ">
                     <a class="nav-link" href="{{ route('rdvs') }}">
-                        <span class="sidenav-normal"> Planning </span>
+                        <span class="sidenav-normal"><i class="fa fa-calendar"></i>  Planning </span>
                     </a>
                 </li>
 
                 <li class="nav-item ">
                   <a class="nav-link" href="{{ route('messagerie') }}">
-                      <span class="sidenav-normal"> Messagerie </span>
+                      <span class="sidenav-normal"><i class="fa fa-comments"></i>  Messagerie </span>
                   </a>
               </li>
                 @if (auth()->user()->type_id == 1)
                     <li class="nav-item">
                         <a class="nav-link  " href="{{ route('users.index') }}">
 
-                            <span class="nav-link-text ms-1">Utilisateurs</span>
+                            <span class="nav-link-text ms-1"><i class="fa fa-users"></i>  Utilisateurs</span>
                         </a>
                     </li>
                 @endif
@@ -78,11 +78,11 @@
                 @if (auth()->user() && auth()->user()->client_id == 0)
                     <li class="nav-item dropdown">
                         <a class="nav-link  dropdown-toggle" data-bs-toggle="dropdown">
-                            Admin </a>
+                          <i class="fa-solid fa-screwdriver-wrench"></i> Admin </a>
                         <ul class="dropdown-menu">
                             <li>
                                 <a class="dropdown-item" href="{{ route('clients.index') }}">
-                                    Partenaires
+                                  <i class="fa-solid fa-users-line"></i>   Partenaires
                                 </a>
                             </li>
 
@@ -124,8 +124,8 @@
               </a>
           </li>
           <li class="nav-item d-flex align-items-center">
-              <a href="{{ route('logout') }}" class="nav-link text-body font-weight-bold px-0">
-                  <span class="d-sm-inline d-none">Logout</span>
+              <a href="{{ route('logout') }}" class="nav-link text-body font-weight-bold px-0" style="    margin-left: 12px;">
+                  <div class="d-sm-inline d-none logout ml-2"><i class="fa-solid fa-right-from-bracket btn btn-success p-2"></i></div>
               </a>
           </li>
 
