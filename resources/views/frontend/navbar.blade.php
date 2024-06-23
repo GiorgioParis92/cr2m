@@ -61,7 +61,11 @@
                     </a>
                 </li>
 
-
+                <li class="nav-item ">
+                  <a class="nav-link" href="{{ route('messagerie') }}">
+                      <span class="sidenav-normal"> Messagerie </span>
+                  </a>
+              </li>
                 @if (auth()->user()->type_id == 1)
                     <li class="nav-item">
                         <a class="nav-link  " href="{{ route('users.index') }}">

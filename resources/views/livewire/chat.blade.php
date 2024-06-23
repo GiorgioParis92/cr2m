@@ -82,7 +82,7 @@
         .chat-messages {
             display: flex;
             flex-direction: column;
-            max-height: 800px;
+            max-height: 40vh;
             overflow-y: scroll;
             min-height: 20vh;
         }
