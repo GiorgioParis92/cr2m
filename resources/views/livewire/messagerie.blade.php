@@ -15,12 +15,11 @@
                             </div>
                         </div>
                     </div>
-@dump($lastMessages)
-
-@dump(empty($lastMessages))
+                    @php $count=0 @endphp
                     @if ($lastMessages)
                         @foreach ($lastMessages as $last)
                             @if ($last->dossier)
+                                @php $count++ @endphp
                                 <a wire:click="set_dossier({{ $last->dossier->id }})" style="cursor:pointer"
                                     class="list-group-item list-group-item-action border-0">
                                     {{-- <div class="badge bg-success float-right">5</div> --}}
@@ -33,7 +32,8 @@
                                                 {{ $last->dossier->beneficiaire->prenom }}</b>
                                             <div class="small">
                                                 {{-- <span class="fas fa-circle chat-online"></span>  --}}
-                                                <span class="text-muted">Le {{ date('d/m/Y à H:i', strtotime($last->created_at)) }}</span><br />
+                                                <span class="text-muted">Le
+                                                    {{ date('d/m/Y à H:i', strtotime($last->created_at)) }}</span><br />
                                                 {{ $last->user->name }} a dit :<br />
                                                 {{ $last->content }}
                                             </div>
@@ -41,13 +41,14 @@
                                     </div>
                                 </a>
                             @else
-                                
                             @endif
                         @endforeach
                     @else
                         <p>Aucun message.</p>
                     @endif
-
+                    @if ($count == 0)
+                        <p>Aucune discussion active.</p>
+                    @endif
 
 
                     <hr class="d-block d-lg-none mt-1 mb-0">
@@ -58,7 +59,8 @@
                         <div class="py-2 px-4 border-bottom d-none d-lg-block">
                             <div class="d-flex align-items-center py-1" style="max-height:50px">
                                 <div class="position-relative">
-                                    <a class="btn btn-primary"  href="{{ route('dossiers.show', $dossier->folder) }}"> Dossier :
+                                    <a class="btn btn-primary" href="{{ route('dossiers.show', $dossier->folder) }}">
+                                        Dossier :
                                         {{ $dossier->beneficiaire->nom }}
                                         {{ $dossier->beneficiaire->prenom }} <i class="fa fa-eye"></i></a>
                                 </div>
@@ -145,7 +147,8 @@
                 <div class="input-group">
                     <input type="text" class="form-control" placeholder="Type your message"
                         wire:model="messageContent" wire:keydown.enter="sendMessage({{ $dossier_set }})">
-                    <button class="btn btn-primary" wire:click="sendMessage({{ $dossier_set }})"><i class="fa fa-paper-plane"></i></button>
+                    <button class="btn btn-primary" wire:click="sendMessage({{ $dossier_set }})"><i
+                            class="fa fa-paper-plane"></i></button>
                 </div>
             </div>
         @endif
@@ -219,18 +222,20 @@
             overflow: hidden
         }
     }
+
     .text-muted {
-    color: #67748e !important;
-    font-size: 10px;
-    margin-right: 10px;
-    margin-left: 10px;
-    font-style: italic;
-}
-a.list-group-item.list-group-item-action.border-0 {
-    margin-bottom: 18px;
-    border-bottom: 1px solid #ccc !important;
-    padding-bottom: 13px;
-}
+        color: #67748e !important;
+        font-size: 10px;
+        margin-right: 10px;
+        margin-left: 10px;
+        font-style: italic;
+    }
+
+    a.list-group-item.list-group-item-action.border-0 {
+        margin-bottom: 18px;
+        border-bottom: 1px solid #ccc !important;
+        padding-bottom: 13px;
+    }
 </style>
 
 <script>
