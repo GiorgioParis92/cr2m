@@ -48,6 +48,7 @@
                     @endif
                     @if ($count == 0)
                         <p>Aucune discussion active.</p>
+                        <p>Pour démarrer une discussion veuillez vous rendre sur le dossier concerné</p>
                     @endif
 
 
