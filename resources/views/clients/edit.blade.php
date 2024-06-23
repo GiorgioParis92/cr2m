@@ -83,6 +83,12 @@
                     <label for="agrement" class="form-label">{{ __('forms.agrement') }}</label>
                     <input type="text" class="form-control" id="agrement" name="agrement" value="{{ $client->agrement }}" >
                 </div>
+
+                <div class="mb-3">
+                    <label for="bank" class="form-label">Coordonnées bancaires</label>
+                    <input type="text" class="form-control" id="bank" name="bank" value="{{ $client->bank }}" >
+                </div>
+
                 <button type="submit" class="btn btn-primary">{{ __('forms.submit') }}</button>
             </form>
         </div>

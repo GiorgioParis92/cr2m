@@ -28,6 +28,7 @@ class Client extends Model
         'rcs',
         'naf',
         'agrement',
+        'bank',
     ];
 
     public function type()
