@@ -1,9 +1,10 @@
 <div wire:poll>
+ 
     <div class="row">
 
         <div class="col-12">
             <div class="card form-register">
-                <div class="card-header pb-0 clearfix">
+                <div class="card-body pb-0 clearfix">
                     <div class="d-lg-flex">
                         <div>
 
@@ -23,7 +24,8 @@
                                 Email : {{ $dossier['beneficiaire']['email'] }}<br />
                             </h6>
 
-                            <div class="btn bg-primary bg-{{$dossier['beneficiaire']['menage_mpr']}}">{{strtoupper($dossier['beneficiaire']['menage_mpr'])}}</div>
+                            <div class="btn bg-primary bg-{{ $dossier['beneficiaire']['menage_mpr'] }}">
+                                {{ strtoupper($dossier['beneficiaire']['menage_mpr']) }}</div>
 
                         </div>
                         <div class="ms-auto my-auto mt-lg-0 mt-4">
@@ -39,7 +41,7 @@
 
             <div class="card form-register">
                 <div class="steps clearfix">
-                    {{-- <ul role="tablist" id="etapeTabs" class="row " wire:poll>
+                    <div class="row etapes_row mt-5" wire:poll>
                         @foreach ($etapes as $index => $e)
                             @php
                                 $isActive = false;
@@ -58,59 +60,16 @@
 
                             @endphp
 
-                            <li @if ($isActive) wire:click="setTab({{ $e->etape_number }})" @endif
-                                role="tab" aria-disabled="false"
-                                class="col-lg-2 nav-link {{ $isActive ? 'active' : '' }} {{ $isCurrent ? 'current' : '' }} {{ $isTab ? 'isTab' : '' }}"
-                                aria-selected="true">
-                                <a id="form-total-t-0" href="#form-total-h-0" aria-controls="form-total-p-0">
-                                    <span class="current-info audible nav-link"></span>
-                                    <div class="title">
-                                        <span class="step-icon">{{ $index + 1 }}</span>
-                                        <span class="step-text">
-                                            {{ strtoupper_extended($e->etape_desc) }}
-                                            <small>
-                                                @if ($dossier->etape_number == $e->etape_number)
-                                                    <p>Status: {{ $dossier->status->status_name ?? '' }}</p>
-                                                @endif
-                                            </small>
-                                        </span>
-                                        <div class="inter_line"></div>
-
-                                    </div>
-                                </a>
-                            </li>
-                        @endforeach
-                    </ul> --}}
-
-
-                    <div  class="row etapes_row mt-5" wire:poll>
-                        @foreach ($etapes as $index => $e)
-                            @php    
-                                $isActive = false;
-                                $isCurrent = false;
-                                $isTab = false;
-                                if ($e->order_column <= $dossier->etape->order_column) {
-                                    $isActive = true;
-                                }
-                                if ($e->order_column == $dossier->etape->order_column) {
-                                    $isCurrent = true;
-                                }
-
-                                if ($e->etape_number == $etape_display['id'] || $e->etape_number == $etape_display) {
-                                    $isTab = true;
-                                }
-
-                            @endphp
-
                             <div @if ($isActive) wire:click="setTab({{ $e->etape_number }})" @endif
                                 aria-disabled="false"
-                                class="@if($isActive) settab @endif col-lg-1  {{ $isActive ? 'active' : '' }} {{ $isCurrent ? 'current' : '' }} {{ $isTab ? 'isTab' : '' }}"
+                                class="@if ($isActive) settab @endif col-lg-1  {{ $isActive ? 'active' : '' }} {{ $isCurrent ? 'current' : '' }} {{ $isTab ? 'isTab' : '' }}"
                                 aria-selected="true">
-                                <a id="form-total-t-0"  aria-controls="form-total-p-0">
+                                <a id="form-total-t-0" aria-controls="form-total-p-0">
                                     <div class="inter_line"></div>
                                     <span class="current-info audible nav-link"></span>
                                     <div class="title">
-                                        <span class="step-icon {{ $isActive ? 'bg-success' : 'bg-tertiary' }}">{{ $index + 1 }}</span>
+                                        <span
+                                            class="step-icon {{ $isActive ? 'bg-success' : 'bg-tertiary' }}">{{ $index + 1 }}</span>
                                         <span class="step-text">
                                             {{ strtoupper_extended($e->etape_desc) }}
                                             <small>
@@ -124,8 +83,8 @@
                                 </a>
                             </div>
                         @endforeach
-                       
-                        </div>
+
+                    </div>
 
                 </div>
 
@@ -134,67 +93,68 @@
                         <div class="row">
                             <div class="col-lg-12">
                                 <h3 class="border-bottom border-gray pb-2 p-2">{{ $etape_display['etape_desc'] }}
-                                @if ($tab == $dossier->etape_number)
-                                <div class="col-lg-6">
-                                    <a class="btn btn-primary"
-                                        href="{{ route('dossiers.next_step', $dossier->id) }}">Valider l'étape</a>
-                                </div>
-                            @endif
-                                <div class="progress">
-                                    <div class="progress-bar" role="progressbar"
-                                    style="width: {{ $score_info['etape_score'] ?? '100' }}%;"
-                                    aria-valuenow="{{ $score_info['etape_score'] ?? '100' }}"
-                                    aria-valuemin="0" aria-valuemax="100">
-                                </div>
+                                    @if ($tab == $dossier->etape_number)
+                                        <div class="col-lg-6">
+                                            <a class="btn btn-primary"
+                                                href="{{ route('dossiers.next_step', $dossier->id) }}">Valider
+                                                l'étape</a>
+                                        </div>
+                                    @endif
+                                    <div class="progress">
+                                        <div class="progress-bar" role="progressbar"
+                                            style="width: {{ $score_info['etape_score'] ?? '100' }}%;"
+                                            aria-valuenow="{{ $score_info['etape_score'] ?? '100' }}" aria-valuemin="0"
+                                            aria-valuemax="100">
+                                        </div>
 
-                            
-                                
-                            </div>
-                            </h3>
+
+
+                                    </div>
+                                </h3>
                             </div>
 
                         </div>
                         <div class="row">
                             <div class="col-lg-6 col-sm-12">
-                                @if(isset($form_id))
-                                <div class="card">
-                                    <div class="card-header p-3 pb-0">
-                                        <h6 class="mb-0">Formulaires</h6>
-                                     
-                                    </div>
+                                @if (isset($form_id))
+                                    <div class="card">
+                                        <div class="card-header p-3 pb-0">
+                                            <h6 class="mb-0">Formulaires</h6>
 
-                                    
-                                    <div class="card-body border-radius-lg p-3">
-                                        <div class="nav-wrapper position-relative end-0">
-                                            <ul class="nav nav-pills nav-fill p-1" role="tablist">
-                                                @foreach ($forms_configs as $index => $form_handler)
-                                                    @if ($form_handler->form->etape_number == $tab && $form_handler->form->type == 'form')
-                                                        <li class="nav-item">
-                                                            <a wire:click="display_form({{ $form_handler->form->id }})"
-                                                                class="nav-link mb-0 px-0 py-1 {{ $form_handler->form->id == $form_id ? 'active' : '' }}">
-                                                                {{ $form_handler->form->form_title }}
+                                        </div>
 
-                                                                {{-- @if (auth()->user()->id == 1)
+
+                                        <div class="card-body border-radius-lg p-3">
+                                            <div class="nav-wrapper position-relative end-0">
+                                                <ul class="nav nav-pills nav-fill p-1" role="tablist">
+                                                    @foreach ($forms_configs as $index => $form_handler)
+                                                        @if ($form_handler->form->etape_number == $tab && $form_handler->form->type == 'form')
+                                                            <li class="nav-item">
+                                                                <a wire:click="display_form({{ $form_handler->form->id }})"
+                                                                    class="nav-link mb-0 px-0 py-1 {{ $form_handler->form->id == $form_id ? 'active' : '' }}">
+                                                                    {{ $form_handler->form->form_title }}
+
+                                                                    {{-- @if (auth()->user()->id == 1)
                                                                     <span style="font-size:12px;font-style:italic">(Form
                                                                         id : {{ $form_handler->form->id }})</span>
                                                                 @endif --}}
-                                                            </a>
-                                                            <div class="progress">
-                                                                <div class="progress-bar" role="progressbar"
-                                                                    style="width: {{ $score_info['form_score'][$form_handler->form->id] ?? '100' }}%;"
-                                                                    aria-valuenow="{{ $score_info['form_score'][$form_handler->form->id] ?? '100' }}"
-                                                                    aria-valuemin="0" aria-valuemax="100">
-                                                                    
+                                                                </a>
+                                                                <div class="progress">
+                                                                    <div class="progress-bar" role="progressbar"
+                                                                        style="width: {{ $score_info['form_score'][$form_handler->form->id] ?? '100' }}%;"
+                                                                        aria-valuenow="{{ $score_info['form_score'][$form_handler->form->id] ?? '100' }}"
+                                                                        aria-valuemin="0" aria-valuemax="100">
+
+                                                                    </div>
                                                                 </div>
-                                                            </div>
-                                                        </li>
-                                                    @endif
-                                                @endforeach
-                                            </ul>
+                                                            </li>
+                                                        @endif
+                                                    @endforeach
+                                                </ul>
+                                            </div>
                                         </div>
+
                                     </div>
-                                    
-                                </div>
                                 @endif
                             </div>
 
@@ -256,7 +216,7 @@
                             </div>
                         </div>
                     @endif
-                
+
                     @if ($form->form->type == 'rdv')
                         {!! $form->render([]) !!}
                         <div class="card container mt-5 pd-5">
@@ -271,6 +231,7 @@
         </div>
     </div>
 </div>
+
 
 <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.css" rel="stylesheet">
 <!-- jQuery -->

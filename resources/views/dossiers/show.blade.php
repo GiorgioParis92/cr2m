@@ -2,15 +2,14 @@
 
 @section('content')
     @php
-      $errors = [];
-$is_valid = true;
-
+        $errors = [];
+        $is_valid = true;
 
     @endphp
 
     <div class="container">
-     
-@livewire('dossier-livewire',['id' => $id])
+
+        @livewire('dossier-livewire', ['id' => $id])
 
         @if (!$is_valid)
             <div class="alert alert-danger">
@@ -22,25 +21,24 @@ $is_valid = true;
                 Données sauvegardées
             </div>
         @endif
-       
+        @if(isset($dossier))
+
+        @livewire('chat',['dossier_id' => $dossier['id']])
+        @endif
     </div>
     <script>
-        @if(session('etape_id'))
-        document.addEventListener('DOMContentLoaded', function() {
-    document.querySelector('[data-index="{{session('etape_id')}}"]').click();
-});
-           alert({{session('etape_id')}})
+        @if (session('etape_id'))
+            document.addEventListener('DOMContentLoaded', function() {
+                document.querySelector('[data-index="{{ session('etape_id') }}"]').click();
+            });
+            alert({{ session('etape_id') }})
         @endif
-        
-        
-            </script>
+    </script>
 @endsection
 @section('scripts')
     <script>
-@if(session('form_id'))
-   alert({{session('form_id')}})
-@endif
-
-
+        @if (session('form_id'))
+            alert({{ session('form_id') }})
+        @endif
     </script>
 @endsection

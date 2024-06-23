@@ -97,7 +97,7 @@ class DossierController extends Controller
         $auditeurs=User::where('type_id',4)->get();
 
 
-        return view('dossiers.show', compact('id','auditeurs'));
+        return view('dossiers.show', compact('id','auditeurs','dossier'));
     }
     public function save_form(Request $request)
     {

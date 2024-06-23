@@ -22,8 +22,10 @@ use App\Http\Controllers\CalendarController;
 use App\Http\Controllers\RdvController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\EtapesController;
+use App\Http\Controllers\Messagerie;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\ResetPasswordController;
+use App\Http\Livewire\Chat;
 
 
 /*
@@ -55,6 +57,12 @@ Route::post('temporary-password/update', [UserController::class, 'updateTemporar
 //     Route::get('temporary-password/reset', [UserController::class, 'showTemporaryPasswordForm'])->name('temporary.password.reset');
 //     Route::post('temporary-password/update', [UserController::class, 'updateTemporaryPassword'])->name('temporary.password.update');
 // });
+
+
+Route::get('/chat', function () {
+    return view('welcome'); // Remplacez par votre vue si nécessaire
+})->middleware('auth');
+
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('logout', [LoginController::class, 'logout']);
@@ -133,6 +141,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 Route::get('/rdvs', [App\Http\Controllers\RdvController::class, 'index'])->name('rdvs');
 Route::get('/calendar', [App\Http\Controllers\CalendarController::class, 'index']);
 Route::get('/events', [App\Http\Controllers\EventController::class, 'getEvents']);
+Route::get('/messagerie', [App\Http\Controllers\Messagerie::class, 'index'])->name('messagerie');
 
 });
 

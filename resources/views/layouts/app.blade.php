@@ -216,6 +216,10 @@
             </div>
         </div>
     </div>
+
+
+
+
     @include('frontend.fixed-plugin')
 
     <!-- Core JS Files -->
