@@ -22,9 +22,22 @@ class Date extends AbstractFormData
 
         $wireModel = "formData.{$this->form_id}.{$this->name}";
 
-        $data = '<div class="form-group  col-sm-12 '.($this->config->class ?? "").'">';
+
+        $class_prediction = '';
+        if ($this->prediction) {
+            $class_prediction = ' prediction';
+        }
+        if (!$this->check_value()) {
+            $class_prediction = ' is-invalid';
+        }
+
+
+
+        $data = '<div class="form-group col-sm-12 ' . ($this->config->class ?? "") . '  group_' . $class_prediction . '">';
+
         $data .= '<label>'.$this->config->title.'</label>';
-        $data .= '<input wire:model="'.$wireModel.'"  class="form-control datepicker ';
+
+        $data .= '<input wire:model="'.$wireModel.'"  class="form-control datepicker ' . $class_prediction.' ';
         if($is_error) {
             $data .=' error is-invalid';
         }
@@ -36,6 +49,16 @@ class Date extends AbstractFormData
         if($is_error) {
             $data .='<div id="validationServerUsernameFeedback" class="invalid-feedback">'.$this->get_error_message().'</div>';
             }
+
+            if (!$this->check_value()) {
+                $data .= '<div  class="invalid-feedback">' . $this->get_error_message() . '</div>';
+    
+            } else {
+                if ($this->prediction) {
+                    $data .= '<span class="prediction">Predicted by OCEER</span>';
+                }
+            }
+
         $data .= '</div>';
 
 

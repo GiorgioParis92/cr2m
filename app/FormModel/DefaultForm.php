@@ -73,7 +73,7 @@ class DefaultForm
         }
         if ($dossier_datas) {
             foreach ($dossier_datas as $key => $value) {
-             
+        
                 $this->formData[$value->meta_key] = $value->meta_value;
             }
         }

@@ -225,7 +225,7 @@
 
         <p>
             <b>Devis n°
-                 </b><br />
+            </b><br />
             Date :
 
 
@@ -304,7 +304,8 @@
         </tr>
 
         <tr>
-            <td width="25%" colspan="4" style="width:25%;min-width:25%;border-left:none;border-right:none" class="text-center border-bottom">
+            <td width="25%" colspan="4" style="width:25%;min-width:25%;border-left:none;border-right:none"
+                class="text-center border-bottom">
 
             </td>
 
@@ -326,7 +327,7 @@
         <tr>
             <td width="25%" colspan="3" style="width:25%;min-width:25%" class=" border-bottom text-center">
                 <p style="width:600px"> <b>Financement par l’ANAH de l’Accompagnateur Rénov’ selon le plafond
-                    de ressources</b></p>
+                        de ressources</b></p>
             </td>
 
 
@@ -335,29 +336,28 @@
             </td>
         </tr>
 
-    @php 
-$array=[
-"bleu"=>['Très modestes','2000'],
-"jaune"=>['Modestes','1600'],
-"violet"=>['Intermédiaires','1200'],
-"rose"=>['Supérieurs','800'],
+        @php
+            $array = [
+                'bleu' => ['Très modestes', '2000'],
+                'jaune' => ['Modestes', '1600'],
+                'violet' => ['Intermédiaires', '1200'],
+                'rose' => ['Supérieurs', '800'],
+            ];
+        @endphp
 
-]
-@endphp
-
-        @foreach($array as $key=>$element)
-        <tr>
-            <td width="25%" colspan="3" style="width:25%;min-width:25%" class=" border-bottom text-right">
-               {{$element[0]}} ({{$key}})
-            </td>
+        @foreach ($array as $key => $element)
+            <tr>
+                <td width="25%" colspan="3" style="width:25%;min-width:25%" class=" border-bottom text-right">
+                    {{ $element[0] }} ({{ $key }})
+                </td>
 
 
-            <td width="25%" style="width:25%;min-width:25%" class=" border-bottom text-right">
-                @if($dossier->beneficiaire->menage_mpr==$key)
-                - {{$array[$dossier->beneficiaire->menage_mpr][1]}} €
-                @endif
-            </td>
-        </tr>
+                <td width="25%" style="width:25%;min-width:25%" class=" border-bottom text-right">
+                    @if ($dossier->beneficiaire->menage_mpr == $key)
+                        - {{ $array[$dossier->beneficiaire->menage_mpr][1] }} €
+                    @endif
+                </td>
+            </tr>
         @endforeach
         <tr>
             <td width="25%" colspan="3" style="width:25%;min-width:25%"
@@ -366,18 +366,17 @@ $array=[
             </td>
 
             <td width="25%" style="width:25%;min-width:25%" class="background_td border-bottom text-right">
-                <b>{{2000-$array[$dossier->beneficiaire->menage_mpr][1]}} €</b>
+                <b>{{ 2000 - $array[$dossier->beneficiaire->menage_mpr][1] }} €</b>
             </td>
         </tr>
 
         <tr>
-            <td width="25%" colspan="4" style="width:25%;min-width:25%"
-                class="background_td border-bottom">
-                En votre aimable règlement sur le compte <b>{{$dossier->client->client_title}}</b><br/><br/>
-                {{$dossier->client->bank ?? ''}}
+            <td width="25%" colspan="4" style="width:25%;min-width:25%" class="background_td border-bottom">
+                En votre aimable règlement sur le compte <b>{{ $dossier->client->client_title }}</b><br /><br />
+                {{ $dossier->client->bank ?? '' }}
             </td>
 
-        
+
         </tr>
 
 
@@ -389,10 +388,10 @@ $array=[
 
 
         <p>
-            Validité du devis : 3 mois à compter de la date d’émission<br/>
-            Date de début de la prestation : à compter de la date de signature du contrat<br/>
-            Date de fin de la prestation : 2 mois à compter de la date de fin des travaux.<br/>
-            Conditions de règlement : payable 8 jours après la date de signature du devis.<br/>
+            Validité du devis : 3 mois à compter de la date d’émission<br />
+            Date de début de la prestation : à compter de la date de signature du contrat<br />
+            Date de fin de la prestation : 2 mois à compter de la date de fin des travaux.<br />
+            Conditions de règlement : payable 8 jours après la date de signature du devis.<br />
         </p>
 
     </div>
@@ -402,8 +401,8 @@ $array=[
 
 
         <p>
-            Le Bénéficiaire<br/>
-            Signature précédé de la mention manuscrite<br/>
+            Le Bénéficiaire<br />
+            Signature précédé de la mention manuscrite<br />
             <i>"Bon pour accord et exécution du devis »</i>
         </p>
 

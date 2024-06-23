@@ -99,6 +99,30 @@ class RdvController extends \App\Http\Controllers\Controller
         $rdvs = $rdvs->where('rdv.id', $rdvId);
 
         $rdvs = $rdvs->first();
+
+
+        DB::table('dossiers_data')->updateOrInsert(
+            [
+                'dossier_id' => $dossier->id,
+                'meta_key' => 'date_1ere_visite'
+            ],
+            [
+                'meta_value' =>  date('d/m/Y', strtotime($request->start)) ?? null,
+                'created_at' => now(),
+                'updated_at' => now()
+            ]
+        );
+
+        DB::table('forms_data')
+        ->where([
+            ['dossier_id', '=', $dossier->id],
+            ['meta_key', '=', 'date_1ere_visite']
+        ])
+        ->update([
+            'meta_value' => date('d/m/Y', strtotime($request->start)) ?? null,
+            'updated_at' => now()
+        ]);
+
         // Return a JSON response
         return response()->json(['success' => true, 'id' => $rdvId, 'rdv' => $rdvs]);
     }
@@ -121,7 +145,7 @@ class RdvController extends \App\Http\Controllers\Controller
         if ($rdvId == 0 || !isset($rdvId)) {
             // Insert a new record and get the id
             $rdvId = DB::table('rdv')->insertGetId([
-                'date_rdv' => date('Y-m-d 00:00:00',strtotime(str_replace('/','-',$request->date_rdv))) ?? '2024-01-01 00:00:00', // Insert default values, adjust as needed
+                'date_rdv' => date('d/m/Y',strtotime(str_replace('/','-',$request->date_rdv))) ?? '2024-01-01 00:00:00', // Insert default values, adjust as needed
                 'user_id' => $request->user_id ?? 0,
                 'type_rdv' => $request->type_rdv ?? 1,
                 'dossier_id' => $request->dossier_id ?? 0,
@@ -143,12 +167,29 @@ class RdvController extends \App\Http\Controllers\Controller
             return response()->json(['success' => false, 'message' => 'Record not found'], 404);
         }
 
-        // $rdvs = DB::table('rdv')->find($rdvId); // Fetch the existing record, you might need to adjust this based on your logic
+        DB::table('dossiers_data')->updateOrInsert(
+            [
+                'dossier_id' => $request->dossier_id,
+                'meta_key' => 'date_1ere_visite'
+            ],
+            [
+                'meta_value' =>  date('d/m/Y',strtotime(str_replace('/','-',$request->date_rdv))) ?? '2024-01-01 00:00:00',
+                'created_at' => now(),
+                'updated_at' => now()
+            ]
+        );
     
-        // if (!$rdvs) {
-        //     return response()->json(['success' => false, 'message' => 'Record not found'], 404);
-        // }
-    
+
+        DB::table('forms_data')
+        ->where([
+            ['dossier_id', '=', $request->dossier_id],
+            ['meta_key', '=', 'date_1ere_visite']
+        ])
+        ->update([
+            'meta_value' => date('d/m/Y',strtotime(str_replace('/','-',$request->date_rdv))) ?? '2024-01-01 00:00:00',
+            'updated_at' => now()
+        ]);
+
         $updateData = [];
     
         foreach ($request->all() as $key => $value) {
