@@ -15,7 +15,9 @@
                             </div>
                         </div>
                     </div>
+@dump($lastMessages)
 
+@dump(empty($lastMessages))
                     @if ($lastMessages)
                         @foreach ($lastMessages as $last)
                             @if ($last->dossier)
