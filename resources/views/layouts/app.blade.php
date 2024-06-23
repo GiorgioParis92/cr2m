@@ -220,7 +220,7 @@
 
 
 
-    @include('frontend.fixed-plugin')
+    {{-- @include('frontend.fixed-plugin') --}}
 
     <!-- Core JS Files -->
     {{-- <script src="{{ asset('frontend/assets/js/core/popper.min.js') }}"></script> --}}
