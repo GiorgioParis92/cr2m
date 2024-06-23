@@ -39,11 +39,11 @@
                                     </div>
                                 </a>
                             @else
-                                <p>Dossier: Not Available</p>
+                                
                             @endif
                         @endforeach
                     @else
-                        <p>No messages available.</p>
+                        <p>Aucun message.</p>
                     @endif
 
 
