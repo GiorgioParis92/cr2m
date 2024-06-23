@@ -100,7 +100,7 @@ class RdvController extends \App\Http\Controllers\Controller
 
         $rdvs = $rdvs->first();
 
-
+        if($type_rdv==1) {
         DB::table('dossiers_data')->updateOrInsert(
             [
                 'dossier_id' => $dossier->id,
@@ -122,7 +122,7 @@ class RdvController extends \App\Http\Controllers\Controller
             'meta_value' => date('d/m/Y', strtotime($request->start)) ?? null,
             'updated_at' => now()
         ]);
-
+    }
         // Return a JSON response
         return response()->json(['success' => true, 'id' => $rdvId, 'rdv' => $rdvs]);
     }
@@ -167,6 +167,9 @@ class RdvController extends \App\Http\Controllers\Controller
             return response()->json(['success' => false, 'message' => 'Record not found'], 404);
         }
 
+
+
+        if($request->type_rdv == 1) {
         DB::table('dossiers_data')->updateOrInsert(
             [
                 'dossier_id' => $request->dossier_id,
@@ -189,7 +192,7 @@ class RdvController extends \App\Http\Controllers\Controller
             'meta_value' => date('d/m/Y',strtotime(str_replace('/','-',$request->date_rdv))) ?? '2024-01-01 00:00:00',
             'updated_at' => now()
         ]);
-
+       }
         $updateData = [];
     
         foreach ($request->all() as $key => $value) {
