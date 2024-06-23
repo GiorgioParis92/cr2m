@@ -186,7 +186,7 @@
         <div class="chat-input">
             <input type="text" id="message-input" wire:model="messageContent" placeholder="Tapez votre message..."
                 wire:keydown.enter="sendMessage">
-            <button class="btn btn-primary" wire:click="sendMessage">Envoyer</button>
+            <button class="btn btn-primary" wire:click="sendMessage"><i class="fa fa-paper-plane"></i></button>
         </div>
     </div>
 </div>
