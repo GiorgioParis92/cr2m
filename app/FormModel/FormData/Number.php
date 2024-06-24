@@ -39,7 +39,7 @@ class Number extends AbstractFormData
 
     public function check_value() {
 
-        if($this->config->required==1) {
+        if($this->config->required ) {
         return is_numeric($this->generate_value());
         }
         return true;

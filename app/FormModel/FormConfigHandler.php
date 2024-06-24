@@ -77,7 +77,7 @@ class FormConfigHandler
 
         foreach ($this->formData as $tag => $data_form) {
             $total ++;
-            if ($data_form->check_value() || $data_form->config->required==0) {
+            if ($data_form->check_value() ) {
                 $valid++;
             }
         }
