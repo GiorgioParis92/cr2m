@@ -130,7 +130,7 @@ class FileUploadService
 
             $update=DB::table('forms_data')->updateOrInsert(
                 [
-                    'dossier_id' => ''.$request->clientId.'',
+                    'dossier_id' => ''.$dossier->id.'',
                     'form_id' => ''.$form_id.'',
                     'meta_key' => ''.$request->input('template').''
                 ],
