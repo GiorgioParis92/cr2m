@@ -11,6 +11,7 @@ class AbstractFormData
     protected $name;
     protected $form_id;
     protected $dossier_id;
+    protected $dossier;
     protected $config;
     public $prediction;
     public $updating = false;
@@ -35,7 +36,7 @@ class AbstractFormData
             ->first();
 
 
-            // Initialize value with the first table's value or an empty string
+        // Initialize value with the first table's value or an empty string
         $this->name = $name;
 
 
@@ -118,5 +119,13 @@ class AbstractFormData
 
         return 'Mauvaise valeur';
 
+    }
+
+
+
+    public function set_dossier($dossier)
+    {
+
+        $this->dossier = $dossier;
     }
 }

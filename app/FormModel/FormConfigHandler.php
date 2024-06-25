@@ -39,6 +39,8 @@ class FormConfigHandler
                 // Fallback to AbstractFormData if the class does not exist
                 $this->formData[$value->name] = new AbstractFormData($value, $value->name, $this->form->id, $this->dossier->id);
             }
+            $this->formData[$value->name] -> set_dossier($this->dossier);
+
         }
     }
 

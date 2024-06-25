@@ -29,7 +29,7 @@ class Fillable extends AbstractFormData
        
       
         data-name="'.$this->name.'"
-        data-dossier_id="'.$this->dossier_id.'"
+        data-dossier_id="'.$this->dossier->folder.'"
         data-form_id="'. $this->form_id . '">
         <i class="fas fa-file-pdf"></i> Générer';
   
@@ -42,7 +42,7 @@ class Fillable extends AbstractFormData
 
         
 
-            $filePath = storage_path('app/public/dossiers/'.$this->dossier_id .'/' . $this->name.'.pdf');  // File system path
+            $filePath = storage_path('app/public/dossiers/'.$this->dossier->folder .'/' . $this->name.'.pdf');  // File system path
 
 
             if (file_exists($filePath)) {
@@ -50,7 +50,7 @@ class Fillable extends AbstractFormData
                     $data .= '<div class="btn btn-success btn-view pdfModal"
             data-toggle="modal" 
              
-            data-img-src="' . asset('storage/dossiers/'.$this->dossier_id.'/' . $this->name.'.pdf') . '?time=' . strtotime('now') . '"
+            data-img-src="' . asset('storage/dossiers/'.$this->dossier->folder.'/' . $this->name.'.pdf') . '?time=' . strtotime('now') . '"
             data-name="' . $this->config->title . '">
             <i class="fas fa-eye"></i> Visualiser</div>';
                 
@@ -64,7 +64,7 @@ class Fillable extends AbstractFormData
 
 
         $data .= '<td class="align-middle text-sm">';
-        $data .= '<form action="' . route("upload_file", ["form_id" => $this->form_id, "folder" => "dossiers", "clientId" => $this->dossier_id, "template" => $this->name]) . '" class="dropzone dropzone_button bg-primary" id="dropzone-' . $this->name . '">';
+        $data .= '<form action="' . route("upload_file", ["form_id" => $this->form_id, "folder" => "dossiers", "clientId" => $this->dossier->folder, "template" => $this->name]) . '" class="dropzone dropzone_button bg-primary" id="dropzone-' . $this->name . '">';
         $data .= csrf_field(); // This will generate the CSRF token input field
         $data .= '<div class="dz-message"><i class="fas fa-arrow-up"></i> Upload';
         $data .= '</div>';
