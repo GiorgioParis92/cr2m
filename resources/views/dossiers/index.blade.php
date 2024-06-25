@@ -215,7 +215,7 @@
                         </td>
 
                         <td class="text-center">
-                            @if(isset($dossier->mandataire_financier))
+                            @if(isset($dossier->mandataire_financier) && $dossier->mandataire_financier>0)
 
                             @if (isset($dossier->mandataire_financier->main_logo) &&
                                     Storage::disk('public')->exists($dossier->mandataire_financier->main_logo))
