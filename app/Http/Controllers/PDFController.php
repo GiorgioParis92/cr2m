@@ -101,7 +101,7 @@ class PDFController extends Controller
 
 
         $validated = $request->validate([
-            'dossier_id' => 'nullable|integer',
+            'dossier_id' => 'nullable',
         ]);
 
         if (isset($validated['dossier_id'])) {
@@ -118,6 +118,13 @@ class PDFController extends Controller
                 $optionsArray = [];
             }
             $dossier = Dossier::where('id', $validated['dossier_id'])->first();
+
+            if(is_numeric($validated['dossier_id'])) {
+                $dossier=Dossier::where('id',$validated['dossier_id'])->first();
+            } else {
+                $dossier=Dossier::where('folder',$validated['dossier_id'])->first();
+            }
+
             $all_data = load_all_dossier_data($dossier);
 
         }

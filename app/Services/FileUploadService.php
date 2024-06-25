@@ -23,7 +23,6 @@ class FileUploadService
     public function storeImage(Request $request, string $folder = null, int $clientId = null, string $inputName = 'file')
     {
 
-        dd($request);
         if ($request->folder == 'dossiers') {
             if (isset($request->analyze)) {
                 // $ocrResponse = $this->callOcrAnalyzeDirectly($request);
