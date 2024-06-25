@@ -84,6 +84,49 @@ class DossierLivewire extends Component
 
     }
 
+
+    public function refresh()
+    {
+        $this->time = now()->format('H:i:s');
+
+        // Fetch dossier with related data
+        $this->dossier = Dossier::where('id', $this->dossier->id)
+            ->with('beneficiaire', 'fiche', 'etape', 'status')
+            ->first();
+
+            $current=DB::table('etapes')->where('id', $this->dossier->etape_number)->first();
+        $this->dossier->order_column = $current->order_column;
+
+        if (!$this->dossier) {
+            abort(404, 'Dossier not found');
+        }
+        $this->global_data=[];
+        // Fetch distinct etapes
+        $distinctEtapes = DB::table('forms')
+            ->select('etape_number', DB::raw('MIN(id) as min_id'))
+            ->groupBy('etape_number');
+           
+            
+        $etapes = DB::table('forms')
+            ->join('etapes', 'forms.etape_number', '=', 'etapes.id')
+            ->joinSub($distinctEtapes, 'distinctEtapes', function ($join) {
+                $join->on('forms.id', '=', 'distinctEtapes.min_id');
+            })
+            ->select('forms.*', 'etapes.etape_name', 'etapes.etape_desc', 'etapes.order_column')
+            ->orderBy('etapes.order_column')
+            ->get();
+        $this->reinitializeFormsConfigs();
+
+        $this->etapes = $this->convertArrayToStdClass($etapes->toArray());
+        foreach ($this->etapes as $etape) {
+            $this->validators[$etape->etape_id] = new EtapeValidator($etape->etape_id);
+        }
+
+   
+
+
+    }
+
     public function setTab($tab)
     {
         $this->tab = $tab;
