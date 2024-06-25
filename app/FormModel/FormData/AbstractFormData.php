@@ -86,7 +86,7 @@ class AbstractFormData
         $value = $this->generate_value();
 
 
-
+        dd($value);
 
         DB::table('forms_data')->updateOrInsert(
             [
