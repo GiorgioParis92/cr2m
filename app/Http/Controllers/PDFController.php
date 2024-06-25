@@ -24,7 +24,7 @@ class PDFController extends Controller
         // Validate the incoming request data
         $validated = $request->validate([
             'template' => 'nullable|string',
-            'dossier_id' => 'nullable|integer',
+            'dossier_id' => 'nullable',
         ]);
 
         // Determine the HTML content to use
