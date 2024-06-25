@@ -38,9 +38,9 @@ class Db_select extends AbstractFormData
         }
         $data .= 'name="' . $this->config->name . '" class="form-control ' . $class_prediction . '">';
         $data .= '<option value=""';
-        if ($this->value == '0'  || $this->value == '' || empty($this->value)) {
-            $data .= ' selected ';
-        }
+        // if ($this->value == '0'  || $this->value == '' || empty($this->value)) {
+        //     $data .= ' selected ';
+        // }
         $data.='>Choisir</option>';
 
         foreach ($request as $result) {
