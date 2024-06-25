@@ -15,11 +15,10 @@ class AbstractFormData
     public $prediction;
     public $updating = false;
 
-    public function __construct($config, $name, $form_id, $dossier_id,$dossier)
+    public function __construct($config, $name, $form_id, $dossier_id)
     {
         $this->form_id = $form_id;
         $this->dossier_id = $dossier_id;
-        $this->dossier = $dossier;
         $this->config = $config;
 
         $config = \DB::table('forms_data')
