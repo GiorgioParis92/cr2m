@@ -263,7 +263,7 @@ class DossierLivewire extends Component
             $dossier=Dossier::where('id', $this->dossier->id)->first();
 
             foreach($dossier->getAttributes() as $key=>$value) {
-                $this->global_data[$key] = $value;
+                // $this->global_data[$key] = $value;
 
             }
 
