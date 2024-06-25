@@ -62,7 +62,7 @@ class Db_select extends AbstractFormData
 
         }
 
-        $data .= '</div>'.$this->value;
+        $data .= '</div>';
 
 
 
