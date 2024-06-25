@@ -23,6 +23,7 @@ class FileUploadService
     public function storeImage(Request $request, string $folder = null, int $clientId = null, string $inputName = 'file')
     {
 
+        dd($request);
         if ($request->folder == 'dossiers') {
             if (isset($request->analyze)) {
                 // $ocrResponse = $this->callOcrAnalyzeDirectly($request);
@@ -75,7 +76,12 @@ class FileUploadService
             $clientId = $request->clientId;
 
             if(isset($request->folder) && $request->folder=='dossiers') {
-                $dossier=Dossier::where('id',$request->clientId)->first();
+                if(is_numeric($request->clientId)) {
+                    $dossier=Dossier::where('id',$request->clientId)->first();
+                } else {
+                    $dossier=Dossier::where('folder',$request->clientId)->first();
+                }
+                
                 $clientId=$dossier->folder;
             }
            
