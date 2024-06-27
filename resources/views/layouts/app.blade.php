@@ -517,7 +517,7 @@
                 }
             });
 
-            $('.pdfModal').click(function() {
+            $('.pdfModal').click(function() {   
             
             $('#pdfFrame').attr('src', '');
 
@@ -536,7 +536,41 @@
             $('#imageModal').modal('show');
         });
         });
-    </script>
+
+    $(document).ready(function() {
+        $('#global').on('keyup', function() {
+            let query = $(this).val();
+            console.log(query)
+            if (query.length > 2) {
+                $.ajax({
+                    url: '{{ route('search') }}',
+                    type: 'GET',
+                    data: { query: query },
+                    success: function(data) {
+                        let resultsContainer = $('#search-results');
+                        resultsContainer.empty();
+                        
+                        $.each(data, function(type, items) {
+                            if (items.length > 0) {
+                            
+                                $.each(items, function(index, item) {
+                                    resultsContainer.append('<div><a href="'+item.url+'">' + (item.beneficiaire.nom +' '+item.beneficiaire.prenom) + '</a></div>');
+                                });
+                            }
+                        });
+                        $('#search-results').show()
+                    }
+                });
+            }
+        });
+    });
+
+    function capitalizeFirstLetter(string) {
+        return string.charAt(0).toUpperCase() + string.slice(1);
+    }
+</script>
+
+
     <!-- Github buttons -->
     <script async defer src="https://buttons.github.io/buttons.js"></script>
     <!-- Control Center for Soft Dashboard: parallax effects, scripts for the example pages etc -->

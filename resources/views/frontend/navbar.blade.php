@@ -100,9 +100,12 @@
         <div class="ms-md-auto pe-md-3 d-flex align-items-center">
           <div class="input-group">
               <span class="input-group-text text-body"><i class="fas fa-search" aria-hidden="true"></i></span>
-              <input type="text" class="form-control" placeholder="Type here...">
+              <input type="text" class="form-control" id="global" placeholder="Type here...">
+              <div style="display:none" id="search-results" class="container mt-3"></div>
+
           </div>
       </div>
+
 
 
       <ul class="navbar-nav  justify-content-end">

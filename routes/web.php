@@ -143,6 +143,10 @@ Route::get('/calendar', [App\Http\Controllers\CalendarController::class, 'index'
 Route::get('/events', [App\Http\Controllers\EventController::class, 'getEvents']);
 Route::get('/messagerie', [App\Http\Controllers\Messagerie::class, 'index'])->name('messagerie');
 
+
+Route::get('/search', [App\Http\Controllers\SearchController::class, 'search'])->name('search');
+
+
 });
 
 // Include auth routes like login, register, password reset, etc.

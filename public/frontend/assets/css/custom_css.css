@@ -1378,3 +1378,23 @@ label.custom-control-label {
 .chat-input button:hover {
     background-color: #0056b3;
 }
+div#search-results div:hover {
+    background: #ccc;
+    color: white;
+    cursor: pointer;
+}
+
+div#search-results div {
+    margin-bottom: 7px;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 5px;
+}
+div#search-results {
+    position: absolute;
+    background: white;
+    color: black;
+    top: 65%;
+    max-width: 100%;
+    width: 100%;
+    z-index: 999;
+}

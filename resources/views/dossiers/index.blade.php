@@ -276,10 +276,13 @@
 
 
                 ],
-                dom: '<"top"l><"bottom"><"clear">',
+                dom: '<"top"lp><"bottom">',
                 language: {
                     lengthMenu: ' _MENU_ lignes'
-                }
+                },
+                pageLength: 100,
+                "order": [0,'desc']
+
 
             });
 
