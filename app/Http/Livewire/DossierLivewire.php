@@ -165,13 +165,14 @@ class DossierLivewire extends Component
     {
         $this->etapes = $this->convertArrayToStdClass($this->etapes);
 
-        $this->reinitializeFormsConfigs(false);
+       $this->reinitializeFormsConfigs(false);
         // $this->emit('initializeDropzones', ['forms_configs' => $this->forms_configs]);
 
     }
     public function updated($propertyName, $value)
     {
         if (strpos($propertyName, 'formData.') === 0) {
+            
             $this->updatedFormData($propertyName, $value);
         }
 
@@ -189,6 +190,7 @@ class DossierLivewire extends Component
             // Ensure the formId and key exist
             if (isset($this->forms_configs[$formId]) && isset($this->forms_configs[$formId]->formData[$key])) {
                 $this->forms_configs[$formId]->formData[$key]->value = $value;
+                $this->forms_configs[$formId]->formData[$key]->save_value();
             }
         }
  
@@ -305,17 +307,10 @@ class DossierLivewire extends Component
         $this->get_score_per_etape();
     }
 
-    public function updateFormData($formId, $key, $value)
-    {
-        $this->formData[$formId][$key] = $value;
-        if (isset($this->forms_configs[$formId])) {
-            $this->forms_configs[$formId]->formData[$key]->value = $value;
-        }
-    }
+ 
 
     public function render()
     {
-        $this->time = now()->format('H:i:s');
 
         return view('livewire.dossier-livewire', [
             'dossier' => $this->dossier,
