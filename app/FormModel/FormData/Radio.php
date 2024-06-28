@@ -57,14 +57,14 @@ class Radio extends AbstractFormData
         }
 
         $data .= '</div>';
-
+     
         return $data;
     }
 
 
     
     public function check_value() {
-
+     
         if($this->config->required && $this->value=='') {
             return false;
         }

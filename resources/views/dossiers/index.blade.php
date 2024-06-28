@@ -33,7 +33,7 @@
                     <option value="">Filtrer par étape</option>
 
                     @foreach ($etapes as $etape)
-                        <option value="{{ $etape->order_column}}">{{ $etape->etape_desc }}</option>
+                        <option value="{{ $etape->order_column}}">{{ ($etape->order_column+1)}} - {{ $etape->etape_desc }}</option>
                     @endforeach
 
                 </select>
@@ -88,9 +88,9 @@
                 <label class="mr-sm-2">Type de dossier</label>
                 <select class="form-control" data-column="19">
                     <option value="">Filtrer par type de dossier</option>
-
+                    @php $count=count($fiches) @endphp
                     @foreach ($fiches as $fiche)
-                        <option value="{{ $fiche->id }}">{{ $fiche->fiche_name }}</option>
+                        <option @if($count==1) selected @endif value="{{ $fiche->id }}">{{ $fiche->fiche_name }}</option>
                     @endforeach
 
                 </select>
@@ -278,8 +278,8 @@
                 ],
                 dom: '<"top"lp><"bottom">',
                 language: {
-                    lengthMenu: ' _MENU_ lignes'
-                },
+        url: '//cdn.datatables.net/plug-ins/2.0.8/i18n/fr-FR.json',
+    },
                 pageLength: 100,
                 "order": [0,'desc']
 

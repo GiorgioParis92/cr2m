@@ -136,8 +136,8 @@
         }
     </style>
     <div class="chat-container collapsed" id="chat-container">
-        <div class="chat-header bg-primary" id="chat-toggle">
-            <div><i class="fa fa-comments"></i> Chat</div>
+        <div class="chat-header bg-primary btn-primary" style="background-position: 0!important" id="chat-toggle">
+            <div><i class="fa fa-comments"></i> Discussion</div>
             <div class="chat-toggle"><i class="fa fa-arrow-up"></i></div>
         </div>
 

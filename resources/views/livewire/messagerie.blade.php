@@ -1,7 +1,7 @@
 <main class="content" wire:poll="refresh">
     <div class="container p-0">
 
-        <h1 class="h3 mb-3">Messagerie</h1>
+        <h1 class="h3 mb-3">Discussions</h1>
 
         <div class="card">
             <div class="row g-0" style="min-height: 80vh">
@@ -10,7 +10,7 @@
                     <div class="px-4 d-none d-md-block">
                         <div class="d-flex align-items-center">
                             <div class="flex-grow-1">
-                                <input type="text" class="form-control my-3" placeholder="Search..."
+                                <input type="text" class="form-control my-3" placeholder="Recherche..."
                                     wire:model.debounce.500ms="searchTerm" wire:keydown="filterMessages">
                             </div>
                         </div>

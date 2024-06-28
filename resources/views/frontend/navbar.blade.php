@@ -63,7 +63,7 @@
 
                 <li class="nav-item ">
                   <a class="nav-link" href="{{ route('messagerie') }}">
-                      <span class="sidenav-normal"><i class="fa fa-comments"></i>  Messagerie </span>
+                      <span class="sidenav-normal"><i class="fa fa-comments"></i>  Discussions </span>
                   </a>
               </li>
                 @if (auth()->user()->type_id == 1)
@@ -100,7 +100,7 @@
         <div class="ms-md-auto pe-md-3 d-flex align-items-center">
           <div class="input-group">
               <span class="input-group-text text-body"><i class="fas fa-search" aria-hidden="true"></i></span>
-              <input type="text" class="form-control" id="global" placeholder="Type here...">
+              <input type="text" class="form-control" id="global" placeholder="Recherche...">
               <div style="display:none" id="search-results" class="container mt-3"></div>
 
           </div>

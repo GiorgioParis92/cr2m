@@ -243,7 +243,12 @@
 
     @yield('scripts')
     <script>
+
+
   document.addEventListener("DOMContentLoaded", function() {
+
+
+
     let isTouchDevice = 'ontouchstart' in document.documentElement;
     let submenuTimeout;
 
@@ -538,6 +543,10 @@
         });
 
     $(document).ready(function() {
+
+
+
+
         $('#global').on('keyup', function() {
             let query = $(this).val();
             console.log(query)

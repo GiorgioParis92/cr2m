@@ -1398,3 +1398,31 @@ div#search-results {
     width: 100%;
     z-index: 999;
 }
+
+.navbar .nav-link {
+    color: #344767;
+    padding: 0.5rem 1rem;
+    font-weight: 400;
+    font-size: 0.875rem;
+    white-space: nowrap;
+}
+
+.chat-container.collapsed {
+    height: 40px;
+    padding: 0;
+    max-width: 200px;
+}
+
+
+.collapsed .chat-header {
+    display: block;
+
+    text-align: center;
+}
+
+.collapsed .chat-toggle {
+    cursor: pointer;
+    position: absolute;
+    top: 9px;
+    right: 10px;
+}

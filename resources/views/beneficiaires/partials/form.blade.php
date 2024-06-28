@@ -95,7 +95,8 @@
         <select class="form-control" id="fiche_id" name="fiche_id">
             <option value=""></option>
             @foreach ($fiches as $fiche)
-                <option value="{{ $fiche->id }}">{{ $fiche->fiche_name }}</option>
+            @php $count=count($fiches) @endphp
+                <option @if($count==1) selected @endif value="{{ $fiche->id }}">{{ $fiche->fiche_name }}</option>
             @endforeach
         </select>
     </div>
@@ -140,3 +141,15 @@
     @endif
 
 @endif
+
+@section('scripts')
+<script>
+    $('select').each(function() {
+                if ($(this).closest('.modal').length === 0) {
+                    $(this).select2();
+                }
+            });
+
+</script>
+
+@endsection

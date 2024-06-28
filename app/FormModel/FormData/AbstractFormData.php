@@ -128,4 +128,15 @@ class AbstractFormData
 
         $this->dossier = $dossier;
     }
+
+
+    public function getOtherValue($name)
+    {
+        $otherValue = DB::table('forms_data')
+            ->where('dossier_id', $this->dossier_id)
+            ->where('meta_key', $name)
+            ->first();
+
+        return $otherValue->meta_value ?? '';
+    }
 }
