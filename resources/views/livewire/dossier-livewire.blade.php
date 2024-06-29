@@ -209,7 +209,7 @@
 
                                     <div class="row">
                                         <div class="form-group">
-                                            {{-- <button class="btn btn-secondary" type="submit">Enregistrer</button> --}}
+                                            <button class="btn btn-secondary" type="submit">Enregistrer</button>
                                         </div>
                                     </div>
                                 </form>

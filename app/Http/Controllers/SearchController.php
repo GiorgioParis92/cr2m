@@ -43,7 +43,7 @@ class SearchController extends Controller
 
 
         $dossiers->each(function ($dossier) {
-            $dossier->url = route('dossiers.show', $dossier->id);
+            $dossier->url = route('dossiers.show', $dossier->folder);
         });
 
 
