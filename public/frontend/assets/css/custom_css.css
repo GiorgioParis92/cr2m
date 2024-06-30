@@ -1426,3 +1426,6 @@ div#search-results {
     top: 9px;
     right: 10px;
 }
+.form-group {
+    display: inline-block;
+}
