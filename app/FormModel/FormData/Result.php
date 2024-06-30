@@ -81,7 +81,10 @@ class Result extends AbstractFormData
                                 $tagValue = 1;
                             }
                         }
-                        dd($tagValue);
+                        if($tag=='estimation_prime') {
+                            dd($tagValue);
+                        }
+                        
                         $total -= $tagValue;
                     }
                 }
