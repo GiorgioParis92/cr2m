@@ -99,7 +99,18 @@ class Result extends AbstractFormData
                         $total += $tagValue;
                     }
                 }
+                if ($operand['operand'] === '<') {
+                   
+                    
+                    
+                    foreach ($operand['tags'] as $tag) {
 
+                        $tagValue = number_format((float) $this->getOtherValue($tag), 2, '.', '');
+
+
+                        $total = $tagValue;
+                    }
+                }
             }
         }
     
