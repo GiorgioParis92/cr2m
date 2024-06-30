@@ -21,7 +21,7 @@ class Result extends AbstractFormData
             }
         }
 
-
+        $total=0;
         if (isset($optionsArray['operands'])) {
             foreach ($optionsArray['operands'] as $operand) {
 
