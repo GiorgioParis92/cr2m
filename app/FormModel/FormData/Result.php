@@ -74,7 +74,6 @@ class Result extends AbstractFormData
                     foreach ($operand['tags'] as $tag) {
                         $tagValue = number_format((float) $this->getOtherValue($tag), 2, '.', '');
 
-dump($tagValue);
                         if ($tagValue === '' || $tagValue === null) {
                             if (is_numeric($tag)) {
                                 $tagValue = $tag;
@@ -82,7 +81,7 @@ dump($tagValue);
                                 $tagValue = 1;
                             }
                         }
-
+                        $data .=$tagValue;
                         $total -= $tagValue;
                     }
                 }
