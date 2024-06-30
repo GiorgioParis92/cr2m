@@ -9,6 +9,9 @@ class Result extends AbstractFormData
 {
     public function render(bool $is_error)
     {
+
+
+
         $jsonString = str_replace(["\n", '', "\r"], '', $this->config->options);
         $optionsArray = json_decode($jsonString, true);
 
@@ -66,7 +69,8 @@ class Result extends AbstractFormData
                 }
 
                 if ($operand['operand'] == '-') {
-                   
+                    $total = 0;
+
                     foreach ($operand['tags'] as $tag) {
                         $tagValue = number_format((float) $this->getOtherValue($tag), 2, '.', '');
 

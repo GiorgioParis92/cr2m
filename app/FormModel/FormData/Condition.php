@@ -10,7 +10,6 @@ class Condition extends AbstractFormData
     public function render(bool $is_error)
     {
         // Constructing the wire:model directive
-
         $jsonString = str_replace(["\n", '', "\r"], '', $this->config->options);
         $optionsArray = json_decode($jsonString, true);
         $wireModel = "formData.{$this->form_id}.{$this->name}";
