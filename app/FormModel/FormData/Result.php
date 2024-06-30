@@ -81,7 +81,7 @@ class Result extends AbstractFormData
                                 $tagValue = 1;
                             }
                         }
-                        $data .=$tagValue;
+                        dd($tagValue);
                         $total -= $tagValue;
                     }
                 }
