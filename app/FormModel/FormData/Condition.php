@@ -33,7 +33,7 @@ class Condition extends AbstractFormData
 
 
         if($this->value=='error') {
-            $data = '<div  class="invalid-feedback">Erreur</div>';
+            $data .= '<div  class="invalid-feedback">Erreur</div>';
         }
 
 
