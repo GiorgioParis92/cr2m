@@ -69,8 +69,8 @@
                       <span class="sidenav-normal"><i class="fa fa-comments"></i>  Discussions </span>
                   </a>
               </li>
-@dump(auth()->user())
-                @if (auth()->user()->type_id == 1)
+
+              @if (auth()->user()->type_id == 1)
                     <li class="nav-item">
                         <a class="nav-link  " href="{{ route('users.index') }}">
 
