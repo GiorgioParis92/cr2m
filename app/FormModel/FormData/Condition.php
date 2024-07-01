@@ -76,7 +76,7 @@ class Condition extends AbstractFormData
         foreach ($optionsArray as $condition_config) {
        
             if($this->value=='error') {
-                $this->get_error_message = $condition_config['error_message'] ?? '';
+                return $condition_config['error_message'] ?? '';
         
             }
 
