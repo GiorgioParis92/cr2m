@@ -135,6 +135,7 @@ class Result extends AbstractFormData
                     
                     foreach ($operand['tags'] as $tag) {
 
+                        $tagValue = $this->getOtherValue($tag);
 
                         if(isset($tagValue) && $tagValue != '' && $tagValue>0) {
                             $total +=1 ;
