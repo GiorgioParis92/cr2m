@@ -21,7 +21,11 @@ class Condition extends AbstractFormData
                 $this->get_error_message = $condition_config['error_message'] ?? '';
                 $this->save_value();
                 $condition_valid=true;
-                break;
+
+                if($condition_config['result']=='AND') {
+                    break;
+                }
+                
             }
 
         }
