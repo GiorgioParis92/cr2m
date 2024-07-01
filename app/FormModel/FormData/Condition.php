@@ -38,7 +38,6 @@ class Condition extends AbstractFormData
         }
 
         $data .='</div>';
-        $data .='</div>';
 
 
 
