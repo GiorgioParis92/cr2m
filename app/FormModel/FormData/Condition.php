@@ -18,6 +18,7 @@ class Condition extends AbstractFormData
        
             if ($this->check_condition($condition_config)) {
                 $this->value = $condition_config['result'];
+                $error_message = $condition_config['error_message'] ?? '';
                 $this->save_value();
                 $condition_valid=true;
                 break;
@@ -29,11 +30,11 @@ class Condition extends AbstractFormData
             $this->value='';
             $this->save_value();
         }
-        $data = '<input wire:model.lazy="' . $wireModel . '" value="'.$this->value.'" id="' . $this->name . '"  class="form-control" type="text" name="' . $this->name . '">';
+        $data = '<input wire:model.lazy="' . $wireModel . '" value="'.$this->value.'" id="' . $this->name . '"  class="form-control" type="hidden" name="' . $this->name . '">';
 
 
         if($this->value=='error') {
-            $data .= '<div style="display:block" class="invalid-feedback">Erreur</div>';
+            $data .= '<div style="display:block" class="invalid-feedback">'.$error_message.'</div>';
         }
 
 
