@@ -29,9 +29,9 @@ class Condition extends AbstractFormData
             $this->value='';
             $this->save_value();
         }
-       
-        $data = '<input wire:model.lazy="' . $wireModel . '" value="'.$this->value.'" id="' . $this->name . '"  class="form-control" type="text" name="' . $this->name . '"';
-
+        $data = '<div  class="form-group col-sm-12 ">';
+        $data .= '<input wire:model.lazy="' . $wireModel . '" value="'.$this->value.'" id="' . $this->name . '"  class="form-control" type="text" name="' . $this->name . '"';
+        $data .='</div>';
 
 
         return $data;
