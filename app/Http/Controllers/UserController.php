@@ -36,7 +36,7 @@ class UserController extends Controller
 
     public function create(Request $request)
     {
-        $clients = Client::where('client_id','>',0)->get();
+        $clients = Client::where('id','>',0)->get();
         $types = DB::table('users_type')->where('type_client_id', '>', 0)->get();
 
 
