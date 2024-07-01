@@ -18,7 +18,7 @@ class Condition extends AbstractFormData
        
             if ($this->check_condition($condition_config)) {
                 $this->value = $condition_config['result'];
-                $error_message = $condition_config['error_message'] ?? '';
+                $this->get_error_message = $condition_config['error_message'] ?? '';
                 $this->save_value();
                 $condition_valid=true;
                 break;
@@ -34,7 +34,7 @@ class Condition extends AbstractFormData
 
 
         if($this->value=='error') {
-            $data .= '<div style="display:block" class="invalid-feedback">123'.$error_message.'</div>';
+            $data .= '<div style="display:block" class="invalid-feedback">123'.$this->get_error_message.'</div>';
         }
 
 
@@ -67,5 +67,21 @@ class Condition extends AbstractFormData
             }
         }
         return false;
+    }
+
+    public function get_error_message()
+    {
+        $jsonString = str_replace(["\n", '', "\r"], '', $this->config->options);
+        $optionsArray = json_decode($jsonString, true);
+        foreach ($optionsArray as $condition_config) {
+       
+            if($this->value=='error') {
+                $this->get_error_message = $condition_config['error_message'] ?? '';
+        
+            }
+
+        }
+
+        return 'Erreur';
     }
 }
