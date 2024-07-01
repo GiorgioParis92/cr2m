@@ -34,7 +34,7 @@ class Condition extends AbstractFormData
 
 
         if($this->value=='error') {
-            $data .= '<div style="display:block" class="invalid-feedback">123'.$this->get_error_message.'</div>';
+            $data .= '<div style="display:block" class="invalid-feedback">123'.$this->get_error_message().'</div>';
         }
 
 
