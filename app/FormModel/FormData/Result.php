@@ -21,26 +21,35 @@ class Result extends AbstractFormData
             }
         }
 
-        $total=0;
+    
         if (isset($optionsArray['operands'])) {
             foreach ($optionsArray['operands'] as $operand) {
 
                 if ($operand['operand'] == 'x') {
-                    $total = 1; // Initialize to 1 for multiplication
-                    foreach ($operand['tags'] as $tag) {
-                        $tagValue = number_format((float) $this->getOtherValue($tag), 2, '.', '');
+                
+                 
+                    if(!isset($total) ) {
+                        $total=1;
+                      
+                    }
+                  
 
+                    
+                    foreach ($operand['tags'] as $tag) {
+                        $tagValue = $this->getOtherValue($tag);
+                   
 
                         if ($tagValue === '' || $tagValue === null) {
                             if (is_numeric($tag)) {
                                 $tagValue = $tag;
                             } else {
-                                $tagValue = 1;
+                                $tagValue = 0;
                             }
                         }
 
                         $total *= $tagValue;
                     }
+                  
                 }
 
 
@@ -48,7 +57,10 @@ class Result extends AbstractFormData
                 if ($operand['operand'] == '/') {
          
                     foreach ($operand['tags'] as $tag) {
-
+                        if(!isset($total)) {
+                            $total=0;
+                        }
+                      
                         $tagValue = $this->getOtherValue($tag) ? number_format((float) $this->getOtherValue($tag), 2, '.', '') : '';
 
                         
@@ -66,11 +78,13 @@ class Result extends AbstractFormData
                         }
 
                     }
+                  
+                   
                 }
 
                 if ($operand['operand'] == '-') {
                  
-
+                    $total=0;
                     foreach ($operand['tags'] as $tag) {
                         $tagValue = number_format((float) $this->getOtherValue($tag), 2, '.', '');
 
@@ -89,7 +103,7 @@ class Result extends AbstractFormData
 
                 if ($operand['operand'] === '+') {
                    
-                    
+                    $total=0;
                     
                     foreach ($operand['tags'] as $tag) {
 
@@ -101,7 +115,7 @@ class Result extends AbstractFormData
                 }
                 if ($operand['operand'] === '<') {
                    
-                    
+                    $total=0;
                     
                     foreach ($operand['tags'] as $tag) {
 
@@ -116,7 +130,7 @@ class Result extends AbstractFormData
 
                 if ($operand['operand'] === '>') {
                    
-                    
+                    $total=0;
                     
                     foreach ($operand['tags'] as $tag) {
 
@@ -131,7 +145,7 @@ class Result extends AbstractFormData
 
                 if ($operand['operand'] === 'count') {
                    
-               
+                    $total=0;
                     
                     foreach ($operand['tags'] as $tag) {
 
@@ -147,7 +161,8 @@ class Result extends AbstractFormData
 
             }
         }
-    
+      
+   
         $this->value = number_format((float) $total, 2, '.', '');
         $this->save_value();
         $wireModel = "formData.{$this->form_id}.{$this->name}";
