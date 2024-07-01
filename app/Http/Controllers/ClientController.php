@@ -113,7 +113,7 @@ class ClientController extends Controller
             'email' => $request->input('email'),
             'password' => Hash::make($temporaryPassword),
             'client_id' => $clientId,
-            'type_id' => 1,
+            'type_id' => 2,
             // Add other fields as necessary
         ]);
     
