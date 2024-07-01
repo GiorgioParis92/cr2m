@@ -159,10 +159,13 @@ class Result extends AbstractFormData
             $readonly = (($optionsArray['readonly'] == true) ? 'disabled' : '');
         }
 
+        $hidden = '';
+        if (isset($optionsArray['hidden'])) {
+            $hidden = (($optionsArray['hidden'] == true) ? 'style="display:none"' : '');
+        }
 
 
-
-        $data = '<div class="form-group col-sm-12 ' . ($this->config->class ?? "") . '">';
+        $data = '<div '.$hidden.' class="form-group col-sm-12 ' . ($this->config->class ?? "") . '">';
 
 
         $data .= '<label style="display:inline-block">' . $this->config->title . '</label>';
