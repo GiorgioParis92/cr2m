@@ -31,7 +31,17 @@ class Condition extends AbstractFormData
         }
         $data = '<div  class="form-group col-sm-12 ">';
         $data .= '<input wire:model.lazy="' . $wireModel . '" value="'.$this->value.'" id="' . $this->name . '"  class="form-control" type="text" name="' . $this->name . '"';
+
+
+        if($this->value=='error') {
+            $data.='ERROR';
+        }
+
         $data .='</div>';
+
+
+
+
 
 
         return $data;
