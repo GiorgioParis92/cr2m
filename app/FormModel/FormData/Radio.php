@@ -17,7 +17,7 @@ class Radio extends AbstractFormData
         }
 
         $data = '<div class="form-group col-sm-12 '.($this->config->class ?? "").' group_' . $class_prediction . '">';
-       
+        $data .= '<div class="form-group">';
 
         // Clean and decode the JSON options
         $jsonString = str_replace(["\n", "\r"], '', $this->config->options);
@@ -48,6 +48,7 @@ class Radio extends AbstractFormData
             }
         }
 
+        $data .= '</div>';
         $data .= '</div>';
 
         if (!$this->check_value()) {
