@@ -22,7 +22,7 @@ class Text extends AbstractFormData
         $data .= '<label style="display:inline-block">' . $this->config->title . '</label>';
 
 
-        $data .= $this->generate_loading();
+        // $data .= $this->generate_loading();
 
 
         $data .= '<input wire:model.lazy="' . $wireModel . '" class="form-control ' . $class_prediction . '" type="text" name="' . $this->name . '"';

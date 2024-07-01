@@ -87,7 +87,7 @@ class DossierLivewire extends Component
 
     public function refresh()
     {
-        // $this->time = now()->format('H:i:s');
+        $this->time = now()->format('H:i:s');
 
         // Fetch dossier with related data
         $this->dossier = Dossier::where('id', $this->dossier->id)
@@ -193,6 +193,7 @@ class DossierLivewire extends Component
                 $this->forms_configs[$formId]->formData[$key]->save_value();
             }
         }
+ 
         foreach ($this->forms_configs as $formId => $config) {
        
             $config->save();
@@ -202,8 +203,6 @@ class DossierLivewire extends Component
                 }
             }
         }
-        $this->reinitializeFormsConfigs(true);
-        $this->hydrate();
 
 
     }
@@ -295,12 +294,12 @@ class DossierLivewire extends Component
             foreach ($this->etapes as $etape) {
                 $this->validators[$etape->etape_id] = new EtapeValidator($etape->etape_id);
             }
-            if($this->validators[$this->etape_display["id"]]) {
-                $new_status = $this->validators[$this->etape_display["id"]]->get_last_validate_status($this->forms_configs);
-                if (isset($new_status) && $this->dossier->etape_number==$this->etape_display['id']) {
-                    Dossier::where('id',$this->dossier->id)->update(['status_id'=> $new_status]);
-                }
-            }
+            // if($this->validators[$this->etape_display["id"]]) {
+            //     $new_status = $this->validators[$this->etape_display["id"]]->get_last_validate_status($this->forms_configs);
+            //     if (isset($new_status) && $this->dossier->etape_number==$this->etape_display['id']) {
+            //         Dossier::where('id',$this->dossier->id)->update(['status_id'=> $new_status]);
+            //     }
+            // }
 
 
         }
