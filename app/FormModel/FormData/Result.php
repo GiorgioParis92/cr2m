@@ -171,7 +171,7 @@ class Result extends AbstractFormData
         $data .= '<label style="display:inline-block">' . $this->config->title . '</label>';
 
 
-        $data .= $this->generate_loading();
+        // $data .= $this->generate_loading();
 
 
         $data .= '<input ' . $readonly . ' wire:model.lazy="' . $wireModel . '" class="form-control " type="text" name="' . $this->name . '" ';
