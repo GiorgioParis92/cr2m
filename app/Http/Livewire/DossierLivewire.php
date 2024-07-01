@@ -165,7 +165,7 @@ class DossierLivewire extends Component
     {
         $this->etapes = $this->convertArrayToStdClass($this->etapes);
 
-       $this->reinitializeFormsConfigs(true);
+       $this->reinitializeFormsConfigs(false);
         // $this->emit('initializeDropzones', ['forms_configs' => $this->forms_configs]);
 
     }
@@ -202,6 +202,7 @@ class DossierLivewire extends Component
                 }
             }
         }
+        $this->reinitializeFormsConfigs(true);
         $this->hydrate();
 
 
