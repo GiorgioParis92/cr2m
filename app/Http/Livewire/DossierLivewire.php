@@ -202,7 +202,7 @@ class DossierLivewire extends Component
                 }
             }
         }
-        $this->hydrate();
+      
 
 
     }
