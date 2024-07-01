@@ -38,12 +38,15 @@
                 <li class="nav-item active"> 
                   <a class="nav-link" href="{{ route('dashboard') }}"><i class="fa fa-house"></i> Dashboard </a>
                 </li>
+
+                @if(auth()->user()->client_id==0 || auth()->user()->type_id==2)
                 <li class="nav-item ">
                     <a class="nav-link" href="{{ route('beneficiaires.create') }}">
                         
                         <span class="sidenav-normal"><i class="fa fa-user-plus"></i>  Nouveau bénéficiaire </span>
                     </a>
                 </li>
+                @endif
 
                 <li class="nav-item dropdown">
                     <a class="nav-link  dropdown-toggle" href="{{ route('dossiers.index') }}" data-bs-toggle="dropdown">
@@ -66,6 +69,7 @@
                       <span class="sidenav-normal"><i class="fa fa-comments"></i>  Discussions </span>
                   </a>
               </li>
+@dump(auth()_>user())
                 @if (auth()->user()->type_id == 1)
                     <li class="nav-item">
                         <a class="nav-link  " href="{{ route('users.index') }}">

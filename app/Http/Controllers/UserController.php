@@ -36,7 +36,7 @@ class UserController extends Controller
 
     public function create(Request $request)
     {
-        $clients = Client::all();
+        $clients = Client::where('client_id','>',0)->get();
         $types = DB::table('users_type')->where('type_client_id', '>', 0)->get();
 
 
@@ -75,7 +75,7 @@ class UserController extends Controller
     public function edit(Request $request, $id)
     {
         $user = User::find($id);
-        $clients = Client::all();
+        $clients = Client::where('client_id','>',0)->get();
         $types = DB::table('users_type')->where('type_client_id', '>', 0)->get();
         return view('users.edit', compact('user', 'clients', 'types'));
 
