@@ -129,6 +129,21 @@ class Result extends AbstractFormData
                     }
                 }
 
+                if ($operand['operand'] === 'count') {
+                   
+                    $total=0;
+                    
+                    foreach ($operand['tags'] as $tag) {
+
+
+                        if(isset($tagValue) && $tagValue != '' && $tagValue>0) {
+                            $total +=1 ;
+                        }
+                        
+                    }
+                }
+
+
             }
         }
     
