@@ -175,13 +175,16 @@ class DossierLivewire extends Component
             
             $this->updatedFormData($propertyName, $value);
         }
-
     }
 
     public function updatedFormData($propertyName, $value)
     {
         // Parse the property name
         // Example property name: formData.3.nom
+
+      
+
+
         $pattern = '/^formData\.(\d+)\.(\w+)$/';
         if (preg_match($pattern, $propertyName, $matches)) {
             $formId = $matches[1]; // Extract formId
@@ -203,7 +206,6 @@ class DossierLivewire extends Component
                 }
             }
         }
-
 
     }
 
