@@ -1429,3 +1429,6 @@ div#search-results {
 .form-group {
     display: inline-block;
 }
+.modal .form-group {
+    display: block;
+}
