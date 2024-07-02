@@ -60,24 +60,24 @@
                                 }
 
                                 if(is_user_allowed($e->etape_name)==false) {
-                                    $isActive = false;
+                                    $isAllowed = false;
                                 } else {
-                                    $isActive = true;
+                                    $isAllowed = true;
                                 }
 
 
                             @endphp
 
-                            <div @if ($isActive) wire:click="setTab({{ $e->etape_number }})" @endif
+                            <div @if ($isActive || $isAllowed) wire:click="setTab({{ $e->etape_number }})" @endif
                                 aria-disabled="false"
-                                class="@if ($isActive) settab @endif col-lg-1  {{ $isActive ? 'active' : '' }} {{ $isCurrent ? 'current' : '' }} {{ $isTab ? 'isTab' : '' }}"
+                                class="@if ($isActive || $isAllowed) settab @endif  @if ($isAllowed) settab @endif col-lg-1  {{ ($isActive || $isAllowed) ? 'active' : '' }} {{ $isCurrent ? 'current' : '' }} {{ $isTab ? 'isTab' : '' }}"
                                 aria-selected="true">
                                 <a id="form-total-t-0" aria-controls="form-total-p-0">
                                     <div class="inter_line"></div>
                                     <span class="current-info audible nav-link"></span>
                                     <div class="title">
                                         <span
-                                            class="step-icon {{ $isActive ? 'bg-success' : 'bg-tertiary' }}">{{ $index + 1 }}</span>
+                                            class="step-icon {{ ($isActive || $isAllowed) ? 'bg-success' : 'bg-tertiary' }}">{{ $index + 1 }}</span>
                                         <span class="step-text">
                                             {{ strtoupper_extended($e->etape_desc) }}
                                             <small>
