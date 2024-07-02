@@ -15,8 +15,13 @@ class Generate extends AbstractFormData
         if (!is_array($optionsArray)) {
             $optionsArray = [];
         }
-
-
+        
+       
+        if (isset($optionsArray['on_generation'])) {
+               $generation = $optionsArray['on_generation'];
+        } else {
+            $generation = null;
+        }
         $data = '';
 
 
@@ -41,8 +46,9 @@ class Generate extends AbstractFormData
         $data .= '<button type="button" class="btn btn-secondary btn-view generatePdfButton"
        
   
-        data-dossier_id="' . $this->dossier->folder . '"
-        data-template="' . $optionsArray['template'] . '">
+        data-dossier_id="' . $this->dossier->folder . '"';
+        $data .="data-generation='" . $generation . "'";
+        $data .='data-template="' . $optionsArray['template'] . '">
         <i class="fas fa-file-pdf"></i> Générer';
 
 

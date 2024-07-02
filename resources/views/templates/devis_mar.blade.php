@@ -222,11 +222,10 @@
     </div>
     <div class="my-4" style="margin-top:10px;margin-left:350px;width:380px;">
 
-
         <p>
             <b>Devis n°
             </b><br />
-            Date :
+            Date : {{ $all_data['dossiers_data']['date_devis_mar'] ?  date('d/m/Y',strtotime($all_data['dossiers_data']['date_devis_mar'])) : ''}}
 
 
         </p>

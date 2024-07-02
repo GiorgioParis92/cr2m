@@ -4,9 +4,58 @@ use App\Models\User;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
+use App\Models\UserPermission;
+use App\Models\Permission;
+use Illuminate\Support\Facades\DB;
+
+if (!function_exists('is_user_allowed')) {
+    /**
+     * Check if the authenticated user has the given permission.
+     *
+     * @param string $permission_name
+     * @return array
+     */
+    function is_user_allowed($permission_name)
+    {
+        $user = Auth::user();
+
+        if (!$user) {
+            return false;
+        }
 
 
-function generateRandomString($length = 12) {
+        $userPermission = UserPermission::where('user_id', $user->id)
+            ->where('permission_name', $permission_name)
+            ->first();
+
+        if ($userPermission && $userPermission->is_active == 1) {
+            return true;
+        }
+
+
+        if ($userPermission) {
+            if ($userPermission->is_active == 0) {
+                return false;
+            }
+        } else {
+            $defaultPermission = DB::table('default_permission')->where('type_id', $user->type_id)
+                ->where('permission_name', $permission_name)
+                ->first();
+
+
+            if ($defaultPermission && $defaultPermission->is_active == 0) {
+                return false;
+            }
+        }
+
+
+
+        return true;
+    }
+}
+
+function generateRandomString($length = 12)
+{
     $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
     $charactersLength = strlen($characters);
     $randomString = '';
@@ -28,8 +77,8 @@ function makeRequest($url, $data)
     $multipartData = [];
 
     foreach ($data as $key => $value) {
-        if ($key === 'file' && $value!='{}' && $value!=null) {
-            
+        if ($key === 'file' && $value != '{}' && $value != null) {
+
             $multipartData[$key] = new CURLFile($value->getRealPath(), $value->getClientMimeType(), $value->getClientOriginalName());
         } else {
             $multipartData[$key] = $value;
@@ -71,14 +120,14 @@ function getColorForType($type)
 if (!function_exists('format_date')) {
     function format_date($value)
     {
-        $value=str_replace('/','-',$value);
-       
-        $value=str_replace('.','-',$value);
-      
-       
-        $value=strtotime($value);
-      
-        $value=date("d/m/Y",$value);
+        $value = str_replace('/', '-', $value);
+
+        $value = str_replace('.', '-', $value);
+
+
+        $value = strtotime($value);
+
+        $value = date("d/m/Y", $value);
         return $value;
     }
 }
@@ -86,10 +135,10 @@ if (!function_exists('format_date')) {
 if (!function_exists('strtotime_date')) {
     function strtotime_date($value)
     {
-        $value=str_replace('/','-',$value);
-        $value=str_replace('.','-',$value);
-        $value=str_replace(' ','-',$value);
-        $value=strtotime($value);
+        $value = str_replace('/', '-', $value);
+        $value = str_replace('.', '-', $value);
+        $value = str_replace(' ', '-', $value);
+        $value = strtotime($value);
         return $value;
     }
 }
@@ -117,16 +166,16 @@ if (!function_exists('store_image')) {
         {
             $allowedExtensions = ['jpeg', 'jpg', 'png', 'gif', 'pdf', 'heic'];
             $extension = $file->getClientOriginalExtension();
-    
+
             if (!in_array($extension, $allowedExtensions)) {
                 return false;
             }
-    
+
             $directory = $clientId ? "{$folder}/{$clientId}" : "{$folder}/temp";
             if (!Storage::disk('public')->exists($directory)) {
                 Storage::disk('public')->makeDirectory($directory);
             }
-    
+
             return $file->store($directory, 'public');
         }
     }
@@ -148,7 +197,8 @@ if (!function_exists('is_client')) {
 
 
 if (!function_exists('load_all_dossier_data')) {
-    function load_all_dossier_data($dossier) {
+    function load_all_dossier_data($dossier)
+    {
         $results = [
             "form_data" => [],
             "beneficiaire_data" => [],
@@ -169,6 +219,18 @@ if (!function_exists('load_all_dossier_data')) {
             }
         }
 
+
+
+        $datas = DB::table('dossiers_data')->where('dossier_id', $dossier->id)->get();
+
+        foreach ($datas as $data) {
+            if (!isset($results["dossiers_data"])) {
+                $results["dossiers_data"] = [];
+            }
+            $results["dossiers_data"][$data->meta_key] = $data->meta_value;
+        }
+
+
         $beneficiaire = DB::table('beneficiaires')->where('id', $dossier->beneficiaire_id)->first();
 
         if ($beneficiaire) {
@@ -176,21 +238,47 @@ if (!function_exists('load_all_dossier_data')) {
                 $results["beneficiaire_data"][$key] = $value;
             }
         }
-        
+
         return $results;
     }
 }
 
 
 
-function strtoupper_extended($string) {
+function strtoupper_extended($string)
+{
     // Mapping of accented characters to their uppercase equivalents
     $accents = [
-        'à' => 'À', 'á' => 'Á', 'â' => 'Â', 'ã' => 'Ã', 'ä' => 'Ä', 'å' => 'Å',
-        'æ' => 'Æ', 'ç' => 'Ç', 'è' => 'È', 'é' => 'É', 'ê' => 'Ê', 'ë' => 'Ë',
-        'ì' => 'Ì', 'í' => 'Í', 'î' => 'Î', 'ï' => 'Ï', 'ð' => 'Ð', 'ñ' => 'Ñ',
-        'ò' => 'Ò', 'ó' => 'Ó', 'ô' => 'Ô', 'õ' => 'Õ', 'ö' => 'Ö', 'ø' => 'Ø',
-        'ù' => 'Ù', 'ú' => 'Ú', 'û' => 'Û', 'ü' => 'Ü', 'ý' => 'Ý', 'þ' => 'Þ',
+        'à' => 'À',
+        'á' => 'Á',
+        'â' => 'Â',
+        'ã' => 'Ã',
+        'ä' => 'Ä',
+        'å' => 'Å',
+        'æ' => 'Æ',
+        'ç' => 'Ç',
+        'è' => 'È',
+        'é' => 'É',
+        'ê' => 'Ê',
+        'ë' => 'Ë',
+        'ì' => 'Ì',
+        'í' => 'Í',
+        'î' => 'Î',
+        'ï' => 'Ï',
+        'ð' => 'Ð',
+        'ñ' => 'Ñ',
+        'ò' => 'Ò',
+        'ó' => 'Ó',
+        'ô' => 'Ô',
+        'õ' => 'Õ',
+        'ö' => 'Ö',
+        'ø' => 'Ø',
+        'ù' => 'Ù',
+        'ú' => 'Ú',
+        'û' => 'Û',
+        'ü' => 'Ü',
+        'ý' => 'Ý',
+        'þ' => 'Þ',
         'ÿ' => 'Ÿ'
     ];
 
@@ -199,6 +287,6 @@ function strtoupper_extended($string) {
 
     // Then, replace accented characters with their uppercase equivalents
     $string = strtr($string, $accents);
-    
+
     return $string;
 }

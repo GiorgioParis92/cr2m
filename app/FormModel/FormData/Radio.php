@@ -6,6 +6,7 @@ use App\Models\Dossier;
 
 class Radio extends AbstractFormData
 {
+    
     public function render(bool $is_error)
     {
         $wireModel = "formData.{$this->form_id}.{$this->name}";
@@ -36,6 +37,7 @@ class Radio extends AbstractFormData
                 $data.='<div class="radio_line" style="background:#'.$backgroundColor.' ">';
                 $data .= '<input id="'.$this->name.'_'.$key.'"
                     wire:model.lazy="'.$wireModel.'" 
+                    wire:click="" 
                     value="'.$element['value'].'"
                     name="'.$this->config->name.'"
                     class="'.($this->value == $element['value'] ? 'choice_checked' : '').' "

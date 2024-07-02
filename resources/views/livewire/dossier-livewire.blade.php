@@ -43,6 +43,7 @@
                 <div class="steps clearfix">
                     <div class="row etapes_row mt-5" wire:poll>
                         @foreach ($etapes as $index => $e)
+                    
                             @php
                                 $isActive = false;
                                 $isCurrent = false;
@@ -57,6 +58,13 @@
                                 if ($e->etape_number == $etape_display['id'] || $e->etape_number == $etape_display) {
                                     $isTab = true;
                                 }
+
+                                if(is_user_allowed($e->etape_name)==false) {
+                                    $isActive = false;
+                                } else {
+                                    $isActive = true;
+                                }
+
 
                             @endphp
 
@@ -844,12 +852,14 @@
 
             var template = $(this).data('template'); // Get the template from data attribute
             var dossier_id = $(this).data('dossier_id'); // Get the dossier ID from data attribute
+            var generation = $(this).data('generation'); // Get the dossier ID from data attribute
 
             $.ajax({
                 url: '/api/generate-pdf', // Adjust this URL to your actual API endpoint
-                type: 'GET',
+                type: 'POST',
                 data: {
                     dossier_id: dossier_id,
+                    generation: generation,
                     template: template
                 },
                 headers: {

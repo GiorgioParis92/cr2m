@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\View;
 use App\View\Components\FormComponent;
 use App\Models\Client;
+use App\Models\UserPermission;
+use App\Models\Permission;
 use Illuminate\Support\Facades\Auth;
 use App\Http\ViewComposers\AuditeursComposer;
 
@@ -39,6 +41,15 @@ class AppServiceProvider extends ServiceProvider
                 $client = Client::where('client_id', $user->client_id)->first();
                 View::share('client', $client);
             }
+
+            // Fetch user permissions
+            $permissions = UserPermission::where('user_id', $user->id)
+                                          ->where('is_active', 1)
+                                          ->pluck('permission_name')
+                                          ->toArray();
+            
+            // Share permissions with all views
+            View::share('permissions', $permissions);
         }
 
         view()->composer('app', AuditeursComposer::class);
