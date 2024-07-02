@@ -8,6 +8,10 @@ use App\Models\UserPermission;
 use App\Models\Permission;
 use Illuminate\Support\Facades\DB;
 
+
+
+
+
 if (!function_exists('is_user_allowed')) {
     /**
      * Check if the authenticated user has the given permission.
@@ -289,4 +293,41 @@ function strtoupper_extended($string)
     $string = strtr($string, $accents);
 
     return $string;
+}
+
+
+if (!function_exists('generate_num_devis')) {
+
+    function generate_num_devis($client_id,$dossier_id)
+    {
+        $check_num_devis = DB::table('dossiers_data')->where('dossier_id', $dossier_id)->where('meta_key', 'numero_devis')->first();
+        if (!isset($check_num_devis)) {
+            
+        $check_devis = DB::table('numerotation_devis')
+        ->where('year', date('Y', strtotime('now')))
+        ->where('month', date('m', strtotime('now')))
+        ->where('client_id',$client_id)->first();
+
+        if (!isset($check_devis)) {
+            DB::table('numerotation_devis')
+            ->insert(['year' => date('Y', strtotime('now')), 'month' => date('m', strtotime('now')), 'client_id' => $client_id,'increment'=>1]);
+        $increment=1;
+        } else {
+
+        $increment=$check_devis->increment+1;
+
+        DB::table('numerotation_devis')->where('year', date('Y', strtotime('now')))
+        ->where('month', date('m', strtotime('now')))->where('client_id',$client_id)->update(['increment'=>$increment]);
+        }
+
+
+
+       
+            $increment = str_pad($increment, 5, '0', STR_PAD_LEFT);
+        $num="DE-".date('Y', strtotime('now')).date('m', strtotime('now')).$increment;
+
+         DB::table('dossiers_data')->insert(['dossier_id' => $dossier_id, 'meta_key' => 'numero_devis', 'meta_value' => $num]);
+        }
+
+}
 }
