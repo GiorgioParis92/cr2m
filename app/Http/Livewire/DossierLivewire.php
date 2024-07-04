@@ -6,6 +6,7 @@ use Livewire\Component;
 use App\Models\Dossier;
 use App\Models\Etape;
 use App\Models\User;
+use App\Models\RdvStatus;
 use App\FormModel\FormConfigHandler;
 use App\FormModel\EtapeValidator;
 use Illuminate\Support\Facades\DB;
@@ -81,6 +82,10 @@ class DossierLivewire extends Component
         $this->departments = DB::table('departement')->get()->map(function ($department) {
             return (array) $department; // Convert stdClass to array
         })->toArray();
+
+        $this->rdv_status=RdvStatus::all();
+
+
 
     }
 

@@ -19,7 +19,10 @@ class RdvController extends \App\Http\Controllers\Controller
                 $join->on('rdv.user_id', '=', 'users.id')
                     ->where('rdv.user_id', '>', 0);
             })
-            ->select('rdv.*', DB::raw("COALESCE(users.name, 'non attribué') as user_name"));
+            ->leftJoin('rdv_status', function ($join) {
+                $join->on('rdv.status', '=', 'rdv_status.id');
+            })
+            ->select('rdv.*', DB::raw("COALESCE(users.name, 'non attribué') as user_name"), DB::raw("rdv_status.id as status"));
 
         if (isset($request->user_id) && $request->user_id > 0) {
             $rdvs = $rdvs->where('rdv.user_id', $request->user_id);
@@ -33,7 +36,7 @@ class RdvController extends \App\Http\Controllers\Controller
         $rdvs = $rdvs->get();
 
         $data = $rdvs->map(function ($rdv) {
-            $rdv->color = getColorForType($rdv->type_rdv);
+            $rdv->color = stringToColorCode($rdv->user_name);
 
             if ($rdv->date_rdv) {
                 $rdv->french_date = date('d/m/Y',strtotime($rdv->date_rdv));

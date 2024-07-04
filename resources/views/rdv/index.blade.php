@@ -31,6 +31,7 @@
     <!-- FullCalendar Locale -->
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/locales/fr.js"></script>
     <!-- Google Maps JavaScript API -->
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCzcaFvxwi1XLyRHmPRnlKO4zcJXPOT5gM&libraries=marker&callback=initMap"></script>
 
     <script>
         var calendarEl = document.getElementById('calendar');
@@ -89,13 +90,17 @@
         var markers = [];
 
         function initMap() {
-            map = new google.maps.Map(document.getElementById('map'), {
-                center: {
-                    lat: 48.8566,
-                    lng: 2.3522
-                },
+            var mapOptions = {
+                center: { lat: 48.8566, lng: 2.3522 },
                 zoom: 5
-            });
+            };
+            var mapElement = document.getElementById('map');
+            
+            if (mapElement) {
+                var map = new google.maps.Map(mapElement, mapOptions);
+            } else {
+                console.error('Map element not found');
+            }
         }
 
         function fetchAndRenderEvents(start, end) {
@@ -110,6 +115,7 @@
                     dpt: $('#dpt').val(),
                 },
                 success: function(data) {
+                    console.log(data)
                     clearMarkers(); // Clear existing markers
                     var events = data.map(function(rdv) {
                         var eventStart = new Date(rdv.date_rdv);
@@ -120,7 +126,7 @@
                         if (eventStart >= start && eventEnd <= end) {
                             // Create event object for FullCalendar
                             var event = {
-                                title: rdv.nom + ' ' + rdv.prenom,
+                                title: rdv.user_name+'<br/>'+rdv.nom + ' ' + rdv.prenom,
                                 start: rdv.date_rdv,
                                 end: eventEnd.toISOString(),
                                 description: rdv.adresse + '<br/>' + rdv.cp + ' ' + rdv.ville,
@@ -130,31 +136,37 @@
                             };
                             console.log(event)
                             // Create marker for Google Maps
-                            var content = getEventContent(rdv.nom + ' ' + rdv.prenom, rdv.adresse +
-                                '<br/>' + rdv.cp + ' ' + rdv.ville);
-                            var marker = new google.maps.Marker({
-                                position: {
-                                    lat: parseFloat(rdv.lat),
-                                    lng: parseFloat(rdv.lng)
-                                },
-                                map: map,
-                                title: rdv.nom + ' ' + rdv.prenom
-                            });
+                                // Create marker for Google Maps
+                                var content = getEventContent(rdv.user_name+'<br/>'+rdv.nom + ' ' + rdv.prenom, rdv.adresse +
+                                    '<br/>' + rdv.cp + ' ' + rdv.ville);
+                            console.log(rdv.lat)
+                                    if(rdv.lat>0) {
+                                var position = { lat: parseFloat(rdv.lat), lng: parseFloat(rdv.lng) };
 
-                            var infowindow = new google.maps.InfoWindow({
-                                content: content
-                            });
+                                const marker = new google.maps.marker.AdvancedMarkerElement({
+                                    position: position,
+                                    map: map,
+                                    title: rdv.nom + ' ' + rdv.prenom
+                                });
 
-                            marker.addListener('click', function() {
-                                infowindow.open(map, marker);
-                            });
+                                const infowindow = new google.maps.InfoWindow({
+                                    content: content
+                                });
+
+                                marker.addListener('gmp-click', () => {
+                                    infowindow.open({
+                                        anchor: marker,
+                                        map: map,
+                                        shouldFocus: false,
+                                    });
+                                });
 
                             markers.push(marker);
-
+                            }
                             return event;
                         }
                     }).filter(event => event !== undefined);
-
+                    console.log(markers)
                     calendar.removeAllEvents();
                     calendar.addEventSource(events);
                     calendar.refetchEvents();
@@ -164,7 +176,7 @@
                 }
             });
         }
-
+      
         // Clear markers from map
         function clearMarkers() {
             markers.forEach(marker => marker.setMap(null));

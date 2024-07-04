@@ -24,7 +24,7 @@ class Db_table extends AbstractFormData
 
 
         $request = DB::select($sql_command);
-
+   
         $data = '<div class="form-group  col-lg-12">';
 
         $data .= '<table class="table table-bordered responsive-table table-responsive dataTable no-footer">';
@@ -42,6 +42,10 @@ class Db_table extends AbstractFormData
         $data .= '</th>';
         $data .= '<th>';
         $data .= 'Type de rdv';
+
+        $data .= '</th>';
+        $data .= '<th>';
+        $data .= 'Statut';
 
         $data .= '</th>';
         $data .= '<th>';
@@ -73,6 +77,12 @@ class Db_table extends AbstractFormData
 
             $data .= '</td>';
 
+
+            $data .= '<td>';
+            $data .= $value->rdv_desc ? '<div data-rdv_id="' . $value->rdv_id . '" class="show_rdv btn btn-'.$value->rdv_style.'">'.$value->rdv_desc.'</div>' : '';
+
+            $data .= '</td>';
+
             $data .= '<td>';
             $data .= '<div data-rdv_id="' . $value->rdv_id . '" class="btn btn-primary show_rdv"><i class="fa fa-eye"></i></div>';
 
@@ -97,7 +107,9 @@ class Db_table extends AbstractFormData
         $data .= '<td>';
 
         $data .= '</td>';
+        $data .= '<td>';
 
+        $data .= '</td>';
         $data .= '<td>';
         $data .= '<div data-rdv_id="" class="btn btn-secondary show_rdv">Ajouter un Rdv </div>';
 

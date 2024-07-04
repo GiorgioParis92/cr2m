@@ -100,7 +100,7 @@
             @endforeach
         </select>
     </div>
-    @if($user->client->id>0)
+    @if($user->client->id>0 && $user->client->type_client == 1)
 
     <input type="hidden" name="mar" value="{{ $user->client->id }}">
 
@@ -125,7 +125,7 @@
         </select>
     </div>
 
-    @if (1==1 || ($user->client && $user->client->type_client == 3))
+    @if (($user->client && $user->client->type_client == 3))
 
         <input type="hidden" name="installateur" value="{{ $user->client->id }}">
     @else

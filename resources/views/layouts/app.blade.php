@@ -51,8 +51,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/4.2.0/bootstrap/main.css" rel="stylesheet">
 
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.14.0/Sortable.min.js"></script>
-    <script async defer
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCzcaFvxwi1XLyRHmPRnlKO4zcJXPOT5gM&callback=initMap"></script>
+    {{-- <script  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCzcaFvxwi1XLyRHmPRnlKO4zcJXPOT5gM&loading=async&callback=initMap"></script> --}}
 
 
 
@@ -163,6 +162,7 @@
                             <input class="form-control" type="hidden" id="rdv_lat" name="lat">
                             <input class="form-control" type="hidden" id="rdv_lng" name="lng">
                             <input class="form-control" type="hidden" id="rdv_type_rdv" name="type_rdv">
+                            <input class="form-control" type="text" id="rdv_status" name="status">
                             <label>Date</label>
                             <input class="form-control datepicker" type="text" id="rdv_french_date"
                                 name="date_rdv">
@@ -200,6 +200,20 @@
 
                             </div>
                             @endif
+
+                            @if(isset($rdv_status))
+                            <div class="form-group">
+                                <label>Statut</label>
+                                <select class="form-control" id="rdv_status" name="status">
+                                    <option value="">Changer de status</option>
+                                    @foreach ($rdv_status as $status)
+                                        <option value="{{ $status->id }}">{{ $status->rdv_desc }}</option>
+                                    @endforeach
+                                </select>
+
+                            </div>
+                            @endif
+
                             <div class="form-group">
 
 

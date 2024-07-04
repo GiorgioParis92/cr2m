@@ -8,6 +8,7 @@ use App\Models\Fiche;
 use App\Models\Dossier;
 use App\Models\Etape;
 use App\Models\Status;
+use App\Models\RdvStatus;
 use App\Models\User;
 use App\FormModel\FormConfigHandler;
 use Illuminate\Http\Request;
@@ -95,9 +96,9 @@ class DossierController extends Controller
         }
 
         $auditeurs=User::where('type_id',4)->get();
+        $rdv_status=RdvStatus::all();
 
-
-        return view('dossiers.show', compact('id','auditeurs','dossier'));
+        return view('dossiers.show', compact('id','auditeurs','dossier','rdv_status'));
     }
     public function save_form(Request $request)
     {

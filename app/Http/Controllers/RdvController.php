@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Livewire\Component;
 use App\Models\Dossier;
 use App\Models\Etape;
+use App\Models\Rdv;
 use App\Models\User;
 use App\FormModel\FormConfigHandler;
 use Illuminate\Support\Facades\DB;
@@ -14,6 +15,11 @@ class RdvController extends Controller
     
     public function index()
     {
+
+
+        $rdvs=Rdv::with('status')->limit(2)->get();
+
+  
 
 
         $auditeurs=User::where('type_id',4);

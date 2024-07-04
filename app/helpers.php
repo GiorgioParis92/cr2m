@@ -331,3 +331,14 @@ if (!function_exists('generate_num_devis')) {
 
 }
 }
+
+function stringToColorCode($str) {
+    // Generate a hash from the string
+    $hash = md5($str);
+    
+    // Extract the first 6 characters from the hash
+    $color = substr($hash, 0, 6);
+    
+    // Return the color code
+    return '#' . $color;
+}
