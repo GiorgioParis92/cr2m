@@ -17,7 +17,7 @@ class RdvController extends Controller
     {
 
 
-        $rdvs=Rdv::with('status')->limit(2)->get();
+        $rdvs=Rdv::with('status')->get();
 
   
 
