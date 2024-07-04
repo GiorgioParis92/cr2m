@@ -88,7 +88,7 @@
             </div>
             @endif
 
-
+{{-- 
             <div class="mb-2 mb-sm-0 col-12 col-md-3">
                 <label class="mr-sm-2">Type de dossier</label>
                 <select class="form-control" data-column="19">
@@ -99,7 +99,7 @@
                     @endforeach
 
                 </select>
-            </div>
+            </div> --}}
 
 
         </div>
