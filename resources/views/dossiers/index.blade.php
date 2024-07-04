@@ -74,7 +74,7 @@
                 </select>
             </div>
 
-            @if($auth()->user()->client->type_client!=3 || auth()->user()->client_id==0)
+            @if(auth()->user()->client->type_client!=3 || auth()->user()->client_id==0)
             <div class="mb-2 mb-sm-0 col-12 col-md-3">
                 <label class="mr-sm-2">Installateur</label>
                 <select class="form-control" data-column="17">
