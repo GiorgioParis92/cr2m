@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Api;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Models\Dossier;
+use App\Models\Client;
 
 use Illuminate\Support\Facades\Schema; // Import Schema for checking columns
 
@@ -13,6 +14,10 @@ class RdvController extends \App\Http\Controllers\Controller
 {
     public function index(Request $request): \Illuminate\Http\JsonResponse
     {
+
+        $user = auth()->user();
+      
+        $client = Client::where('id', $request->client_id)->first();
 
         $rdvs = DB::table('rdv')
             ->leftJoin('users', function ($join) {
@@ -22,8 +27,22 @@ class RdvController extends \App\Http\Controllers\Controller
             ->leftJoin('rdv_status', function ($join) {
                 $join->on('rdv.status', '=', 'rdv_status.id');
             })
+            ->leftJoin('dossiers', function ($join) {
+                $join->on('rdv.dossier_id', '=', 'dossiers.id');
+            })
             ->select('rdv.*', DB::raw("COALESCE(users.name, 'non attribué') as user_name"), DB::raw("rdv_status.id as status"));
 
+
+            if ($client->id > 0 && ($client->type_client == 1)) {
+                $rdvs = $rdvs->where('dossiers.client_id', $client->id);
+            }
+            if ($client->id > 0 && ($client->type_client == 2)) {
+                $rdvs = $rdvs->where('dossiers.mandataire_financier', $client->id);
+            }
+            if ($client->id > 0 && ($client->type_client == 3)) {
+                $rdvs = $rdvs->where('dossiers.installateur', $client->id);
+            }
+            
         if (isset($request->user_id) && $request->user_id > 0) {
             $rdvs = $rdvs->where('rdv.user_id', $request->user_id);
         }

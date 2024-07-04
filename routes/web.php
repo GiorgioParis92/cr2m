@@ -83,7 +83,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/user/store', [UserController::class, 'createUser'])->name('users.store');
     Route::get('/user/edit/{id}', [UserController::class, 'edit'])->name('users.editform');
     Route::put('/user/edit/{id}', [UserController::class, 'editUser'])->name('users.edit');
-    Route::put('/user/destroy/{id}', [UserController::class, 'editUser'])->name('users.destroy');
+    Route::get('/user/destroy/{id}', [UserController::class, 'destroy'])->name('users.destroy');
+    Route::delete('/user/destroy/{id}', [UserController::class, 'destroy'])->name('users.destroy');
     Route::post('/password/reset', [UserController::class, 'resetPassword']);
     
     Route::get('/profile/{id}', [ProfileController::class, 'edit'])->name('users.profile');

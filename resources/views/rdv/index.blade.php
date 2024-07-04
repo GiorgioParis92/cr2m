@@ -113,6 +113,7 @@
                 data: {
                     user_id: $('#form_config_user_id').val(),
                     dpt: $('#dpt').val(),
+                    client_id: {{auth()->user()->client_id ?? 0}},
                 },
                 success: function(data) {
                     console.log(data)

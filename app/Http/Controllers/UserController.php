@@ -119,6 +119,22 @@ class UserController extends Controller
         return redirect()->route('users.index')->with('success', 'Utilisateur modifié.');
     }
 
+    
+    public function destroy(Request $request,$id)
+    {
+
+
+        $user = User::find($id);
+
+    
+
+        $user->delete();
+
+   
+
+        return redirect()->route('users.index')->with('success', 'Utilisateur supprimé.');
+    }
+
     public function resetPassword(Request $request)
     {
         $request->validate(['email' => 'required|email']);

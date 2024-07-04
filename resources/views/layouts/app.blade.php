@@ -162,7 +162,6 @@
                             <input class="form-control" type="hidden" id="rdv_lat" name="lat">
                             <input class="form-control" type="hidden" id="rdv_lng" name="lng">
                             <input class="form-control" type="hidden" id="rdv_type_rdv" name="type_rdv">
-                            <input class="form-control" type="text" id="rdv_status" name="status">
                             <label>Date</label>
                             <input class="form-control datepicker" type="text" id="rdv_french_date"
                                 name="date_rdv">
