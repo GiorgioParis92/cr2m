@@ -60,7 +60,7 @@
 </div>
 <div class="form-group col-sm-12 col-lg-4">
     <label for="chauffage">Type de chauffage</label>
-    <select class="form-control" id="chauffage" name="chauffage" required>
+    <select class="form-control" id="chauffage" name="chauffage" >
         <option value="" {{ old('chauffage', $beneficiaire->chauffage ?? '') == '' ? 'selected' : '' }}></option>
         <option value="gaz" {{ old('chauffage', $beneficiaire->chauffage ?? '') == 'gaz' ? 'selected' : '' }}>Gaz
         </option>
@@ -80,12 +80,15 @@
     <select class="form-control" id="occupation" name="occupation" required>
         <option value="" {{ old('occupation', $beneficiaire->occupation ?? '') == '' ? 'selected' : '' }}>
         </option>
-        <option value="locataire"
-            {{ old('occupation', $beneficiaire->occupation ?? '') == 'locataire' ? 'selected' : '' }}>Locataire
-        </option>
         <option value="proprietaire"
             {{ old('occupation', $beneficiaire->occupation ?? '') == 'proprietaire' ? 'selected' : '' }}>Proprietaire
         </option>
+        <option value="proprietaire_bailleur"
+            {{ old('occupation', $beneficiaire->occupation ?? '') == 'proprietaire_bailleur' ? 'selected' : '' }}>Proprietaire Bailleur
+        </option>
+        <option value="sci"
+        {{ old('occupation', $beneficiaire->occupation ?? '') == 'sci' ? 'selected' : '' }}>SCI
+    </option>
     </select>
 </div>
 
