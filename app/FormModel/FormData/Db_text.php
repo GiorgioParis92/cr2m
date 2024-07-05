@@ -25,11 +25,25 @@ class Db_text extends AbstractFormData
         if (!$this->check_value()) {
             $class_prediction = ' is-invalid';
         }
+        $request = DB::select($sql_command);
 
        if($this->value && $this->value!='' && $this->value!=0) {
       
+
+        foreach ($request as $result) {
+            $fieldValue = $optionsArray['value'];
+           $fieldLabel = $optionsArray['label'];
+
+            if($this->value>$result->$fieldLabel) {
+                $this->value= $result->$fieldLabel;
+                $this->save_value();
+            }
+
+     
+        }
+
+
        } else {
-        $request = DB::select($sql_command);
         foreach ($request as $result) {
             $fieldValue = $optionsArray['value'];
            $fieldLabel = $optionsArray['label'];
