@@ -139,7 +139,7 @@ if (!function_exists('format_date')) {
 if (!function_exists('strtotime_date')) {
     function strtotime_date($value)
     {
-        // $value = str_replace('/', '-', $value);
+        $value = str_replace('/', '-', $value);
         // $value = str_replace('.', '-', $value);
         // $value = str_replace('', '-', $value);
         $value = strtotime($value);
