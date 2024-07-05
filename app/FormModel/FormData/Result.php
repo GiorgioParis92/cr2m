@@ -84,7 +84,10 @@ class Result extends AbstractFormData
 
                 if ($operand['operand'] == '-') {
                  
-                    $total=0;
+                    if(!isset($total)) {
+                        $total=0;
+                    }
+                  
                     foreach ($operand['tags'] as $tag) {
                         $tagValue = number_format((float) $this->getOtherValue($tag), 2, '.', '');
 
@@ -103,7 +106,9 @@ class Result extends AbstractFormData
 
                 if ($operand['operand'] === '+') {
                    
-                    $total=0;
+                    if(!isset($total)) {
+                        $total=0;
+                    }
                     
                     foreach ($operand['tags'] as $tag) {
 
@@ -115,7 +120,9 @@ class Result extends AbstractFormData
                 }
                 if ($operand['operand'] === '<') {
                    
-                
+                    if(!isset($total)) {
+                        $total=0;
+                    }
                     
                     foreach ($operand['tags'] as $tag) {
 
@@ -130,7 +137,9 @@ class Result extends AbstractFormData
 
                 if ($operand['operand'] === '>') {
                    
-                   
+                    if(!isset($total)) {
+                        $total=0;
+                    }
                     
                     foreach ($operand['tags'] as $tag) {
 
@@ -145,7 +154,9 @@ class Result extends AbstractFormData
 
                 if ($operand['operand'] === 'count') {
                    
-                    $total=0;
+                    if(!isset($total)) {
+                        $total=0;
+                    }
                     
                     foreach ($operand['tags'] as $tag) {
 
