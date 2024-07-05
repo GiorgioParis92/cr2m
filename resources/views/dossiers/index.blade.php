@@ -140,8 +140,10 @@
                         <td>{{ format_date($dossier->created_at) }}</td>
                         <td>{{ strtotime_date($dossier->created_at) }}</td>
                         <td><b><a href="{{ route('dossiers.show', $dossier->folder) }}">{{ $dossier->beneficiaire->nom }} {{ $dossier->beneficiaire->prenom }}</a></b><br/>
-                            <i>Ménage :{{ $dossier->beneficiaire->menage_mpr }}</i>
-
+                           
+                            <div class="btn bg-primary bg-bleu">
+                                {{ $dossier->beneficiaire->menage_mpr }} {{ couleur_menage($dossier->beneficiaire->menage_mpr) }}
+                            </div>
                         </td>
                         <td>
                             {{ $dossier->beneficiaire->adresse }}<br />
@@ -286,7 +288,7 @@
         url: '//cdn.datatables.net/plug-ins/2.0.8/i18n/fr-FR.json',
     },
                 pageLength: 100,
-                "order": [0,'desc']
+                "order": [1,'desc']
 
 
             });

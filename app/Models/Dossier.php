@@ -18,6 +18,7 @@ class Dossier extends Model
         'status_id',
         'mar',
         'mandataire_financier',
+        'installateur',
         'lat',
         'lng'
     ];

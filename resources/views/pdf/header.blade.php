@@ -1,7 +1,11 @@
 <page_header style="font-family:dejavusans">
 
         <div class="logo_header" style="">
+            @if(isset($dossier->client->main_logo) && file_exists(storage_path('app/public/' . $dossier->client->main_logo)))
+
             <img src="{{ asset('storage/' . $dossier->client->main_logo) }}" alt="Logo">
+
+            @endif
         </div>
 
 <style>

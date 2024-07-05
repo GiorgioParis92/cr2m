@@ -3,7 +3,7 @@
         <div class="sidenav-header">
             <i class="fas fa-times p-3 cursor-pointer text-secondary opacity-5 position-absolute end-0 top-0 d-none d-xl-none"
                 aria-hidden="true" id="iconSidenav"></i>
-            <a class="navbar-brand m-0" href="{{ route('dashboard') }}" target="_blank">
+            <a class="navbar-brand m-0" href="{{ route('dashboard') }}" >
 
                 @if (auth()->user() && auth()->user()->client_id > 0 && isset($client->main_logo))
                     @if (Storage::disk('public')->exists($client->main_logo))
@@ -39,14 +39,12 @@
                   <a class="nav-link" href="{{ route('dashboard') }}"><i class="fa fa-house"></i> Dashboard </a>
                 </li>
 
-                @if(auth()->user()->client_id==0 || auth()->user()->type_id==2)
                 <li class="nav-item ">
                     <a class="nav-link" href="{{ route('beneficiaires.create') }}">
                         
                         <span class="sidenav-normal"><i class="fa fa-user-plus"></i>  Nouveau bénéficiaire </span>
                     </a>
                 </li>
-                @endif
 
                 <li class="nav-item dropdown">
                     <a class="nav-link  dropdown-toggle" href="{{ route('dossiers.index') }}" data-bs-toggle="dropdown">

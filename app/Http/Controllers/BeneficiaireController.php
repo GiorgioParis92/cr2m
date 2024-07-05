@@ -47,6 +47,8 @@ class BeneficiaireController extends Controller
             'chauffage' => '',
             'occupation' => '',
             'installateur' => '',
+            'mar' => '',
+            'mandataire_financier' => '',
             'lat' => '',
             'lng' => '',
         ]);
@@ -55,7 +57,7 @@ class BeneficiaireController extends Controller
         $new_lat = 0;
         $new_lng = 0;
        
-        
+       
         $fullAddress = urlencode("{{$validated['cp']}+{$validated['ville']} France");
         $nominatimUrl = "https://nominatim.openstreetmap.org/search?q={$fullAddress}&format=geojson";
         // Send the request to Nominatim API
@@ -139,9 +141,10 @@ class BeneficiaireController extends Controller
         // Create the beneficiaire
         $beneficiaire = Beneficiaire::create($validated);
    
-
         // Create the dossier if fiche_id is provided
         if ($request->has('fiche_id')) {
+         
+
             $dossier = Dossier::create([
                 'beneficiaire_id' => $beneficiaire->id,
                 'fiche_id' => $request->input('fiche_id'),
@@ -155,7 +158,7 @@ class BeneficiaireController extends Controller
                 'lat' => $validated['lat'] ?? 0,
                 'lng' => $validated['lng'] ?? 0,
             ]);
-    
+            dd($dossier);
             foreach($validated as $key=>$value) {
                 \DB::table('dossiers_data')->updateOrInsert(
                     [
