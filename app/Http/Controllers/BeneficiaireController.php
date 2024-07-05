@@ -43,9 +43,10 @@ class BeneficiaireController extends Controller
             'telephone' => 'required|max:20',
             'telephone_2' => 'nullable|max:20',
             'email' => 'required|email|max:200',
-            'menage_mpr' => 'required|in:bleu,jaune,violet,rose',
-            'chauffage' => 'required|in:gaz,fioul,bois,charbon,electricite',
-            'occupation' => 'required|in:locataire,proprietaire',
+            'menage_mpr' => '',
+            'chauffage' => '',
+            'occupation' => '',
+            'installateur' => '',
             'lat' => '',
             'lng' => '',
         ]);
