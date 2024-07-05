@@ -342,3 +342,14 @@ function stringToColorCode($str) {
     // Return the color code
     return '#' . $color;
 }
+
+
+
+function couleur_menage($couleur) {
+    // Generate a hash from the string
+$array=[
+    'bleu'=>'Très modestes',
+    'jaune'=>'Très modestes',
+];
+return $array[$couleur] ?? '';
+}
