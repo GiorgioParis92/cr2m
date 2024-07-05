@@ -158,7 +158,7 @@ class BeneficiaireController extends Controller
                 'lat' => $validated['lat'] ?? 0,
                 'lng' => $validated['lng'] ?? 0,
             ]);
-            dd($dossier);
+       
             foreach($validated as $key=>$value) {
                 \DB::table('dossiers_data')->updateOrInsert(
                     [
