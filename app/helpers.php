@@ -141,7 +141,7 @@ if (!function_exists('strtotime_date')) {
     {
         $value = str_replace('/', '-', $value);
         $value = str_replace('.', '-', $value);
-        $value = str_replace(' ', '-', $value);
+        $value = str_replace('', '-', $value);
         $value = strtotime($value);
         return $value;
     }
