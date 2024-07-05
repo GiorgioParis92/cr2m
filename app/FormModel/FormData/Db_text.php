@@ -12,6 +12,8 @@ class Db_text extends AbstractFormData
         $jsonString = str_replace(["\n", '', "\r"], '', $this->config->options);
         $optionsArray = json_decode($jsonString, true);
 
+
+
         $sql_command = $optionsArray['sql'];
 
         if (isset($optionsArray['arguments'])) {
@@ -24,12 +26,22 @@ class Db_text extends AbstractFormData
             $class_prediction = ' is-invalid';
         }
 
-       
+       if($this->value && $this->value!='' && $this->value!=0) {
+      
+       } else {
+        $request = DB::select($sql_command);
+        foreach ($request as $result) {
+            $fieldValue = $optionsArray['value'];
+           $fieldLabel = $optionsArray['label'];
+           $this->value= $result->$fieldLabel;
+            $this->save_value();
+        }
+       }
        
        
         $wireModel = "formData.{$this->form_id}.{$this->name}";
 
-        $request = DB::select($sql_command);
+       
 
       $readonly='';
       if(isset($optionsArray['readonly'])) {
@@ -40,12 +52,7 @@ class Db_text extends AbstractFormData
         $wireModel = "formData.{$this->form_id}.{$this->name}";
 
 
-        foreach ($request as $result) {
-            $fieldValue = $optionsArray['value'];
-           $fieldLabel = $optionsArray['label'];
-           $this->value= $result->$fieldLabel;
-            $this->save_value();
-        }
+
 
         $class_prediction = '';
         if ($this->prediction) {
@@ -64,7 +71,7 @@ class Db_text extends AbstractFormData
         $data .= $this->generate_loading();
 
 
-        $data .= '<input '.$readonly.' wire:model.lazy="' . $wireModel . '" class="form-control ' . $class_prediction . '" type="text" name="' . $this->name . '" value="'.$result->$fieldLabel.'"';
+        $data .= '<input '.$readonly.' wire:model.lazy="' . $wireModel . '" class="form-control ' . $class_prediction . '" type="text" name="' . $this->name . '" ';
 
         if ($this->config->required) {
             $data .= ' required ';
