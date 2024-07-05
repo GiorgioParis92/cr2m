@@ -107,7 +107,7 @@
         <table id="dossiersTable" class="table table-bordered responsive-table table-responsive">
             <thead>
                 <tr>
-                    <th style="max-width:10%">Date</th>
+                    <th style="max-width:10%">Date de création du dossier</th>
                     <th style="max-width:10%">Date str</th>
                     <th style="max-width:10%">Client</th>
                     <th style="max-width:10%">Coordonnées</th>
