@@ -115,7 +115,7 @@ class Result extends AbstractFormData
                 }
                 if ($operand['operand'] === '<') {
                    
-                    $total=0;
+                
                     
                     foreach ($operand['tags'] as $tag) {
 
@@ -130,7 +130,7 @@ class Result extends AbstractFormData
 
                 if ($operand['operand'] === '>') {
                    
-                    $total=0;
+                   
                     
                     foreach ($operand['tags'] as $tag) {
 
