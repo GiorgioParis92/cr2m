@@ -277,7 +277,7 @@
         $(document).ready(function() {
             var table = $('#dossiersTable').DataTable({
                 columnDefs: [{
-                        targets: [4, 5, 6, 7, 9, 11, 13, 15, 17, 19],
+                        targets: [1,4, 5, 6, 7, 9, 11, 13, 15, 17, 19],
                         visible: false
                     },
 
