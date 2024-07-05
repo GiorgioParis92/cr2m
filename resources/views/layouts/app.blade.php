@@ -421,6 +421,7 @@
                     telephone_2: $('#rdv_telephone_2').val(),
                     email: $('#rdv_email').val(),
                     dossier_id: $('#rdv_dossier_id').val(),
+                    status: $('#rdv_status').val(),
                     client_id: $('#rdv_client_id').val(),
                     lat: $('#rdv_lat').val(),
                     lng: $('#rdv_lng').val(),

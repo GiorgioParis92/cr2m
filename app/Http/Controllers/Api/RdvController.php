@@ -226,12 +226,14 @@ class RdvController extends \App\Http\Controllers\Controller
         foreach ($request->all() as $key => $value) {
             if ($key == 'date_rdv') {
                 $value = date('Y-m-d', strtotime(str_replace('/', '-', $value))) . ' ' . $request->hour . ':' . $request->minute . ':00';
-
+               
             }
+    
 
-
-            if (Schema::hasColumn('rdv', $key)) {
+            if (isset($key) && Schema::hasColumn('rdv', $key)) {
+        
                 $updateData[$key] = $value;
+      
             }
         }
 
@@ -242,7 +244,7 @@ class RdvController extends \App\Http\Controllers\Controller
         } else {
             return response()->json(['success' => false, 'message' => 'No valid fields to update'], 400);
         }
-
+  
         return response()->json(['success' => true, 'id' => $rdvId, 'rdv' => $rdvs]);
     }
 }

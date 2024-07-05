@@ -799,6 +799,8 @@
                         console.log(response)
                         var rdv = response[0];
                         $.each(rdv, function(key, value) {
+                            console.log(key)
+                            console.log(value)
                             // Populate form fields
                             $('#rdv_' + key).val(value);
                         });
