@@ -22,7 +22,7 @@ if (!function_exists('is_user_allowed')) {
     function is_user_allowed($permission_name)
     {
         $user = Auth::user();
-
+      
         if (!$user) {
             return false;
         }
@@ -42,14 +42,33 @@ if (!function_exists('is_user_allowed')) {
                 return false;
             }
         } else {
+
+            if(isset($user->client->type_client)) {
+                $defaultPermission = DB::table('default_permission')
+                ->where('type_client', $user->client->type_client)
+                ->where('permission_name', $permission_name)
+                
+                    ->first();
+    
+    
+                if ($defaultPermission && $defaultPermission->is_active == 0) {
+                    return false;
+                }
+            }
+
+
             $defaultPermission = DB::table('default_permission')->where('type_id', $user->type_id)
                 ->where('permission_name', $permission_name)
+                
                 ->first();
 
 
             if ($defaultPermission && $defaultPermission->is_active == 0) {
                 return false;
             }
+
+
+ 
         }
 
 

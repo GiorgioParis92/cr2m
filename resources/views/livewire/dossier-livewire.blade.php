@@ -51,11 +51,11 @@
                                 if ($e->order_column <= $dossier->etape->order_column) {
                                     $isActive = true;
                                 }
-                                if ($e->order_column == $dossier->etape->order_column) {
+                                if ($e->order_column == $dossier->etape->order_column && is_user_allowed($e->etape_name)==true) {
                                     $isCurrent = true;
                                 }
 
-                                if ($e->etape_number == $etape_display['id'] || $e->etape_number == $etape_display) {
+                                if (($e->etape_number == $etape_display['id'] || $e->etape_number == $etape_display) && is_user_allowed($e->etape_name)==true) {
                                     $isTab = true;
                                 }
 
@@ -70,7 +70,7 @@
 
                             <div @if ($isActive && $isAllowed) wire:click="setTab({{ $e->etape_number }})" @endif
                                 aria-disabled="false"
-                                class="@if ($isActive && $isAllowed) settab @endif  @if ($isAllowed) settab @endif col-lg-1  {{ ($isActive && $isAllowed) ? 'active' : '' }} {{ $isCurrent ? 'current' : '' }} {{ $isTab ? 'isTab' : '' }}"
+                                class="@if ($isActive && $isAllowed) settab @endif  col-lg-1  {{ ($isActive && $isAllowed) ? 'active' : '' }} {{ $isCurrent ? 'current' : '' }} {{ $isTab ? 'isTab' : '' }}"
                                 aria-selected="true">
                                 <a id="form-total-t-0" aria-controls="form-total-p-0">
                                     <div class="inter_line"></div>
