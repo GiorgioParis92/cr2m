@@ -9,36 +9,40 @@ class Condition extends AbstractFormData
 {
     public function render(bool $is_error)
     {
-        // Constructing the wire:model directive
+
         $jsonString = str_replace(["\n", '', "\r"], '', $this->config->options);
+
         $optionsArray = json_decode($jsonString, true);
+
         $wireModel = "formData.{$this->form_id}.{$this->name}";
-        $condition_valid=false;
+
+        $condition_valid = false;
+
         foreach ($optionsArray as $condition_config) {
-       
+
             if ($this->check_condition($condition_config)) {
                 $this->value = $condition_config['result'];
                 $this->get_error_message = $condition_config['error_message'] ?? '';
                 $this->save_value();
-                $condition_valid=true;
+                $condition_valid = true;
 
-                if($condition_config['result']=='AND') {
+                if ($condition_config['result'] == 'AND') {
                     break;
                 }
-                
+
             }
 
         }
 
-        if(!$condition_valid) {
-            $this->value='';
+        if (!$condition_valid) {
+            $this->value = '';
             $this->save_value();
         }
-        $data = '<input wire:model.lazy="' . $wireModel . '" value="'.$this->value.'" id="' . $this->name . '"  class="form-control" type="hidden" name="' . $this->name . '">';
+        $data = '<input wire:model.lazy="' . $wireModel . '" value="' . $this->value . '" id="' . $this->name . '"  class="form-control" type="hidden" name="' . $this->name . '">';
 
 
-        if($this->value=='error') {
-           $data .= ' <div style="display:block" class="alert alert-danger" role="alert">'.$this->get_error_message().'</div>';
+        if ($this->value == 'error') {
+            $data .= ' <div style="display:block" class="alert alert-danger" role="alert">' . $this->get_error_message() . '</div>';
         }
 
 
@@ -51,10 +55,10 @@ class Condition extends AbstractFormData
     public function check_condition($condition_config)
     {
 
-        
+
         foreach ($condition_config['conditions'] as $tag => $list_values) {
             if (!$this->match_value($tag, $list_values)) {
-              
+
                 return false;
             }
         }
@@ -64,7 +68,7 @@ class Condition extends AbstractFormData
     public function match_value($tag, $list_values)
     {
         $value = $this->getOtherValue($tag);
-       
+
         foreach ($list_values as $list_value) {
             if ($value == $list_value) {
                 return true;
@@ -78,11 +82,11 @@ class Condition extends AbstractFormData
         $jsonString = str_replace(["\n", '', "\r"], '', $this->config->options);
         $optionsArray = json_decode($jsonString, true);
         foreach ($optionsArray as $condition_config) {
-       
-            if($this->value=='error') {
-             
+
+            if ($this->value == 'error') {
+
                 return $condition_config['result_message'] ?? '';
-        
+
             }
 
         }
