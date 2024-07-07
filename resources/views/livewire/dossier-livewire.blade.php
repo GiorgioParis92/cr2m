@@ -807,7 +807,7 @@ Livewire.hook('message.processed', (message, component) => {
                     $('#rdv_user_id').val('');
                     $('#rdv_status').val('');
                     $('#rdv_observations').val('');
-                    $('#rdv_type_rdv').val(1);
+                    $('#rdv_type_rdv').val($('#type_rdv').val());
                     $('#rdv_nom').val("{!! $dossier['beneficiaire']['nom'] ?? '' !!}");
                     $('#rdv_prenom').val("{!! $dossier['beneficiaire']['prenom'] ?? '' !!}");
                     $('#rdv_adresse').val("{!! $dossier['beneficiaire']['adresse'] ?? '' !!}");
