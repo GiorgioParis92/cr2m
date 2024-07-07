@@ -605,14 +605,14 @@ Livewire.hook('message.processed', (message, component) => {
         Livewire.on('setTab', (data) => {
             var configs = data.forms_configs;
             initializeDropzones(configs);
-            // initializeTextarea();
+            // 
         });
         // 
 
         // Listen for the Livewire event to reinitialize Dropzone
         Livewire.on('initializeDropzones', (data) => {
             console.log('initializeDropzones');
-
+            initializeTextarea();
 
      
 
