@@ -595,7 +595,7 @@ function initializeTextarea() {
 initializeTextarea();
 
 Livewire.hook('message.processed', (message, component) => {
-    initializeTextarea();
+    // initializeTextarea();
 });
 });
 
@@ -605,7 +605,7 @@ Livewire.hook('message.processed', (message, component) => {
         Livewire.on('setTab', (data) => {
             var configs = data.forms_configs;
             initializeDropzones(configs);
-
+            initializeTextarea();
         });
         // 
 
