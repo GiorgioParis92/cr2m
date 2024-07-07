@@ -28,38 +28,22 @@ class AbstractFormData
             ->where('meta_key', $name)
             ->first();
 
-
-
         $config_dossiers = \DB::table('dossiers_data')
             ->where('dossier_id', $dossier_id)
             ->where('meta_key', $name)
             ->first();
 
-
-        // Initialize value with the first table's value or an empty string
         $this->name = $name;
-
 
         $this->value = $config->meta_value ?? '';
 
-
-
-
-
         $this->prediction = $config_dossiers->meta_value ?? '';
-
 
         $this->global_data = '';
 
-
         if ($this->value == '') {
             $this->value = $this->prediction;
-
         }
-
-        // if (!$this->check_value()) {
-        //     $this->value = '';
-        // }
 
     }
 
@@ -85,9 +69,6 @@ class AbstractFormData
     public function save_value()
     {
         $value = $this->generate_value();
-
-
-
 
         DB::table('forms_data')->updateOrInsert(
             [
@@ -125,7 +106,6 @@ class AbstractFormData
 
     public function set_dossier($dossier)
     {
-
         $this->dossier = $dossier;
     }
 

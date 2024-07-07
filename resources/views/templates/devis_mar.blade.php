@@ -408,3 +408,102 @@
     </div>
 
 </page>
+
+
+@if($dossier->beneficiaire->menage_mpr!='bleu')
+<page backtop="25mm" backleft="10mm" backright="10mm" backimg="" backbottom="10mm">
+    @include('pdf.header')
+    @include('pdf.footer')
+    <div class="my-4"
+        style="margin-top:20px;margin-left:350px;border:0px solid #ccc;border-radius:5px;width:280px;padding:12px">
+        <p>
+            <b>FATURE PRO-FORMA</b><br />
+            <b>Acquitée</b>
+
+
+        </p>
+
+
+
+    </div>
+
+    <div class="my-4"
+        style="margin-top:20px;margin-left:350px;border:1px solid #ccc;border-radius:5px;width:280px;padding:12px">
+        <p>
+            <b>{{ $dossier->beneficiaire->nom }} {{ $dossier->beneficiaire->prenom }}</b><br />
+            {{ $dossier->beneficiaire->adresse }} <br />
+            {{ $dossier->beneficiaire->cp }} {{ $dossier->beneficiaire->ville }}<br />
+            Tél. : {{ $dossier->beneficiaire->telephone }} @if (!empty($dossier->beneficiaire->telephone_2))
+                / {{ $dossier->beneficiaire->telephone_2 }}
+            @endif <br />
+            Courriel : {{ $dossier->beneficiaire->email }}
+
+
+        </p>
+
+
+
+    </div>
+    <div class="my-4" style="margin-top:10px;margin-left:350px;width:380px;">
+
+        <p>
+            <b>Devis n° {{ $all_data['dossiers_data']['numero_devis'] ?  $all_data['dossiers_data']['numero_devis'] : ''}}
+            </b><br />
+            Date : {{ $all_data['dossiers_data']['date_devis_mar'] ?  date('d/m/Y',strtotime($all_data['dossiers_data']['date_devis_mar'])) : ''}}
+
+
+        </p>
+
+    </div>
+    <table>
+        <tr>
+            <td width="25%" style="width:25%;min-width:25%" class="background_td border-bottom text-center">
+                <p><b style="font-size:13px;">Prestation</b></p>
+            </td>
+            <td width="25%" style="width:25%;min-width:25%" class="background_td border-bottom text-center">
+                <p><b style="font-size:13px;">Montant H.T.</b></p>
+            </td>
+            <td width="25%" style="width:25%;min-width:25%" class="background_td border-bottom text-center">
+                <p><b style="font-size:13px;">TVA</b></p>
+            </td>
+            <td width="25%" style="width:25%;min-width:25%" class="background_td border-bottom text-center">
+                <p><b style="font-size:13px;">Montant TTC</b></p>
+            </td>
+        </tr>
+
+        @php
+            $array = [
+                'bleu' => ['Très modestes', '2000'],
+                'jaune' => ['Modestes', '1600'],
+                'violet' => ['Intermédiaires', '1200'],
+                'rose' => ['Supérieurs', '800'],
+            ];
+        @endphp
+        <tr>
+            <td width="25%" style="width:25%;min-width:25%" class=" border-bottom text-center">
+                <p><b style="font-size:13px;">Reste à charge sur le devis de Mon Accompagnateur Rénov'</b></p>
+            </td>
+            <td width="25%" style="width:25%;min-width:25%" class=" border-bottom text-right">
+                <p style="text-align: right">
+               {{ number_format(((2000 - $array[$dossier->beneficiaire->menage_mpr][1])/1.2),2) }} €
+                </p>
+            </td>
+            <td width="25%" style="width:25%;min-width:25%" class=" border-bottom text-right">
+                <p style="text-align: right">
+                   {{ number_format(((2000 - $array[$dossier->beneficiaire->menage_mpr][1])/1.2*0.2),2) }} €
+
+                </p>
+            </td>
+            <td width="25%" style="width:25%;min-width:25%" class=" border-bottom text-right">
+                <p style="text-align: right">
+                   {{ number_format(((2000 - $array[$dossier->beneficiaire->menage_mpr][1])),2) }} €
+                </p>
+            </td>
+        </tr>
+     
+
+
+    </table>
+</page>
+
+@endif

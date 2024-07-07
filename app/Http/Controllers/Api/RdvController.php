@@ -185,6 +185,7 @@ class RdvController extends \App\Http\Controllers\Controller
                 'telephone' => $request->telephone ?? '',
                 'email' => $request->email ?? '',
                 'status' => $request->status ?? '',
+                'observations' => $request->observations ?? '',
                 // Other necessary fields with default values
             ]);
         }

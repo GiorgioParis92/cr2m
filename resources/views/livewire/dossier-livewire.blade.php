@@ -781,6 +781,7 @@
                     $('#rdv_minute').val('');
                     $('#rdv_user_id').val('');
                     $('#rdv_status').val('');
+                    $('#rdv_observations').val('');
                     $('#rdv_type_rdv').val(1);
                     $('#rdv_nom').val("{!! $dossier['beneficiaire']['nom'] ?? '' !!}");
                     $('#rdv_prenom').val("{!! $dossier['beneficiaire']['prenom'] ?? '' !!}");

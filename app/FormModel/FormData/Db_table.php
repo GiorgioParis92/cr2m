@@ -32,8 +32,7 @@ class Db_table extends AbstractFormData
         $data .= '<th>';
         $data .= 'Date';
 
-        $data .= '<th>';
-        $data .= 'Heure';
+
 
         $data .= '</th>';
         $data .= '<th>';
@@ -48,6 +47,12 @@ class Db_table extends AbstractFormData
         $data .= 'Statut';
 
         $data .= '</th>';
+
+        $data .= '<th>';
+        $data .= 'Observations';
+
+        $data .= '</th>';
+
         $data .= '<th>';
         $data .= '';
 
@@ -59,12 +64,9 @@ class Db_table extends AbstractFormData
 
             $data .= '<td>';
             $data .= date('d/m/Y', strtotime($value->date_rdv));
-
+            $data .= ' à '.date('H:i', strtotime($value->date_rdv));
             $data .= '</td>';
-            $data .= '<td>';
-            $data .= date('H:i', strtotime($value->date_rdv));
-
-            $data .= '</td>';
+        
 
             $data .= '<td>';
             $data .= $value->name;
@@ -82,7 +84,10 @@ class Db_table extends AbstractFormData
             $data .= $value->rdv_desc ? '<div data-rdv_id="' . $value->rdv_id . '" class="show_rdv btn btn-'.$value->rdv_style.'">'.$value->rdv_desc.'</div>' : '';
 
             $data .= '</td>';
+            $data .= '<td>';
+            $data .= $value->observations ? '<div >'.$value->observations.'</div>' : '';
 
+            $data .= '</td>';
             $data .= '<td>';
             $data .= '<div data-rdv_id="' . $value->rdv_id . '" class="btn btn-primary show_rdv"><i class="fa fa-eye"></i></div>';
 

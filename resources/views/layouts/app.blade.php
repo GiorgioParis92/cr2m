@@ -212,7 +212,11 @@
 
                             </div>
                             @endif
+                            <div class="form-group">
+                                <label>Observations</label>
+                                <textarea class="form-control" name="observations" id="rdv_observations"></textarea>
 
+                            </div>
                             <div class="form-group">
 
 
@@ -422,6 +426,7 @@
                     email: $('#rdv_email').val(),
                     dossier_id: $('#rdv_dossier_id').val(),
                     status: $('#rdv_status').val(),
+                    observations: $('#rdv_observations').val(),
                     client_id: $('#rdv_client_id').val(),
                     lat: $('#rdv_lat').val(),
                     lng: $('#rdv_lng').val(),
@@ -563,6 +568,9 @@
 
         $('#global').on('keyup', function() {
             let query = $(this).val();
+            if(query=='') {
+                $('#search-results').hide()
+            }
             console.log(query)
             if (query.length > 2) {
                 $.ajax({
@@ -579,9 +587,12 @@
                                 $.each(items, function(index, item) {
                                     resultsContainer.append('<div><a href="'+item.url+'">' + (item.beneficiaire.nom +' '+item.beneficiaire.prenom) + '</a></div>');
                                 });
+                                $('#search-results').show()
+                            } else {
+                                $('#search-results').hide()
                             }
                         });
-                        $('#search-results').show()
+                       
                     }
                 });
             }

@@ -36,8 +36,8 @@ class Radio extends AbstractFormData
                 $backgroundColor = '';
                 $data.='<div class="radio_line" style="background:#'.$backgroundColor.' ">';
                 $data .= '<input id="'.$this->name.'_'.$key.'"
-                    wire:model.lazy="'.$wireModel.'" 
-                    wire:click="" 
+                    wire:model="'.$wireModel.'" 
+                  
                     value="'.$element['value'].'"
                     name="'.$this->config->name.'"
                     class="'.($this->value == $element['value'] ? 'choice_checked' : '').' "

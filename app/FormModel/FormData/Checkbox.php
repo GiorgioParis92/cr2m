@@ -34,7 +34,7 @@ class Checkbox extends AbstractFormData
                 $data .= 'checked';
             }
             $data .= ' id="checkbox_'.$this->config->name.'"
-            wire:model="'.$wireModel.'"
+            wire:model.lazy="'.$wireModel.'"
             value="'.$optionsArray[1]['value'].'">';
 
             $data .= '<span class="slider round"></span>';
