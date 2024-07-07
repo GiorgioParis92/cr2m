@@ -569,35 +569,6 @@
     });
 
 
-    document.addEventListener('DOMContentLoaded', function() {
-
-function adjustTextareaHeight(textarea) {
-    if ($(textarea).attr('id')) {
-        const id = $(textarea).attr('id');
-        $('#' + id).attr('style', 'height:auto;');
-        $('#' + id).attr('style', 'height:' + textarea.scrollHeight + 'px; min-height:' + textarea.scrollHeight + 'px;');
-    } else {
-        $(textarea).attr('style', 'height:auto;');
-        $(textarea).attr('style', 'height:' + textarea.scrollHeight + 'px; min-height:' + textarea.scrollHeight + 'px;');
-    }
-}
-
-function initializeTextarea() {
-    $('textarea').each(function() {
-        adjustTextareaHeight(this);
-    });
-
-    $('textarea').on('input', function() {
-        adjustTextareaHeight(this);
-    });
-}
-
-initializeTextarea();
-
-Livewire.hook('message.processed', (message, component) => {
-    // initializeTextarea();
-});
-});
 
     document.addEventListener('DOMContentLoaded', function() {
 
@@ -612,7 +583,6 @@ Livewire.hook('message.processed', (message, component) => {
         // Listen for the Livewire event to reinitialize Dropzone
         Livewire.on('initializeDropzones', (data) => {
             console.log('initializeDropzones');
-            initializeTextarea();
 
      
 
