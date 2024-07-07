@@ -240,7 +240,14 @@
     </div>
 </div>
 
-
+<style>
+    textarea {
+        width: 100%;
+        box-sizing: border-box;
+        overflow: hidden;
+        resize: none;
+    }
+</style>
 <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.css" rel="stylesheet">
 <!-- jQuery -->
 <!-- FullCalendar Core JS -->
@@ -253,10 +260,11 @@
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/locales/fr.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Existing initialization code
-        console.log('DOM fully loaded and parsed');
 
-        // Listen for the custom event from Livewire
+        console.log('DOM fully loaded and parsed');
+    
+
+       
         Livewire.on('loadCalendar', function() {
 
 
@@ -559,6 +567,38 @@
     $(document).ready(function() {
         $('.current').click();
     });
+
+
+    document.addEventListener('DOMContentLoaded', function() {
+
+function adjustTextareaHeight(textarea) {
+    if ($(textarea).attr('id')) {
+        const id = $(textarea).attr('id');
+        $('#' + id).attr('style', 'height:auto;');
+        $('#' + id).attr('style', 'height:' + textarea.scrollHeight + 'px; min-height:' + textarea.scrollHeight + 'px;');
+    } else {
+        $(textarea).attr('style', 'height:auto;');
+        $(textarea).attr('style', 'height:' + textarea.scrollHeight + 'px; min-height:' + textarea.scrollHeight + 'px;');
+    }
+}
+
+function initializeTextarea() {
+    $('textarea').each(function() {
+        adjustTextareaHeight(this);
+    });
+
+    $('textarea').on('input', function() {
+        adjustTextareaHeight(this);
+    });
+}
+
+initializeTextarea();
+
+Livewire.hook('message.processed', (message, component) => {
+    initializeTextarea();
+});
+});
+
     document.addEventListener('DOMContentLoaded', function() {
 
 
@@ -572,24 +612,9 @@
         // Listen for the Livewire event to reinitialize Dropzone
         Livewire.on('initializeDropzones', (data) => {
             console.log('initializeDropzones');
-            //     $('input:radio').radiocharm({
 
-            // });
 
-            $('input.choice_checked').trigger('click');
-            $('select').each(function() {
-                if ($(this).closest('.modal').length === 0) {
-                    $(this).select2();
-                }
-            });
-
-            // $("textarea").keyup(function(e) {
-            //     console.log('airo')
-            //     while ($(this).outerHeight() < this.scrollHeight + parseFloat($(this).css(
-            //             "borderTopWidth")) + parseFloat($(this).css("borderBottomWidth"))) {
-            //         $(this).height($(this).height() + 1);
-            //     };
-            // });
+     
 
             $('.datepicker').datepicker({
                 language: 'fr',
