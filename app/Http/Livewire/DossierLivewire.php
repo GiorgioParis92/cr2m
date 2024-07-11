@@ -63,17 +63,18 @@ class DossierLivewire extends Component
             $this->validators[$etape->etape_id] = new EtapeValidator($etape->etape_id);
         }
 
-
+        for ($i = 0; $i < $this->dossier['etape_number']; $i++) {
+        }
         $this->setTab($this->dossier['etape_number']);
         $this->emit('setTab');
         // $this->emit('initializeDropzones', ['forms_configs' => $this->forms_configs]);
 
         $auditeurs = User::where('type_id', 4);
 
-        if (auth()->user()->client_id > 0) {
-            $auditeurs = $auditeurs->where('client_id', auth()->user()->client_id);
+        // if (auth()->user()->client_id > 0) {
+        //     $auditeurs = $auditeurs->where('client_id', auth()->user()->client_id);
 
-        }
+        // }
 
         $auditeurs = $auditeurs->get();
 
