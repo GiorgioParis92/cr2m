@@ -26,7 +26,7 @@ class RdvController extends Controller
         
 
         if(auth()->user()->client_id>0) {
-            $auditeurs=$auditeurs->where('client_id',auth()->user()->client_id);
+            // $auditeurs=$auditeurs->where('client_id',auth()->user()->client_id);
         }
 
         $auditeurs=$auditeurs->get();
