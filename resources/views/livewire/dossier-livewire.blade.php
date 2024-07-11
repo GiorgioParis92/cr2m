@@ -560,7 +560,7 @@
     });
 
     $(document).ready(function() {
-        $('.current').click();
+        $('.isTab').click();
     });
 
 
