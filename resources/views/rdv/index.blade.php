@@ -104,6 +104,8 @@
         }
 
         function fetchAndRenderEvents(start, end) {
+            console.log(start)
+            console.log(end)
             $.ajax({
                 url: '/api/rdvs',
                 type: 'GET',
@@ -122,10 +124,12 @@
                         var eventStart = new Date(rdv.date_rdv);
                         var eventEnd = new Date(eventStart.getTime() + 60 * 60 *
                         1000); // Add 1 hour to the start date
-
+                        console.log(eventStart)
+                        console.log(eventEnd)
                         // Check if event is within the current calendar view
                         if (eventStart >= start && eventEnd <= end) {
                             // Create event object for FullCalendar
+                            console.log(rdv)
                             var event = {
                                 title: rdv.user_name+'<br/>'+rdv.nom + ' ' + rdv.prenom,
                                 start: rdv.date_rdv,
@@ -133,7 +137,8 @@
                                 description: rdv.adresse + '<br/>' + rdv.cp + ' ' + rdv.ville,
                                 backgroundColor: rdv.color,
                                 borderColor: rdv.color,
-                                dossier_id: rdv.dossier_id
+                                dossier_id: rdv.dossier_id,
+                                dossier_folder: rdv.dossier_folder
                             };
                             console.log(event)
                             // Create marker for Google Maps
@@ -197,6 +202,8 @@
         $('#form_config_user_id').change(function() {
             var start = calendar.view.activeStart;
             var end = calendar.view.activeEnd;
+            console.log(start)
+            console.log(end)
             clearMarkers();
             fetchAndRenderEvents(new Date(start), new Date(end));
         });
@@ -222,8 +229,10 @@
 
         function handleEventClick(event) {
             var dossierId = event.extendedProps.dossier_id; // Access the dossier_id
+            var dossierFolder = event.extendedProps.dossier_folder; // Access the dossier_id
             console.log(dossierId); // Log the dossier_id
-            window.location.href = `/dossier/show/${dossierId}`; // Redirect to the desired URL
+            console.log(dossierFolder); // Log the dossier_id
+            window.location.href = `/dossier/show/${dossierFolder}`; // Redirect to the desired URL
         }
     </script>
 @endsection

@@ -33,8 +33,7 @@ class RdvController extends \App\Http\Controllers\Controller
             ->leftJoin('dossiers', function ($join) {
                 $join->on('rdv.dossier_id', '=', 'dossiers.id');
             })
-            ->select('rdv.*', DB::raw("COALESCE(users.name, 'non attribué') as user_name"), DB::raw("rdv_status.id as status"));
-
+            ->select('rdv.*', DB::raw("COALESCE(users.name, 'non attribué') as user_name"), DB::raw("rdv_status.id as status"), DB::raw("dossiers.folder as dossier_folder"));
         if (isset($client) && !empty($client)) {
             if ($client->id > 0 && ($client->type_client == 1)) {
                 $rdvs = $rdvs->where('dossiers.client_id', $client->id);
@@ -59,6 +58,7 @@ class RdvController extends \App\Http\Controllers\Controller
         }
         $rdvs = $rdvs->get();
 
+        
         $data = $rdvs->map(function ($rdv) {
             $rdv->color = stringToColorCode($rdv->user_name);
 
