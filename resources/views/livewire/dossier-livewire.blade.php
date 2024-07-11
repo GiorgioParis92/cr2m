@@ -241,12 +241,7 @@
 </div>
 
 <style>
-    textarea {
-        width: 100%;
-        box-sizing: border-box;
-        overflow: hidden;
-        resize: none;
-    }
+
 </style>
 <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.css" rel="stylesheet">
 <!-- jQuery -->

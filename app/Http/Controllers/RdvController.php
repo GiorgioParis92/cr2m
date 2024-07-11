@@ -24,9 +24,10 @@ class RdvController extends Controller
 
         $auditeurs=User::where('type_id',4);
         
+        dump(is_user_allowed('see_all_inspectors'));
+
         if(auth()->user()->client_id>0) {
             $auditeurs=$auditeurs->where('client_id',auth()->user()->client_id);
-
         }
 
         $auditeurs=$auditeurs->get();
