@@ -58,7 +58,8 @@
                                 // if (($e->etape_number == $etape_display['id'] || $e->etape_number == $etape_display) && is_user_allowed($e->etape_name)==true) {
                                 //     $isTab = true;
                                 // }
-                                if ($e->etape_number == $last_etape) {
+                            
+                                if (($e->order_column+1) == $last_etape) {
                                     $isTab = true;
                                 }
                                 if(is_user_allowed($e->etape_name)==false) {
