@@ -63,9 +63,15 @@ class DossierLivewire extends Component
             $this->validators[$etape->etape_id] = new EtapeValidator($etape->etape_id);
         }
 
-        for ($i = 0; $i < $this->dossier['etape_number']; $i++) {
+        foreach($this->etapes as $etape) {
+         
+            if(is_user_allowed($etape->etape_name)==true && (($etape->order_column)+1)<=$this->dossier['etape_number']) {
+                $last_etape=($etape->order_column)+1;
+            }
         }
-        $this->setTab($this->dossier['etape_number']);
+  
+        // $this->setTab($this->dossier['etape_number']);
+        $this->setTab($last_etape);
         $this->emit('setTab');
         // $this->emit('initializeDropzones', ['forms_configs' => $this->forms_configs]);
 
