@@ -17,7 +17,7 @@ class Prompt extends AbstractFormData
 
         $data = '<div style="margin-bottom:20px" class="form-group  col-sm-12 '.($this->config->class ?? "").'">';
         $data .= '<label>'.$this->config->title.'</label>';
-        $data .= '<textarea   class="form-control" id="'.$this->config->name.'" name="'.$this->config->name.'">'.$content.'</textarea>';
+        $data .= '<textarea  style="min-height:500px" class="form-control" id="'.$this->config->name.'" name="'.$this->config->name.'">'.$content.'</textarea>';
 
         $data .= '</div>';
 

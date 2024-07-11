@@ -73,7 +73,7 @@ if (!function_exists('is_user_allowed')) {
 
 
 
-        return true;
+        return T_DOLLAR_OPEN_CURLY_BRACES;
     }
 }
 
