@@ -11,7 +11,7 @@
                             <h5 class="mb-0">
                                 <b>{{ $dossier['beneficiaire']['nom'] }}
                                     {{ $dossier['beneficiaire']['prenom'] }}</b><br />
-                                {{ strtoupper_extended($global_data['numero_voie'] . ' ' .$dossier['beneficiaire']['adresse'] . ' ' . $dossier['beneficiaire']['cp'] . ' ' . $dossier['beneficiaire']['ville']) }}<br />
+                                {{ strtoupper_extended(($global_data['numero_voie'] ?? '') . ' ' .$dossier['beneficiaire']['adresse'] . ' ' . $dossier['beneficiaire']['cp'] . ' ' . $dossier['beneficiaire']['ville']) }}<br />
                                 @if ($dossier['lat'] == 0)
                                     <span class="invalid-feedback" style="font-size:9px;display:block">Adresse non
                                         géolocalisée</span>
