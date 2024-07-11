@@ -21,6 +21,7 @@ class DossierLivewire extends Component
     public $forms_configs;
     public $global_data = [];
     public $tab;
+    public $last_etape;
     public $score_info;
     public $formData = [];
     public $validators = [];
@@ -69,7 +70,7 @@ class DossierLivewire extends Component
                 $last_etape=($etape->order_column)+1;
             }
         }
-
+        $this->last_etape=$last_etape;
         // $this->setTab($this->dossier['etape_number']);
         $this->setTab($last_etape);
         $this->emit('setTab');
