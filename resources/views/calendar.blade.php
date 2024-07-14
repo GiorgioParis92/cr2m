@@ -12,14 +12,20 @@
 
 <body>
     <div class="row">
-        <div class="form-group col-lg-6">
-            <select class="form-control" id="form_config_user_id">
-                <option value="">Choisir un auditeur / Voir tous les auditeurs</option>
-                @foreach ($auditeurs as $auditeur)
-                    <option value="{{ $auditeur->id }}">{{ $auditeur->name }}</option>
-                @endforeach
-            </select>
-        </div>
+        @if(auth()->user()->type_id==4)
+        <input type="hidden" value="{{auth()->user()->id}}" id="form_config_user_id">
+        @else
+            @if(auth()->user()->client->type_client!=3)
+            <div class="form-group col-lg-6">
+                <select class="form-control" id="form_config_user_id">
+                    <option value="">Choisir un auditeur / Voir tous les auditeurs</option>
+                    @foreach ($auditeurs as $auditeur)
+                        <option value="{{ $auditeur->id }}">{{ $auditeur->name }}</option>
+                    @endforeach
+                </select>
+            </div>
+            @endif
+        @endif
         <div class="form-group col-lg-6">
             <select id="dpt" onchange="handleSelectionChange(this)">
                 <option value=""  selected>Choisir un département</option>

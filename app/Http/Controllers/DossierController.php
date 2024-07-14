@@ -31,7 +31,6 @@ class DossierController extends Controller
 
         $dossiers = Dossier::where('id', '>', 0);
 
-
         if (auth()->user()->client_id > 0 && ($client->type_client == 1)) {
             $dossiers = $dossiers->where('client_id', auth()->user()->client_id);
         }

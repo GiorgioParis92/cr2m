@@ -240,7 +240,7 @@
                             @endif
                         </td>
                         <td>
-                            @if(isset($dossier->installateur))
+                            @if(isset($dossier->installateur) && isset($dossier->installateur->main_logo))
                             @if (Storage::disk('public')->exists($dossier->installateur->main_logo))
                                 <img class="logo_table" src="{{ asset('storage/' . $dossier->installateur->main_logo) }}">
                             @endif
@@ -283,11 +283,11 @@
 
 
                 ],
-                dom: '<"top"lp><"bottom">',
+                dom: '<"top"l><"bottom">',
                 language: {
         url: '//cdn.datatables.net/plug-ins/2.0.8/i18n/fr-FR.json',
     },
-                pageLength: 100,
+                pageLength: -1,
                 "order": [1,'desc']
 
 

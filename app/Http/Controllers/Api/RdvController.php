@@ -17,10 +17,9 @@ class RdvController extends \App\Http\Controllers\Controller
 
         $user = auth()->user();
         $client='';
-        if ($request->client) {
+        if ($request->client_id) {
             $client = Client::where('id', $request->client_id)->first();
         }
-
 
         $rdvs = DB::table('rdv')
             ->leftJoin('users', function ($join) {
