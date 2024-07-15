@@ -269,131 +269,7 @@
         });
 
         function get_calendar() {
-            // var calendarEl = document.getElementById('calendar');
-            // var token = $('meta[name="api-token"]').attr('content');
-
-            // var calendar = new FullCalendar.Calendar(calendarEl, {
-            //     initialView: 'timeGridWeek',
-            //     editable: true,
-            //     locale: 'fr',
-            //     headerToolbar: {
-            //         start: 'title',
-            //         center: '',
-            //         end: 'today prev,next timeGrid timeGridWeek dayGridMonth'
-            //     },
-            //     slotMinTime: "08:00:00",
-            //     slotMaxTime: "20:00:00",
-            //     slotDuration: '00:30:00',
-            //     allDaySlot: false,
-            //     buttonText: {
-            //         prev: 'Précédent',
-            //         next: 'Suivant',
-            //         today: "Aujourd'hui",
-            //         month: 'Mois',
-            //         timeGrid: 'Journée',
-            //         week: 'Semaine',
-            //         day: 'Jour'
-            //     },
-            //     weekText: 'Sem.',
-            //     allDayText: 'Toute la journée',
-            //     moreLinkText: 'en plus',
-            //     noEventsText: 'Aucun événement à afficher',
-            //     events: [],
-            //     dateClick: function(info) {
-            //         var date = moment(new Date(info.dateStr));
-            //         var formattedDate = date.format('YYYY-MM-DD HH:mm:ss');
-            //         $.ajax({
-            //             url: '/api/rdvs/save',
-            //             method: 'POST',
-            //             data: {
-            //                 dossier_id: {{ $dossier->id ?? '' }},
-            //                 start: formattedDate,
-            //                 user_id: $('#form_config_user_id').val(),
-            //                 type_rdv: $('#type_rdv').val(),
-            //             },
-            //             success: function(response) {
-            //                 if (response.success) {
-            //                     calendar.addEvent({
-            //                         start: formattedDate
-            //                     });
-            //                 } else {
-            //                     alert('Failed to save event');
-            //                 }
-            //             },
-            //             error: function() {
-            //                 alert('Error occurred while saving event');
-            //             }
-            //         });
-            //     },
-            //     eventContent: function(arg) {
-            //         var eventDiv = document.createElement('div');
-            //         var titleDiv = document.createElement('div');
-            //         var descriptionDiv = document.createElement('div');
-
-            //         titleDiv.innerHTML = arg.event.title;
-            //         descriptionDiv.innerHTML = arg.event.extendedProps.description;
-
-            //         eventDiv.appendChild(titleDiv);
-            //         eventDiv.appendChild(descriptionDiv);
-
-            //         return {
-            //             domNodes: [eventDiv]
-            //         };
-            //     },
-            //     eventClick: function(info) {
-            //         info.jsEvent.preventDefault();
-            //         openEventModal(info.event);
-            //     }
-            // });
-
-            // calendar.render();
-
-            // function fetchAndRenderEvents(userId) {
-            //     $.ajax({
-            //         url: '/api/rdvs',
-            //         type: 'GET',
-            //         headers: {
-            //             'Authorization': 'Bearer ' + token
-            //         },
-            //         data: {
-            //             user_id: userId
-            //         },
-            //         success: function(data) {
-            //             console.log(data)
-            //             var events = data.map(function(rdv) {
-            //                 var startDate = new Date(rdv.date_rdv);
-            //                 var endDate = new Date(startDate.getTime() + 60 * 60 * 1000);
-
-            //                 return {
-            //                     title: rdv.nom + ' ' + rdv.prenom,
-            //                     start: startDate.toISOString(),
-            //                     end: endDate.toISOString(),
-            //                     description: 'Address: ' + rdv.adresse + ', ' + rdv.ville
-            //                 };
-            //             });
-            //             calendar.removeAllEvents();
-            //             calendar.addEventSource(events);
-            //         },
-            //         error: function(xhr, status, error) {
-            //             console.error('Error fetching RDVs:', error);
-            //         }
-            //     });
-            // }
-
-            // fetchAndRenderEvents($('#form_config_user_id').val());
-
-            // $('#form_config_user_id').change(function() {
-            //     var selectedUserId = $(this).val();
-            //     fetchAndRenderEvents(selectedUserId);
-            // });
-
-            // function openEventModal(event) {
-            //     document.getElementById('eventTitle').textContent = event.title;
-            //     document.getElementById('eventDescription').textContent = event.extendedProps.description;
-            //     document.getElementById('eventStart').textContent = new Date(event.start).toLocaleString();
-            //     document.getElementById('eventEnd').textContent = new Date(event.end).toLocaleString();
-            //     $('#eventModal').modal('show');
-            // }
+           
 
             var calendarEl = document.getElementById('calendar');
             var token = $('meta[name="api-token"]').attr('content'); // Get token from meta tag
@@ -595,67 +471,13 @@
 
             var configs = data.forms_configs;
             initializeDropzones(configs);
-            // // Remove existing Dropzones to prevent multiple instances
-            // if (Dropzone.instances.length > 0) {
-            //     Dropzone.instances.forEach(instance => instance.destroy());
-            // }
-
-            // Dropzone.autoDiscover = false;
-
-            // // Convert object to array and loop through configs
-            // Object.values(configs).forEach((formConfig) => {
-            //     console.log(formConfig)
-            //     if (formConfig.form.type === 'document') {
-            //         Object.keys(formConfig.formData).forEach((key) => {
-            //             console.log(key)
-
-            //             var dropzoneElementId = `#dropzone-${key}`;
-            //             var dropzoneElement = document.querySelector(dropzoneElementId);
-            //             if (!dropzoneElement) {
-            //                 console.warn(`Element ${dropzoneElementId} not found.`);
-            //                 return;
-            //             }
-            //             new Dropzone(dropzoneElement, {
-            //                 method: 'post',
-            //                 headers: {
-            //                     // 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-            //                 },
-            //                 paramName: 'file',
-            //                 sending: function(file, xhr, formData) {
-            //                     formData.append('folder', 'dossiers');
-            //                     formData.append('template', key);
-            //                 },
-            //                 init: function() {
-            //                     this.on("success", function(file,
-            //                         response) {
-            //                         console.log(
-            //                             'Successfully uploaded:',
-            //                             response);
-            //                     });
-            //                     this.on("error", function(file, response) {
-            //                         console.log('Upload error:',
-            //                             response);
-            //                     });
-            //                 }
-            //             });
-            //         });
-            //     }
-            // });
-
+           
 
 
 
         });
 
 
-
-
-        // Use Livewire's hook to run scripts after DOM updates
-        Livewire.hook('message.processed', (message, component) => {
-            // initializeDropzones();
-            // initializePdfModals();
-
-        });
     });
 
     function initializeDropzones(configs) {
@@ -668,8 +490,9 @@
 
         // Convert object to array and loop through configs
         Object.values(configs).forEach((formConfig) => {
-            if (formConfig.form.type === 'document') {
+             if (formConfig.form.type === 'document') {
                 Object.keys(formConfig.formData).forEach((key) => {
+                    console.log(key)
                     var dropzoneElementId = `#dropzone-${key}`;
                     var dropzoneElement = document.querySelector(dropzoneElementId);
 
@@ -678,7 +501,6 @@
                         return;
                     }
 
-                    // Check if Dropzone is already attached
                     if (dropzoneElement.dropzone) {
                         console.warn(`Dropzone already attached to ${dropzoneElementId}.`);
                         return;
@@ -687,8 +509,6 @@
                     new Dropzone(dropzoneElement, {
                         method: 'post',
                         headers: {
-                            // Uncomment if CSRF token is needed
-                            // 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
                         },
                         paramName: 'file',
                         sending: function(file, xhr, formData) {
@@ -714,7 +534,7 @@
                         }
                     });
                 });
-            }
+             }
         });
     }
 

@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http; // Add this line
 use App\Http\Controllers\Api\OcrAnalyze; // Import the OcrAnalyze controller
 use App\Models\Dossier;
+use App\FormModel\FormData\Photo;
 
 class FileUploadService
 {
@@ -125,7 +126,7 @@ class FileUploadService
             // Save the new file
             $filePath = $file->storeAs($directory, $fileName, 'public');
 
-
+            
             DB::enableQueryLog();
 
             $update=DB::table('forms_data')->updateOrInsert(
@@ -140,8 +141,8 @@ class FileUploadService
                     'updated_at' => now()
                 ]
             );
-        
-
+            // $photo = new Photo($form_id, $request->input('template'), $filePath, $this);
+            // $photo->save_value();
 
             return $filePath;
         }

@@ -1432,3 +1432,7 @@ div#search-results {
 .modal .form-group {
     display: block;
 }
+
+button img {
+    max-height: 100px;
+}

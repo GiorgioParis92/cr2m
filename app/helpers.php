@@ -50,7 +50,7 @@ if (!function_exists('is_user_allowed')) {
                 
                     ->first();
     
-    
+            
                 if ($defaultPermission && $defaultPermission->is_active == 0) {
                     return false;
                 }

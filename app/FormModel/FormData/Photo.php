@@ -1,0 +1,106 @@
+<?php
+namespace App\FormModel\FormData;
+
+use Illuminate\Support\Facades\DB;
+use App\Models\Dossier;
+use Illuminate\Support\Facades\Storage;
+
+class Photo extends AbstractFormData
+{
+    public function render(bool $is_error)
+    {
+        $data = '';
+        $wireModel = "formData.{$this->form_id}.{$this->name}";
+        $data .= '<input type="text" wire:model.lazy="' . $wireModel . '">';
+
+        $csrfToken = csrf_token();
+        $data .= "<div class='row'>";
+        $data .= "<div class='col-lg-3'>";
+
+
+
+        $data .= '<div style="cursor:pointer" class="dropzone photo_button bg-secondary" id="dropzone-' . $this->name . '">';
+        $data .= csrf_field(); // This will generate the CSRF token input field
+        $data .= '<div style="color:white" class="dz-message"><i class="fas fa-camera"></i> ' . $this->config->title . '</div>';
+        $data .= '</div>';
+
+        // Generate the upload URL
+        $uploadUrl = route("upload_file", [
+            "form_id" => $this->form_id,
+            "folder" => "dossiers",
+            "clientId" => $this->dossier->folder,
+            "template" => $this->name,
+            'config' => $this
+        ]);
+
+        // Dropzone script
+        $data .= "<script>
+      
+            var dropzoneElementId = '#dropzone-" . $this->name . "';
+            var dropzoneElement = document.querySelector(dropzoneElementId);
+            
+            var dropzone = new Dropzone(dropzoneElement, {
+                url: '{$uploadUrl}', // Use the generated upload URL
+                method: 'post',
+                headers: {
+                    'X-CSRF-TOKEN': '{$csrfToken}'
+                },
+                paramName: 'file',
+                sending: function(file, xhr, formData) {
+                    formData.append('folder', 'dossiers');
+                    formData.append('template', '{$this->name}');
+                },
+                init: function() {
+                    this.on('success', function(file, response) {
+                        console.log(response);
+
+                        console.log('Successfully uploaded:', response);
+                    });
+                    this.on('error', function(file, response) {
+                        console.log('Upload error:', response);
+                    });
+                }
+            });
+        
+        </script>";
+        if ($this->value) {
+            $extension = explode('.', $this->value);
+
+
+
+            $filePath = storage_path('app/public/' . $this->value);  // File system path
+
+            // $data.=$filePath;
+
+            if (file_exists($filePath)) {
+                if (end($extension) != 'pdf') {
+                    $data .= '<button type="button" class="btn btn-success btn-view imageModal"
+        data-toggle="modal" data-target="imageModal"
+        data-img-src="' . asset('storage/' . $this->value) . '"
+        data-name="' . $this->config->title . '">';
+                    $data .= '<img src="' . asset('storage/' . $this->value) . '">';
+                    $data .= '<i class="fas fa-eye"></i>' . $this->config->title . '
+    </button> ';
+                } else {
+                    $data .= '<div class="btn btn-success btn-view pdfModal"
+        data-toggle="modal" 
+         
+        data-img-src="' . asset('storage/' . $this->value) . '"
+        data-name="' . $this->config->title . '">';
+
+                    $data .= '<i class="fas fa-eye"></i>' . $this->config->title . '</div>';
+                }
+            }
+            $data .= "<script>initializePdfModals()</script>";
+        }
+        $data .= "</div>";
+        $data .= "</div>";
+
+        return $data;
+    }
+
+    public function check_value()
+    {
+        return Storage::disk('public')->exists($this->value);
+    }
+}
