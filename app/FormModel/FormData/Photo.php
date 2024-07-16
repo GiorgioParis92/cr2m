@@ -11,7 +11,7 @@ class Photo extends AbstractFormData
     {
         $data = '';
         $wireModel = "formData.{$this->form_id}.{$this->name}";
-        $data .= '<input type="text" wire:model.lazy="' . $wireModel . '">';
+        $data .= '<input type="hidden" wire:model.lazy="' . $wireModel . '">';
 
         $csrfToken = csrf_token();
         $data .= "<div class='row'>";
