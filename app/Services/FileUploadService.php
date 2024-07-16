@@ -21,7 +21,7 @@ class FileUploadService
      * @param string $inputName
      * @return string|false
      */
-    public function storeImage(Request $request, string $folder = null, int $clientId = null, string $inputName = 'file')
+    public function storeImage(Request $request, string $folder = null, int $clientId = null, string $inputName = 'file', bool $random_name=false )
     {
      
         if ($request->folder == 'dossiers') {
@@ -87,6 +87,12 @@ class FileUploadService
            
 
         }
+
+
+        if (isset($request->$random_name)) {
+            $random_name = true;
+        }
+
         if (isset($request->form_id)) {
             $form_id = $request->form_id;
         }
@@ -120,7 +126,13 @@ class FileUploadService
             // Prepare the new file name with the template if provided
             if ($request->has('template')) {
                 $extension = $file->getClientOriginalExtension();
-                $fileName = $request->input('template') . '.' . $extension;
+                if($random_name) {
+                    $fileName = $request->input('template') .time(). '.' . $extension;
+
+                } else {
+                    $fileName = $request->input('template') . '.' . $extension;
+
+                }
             } else {
                 $fileName = $file->getClientOriginalName();
             }
