@@ -50,6 +50,7 @@ class Photo extends AbstractFormData
                 sending: function(file, xhr, formData) {
                     formData.append('folder', 'dossiers');
                     formData.append('template', '{$this->name}');
+                    formData.append('random_name', 'true');
                 },
                 init: function() {
                     this.on('success', function(file, response) {
