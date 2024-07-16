@@ -23,7 +23,7 @@ class FileUploadService
      */
     public function storeImage(Request $request, string $folder = null, int $clientId = null, string $inputName = 'file')
     {
-
+     
         if ($request->folder == 'dossiers') {
             if (isset($request->analyze)) {
                 // $ocrResponse = $this->callOcrAnalyzeDirectly($request);
@@ -90,10 +90,13 @@ class FileUploadService
         if (isset($request->form_id)) {
             $form_id = $request->form_id;
         }
-        if ($request->hasFile($inputName)) {
-            $file = $request->file($inputName);
+       
+        
+            $file = $request->file('file');
+
             $allowedExtensions = ['jpeg', 'jpg', 'png', 'gif', 'pdf'];
             $extension = strtolower($file->getClientOriginalExtension());
+          
 
 
             if (!in_array($extension, $allowedExtensions)) {
@@ -105,13 +108,12 @@ class FileUploadService
                 Storage::disk('public')->makeDirectory($directory);
             }
             $originalFileName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
-
             // Directory path where files will be stored
             $directoryPath = storage_path('app/public/' . $directory);
-            
+
             // Find all files with the same base name in the directory
             foreach (glob($directoryPath . '/' . $originalFileName . '.*') as $existingFile) {
-                // Delete the existing file
+                
                 unlink($existingFile);
             }
             
@@ -122,10 +124,9 @@ class FileUploadService
             } else {
                 $fileName = $file->getClientOriginalName();
             }
-            
+     
             // Save the new file
             $filePath = $file->storeAs($directory, $fileName, 'public');
-
             
             DB::enableQueryLog();
 
@@ -145,9 +146,9 @@ class FileUploadService
             // $photo->save_value();
 
             return $filePath;
-        }
+        
 
-        return false;
+
     }
     protected function callOcrAnalyzeDirectly(Request $request)
     {
