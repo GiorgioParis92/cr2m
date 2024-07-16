@@ -120,7 +120,7 @@ class FileUploadService
             // Prepare the new file name with the template if provided
             if ($request->has('template')) {
                 $extension = $file->getClientOriginalExtension();
-                $fileName = $request->input('template') .time(). '.' . $extension;
+                $fileName = $request->input('template') . '.' . $extension;
             } else {
                 $fileName = $file->getClientOriginalName();
             }
