@@ -30,7 +30,7 @@ class Photo extends AbstractFormData
             "folder" => "dossiers",
             "clientId" => $this->dossier->folder,
             "template" => $this->name,
-            "random_name" => true,
+            "random_name" => "true",
             'config' => $this
         ]);
 
