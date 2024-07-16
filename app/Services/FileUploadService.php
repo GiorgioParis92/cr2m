@@ -90,8 +90,8 @@ class FileUploadService
         // dd($request);
 
 
-        if (isset($request->$random_name)) {
-            dd('Thierry');
+        if (isset($request->random_name)) {
+     
             $random_name = true;
         }
 
