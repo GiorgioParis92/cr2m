@@ -64,7 +64,7 @@ class Photo extends AbstractFormData
                 url: '/delete_file',
                 method: 'POST',
                 headers: {
-                    'X-CSRF-TOKEN': $('meta[name='_token']').attr('content')
+                      'X-CSRF-TOKEN': '{$csrfToken}'
                 },
                 data: {
                     link: link,
