@@ -546,11 +546,10 @@
 
     function initializePdfModals() {
 
-        $deleteUrl = route("delete_file");
         $('.delete_photo').click(function(){
                 var link=$(this).data('val');
                 $.ajax({
-            url: '{$deleteUrl}',
+            url: '/delete_file',
             method: 'POST',
                 headers: {
                     'X-CSRF-TOKEN': '{$csrfToken}'
