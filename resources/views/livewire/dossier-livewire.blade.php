@@ -548,13 +548,13 @@
 
         $('.delete_photo').click(function() {
             alert('stop')
-            console.log($('meta[name="csrf-token"]').attr('content'))
+            console.log($('meta[name="_token"]').attr('content'))
             var link = $(this).data('val');
             $.ajax({
                 url: '/delete_file',
                 method: 'POST',
                 headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
                 },
                 data: {
                     link: link,
