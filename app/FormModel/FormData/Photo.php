@@ -116,7 +116,8 @@ class Photo extends AbstractFormData
                         data-name="' . $this->config->title . '">';
                     $data .= '<img src="' . asset('storage/' . $value) . '">';
                     $data .= '<i style="display:block" class="fas fa-eye"></i>' . $this->config->title . '
-                    </button> <i data-val="' . $value . '" data-img-src="' . asset('storage/' . $value) . '" class="delete_photo btn btn-danger fa fa-trash bg-danger"></i></div>';
+                     <i data-val="' . $value . '" data-img-src="' . asset('storage/' . $value) . '" class="delete_photo btn btn-danger fa fa-trash bg-danger"></i>
+                    </button></div>';
                 } else {
                     $data .= '<div class="btn btn-success btn-view pdfModal"
                         data-toggle="modal" 
