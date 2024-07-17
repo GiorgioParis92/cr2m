@@ -90,7 +90,31 @@ class Photo extends AbstractFormData
                 }
             });
         
- 
+           $('.delete_photo').click(function() {
+            alert('stop')
+            var link = $(this).data('val');
+            $.ajax({
+                url: '/delete_file',
+                method: 'POST',
+                headers: {
+                      'X-CSRF-TOKEN': '{$csrfToken}'
+                },
+                data: {
+                    link: link,
+
+                },
+                success: function(response) {
+
+
+                },
+                error: function(xhr) {
+                    let errorMessage = 'An error occurred';
+                    if (xhr.responseJSON && xhr.responseJSON.errors) {
+                        errorMessage = Object.values(xhr.responseJSON.errors).join(', ');
+                    }
+
+                }
+            });
         
         </script>";
         if ($this->value) {
