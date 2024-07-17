@@ -63,7 +63,7 @@ class Photo extends AbstractFormData
                     });
                 }
             });
-        function del_photo() {
+       
             $('.delete_photo').click(function(){
                 var link=$(this).data('val');
                 $.ajax({
@@ -89,7 +89,7 @@ class Photo extends AbstractFormData
             }
         });
             })
-        }
+        
         </script>";
         if ($this->value) {
             $extension = explode('.', $this->value);
