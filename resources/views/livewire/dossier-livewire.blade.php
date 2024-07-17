@@ -473,7 +473,7 @@
     }
 
     $(document).ready(function () {
-        initializeDropzone();
+        initializeDeleteButtons();
     });
     document.addEventListener('DOMContentLoaded', function() {
 
