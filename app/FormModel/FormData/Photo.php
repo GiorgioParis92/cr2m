@@ -115,6 +115,7 @@ class Photo extends AbstractFormData
 
                 }
             });
+            });
         
         </script>";
         if ($this->value) {
