@@ -182,7 +182,7 @@ class FileUploadService
 
 
         $value = DB::table('forms_data')
-            ->where('meta_value', 'like', $request->link)
+            ->where('meta_value', 'like', '%'.$request->link.'%')
             ->first();
         dd($value);
         if ($value) {
