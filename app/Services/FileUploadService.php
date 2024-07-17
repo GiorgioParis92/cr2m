@@ -194,7 +194,7 @@ class FileUploadService
           
             if (is_array($json_value) && in_array($request->link, $json_value)) {
                 // Remove the value from the array
-                $json_value = array_filter($json_value, function ($item) use ($value) {
+                $json_value = array_filter($json_value, function ($item) use ($request) {
                     return $item !== $request->link;
                 });
                 
