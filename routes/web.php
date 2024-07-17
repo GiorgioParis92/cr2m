@@ -134,6 +134,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/fill-pdf', [PDFController::class, 'fillPdf']);
 
     Route::post('upload_file', [FileUploadService::class, 'storeImage'])->name('upload_file');
+    Route::post('delete_file', [FileUploadService::class, 'deleteImage'])->name('delete_file');
     Route::get('etapes-controller', [EtapesController::class, 'show'])->name('etapes-controller');
     Route::get('edit-etape/{id}', [EtapesController::class, 'edit'])->name('edit-etape');
 

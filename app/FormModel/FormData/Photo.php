@@ -33,10 +33,10 @@ class Photo extends AbstractFormData
             "random_name" => "true",
             'config' => $this
         ]);
-
+        $deleteUrl = route("delete_file");
         // Dropzone script
         $data .= "<script>
-      
+            del_photo();
             var dropzoneElementId = '#dropzone-" . $this->name . "';
             var dropzoneElement = document.querySelector(dropzoneElementId);
             
@@ -55,7 +55,7 @@ class Photo extends AbstractFormData
                 init: function() {
                     this.on('success', function(file, response) {
                         console.log(response);
-
+                    del_photo();
                         console.log('Successfully uploaded:', response);
                     });
                     this.on('error', function(file, response) {
@@ -63,7 +63,33 @@ class Photo extends AbstractFormData
                     });
                 }
             });
+        function del_photo() {
+            $('.delete_photo').click(function(){
+                var link=$(this).data('val');
+                $.ajax({
+            url: '{$deleteUrl}',
+            method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': '{$csrfToken}'
+                },
+            data: {
+                    link: link,
+                   
+                },
+            success: function(response) {
+            alert('ok')
+    
+            },
+            error: function(xhr) {
+                let errorMessage = 'An error occurred';
+                if (xhr.responseJSON && xhr.responseJSON.errors) {
+                    errorMessage = Object.values(xhr.responseJSON.errors).join(', ');
+                }
         
+            }
+        });
+            })
+        }
         </script>";
         if ($this->value) {
             $extension = explode('.', $this->value);
@@ -76,18 +102,20 @@ class Photo extends AbstractFormData
 
             if (file_exists($filePath)) {
                 if (end($extension) != 'pdf') {
-                    $data .= '<button type="button" class="btn btn-success btn-view imageModal"
+                    $data .= '<div><button type="button" class="btn btn-success btn-view imageModal"
         data-toggle="modal" data-target="imageModal"
         data-img-src="' . asset('storage/' . $this->value) . '"
+        data-val="'.$this->value . '"
         data-name="' . $this->config->title . '">';
                     $data .= '<img src="' . asset('storage/' . $this->value) . '">';
                     $data .= '<i class="fas fa-eye"></i>' . $this->config->title . '
-    </button> ';
+    </button> <i data-val="'.$this->value . '" data-img-src="' . asset('storage/' . $this->value) . '" class="delete_photo btn btn-danger fa fa-trash bg-danger"></i></div>';
                 } else {
                     $data .= '<div class="btn btn-success btn-view pdfModal"
         data-toggle="modal" 
          
         data-img-src="' . asset('storage/' . $this->value) . '"
+        data-val="'.$this->value . '"
         data-name="' . $this->config->title . '">';
 
                     $data .= '<i class="fas fa-eye"></i>' . $this->config->title . '</div>';

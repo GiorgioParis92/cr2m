@@ -177,4 +177,16 @@ class FileUploadService
 
         return false;
     }
+    public function deleteImage(Request $request)
+    {
+      
+        unlink(storage_path('app/public/' . $request->link));
+
+        DB::table('forms_data')->delete(
+            [
+          
+                'meta_value' => ''.$request->link.''
+            ]
+        );
+    }
 }
