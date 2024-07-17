@@ -150,7 +150,7 @@ class FileUploadService
                 ->where("form_id",$form_id)
                 ->where("dossier_id",$dossier->id)
                 ->first();
-
+            dd($value);
             if ($value) {
                 $json_value = json_decode($value->meta_value);
                 array_push($json_value,$filePath);
