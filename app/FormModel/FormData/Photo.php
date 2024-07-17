@@ -58,7 +58,7 @@ class Photo extends AbstractFormData
                  
                         console.log('Successfully uploaded:', response);
             $('.delete_photo').click(function() {
-            alert('stop')
+            alert('stop1')
             var link = $(this).data('val');
             $.ajax({
                 url: '/delete_file',
@@ -91,7 +91,7 @@ class Photo extends AbstractFormData
             });
         
            $('.delete_photo').click(function() {
-            alert('stop')
+            alert('stop2')
             var link = $(this).data('val');
             $.ajax({
                 url: '/delete_file',
