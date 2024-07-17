@@ -57,31 +57,7 @@ class Photo extends AbstractFormData
                         console.log(response);
                  
                         console.log('Successfully uploaded:', response);
-                         $('.delete_photo').click(function(){
-                var link=$(this).data('val');
-                $.ajax({
-            url: '{$deleteUrl}',
-            method: 'POST',
-                headers: {
-                    'X-CSRF-TOKEN': '{$csrfToken}'
-                },
-            data: {
-                    link: link,
-                   
-                },
-            success: function(response) {
-          
-    
-            },
-            error: function(xhr) {
-                let errorMessage = 'An error occurred';
-                if (xhr.responseJSON && xhr.responseJSON.errors) {
-                    errorMessage = Object.values(xhr.responseJSON.errors).join(', ');
-                }
-        
-            }
-        });
-            })
+           
                     });
                     this.on('error', function(file, response) {
                         console.log('Upload error:', response);
@@ -106,17 +82,17 @@ class Photo extends AbstractFormData
                     $data .= '<div><button type="button" class="btn btn-success btn-view imageModal"
         data-toggle="modal" data-target="imageModal"
         data-img-src="' . asset('storage/' . $this->value) . '"
-        data-val="'.$this->value . '"
+        data-val="' . $this->value . '"
         data-name="' . $this->config->title . '">';
                     $data .= '<img src="' . asset('storage/' . $this->value) . '">';
                     $data .= '<i class="fas fa-eye"></i>' . $this->config->title . '
-    </button> <i data-val="'.$this->value . '" data-img-src="' . asset('storage/' . $this->value) . '" class="delete_photo btn btn-danger fa fa-trash bg-danger"></i></div>';
+    </button> <i data-val="' . $this->value . '" data-img-src="' . asset('storage/' . $this->value) . '" class="delete_photo btn btn-danger fa fa-trash bg-danger"></i></div>';
                 } else {
                     $data .= '<div class="btn btn-success btn-view pdfModal"
         data-toggle="modal" 
          
         data-img-src="' . asset('storage/' . $this->value) . '"
-        data-val="'.$this->value . '"
+        data-val="' . $this->value . '"
         data-name="' . $this->config->title . '">';
 
                     $data .= '<i class="fas fa-eye"></i>' . $this->config->title . '</div>';
