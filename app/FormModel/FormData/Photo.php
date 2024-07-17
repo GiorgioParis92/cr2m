@@ -57,7 +57,32 @@ class Photo extends AbstractFormData
                         console.log(response);
                  
                         console.log('Successfully uploaded:', response);
-           
+            $('.delete_photo').click(function() {
+            alert('stop')
+            var link = $(this).data('val');
+            $.ajax({
+                url: '/delete_file',
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name='_token']').attr('content')
+                },
+                data: {
+                    link: link,
+
+                },
+                success: function(response) {
+
+
+                },
+                error: function(xhr) {
+                    let errorMessage = 'An error occurred';
+                    if (xhr.responseJSON && xhr.responseJSON.errors) {
+                        errorMessage = Object.values(xhr.responseJSON.errors).join(', ');
+                    }
+
+                }
+            });
+        })
                     });
                     this.on('error', function(file, response) {
                         console.log('Upload error:', response);
