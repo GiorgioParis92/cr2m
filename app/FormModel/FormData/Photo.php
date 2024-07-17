@@ -36,7 +36,7 @@ class Photo extends AbstractFormData
         $deleteUrl = route("delete_file");
         // Dropzone script
         $data .= "<script>
-            del_photo();
+         
             var dropzoneElementId = '#dropzone-" . $this->name . "';
             var dropzoneElement = document.querySelector(dropzoneElementId);
             
@@ -55,7 +55,7 @@ class Photo extends AbstractFormData
                 init: function() {
                     this.on('success', function(file, response) {
                         console.log(response);
-                    del_photo();
+                 
                         console.log('Successfully uploaded:', response);
                     });
                     this.on('error', function(file, response) {
@@ -63,7 +63,7 @@ class Photo extends AbstractFormData
                     });
                 }
             });
-       
+        
             $('.delete_photo').click(function(){
                 var link=$(this).data('val');
                 $.ajax({
