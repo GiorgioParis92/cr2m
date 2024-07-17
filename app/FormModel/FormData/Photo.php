@@ -14,6 +14,7 @@ class Photo extends AbstractFormData
 
         if($json_value) {
             $values=$json_value;
+            dd($values);
         }
         else {
             $values=[$this->value];
