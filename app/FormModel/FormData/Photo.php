@@ -77,7 +77,7 @@ class Photo extends AbstractFormData
                    
                 },
             success: function(response) {
-            alert('ok')
+          
     
             },
             error: function(xhr) {
