@@ -453,7 +453,7 @@
                 url: '/delete_file',
                 method: 'POST',
                 headers: {
-                    'X-CSRF-TOKEN': '{{ $csrfToken }}'
+                    'X-CSRF-TOKEN': '{{csrf_token()}}'
                 },
                 data: {
                     link: link,
