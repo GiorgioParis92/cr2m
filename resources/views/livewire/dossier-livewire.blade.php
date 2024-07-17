@@ -552,9 +552,9 @@
             $.ajax({
                 url: '/delete_file',
                 method: 'POST',
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
+                // headers: {
+                //     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                // },
                 data: {
                     link: link,
 
