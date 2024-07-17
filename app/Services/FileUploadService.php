@@ -190,20 +190,20 @@ class FileUploadService
             dump($value->meta_value);
 
             dump(is_array($json_value));
-            dump(in_array($value->meta_value, $json_value));
-            dd($json_value);
-            if (is_array($json_value) && in_array($value->meta_value, $json_value)) {
+            dump(in_array($request->link, $json_value));
+          
+            if (is_array($json_value) && in_array($request->link, $json_value)) {
                 // Remove the value from the array
                 $json_value = array_filter($json_value, function ($item) use ($value) {
-                    return $item !== $value->meta_value;
+                    return $item !== $request->link;
                 });
                 
                 // Reindex the array
                 $json_value = array_values($json_value);
-
+                dump($json_value);
                 // Encode back to JSON
                 $new_json_value = json_encode($json_value);
-
+                dd($new_json_value);
                 // Update the meta_value in the database
                 DB::table('forms_data')
                     ->where('id', $value->id) // Assuming 'id' is the primary key
