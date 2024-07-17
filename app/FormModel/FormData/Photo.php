@@ -9,6 +9,16 @@ class Photo extends AbstractFormData
 {
     public function render(bool $is_error)
     {
+
+        $json_value=json_decode($this->value);
+
+        if($json_value) {
+            $values=$json_value;
+        }
+        else {
+            $values=[$this->value];
+        }
+
         $data = '';
         $wireModel = "formData.{$this->form_id}.{$this->name}";
         $data .= '<input type="hidden" wire:model.lazy="' . $wireModel . '">';
@@ -33,7 +43,7 @@ class Photo extends AbstractFormData
         ]);
         $deleteUrl = route("delete_file");
 
-        // Dropzone script
+        
         $data .= "<script>
             var dropzoneElementId = '#dropzone-" . $this->name . "';
             var dropzoneElement = document.querySelector(dropzoneElementId);
@@ -91,33 +101,33 @@ class Photo extends AbstractFormData
                 initializeDeleteButtons();
             });
         </script>";
-
-        if ($this->value) {
-            $extension = explode('.', $this->value);
-            $filePath = storage_path('app/public/' . $this->value);  // File system path
+        foreach($values as $value) {
+        if ($value) {
+            $extension = explode('.', $value);
+            $filePath = storage_path('app/public/' . $value);  // File system path
 
             if (file_exists($filePath)) {
                 if (end($extension) != 'pdf') {
                     $data .= '<div><button type="button" class="btn btn-success btn-view imageModal"
                         data-toggle="modal" data-target="imageModal"
-                        data-img-src="' . asset('storage/' . $this->value) . '"
-                        data-val="' . $this->value . '"
+                        data-img-src="' . asset('storage/' . $value) . '"
+                        data-val="' . $value . '"
                         data-name="' . $this->config->title . '">';
-                    $data .= '<img src="' . asset('storage/' . $this->value) . '">';
+                    $data .= '<img src="' . asset('storage/' . $value) . '">';
                     $data .= '<i class="fas fa-eye"></i>' . $this->config->title . '
-                    </button> <i data-val="' . $this->value . '" data-img-src="' . asset('storage/' . $this->value) . '" class="delete_photo btn btn-danger fa fa-trash bg-danger"></i></div>';
+                    </button> <i data-val="' . $value . '" data-img-src="' . asset('storage/' . $value) . '" class="delete_photo btn btn-danger fa fa-trash bg-danger"></i></div>';
                 } else {
                     $data .= '<div class="btn btn-success btn-view pdfModal"
                         data-toggle="modal" 
-                        data-img-src="' . asset('storage/' . $this->value) . '"
-                        data-val="' . $this->value . '"
+                        data-img-src="' . asset('storage/' . $value) . '"
+                        data-val="' . $value . '"
                         data-name="' . $this->config->title . '">';
                     $data .= '<i class="fas fa-eye"></i>' . $this->config->title . '</div>';
                 }
             }
             $data .= "<script>initializePdfModals()</script>";
         }
-
+        }
         $data .= "</div>";
         $data .= "</div>";
 
