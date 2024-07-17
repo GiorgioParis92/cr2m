@@ -180,12 +180,11 @@ class FileUploadService
     public function deleteImage(Request $request)
     {
 
-        unlink(storage_path('app/public/' . $request->link));
 
         $value = DB::table('forms_data')
             ->where('meta_value', 'like', $request->link)
             ->first();
-
+        dd($value);
         if ($value) {
             $json_value = json_decode($value->meta_value);
 
@@ -211,6 +210,7 @@ class FileUploadService
                     ->delete();
             }
         }
+        unlink(storage_path('app/public/' . $request->link));
 
 
     }
