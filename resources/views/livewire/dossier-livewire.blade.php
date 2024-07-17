@@ -473,7 +473,33 @@
             var configs = data.forms_configs;
             initializeDropzones(configs);
 
+            $('.delete_photo').click(function() {
+            alert('stop')
+            console.log($('meta[name="_token"]').attr('content'))
+            var link = $(this).data('val');
+            $.ajax({
+                url: '/delete_file',
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                },
+                data: {
+                    link: link,
 
+                },
+                success: function(response) {
+
+
+                },
+                error: function(xhr) {
+                    let errorMessage = 'An error occurred';
+                    if (xhr.responseJSON && xhr.responseJSON.errors) {
+                        errorMessage = Object.values(xhr.responseJSON.errors).join(', ');
+                    }
+
+                }
+            });
+        })
 
 
         });
@@ -546,33 +572,7 @@
 
     function initializePdfModals() {
 
-        $('.delete_photo').click(function() {
-            alert('stop')
-            console.log($('meta[name="_token"]').attr('content'))
-            var link = $(this).data('val');
-            $.ajax({
-                url: '/delete_file',
-                method: 'POST',
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-                },
-                data: {
-                    link: link,
-
-                },
-                success: function(response) {
-
-
-                },
-                error: function(xhr) {
-                    let errorMessage = 'An error occurred';
-                    if (xhr.responseJSON && xhr.responseJSON.errors) {
-                        errorMessage = Object.values(xhr.responseJSON.errors).join(', ');
-                    }
-
-                }
-            });
-        })
+       
 
 
         $('.close').on('click', function() {
