@@ -25,7 +25,7 @@ class Photo extends AbstractFormData
 
         $csrfToken = csrf_token();
         $data .= "<div class='row'>";
-        $data .= "<div class='col-lg-3'>";
+        $data .= "<div class='col-lg-12'>";
 
         $data .= '<div style="cursor:pointer" class="dropzone photo_button bg-secondary" id="dropzone-' . $this->name . '">';
         $data .= csrf_field(); // This will generate the CSRF token input field
