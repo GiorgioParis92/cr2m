@@ -443,8 +443,38 @@
         $('.isTab').click();
     });
 
+    document.addEventListener('livewire:update', function () {
+        initializeDeleteButtons();
+    });
+    function initializeDeleteButtons() {
+        $('.delete_photo').off('click').on('click', function () {
+            var link = $(this).data('val');
+            $.ajax({
+                url: '{{ $deleteUrl }}',
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ $csrfToken }}'
+                },
+                data: {
+                    link: link,
+                },
+                success: function (response) {
+                    console.log('Successfully deleted:', response);
+                },
+                error: function (xhr) {
+                    let errorMessage = 'An error occurred';
+                    if (xhr.responseJSON && xhr.responseJSON.errors) {
+                        errorMessage = Object.values(xhr.responseJSON.errors).join(', ');
+                    }
+                    console.log(errorMessage);
+                }
+            });
+        });
+    }
 
-
+    $(document).ready(function () {
+        initializeDropzone();
+    });
     document.addEventListener('DOMContentLoaded', function() {
 
 
