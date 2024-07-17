@@ -547,6 +547,7 @@
     function initializePdfModals() {
 
         $('.delete_photo').click(function(){
+            alert('stop')
                 var link=$(this).data('val');
                 $.ajax({
             url: '/delete_file',
