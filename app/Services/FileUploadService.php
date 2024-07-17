@@ -143,19 +143,60 @@ class FileUploadService
         $filePath = $file->storeAs($directory, $fileName, 'public');
 
         DB::enableQueryLog();
+        if ($random_name) {
 
-        $update = DB::table('forms_data')->updateOrInsert(
-            [
-                'dossier_id' => '' . $dossier->id . '',
-                'form_id' => '' . $form_id . '',
-                'meta_key' => '' . $request->input('template') . ''
-            ],
-            [
-                'meta_value' => '' . $filePath . '',
-                'created_at' => now(),
-                'updated_at' => now()
-            ]
-        );
+            $value = DB::table('forms_data')
+                ->where('meta_key', $request->input('template'))
+                ->where("form_id",$form_id)
+                ->where("dossier_id",$dossier->id)
+                ->first();
+
+            if ($value) {
+                $json_value = json_decode($value->meta_value);
+                array_push($json_value,$filePath);
+                $update = DB::table('forms_data')->updateOrInsert(
+                    [
+                        'dossier_id' => '' . $dossier->id . '',
+                        'form_id' => '' . $form_id . '',
+                        'meta_key' => '' . $request->input('template') . ''
+                    ],
+                    [
+                        'meta_value' => '' . json_encode($json_value) . '',
+                        'created_at' => now(),
+                        'updated_at' => now()
+                    ]
+                );
+            } else {
+                $json_value = [];
+                array_push($json_value,$filePath);
+                $update = DB::table('forms_data')->updateOrInsert(
+                    [
+                        'dossier_id' => '' . $dossier->id . '',
+                        'form_id' => '' . $form_id . '',
+                        'meta_key' => '' . $request->input('template') . ''
+                    ],
+                    [
+                        'meta_value' => '' . json_encode($json_value) . '',
+                        'created_at' => now(),
+                        'updated_at' => now()
+                    ]
+                );
+            }
+        } else {
+            $update = DB::table('forms_data')->updateOrInsert(
+                [
+                    'dossier_id' => '' . $dossier->id . '',
+                    'form_id' => '' . $form_id . '',
+                    'meta_key' => '' . $request->input('template') . ''
+                ],
+                [
+                    'meta_value' => '' . $filePath . '',
+                    'created_at' => now(),
+                    'updated_at' => now()
+                ]
+            );
+        }
+
         // $photo = new Photo($form_id, $request->input('template'), $filePath, $this);
         // $photo->save_value();
 
@@ -182,19 +223,19 @@ class FileUploadService
 
 
         $value = DB::table('forms_data')
-            ->where('meta_value', 'like', '%'.$request->link.'%')
+            ->where('meta_value', 'like', '%' . $request->link . '%')
             ->first();
-       
+
         if ($value) {
             $json_value = json_decode($value->meta_value);
-      
-          
+
+
             if (is_array($json_value) && in_array($request->link, $json_value)) {
                 // Remove the value from the array
                 $json_value = array_filter($json_value, function ($item) use ($request) {
                     return $item !== $request->link;
                 });
-                
+
                 // Reindex the array
                 $json_value = array_values($json_value);
                 // Encode back to JSON
