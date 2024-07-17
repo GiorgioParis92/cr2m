@@ -546,6 +546,34 @@
 
     function initializePdfModals() {
 
+        $deleteUrl = route("delete_file");
+        $('.delete_photo').click(function(){
+                var link=$(this).data('val');
+                $.ajax({
+            url: '{$deleteUrl}',
+            method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': '{$csrfToken}'
+                },
+            data: {
+                    link: link,
+                   
+                },
+            success: function(response) {
+          
+    
+            },
+            error: function(xhr) {
+                let errorMessage = 'An error occurred';
+                if (xhr.responseJSON && xhr.responseJSON.errors) {
+                    errorMessage = Object.values(xhr.responseJSON.errors).join(', ');
+                }
+        
+            }
+        });
+            })
+
+
         $('.close').on('click', function() {
 
             $('.modal').modal('hide');
