@@ -450,7 +450,7 @@
         $('.delete_photo').off('click').on('click', function () {
             var link = $(this).data('val');
             $.ajax({
-                url: '{{ $deleteUrl }}',
+                url: '/delete_file',
                 method: 'POST',
                 headers: {
                     'X-CSRF-TOKEN': '{{ $csrfToken }}'
