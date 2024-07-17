@@ -187,13 +187,13 @@ class FileUploadService
        
         if ($value) {
             $json_value = json_decode($value->meta_value);
-            dd($json_value);
+            
             if (is_array($json_value) && in_array($value->meta_value, $json_value)) {
                 // Remove the value from the array
                 $json_value = array_filter($json_value, function ($item) use ($value) {
                     return $item !== $value->meta_value;
                 });
-
+                dd($json_value);
                 // Reindex the array
                 $json_value = array_values($json_value);
 
