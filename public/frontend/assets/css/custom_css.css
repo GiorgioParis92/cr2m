@@ -1438,7 +1438,7 @@ button img {
 }
 
 .delete_photo {
-    position: absolute!important;
+    position: relative!important;
     margin-top: -8px!important;
     left: 13px!important;
     max-width: 25px!important;

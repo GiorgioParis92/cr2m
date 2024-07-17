@@ -187,10 +187,7 @@ class FileUploadService
        
         if ($value) {
             $json_value = json_decode($value->meta_value);
-            dump($value->meta_value);
-
-            dump(is_array($json_value));
-            dump(in_array($request->link, $json_value));
+      
           
             if (is_array($json_value) && in_array($request->link, $json_value)) {
                 // Remove the value from the array
@@ -200,10 +197,8 @@ class FileUploadService
                 
                 // Reindex the array
                 $json_value = array_values($json_value);
-                dump($json_value);
                 // Encode back to JSON
                 $new_json_value = json_encode($json_value);
-                dd($new_json_value);
                 // Update the meta_value in the database
                 DB::table('forms_data')
                     ->where('id', $value->id) // Assuming 'id' is the primary key
@@ -214,7 +209,7 @@ class FileUploadService
                     ->delete();
             }
         }
-        // unlink(storage_path('app/public/' . $request->link));
+        unlink(storage_path('app/public/' . $request->link));
 
 
     }
