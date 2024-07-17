@@ -108,13 +108,14 @@ class Photo extends AbstractFormData
 
             if (file_exists($filePath)) {
                 if (end($extension) != 'pdf') {
-                    $data .= '<div style="display:inline-block"><button style="display:block" type="button" class="btn btn-success btn-view imageModal"
+                    $data .= '<div style="display:inline-block">
+                    <button  type="button" class="btn btn-success btn-view imageModal"
                         data-toggle="modal" data-target="imageModal"
                         data-img-src="' . asset('storage/' . $value) . '"
                         data-val="' . $value . '"
                         data-name="' . $this->config->title . '">';
                     $data .= '<img src="' . asset('storage/' . $value) . '">';
-                    $data .= '<i class="fas fa-eye"></i>' . $this->config->title . '
+                    $data .= '<i style="display:block" class="fas fa-eye"></i>' . $this->config->title . '
                     </button> <i data-val="' . $value . '" data-img-src="' . asset('storage/' . $value) . '" class="delete_photo btn btn-danger fa fa-trash bg-danger"></i></div>';
                 } else {
                     $data .= '<div class="btn btn-success btn-view pdfModal"
