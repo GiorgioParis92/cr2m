@@ -108,7 +108,7 @@ class Photo extends AbstractFormData
 
             if (file_exists($filePath)) {
                 if (end($extension) != 'pdf') {
-                    $data .= '<div><button type="button" class="btn btn-success btn-view imageModal"
+                    $data .= '<div style="display:inline-block"><button style="display:block" type="button" class="btn btn-success btn-view imageModal"
                         data-toggle="modal" data-target="imageModal"
                         data-img-src="' . asset('storage/' . $value) . '"
                         data-val="' . $value . '"
