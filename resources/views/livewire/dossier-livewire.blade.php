@@ -1,5 +1,5 @@
 <div wire:poll>
- 
+
     <div class="row">
 
         <div class="col-12">
@@ -11,7 +11,7 @@
                             <h5 class="mb-0">
                                 <b>{{ $dossier['beneficiaire']['nom'] }}
                                     {{ $dossier['beneficiaire']['prenom'] }}</b><br />
-                                {{ strtoupper_extended(($global_data['numero_voie'] ?? '') . ' ' .$dossier['beneficiaire']['adresse'] . ' ' . $dossier['beneficiaire']['cp'] . ' ' . $dossier['beneficiaire']['ville']) }}<br />
+                                {{ strtoupper_extended(($global_data['numero_voie'] ?? '') . ' ' . $dossier['beneficiaire']['adresse'] . ' ' . $dossier['beneficiaire']['cp'] . ' ' . $dossier['beneficiaire']['ville']) }}<br />
                                 @if ($dossier['lat'] == 0)
                                     <span class="invalid-feedback" style="font-size:9px;display:block">Adresse non
                                         géolocalisée</span>
@@ -43,7 +43,6 @@
                 <div class="steps clearfix">
                     <div class="row etapes_row mt-5" wire:poll>
                         @foreach ($etapes as $index => $e)
-                    
                             @php
                                 $isActive = false;
                                 $isCurrent = false;
@@ -51,36 +50,38 @@
                                 if ($e->order_column <= $dossier->etape->order_column) {
                                     $isActive = true;
                                 }
-                                if ($e->order_column == $dossier->etape->order_column && is_user_allowed($e->etape_name)==true) {
+                                if (
+                                    $e->order_column == $dossier->etape->order_column &&
+                                    is_user_allowed($e->etape_name) == true
+                                ) {
                                     $isCurrent = true;
                                 }
 
                                 // if (($e->etape_number == $etape_display['id'] || $e->etape_number == $etape_display) && is_user_allowed($e->etape_name)==true) {
                                 //     $isTab = true;
                                 // }
-                            
-                                if (($e->order_column+1) == $last_etape) {
+
+                                if ($e->order_column + 1 == $last_etape) {
                                     $isTab = true;
                                 }
-                                if(is_user_allowed($e->etape_name)==false) {
+                                if (is_user_allowed($e->etape_name) == false) {
                                     $isAllowed = false;
                                 } else {
                                     $isAllowed = true;
                                 }
 
-
                             @endphp
 
                             <div @if ($isActive && $isAllowed) wire:click="setTab({{ $e->etape_number }})" @endif
                                 aria-disabled="false"
-                                class="@if ($isActive && $isAllowed) settab @endif  col-lg-1  {{ ($isActive && $isAllowed) ? 'active' : '' }} {{ $isCurrent ? 'current' : '' }} {{ $isTab ? 'isTab' : '' }}"
+                                class="@if ($isActive && $isAllowed) settab @endif  col-lg-1  {{ $isActive && $isAllowed ? 'active' : '' }} {{ $isCurrent ? 'current' : '' }} {{ $isTab ? 'isTab' : '' }}"
                                 aria-selected="true">
                                 <a id="form-total-t-0" aria-controls="form-total-p-0">
                                     <div class="inter_line"></div>
                                     <span class="current-info audible nav-link"></span>
                                     <div class="title">
                                         <span
-                                            class="step-icon {{ ($isActive && $isAllowed) ? 'bg-success' : 'bg-tertiary' }}">{{ $index + 1 }}</span>
+                                            class="step-icon {{ $isActive && $isAllowed ? 'bg-success' : 'bg-tertiary' }}">{{ $index + 1 }}</span>
                                         <span class="step-text">
                                             {{ strtoupper_extended($e->etape_desc) }}
                                             <small>
@@ -260,16 +261,16 @@
     document.addEventListener('DOMContentLoaded', function() {
 
         console.log('DOM fully loaded and parsed');
-    
 
-       
+
+
         Livewire.on('loadCalendar', function() {
 
 
         });
 
         function get_calendar() {
-           
+
 
             var calendarEl = document.getElementById('calendar');
             var token = $('meta[name="api-token"]').attr('content'); // Get token from meta tag
@@ -458,7 +459,7 @@
         Livewire.on('initializeDropzones', (data) => {
             console.log('initializeDropzones');
 
-     
+
 
             $('.datepicker').datepicker({
                 language: 'fr',
@@ -471,7 +472,7 @@
 
             var configs = data.forms_configs;
             initializeDropzones(configs);
-           
+
 
 
 
@@ -490,7 +491,7 @@
 
         // Convert object to array and loop through configs
         Object.values(configs).forEach((formConfig) => {
-             if (formConfig.form.type === 'document') {
+            if (formConfig.form.type === 'document') {
                 Object.keys(formConfig.formData).forEach((key) => {
                     console.log(key)
                     var dropzoneElementId = `#dropzone-${key}`;
@@ -508,8 +509,7 @@
 
                     new Dropzone(dropzoneElement, {
                         method: 'post',
-                        headers: {
-                        },
+                        headers: {},
                         paramName: 'file',
                         sending: function(file, xhr, formData) {
                             formData.append('folder', 'dossiers');
@@ -534,7 +534,7 @@
                         }
                     });
                 });
-             }
+            }
         });
     }
 
@@ -546,32 +546,33 @@
 
     function initializePdfModals() {
 
-        $('.delete_photo').click(function(){
+        $('.delete_photo').click(function() {
             alert('stop')
-                var link=$(this).data('val');
-                $.ajax({
-            url: '/delete_file',
-            method: 'POST',
+            var link = $(this).data('val');
+            $.ajax({
+                url: '/delete_file',
+                method: 'POST',
                 headers: {
-                    'X-CSRF-TOKEN': '{$csrfToken}'
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr(
+                        'content') // Include CSRF token if using Laravel's CSRF protection
                 },
-            data: {
+                data: {
                     link: link,
-                   
+
                 },
-            success: function(response) {
-          
-    
-            },
-            error: function(xhr) {
-                let errorMessage = 'An error occurred';
-                if (xhr.responseJSON && xhr.responseJSON.errors) {
-                    errorMessage = Object.values(xhr.responseJSON.errors).join(', ');
+                success: function(response) {
+
+
+                },
+                error: function(xhr) {
+                    let errorMessage = 'An error occurred';
+                    if (xhr.responseJSON && xhr.responseJSON.errors) {
+                        errorMessage = Object.values(xhr.responseJSON.errors).join(', ');
+                    }
+
                 }
-        
-            }
-        });
-            })
+            });
+        })
 
 
         $('.close').on('click', function() {
