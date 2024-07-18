@@ -16,12 +16,13 @@ class AbstractFormData
     public $prediction;
     public $updating = false;
 
-    public function __construct($config, $name, $form_id, $dossier_id)
+    public function __construct($config, $name, $form_id, $dossier_id, $should_load=true)
     {
         $this->form_id = $form_id;
         $this->dossier_id = $dossier_id;
         $this->config = $config;
 
+        if ($should_load) {
         $config = \DB::table('forms_data')
             ->where('form_id', $form_id)
             ->where('dossier_id', $dossier_id)
@@ -32,12 +33,14 @@ class AbstractFormData
             ->where('dossier_id', $dossier_id)
             ->where('meta_key', $name)
             ->first();
+            $this->value = $config->meta_value ?? '';
+
+            $this->prediction = $config_dossiers->meta_value ?? '';
+        }
 
         $this->name = $name;
 
-        $this->value = $config->meta_value ?? '';
 
-        $this->prediction = $config_dossiers->meta_value ?? '';
 
         $this->global_data = '';
 

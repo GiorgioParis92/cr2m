@@ -129,8 +129,8 @@ class DossierLivewire extends Component
             ->select('forms.*', 'etapes.etape_name', 'etapes.etape_desc', 'etapes.order_column')
             ->orderBy('etapes.order_column')
             ->get();
-        $this->reinitializeFormsConfigs();
-
+        // $this->reinitializeFormsConfigs();
+            
         $this->etapes = $this->convertArrayToStdClass($etapes->toArray());
         foreach ($this->etapes as $etape) {
             $this->validators[$etape->etape_id] = new EtapeValidator($etape->etape_id);
@@ -183,6 +183,15 @@ class DossierLivewire extends Component
         // $this->emit('initializeDropzones', ['forms_configs' => $this->forms_configs]);
 
     }
+
+
+    public function update_value($propertyName, $value)
+    {
+        if (strpos($propertyName, 'formData.') === 0) {
+            
+            $this->updatedFormData($propertyName, $value);
+        }
+    }
     public function updated($propertyName, $value)
     {
         if (strpos($propertyName, 'formData.') === 0) {
@@ -194,13 +203,32 @@ class DossierLivewire extends Component
     public function updatedFormData($propertyName, $value)
     {
         // Parse the property name
-        // Example property name: formData.3.nom
+        // Example property names: formData.3.nom, formData.27.ajout_piece#table-0-nom_de_la_piece
+    
+        // Pattern to match simple formData properties
+        $simplePattern = '/^formData\.(\d+)\.(\w+)$/';
+        // Pattern to match complex formData properties with table
+        $complexPattern = '/^formData\.(\d+)\.(\w+)\.value\.(\d+)\.(\w+)$/';
+    
+        if (preg_match($complexPattern, $propertyName, $matches)) {
+            $formId = $matches[1]; // Extract formId
+            $key = $matches[2]; // Extract tag
+            $tableIndex = (int)$matches[3]; // Extract table index
+            $cellTag = $matches[4]; // Extract cell tag
+       
+            $this->forms_configs[$formId]->formData[$key]->updating=true;
 
-      
+            if (isset($this->forms_configs[$formId]) && isset($this->forms_configs[$formId]->formData[$key])) {
+                $this->forms_configs[$formId]->formData[$key]->value = $this->forms_configs[$formId]->formData[$key]->init_value();
+                $this->forms_configs[$formId]->formData[$key]->value[(int) $tableIndex][$cellTag]["value"] = $value;
+
+                $this->forms_configs[$formId]->formData[$key]->save_value();
 
 
-        $pattern = '/^formData\.(\d+)\.(\w+)$/';
-        if (preg_match($pattern, $propertyName, $matches)) {
+            }
+
+        
+        } elseif (preg_match($simplePattern, $propertyName, $matches)) {
             $formId = $matches[1]; // Extract formId
             $key = $matches[2]; // Extract key
             $this->forms_configs[$formId]->formData[$key]->updating=true;
@@ -210,17 +238,20 @@ class DossierLivewire extends Component
                 $this->forms_configs[$formId]->formData[$key]->save_value();
             }
         }
- 
+        // dd($this->global_data);
         foreach ($this->forms_configs as $formId => $config) {
        
             $config->save();
+           
             foreach ($config->formData as $tag => $data_form) {
+                if(!isset($this->global_data[$tag])) {
+                    $this->global_data[$tag]='';
+                }
                 if ($this->global_data[$tag] != $data_form->value) {
                     $this->global_data[$tag] = $data_form->value;
                 }
             }
         }
-
     }
 
     public function display_form($form_id)
@@ -258,11 +289,11 @@ class DossierLivewire extends Component
             foreach ($forms as $form) {
                 $handler = new FormConfigHandler($this->dossier, $this->convertArrayToStdClass((array) $form));
                 $this->forms_configs[$form->id] = $handler;
-
+                
                 foreach ($handler->formData as $key => $field) {
-             
+            
                     if (!isset($this->global_data[$key]) ) {
-                        $this->formData[$form->id][$key] =  $field->generate_value();
+                        $this->formData[$form->id][$key] = $field->generate_value();
                    
                         $this->global_data[$key] = $field->generate_value();
                     } else {
@@ -397,6 +428,7 @@ class DossierLivewire extends Component
 
     public function add_row($table_tag,$form_id)
     {
+
         if(isset($this->forms_configs[$form_id])) {
             $form_configs=$this->forms_configs[$form_id];
             $form_configs->formData[$table_tag]->add_element();
