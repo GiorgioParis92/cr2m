@@ -93,7 +93,7 @@ class AbstractFormData
     public function render(bool $is_error)
     {
 
-        return '<div>' . $this->value . '</div>';
+        return '<div></div>';
 
     }
 
