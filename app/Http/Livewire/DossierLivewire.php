@@ -443,7 +443,7 @@ class DossierLivewire extends Component
         if(isset($this->forms_configs[$form_id])) {
             $form_configs=$this->forms_configs[$form_id];
 
-            $form_configs->formData[$table_tag]->remove_element($index);
+            $this->global_data[$table_tag]=$form_configs->formData[$table_tag]->remove_element($index);
         }
         
         return '';

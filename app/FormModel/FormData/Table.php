@@ -95,9 +95,11 @@ class Table extends AbstractFormData
         $this->value = $this->decode_if_json($this->value);
 
         unset($this->value[$index]);
+      
         $this->value = array_values($this->value); // Reindex the array
 
         $this->save_value();
+        return $this->generate_value();
     }
     public function init_value()
     {
