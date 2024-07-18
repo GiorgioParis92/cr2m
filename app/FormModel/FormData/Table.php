@@ -21,10 +21,13 @@ class Table extends AbstractFormData
     public function render(bool $is_error)
     {
         $data = '';
+        
         $this->value = $this->decode_if_json($this->value);
 
 
         foreach ($this->value as $index => $element_data) {
+            $data .='<div class="row">';
+            $data .='<div class="col-lg-10 col-sm-12">';
             foreach ($this->optionsArray as $element_config) {
 
                 $baseNamespace = 'App\FormModel\FormData\\';
@@ -47,13 +50,18 @@ class Table extends AbstractFormData
                 $data .= $element_group[$element_config['name']]->render(false);
 
             }
-            $data .= '<div class="btn btn-primary" wire:click="remove_row(\'ajout_piece\',' . $this->form_id . ','. (int)$index.')">remove row</div>';
+            $data .='</div>';
+            $data .='<div class="col-lg-2">';
+            $data .="<label></label>";
+            $data .= '<div class="col-lg-12 col-sm-12 btn btn-danger" wire:click="remove_row(\''.$this->name.'\',' . $this->form_id . ','. (int)$index.')">remove row</div>';
+            $data .='</div>';
+            $data .='</div>';
 
         }
         $this->save_value();
 
 
-        $data .= '<div class="btn btn-primary" wire:click="add_row(\'ajout_piece\',' . $this->form_id . ')">Add row</div>';
+        $data .= '<div class="btn btn-success" wire:click="add_row(\''.$this->name.'\',' . $this->form_id . ')">'.$this->config->title.'</div>';
 
 
         return $data;
