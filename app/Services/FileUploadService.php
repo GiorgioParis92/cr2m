@@ -102,7 +102,7 @@ class FileUploadService
 
         $file = $request->file('file');
 
-        $allowedExtensions = ['jpeg', 'jpg', 'png', 'gif', 'pdf'];
+        $allowedExtensions = ['jpeg', 'jpg', 'png', 'gif', 'pdf','heic'];
         $extension = strtolower($file->getClientOriginalExtension());
 
 
