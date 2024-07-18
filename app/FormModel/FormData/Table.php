@@ -45,9 +45,10 @@ class Table extends AbstractFormData
 
                 $element_group[$element_config['name']]->value = $element_data[$element_config['name']]->value;
                 $data .= $element_group[$element_config['name']]->render(false);
-                $data .= '<div class="btn btn-primary" wire:click="remove_row(\'ajout_piece\',' . $this->form_id . ','. $index.')">remove row</div>';
 
             }
+            $data .= '<div class="btn btn-primary" wire:click="remove_row(\'ajout_piece\',' . $this->form_id . ','. $index.')">remove row</div>';
+
         }
         $this->save_value();
 
