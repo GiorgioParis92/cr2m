@@ -22,10 +22,10 @@ class Table extends AbstractFormData
     {
         $data = '';
         $this->value = $this->decode_if_json($this->value);
-      
 
-            foreach ($this->value as $index => $element_data) {
-                        foreach ($this->optionsArray as $element_config) {
+
+        foreach ($this->value as $index => $element_data) {
+            foreach ($this->optionsArray as $element_config) {
 
                 $baseNamespace = 'App\FormModel\FormData\\';
                 $className = $baseNamespace . ucfirst($element_config['type']);
@@ -42,18 +42,19 @@ class Table extends AbstractFormData
                 if (is_array($element_data[$element_config['name']])) {
                     $element_data[$element_config['name']] = (object) $element_data[$element_config['name']];
                 }
-              
+
                 $element_group[$element_config['name']]->value = $element_data[$element_config['name']]->value;
                 $data .= $element_group[$element_config['name']]->render(false);
+                $data .= '<div class="btn btn-primary" wire:click="remove_row(\'ajout_piece\',' . $this->form_id . ','. $index.')">remove row</div>';
+
             }
         }
         $this->save_value();
 
- 
-        $data .= '<div class="btn btn-primary" wire:click="add_row(\'ajout_piece\',' . $this->form_id . ')">Add row</div>';
-        $data .= '<div class="btn btn-primary" wire:click="remove_row(\'ajout_piece\',' . $this->form_id . ',0)">remove row</div>';
 
-        
+        $data .= '<div class="btn btn-primary" wire:click="add_row(\'ajout_piece\',' . $this->form_id . ')">Add row</div>';
+
+
         return $data;
     }
 
@@ -123,7 +124,7 @@ class Table extends AbstractFormData
 
     function decode_if_json($value)
     {
-        if($value=='') {
+        if ($value == '') {
             return [];
         }
         if (is_string($value)) {
