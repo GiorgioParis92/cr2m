@@ -93,7 +93,7 @@ class Table extends AbstractFormData
     public function remove_element($index)
     {
         dump($this->value);
-        dump(gettype($index));
+        dump(gettype($this->value));
         dd($index);
         unset($this->value[$index]);
         $this->value = array_values($this->value); // Reindex the array
