@@ -47,7 +47,7 @@ class Table extends AbstractFormData
                 $data .= $element_group[$element_config['name']]->render(false);
 
             }
-            $data .= '<div class="btn btn-primary" wire:click="remove_row(\'ajout_piece\',' . $this->form_id . ','. $index.')">remove row</div>';
+            $data .= '<div class="btn btn-primary" wire:click="remove_row(\'ajout_piece\',' . $this->form_id . ','. (int)$index.')">remove row</div>';
 
         }
         $this->save_value();
@@ -93,7 +93,7 @@ class Table extends AbstractFormData
     public function remove_element($index)
     {
 
-        unset($this->value[$index]);
+        unset($this->value[(int)$index]);
         $this->value = array_values($this->value); // Reindex the array
 
         $this->save_value();
