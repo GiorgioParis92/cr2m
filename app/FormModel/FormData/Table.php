@@ -92,12 +92,11 @@ class Table extends AbstractFormData
     }
     public function remove_element($index)
     {
-        dump($this->value);
-        dump(gettype($this->value));
-        dd($index);
+        $this->value = $this->decode_if_json($this->value);
+
         unset($this->value[$index]);
         $this->value = array_values($this->value); // Reindex the array
-        dd($this->value);
+
         $this->save_value();
     }
     public function init_value()
