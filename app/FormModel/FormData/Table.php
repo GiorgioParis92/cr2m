@@ -94,7 +94,7 @@ class Table extends AbstractFormData
     {
         dump($this->value);
         dump(gettype($index));
-        dump($index);
+        dd($index);
         unset($this->value[$index]);
         $this->value = array_values($this->value); // Reindex the array
         dd($this->value);
