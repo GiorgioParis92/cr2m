@@ -35,7 +35,7 @@ class RdvController extends \App\Http\Controllers\Controller
             ->select('rdv.*', DB::raw("COALESCE(users.name, 'non attribué') as user_name"), DB::raw("rdv_status.id as status"), DB::raw("dossiers.folder as dossier_folder"));
         if (isset($client) && !empty($client)) {
             if ($client->id > 0 && ($client->type_client == 1)) {
-                $rdvs = $rdvs->where('dossiers.client_id', $client->id);
+                // $rdvs = $rdvs->where('dossiers.client_id', $client->id);
             }
             if ($client->id > 0 && ($client->type_client == 2)) {
                 $rdvs = $rdvs->where('dossiers.mandataire_financier', $client->id);

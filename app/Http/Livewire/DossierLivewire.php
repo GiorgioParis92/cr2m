@@ -392,4 +392,28 @@ class DossierLivewire extends Component
 
         session()->flash('message', 'Data saved successfully.');
     }
+
+
+
+    public function add_row($table_tag,$form_id)
+    {
+        if(isset($this->forms_configs[$form_id])) {
+            $form_configs=$this->forms_configs[$form_id];
+            $form_configs->formData[$table_tag]->add_element();
+        }
+        
+        return '';
+    }
+
+
+    public function remove_row($table_tag,$form_id,$index)
+    {
+        if(isset($this->forms_configs[$form_id])) {
+            $form_configs=$this->forms_configs[$form_id];
+
+            $form_configs->formData[$table_tag]->remove_element($index);
+        }
+        
+        return '';
+    }
 }
