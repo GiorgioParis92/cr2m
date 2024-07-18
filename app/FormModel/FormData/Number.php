@@ -12,7 +12,7 @@ class Number extends AbstractFormData
 
         $data = '<div class="form-group  col-sm-12 '.($this->config->class ?? "").'">';
         $data .= '<label>'.$this->config->title.'</label>';
-        $data .= '<input wire:model="'.$wireModel.'" class="form-control ';
+        $data .= '<input  wire:blur="update_value(\''.$wireModel.'\',  $event.target.value)" class="form-control ';
 
         if(!$this->check_value()) {
             $data .=' error is-invalid';

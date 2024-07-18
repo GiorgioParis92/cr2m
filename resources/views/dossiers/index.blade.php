@@ -254,17 +254,29 @@
                             @endif
                         </td>
                         <td>
-                            <a  href="{{ route('dossiers.show', $dossier->folder) }}" class="btn btn-primary">
-                                {!! $dossier->fiche->fiche_name . '<br/>' ?? 'N/A' !!}
-                            </a>
+                      
+                            @foreach($dossier->get_rdv as $rdv)
+                            <div>
+                                Date du rdv : {{format_date($rdv->date_rdv)}}<br/>
+                            </div>
+                            @endforeach
+
                         </td>
                         <td>
 
                             {{ $dossier->fiche->id }}
 
                         </td>
+                        <td>
+                      
+                            @foreach($dossier->get_rdv as $rdv)
+                            <div>
+                                Date du rdv : {{strtotime_date($rdv->date_rdv)}}<br/>
+                            </div>
+                            @endforeach
 
-
+                        </td>
+                        
 
                     </tr>
                 @endforeach
@@ -277,9 +289,10 @@
         $(document).ready(function() {
             var table = $('#dossiersTable').DataTable({
                 columnDefs: [{
-                        targets: [1,4, 5, 6, 7, 9, 11, 13, 15, 17, 19],
+                        targets: [1,4, 5, 6, 7, 9, 11, 13, 15, 17, 19,20],
                         visible: false
                     },
+                    { "targets": 18, "orderData": [20] } 
 
 
                 ],

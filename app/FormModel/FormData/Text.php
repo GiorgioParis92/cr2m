@@ -51,7 +51,7 @@ class Text extends AbstractFormData
             return '';
         }
 
-        $data = '<div class="form-group col-sm-12 ' . ($this->config->class ?? "") . '  group_' . $class_prediction . '">';
+        $data = '<div wire:model class="form-group col-sm-12 ' . ($this->config->class ?? "") . '  group_' . $class_prediction . '">';
 
 
         $data .= '<label style="display:inline-block">' . $this->config->title . '</label>';
@@ -60,7 +60,7 @@ class Text extends AbstractFormData
        $data .= $this->generate_loading();
 
 
-        $data .= '<input wire:model.lazy="' . $wireModel . '" class="form-control ' . $class_prediction . '" type="text" name="' . $this->name . '"';
+        $data .= '<input wire:blur="update_value(\''.$wireModel.'\',  $event.target.value)" value="'.$this->value.'"   class="form-control ' . $class_prediction . '" type="text" name="' . $this->name . '"';
 
         if ($this->config->required) {
             $data .= ' required ';

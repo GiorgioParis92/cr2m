@@ -40,10 +40,11 @@ class DossierController extends Controller
         if (auth()->user()->client_id > 0 && ($client->type_client == 3)) {
             $dossiers = $dossiers->where('installateur', auth()->user()->client_id);
         }
-        $dossiers = $dossiers->with('beneficiaire', 'fiche', 'etape', 'status');
+        $dossiers = $dossiers->with('beneficiaire', 'fiche', 'etape', 'status','get_rdv');
         $dossiers = $dossiers->get();
 
         foreach ($dossiers as $dossier) {
+          
             $dossier->mar = $dossier->mar_client;
             $mandataireFinancierClient = $dossier->mandataire_financier_client; // Access the mandataire_financier client
             $installateur = $dossier->installateur_client; // Access the installateur client

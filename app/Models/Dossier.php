@@ -40,7 +40,10 @@ class Dossier extends Model
     {
         return $this->belongsTo(Etape::class, 'etape_number');
     }
-
+    public function get_rdv()
+    {
+        return $this->hasMany(Rdv::class, 'dossier_id','id');
+    }
     public function status()
     {
         return $this->belongsTo(Status::class, 'status_id');
