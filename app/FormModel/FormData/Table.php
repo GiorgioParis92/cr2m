@@ -23,9 +23,10 @@ class Table extends AbstractFormData
         $data = '';
         $this->value = $this->decode_if_json($this->value);
       
-        foreach ($this->optionsArray as $element_config) {
 
             foreach ($this->value as $index => $element_data) {
+                        foreach ($this->optionsArray as $element_config) {
+
                 $baseNamespace = 'App\FormModel\FormData\\';
                 $className = $baseNamespace . ucfirst($element_config['type']);
                 $div_name = $this->name . '.value.' . $index . '.' . $element_config['name'];
