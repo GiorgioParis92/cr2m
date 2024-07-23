@@ -16,9 +16,12 @@ class Text extends AbstractFormData
             $class_prediction = ' is-invalid';
         }
 
-        $jsonString = str_replace(["\n", '', "\r"], '', $this->config->options);
-
-        $optionsArray = json_decode($jsonString, true);
+        if(!is_array($this->config->options)) {
+            $jsonString = str_replace(["\n", '', "\r"], '', $this->config->options);
+            $optionsArray = json_decode($jsonString, true);
+        } else {
+            $optionsArray = $this->config->options;
+        }
 
         $condition_valid = false;
 
@@ -51,7 +54,7 @@ class Text extends AbstractFormData
             return '';
         }
 
-        $data = '<div wire:model class="form-group col-sm-12 ' . ($this->config->class ?? "") . '  group_' . $class_prediction . '">';
+        $data = '<div  class="form-group col-sm-12 ' . ($this->config->class ?? "") . '  group_' . $class_prediction . '">';
 
 
         $data .= '<label style="display:inline-block">' . $this->config->title . '</label>';

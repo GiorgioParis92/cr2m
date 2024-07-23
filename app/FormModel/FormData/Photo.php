@@ -9,25 +9,27 @@ class Photo extends AbstractFormData
 {
     public function render(bool $is_error)
     {
-
-        $json_value=json_decode($this->value);
-
+      
+        $json_value=decode_if_json($this->value);
+       
+        // $json_value=json_decode($this->value);
+        
         if($json_value) {
             $values=$json_value;
         }
         else {
             $values=[$this->value];
         }
-
+   
         $data = '';
         $wireModel = "formData.{$this->form_id}.{$this->name}";
         $data .= '<input type="hidden" wire:model.lazy="' . $wireModel . '">';
 
         $csrfToken = csrf_token();
         $data .= "<div class='row'>";
-        $data .= "<div class='col-lg-12'>";
+        $data .= "<div class='col-lg-3'>";
 
-        $data .= '<div style="cursor:pointer" class="dropzone photo_button bg-secondary" id="dropzone-' . $this->name . '">';
+        $data .= '<div style="cursor:pointer" class="dropzone photo_button bg-secondary" id="dropzone-' . str_replace('.','-',$this->name) . '">';
         $data .= csrf_field(); // This will generate the CSRF token input field
         $data .= '<div style="color:white" class="dz-message"><i class="fas fa-camera"></i> ' . $this->config->title . '</div>';
         $data .= '</div>';
@@ -45,7 +47,7 @@ class Photo extends AbstractFormData
 
         
         $data .= "<script>
-            var dropzoneElementId = '#dropzone-" . $this->name . "';
+            var dropzoneElementId = '#dropzone-" . str_replace('.','-',$this->name) . "';
             var dropzoneElement = document.querySelector(dropzoneElementId);
             
             var dropzone = new Dropzone(dropzoneElement, {
@@ -54,8 +56,11 @@ class Photo extends AbstractFormData
                 headers: {
                     'X-CSRF-TOKEN': '{$csrfToken}'
                 },
+                maxFilesize: 50000, // Set the maximum file size to 50 MB
+
                 paramName: 'file',
                 sending: function(file, xhr, formData) {
+                console.log(file)
                     formData.append('folder', 'dossiers');
                     formData.append('template', '{$this->name}');
                     formData.append('random_name', 'true');
@@ -64,6 +69,7 @@ class Photo extends AbstractFormData
                     this.on('success', function(file, response) {
                         console.log('Successfully uploaded:', response);
                         initializeDeleteButtons();
+
                     });
                     this.on('error', function(file, response) {
                         console.log('Upload error:', response);
@@ -82,6 +88,9 @@ class Photo extends AbstractFormData
                         },
                         data: {
                             link: link,
+                            tag: $(this).data('tag') ?? '',
+                            index: $(this).data('index') ?? '',
+                            dossier_id: $(this).data('dossier_id') ?? '',
                         },
                         success: function(response) {
                             console.log('Successfully deleted:', response);
@@ -106,11 +115,22 @@ class Photo extends AbstractFormData
             $extension = explode('.', $value);
             $filePath = storage_path('app/public/' . $value);  // File system path
 
+            if(count($extension)>2) {
+                $first=(explode('/',$extension[0]));
+                $tag=$first[2];
+                $index=$extension[2];
+            
+            }
+
+            if($this->name!='photo_maison') {
+                // dd($extension);
+            }
+            
             if (file_exists($filePath)) {
                 if (end($extension) != 'pdf') {
                     
                     $data .= '<div style="display:inline-block">
-                    <i data-val="' . $value . '" data-img-src="' . asset('storage/' . $value) . '" class="delete_photo btn btn-danger fa fa-trash bg-danger"></i>
+                    <i data-dossier_id="$this->dossier_id" data-tag="'.($tag ?? $this->name).'" data-index="'.($index ?? '').'" data-val="' . $value . '" data-img-src="' . asset('storage/' . $value) . '" class="delete_photo btn btn-danger fa fa-trash bg-danger"></i>
 
                     <button  type="button" class="btn btn-success btn-view imageModal"
                         data-toggle="modal" data-target="imageModal"
@@ -132,8 +152,11 @@ class Photo extends AbstractFormData
             $data .= "<script>initializePdfModals()</script>";
         }
         }
+       
+        
         $data .= "</div>";
         $data .= "</div>";
+        
 
         return $data;
     }

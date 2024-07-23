@@ -25,7 +25,7 @@ class DossierLivewire extends Component
     public $score_info;
     public $formData = [];
     public $validators = [];
-    protected $listeners = ['fileUploaded' => 'handleFileUploaded'];
+    protected $listeners = ['fileUploaded' => 'handleFileUploaded','test' => 'test'];
 
     public function mount($id)
     {
@@ -97,7 +97,10 @@ class DossierLivewire extends Component
 
 
     }
-
+    public function test()
+    {
+        dd('ok');
+    }
 
     public function refresh()
     {

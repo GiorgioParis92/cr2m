@@ -21,7 +21,8 @@ class AbstractFormData
         $this->form_id = $form_id;
         $this->dossier_id = $dossier_id;
         $this->config = $config;
-
+    
+        
         if ($should_load) {
         $config = \DB::table('forms_data')
             ->where('form_id', $form_id)

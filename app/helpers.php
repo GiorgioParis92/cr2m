@@ -372,3 +372,33 @@ $array=[
 ];
 return $array[$couleur] ?? '';
 }
+
+function decode_if_json($value)
+{
+    if ($value == '') {
+        return [];
+    }
+    if (is_string($value)) {
+        $decoded = json_decode($value, true);
+        // Check if json_decode succeeded
+        if (json_last_error() === JSON_ERROR_NONE) {
+            return $decoded;
+        }
+    }
+
+    if(is_array($value)) {
+        return $value;
+    }
+
+    return $value;
+}
+
+function convertToArray($data) {
+    if (is_object($data)) {
+        $data = (array) $data;
+    }
+    if (is_array($data)) {
+        return array_map('convertToArray', $data);
+    }
+    return $data;
+}

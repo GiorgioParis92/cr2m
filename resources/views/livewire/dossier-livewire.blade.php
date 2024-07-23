@@ -510,7 +510,9 @@
         })
         });
         // 
-
+        Livewire.on('ok_photo', (data) => {
+            alert('ok');
+        });
         // Listen for the Livewire event to reinitialize Dropzone
         Livewire.on('initializeDropzones', (data) => {
             console.log('initializeDropzones');

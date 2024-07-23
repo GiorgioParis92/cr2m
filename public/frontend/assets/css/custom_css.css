@@ -1450,3 +1450,8 @@ button img {
     padding: 0!important;
     font-size: 10px!important;
 }
+.form-group {
+    margin-bottom: 1rem;
+    vertical-align: top;
+    margin-right: 12px;
+}

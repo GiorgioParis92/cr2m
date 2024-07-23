@@ -9,11 +9,16 @@ class Db_select extends AbstractFormData
 {
     public function render(bool $is_error)
     {
-        $jsonString = str_replace(["\n", '', "\r"], '', $this->config->options);
-        $optionsArray = json_decode($jsonString, true);
+        if(!is_array($this->config->options)) {
+            $jsonString = str_replace(["\n", '', "\r"], '', $this->config->options);
+            $optionsArray = json_decode($jsonString, true);
+        } else {
+            $optionsArray = $this->config->options;
+        }
+
 
         $sql_command = $optionsArray['sql'];
-
+      
         if (isset($optionsArray['arguments'])) {
             foreach ($optionsArray['arguments'] as $key => $data) {
                 $sql_command = str_replace($key, eval ($data), $sql_command);
@@ -28,11 +33,11 @@ class Db_select extends AbstractFormData
 
         $request = DB::select($sql_command);
 
-        $data = '<div class="form-group  col-sm-12 group_' . $class_prediction . '';
+        $data = '<div class="form-group ' . ($this->config->class ?? "") . ' col-sm-12 group_' . $class_prediction . '';
         $data .= $this->config->class ?? '';
         $data .= '">';
         $data .= '<label>' . $this->config->title . '</label><br />';
-        $data .= '<select wire:model="' . $wireModel . '" id="form_config_' . $this->name . '"';
+        $data .= '<select wire:change="update_value(\''.$wireModel.'\',  $event.target.value)" id="form_config_' . $this->name . '"';
         if ($this->config->required == 1) {
             $data .= ' required ';
         }

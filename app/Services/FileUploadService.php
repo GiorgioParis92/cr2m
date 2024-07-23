@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Http; // Add this line
 use App\Http\Controllers\Api\OcrAnalyze; // Import the OcrAnalyze controller
 use App\Models\Dossier;
 use App\FormModel\FormData\Photo;
+use App\FormModel\FormData\Table;
+use Livewire\Livewire; // Import the Livewire facade
 
 class FileUploadService
 {
@@ -23,7 +25,6 @@ class FileUploadService
      */
     public function storeImage(Request $request, string $folder = null, int $clientId = null, string $inputName = 'file', bool $random_name = false)
     {
-
         if ($request->folder == 'dossiers') {
             if (isset($request->analyze)) {
                 // $ocrResponse = $this->callOcrAnalyzeDirectly($request);
@@ -87,14 +88,14 @@ class FileUploadService
 
 
         }
-        // dd($request);
+     
 
 
         if (isset($request->random_name)) {
 
             $random_name = true;
         }
-
+      
         if (isset($request->form_id)) {
             $form_id = $request->form_id;
         }
@@ -102,15 +103,15 @@ class FileUploadService
 
         $file = $request->file('file');
 
-        $allowedExtensions = ['jpeg', 'jpg', 'png', 'gif', 'pdf','heic'];
+        $allowedExtensions = ['jpeg', 'jpg', 'png', 'gif', 'pdf','heic','webp'];
         $extension = strtolower($file->getClientOriginalExtension());
 
-
+     
 
         if (!in_array($extension, $allowedExtensions)) {
             return false;
         }
-
+     
         $directory = "{$folder}/{$clientId}";
         if (!Storage::disk('public')->exists($directory)) {
             Storage::disk('public')->makeDirectory($directory);
@@ -118,7 +119,7 @@ class FileUploadService
         $originalFileName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
         // Directory path where files will be stored
         $directoryPath = storage_path('app/public/' . $directory);
-
+    
         // Find all files with the same base name in the directory
         foreach (glob($directoryPath . '/' . $originalFileName . '.*') as $existingFile) {
 
@@ -143,29 +144,62 @@ class FileUploadService
         $filePath = $file->storeAs($directory, $fileName, 'public');
 
         DB::enableQueryLog();
-        if ($random_name) {
-
+   
+        $template=$request->input('template');
+        if ($random_name==true) {
+    
+            $index='';
+            $explode=(explode('.',$request->input('template')));
+            if(is_array($explode) && count($explode)>1) {
+                $array=explode('.',$request->input('template'));
+                $template=$array[0];
+                $index=$array[2];
+                $field=$array[3];
+                
+            } else {
+                $template=$request->input('template');
+            }
+       
             $value = DB::table('forms_data')
-                ->where('meta_key', $request->input('template'))
+                ->where('meta_key', $template)
                 ->where("form_id",$form_id)
                 ->where("dossier_id",$dossier->id)
                 ->first();
             
             if ($value) {
                 $json_value = json_decode($value->meta_value);
-                array_push($json_value,$filePath);
+                if($json_value) {
+                    array_push($json_value,$filePath);
+                } else {
+                    $json_value=[];
+                    array_push($json_value,$filePath);
+                }
+                $updatedJsonString=json_encode($json_value);
+                if($index!='') {
+                    $json_array=(json_decode($value->meta_value,true));
+                 
+                    $json_array[$index][$field]['value'][] = $filePath;
+               
+                    $updatedJsonString = json_encode($json_array);
+               
+
+                }
+           
+                
                 $update = DB::table('forms_data')->updateOrInsert(
                     [
                         'dossier_id' => '' . $dossier->id . '',
                         'form_id' => '' . $form_id . '',
-                        'meta_key' => '' . $request->input('template') . ''
+                        'meta_key' => '' . $template . ''
                     ],
                     [
-                        'meta_value' => '' . json_encode($json_value) . '',
+                        'meta_value' => '' . $updatedJsonString . '',
                         'created_at' => now(),
                         'updated_at' => now()
                     ]
                 );
+                 
+            
             } else {
                 $json_value = [];
                 array_push($json_value,$filePath);
@@ -187,7 +221,7 @@ class FileUploadService
                 [
                     'dossier_id' => '' . $dossier->id . '',
                     'form_id' => '' . $form_id . '',
-                    'meta_key' => '' . $request->input('template') . ''
+                    'meta_key' => '' . $template . ''
                 ],
                 [
                     'meta_value' => '' . $filePath . '',
@@ -197,8 +231,17 @@ class FileUploadService
             );
         }
 
-        // $photo = new Photo($form_id, $request->input('template'), $filePath, $this);
-        // $photo->save_value();
+       
+        if($index!='') {
+            $config = \DB::table('forms_config')
+            ->where('form_id', $form_id)
+            ->where('name', $template)
+            ->first();
+           
+        $table = new Table($config, $template, $form_id, $dossier->id);
+        $table->save_value();
+        }
+
 
         return $filePath;
 
@@ -223,9 +266,9 @@ class FileUploadService
 
 
         $value = DB::table('forms_data')
-            ->where('meta_value', 'like', '%' . $request->link . '%')
+            ->where('dossier_id', $request->dossier_id)
+            ->where('meta_key', $request->tag)
             ->first();
-
         if ($value) {
             $json_value = json_decode($value->meta_value);
 

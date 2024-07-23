@@ -10,8 +10,12 @@ class Checkbox extends AbstractFormData
     
     public function render(bool $is_error)
     {
-        $jsonString = str_replace(["\n", '', "\r"], '', $this->config->options);
-        $optionsArray = json_decode($jsonString, true);
+        if(!is_array($this->config->options)) {
+            $jsonString = str_replace(["\n", '', "\r"], '', $this->config->options);
+            $optionsArray = json_decode($jsonString, true);
+        } else {
+            $optionsArray = $this->config->options;
+        }
         if (!is_array($optionsArray)) {
             $optionsArray = [];
         }
@@ -26,6 +30,16 @@ class Checkbox extends AbstractFormData
         $data = '<div class="form-group col-sm-12 ';
         $data .= $this->config->class ?? '';
         $data .= '">';
+        if(isset($this->config->title)) {
+            $data .= '<label>' . $this->config->title . '</label><br />';
+        }
+  
+        $value=$optionsArray[1]['value'];
+
+        if($this->value==$optionsArray[1]['value']) {
+            $value=$optionsArray[0]['value'];
+        }
+
 
         if (is_array($optionsArray)) {
             $data .= '<label class="switch" >';
@@ -34,7 +48,7 @@ class Checkbox extends AbstractFormData
                 $data .= 'checked';
             }
             $data .= ' id="checkbox_'.$this->config->name.'"
-            wire:model.lazy="'.$wireModel.'"
+            wire:change="update_value(\''.$wireModel.'\',  '.$value.')"
             value="'.$optionsArray[1]['value'].'">';
 
             $data .= '<span class="slider round"></span>';

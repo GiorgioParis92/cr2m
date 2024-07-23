@@ -10,9 +10,12 @@ class Title extends AbstractFormData
     {
 
 
-        $jsonString = str_replace(["\n", '', "\r"], '', $this->config->options);
-
-        $optionsArray = json_decode($jsonString, true);
+        if(!is_array($this->config->options)) {
+            $jsonString = str_replace(["\n", '', "\r"], '', $this->config->options);
+            $optionsArray = json_decode($jsonString, true);
+        } else {
+            $optionsArray = $this->config->options;
+        }
 
         $condition_valid = false;
 

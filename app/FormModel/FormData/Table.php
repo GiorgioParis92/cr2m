@@ -9,18 +9,28 @@ class Table extends AbstractFormData
 {
 
     public $optionsArray = [];
+    
     public function __construct($config, $name, $form_id, $dossier_id)
     {
         parent::__construct($config, $name, $form_id, $dossier_id);
 
         // $this->value = $this->init_value();
-        $jsonString = str_replace(["\n", "\r"], '', $this->config->options);
-        $this->optionsArray = json_decode($jsonString, true);
+        if(!is_array($this->config->options)) {
+            $jsonString = str_replace(["\n", '', "\r"], '', $this->config->options);
+            $optionsArray = json_decode($jsonString, true);
+        } else {
+            $optionsArray = $this->config->options;
+
+        }
+        $optionsArray = convertToArray($optionsArray);
+        $this->optionsArray=$optionsArray;
+       
 
     }
     public function render(bool $is_error)
     {
         $data = '';
+            // dd($this);
         
         $this->value = $this->decode_if_json($this->value);
 
@@ -41,6 +51,7 @@ class Table extends AbstractFormData
                     // Fallback to AbstractFormData if the class does not exist
                     $element_group[$element_config['name']] = new AbstractFormData((object) $element_config, $div_name, $this->form_id, $this->dossier->id, false);
                 }
+              
                 $element_group[$element_config['name']]->set_dossier($this->dossier);
                 if (is_array($element_data[$element_config['name']])) {
                     $element_data[$element_config['name']] = (object) $element_data[$element_config['name']];
@@ -51,14 +62,15 @@ class Table extends AbstractFormData
 
             }
             $data .='</div>';
+
+            $data .='</div>';
             $data .='<div class="col-lg-2">';
             $data .="<label></label>";
             $data .= '<div class="col-lg-12 col-sm-12 btn btn-danger" wire:click="remove_row(\''.$this->name.'\',' . $this->form_id . ','. (int)$index.')">remove row</div>';
             $data .='</div>';
-            $data .='</div>';
-
         }
-        $this->save_value();
+
+        // $this->save_value();
 
 
         $data .= '<div class="btn btn-success" wire:click="add_row(\''.$this->name.'\',' . $this->form_id . ')">'.$this->config->title.'</div>';
@@ -69,7 +81,7 @@ class Table extends AbstractFormData
 
     public function init_element()
     {
-
+        
         $element_group = [];
 
         foreach ($this->optionsArray as $element_config) {
@@ -85,7 +97,6 @@ class Table extends AbstractFormData
             }
             $element_group[$element_config['name']]->set_dossier($this->dossier);
         }
-
 
         return $element_group;
     }
