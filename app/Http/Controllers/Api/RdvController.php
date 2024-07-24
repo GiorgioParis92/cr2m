@@ -75,6 +75,15 @@ class RdvController extends \App\Http\Controllers\Controller
                 $rdv->hour = null;
                 $rdv->minute = null;
             }
+
+            if ($rdv->dossier_id) {
+             
+                $dossier = Dossier::where('id', $rdv->dossier_id)
+                ->with('beneficiaire', 'fiche', 'etape', 'status','mandataire_financier','mar')
+                ->first();
+                $rdv->dossier=$dossier;
+            }
+
             return $rdv;
         });
 
@@ -94,8 +103,16 @@ class RdvController extends \App\Http\Controllers\Controller
             $type_rdv = $request->type_rdv ?? 0;
             $client_id = $dossier->client_id;
 
+            $datas=DB::table('dossiers_data')->where('dossier_id',$dossier->id)->get();
+            foreach($datas as $data) {
+                if(isset($data) && !empty($data->meta_value)) {
+                    $dossier[$data->meta_key]=$data->meta_value;
+
+                }
+            }
 
         }
+      
         $data = [
             'type_rdv' => $type_rdv,
             'user_id' => $user_id,
@@ -103,7 +120,7 @@ class RdvController extends \App\Http\Controllers\Controller
             'client_id' => $client_id,
             'nom' => $dossier->beneficiaire->nom ?? '',
             'prenom' => $dossier->beneficiaire->prenom ?? '',
-            'adresse' => $dossier->beneficiaire->adresse ?? '',
+            'adresse' => ($dossier['numero_voie'] ?? '').''.$dossier->beneficiaire->adresse ?? '',
             'cp' => $dossier->beneficiaire->cp ?? '',
             'ville' => $dossier->beneficiaire->ville ?? '',
             'telephone' => $dossier->beneficiaire->telephone ?? '',
@@ -172,7 +189,25 @@ class RdvController extends \App\Http\Controllers\Controller
             return response()->json(['success' => false, 'message' => 'Entrez une date'], 200);
 
         }
+        if (isset($request->dossier_id)) {
+            $id = $request->dossier_id;
+            $dossier = Dossier::where('id', $id)
+                ->with('beneficiaire', 'fiche', 'etape', 'status')
+                ->first();
+            $date = date('Y-m-d H:i:s', strtotime($request->start));
+            $user_id = $request->user_id ?? 0;
+            $type_rdv = $request->type_rdv ?? 0;
+            $client_id = $dossier->client_id;
 
+            $datas=DB::table('dossiers_data')->where('dossier_id',$dossier->id)->get();
+            foreach($datas as $data) {
+                if(isset($data) && !empty($data->meta_value)) {
+                    $dossier[$data->meta_key]=$data->meta_value;
+
+                }
+            }
+
+        }
         if ($rdvId == 0 || !isset($rdvId)) {
             // Insert a new record and get the id
             $rdvId = DB::table('rdv')->insertGetId([
@@ -183,7 +218,7 @@ class RdvController extends \App\Http\Controllers\Controller
                 'client_id' => $request->client_id ?? 0,
                 'nom' => $request->nom ?? '',
                 'prenom' => $request->prenom ?? '',
-                'adresse' => $request->adresse ?? '',
+                'adresse' => ($dossier['numero_voie'] ?? '').' '.$request->adresse ?? '',
                 'cp' => $request->cp ?? '',
                 'ville' => $request->ville ?? '',
                 'telephone' => $request->telephone ?? '',
@@ -193,7 +228,7 @@ class RdvController extends \App\Http\Controllers\Controller
                 // Other necessary fields with default values
             ]);
         }
-
+        
         // Fetch the existing record from the 'rdv' table
         $rdv = DB::table('rdv')->find($rdvId);
         if (!$rdv) {

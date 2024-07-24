@@ -34,6 +34,17 @@
     <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCzcaFvxwi1XLyRHmPRnlKO4zcJXPOT5gM&libraries=marker&callback=initMap"></script>
 
     <script>
+            function formatFrenchPhoneNumber(phoneNumber) {
+                // Remove any non-digit characters
+                let cleaned = phoneNumber.replace(/\D/g, '');
+                // Match and group digits
+                let match = cleaned.match(/(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/);
+                // Format the phone number
+                if (match) {
+                    return match[1] + ' ' + match[2] + ' ' + match[3] + ' ' + match[4] + ' ' + match[5];
+                }
+                return null;
+            }
         var calendarEl = document.getElementById('calendar');
         var token = $('meta[name="api-token"]').attr('content'); // Get token from meta tag
 
@@ -104,6 +115,7 @@
         }
 
         function fetchAndRenderEvents(start, end) {
+            console.log($('#form_config_user_id').val())
             console.log(start)
             console.log(end)
             $.ajax({
@@ -122,7 +134,7 @@
                     clearMarkers(); // Clear existing markers
                     var events = data.map(function(rdv) {
                         var eventStart = new Date(rdv.date_rdv);
-                        var eventEnd = new Date(eventStart.getTime() + 60 * 60 *
+                        var eventEnd = new Date(eventStart.getTime() + 90 * 60 *
                         1000); // Add 1 hour to the start date
                         console.log(eventStart)
                         console.log(eventEnd)
@@ -131,10 +143,10 @@
                             // Create event object for FullCalendar
                             console.log(rdv)
                             var event = {
-                                title: rdv.user_name+'<br/>'+rdv.nom + ' ' + rdv.prenom,
+                                title: '<a  href="https://waze.com/ul?q='+ rdv.adresse + ' ' + rdv.cp + ' ' + rdv.ville+ '&navigate=yes" class="waze_button"><img width="32" src="https://play-lh.googleusercontent.com/r7XL36PVNtnidqy6ikRiW1AHEIsjhePrZ8W5M4cNTQy5ViF3-lIDY47hpvxc84kJ7lw=w240-h480-rw"></a>'+ rdv.user_name+'<br/>'+rdv.nom + ' ' + rdv.prenom,
                                 start: rdv.date_rdv,
                                 end: eventEnd.toISOString(),
-                                description: rdv.adresse + '<br/>' + rdv.cp + ' ' + rdv.ville,
+                                description: rdv.adresse + ' ' + rdv.cp + ' ' + rdv.ville+ '<br/>' + formatFrenchPhoneNumber(rdv.telephone)+ '<br/> MAR : ' + rdv.dossier.mar.client_title+' / '+ rdv.dossier.mandataire_financier.client_title,
                                 backgroundColor: rdv.color,
                                 borderColor: rdv.color,
                                 dossier_id: rdv.dossier_id,

@@ -48,6 +48,16 @@ class Dossier extends Model
     {
         return $this->belongsTo(Status::class, 'status_id');
     }
+
+    public function mandataire_financier()
+    {
+        return $this->belongsTo(Client::class,'mandataire_financier', 'id');
+    }
+
+    public function mar()
+    {
+        return $this->belongsTo(Client::class,'mar', 'id');
+    }
     public function getMarClientAttribute()
     {
         return Client::find($this->mar);
