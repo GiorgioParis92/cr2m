@@ -22,9 +22,8 @@ class RdvController extends \App\Http\Controllers\Controller
             $client = Client::where('id', $request->client_id)->first();
         }
 
-        if ($request->user_id && $request->user_id==1) {
+        if ($request->user_id && $request->user_id>0) {
             $user = User::where('id', $request->user_id)->first();
-            dd($user);
         }
 
         $rdvs = DB::table('rdv')
@@ -52,7 +51,7 @@ class RdvController extends \App\Http\Controllers\Controller
         }
 
 
-        if (isset($request->user_id) && $request->user_id > 0) {
+        if (isset($request->user_id) && $request->user_id > 0 && $user->type_id==4) {
             $rdvs = $rdvs->where('rdv.user_id', $request->user_id);
         }
         if (isset($request->dpt)) {
