@@ -17,7 +17,7 @@ class RdvController extends \App\Http\Controllers\Controller
 
         $user = auth()->user();
         $client='';
-        if ($request->client_id) {
+        if ($request->client_id && $request->client_id>0) {
             $client = Client::where('id', $request->client_id)->first();
         }
 
