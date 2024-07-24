@@ -63,7 +63,7 @@ class DossierLivewire extends Component
         foreach ($this->etapes as $etape) {
             $this->validators[$etape->etape_id] = new EtapeValidator($etape->etape_id);
         }
-
+        $last_etape=1;
         foreach($this->etapes as $etape) {
          
             if(is_user_allowed($etape->etape_name)==true && (($etape->order_column)+1)<=$this->dossier['etape_number']) {
