@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Models\Dossier;
 use App\Models\Client;
+use App\Models\User;
 
 use Illuminate\Support\Facades\Schema; // Import Schema for checking columns
 
@@ -19,6 +20,11 @@ class RdvController extends \App\Http\Controllers\Controller
         $client='';
         if ($request->client_id && $request->client_id>0) {
             $client = Client::where('id', $request->client_id)->first();
+        }
+
+        if ($request->user_id && $request->user_id==1) {
+            $user = User::where('id', $request->user_id)->first();
+            dd($user);
         }
 
         $rdvs = DB::table('rdv')
