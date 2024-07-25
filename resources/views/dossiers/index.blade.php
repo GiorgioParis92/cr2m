@@ -300,8 +300,8 @@
                 ],
                 @else
                 columnDefs: [{
-                        targets: [1, 4, 5, 6, 7, 9, 11,12,13,14,15,16, 17, 19, 20],
-                        visible: false
+                    targets: [1, 4, 5, 6, 7, 9, 11, 13, 15, 17, 19, 20],
+                    visible: false
                     },
                     {
                         "targets": 18,
