@@ -102,7 +102,7 @@ var calendar = new FullCalendar.Calendar(calendarEl, {
         };
         
         eventDiv.innerHTML = content;
-        eventDiv.appendChild(wazeButton); // Append the Waze button to the event content
+       // eventDiv.appendChild(wazeButton); // Append the Waze button to the event content
         return {
             domNodes: [eventDiv]
         };

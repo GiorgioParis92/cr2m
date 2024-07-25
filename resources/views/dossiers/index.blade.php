@@ -33,7 +33,8 @@
                     <option value="">Filtrer par étape</option>
 
                     @foreach ($etapes as $etape)
-                        <option value="{{ $etape->order_column}}">{{ ($etape->order_column+1)}} - {{ $etape->etape_desc }}</option>
+                        <option value="{{ $etape->order_column }}">{{ $etape->order_column + 1 }} - {{ $etape->etape_desc }}
+                        </option>
                     @endforeach
 
                 </select>
@@ -49,7 +50,7 @@
 
                 </select>
             </div>
-
+            @if (auth()->user()->client->type_client != 3 || auth()->user()->client_id == 0)
             <div class="mb-2 mb-sm-0 col-12 col-md-3">
                 <label class="mr-sm-2">Acoompagnateur</label>
                 <select class="form-control" data-column="13">
@@ -74,28 +75,28 @@
                 </select>
             </div>
 
-            @if(auth()->user()->client->type_client!=3 || auth()->user()->client_id==0)
-            <div class="mb-2 mb-sm-0 col-12 col-md-3">
-                <label class="mr-sm-2">Installateur</label>
-                <select class="form-control" data-column="17">
-                    <option value="">Filtrer par installateur</option>
+           
+                <div class="mb-2 mb-sm-0 col-12 col-md-3">
+                    <label class="mr-sm-2">Installateur</label>
+                    <select class="form-control" data-column="17">
+                        <option value="">Filtrer par installateur</option>
 
-                    @foreach ($installateurs as $installateur)
-                        <option value="{{ $installateur->id }}">{{ $installateur->client_title }}</option>
-                    @endforeach
+                        @foreach ($installateurs as $installateur)
+                            <option value="{{ $installateur->id }}">{{ $installateur->client_title }}</option>
+                        @endforeach
 
-                </select>
-            </div>
+                    </select>
+                </div>
             @endif
 
-{{-- 
+            {{-- 
             <div class="mb-2 mb-sm-0 col-12 col-md-3">
                 <label class="mr-sm-2">Type de dossier</label>
                 <select class="form-control" data-column="19">
                     <option value="">Filtrer par type de dossier</option>
                     @php $count=count($fiches) @endphp
                     @foreach ($fiches as $fiche)
-                        <option @if($count==1) selected @endif value="{{ $fiche->id }}">{{ $fiche->fiche_name }}</option>
+                        <option @if ($count == 1) selected @endif value="{{ $fiche->id }}">{{ $fiche->fiche_name }}</option>
                     @endforeach
 
                 </select>
@@ -139,10 +140,12 @@
                     <tr>
                         <td>{{ format_date($dossier->created_at) }}</td>
                         <td>{{ strtotime_date($dossier->created_at) }}</td>
-                        <td><b><a href="{{ route('dossiers.show', $dossier->folder) }}">{{ $dossier->beneficiaire->nom }} {{ $dossier->beneficiaire->prenom }}</a></b><br/>
-                           
+                        <td><b><a href="{{ route('dossiers.show', $dossier->folder) }}">{{ $dossier->beneficiaire->nom }}
+                                    {{ $dossier->beneficiaire->prenom }}</a></b><br />
+
                             <div class="btn bg-primary bg-bleu">
-                                {{ $dossier->beneficiaire->menage_mpr }} {{ couleur_menage($dossier->beneficiaire->menage_mpr) }}
+                                {{ $dossier->beneficiaire->menage_mpr }}
+                                {{ couleur_menage($dossier->beneficiaire->menage_mpr) }}
                             </div>
                         </td>
                         <td>
@@ -166,8 +169,9 @@
                         </td>
                         <td>{{ $dossier->beneficiaire->occupation }}</td>
                         <td>
-                            <a style="max-width:80px"  href="{{ route('dossiers.show', $dossier->folder) }}">
-                                <span class="badge badge-primary badge_button">{{ ($dossier->etape->order_column)+1 }}</span>
+                            <a style="max-width:80px" href="{{ route('dossiers.show', $dossier->folder) }}">
+                                <span
+                                    class="badge badge-primary badge_button">{{ $dossier->etape->order_column + 1 }}</span>
 
                                 <div style="    margin-top: 13px;
     max-width: 80px;
@@ -190,7 +194,7 @@
                             {{ $dossier->etape->order_column ?? '' }}
                         </td>
                         <td>
-                            <a  href="{{ route('dossiers.show', $dossier->folder) }}">
+                            <a href="{{ route('dossiers.show', $dossier->folder) }}">
                                 <div style="    margin-top: 12px; width: 100%;    max-width: 100%;"
                                     class="btn btn-{{ $dossier->status->status_style ?? 'default' }}">
 
@@ -205,60 +209,54 @@
                         </td>
 
                         <td class="text-center">
-                            @if(isset($dossier->mar))
-
-                            @if (Storage::disk('public')->exists($dossier->mar->main_logo))
-                                <img class="logo_table" src="{{ asset('storage/' . $dossier->mar->main_logo) }}">
-                            @endif
-                            {{ $dossier->mar->client_title }}
+                            @if (isset($dossier->mar))
+                                @if (Storage::disk('public')->exists($dossier->mar->main_logo))
+                                    <img class="logo_table" src="{{ asset('storage/' . $dossier->mar->main_logo) }}">
+                                @endif
+                                {{ $dossier->mar->client_title }}
                             @endif
                         </td>
                         <td>
-                            @if(isset($dossier->mar))
-
-                            {{ $dossier->mar->id }}
-
+                            @if (isset($dossier->mar))
+                                {{ $dossier->mar->id }}
                             @endif
                         </td>
 
                         <td class="text-center">
-                            @if(isset($dossier->mandataire_financier) && $dossier->mandataire_financier->id>0)
-
-                            @if (isset($dossier->mandataire_financier->main_logo) &&
-                                    Storage::disk('public')->exists($dossier->mandataire_financier->main_logo))
-                                <img class="logo_table"
-                                    src="{{ asset('storage/' . $dossier->mandataire_financier->main_logo) }}">
-                            @endif
-                            {{ $dossier->mandataire_financier->client_title ?? 'Aucun' }}
-                            @endif
-                        </td>
-                        <td>
-                            @if(isset($dossier->mandataire_financier))
-
-                            {{ $dossier->mandataire_financier->id ?? '' }}
-
+                            @if (isset($dossier->mandataire_financier) && $dossier->mandataire_financier->id > 0)
+                                @if (isset($dossier->mandataire_financier->main_logo) &&
+                                        Storage::disk('public')->exists($dossier->mandataire_financier->main_logo))
+                                    <img class="logo_table"
+                                        src="{{ asset('storage/' . $dossier->mandataire_financier->main_logo) }}">
+                                @endif
+                                {{ $dossier->mandataire_financier->client_title ?? 'Aucun' }}
                             @endif
                         </td>
                         <td>
-                            @if(isset($dossier->installateur) && isset($dossier->installateur->main_logo))
-                            @if (Storage::disk('public')->exists($dossier->installateur->main_logo))
-                                <img class="logo_table" src="{{ asset('storage/' . $dossier->installateur->main_logo) }}">
-                            @endif
-                            {{ $dossier->installateur->client_title ?? '' }}
+                            @if (isset($dossier->mandataire_financier))
+                                {{ $dossier->mandataire_financier->id ?? '' }}
                             @endif
                         </td>
                         <td>
-                            @if(isset($dossier->installateur))
+                            @if (isset($dossier->installateur) && isset($dossier->installateur->main_logo))
+                                @if (Storage::disk('public')->exists($dossier->installateur->main_logo))
+                                    <img class="logo_table"
+                                        src="{{ asset('storage/' . $dossier->installateur->main_logo) }}">
+                                @endif
+                                {{ $dossier->installateur->client_title ?? '' }}
+                            @endif
+                        </td>
+                        <td>
+                            @if (isset($dossier->installateur))
+                                {{ $dossier->installateur->id ?? '' }}
+                            @endif
+                        </td>
+                        <td>
 
-                            {{ $dossier->installateur->id ?? '' }}
-                            @endif
-                        </td>
-                        <td>
-                      
-                            @foreach($dossier->get_rdv as $rdv)
-                            <div>
-                                Date du rdv : {{format_date($rdv->date_rdv)}}<br/>
-                            </div>
+                            @foreach ($dossier->get_rdv as $rdv)
+                                <div>
+                                    Date du rdv : {{ format_date($rdv->date_rdv) }}<br />
+                                </div>
                             @endforeach
 
                         </td>
@@ -268,15 +266,15 @@
 
                         </td>
                         <td>
-                      
-                            @foreach($dossier->get_rdv as $rdv)
-                            <div>
-                                Date du rdv : {{strtotime_date($rdv->date_rdv)}}<br/>
-                            </div>
+
+                            @foreach ($dossier->get_rdv as $rdv)
+                                <div>
+                                    Date du rdv : {{ strtotime_date($rdv->date_rdv) }}<br />
+                                </div>
                             @endforeach
 
                         </td>
-                        
+
 
                     </tr>
                 @endforeach
@@ -288,20 +286,38 @@
     <script>
         $(document).ready(function() {
             var table = $('#dossiersTable').DataTable({
+                @if (auth()->user()->client_id==0 && auth()->user()->type_id!=4 && auth()->user()->type_id!=3)
                 columnDefs: [{
-                        targets: [1,4, 5, 6, 7, 9, 11, 13, 15, 17, 19,20],
+                        targets: [1, 4, 5, 6, 7, 9, 11, 13, 15, 17, 19, 20],
                         visible: false
                     },
-                    { "targets": 18, "orderData": [20] } 
+                    {
+                        "targets": 18,
+                        "orderData": [20]
+                    }
 
 
                 ],
+                @else
+                columnDefs: [{
+                        targets: [1, 4, 5, 6, 7, 9, 11,12,13,14,15,16, 17, 19, 20],
+                        visible: false
+                    },
+                    {
+                        "targets": 18,
+                        "orderData": [20]
+                    }
+
+
+                ],
+                @endif
+              
                 dom: '<"top"l><"bottom">',
                 language: {
-        url: '//cdn.datatables.net/plug-ins/2.0.8/i18n/fr-FR.json',
-    },
+                    url: '//cdn.datatables.net/plug-ins/2.0.8/i18n/fr-FR.json',
+                },
                 pageLength: -1,
-                "order": [1,'desc']
+                "order": [1, 'desc']
 
 
             });
