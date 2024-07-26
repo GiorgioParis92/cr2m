@@ -148,4 +148,21 @@ class DossierController extends Controller
         return redirect()->route('dossiers.show', ['id' => $dossier->folder]);
 
     }
+
+
+
+    public function delete($id)
+    {
+
+        $dossier = Dossier::where('id', $id)
+            ->with('beneficiaire', 'fiche', 'etape', 'status')
+            ->delete();
+       
+        
+
+          
+        return redirect()->route('dossiers.index');
+
+    }
+
 }

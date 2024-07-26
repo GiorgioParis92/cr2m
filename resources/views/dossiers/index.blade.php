@@ -52,7 +52,7 @@
             </div>
             @if (auth()->user()->client->type_client != 3 || auth()->user()->client_id == 0)
             <div class="mb-2 mb-sm-0 col-12 col-md-3">
-                <label class="mr-sm-2">Acoompagnateur</label>
+                <label class="mr-sm-2">Acompagnateur</label>
                 <select class="form-control" data-column="13">
                     <option value="">Filtrer par accompagnateur</option>
 
@@ -142,11 +142,12 @@
                         <td>{{ strtotime_date($dossier->created_at) }}</td>
                         <td><b><a href="{{ route('dossiers.show', $dossier->folder) }}">{{ $dossier->beneficiaire->nom }}
                                     {{ $dossier->beneficiaire->prenom }}</a></b><br />
-
-                            <div class="btn bg-primary bg-bleu">
+                            <a href="{{ route('dossiers.show', $dossier->folder) }}">
+                            <div class="btn bg-primary bg-{{ couleur_menage($dossier->beneficiaire->menage_mpr) }}">
                                 {{ $dossier->beneficiaire->menage_mpr }}
                                 {{ couleur_menage($dossier->beneficiaire->menage_mpr) }}
                             </div>
+                        </a>
                         </td>
                         <td>
                             {{ $dossier->beneficiaire->adresse }}<br />

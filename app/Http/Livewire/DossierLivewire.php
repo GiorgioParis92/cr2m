@@ -40,6 +40,8 @@ class DossierLivewire extends Component
         $this->dossier->order_column = $current->order_column;
 
         if (!$this->dossier) {
+            return redirect()->route('dossiers.index');
+
             abort(404, 'Dossier not found');
         }
 
@@ -115,6 +117,8 @@ class DossierLivewire extends Component
         $this->dossier->order_column = $current->order_column;
 
         if (!$this->dossier) {
+            return redirect()->route('dossiers.index');
+
             abort(404, 'Dossier not found');
         }
         $this->global_data=[];

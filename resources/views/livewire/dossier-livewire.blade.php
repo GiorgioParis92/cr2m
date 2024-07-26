@@ -24,13 +24,16 @@
                                 Email : {{ $dossier['beneficiaire']['email'] }}<br />
                             </h6>
 
-                            <div class="btn bg-primary bg-{{ $dossier['beneficiaire']['menage_mpr'] }}">
+                            <div class="btn bg-primary bg-{{ couleur_menage($dossier->beneficiaire->menage_mpr) }}">
                                 {{ strtoupper($dossier['beneficiaire']['menage_mpr']) }}</div>
 
                         </div>
                         <div class="ms-auto my-auto mt-lg-0 mt-4">
                             <div class="ms-auto my-auto">
                                 <div class="btn btn-primary">{{ $dossier['fiche']['fiche_name'] }}</div>
+                                @if(auth()->user()->client_id==0)
+                                <a href="{{route('dossiers.delete', ['id' => $dossier->id])}}" class="btn btn-danger">Supprimer le dossier</a>
+                                @endif
                             </div>
                         </div>
                     </div>
