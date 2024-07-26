@@ -143,7 +143,7 @@
                         <td><b><a href="{{ route('dossiers.show', $dossier->folder) }}">{{ $dossier->beneficiaire->nom }}
                                     {{ $dossier->beneficiaire->prenom }}</a></b><br />
                             <a href="{{ route('dossiers.show', $dossier->folder) }}">
-                            <div class="btn bg-primary bg-{{ couleur_menage($dossier->beneficiaire->menage_mpr) }}">
+                            <div style="color:white"  class="btn bg-primary bg-{{ couleur_menage($dossier->beneficiaire->menage_mpr) }}">
                                 {{ $dossier->beneficiaire->menage_mpr }}
                                 {{ couleur_menage($dossier->beneficiaire->menage_mpr) }}
                             </div>
@@ -295,8 +295,11 @@
                     {
                         "targets": 18,
                         "orderData": [20]
+                    },
+                    {
+                        "targets": 0,
+                        "orderData": [1]
                     }
-
 
                 ],
                 @else
@@ -307,6 +310,10 @@
                     {
                         "targets": 18,
                         "orderData": [20]
+                    },
+                    {
+                        "targets": 0,
+                        "orderData": [1]
                     }
 
 
