@@ -169,8 +169,9 @@ var calendar = new FullCalendar.Calendar(calendarEl, {
                                 title: '<a  href="https://waze.com/ul?q='+ rdv.adresse + ' ' + rdv.cp + ' ' + rdv.ville+ '&navigate=yes" class="waze_button">'+ rdv.user_name+'<br/>'+rdv.nom + ' ' + rdv.prenom,
                                 start: rdv.date_rdv,
                                 end: eventEnd.toISOString(),
-                                description: rdv.adresse + ' ' + rdv.cp + ' ' + rdv.ville+ '<br/>' + formatFrenchPhoneNumber(rdv.telephone)+ '<br/> MAR : ' + rdv.dossier.mar.client_title+' / '+ rdv.dossier.mandataire_financier.client_title,
-                                backgroundColor: rdv.color,
+                                description: rdv.adresse + ' ' + rdv.cp + ' ' + rdv.ville + '<br/>' + formatFrenchPhoneNumber(rdv.telephone) + 
+                 (rdv.dossier ? '<br/> MAR : ' + rdv.dossier.mar.client_title + ' / ' + rdv.dossier.mandataire_financier.client_title : ''),
+    backgroundColor: rdv.color,
                                 borderColor: rdv.color,
                                 dossier_id: rdv.dossier_id,
                                 dossier_folder: rdv.dossier_folder
