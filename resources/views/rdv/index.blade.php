@@ -166,7 +166,7 @@ var calendar = new FullCalendar.Calendar(calendarEl, {
                             // Create event object for FullCalendar
                             console.log(rdv)
                             var event = {
-                                title: '<a  href="https://waze.com/ul?q='+ rdv.adresse + ' ' + rdv.cp + ' ' + rdv.ville+ '&navigate=yes" class="waze_button">'+ rdv.user_name+'<br/>'+rdv.nom + ' ' + rdv.prenom,
+                                title: ''+ rdv.user_name+'<br/>'+rdv.nom + ' ' + rdv.prenom,
                                 start: rdv.date_rdv,
                                 end: eventEnd.toISOString(),
                                 description: rdv.adresse + ' ' + rdv.cp + ' ' + rdv.ville + '<br/>' + formatFrenchPhoneNumber(rdv.telephone) + 
