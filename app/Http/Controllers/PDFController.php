@@ -61,6 +61,7 @@ class PDFController extends Controller
         if (isset($validated['dossier_id'])) {
             $dossierId = $validated['dossier_id'];
             $folderPath = "public/dossiers/{$dossierId}";
+            $directPath = "dossiers/{$dossierId}";
 
             // Create the folder if it does not exist
             if (!Storage::exists($folderPath)) {
@@ -70,8 +71,23 @@ class PDFController extends Controller
             // Save the PDF file to the folder
             $fileName = ($validated['template'] ?? 'document') . ".pdf";
             $filePath = "{$folderPath}/{$fileName}";
+            $directPath ="{$directPath}/{$fileName}";
             Storage::put($filePath, $pdfOutput);
 
+            $dossier = Dossier::where('folder', $dossierId)->first();
+
+            $update = DB::table('forms_data')->updateOrInsert(
+                [
+                    'dossier_id' => '' . $dossier->id . '',
+                    'form_id' => '' . $request->form_id . '',
+                    'meta_key' => '' . $request->template . ''
+                ],
+                [
+                    'meta_value' => '' . $directPath . '',
+                    'created_at' => now(),
+                    'updated_at' => now()
+                ]
+            );
             // Return success response
             return response()->json([
                 'message' => 'PDF generated and saved successfully',

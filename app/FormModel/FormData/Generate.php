@@ -48,6 +48,7 @@ class Generate extends AbstractFormData
   
         data-dossier_id="' . $this->dossier->folder . '"';
         $data .="data-generation='" . $generation . "'";
+        $data .="data-form_id='" . $this->form_id . "'";
         $data .='data-template="' . $optionsArray['template'] . '">
         <i class="fas fa-file-pdf"></i> Générer';
 
@@ -93,6 +94,20 @@ class Generate extends AbstractFormData
 
 
         $data .= '</div>';
+
+            if(isset($optionsArray['signable']) && $optionsArray['signable']=='true') {
+                $data .= '<button type="button" class="btn btn-warning btn-view signable"
+                data-toggle="modal" 
+                   data-dossier_id="' . $this->dossier->folder . '"';
+        $data .="data-generation='" . $generation . "'";
+        $data .="data-form_id='" . $this->form_id . "'";
+        $data .='data-template="' . $optionsArray['template'] . '"
+                data-name="' . $this->config->title . '">
+                <i class="fas fa-eye"></i> Signer le document
+            </button> ';  
+            }
+
+
         }
         $data.='</td>';
 

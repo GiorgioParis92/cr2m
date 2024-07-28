@@ -81,7 +81,10 @@ class RdvController extends \App\Http\Controllers\Controller
                 $dossier = Dossier::where('id', $rdv->dossier_id)
                 ->with('beneficiaire', 'fiche', 'etape', 'status','mandataire_financier','mar')
                 ->first();
-                $rdv->dossier=$dossier;
+                if($dossier) {
+                    $rdv->dossier=$dossier;
+                }
+                
             }
 
             return $rdv;

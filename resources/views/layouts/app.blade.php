@@ -489,6 +489,7 @@
         });
             $('.generatePdfButton').click(function() {
                 var template = $(this).data('template'); // Get the template from data attribute
+                var form_id = $(this).data('form_id'); // Get the template from data attribute
                 var dossier_id = $(this).data('dossier_id'); // Get the dossier ID from data attribute
 
                 $.ajax({
@@ -496,6 +497,7 @@
                     type: 'GET',
                     data: {
                         dossier_id: dossier_id,
+                        form_id: form_id,
                         template: template
                     },
                     headers: {

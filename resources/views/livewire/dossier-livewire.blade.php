@@ -619,7 +619,7 @@
             $('.modal').modal('hide');
         });
         // Remove existing event listeners to prevent multiple bindings
-        $(document).off('click', '.pdfModal').off('click', '.imageModal').off('click', '.fillPDF').off('click',
+        $(document).off('click', '.signable').off('click', '.pdfModal').off('click', '.imageModal').off('click', '.fillPDF').off('click',
             '.generatePdfButton').off('rdv_modal', '.generatePdfButton');
 
         // Attach new event listeners
@@ -733,6 +733,7 @@
 
             var template = $(this).data('template'); // Get the template from data attribute
             var dossier_id = $(this).data('dossier_id'); // Get the dossier ID from data attribute
+            var form_id = $(this).data('form_id'); // Get the dossier ID from data attribute
             var generation = $(this).data('generation'); // Get the dossier ID from data attribute
 
             $.ajax({
@@ -741,6 +742,7 @@
                 data: {
                     dossier_id: dossier_id,
                     generation: generation,
+                    form_id: form_id,
                     template: template
                 },
                 headers: {
@@ -771,5 +773,38 @@
                 }
             });
         });
+
+
+
+
+        $(document).on('click', '.signable', function(event) {
+
+var template = $(this).data('template'); // Get the template from data attribute
+var dossier_id = $(this).data('dossier_id'); // Get the dossier ID from data attribute
+var form_id = $(this).data('form_id'); // Get the dossier ID from data attribute
+var generation = $(this).data('generation'); // Get the dossier ID from data attribute
+
+$.ajax({
+    url: '/api/yousign', // Adjust this URL to your actual API endpoint
+    type: 'POST',
+    data: {
+        dossier_id: dossier_id,
+        generation: generation,
+        form_id: form_id,
+        template: template
+    },
+    headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr(
+            'content') // Include CSRF token if using Laravel's CSRF protection
+    },
+    success: function(response) {
+      console.log(response)
+    },
+    error: function(xhr, status, error) {
+        console.error('Error generating PDF:', error);
+    }
+});
+});
+
     }
 </script>
