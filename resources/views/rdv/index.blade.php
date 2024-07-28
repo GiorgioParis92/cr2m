@@ -81,25 +81,25 @@ var calendar = new FullCalendar.Calendar(calendarEl, {
         var eventDiv = document.createElement('div');
         var content = getEventContent(arg.event.title, arg.event.extendedProps.description);
         
-        // Create Waze button with an image
-        var wazeButton = document.createElement('a');
-        var wazeImage = document.createElement('img');
-        wazeImage.src = 'https://play-lh.googleusercontent.com/r7XL36PVNtnidqy6ikRiW1AHEIsjhePrZ8W5M4cNTQy5ViF3-lIDY47hpvxc84kJ7lw=w240-h480-rw'; // Replace with the path to your Waze image
-        wazeImage.alt = '';
-        wazeImage.style.width = '20px'; // Set the size of the image
-        wazeImage.style.height = '20px';
+        // // Create Waze button with an image
+        // var wazeButton = document.createElement('a');
+        // var wazeImage = document.createElement('img');
+        // wazeImage.src = 'https://play-lh.googleusercontent.com/r7XL36PVNtnidqy6ikRiW1AHEIsjhePrZ8W5M4cNTQy5ViF3-lIDY47hpvxc84kJ7lw=w240-h480-rw'; // Replace with the path to your Waze image
+        // wazeImage.alt = '';
+        // wazeImage.style.width = '20px'; // Set the size of the image
+        // wazeImage.style.height = '20px';
         
-        wazeButton.appendChild(wazeImage);
-        wazeButton.onclick = function(e) {
-            e.stopPropagation(); // Prevent the eventClick from being triggered
-            var location = arg.event.extendedProps.location; // Ensure your event data has this field
-            if (location) {
-                var wazeUrl = `https://waze.com/ul?ll=${location}&navigate=yes`;
-                window.open(wazeUrl, '_blank'); // Open the Waze URL in a new tab/window
-            } else {
-                alert("Location not available for this event.");
-            }
-        };
+        // wazeButton.appendChild(wazeImage);
+        // wazeButton.onclick = function(e) {
+        //     e.stopPropagation(); // Prevent the eventClick from being triggered
+        //     var location = arg.event.extendedProps.location; // Ensure your event data has this field
+        //     if (location) {
+        //         var wazeUrl = `https://waze.com/ul?ll=${location}&navigate=yes`;
+        //         window.open(wazeUrl, '_blank'); // Open the Waze URL in a new tab/window
+        //     } else {
+        //         alert("Location not available for this event.");
+        //     }
+        // };
         
         eventDiv.innerHTML = content;
        // eventDiv.appendChild(wazeButton); // Append the Waze button to the event content
