@@ -33,7 +33,6 @@
                                 <div class="btn btn-primary">{{ $dossier['fiche']['fiche_name'] }}</div>
                                 @if(auth()->user()->client_id==0)
                                 <a href="{{route('dossiers.delete', ['id' => $dossier->id])}}" class="btn btn-danger">Supprimer le dossier</a>
-                                @if(auth()->user()->id==1)
                                 <form class="form-control" method="get">
                                     <label>Installateur</label>
                                     <select wire:ignore    class="form-control"  name="installateur" onchange="this.form.submit()">
@@ -43,7 +42,6 @@
                                         @endforeach
                                     </select>
                                 </form>
-                                @endif
                                 
                                 @endif
                             </div>
