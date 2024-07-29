@@ -68,12 +68,14 @@ class DossierController extends Controller
         return view('dossiers.index', compact('dossiers', 'etapes', 'status', 'mars', 'financiers', 'fiches', 'installateurs'));
     }
 
-    public function show($id)
+    public function show($id, Request $request)
     {
 
         $dossier_by_folder = Dossier::where('folder', $id)
         ->with('beneficiaire', 'fiche', 'etape', 'status')
         ->first();
+
+
 
         if(! $dossier_by_folder) {
             if(auth()->user()->client_id==0) {
@@ -91,6 +93,11 @@ class DossierController extends Controller
             $id= $dossier->id;
         }
         
+        if(isset($request->installateur)) {
+            $dossier->installateur = $request->installateur;
+            $dossier->save();
+        }
+
         if(!isset($dossier)) {
             abort(404);
         }
