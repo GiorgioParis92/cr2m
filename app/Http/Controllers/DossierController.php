@@ -105,7 +105,10 @@ class DossierController extends Controller
         $auditeurs=User::where('type_id',4)->get();
         $rdv_status=RdvStatus::all();
 
-        return view('dossiers.show', compact('id','auditeurs','dossier','rdv_status'));
+        $mars = Client::where('type_client', 1)->get();
+        $financiers = Client::where('type_client', 2)->get();
+        $installateurs = Client::where('type_client', 3)->get();
+        return view('dossiers.show', compact('id','auditeurs','dossier','rdv_status','mars','installateurs','financiers'));
     }
     public function save_form(Request $request)
     {

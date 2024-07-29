@@ -11,6 +11,7 @@ use App\FormModel\FormConfigHandler;
 use App\FormModel\EtapeValidator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use App\Models\Client;
 
 class DossierLivewire extends Component
 {
@@ -96,7 +97,9 @@ class DossierLivewire extends Component
 
         $this->rdv_status=RdvStatus::all();
 
-
+        $this->mars = Client::where('type_client', 1)->get();
+        $this->financiers = Client::where('type_client', 2)->get();
+        $this->installateurs = Client::where('type_client', 3)->get();
 
     }
     public function test()

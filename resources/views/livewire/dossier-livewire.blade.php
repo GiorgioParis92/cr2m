@@ -1,9 +1,9 @@
 <div wire:poll>
 
-    <div class="row">
+    <div class="row" >
 
         <div class="col-12">
-            <div class="card form-register">
+            <div class="card form-register" wire:ignore >
                 <div class="card-body pb-0 clearfix">
                     <div class="d-lg-flex">
                         <div>
@@ -34,11 +34,14 @@
                                 @if(auth()->user()->client_id==0)
                                 <a href="{{route('dossiers.delete', ['id' => $dossier->id])}}" class="btn btn-danger">Supprimer le dossier</a>
                                 @if(auth()->user()->id==1)
-                                <form class="form-control" method="post">
-                                    <select class="form-control"  name="installateur" onchange="this.form.submit()">
-                                        <option value="">PP</option>
-                                        <option value="1">1</option>
-
+                                <form class="form-control" method="get">
+                                    <label>Installateur</label>
+                                    <select wire:ignore    class="form-control"  name="installateur" onchange="this.form.submit()">
+                                        <option value="">Choisir un installateur</option>
+                                        @foreach($installateurs as $installateur)
+                                        <option @if($dossier['installateur']==$installateur->id) selected @endif value="{{$installateur->id}}">{{$installateur->client_title}}</option>
+                                        @endforeach
+                                    </select>
                                 </form>
                                 @endif
                                 
