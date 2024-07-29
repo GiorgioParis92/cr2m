@@ -33,14 +33,14 @@
                                 <div class="btn btn-primary">{{ $dossier['fiche']['fiche_name'] }}</div>
                                 @if(auth()->user()->client_id==0)
                                 <a href="{{route('dossiers.delete', ['id' => $dossier->id])}}" class="btn btn-danger">Supprimer le dossier</a>
-                                
-                                {{-- <form class="form-control" method="post">
+                                @if(auth()->user()->id==1)
+                                <form class="form-control" method="post">
                                     <select class="form-control"  name="installateur" onchange="this.form.submit()">
                                         <option value="">PP</option>
                                         <option value="1">1</option>
 
-                                </form> --}}
-                                
+                                </form>
+                                @endif
                                 
                                 @endif
                             </div>
