@@ -15,6 +15,7 @@
         "laravel/ui": "^3.4",
         "league/flysystem": "1.1.4",
         "livewire/livewire": "^2.4",
+        "mobiledetect/mobiledetectlib": "^3.74",
         "setasign/fpdi": "^2.6",
         "setasign/fpdi-fpdf": "^2.3",
         "spatie/laravel-permission": "^6.7",

@@ -22,6 +22,7 @@ class Kernel extends HttpKernel
         \App\Http\Middleware\TrimStrings::class,
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
         \App\Http\Middleware\LoadUserRelations::class,
+        \App\Http\Middleware\DetectDevice::class,
 
     ];
 
@@ -74,6 +75,7 @@ class Kernel extends HttpKernel
         'check.client.id' => \App\Http\Middleware\CheckClientId::class,
         'temp_password' => \App\Http\Middleware\CheckTemporaryPassword::class,
         'loadUserRelations' => \App\Http\Middleware\LoadUserRelations::class,
+        'detect.device' => \App\Http\Middleware\DetectDevice::class,
 
 
     ];
