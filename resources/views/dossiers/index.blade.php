@@ -365,6 +365,7 @@
                             } else {
                                 var column = columns[0];
                                 console.log(column)
+                                console.log(this.value)
                                 table.column(column).search(this.value).draw();
                             }
                         });
