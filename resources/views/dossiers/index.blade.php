@@ -325,7 +325,8 @@
                 language: {
                     url: '//cdn.datatables.net/plug-ins/2.0.8/i18n/fr-FR.json',
                 },
-                pageLength: -1,
+                pageLength: -1,  // Set the default page length here
+                lengthMenu: [[10, 25, 50,100,250,1000, -1], [10, 25, 50,100,250,1000, "Tout"]], 
                 "order": [1, 'desc']
 
 
