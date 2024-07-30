@@ -201,7 +201,7 @@
     <div class="my-4">
         <p>Madame,Monsieur,</p>
         <p>
-            À la suite de notre visite du ....... / .......... / ............ à votre domicile, nous résumons les
+            À la suite de notre visite du {{date('d/m/Y',strtotime('now'))}} à votre domicile, nous résumons les
             principaux points sur lesquels nous avons échangé
         </p>
 

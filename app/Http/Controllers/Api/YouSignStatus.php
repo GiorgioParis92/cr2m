@@ -17,7 +17,7 @@ use phpseclib3\Net\SSH2;
 use phpseclib3\Net\SFTP;
 use Illuminate\Support\Facades\Storage;
 
-class YouSign extends Controller
+class YouSignStatus extends Controller
 {
 
 
@@ -28,39 +28,12 @@ class YouSign extends Controller
 
     $url = 'http://192.168.100.40:5010/process_request?service=yousign';
     $data = json_encode([
-      'request_type' => 'create_document',
+      'request_type' => 'get_status',
       'request_data' => [
-        'signature_name' => 'Attestation de visite',
-        'delivery_mode' => 'email',
-        'signature_level' => 'electronic_signature',
-        'fields' => [
-          [
-            'type' => 'signature',
-            'page' => 2,
-            'width' => 200,
-            'x' => 72,
-            'y' => 570
-          ]
-        ],
-        'signer_info' => [
-          'first_name' => 'Georges',
-          'last_name' => 'KALFON',
-          'email' => 'genius.market.fr@gmail.com',
-          'phone_number' => '+33651980838'
-        ]
+      "signature_request_id" => "de24e7be-cc3b-4c3b-b0f4-c0580e405db8"
       ]
     ]);
 
-
-    $dossier = Dossier::where('folder', $request->dossier_id)->first();
-
-    $path = 'storage/dossiers/'.$request->dossier_id.'/'.$request->template.'.pdf';
-
-    $fullPath = public_path($path);
-    // Check if the file exists
-
-
-    $file = new \CURLFile($fullPath, 'application/pdf');
    
     $curl = curl_init();
 
@@ -73,8 +46,8 @@ class YouSign extends Controller
         'Content-Type: multipart/form-data'
       ],
       CURLOPT_POSTFIELDS => [
-        'data' => $data,
-        'file' => $file
+        'data' => $data
+    
       ],
     ]);
 

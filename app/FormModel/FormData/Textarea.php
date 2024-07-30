@@ -12,7 +12,7 @@ class Textarea extends AbstractFormData
 
         $data = '<div class="form-group  col-sm-12 '.($this->config->class ?? "").'">';
         $data .= '<label>'.$this->config->title.'</label>';
-        $data .= '<textarea wire:model.lazy="'.$wireModel.'" class="form-control" name="'.$this->config->name.'">'.($this->value ?? "") .'</textarea>';
+        $data .= '<textarea wire:blur="update_value(\''.$wireModel.'\',  $event.target.value)" class="form-control" name="'.$this->config->name.'">'.($this->value ?? "") .'</textarea>';
 
         $data .= '</div>';
 

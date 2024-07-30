@@ -7,6 +7,7 @@ use App\Http\Controllers\PDFController;
 use App\Http\Controllers\Api\RdvController;
 use App\Http\Controllers\Api\OcrAnalyze;
 use App\Http\Controllers\Api\YouSign;
+use App\Http\Controllers\Api\YouSignStatus;
 
 
 /*
@@ -39,6 +40,8 @@ Route::post('/rdvs/update', [RdvController::class, 'update'])->name('rdv.update'
 
 Route::post('/ocr-analyze', [OcrAnalyze::class, 'index']);
 Route::post('/yousign', [YouSign::class, 'index']);
+Route::post('/yousign-status', [YouSignStatus::class, 'index']);
+Route::get('/yousign-status', [YouSignStatus::class, 'index']);
 
 Route::middleware('auth:api')->group(function () {
 

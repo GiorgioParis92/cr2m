@@ -53,6 +53,19 @@ class Table extends AbstractFormData
                 }
               
                 $element_group[$element_config['name']]->set_dossier($this->dossier);
+                if (!isset($element_data[$element_config['name']])) {
+                    $baseNamespace = 'App\FormModel\FormData\\';
+                    $className = $baseNamespace . ucfirst($element_config['type']);
+        
+                    if (class_exists($className)) {
+                        $reflectionClass = new \ReflectionClass($className);
+                        $element_data[$element_config['name']] = $reflectionClass->newInstance((object) $element_config, $element_config['name'], $this->form_id, $this->dossier->id, false);
+                    } else {
+                        // Fallback to AbstractFormData if the class does not exist
+                        $element_data[$element_config['name']] = new AbstractFormData((object) $element_config, $element_config['name'], $this->form_id, $this->dossier->id, false);
+                    }
+                }
+                
                 if (is_array($element_data[$element_config['name']])) {
                     $element_data[$element_config['name']] = (object) $element_data[$element_config['name']];
                 }

@@ -15,10 +15,10 @@ class Generate extends AbstractFormData
         if (!is_array($optionsArray)) {
             $optionsArray = [];
         }
-        
-       
+
+
         if (isset($optionsArray['on_generation'])) {
-               $generation = $optionsArray['on_generation'];
+            $generation = $optionsArray['on_generation'];
         } else {
             $generation = null;
         }
@@ -47,9 +47,9 @@ class Generate extends AbstractFormData
        
   
         data-dossier_id="' . $this->dossier->folder . '"';
-        $data .="data-generation='" . $generation . "'";
-        $data .="data-form_id='" . $this->form_id . "'";
-        $data .='data-template="' . $optionsArray['template'] . '">
+        $data .= "data-generation='" . $generation . "'";
+        $data .= "data-form_id='" . $this->form_id . "'";
+        $data .= 'data-template="' . $optionsArray['template'] . '">
         <i class="fas fa-file-pdf"></i> Générer';
 
 
@@ -62,13 +62,13 @@ class Generate extends AbstractFormData
         $data .= '<td class="w-30" ><div >';
 
 
-        if($this->value) {
-        $extension = explode('.', $this->value);
+        if ($this->value) {
+            $extension = explode('.', $this->value);
 
-      
 
-            $filePath = storage_path('app/public/dossiers/'.$this->dossier->folder .'/' . $this->name.'.pdf');  // File system path
-    
+
+            $filePath = storage_path('app/public/dossiers/' . $this->dossier->folder . '/' . $this->name . '.pdf');  // File system path
+
             // $data.=(asset('storage/' . $this->value));
             if (file_exists($filePath)) {
                 if (end($extension) != 'pdf') {
@@ -88,28 +88,46 @@ class Generate extends AbstractFormData
                 }
             }
 
-        
 
 
 
 
-        $data .= '</div>';
 
-            if(isset($optionsArray['signable']) && $optionsArray['signable']=='true') {
-                $data .= '<button type="button" class="btn btn-warning btn-view signable"
-                data-toggle="modal" 
-                   data-dossier_id="' . $this->dossier->folder . '"';
-        $data .="data-generation='" . $generation . "'";
-        $data .="data-form_id='" . $this->form_id . "'";
-        $data .='data-template="' . $optionsArray['template'] . '"
-                data-name="' . $this->config->title . '">
-                <i class="fas fa-eye"></i> Signer le document
-            </button> ';  
+            $data .= '</div>';
+
+            if (isset($optionsArray['signable']) && $optionsArray['signable'] == 'true') {
+
+                $check_signature=DB::table('forms_data')->where('form_id',$this->form_id)->where('dossier_id',$this->dossier_id)->where('meta_key','signature_request_id')->first();
+
+
+                if(!$check_signature)
+                {
+                    $data .= '<button type="button" class="btn btn-warning btn-view signable"
+                    data-toggle="modal" 
+                       data-dossier_id="' . $this->dossier->folder . '"';
+                    $data .= "data-generation='" . $generation . "'";
+                    $data .= "data-form_id='" . $this->form_id . "'";
+                    $data .= 'data-template="' . $optionsArray['template'] . '"
+                    data-name="' . $this->config->title . '">
+                    <i class="fas fa-eye"></i> Signer le document
+                </button> ';
+                } else {
+                    $data .= '<button type="button" class="btn btn-warning btn-view check_signature"
+                    data-toggle="modal" 
+                       data-dossier_id="' . $this->dossier->folder . '"';
+                    $data .= "data-generation='" . $generation . "'";
+                    $data .= "data-form_id='" . $this->form_id . "'";
+                    $data .= 'data-template="' . $optionsArray['template'] . '"
+                    data-name="' . $this->config->title . '">
+                    <i class="fas fa-eye"></i> Télécharger le document signé '.$check_signature->meta_value.'
+                </button> '; 
+                }
+
             }
 
 
         }
-        $data.='</td>';
+        $data .= '</td>';
 
 
         $data .= '<td class="align-middle text-sm">';
