@@ -51,31 +51,31 @@
                 </select>
             </div>
             @if (auth()->user()->client->type_client != 3 || auth()->user()->client_id == 0)
-            <div class="mb-2 mb-sm-0 col-12 col-md-3">
-                <label class="mr-sm-2">Acompagnateur</label>
-                <select class="form-control" data-column="13">
-                    <option value="">Filtrer par accompagnateur</option>
+                <div class="mb-2 mb-sm-0 col-12 col-md-3">
+                    <label class="mr-sm-2">Acompagnateur</label>
+                    <select class="form-control" data-column="13">
+                        <option value="">Filtrer par accompagnateur</option>
 
-                    @foreach ($mars as $mar)
-                        <option value="{{ $mar->id }}">{{ $mar->client_title }}</option>
-                    @endforeach
+                        @foreach ($mars as $mar)
+                            <option value="{{ $mar->id }}">{{ $mar->client_title }}</option>
+                        @endforeach
 
-                </select>
-            </div>
+                    </select>
+                </div>
 
-            <div class="mb-2 mb-sm-0 col-12 col-md-3">
-                <label class="mr-sm-2">Mandataire</label>
-                <select class="form-control" data-column="15">
-                    <option value="">Filtrer par mandataire</option>
+                <div class="mb-2 mb-sm-0 col-12 col-md-3">
+                    <label class="mr-sm-2">Mandataire</label>
+                    <select class="form-control" data-column="15">
+                        <option value="">Filtrer par mandataire</option>
 
-                    @foreach ($financiers as $financier)
-                        <option value="{{ $financier->id }}">{{ $financier->client_title }}</option>
-                    @endforeach
+                        @foreach ($financiers as $financier)
+                            <option value="{{ $financier->id }}">{{ $financier->client_title }}</option>
+                        @endforeach
 
-                </select>
-            </div>
+                    </select>
+                </div>
 
-           
+
                 <div class="mb-2 mb-sm-0 col-12 col-md-3">
                     <label class="mr-sm-2">Installateur</label>
                     <select class="form-control" data-column="17">
@@ -143,11 +143,12 @@
                         <td><b><a href="{{ route('dossiers.show', $dossier->folder) }}">{{ $dossier->beneficiaire->nom }}
                                     {{ $dossier->beneficiaire->prenom }}</a></b><br />
                             <a href="{{ route('dossiers.show', $dossier->folder) }}">
-                            <div style="color:white"  class="btn bg-primary bg-{{ couleur_menage($dossier->beneficiaire->menage_mpr) }}">
-                                {{ $dossier->beneficiaire->menage_mpr }}
-                                {{ couleur_menage($dossier->beneficiaire->menage_mpr) }}
-                            </div>
-                        </a>
+                                <div style="color:white"
+                                    class="btn bg-primary bg-{{ couleur_menage($dossier->beneficiaire->menage_mpr) }}">
+                                    {{ $dossier->beneficiaire->menage_mpr }}
+                                    {{ couleur_menage($dossier->beneficiaire->menage_mpr) }}
+                                </div>
+                            </a>
                         </td>
                         <td>
                             {{ $dossier->beneficiaire->adresse }}<br />
@@ -287,40 +288,39 @@
     <script>
         $(document).ready(function() {
             var table = $('#dossiersTable').DataTable({
-                @if (auth()->user()->client_id==0 && auth()->user()->type_id!=4 && auth()->user()->type_id!=3)
-                columnDefs: [{
-                        targets: [1, 4, 5, 6, 7, 9, 11, 13, 15,  19, 20],
-                        visible: false
-                    },
-                    {
-                        "targets": 18,
-                        "orderData": [20]
-                    },
-                    {
-                        "targets": 0,
-                        "orderData": [1]
-                    }
+                @if (auth()->user()->client_id == 0 && auth()->user()->type_id != 4 && auth()->user()->type_id != 3)
+                    columnDefs: [{
+                            targets: [1, 4, 5, 6, 7, 9, 11, 13, 15,17, 19, 20],
+                            visible: false
+                        },
+                        {
+                            "targets": 18,
+                            "orderData": [20]
+                        },
+                        {
+                            "targets": 0,
+                            "orderData": [1]
+                        }
 
-                ],
-
+                    ],
                 @else
-                columnDefs: [{
-                    targets: [1, 4, 5, 6, 7, 9, 11, 13, 15,  19, 20],
-                    visible: false
-                    },
-                    {
-                        "targets": 18,
-                        "orderData": [20]
-                    },
-                    {
-                        "targets": 0,
-                        "orderData": [1]
-                    }
+                    columnDefs: [{
+                            targets: [1, 4, 5, 6, 7, 9, 11, 13, 15,17, 19, 20],
+                            visible: false
+                        },
+                        {
+                            "targets": 18,
+                            "orderData": [20]
+                        },
+                        {
+                            "targets": 0,
+                            "orderData": [1]
+                        }
 
 
-                ],
+                    ],
                 @endif
-              
+
                 dom: '<"top"l><"bottom">',
                 language: {
                     url: '//cdn.datatables.net/plug-ins/2.0.8/i18n/fr-FR.json',
@@ -364,12 +364,12 @@
                                 $.fn.dataTable.ext.search.pop();
                             } else {
                                 var column = columns[0];
-                                console.log(column)
-                                console.log(this.value)
-                                var searchValue = '^' + $.fn.dataTable.util.escapeRegex(this.value) + '$';
 
-// Use regex: true and smart: false to perform exact match search
-table.column(column).search(searchValue, true, false).draw();
+                                var searchValue = '^' + $.fn.dataTable.util.escapeRegex(this.value) +
+                                    '$';
+
+                                // Use regex: true and smart: false to perform exact match search
+                                table.column(column).search(searchValue, true, false).draw();
                             }
                         });
                 }
