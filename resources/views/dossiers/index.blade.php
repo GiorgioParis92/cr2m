@@ -289,7 +289,7 @@
             var table = $('#dossiersTable').DataTable({
                 @if (auth()->user()->client_id==0 && auth()->user()->type_id!=4 && auth()->user()->type_id!=3)
                 columnDefs: [{
-                        targets: [1, 4, 5, 6, 7, 9, 11, 13, 15, 17, 19, 20],
+                        targets: [1, 4, 5, 6, 7, 9, 11, 13, 15,  19, 20],
                         visible: false
                     },
                     {
@@ -302,10 +302,10 @@
                     }
 
                 ],
-                
+
                 @else
                 columnDefs: [{
-                    targets: [1, 4, 5, 6, 7, 9, 11, 13, 15, 17, 19, 20],
+                    targets: [1, 4, 5, 6, 7, 9, 11, 13, 15,  19, 20],
                     visible: false
                     },
                     {
