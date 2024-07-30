@@ -64,7 +64,6 @@ Route::get('/chat', function () {
 })->middleware('auth');
 
 
-
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('logout', [LoginController::class, 'logout']);
 
