@@ -364,6 +364,7 @@
                                 $.fn.dataTable.ext.search.pop();
                             } else {
                                 var column = columns[0];
+                                console.log(column)
                                 table.column(column).search(this.value).draw();
                             }
                         });
