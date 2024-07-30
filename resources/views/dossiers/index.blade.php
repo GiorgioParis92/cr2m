@@ -366,7 +366,10 @@
                                 var column = columns[0];
                                 console.log(column)
                                 console.log(this.value)
-                                table.column(column).search(this.value).draw();
+                                var searchValue = '^' + $.fn.dataTable.util.escapeRegex(this.value) + '$';
+
+// Use regex: true and smart: false to perform exact match search
+table.column(column).search(searchValue, true, false).draw();
                             }
                         });
                 }
