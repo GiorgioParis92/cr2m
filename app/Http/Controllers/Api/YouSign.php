@@ -28,29 +28,35 @@ class YouSign extends Controller
 
     $url = 'http://192.168.100.40:5010/process_request?service=yousign';
 
+    $dossier = Dossier::where('folder', $request->dossier_id);
+    $dossier = $dossier->with('beneficiaire', 'fiche', 'etape', 'status','get_rdv')->first();
 
-    $data = json_encode([
-      'request_type' => 'create_document',
-      'request_data' => [
-        'signature_name' => 'Attestation de visite',
-        'delivery_mode' => 'email',
-        'signature_level' => 'electronic_signature',
-        'fields' => json_decode(json_encode($request->fields), true),
-        'signer_info' => [
-          'first_name' => 'Georges',
-          'last_name' => 'KALFON',
-          'email' => 'genius.market.fr@gmail.com',
-          'phone_number' => '+33651980838'
+    dd($dossier);
+
+    if($dossier) {
+      $data = json_encode([
+        'request_type' => 'create_document',
+        'request_data' => [
+          'signature_name' => 'Attestation de visite',
+          'delivery_mode' => 'email',
+          'signature_level' => 'electronic_signature',
+          'fields' => json_decode(json_encode($request->fields), true),
+          'signer_info' => [
+            'first_name' => 'Georges',
+            'last_name' => 'KALFON',
+            'email' => 'genius.market.fr@gmail.com',
+            'phone_number' => '+33651980838'
+          ]
         ]
-      ]
-    ]);
+      ]);
+  
+  
+  
+      $path = 'storage/dossiers/'.$request->dossier_id.'/'.$request->template.'.pdf';
+  
+      $fullPath = public_path($path);
+    }
 
-
-    $dossier = Dossier::where('folder', $request->dossier_id)->first();
-
-    $path = 'storage/dossiers/'.$request->dossier_id.'/'.$request->template.'.pdf';
-
-    $fullPath = public_path($path);
     // Check if the file exists
 
 
