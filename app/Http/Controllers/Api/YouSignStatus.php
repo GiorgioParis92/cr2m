@@ -247,7 +247,11 @@ class YouSignStatus extends Controller
 
               $url = $responseData->result->data->url_info->url;
               $token = $responseData->result->data->url_info->token; // Replace YOUR_BEARER_TOKEN with your actual token
-          
+
+              $path = 'storage/dossiers/'.$request->dossier_id.'/'.$request->template.'_signee.pdf';
+
+              $outputFile = public_path($path);
+
               $ch = curl_init();
           
               // Set cURL options
@@ -265,7 +269,24 @@ class YouSignStatus extends Controller
               if (curl_errno($ch)) {
                   echo 'cURL error: ' . curl_error($ch);
               } else {
-                  // Output the response
+                file_put_contents($outputFile, $response);
+
+                $update = DB::table('forms_data')->updateOrInsert(
+                  [
+                    'dossier_id' => '' . $dossier->id . '',
+                    'form_id' => '' . $request->form_id . '',
+                    'meta_key' => 'signature_status'
+                  ],
+                  [
+                    'meta_value' => 'finish',
+                    'created_at' => now(),
+                    'updated_at' => now()
+                  ]
+                );
+
+
+    
+
                   dd($response);
               }
           
