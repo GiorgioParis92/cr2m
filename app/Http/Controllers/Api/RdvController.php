@@ -60,6 +60,11 @@ class RdvController extends \App\Http\Controllers\Controller
         if (isset($request->rdv_id)) {
             $rdvs = $rdvs->where('rdv.id', $request->rdv_id);
         }
+
+        if (isset($request->start_date) && isset($request->end_date)) {
+            $rdvs = $rdvs->whereDate('rdv.date_rdv', '>=', $request->start_date)
+            ->whereDate('rdv.date_rdv', '<=', $request->end_date);}
+
         $rdvs = $rdvs->get();
 
         
