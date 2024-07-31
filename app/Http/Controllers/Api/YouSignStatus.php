@@ -287,7 +287,7 @@ class YouSignStatus extends Controller
 
     
 
-                  dd($response);
+                 
               }
           
               // Close the cURL session
@@ -297,7 +297,7 @@ class YouSignStatus extends Controller
 
 
 
-              dd($responseData);
+        
               return response()->json('OK', 200);
 
 

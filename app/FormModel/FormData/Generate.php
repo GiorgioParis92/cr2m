@@ -22,6 +22,14 @@ class Generate extends AbstractFormData
         } else {
             $generation = null;
         }
+
+        if (isset($optionsArray['signable']) && $optionsArray['signable'] == 'true' && auth()->user()->id==1) {
+            $check_signature=DB::table('forms_data')->where('form_id',$this->form_id)->where('dossier_id',$this->dossier_id)->where('meta_key','signature_request_id')->first();
+            $check_status=DB::table('forms_data')->where('form_id',$this->form_id)->where('dossier_id',$this->dossier_id)->where('meta_key','signature_status')->first();
+            $check_document=DB::table('forms_data')->where('form_id',$this->form_id)->where('dossier_id',$this->dossier_id)->where('meta_key','document_id')->first();
+        }
+
+
         $data = '';
 
 
@@ -42,7 +50,7 @@ class Generate extends AbstractFormData
         $extension = explode('.', $this->value);
 
 
-
+        if(isset($check_status) && $check_status->meta_value!='finish') {
         $data .= '<button type="button" class="btn btn-secondary btn-view generatePdfButton"
        
   
@@ -51,7 +59,7 @@ class Generate extends AbstractFormData
         $data .= "data-form_id='" . $this->form_id . "'";
         $data .= 'data-template="' . $optionsArray['template'] . '">
         <i class="fas fa-file-pdf"></i> Générer';
-
+        }
 
 
 
@@ -97,11 +105,8 @@ class Generate extends AbstractFormData
 
             if (isset($optionsArray['signable']) && $optionsArray['signable'] == 'true' && auth()->user()->id==1) {
 
-                $check_signature=DB::table('forms_data')->where('form_id',$this->form_id)->where('dossier_id',$this->dossier_id)->where('meta_key','signature_request_id')->first();
-                $check_status=DB::table('forms_data')->where('form_id',$this->form_id)->where('dossier_id',$this->dossier_id)->where('meta_key','signature_status')->first();
-                $check_document=DB::table('forms_data')->where('form_id',$this->form_id)->where('dossier_id',$this->dossier_id)->where('meta_key','document_id')->first();
 
-
+                if(isset($check_status) && $check_status->meta_value!='finish') {
                 if(!$check_signature)
                 {
                     $data .= '<button type="button" class="btn btn-warning btn-view signable"
@@ -137,12 +142,21 @@ class Generate extends AbstractFormData
                         if($check_status->meta_value=='done') {
                             $data.='Le document a été signé';
                         }
-
+                        if($check_status->meta_value=='finish') {
+                            $data.='Le document a été signé';
+                        }
                     }
-
-                $data.='</div>';
                 }
-
+                $data.='</div>';
+                } else {
+                    $data.='<div id="message_' . $optionsArray['template'] . '">';
+                    $data.='Document signé';
+                    $data.='</div>';
+                }
+             
+    
+            
+      
             }
 
 
@@ -151,12 +165,13 @@ class Generate extends AbstractFormData
 
 
         $data .= '<td class="align-middle text-sm">';
+        if(isset($check_status) && $check_status->meta_value!='finish') {
         $data .= '<form action="' . route("upload_file", ["form_id" => $this->form_id, "folder" => "dossiers", "clientId" => $this->dossier->folder, "template" => $this->name]) . '" class="dropzone dropzone_button bg-primary" id="dropzone-' . $this->name . '">';
         $data .= csrf_field(); // This will generate the CSRF token input field
         $data .= '<div class="dz-message"><i class="fas fa-arrow-up"></i> Upload';
         $data .= '</div>';
         $data .= '</form>';
-
+        }
         $data .= '</td>';
         $data .= '</tr>';
 
