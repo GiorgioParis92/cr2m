@@ -1,9 +1,9 @@
 <div wire:poll>
 
-    <div class="row" >
+    <div class="row">
 
         <div class="col-12">
-            <div class="card form-register" wire:ignore >
+            <div class="card form-register" wire:ignore>
                 <div class="card-body pb-0 clearfix">
                     <div class="d-lg-flex">
                         <div>
@@ -31,18 +31,22 @@
                         <div class="ms-auto my-auto mt-lg-0 mt-4">
                             <div class="ms-auto my-auto">
                                 <div class="btn btn-primary">{{ $dossier['fiche']['fiche_name'] }}</div>
-                                @if(auth()->user()->client_id==0)
-                                <a href="{{route('dossiers.delete', ['id' => $dossier->id])}}" class="btn btn-danger">Supprimer le dossier</a>
-                                <form class="form-control" method="get">
-                                    <label>Installateur</label>
-                                    <select wire:ignore    class="form-control"  name="installateur" onchange="this.form.submit()">
-                                        <option value="">Choisir un installateur</option>
-                                        @foreach($installateurs as $installateur)
-                                        <option @if($dossier['installateur']==$installateur->id) selected @endif value="{{$installateur->id}}">{{$installateur->client_title}}</option>
-                                        @endforeach
-                                    </select>
-                                </form>
-                                
+                                @if (auth()->user()->client_id == 0)
+                                    <a href="{{ route('dossiers.delete', ['id' => $dossier->id]) }}"
+                                        class="btn btn-danger">Supprimer le dossier</a>
+                                    <form class="form-control" method="get">
+                                        <label>Installateur</label>
+                                        <select wire:ignore class="form-control" name="installateur"
+                                            onchange="this.form.submit()">
+                                            <option value="">Choisir un installateur</option>
+                                            @foreach ($installateurs as $installateur)
+                                                <option @if ($dossier['installateur'] == $installateur->id) selected @endif
+                                                    value="{{ $installateur->id }}">{{ $installateur->client_title }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </form>
+
                                 @endif
                             </div>
                         </div>
@@ -274,7 +278,7 @@
     document.addEventListener('DOMContentLoaded', function() {
 
         console.log('DOM fully loaded and parsed');
-      
+
 
 
         Livewire.on('loadCalendar', function() {
@@ -456,25 +460,26 @@
         $('.isTab').click();
     });
 
-    document.addEventListener('livewire:update', function () {
+    document.addEventListener('livewire:update', function() {
         initializeDeleteButtons();
     });
+
     function initializeDeleteButtons() {
-        $('.delete_photo').off('click').on('click', function () {
+        $('.delete_photo').off('click').on('click', function() {
             var link = $(this).data('val');
             $.ajax({
                 url: '/delete_file',
                 method: 'POST',
                 headers: {
-                    'X-CSRF-TOKEN': '{{csrf_token()}}'
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
                 },
                 data: {
                     link: link,
                 },
-                success: function (response) {
+                success: function(response) {
                     console.log('Successfully deleted:', response);
                 },
-                error: function (xhr) {
+                error: function(xhr) {
                     let errorMessage = 'An error occurred';
                     if (xhr.responseJSON && xhr.responseJSON.errors) {
                         errorMessage = Object.values(xhr.responseJSON.errors).join(', ');
@@ -485,7 +490,7 @@
         });
     }
 
-    $(document).ready(function () {
+    $(document).ready(function() {
         initializeDeleteButtons();
     });
     document.addEventListener('DOMContentLoaded', function() {
@@ -495,32 +500,33 @@
             var configs = data.forms_configs;
             initializeDropzones(configs);
             $('.delete_photo').click(function() {
-            alert('stop')
-            console.log($('meta[name="_token"]').attr('content'))
-            var link = $(this).data('val');
-            $.ajax({
-                url: '/delete_file',
-                method: 'POST',
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-                },
-                data: {
-                    link: link,
+                alert('stop')
+                console.log($('meta[name="_token"]').attr('content'))
+                var link = $(this).data('val');
+                $.ajax({
+                    url: '/delete_file',
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                    },
+                    data: {
+                        link: link,
 
-                },
-                success: function(response) {
+                    },
+                    success: function(response) {
 
 
-                },
-                error: function(xhr) {
-                    let errorMessage = 'An error occurred';
-                    if (xhr.responseJSON && xhr.responseJSON.errors) {
-                        errorMessage = Object.values(xhr.responseJSON.errors).join(', ');
+                    },
+                    error: function(xhr) {
+                        let errorMessage = 'An error occurred';
+                        if (xhr.responseJSON && xhr.responseJSON.errors) {
+                            errorMessage = Object.values(xhr.responseJSON.errors)
+                                .join(', ');
+                        }
+
                     }
-
-                }
-            });
-        })
+                });
+            })
         });
         // 
         Livewire.on('ok_photo', (data) => {
@@ -544,7 +550,7 @@
             var configs = data.forms_configs;
             initializeDropzones(configs);
 
-          
+
 
 
         });
@@ -617,7 +623,7 @@
 
     function initializePdfModals() {
 
-       
+
 
 
         $('.close').on('click', function() {
@@ -629,8 +635,7 @@
             $('.modal').modal('hide');
         });
         // Remove existing event listeners to prevent multiple bindings
-        $(document).off('click', '.signable').off('click', '.pdfModal').off('click', '.imageModal').off('click', '.fillPDF').off('click',
-            '.generatePdfButton').off('rdv_modal', '.generatePdfButton');
+        $(document).off('click', '.signable').off('click', '.pdfModal').off('click', '.imageModal').off('click','.fillPDF').off('click','.generatePdfButton').off('click','.check_signature').off('rdv_modal', '.generatePdfButton');
 
         // Attach new event listeners
         $(document).on('click', '.imageModal', function(event) {
@@ -784,37 +789,76 @@
             });
         });
 
+        $(document).on('click', '.check_signature', function(event) {
+            var template = $(this).data('template'); // Get the template from data attribute
+            var dossier_id = $(this).data('dossier_id'); // Get the dossier ID from data attribute
+            var form_id = $(this).data('form_id'); // Get the dossier ID from data attribute
+            var generation = $(this).data('generation'); // Get the dossier ID from data attribute
+            var signature_request_id = $(this).data('signature_request_id'); // Get the dossier ID from data attribute
+            var document_id = $(this).data('document_id'); // Get the dossier ID from data attribute
 
+
+            $.ajax({
+                url: '/api/yousign-status', // Adjust this URL to your actual API endpoint
+                type: 'POST',
+                data: {
+                    dossier_id: dossier_id,
+                    generation: generation,
+                    form_id: form_id,
+                    signature_request_id: signature_request_id,
+                    document_id: document_id,
+                    template: template
+                },
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr(
+                        'content') // Include CSRF token if using Laravel's CSRF protection
+                },
+                success: function(response) {
+                    console.log(response)
+
+                    if(response=='ongoing') {
+                        $('#message_'+template).html('Le document est en cours de signature');
+                    }
+
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error generating PDF:', error);
+                }
+            });
+
+        });
 
 
         $(document).on('click', '.signable', function(event) {
 
-var template = $(this).data('template'); // Get the template from data attribute
-var dossier_id = $(this).data('dossier_id'); // Get the dossier ID from data attribute
-var form_id = $(this).data('form_id'); // Get the dossier ID from data attribute
-var generation = $(this).data('generation'); // Get the dossier ID from data attribute
+            var template = $(this).data('template'); // Get the template from data attribute
+            var dossier_id = $(this).data('dossier_id'); // Get the dossier ID from data attribute
+            var form_id = $(this).data('form_id'); // Get the dossier ID from data attribute
+            var generation = $(this).data('generation'); // Get the dossier ID from data attribute
+            var fields = $(this).data('fields'); // Get the dossier ID from data attribute
 
-$.ajax({
-    url: '/api/yousign', // Adjust this URL to your actual API endpoint
-    type: 'POST',
-    data: {
-        dossier_id: dossier_id,
-        generation: generation,
-        form_id: form_id,
-        template: template
-    },
-    headers: {
-        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr(
-            'content') // Include CSRF token if using Laravel's CSRF protection
-    },
-    success: function(response) {
-      console.log(response)
-    },
-    error: function(xhr, status, error) {
-        console.error('Error generating PDF:', error);
-    }
-});
-});
+            $.ajax({
+                url: '/api/yousign', // Adjust this URL to your actual API endpoint
+                type: 'POST',
+                data: {
+                    dossier_id: dossier_id,
+                    generation: generation,
+                    form_id: form_id,
+                    fields: fields,
+                    template: template
+                },
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr(
+                        'content') // Include CSRF token if using Laravel's CSRF protection
+                },
+                success: function(response) {
+                    console.log(response)
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error generating PDF:', error);
+                }
+            });
+        });
 
     }
 </script>
