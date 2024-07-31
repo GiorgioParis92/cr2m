@@ -30,11 +30,11 @@ class YouSignStatus extends Controller
     $data = json_encode([
       'request_type' => 'get_status',
       'request_data' => [
-      "signature_request_id" => "de24e7be-cc3b-4c3b-b0f4-c0580e405db8"
+        "signature_request_id" => $request->signature_request_id
       ]
     ]);
 
-   
+
     $curl = curl_init();
 
     curl_setopt_array($curl, [
@@ -47,7 +47,7 @@ class YouSignStatus extends Controller
       ],
       CURLOPT_POSTFIELDS => [
         'data' => $data
-    
+
       ],
     ]);
 
@@ -59,7 +59,7 @@ class YouSignStatus extends Controller
 
     $uuid = $responseData['request_uuid'];
 
-   
+
 
     while (true) {
 
@@ -104,6 +104,7 @@ class YouSignStatus extends Controller
 
       // Close cURL session
       curl_close($ch);
+      $dossier = Dossier::where('folder', $request->dossier_id)->first();
 
       // Process response
       $responseData = json_decode($response);
@@ -116,7 +117,162 @@ class YouSignStatus extends Controller
           $responseData->status === 'error'
         )
       ) {
-        dd($responseData);
+        if ($responseData->result->data->document->status == 'ongoing') {
+
+          $update = DB::table('forms_data')->updateOrInsert(
+            [
+              'dossier_id' => '' . $dossier->id . '',
+              'form_id' => '' . $request->form_id . '',
+              'meta_key' => 'signature_status'
+            ],
+            [
+              'meta_value' => 'ongoing',
+              'created_at' => now(),
+              'updated_at' => now()
+            ]
+          );
+
+          return response()->json('ongoing', 200);
+        }
+
+
+
+        if ($responseData->result->data->document->status == 'done') {
+
+          $update = DB::table('forms_data')->updateOrInsert(
+            [
+              'dossier_id' => '' . $dossier->id . '',
+              'form_id' => '' . $request->form_id . '',
+              'meta_key' => 'signature_status'
+            ],
+            [
+              'meta_value' => 'done',
+              'created_at' => now(),
+              'updated_at' => now()
+            ]
+          );
+
+
+          $url = 'http://192.168.100.40:5010/process_request?service=yousign';
+          $data = json_encode([
+            'request_type' => 'download_document',
+            'request_data' => [
+              "signature_request_id" => $request->signature_request_id,
+              "document_id" => $request->document_id
+            ]
+
+
+          ]);
+
+
+          $curl = curl_init();
+
+          curl_setopt_array($curl, [
+            CURLOPT_URL => $url,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_POST => true,
+            CURLOPT_HTTPHEADER => [
+              'accept: application/json',
+              'Content-Type: multipart/form-data'
+            ],
+            CURLOPT_POSTFIELDS => [
+              'data' => $data
+
+            ],
+          ]);
+
+          $response = curl_exec($curl);
+
+
+          // Extracting UUID
+          $responseData = json_decode($response, true);
+          $uuid = $responseData['request_uuid'];
+
+          while (true) {
+
+
+            $url = 'http://192.168.100.40:5010/get_packet_result';
+            $params = array(
+              'uuid_packet' => $uuid,
+              'service' => 'yousign'
+            );
+
+            // Initialize cURL
+            $ch = curl_init();
+
+            // Set URL
+            curl_setopt($ch, CURLOPT_URL, $url . '?' . http_build_query($params));
+
+            // Set method to POST
+            curl_setopt($ch, CURLOPT_POST, true);
+
+            // Set headers
+            curl_setopt(
+              $ch,
+              CURLOPT_HTTPHEADER,
+              array(
+                'accept: application/json'
+              )
+            );
+
+            // Set data
+            curl_setopt($ch, CURLOPT_POSTFIELDS, '');
+
+            // Set return transfer to true
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+            // Execute cURL request
+            $response = curl_exec($ch);
+
+            // Check for errors
+            if ($response === false) {
+              echo 'cURL error: ' . curl_error($ch);
+            }
+
+            // Close cURL session
+            curl_close($ch);
+
+            // Process response
+            $responseData = json_decode($response);
+
+
+            if (
+              isset($responseData->status) && (
+                $responseData->status === 'done' ||
+                $responseData->status === 'uuid not found' ||
+                $responseData->status === 'error'
+              )
+            ) {
+
+              $client = new \GuzzleHttp\Client();
+              if($responseData->result->data->success==true) {
+                $response = $client->request('GET', $responseData->result->data->url_info->url, [
+                  'headers' => [
+                    'accept' => 'application/zip, application/pdf',
+                    'Authorization' => $responseData->result->data->url_info->token, // Replace YOUR_BEARER_TOKEN with your actual token
+
+                  ],
+                ]);
+  
+                dd($response->getBody());
+              }
+
+
+
+              dd($responseData);
+              return response()->json('OK', 200);
+
+
+
+            }
+
+
+
+
+          }
+
+          return response()->json('done', 200);
+        }
 
 
         $update = DB::table('forms_data')->updateOrInsert(

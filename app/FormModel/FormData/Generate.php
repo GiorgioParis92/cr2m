@@ -25,8 +25,8 @@ class Generate extends AbstractFormData
         $data = '';
 
 
-
-
+  
+       
 
         $data = '<tr>';
 
@@ -95,9 +95,11 @@ class Generate extends AbstractFormData
 
             $data .= '</div>';
 
-            if (isset($optionsArray['signable']) && $optionsArray['signable'] == 'true') {
+            if (isset($optionsArray['signable']) && $optionsArray['signable'] == 'true' && auth()->user()->id==1) {
 
                 $check_signature=DB::table('forms_data')->where('form_id',$this->form_id)->where('dossier_id',$this->dossier_id)->where('meta_key','signature_request_id')->first();
+                $check_status=DB::table('forms_data')->where('form_id',$this->form_id)->where('dossier_id',$this->dossier_id)->where('meta_key','signature_status')->first();
+                $check_document=DB::table('forms_data')->where('form_id',$this->form_id)->where('dossier_id',$this->dossier_id)->where('meta_key','document_id')->first();
 
 
                 if(!$check_signature)
@@ -107,6 +109,7 @@ class Generate extends AbstractFormData
                        data-dossier_id="' . $this->dossier->folder . '"';
                     $data .= "data-generation='" . $generation . "'";
                     $data .= "data-form_id='" . $this->form_id . "'";
+                    $data .= "data-fields='" . json_encode($optionsArray['fields']) . "'";
                     $data .= 'data-template="' . $optionsArray['template'] . '"
                     data-name="' . $this->config->title . '">
                     <i class="fas fa-eye"></i> Signer le document
@@ -117,10 +120,27 @@ class Generate extends AbstractFormData
                        data-dossier_id="' . $this->dossier->folder . '"';
                     $data .= "data-generation='" . $generation . "'";
                     $data .= "data-form_id='" . $this->form_id . "'";
+                    $data .= "data-signature_request_id='" . $check_signature->meta_value . "'";
+                    $data .= "data-document_id='" . $check_document->meta_value . "'";
+
                     $data .= 'data-template="' . $optionsArray['template'] . '"
                     data-name="' . $this->config->title . '">
-                    <i class="fas fa-eye"></i> Télécharger le document signé '.$check_signature->meta_value.'
+                    <i class="fas fa-eye"></i> Télécharger le document signé
                 </button> '; 
+                $data.='<div id="message_' . $optionsArray['template'] . '">';
+                
+                    if($check_status) {
+                        if($check_status->meta_value=='ongoing') {
+                            $data.='Le document est en cours de signature';
+                        }
+
+                        if($check_status->meta_value=='done') {
+                            $data.='Le document a été signé';
+                        }
+
+                    }
+
+                $data.='</div>';
                 }
 
             }

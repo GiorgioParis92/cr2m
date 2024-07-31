@@ -27,21 +27,15 @@ class YouSign extends Controller
   {
 
     $url = 'http://192.168.100.40:5010/process_request?service=yousign';
+
+
     $data = json_encode([
       'request_type' => 'create_document',
       'request_data' => [
         'signature_name' => 'Attestation de visite',
         'delivery_mode' => 'email',
         'signature_level' => 'electronic_signature',
-        'fields' => [
-          [
-            'type' => 'signature',
-            'page' => 2,
-            'width' => 200,
-            'x' => 72,
-            'y' => 570
-          ]
-        ],
+        'fields' => json_decode(json_encode($request->fields), true),
         'signer_info' => [
           'first_name' => 'Georges',
           'last_name' => 'KALFON',
@@ -86,7 +80,6 @@ class YouSign extends Controller
 
     $uuid = $responseData['request_uuid'];
 
-   
 
     while (true) {
 
@@ -143,22 +136,31 @@ class YouSign extends Controller
           $responseData->status === 'error'
         )
       ) {
-        dd($responseData);
-
 
         $update = DB::table('forms_data')->updateOrInsert(
           [
             'dossier_id' => '' . $dossier->id . '',
             'form_id' => '' . $request->form_id . '',
-            'meta_key' => '' . $request->template . ''
+            'meta_key' => 'signature_request_id'
           ],
           [
-            'meta_value' => '' . $directPath . '',
+            'meta_value' => '' . $responseData->result->data->result->signature_request_id . '',
             'created_at' => now(),
             'updated_at' => now()
           ]
         );
-
+        $update = DB::table('forms_data')->updateOrInsert(
+          [
+            'dossier_id' => '' . $dossier->id . '',
+            'form_id' => '' . $request->form_id . '',
+            'meta_key' => 'document_id'
+          ],
+          [
+            'meta_value' => '' . $responseData->result->data->result->document_id . '',
+            'created_at' => now(),
+            'updated_at' => now()
+          ]
+        );
 
 
 
