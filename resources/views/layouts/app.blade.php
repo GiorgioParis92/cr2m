@@ -184,7 +184,10 @@
                 <div class="modal-footer">
                     <div id="save_rdv" class="btn btn-primary">Enregistrer</div>
                     <button type="button" class="btn btn-secondary close_button" data-dismiss="modal">Fermer</button>
+                    
+                    @if(auth()->user()->id==1)    
                     <button type="button" class="btn btn-info" data-toggle="modal" id="open_auto_planification" data-target="#auto_planification_modal">Planification Auto</button>
+                    @endif
                 </div>
             </div>
         </div>
