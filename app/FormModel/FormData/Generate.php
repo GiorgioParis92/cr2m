@@ -50,7 +50,7 @@ class Generate extends AbstractFormData
         $extension = explode('.', $this->value);
 
 
-        if(isset($check_status) && $check_status->meta_value!='finish') {
+        if((isset($check_status) && $check_status->meta_value!='finish') || !isset($check_status)) {
         $data .= '<button type="button" class="btn btn-secondary btn-view generatePdfButton"
        
   
