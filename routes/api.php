@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\RdvController;
 use App\Http\Controllers\Api\OcrAnalyze;
 use App\Http\Controllers\Api\YouSign;
 use App\Http\Controllers\Api\YouSignStatus;
+use App\Http\Controllers\Api\VRP;
 
 
 /*
@@ -44,6 +45,9 @@ Route::post('/yousign-status', [YouSignStatus::class, 'index']);
 Route::get('/yousign-status', [YouSignStatus::class, 'index']);
 
 Route::middleware('auth:api')->group(function () {
+
+Route::get('/vrp', [VRP::class, 'index']);
+Route::post('/vrp', [VRP::class, 'index']);
 
     // Add other RdvController routes here as needed
 });
