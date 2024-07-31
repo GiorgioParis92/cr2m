@@ -248,7 +248,7 @@ class YouSignStatus extends Controller
               $url = $responseData->result->data->url_info->url;
               $token = $responseData->result->data->url_info->token; // Replace YOUR_BEARER_TOKEN with your actual token
 
-              $path = 'storage/dossiers/'.$request->dossier_id.'/'.$request->template.'_signee.pdf';
+              $path = 'storage/dossiers/'.$request->dossier_id.'/'.$request->template.'.pdf';
 
               $outputFile = public_path($path);
 
