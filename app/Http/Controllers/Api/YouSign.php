@@ -42,8 +42,8 @@ class YouSign extends Controller
           'signature_level' => 'electronic_signature',
           'fields' => json_decode(json_encode($request->fields), true),
           'signer_info' => [
-            'first_name' => 'Georges',
-            'last_name' => 'KALFON',
+            'first_name' => $dossier->beneficiaire->prenom ?? '',
+            'last_name' => $dossier->beneficiaire->nom ?? '',
             'email' => 'genius.market.fr@gmail.com',
             'phone_number' => '+33651980838'
           ]
