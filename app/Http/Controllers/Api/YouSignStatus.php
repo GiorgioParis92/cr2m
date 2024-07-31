@@ -244,18 +244,35 @@ class YouSignStatus extends Controller
               )
             ) {
 
-              $client = new \GuzzleHttp\Client();
-              if($responseData->result->data->success==true) {
-                $response = $client->request('GET', $responseData->result->data->url_info->url, [
-                  'headers' => [
-                    'accept' => 'application/zip, application/pdf',
-                    'Authorization' => $responseData->result->data->url_info->token, // Replace YOUR_BEARER_TOKEN with your actual token
 
-                  ],
-                ]);
-  
-                dd($response->getBody());
+              $url = $responseData->result->data->url_info->url;
+              $token = $responseData->result->data->url_info->token; // Replace YOUR_BEARER_TOKEN with your actual token
+          
+              $ch = curl_init();
+          
+              // Set cURL options
+              curl_setopt($ch, CURLOPT_URL, $url);
+              curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+              curl_setopt($ch, CURLOPT_HTTPHEADER, [
+                  'Accept: application/zip, application/pdf',
+                  'Authorization: Bearer ' . $token,
+              ]);
+          
+              // Execute the request and fetch the response
+              $response = curl_exec($ch);
+          
+              // Check for cURL errors
+              if (curl_errno($ch)) {
+                  echo 'cURL error: ' . curl_error($ch);
+              } else {
+                  // Output the response
+                  dd($response);
               }
+          
+              // Close the cURL session
+              curl_close($ch);
+
+
 
 
 
