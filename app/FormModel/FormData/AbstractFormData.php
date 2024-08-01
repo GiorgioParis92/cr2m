@@ -4,6 +4,7 @@ namespace App\FormModel\FormData;
 
 use Illuminate\Support\Facades\DB;
 use App\Models\Dossier;
+use Illuminate\Support\Facades\Schema;
 
 class AbstractFormData
 {
@@ -87,6 +88,45 @@ class AbstractFormData
             ]
         );
 
+        if($this->form_id==3) {
+            $beneficiaire = DB::table('dossiers')->where('id', $this->dossier_id)->first();
+    
+            if ($beneficiaire) {
+                $columnExists = DB::getSchemaBuilder()->hasColumn('beneficiaires', $this->name);
+                
+                if ($columnExists) {
+                    $columnType = $this->getColumnType('beneficiaires', $this->name);
+
+                    if ($columnType == 'int' && $value === '') {
+                        $value = 0;
+                    }
+    
+                    DB::table('beneficiaires')->where('id', $beneficiaire->beneficiaire_id)->update([
+                        $this->name => $value,
+                        'updated_at' => now()
+                    ]);
+                }
+
+
+                $columnExists = DB::getSchemaBuilder()->hasColumn('dossiers', $this->name);
+             
+                if ($columnExists) {
+                    $columnType = $this->getColumnType('dossiers', $this->name);
+                  
+                    if ($columnType == 'int' && $value === '') {
+                        $value = 0;
+                    }
+    
+                    DB::table('dossiers')->where('id', $this->dossier_id)->update([
+                        $this->name => $value,
+                        'updated_at' => now()
+                    ]);
+                }
+
+            }
+        }
+
+
         return $this->check_value();
     }
 
@@ -123,4 +163,19 @@ class AbstractFormData
 
         return $otherValue->meta_value ?? '';
     }
+
+
+    protected function getColumnType($table, $column)
+{
+    $database = env('DB_DATABASE');
+    $columnInfo = DB::select("
+        SELECT DATA_TYPE 
+        FROM INFORMATION_SCHEMA.COLUMNS 
+        WHERE TABLE_SCHEMA = ? 
+        AND TABLE_NAME = ? 
+        AND COLUMN_NAME = ?
+    ", [$database, $table, $column]);
+
+    return $columnInfo[0]->DATA_TYPE ?? null;
+}
 }
