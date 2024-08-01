@@ -107,7 +107,6 @@ class AbstractFormData
                     ]);
                 }
 
-
                 $columnExists = DB::getSchemaBuilder()->hasColumn('dossiers', $this->name);
              
                 if ($columnExists) {
