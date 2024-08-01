@@ -26,7 +26,8 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-
+Route::get('/vrp', [VRP::class, 'index']);
+Route::post('/vrp', [VRP::class, 'index']);
 Route::apiResource('beneficiaires', BeneficiaireController::class);
 
 Route::get('/generate-pdf', [PDFController::class, 'generatePDF']);
@@ -44,10 +45,11 @@ Route::post('/yousign', [YouSign::class, 'index']);
 Route::post('/yousign-status', [YouSignStatus::class, 'index']);
 Route::get('/yousign-status', [YouSignStatus::class, 'index']);
 
+
+
 Route::middleware('auth:api')->group(function () {
 
-Route::get('/vrp', [VRP::class, 'index']);
-Route::post('/vrp', [VRP::class, 'index']);
+
 
     // Add other RdvController routes here as needed
 });
