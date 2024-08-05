@@ -49,16 +49,15 @@ class DossiersController extends \App\Http\Controllers\Controller
 
 
 
-        if ($request->status || $request->start || $request->end) {
+        if ($request->status ) {
             if ($request->status == -1) {
                 // Get all dossiers that don't have any rdv
                 $dossiers = $dossiers->whereDoesntHave('get_rdv');
             } else {
                 // Get dossiers where rdv status matches the request status
-                $dossiers = $dossiers->whereHas('get_rdv', function ($query) use ($request,$start,$end) {
+                $dossiers = $dossiers->whereHas('get_rdv', function ($query) use ($request) {
                     $query->where('status', $request->status)
-                    ->where('date_rdv','>=',$start)
-                    ->where('date_rdv','<=',$end)
+                   
                     ;
                 });
                 
@@ -66,7 +65,24 @@ class DossiersController extends \App\Http\Controllers\Controller
 
         }
 
+        if ($request->start ) {
+            $start = date('Y-m-d 00:00:00',strtotime(str_replace('/','-',$request->start)));
+                // Get dossiers where rdv status matches the request status
+                $dossiers = $dossiers->whereHas('get_rdv', function ($query) use ($request,$start) {
+                    $query->where('date_rdv','>=',$start)
+                    ;
+                });
 
+        }
+        if ($request->end ) {
+            $end = date('Y-m-d 00:00:00',strtotime(str_replace('/','-',$request->end)));
+                // Get dossiers where rdv status matches the request status
+                $dossiers = $dossiers->whereHas('get_rdv', function ($query) use ($request,$end) {
+                    $query->where('date_rdv','>=',$end)
+                    ;
+                });
+
+        }
         if ($request->dossier_status) {
    
                 // Get dossiers where rdv status matches the request status
