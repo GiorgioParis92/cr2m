@@ -75,10 +75,10 @@ class DossiersController extends \App\Http\Controllers\Controller
 
         }
         if ($request->end ) {
-            $end = date('Y-m-d 00:00:00',strtotime(str_replace('/','-',$request->end)));
+            $end = date('Y-m-d 23:59:59',strtotime(str_replace('/','-',$request->end)));
                 // Get dossiers where rdv status matches the request status
                 $dossiers = $dossiers->whereHas('get_rdv', function ($query) use ($request,$end) {
-                    $query->where('date_rdv','>=',$end)
+                    $query->where('date_rdv','<=',$end)
                     ;
                 });
 
