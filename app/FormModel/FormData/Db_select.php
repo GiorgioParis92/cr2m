@@ -47,7 +47,7 @@ class Db_select extends AbstractFormData
         //     $data .= ' selected ';
         // }
         $data.='>Choisir</option>';
-
+   
         foreach ($request as $result) {
             $fieldValue = $optionsArray['value'];
             $fieldLabel = $optionsArray['label'];

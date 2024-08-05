@@ -88,7 +88,7 @@ class AbstractFormData
             ]
         );
 
-        if($this->form_id==3) {
+        if($this->form_id==3 || $this->form_id==10) {
             $beneficiaire = DB::table('dossiers')->where('id', $this->dossier_id)->first();
     
             if ($beneficiaire) {

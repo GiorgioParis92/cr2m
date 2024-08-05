@@ -361,7 +361,7 @@ class DossierLivewire extends Component
 
 
         }
-
+       
         $this->get_score_per_etape();
     }
 
