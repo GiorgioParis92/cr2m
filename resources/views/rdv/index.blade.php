@@ -1,274 +1,235 @@
 @extends('layouts.app')
 
 @section('content')
-    <div>
-        <div class="">
-            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
-                <div class="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
-                    <div class="max-w-xl">
-                        @include('calendar')
-                    </div>
-                </div>
-                <div class="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
-                    <div class="max-w-xl">
-                        <div id="map" style="height: 600px;"></div>
-                    </div>
-                </div>
+    <div class="container">
+        <h4>Liste des RDV (<span id="count"></span> résultats)</h4>
+
+        <div class="row form-group">
+            <div class="mb-2 mb-sm-0 col-12 col-md-3">
+                <label class="mr-sm-2">Client</label>
+                <input type="text" class="form-control filter" name="search" id="search"
+                    placeholder="Filtrer par nom de client, adresse, ou téléphone (3 caracteres minimum)">
             </div>
+            <div class="mb-2 mb-sm-0 col-12 col-md-3">
+                <label class="mr-sm-2">Statut du rdv</label>
+                <select class="form-control select-filter" name="status" id="status">
+                    <option value="">Filtrer</option>
+                    <option value="-1">Dossiers sans RDV</option>
+                    @foreach ($status as $statut)
+                        <option value="{{ $statut->id }}">{{ $statut->rdv_desc }}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="mb-2 mb-sm-0 col-12 col-md-3">
+                <label class="mr-sm-2">Installateur</label>
+                <select class="form-control select-filter" name="installateur" id="installateur">
+                    <option value="">Filtrer par installateur</option>
+                    <option value="-1">Dossiers sans installateur</option>
+
+                    @foreach ($installateurs as $installateur)
+                        <option value="{{ $installateur->id }}">{{ $installateur->client_title }}</option>
+                    @endforeach
+
+                </select>
+            </div>
+
+            <div class="mb-2 mb-sm-0 col-12 col-md-3">
+                <label class="mr-sm-2">Accompagnateur</label>
+                <select class="form-control select-filter" name="mar" id="mar">
+                    <option value="">Filtrer par Accompagnateur</option>
+                    <option value="-1">Dossiers sans Accompagnateur</option>
+
+                    @foreach ($mars as $mar)
+                        <option value="{{ $mar->id }}">{{ $mar->client_title }}</option>
+                    @endforeach
+
+                </select>
+            </div>
+
+            <div class="mb-2 mb-sm-0 col-12 col-md-3">
+                <label class="mr-sm-2">Mandataire financier</label>
+                <select class="form-control select-filter" name="mandataire_financier" id="mandataire_financier">
+                    <option value="">Filtrer par mandataire</option>
+                    <option value="-1">Dossiers sans mandataire</option>
+
+                    @foreach ($financiers as $mandataire_financier)
+                        <option value="{{ $mandataire_financier->id }}">{{ $mandataire_financier->client_title }}</option>
+                    @endforeach
+
+                </select>
+            </div>
+
         </div>
+
+        <table id="dossiersTable" class="table table-bordered responsive-table table-responsive">
+            <thead>
+                <tr>
+                    <th>Dossier</th>
+                    <th>RDV</th>
+                    <th>Installateur</th>
+                    <th>Accompagnateur</th>
+                    <th>Mandataire financier</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
     </div>
+
+    <div id="loader" style="display:none;">Loading...</div>
+
 @endsection
 
 @section('scripts')
     <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.css" rel="stylesheet">
-    <!-- jQuery -->
-    <!-- FullCalendar Core JS -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.js"></script>
-    <!-- FullCalendar Plugins JS -->
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/daygrid/main.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/timegrid/main.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/interaction/main.min.js"></script>
-    <!-- FullCalendar Locale -->
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/locales/fr.js"></script>
-    <!-- Google Maps JavaScript API -->
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCzcaFvxwi1XLyRHmPRnlKO4zcJXPOT5gM&libraries=marker&callback=initMap"></script>
+    <script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCzcaFvxwi1XLyRHmPRnlKO4zcJXPOT5gM&libraries=marker&callback=initMap">
+    </script>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
 
     <script>
-            function formatFrenchPhoneNumber(phoneNumber) {
-                // Remove any non-digit characters
-                let cleaned = phoneNumber.replace(/\D/g, '');
-                // Match and group digits
-                let match = cleaned.match(/(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/);
-                // Format the phone number
-                if (match) {
-                    return match[1] + ' ' + match[2] + ' ' + match[3] + ' ' + match[4] + ' ' + match[5];
-                }
-                return null;
-            }
-        var calendarEl = document.getElementById('calendar');
-        var token = $('meta[name="api-token"]').attr('content'); // Get token from meta tag
+ $(document).ready(function() {
+    var table = $('#dossiersTable').DataTable({
+        
+        dom: '<"top"><"bottom">',
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/2.0.8/i18n/fr-FR.json',
+                },
+                pageLength: -1,  // Set the default page length here
 
-// Define the FullCalendar instance
-var calendar = new FullCalendar.Calendar(calendarEl, {
-    initialView: 'timeGridWeek',
-    editable: true,
-    locale: 'fr',
-    headerToolbar: {
-        start: 'title',
-        center: '',
-        end: 'today prev,next timeGrid timeGridWeek dayGridMonth'
-    },
-    slotMinTime: "07:00:00",
-    slotMaxTime: "21:00:00",
-    slotDuration: '00:15:00',
-    eventColor: '#cb0c9f',
-    buttonText: {
-        prev: 'Précédent',
-        next: 'Suivant',
-        today: "Aujourd'hui",
-        month: 'Mois',
-        timeGrid: 'Journée',
-        week: 'Semaine',
-        day: 'Jour'
-    },
-    allDaySlot: false,
-    weekText: 'Sem.',
-    allDayText: 'Toute la journée',
-    moreLinkText: 'en plus',
-    noEventsText: 'Aucun événement à afficher',
-    events: [],
-    eventContent: function(arg) {
-        var eventDiv = document.createElement('div');
-        var content = getEventContent(arg.event.title, arg.event.extendedProps.description);
-        
-        // // Create Waze button with an image
-        // var wazeButton = document.createElement('a');
-        // var wazeImage = document.createElement('img');
-        // wazeImage.src = 'https://play-lh.googleusercontent.com/r7XL36PVNtnidqy6ikRiW1AHEIsjhePrZ8W5M4cNTQy5ViF3-lIDY47hpvxc84kJ7lw=w240-h480-rw'; // Replace with the path to your Waze image
-        // wazeImage.alt = '';
-        // wazeImage.style.width = '20px'; // Set the size of the image
-        // wazeImage.style.height = '20px';
-        
-        // wazeButton.appendChild(wazeImage);
-        // wazeButton.onclick = function(e) {
-        //     e.stopPropagation(); // Prevent the eventClick from being triggered
-        //     var location = arg.event.extendedProps.location; // Ensure your event data has this field
-        //     if (location) {
-        //         var wazeUrl = `https://waze.com/ul?ll=${location}&navigate=yes`;
-        //         window.open(wazeUrl, '_blank'); // Open the Waze URL in a new tab/window
-        //     } else {
-        //         alert("Location not available for this event.");
-        //     }
-        // };
-        
-        eventDiv.innerHTML = content;
-       // eventDiv.appendChild(wazeButton); // Append the Waze button to the event content
-        return {
-            domNodes: [eventDiv]
-        };
-    },
-    datesSet: function(info) {
-        fetchAndRenderEvents(info.start, info.end); // Fetch events for the visible date range
-    },
-    dateClick: function(info) {
-        handleDateClick(info); // Redirect on slot click
-    },
-    eventClick: function(info) {
-        handleEventClick(info.event); // Handle event click
+        columns: [
+            { title: "Bénéficiaire" },
+            { title: "RDV" },
+            { title: "Installateur" },
+            { title: "MAR" },
+            { title: "Mandataire Financier" }
+        ]
+    });
+
+    function fetchDossiers() {
+        var apiToken = '{{ $apiToken }}';
+        var data = {};
+        $('#loader').show();
+        $('#dossiersTable').hide()
+        $('.filter, .select-filter').each(function() {
+            data[$(this).attr('name')] = $(this).val();
+        });
+
+        console.log(data);
+        $.ajax({
+            url: 'api/dossiers', // Make sure to update the route as per your configuration
+            method: 'POST',
+            headers: {
+                'Authorization': 'Bearer ' + apiToken
+            },
+            data: data,
+            success: function(data) {
+                console.log(data);
+                populateTable(data);
+
+                // Redraw the DataTable
+                table.clear().rows.add(populateTable(data)).draw();
+                $('#loader').hide();
+                $('#dossiersTable').show()
+
+            },
+            error: function(error) {
+                console.log('Error:', error);
+                $('#loader').hide();
+                $('#dossiersTable').show()
+
+            }
+        });
     }
+
+    function populateTable(dossiers) {
+        var tableData = [];
+        var count=0;
+        $.each(dossiers, function(index, dossier) {
+            var row = [];
+
+            if (dossier.beneficiaire) {
+                var beneficiaireInfo = dossier.beneficiaire.nom + ' ' + dossier.beneficiaire.prenom + '<br/>' +
+                    (dossier.beneficiaire.numero_voie ?? '') + ' ' + dossier.beneficiaire.adresse + '<br/>' +
+                    dossier.beneficiaire.cp + ' ' + dossier.beneficiaire.ville + '<br/>' + dossier.beneficiaire.telephone;
+                row.push(beneficiaireInfo);
+            } else {
+                row.push('');
+            }
+
+            if (dossier.get_rdv) {
+                var rdvInfo = '';
+                dossier.get_rdv.forEach(rdv => {
+                    const date = new Date(rdv.date_rdv);
+
+                    const dateOptions = {
+                        day: 'numeric',
+                        month: 'long',
+                        year: 'numeric'
+                    };
+                    const timeOptions = {
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    };
+
+                    const formattedDate = date.toLocaleDateString('fr-FR', dateOptions);
+                    const formattedTime = date.toLocaleTimeString('fr-FR', timeOptions);
+                    const formattedDateTime = `${formattedDate} à ${formattedTime}`;
+
+                    rdvInfo += '<div class="show_rdv btn btn-' + (rdv.status ? rdv.status.rdv_style : '') + '">RDV MAR' + rdv.type_rdv + ' du ' +
+                        formattedDateTime + ' Statut : ' + (rdv.status ? rdv.status.rdv_desc : '') + '</div><br/>';
+                });
+                row.push(rdvInfo);
+            } else {
+                row.push('');
+            }
+
+            if (dossier.installateur) {
+                row.push(dossier.installateur.client_title);
+            } else {
+                row.push('');
+            }
+
+            if (dossier.mar) {
+                row.push(dossier.mar.client_title);
+            } else {
+                row.push('');
+            }
+
+            if (dossier.mandataire_financier>0) {
+                row.push(dossier.mandataire_financier.client_title);
+            } else {
+                row.push('');
+            }
+
+            tableData.push(row);
+            count=count+1;
+        });
+        console.log(count)
+        $('#count').html(count)
+        return tableData;
+    }
+
+    // Fetch dossiers on page load
+    fetchDossiers();
+
+    $('.select-filter').on('change', function() {
+        fetchDossiers();
+    });
+
+    $('.filter').on('keydown keyup blur change', function() {
+        fetchDossiers();
+    });
 });
 
-        calendar.render();
 
-        var map;
-        var markers = [];
 
-        function initMap() {
-            var mapOptions = {
-                center: { lat: 48.8566, lng: 2.3522 },
-                zoom: 5
-            };
-            var mapElement = document.getElementById('map');
-            
-            if (mapElement) {
-                var map = new google.maps.Map(mapElement, mapOptions);
-            } else {
-                console.error('Map element not found');
-            }
-        }
-
-        function fetchAndRenderEvents(start, end) {
-            console.log($('#form_config_user_id').val())
-            console.log(start)
-            console.log(end)
-            $.ajax({
-                url: '/api/rdvs',
-                type: 'GET',
-                headers: {
-                    'Authorization': 'Bearer ' + token
-                },
-                data: {
-                    user_id: $('#form_config_user_id').val(),
-                    dpt: $('#dpt').val(),
-                    client_id: {{auth()->user()->client_id ?? 0}},
-                },
-                success: function(data) {
-                    console.log(data)
-                    clearMarkers(); // Clear existing markers
-                    var events = data.map(function(rdv) {
-                        var eventStart = new Date(rdv.date_rdv);
-                        var eventEnd = new Date(eventStart.getTime() + 90 * 60 *
-                        1000); // Add 1 hour to the start date
-                        console.log(eventStart)
-                        console.log(eventEnd)
-                        // Check if event is within the current calendar view
-                        if (eventStart >= start && eventEnd <= end) {
-                            // Create event object for FullCalendar
-                            console.log(rdv)
-                            var event = {
-                                title: ''+ rdv.user_name+'<br/>'+rdv.nom + ' ' + rdv.prenom,
-                                start: rdv.date_rdv,
-                                end: eventEnd.toISOString(),
-                                description: rdv.adresse + ' ' + rdv.cp + ' ' + rdv.ville + '<br/>' + formatFrenchPhoneNumber(rdv.telephone) + 
-                 (rdv.dossier ? '<br/> MAR : ' + rdv.dossier.mar.client_title + ' / ' + rdv.dossier.mandataire_financier.client_title : ''),
-    backgroundColor: rdv.color,
-                                borderColor: rdv.color,
-                                dossier_id: rdv.dossier_id,
-                                dossier_folder: rdv.dossier_folder
-                            };
-                            console.log(event)
-                            // Create marker for Google Maps
-                                // Create marker for Google Maps
-                                var content = getEventContent(rdv.user_name+'<br/>'+rdv.nom + ' ' + rdv.prenom, rdv.adresse +
-                                    '<br/>' + rdv.cp + ' ' + rdv.ville);
-                            console.log(rdv.lat)
-                                    if(rdv.lat>0) {
-                                var position = { lat: parseFloat(rdv.lat), lng: parseFloat(rdv.lng) };
-
-                                const marker = new google.maps.marker.AdvancedMarkerElement({
-                                    position: position,
-                                    map: map,
-                                    title: rdv.nom + ' ' + rdv.prenom
-                                });
-
-                                const infowindow = new google.maps.InfoWindow({
-                                    content: content
-                                });
-
-                                marker.addListener('gmp-click', () => {
-                                    infowindow.open({
-                                        anchor: marker,
-                                        map: map,
-                                        shouldFocus: false,
-                                    });
-                                });
-
-                            markers.push(marker);
-                            }
-                            return event;
-                        }
-                    }).filter(event => event !== undefined);
-                    console.log(markers)
-                    calendar.removeAllEvents();
-                    calendar.addEventSource(events);
-                    calendar.refetchEvents();
-                },
-                error: function(xhr, status, error) {
-                    console.error('Error fetching RDVs:', error);
-                }
-            });
-        }
-      
-        // Clear markers from map
-        function clearMarkers() {
-            markers.forEach(marker => marker.setMap(null));
-            markers = [];
-        }
-
-        // Generate HTML content for events and markers
-        function getEventContent(title, description) {
-            return `<div>
-                        <strong>${title}</strong>
-                        <br>
-                        <span>${description}</span>
-                    </div>`;
-        }
-
-        // Fetch and render events when the dropdown value changes
-        $('#form_config_user_id').change(function() {
-            var start = calendar.view.activeStart;
-            var end = calendar.view.activeEnd;
-            console.log(start)
-            console.log(end)
-            clearMarkers();
-            fetchAndRenderEvents(new Date(start), new Date(end));
-        });
-
-        function handleSelectionChange(select) {
-            var start = calendar.view.activeStart;
-            var end = calendar.view.activeEnd;
-            fetchAndRenderEvents(new Date(start), new Date(end));
-        }
-
-        // Initial fetch
-        $(document).ready(function() {
-            var start = calendar.view.activeStart;
-            var end = calendar.view.activeEnd;
-            fetchAndRenderEvents(new Date(start), new Date(end));
-        });
-
-        // function handleDateClick(info) {
-        //     // Redirect to URL on date click
-        //     var dateStr = info.dateStr;
-        //     window.location.href = `/dossier/${dateStr}`;
-        // }
-
-        function handleEventClick(event) {
-            var dossierId = event.extendedProps.dossier_id; // Access the dossier_id
-            var dossierFolder = event.extendedProps.dossier_folder; // Access the dossier_id
-            console.log(dossierId); // Log the dossier_id
-            console.log(dossierFolder); // Log the dossier_id
-            window.location.href = `/dossier/show/${dossierFolder}`; // Redirect to the desired URL
-        }
     </script>
 @endsection

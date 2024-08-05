@@ -142,7 +142,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 
     // routes/web.php
-Route::get('/rdvs', [App\Http\Controllers\RdvController::class, 'index'])->name('rdvs');
+Route::get('/planning', [App\Http\Controllers\RdvController::class, 'index'])->name('planning');
+
+
+Route::get('/rdvs', [App\Http\Controllers\RdvController::class, 'rdvs'])->name('rdvs');
+
+
+
 Route::get('/calendar', [App\Http\Controllers\CalendarController::class, 'index']);
 Route::get('/events', [App\Http\Controllers\EventController::class, 'getEvents']);
 Route::get('/messagerie', [App\Http\Controllers\Messagerie::class, 'index'])->name('messagerie');

@@ -20,6 +20,8 @@
         "spatie/laravel-permission": "^6.7",
         "spipu/html2pdf": "^5.2",
         "symfony/http-kernel": "5.4",
+        "laravel/passport": "^10.1",
+
         "tecnickcom/tcpdf": "^6.7"
     },
     "require-dev": {

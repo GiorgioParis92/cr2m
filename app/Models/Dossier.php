@@ -51,6 +51,8 @@ class Dossier extends Model
 
     public function mandataire_financier()
     {
+
+
         return $this->belongsTo(Client::class,'mandataire_financier', 'id');
     }
 
@@ -58,6 +60,12 @@ class Dossier extends Model
     {
         return $this->belongsTo(Client::class,'mar', 'id');
     }
+
+    public function installateur()
+    {
+        return $this->belongsTo(Client::class,'installateur', 'id');
+    }
+
     public function getMarClientAttribute()
     {
         return Client::find($this->mar);
@@ -65,6 +73,7 @@ class Dossier extends Model
 
     public function getMandataireFinancierClientAttribute()
     {
+
         return Client::find($this->mandataire_financier);
     }
     public function getInstallateurClientAttribute()

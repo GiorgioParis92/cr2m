@@ -58,10 +58,17 @@
                 </li>
 
                 <li class="nav-item ">
-                    <a class="nav-link" href="{{ route('rdvs') }}">
+                    <a class="nav-link" href="{{ route('planning') }}">
                         <span class="sidenav-normal"><i class="fa fa-calendar"></i>  Planning </span>
                     </a>
                 </li>
+
+                <li class="nav-item ">
+                    <a class="nav-link" href="{{ route('rdvs') }}">
+                        <span class="sidenav-normal"><i class="fa fa-calendar"></i>  Gestion des rdvs </span>
+                    </a>
+                </li>
+
 
                 <li class="nav-item ">
                   <a class="nav-link" href="{{ route('messagerie') }}">

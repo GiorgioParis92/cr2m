@@ -8,6 +8,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 
 use Illuminate\Contracts\Auth\CanResetPassword;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Str;
+
 // app/Models/User.php
 
 
@@ -52,5 +54,14 @@ class User extends Authenticatable
     public function type()
     {
         return $this->belongsTo(UserType::class, 'type_id');
+    }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($user) {
+            $user->api_token = Str::random(60);
+        });
     }
 }
