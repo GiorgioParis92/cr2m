@@ -62,6 +62,7 @@
                         <span class="sidenav-normal"><i class="fa fa-calendar"></i>  Planning </span>
                     </a>
                 </li>
+                @if (auth()->user() && auth()->user()->client_id == 0)
 
                 <li class="nav-item ">
                     <a class="nav-link" href="{{ route('rdvs') }}">
@@ -69,6 +70,7 @@
                     </a>
                 </li>
 
+                @endif
 
                 <li class="nav-item ">
                   <a class="nav-link" href="{{ route('messagerie') }}">
