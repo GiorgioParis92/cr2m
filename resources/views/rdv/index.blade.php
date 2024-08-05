@@ -156,7 +156,7 @@
             var row = [];
 
             if (dossier.beneficiaire) {
-                var beneficiaireInfo = dossier.beneficiaire.nom + ' ' + dossier.beneficiaire.prenom + '<br/>' +
+                var beneficiaireInfo = '<a href="dossier/show/'+dossier.folder+'"><b>'+dossier.beneficiaire.nom + ' ' + dossier.beneficiaire.prenom + '</b></a><br/>' +
                     (dossier.beneficiaire.numero_voie ?? '') + ' ' + dossier.beneficiaire.adresse + '<br/>' +
                     dossier.beneficiaire.cp + ' ' + dossier.beneficiaire.ville + '<br/>' + dossier.beneficiaire.telephone;
                 row.push(beneficiaireInfo);
@@ -183,8 +183,8 @@
                     const formattedTime = date.toLocaleTimeString('fr-FR', timeOptions);
                     const formattedDateTime = `${formattedDate} à ${formattedTime}`;
 
-                    rdvInfo += '<div class="show_rdv btn btn-' + (rdv.status ? rdv.status.rdv_style : '') + '">RDV MAR' + rdv.type_rdv + ' du ' +
-                        formattedDateTime + ' Statut : ' + (rdv.status ? rdv.status.rdv_desc : '') + '</div><br/>';
+                    rdvInfo += '<a href="dossier/show/'+dossier.folder+'"><div class="show_rdv btn btn-' + (rdv.status ? rdv.status.rdv_style : '') + '">RDV MAR' + rdv.type_rdv + ' du ' +
+                        formattedDateTime + ' Statut : ' + (rdv.status ? rdv.status.rdv_desc : '') + '</div></a><br/>';
                 });
                 row.push(rdvInfo);
             } else {
