@@ -36,6 +36,7 @@
     <script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/4.2.0/bootstrap/main.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.14.0/Sortable.min.js"></script>
+   
     {{-- <script  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCzcaFvxwi1XLyRHmPRnlKO4zcJXPOT5gM&loading=async&callback=initMap"></script> --}}
     @livewireStyles
     @include('partials.css_variables')
@@ -347,6 +348,11 @@
     <script src="{{ asset('frontend/assets/js/soft-ui-dashboard.min.js?v=1.0.7') }}"></script>
     <!-- Bootstrap Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+   
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/i18n/datepicker-fr.js"></script>
+
     @yield('scripts')
     <script>
         document.addEventListener("DOMContentLoaded", function() {
@@ -498,6 +504,32 @@
                 dateFormat: 'dd/mm/yy', // See format options on parseDate
 
             });
+
+            jQuery(function($){
+	$.datepicker.regional['fr'] = {
+		closeText: 'Fermer',
+		prevText: '&#x3c;Préc',
+		nextText: 'Suiv&#x3e;',
+		currentText: 'Aujourd\'hui',
+		monthNames: ['Janvier','Fevrier','Mars','Avril','Mai','Juin',
+		'Juillet','Aout','Septembre','Octobre','Novembre','Decembre'],
+		monthNamesShort: ['Jan','Fev','Mar','Avr','Mai','Jun',
+		'Jul','Aou','Sep','Oct','Nov','Dec'],
+		dayNames: ['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'],
+		dayNamesShort: ['Dim','Lun','Mar','Mer','Jeu','Ven','Sam'],
+		dayNamesMin: ['Di','Lu','Ma','Me','Je','Ve','Sa'],
+		weekHeader: 'Sm',
+		dateFormat: 'dd-mm-yy',
+		firstDay: 1,
+		isRTL: false,
+		showMonthAfterYear: false,
+		yearSuffix: '',
+		
+		numberOfMonths: 1,
+		showButtonPanel: true
+		};
+	$.datepicker.setDefaults($.datepicker.regional['fr']);
+});
             $('.datatable').DataTable()
 
 

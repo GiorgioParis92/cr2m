@@ -89,6 +89,7 @@
             <thead>
                 <tr>
                     <th>Dossier</th>
+                    <th>Dossier</th>
                     <th>RDV</th>
                     <th>Installateur</th>
                     <th>Accompagnateur</th>
@@ -100,25 +101,67 @@
         </table>
     </div>
 
-    <div id="loader" style="display:none;">Loading...</div>
-@endsection
+    <div id="loader" style="display:none;"><div class="lds-ring"><div></div><div></div><div></div><div></div></div></div>
+
+<style>
+   div#loader {
+    width: 100%;
+    text-align: center;
+    background: #6666661c;
+    min-height: 20vh;
+    line-height: 33vh;
+} 
+.lds-ring,
+.lds-ring div {
+  box-sizing: border-box;
+}
+.lds-ring {
+  display: inline-block;
+  position: relative;
+  width: 80px;
+  height: 80px;
+}
+.lds-ring div {
+  box-sizing: border-box;
+  display: block;
+  position: absolute;
+  width: 64px;
+  height: 64px;
+  margin: 8px;
+  border: 8px solid currentColor;
+  border-radius: 50%;
+  animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+  border-color: currentColor transparent transparent transparent;
+}
+.lds-ring div:nth-child(1) {
+  animation-delay: -0.45s;
+}
+.lds-ring div:nth-child(2) {
+  animation-delay: -0.3s;
+}
+.lds-ring div:nth-child(3) {
+  animation-delay: -0.15s;
+}
+@keyframes lds-ring {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+
+</style>
+    @endsection
 
 @section('scripts')
-    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.css" rel="stylesheet">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/daygrid/main.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/timegrid/main.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/interaction/main.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/locales/fr.js"></script>
-    <script async defer
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCzcaFvxwi1XLyRHmPRnlKO4zcJXPOT5gM&libraries=marker&callback=initMap">
-    </script>
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
-    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
-
+    
     <script>
         $(document).ready(function() {
+
+          
+
             var table = $('#dossiersTable').DataTable({
 
                 dom: '<"top"><"bottom">',
@@ -267,7 +310,7 @@
                         row.push('');
                     }
 
-                    if (dossier.mandataire_financier > 0) {
+                    if (dossier.mandataire_financier>0) {
                         row.push(dossier.mandataire_financier.client_title);
                     } else {
                         row.push('');
