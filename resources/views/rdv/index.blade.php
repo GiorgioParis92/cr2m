@@ -20,6 +20,32 @@
                     @endforeach
                 </select>
             </div>
+
+            <div class="mb-2 mb-sm-0 col-12 col-md-3">
+                <label class="mr-sm-2">Statut du dossier</label>
+                <select class="form-control select-filter" name="dossier_status" id="dossier_status">
+                    <option value="">Filtrer</option>
+                    @foreach ($dossier_status as $statut)
+                        <option value="{{ $statut->id }}">{{ $statut->status_desc }}</option>
+                    @endforeach
+                </select>
+            </div>
+        </div>
+        <div class="row form-group">
+            <div class="mb-2 mb-sm-0 col-12 col-md-3">
+                <label class="mr-sm-2">Date de début</label>
+                <input type="text" class="form-control filter datepicker" name="start" id="start"
+                    placeholder="">
+            </div>
+
+            <div class="mb-2 mb-sm-0 col-12 col-md-3">
+                <label class="mr-sm-2">Date de fin</label>
+                <input type="text" class="form-control filter datepicker" name="end" id="end"
+                    placeholder="">
+            </div>
+
+        </div>
+        <div class="row form-group">
             <div class="mb-2 mb-sm-0 col-12 col-md-3">
                 <label class="mr-sm-2">Installateur</label>
                 <select class="form-control select-filter" name="installateur" id="installateur">
@@ -107,6 +133,7 @@
         columns: [
             { title: "Bénéficiaire" },
             { title: "RDV" },
+            { title: "Statut du dossier" },
             { title: "Installateur" },
             { title: "MAR" },
             { title: "Mandataire Financier" }
@@ -190,6 +217,13 @@
             } else {
                 row.push('');
             }
+
+            if (dossier.status) {
+                row.push(dossier.status.status_desc);
+            } else {
+                row.push('');
+            }
+
 
             if (dossier.installateur) {
                 row.push(dossier.installateur.client_title);

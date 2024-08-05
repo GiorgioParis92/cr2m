@@ -49,6 +49,7 @@ class RdvController extends Controller
 
   
         $status=DB::table('rdv_status')->get();
+        $dossier_status=DB::table('status')->where('etape_id',2)->orderBy('status_desc')->get();
 
         $auditeurs=User::where('type_id',4);
         
@@ -69,7 +70,7 @@ class RdvController extends Controller
         $installateurs = Client::where('type_client', 3)->get();
         $fiches = Fiche::all();
 
-        return view('rdv.index',compact('auditeurs','departments','apiToken','status','etapes','mars','financiers','installateurs','fiches'));
+        return view('rdv.index',compact('auditeurs','departments','apiToken','status','dossier_status','etapes','mars','financiers','installateurs','fiches'));
     }
 
 

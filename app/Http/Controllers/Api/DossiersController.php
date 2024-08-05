@@ -30,23 +30,45 @@ class DossiersController extends \App\Http\Controllers\Controller
             $user = User::where('id', $request->user_id)->first();
         }
 
-
-
-
+        if ($request->start) {
+            $start = date('Y-m-d 00:00:00',strtotime(str_replace('/','-',$request->start)));
+        } else {
+            $start=date('1970-01-01 00:00:00');
+        }
+        if ($request->end) {
+            $end = date('Y-m-d 23:59:59',strtotime(str_replace('/','-',$request->end)));
+        } else {
+            $end=date('Y-m-d 23:59:59',strtotime('now'));
+        }
+        
         $dossiers = Dossier::where('id', '>', 0);
 
 
 
-        if ($request->status) {
+        if ($request->status || $request->start || $request->end) {
             if ($request->status == -1) {
                 // Get all dossiers that don't have any rdv
                 $dossiers = $dossiers->whereDoesntHave('get_rdv');
             } else {
                 // Get dossiers where rdv status matches the request status
-                $dossiers = $dossiers->whereHas('get_rdv', function ($query) use ($request) {
-                    $query->where('status', $request->status);
+                $dossiers = $dossiers->whereHas('get_rdv', function ($query) use ($request,$start,$end) {
+                    $query->where('status', $request->status)
+                    ->where('date_rdv','>=',$start)
+                    ->where('date_rdv','<=',$end)
+                    ;
                 });
+                
             }
+
+        }
+
+
+        if ($request->dossier_status) {
+   
+                // Get dossiers where rdv status matches the request status
+                $dossiers = $dossiers->where('status_id', $request->dossier_status);
+        
+            
         }
 
         if ($request->installateur) {
