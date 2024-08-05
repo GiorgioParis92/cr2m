@@ -15,10 +15,14 @@ class DossiersController extends \App\Http\Controllers\Controller
 {
     public function index(Request $request): \Illuminate\Http\JsonResponse
     {
-
         $user = auth()->user();
         if (!$user) {
             return response()->json(['error' => 'Unauthorized'], 401);
+        }
+
+        if($request->filter=='false') {
+            return response()->json('no_filter');
+
         }
 
         $client = null;

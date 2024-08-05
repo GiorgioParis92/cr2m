@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="container">
-        <h4>Liste des RDV (<span id="count"></span> résultats)</h4>
+        <h4>Liste des RDV <span id="count_message">(<span id="count"></span> résultats)</span></h4>
 
         <div class="row form-group">
             <div class="mb-2 mb-sm-0 col-12 col-md-3">
@@ -34,14 +34,12 @@
         <div class="row form-group">
             <div class="mb-2 mb-sm-0 col-12 col-md-3">
                 <label class="mr-sm-2">Date de début</label>
-                <input type="text" class="form-control filter datepicker" name="start" id="start"
-                    placeholder="">
+                <input type="text" class="form-control filter datepicker" name="start" id="start" placeholder="">
             </div>
 
             <div class="mb-2 mb-sm-0 col-12 col-md-3">
                 <label class="mr-sm-2">Date de fin</label>
-                <input type="text" class="form-control filter datepicker" name="end" id="end"
-                    placeholder="">
+                <input type="text" class="form-control filter datepicker" name="end" id="end" placeholder="">
             </div>
 
         </div>
@@ -103,7 +101,6 @@
     </div>
 
     <div id="loader" style="display:none;">Loading...</div>
-
 @endsection
 
 @section('scripts')
@@ -117,153 +114,187 @@
     <script async defer
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCzcaFvxwi1XLyRHmPRnlKO4zcJXPOT5gM&libraries=marker&callback=initMap">
     </script>
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
-<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
 
     <script>
- $(document).ready(function() {
-    var table = $('#dossiersTable').DataTable({
-        
-        dom: '<"top"><"bottom">',
+        $(document).ready(function() {
+            var table = $('#dossiersTable').DataTable({
+
+                dom: '<"top"><"bottom">',
                 language: {
                     url: '//cdn.datatables.net/plug-ins/2.0.8/i18n/fr-FR.json',
+                    emptyTable: "Appliquez au moins un filtre"
                 },
-                pageLength: -1,  // Set the default page length here
+                pageLength: -1, // Set the default page length here
 
-        columns: [
-            { title: "Bénéficiaire" },
-            { title: "RDV" },
-            { title: "Statut du dossier" },
-            { title: "Installateur" },
-            { title: "MAR" },
-            { title: "Mandataire Financier" }
-        ]
-    });
+                columns: [{
+                        title: "Bénéficiaire"
+                    },
+                    {
+                        title: "RDV"
+                    },
+                    {
+                        title: "Statut du dossier"
+                    },
+                    {
+                        title: "Installateur"
+                    },
+                    {
+                        title: "MAR"
+                    },
+                    {
+                        title: "Mandataire Financier"
+                    }
+                ]
+            });
 
-    function fetchDossiers() {
-        var apiToken = '{{ $apiToken }}';
-        var data = {};
-        $('#loader').show();
-        $('#dossiersTable').hide()
-        $('.filter, .select-filter').each(function() {
-            data[$(this).attr('name')] = $(this).val();
-        });
+            function fetchDossiers() {
+                var apiToken = '{{ $apiToken }}';
+                var data = {};
+                $('#loader').show();
+                $('#dossiersTable').hide()
+                var filter = false;
+                data['filter'] = false;
 
-        console.log(data);
-        $.ajax({
-            url: 'api/dossiers', // Make sure to update the route as per your configuration
-            method: 'POST',
-            headers: {
-                'Authorization': 'Bearer ' + apiToken
-            },
-            data: data,
-            success: function(data) {
-                console.log(data);
-                populateTable(data);
+                $('.filter, .select-filter').each(function() {
+                    data[$(this).attr('name')] = $(this).val();
+                    if ($(this).val() != '') {
+                        filter = true;
+                        data['filter'] = true;
 
-                // Redraw the DataTable
-                table.clear().rows.add(populateTable(data)).draw();
-                $('#loader').hide();
-                $('#dossiersTable').show()
-
-            },
-            error: function(error) {
-                console.log('Error:', error);
-                $('#loader').hide();
-                $('#dossiersTable').show()
-
-            }
-        });
-    }
-
-    function populateTable(dossiers) {
-        var tableData = [];
-        var count=0;
-        $.each(dossiers, function(index, dossier) {
-            var row = [];
-
-            if (dossier.beneficiaire) {
-                var beneficiaireInfo = '<a href="dossier/show/'+dossier.folder+'"><b>'+dossier.beneficiaire.nom + ' ' + dossier.beneficiaire.prenom + '</b></a><br/>' +
-                    (dossier.beneficiaire.numero_voie ?? '') + ' ' + dossier.beneficiaire.adresse + '<br/>' +
-                    dossier.beneficiaire.cp + ' ' + dossier.beneficiaire.ville + '<br/>' + dossier.beneficiaire.telephone;
-                row.push(beneficiaireInfo);
-            } else {
-                row.push('');
-            }
-
-            if (dossier.get_rdv) {
-                var rdvInfo = '';
-                dossier.get_rdv.forEach(rdv => {
-                    const date = new Date(rdv.date_rdv);
-
-                    const dateOptions = {
-                        day: 'numeric',
-                        month: 'long',
-                        year: 'numeric'
-                    };
-                    const timeOptions = {
-                        hour: '2-digit',
-                        minute: '2-digit'
-                    };
-
-                    const formattedDate = date.toLocaleDateString('fr-FR', dateOptions);
-                    const formattedTime = date.toLocaleTimeString('fr-FR', timeOptions);
-                    const formattedDateTime = `${formattedDate} à ${formattedTime}`;
-
-                    rdvInfo += '<a href="dossier/show/'+dossier.folder+'"><div class="show_rdv btn btn-' + (rdv.status ? rdv.status.rdv_style : '') + '">RDV MAR' + rdv.type_rdv + ' du ' +
-                        formattedDateTime + ' Statut : ' + (rdv.status ? rdv.status.rdv_desc : '') + '</div></a><br/>';
+                    }
                 });
-                row.push(rdvInfo);
-            } else {
-                row.push('');
+
+                console.log(data);
+                $.ajax({
+                    url: 'api/dossiers', // Make sure to update the route as per your configuration
+                    method: 'POST',
+                    headers: {
+                        'Authorization': 'Bearer ' + apiToken
+                    },
+                    data: data,
+                    success: function(data) {
+                        console.log(data);
+                        if (data == 'no_filter') {
+                            table.clear().draw();
+                            $('#loader').hide();
+                            $('#count_message').hide();
+                            $('#dossiersTable').show()
+                            return;
+                        }
+                        populateTable(data);
+
+                        // Redraw the DataTable
+                        table.clear().rows.add(populateTable(data)).draw();
+                        $('#loader').hide();
+                        $('#dossiersTable').show()
+
+                    },
+                    error: function(error) {
+                        console.log('Error:', error);
+                        $('#loader').hide();
+                        $('#dossiersTable').show()
+
+                    }
+                });
             }
 
-            if (dossier.status) {
-                row.push(dossier.status.status_desc);
-            } else {
-                row.push('');
+            function populateTable(dossiers) {
+                var tableData = [];
+                var count = 0;
+                $.each(dossiers, function(index, dossier) {
+                    var row = [];
+
+                    if (dossier.beneficiaire) {
+                        var beneficiaireInfo = '<a href="dossier/show/' + dossier.folder + '"><b>' + dossier
+                            .beneficiaire.nom + ' ' + dossier.beneficiaire.prenom + '</b></a><br/>' +
+                            (dossier.beneficiaire.numero_voie ?? '') + ' ' + dossier.beneficiaire.adresse +
+                            '<br/>' +
+                            dossier.beneficiaire.cp + ' ' + dossier.beneficiaire.ville + '<br/>' + dossier
+                            .beneficiaire.telephone;
+                        row.push(beneficiaireInfo);
+                    } else {
+                        row.push('');
+                    }
+
+                    if (dossier.get_rdv) {
+                        var rdvInfo = '';
+                        dossier.get_rdv.forEach(rdv => {
+                            const date = new Date(rdv.date_rdv);
+
+                            const dateOptions = {
+                                day: 'numeric',
+                                month: 'long',
+                                year: 'numeric'
+                            };
+                            const timeOptions = {
+                                hour: '2-digit',
+                                minute: '2-digit'
+                            };
+
+                            const formattedDate = date.toLocaleDateString('fr-FR', dateOptions);
+                            const formattedTime = date.toLocaleTimeString('fr-FR', timeOptions);
+                            const formattedDateTime = `${formattedDate} à ${formattedTime}`;
+
+                            rdvInfo += '<a href="dossier/show/' + dossier.folder +
+                                '"><div class="show_rdv btn btn-' + (rdv.status ? rdv.status
+                                    .rdv_style : '') + '">RDV MAR' + rdv.type_rdv + ' du ' +
+                                formattedDateTime + ' Statut : ' + (rdv.status ? rdv.status
+                                    .rdv_desc : '') + '</div></a><br/>';
+                        });
+                        row.push(rdvInfo);
+                    } else {
+                        row.push('');
+                    }
+
+                    if (dossier.status) {
+                        row.push(dossier.status.status_desc);
+                    } else {
+                        row.push('');
+                    }
+
+
+                    if (dossier.installateur) {
+                        row.push(dossier.installateur.client_title);
+                    } else {
+                        row.push('');
+                    }
+
+                    if (dossier.mar) {
+                        row.push(dossier.mar.client_title);
+                    } else {
+                        row.push('');
+                    }
+
+                    if (dossier.mandataire_financier > 0) {
+                        row.push(dossier.mandataire_financier.client_title);
+                    } else {
+                        row.push('');
+                    }
+
+                    tableData.push(row);
+                    count = count + 1;
+                });
+                console.log(count)
+                $('#count').html(count)
+                if(count>0) {
+                    $('#count_message').show();
+
+                }
+                return tableData;
             }
 
+            // Fetch dossiers on page load
+            fetchDossiers();
 
-            if (dossier.installateur) {
-                row.push(dossier.installateur.client_title);
-            } else {
-                row.push('');
-            }
+            $('.select-filter').on('change', function() {
+                fetchDossiers();
+            });
 
-            if (dossier.mar) {
-                row.push(dossier.mar.client_title);
-            } else {
-                row.push('');
-            }
-
-            if (dossier.mandataire_financier>0) {
-                row.push(dossier.mandataire_financier.client_title);
-            } else {
-                row.push('');
-            }
-
-            tableData.push(row);
-            count=count+1;
+            $('.filter').on('keydown keyup blur change', function() {
+                fetchDossiers();
+            });
         });
-        console.log(count)
-        $('#count').html(count)
-        return tableData;
-    }
-
-    // Fetch dossiers on page load
-    fetchDossiers();
-
-    $('.select-filter').on('change', function() {
-        fetchDossiers();
-    });
-
-    $('.filter').on('keydown keyup blur change', function() {
-        fetchDossiers();
-    });
-});
-
-
-
     </script>
 @endsection
