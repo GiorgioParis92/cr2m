@@ -39,13 +39,74 @@
             </select>
         </div>
     </div>
+    <div data-rdv_id="" class="btn btn-secondary show_rdv">Ajouter un Rdv </div>
     <div class="row">
         <div class="col-12">
             <div id="calendar"></div>
         </div>
     </div>
    
-    
+    <script>
+                $(document).on('click', '.show_rdv', function(event) {
+            var rdv_id = $(this).data('rdv_id');
+
+            if (rdv_id == undefined || rdv_id == '') {
+                rdv_id = 0
+            }
+
+            $.ajax({
+                url: '/api/rdvs', // Adjust this URL to your actual API endpoint
+                type: 'GET',
+                data: {
+                    rdv_id: rdv_id
+                },
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr(
+                        'content') // Include CSRF token if using Laravel's CSRF protection
+                },
+                success: function(response) {
+
+                    // Clear previous data
+                    $('#rdv_id').val('0');
+                    $('#rdv_french_date').val('');
+                    $('#rdv_hour').val('');
+                    $('#rdv_minute').val('');
+                    $('#rdv_user_id').val('');
+                    $('#rdv_status').val('');
+                    $('#rdv_observations').val('');
+                    $('#rdv_type_rdv').val($('#type_rdv').val());
+                    $('#rdv_nom').val("{!! $dossier['beneficiaire']['nom'] ?? '' !!}");
+                    $('#rdv_prenom').val("{!! $dossier['beneficiaire']['prenom'] ?? '' !!}");
+                    $('#rdv_adresse').val("{!! $dossier['beneficiaire']['adresse'] ?? '' !!}");
+                    $('#rdv_cp').val("{!! $dossier['beneficiaire']['cp'] ?? '' !!}");
+                    $('#rdv_ville').val("{!! $dossier['beneficiaire']['ville'] ?? '' !!}");
+                    $('#rdv_telephone').val("{!! $dossier['beneficiaire']['telephone'] ?? '' !!}");
+                    $('#rdv_email').val("{!! $dossier['beneficiaire']['email'] ?? '' !!}");
+                    $('#rdv_telephone_2').val("{!! $dossier['beneficiaire']['telephone_2'] ?? '' !!}");
+                    $('#rdv_dossier_id').val("{!! $dossier['id'] ?? '' !!}");
+                    $('#rdv_client_id').val("{!! $dossier['client_id'] ?? '' !!}");
+                    $('#rdv_lat').val("{!! $dossier['beneficiaire']['lat'] ?? '' !!}");
+                    $('#rdv_lng').val("{!! $dossier['beneficiaire']['lng'] ?? '' !!}");
+
+                    if (response && response.length > 0) {
+                        console.log(response)
+                        var rdv = response[0];
+                        $.each(rdv, function(key, value) {
+                            console.log(key)
+                            console.log(value)
+                            // Populate form fields
+                            $('#rdv_' + key).val(value);
+                        });
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error loading rdv data:', error);
+                }
+            });
+
+            $('#rdv_modal').modal('show');
+        });
+</script>
 </body>
 
 </html>

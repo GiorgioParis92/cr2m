@@ -163,8 +163,79 @@
           
 
             var table = $('#dossiersTable').DataTable({
+                buttons: [
+            {
+                extend: 'copy',
+                className: 'btn btn-primary',
 
-                dom: '<"top"><"bottom">',
+                filename: 'Extraction RDV'
+            },
+            {
+                extend: 'csv',
+                className: 'btn btn-primary',
+
+                filename: 'Extraction RDV'
+            },
+            {
+                extend: 'excel',
+                className: 'btn btn-primary',
+
+                filename: 'Extraction RDV Excel',
+                customize: function(xlsx) {
+                    var sheet = xlsx.xl.worksheets['sheet1.xml'];
+                    $('row c[r^="A"] t', sheet).each(function() {
+                        var text = $(this).text();
+                        if (text.indexOf('<br/>') > -1) {
+                            $(this).text(text.replace(/<br\s*\/?>/gi, '\n'));
+                        }
+                    });
+                }
+            },
+            {
+                extend: 'pdfHtml5',
+                orientation: 'landscape', // Change to 'portrait' if needed
+                pageSize: 'A4', // Change to other sizes if needed
+                filename: 'Extraction RDV',
+                title: 'Extraction RDV',
+                customize: function (doc) {
+                    doc.styles.title = {
+                        color: 'red',
+                        fontSize: '20',
+                        alignment: 'center'
+                    }
+                }
+            },
+            {
+                extend: 'print',
+                title: 'Extraction',
+                className: 'btn btn-primary',
+
+                customize: function (win) {
+                    $(win.document.body).css('font-size', '10pt');
+                    $(win.document.body).find('table')
+                        .addClass('compact')
+                        .css('font-size', 'inherit');
+                    
+                    // Adding landscape orientation style
+                    var css = '@page { size: landscape; }',
+                        head = win.document.head || win.document.getElementsByTagName('head')[0],
+                        style = win.document.createElement('style');
+                    
+                    style.type = 'text/css';
+                    style.media = 'print';
+
+                    if (style.styleSheet) {
+                      style.styleSheet.cssText = css;
+                    } else {
+                      style.appendChild(win.document.createTextNode(css));
+                    }
+
+                    head.appendChild(style);
+                }
+            }
+        ],
+                dom: '<"top"Bfrtip><"bottom">',
+
                 language: {
                     url: '//cdn.datatables.net/plug-ins/2.0.8/i18n/fr-FR.json',
                     emptyTable: "Appliquez au moins un filtre"
