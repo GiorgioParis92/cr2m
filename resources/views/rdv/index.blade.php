@@ -381,7 +381,7 @@
                         row.push('');
                     }
 
-                    if (dossier.mandataire_financier>0) {
+                    if (dossier.mandataire_financier) {
                         row.push(dossier.mandataire_financier.client_title);
                     } else {
                         row.push('');
