@@ -381,9 +381,13 @@
                         row.push('');
                     }
 
-                    if (dossier.mandataire_financier && dossier.mandataire_financier>0) {
-
-                        row.push(dossier.mandataire_financier.client_title);
+                    if (dossier.mandataire_financier) {
+                        if(dossier.mandataire_financier.id>0) {
+                            row.push(dossier.mandataire_financier.client_title );
+                        } else {
+                            row.push('');
+                        }
+                        
 
                     } else {
                         row.push('');

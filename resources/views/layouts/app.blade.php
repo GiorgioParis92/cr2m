@@ -48,7 +48,7 @@
 
 <body class="g-sidenav-show bg-gray-100">
     {{-- @include('frontend.sidebar')  --}}
-    <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg">
+    <main class="main-content position-relative  h-100 border-radius-lg">
         @include('frontend.navbar')
         <div class="pt-5">
             @yield('content')
