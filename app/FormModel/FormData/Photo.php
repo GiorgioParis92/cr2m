@@ -153,6 +153,8 @@ class Photo extends AbstractFormData
             $data .= "<script>initializePdfModals()</script>";
         }
         }
+    } else {
+        dd($values);
     }
         
         $data .= "</div>";
