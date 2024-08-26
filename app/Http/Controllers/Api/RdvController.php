@@ -121,6 +121,9 @@ class RdvController extends \App\Http\Controllers\Controller
 
         }
       
+
+        dd($request);
+
         $data = [
             'type_rdv' => $type_rdv,
             'user_id' => $user_id,

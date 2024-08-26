@@ -20,7 +20,7 @@ class Photo extends AbstractFormData
         else {
             $values=[$this->value];
         }
-   
+        
         $data = '';
         $wireModel = "formData.{$this->form_id}.{$this->name}";
         $data .= '<input type="hidden" wire:model.lazy="' . $wireModel . '">';
@@ -110,6 +110,7 @@ class Photo extends AbstractFormData
                 initializeDeleteButtons();
             });
         </script>";
+        if(is_array($values)) {
         foreach($values as $value) {
         if ($value) {
             $extension = explode('.', $value);
@@ -152,7 +153,7 @@ class Photo extends AbstractFormData
             $data .= "<script>initializePdfModals()</script>";
         }
         }
-       
+    }
         
         $data .= "</div>";
         $data .= "</div>";

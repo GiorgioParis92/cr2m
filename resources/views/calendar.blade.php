@@ -39,7 +39,7 @@
             </select>
         </div>
     </div>
-    <div data-rdv_id="" class="btn btn-secondary show_rdv">Ajouter un Rdv </div>
+    <div data-rdv_id="" data-type_rdv="3" class="btn btn-secondary show_conge">Ajouter un congé/indisponibilité </div>
     <div class="row">
         <div class="col-12">
             <div id="calendar"></div>
@@ -47,7 +47,7 @@
     </div>
    
     <script>
-                $(document).on('click', '.show_rdv', function(event) {
+                $(document).on('click', '.show_conge', function(event) {
             var rdv_id = $(this).data('rdv_id');
 
             if (rdv_id == undefined || rdv_id == '') {
@@ -66,6 +66,9 @@
                 },
                 success: function(response) {
 
+                    $('#hour_group').hide();
+                    $('#new_day').show();
+
                     // Clear previous data
                     $('#rdv_id').val('0');
                     $('#rdv_french_date').val('');
@@ -74,7 +77,7 @@
                     $('#rdv_user_id').val('');
                     $('#rdv_status').val('');
                     $('#rdv_observations').val('');
-                    $('#rdv_type_rdv').val($('#type_rdv').val());
+                    $('#rdv_type_rdv').val($(this).data('type_rdv'));
                     $('#rdv_nom').val("{!! $dossier['beneficiaire']['nom'] ?? '' !!}");
                     $('#rdv_prenom').val("{!! $dossier['beneficiaire']['prenom'] ?? '' !!}");
                     $('#rdv_adresse').val("{!! $dossier['beneficiaire']['adresse'] ?? '' !!}");

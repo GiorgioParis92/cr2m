@@ -141,7 +141,11 @@
                             <label>Date</label>
                             <input class="form-control datepicker" type="text" id="rdv_french_date" name="date_rdv">
                         </div>
-                        <div class="form-group">
+                        <div class="form-group" id="new_day" style="display:none">
+                             <label>Date de fin</label>
+                            <input class="form-control datepicker" type="text" id="rdv_french_date_end" name="date_rdv_end">
+                        </div>
+                        <div class="form-group" id="hour_group">
                             <label>Heure</label>
                             <div class="row">
                                 <div class="col-6">
@@ -538,6 +542,8 @@
 
 
             $('#save_rdv').click(function() {
+                alert('ok')
+
                 // Collect form data
                 var formData = {
                     rdv_id: $('#rdv_id').val(),
@@ -562,7 +568,6 @@
                     lng: $('#rdv_lng').val(),
                     // Include additional fields if present
                 };
-
                 // Perform AJAX call
                 updateRdv(formData);
             });
