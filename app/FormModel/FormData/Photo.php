@@ -110,6 +110,9 @@ class Photo extends AbstractFormData
                 initializeDeleteButtons();
             });
         </script>";
+        if(!is_array($values)) {
+            $values = [$values];  // Transform into array if not already an array
+        }
         if(is_array($values)) {
         foreach($values as $value) {
         if ($value) {
@@ -153,10 +156,8 @@ class Photo extends AbstractFormData
             $data .= "<script>initializePdfModals()</script>";
         }
         }
-    } else {
-        dd($values);
-    }
-        
+    } 
+    
         $data .= "</div>";
         $data .= "</div>";
         
