@@ -316,6 +316,18 @@ class FileUploadService
             if ($width > $height) {
                 // Rotate the image if it's wider than it is tall (landscape)
                 $image->rotate(90);
+                $update = DB::table('forms_data')->updateOrInsert(
+                    [
+                        'dossier_id' => '' . $dossier->id . '',
+                        'form_id' => '' . $form_id . '',
+                        'meta_key' => 'rotate'
+                    ],
+                    [
+                        'meta_value' => 'yes',
+                        'created_at' => now(),
+                        'updated_at' => now()
+                    ]
+                );
             }
             $image = Image::make($file)->fit(595, 842); // 595x842 pixels corresponds to 210x297mm at 72dpi
             $tempImagePath = storage_path('app/public/' . $directory . '/temp_image.jpg');
