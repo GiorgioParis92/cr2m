@@ -15,6 +15,7 @@ use PDF; // Assuming you have barryvdh/laravel-dompdf installed
 use Image; // Assuming you have intervention/image installed
 use setasign\Fpdi\Fpdi;
 use FPDF;
+
 class FileUploadService
 {
     /**
@@ -91,14 +92,14 @@ class FileUploadService
 
 
         }
-     
+
 
 
         if (isset($request->random_name)) {
 
             $random_name = true;
         }
-      
+
         if (isset($request->form_id)) {
             $form_id = $request->form_id;
         }
@@ -106,15 +107,15 @@ class FileUploadService
 
         $file = $request->file('file');
 
-        $allowedExtensions = ['jpeg', 'jpg', 'png', 'gif', 'pdf','heic','webp'];
+        $allowedExtensions = ['jpeg', 'jpg', 'png', 'gif', 'pdf', 'heic', 'webp'];
         $extension = strtolower($file->getClientOriginalExtension());
 
-     
+
 
         if (!in_array($extension, $allowedExtensions)) {
             return false;
         }
-     
+
         $directory = "{$folder}/{$clientId}";
         if (!Storage::disk('public')->exists($directory)) {
             Storage::disk('public')->makeDirectory($directory);
@@ -122,7 +123,7 @@ class FileUploadService
         $originalFileName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
         // Directory path where files will be stored
         $directoryPath = storage_path('app/public/' . $directory);
-    
+
         // Find all files with the same base name in the directory
         foreach (glob($directoryPath . '/' . $originalFileName . '.*') as $existingFile) {
 
@@ -147,55 +148,55 @@ class FileUploadService
         $filePath = $file->storeAs($directory, $fileName, 'public');
 
         DB::enableQueryLog();
-        $index='';
+        $index = '';
 
-        $template=$request->input('template');
-
-      
+        $template = $request->input('template');
 
 
 
-        if ($random_name==true) {
-          
-            $index='';
-            $explode=(explode('.',$request->input('template')));
-            if(is_array($explode) && count($explode)>1) {
-                $array=explode('.',$request->input('template'));
-                $template=$array[0];
-                $index=$array[2];
-                $field=$array[3];
-                
+
+
+        if ($random_name == true) {
+
+            $index = '';
+            $explode = (explode('.', $request->input('template')));
+            if (is_array($explode) && count($explode) > 1) {
+                $array = explode('.', $request->input('template'));
+                $template = $array[0];
+                $index = $array[2];
+                $field = $array[3];
+
             } else {
 
-                $template=$request->input('template');
+                $template = $request->input('template');
             }
-       
+
             $value = DB::table('forms_data')
                 ->where('meta_key', $template)
-                ->where("form_id",$form_id)
-                ->where("dossier_id",$dossier->id)
+                ->where("form_id", $form_id)
+                ->where("dossier_id", $dossier->id)
                 ->first();
-            
+
             if ($value) {
                 $json_value = json_decode($value->meta_value);
-                if($json_value) {
-                    array_push($json_value,$filePath);
+                if ($json_value) {
+                    array_push($json_value, $filePath);
                 } else {
-                    $json_value=[];
-                    array_push($json_value,$filePath);
+                    $json_value = [];
+                    array_push($json_value, $filePath);
                 }
-                $updatedJsonString=json_encode($json_value);
-                if($index!='') {
-                    $json_array=(json_decode($value->meta_value,true));
-                 
+                $updatedJsonString = json_encode($json_value);
+                if ($index != '') {
+                    $json_array = (json_decode($value->meta_value, true));
+
                     $json_array[$index][$field]['value'][] = $filePath;
-               
+
                     $updatedJsonString = json_encode($json_array);
-               
+
 
                 }
-           
-           
+
+
 
                 $update = DB::table('forms_data')->updateOrInsert(
                     [
@@ -209,11 +210,11 @@ class FileUploadService
                         'updated_at' => now()
                     ]
                 );
-                 
-            
+
+
             } else {
                 $json_value = [];
-                array_push($json_value,$filePath);
+                array_push($json_value, $filePath);
                 $update = DB::table('forms_data')->updateOrInsert(
                     [
                         'dossier_id' => '' . $dossier->id . '',
@@ -228,7 +229,7 @@ class FileUploadService
                 );
             }
         } else {
-           
+
 
             $update = DB::table('forms_data')->updateOrInsert(
                 [
@@ -242,7 +243,7 @@ class FileUploadService
                     'updated_at' => now()
                 ]
             );
-           
+
         }
 
 
@@ -251,15 +252,30 @@ class FileUploadService
 
             $image = Image::make($file);
 
-              // Get the width and height of the image
-    $width = $image->width();
-    $height = $image->height();
-
-    // If the width is greater than the height (landscape), rotate the image
-    if ($width < $height) {
-        $image->rotate(-90); // Rotate the image to correct the orientation
-    }
-
+            $exif = @exif_read_data($file->getPathname());
+            if ($exif && isset($exif['Orientation'])) {
+                switch ($exif['Orientation']) {
+                    case 3:
+                        $image->rotate(180);
+                        break;
+                    case 6:
+                        $image->rotate(-90);
+                        break;
+                    case 8:
+                        $image->rotate(90);
+                        break;
+                }
+            }
+        
+            // Get the width and height of the image
+            $width = $image->width();
+            $height = $image->height();
+        
+            // Standardize the image orientation and dimensions
+            if ($width > $height) {
+                // Rotate the image if it's wider than it is tall (landscape)
+                $image->rotate(-90);
+            }
             $image = Image::make($file)->fit(595, 842); // 595x842 pixels corresponds to 210x297mm at 72dpi
             $tempImagePath = storage_path('app/public/' . $directory . '/temp_image.jpg');
             $image->save($tempImagePath);
@@ -313,16 +329,16 @@ class FileUploadService
             return $directory . '/' . $pdfFileName;
         }
 
-        if($index!='') {
+        if ($index != '') {
             $config = \DB::table('forms_config')
-            ->where('form_id', $form_id)
-            ->where('name', $template)
-            ->first();
-           
-        $table = new Table($config, $template, $form_id, $dossier->id);
-        $table->save_value();
+                ->where('form_id', $form_id)
+                ->where('name', $template)
+                ->first();
+
+            $table = new Table($config, $template, $form_id, $dossier->id);
+            $table->save_value();
         }
-       
+
 
         return $filePath;
 
