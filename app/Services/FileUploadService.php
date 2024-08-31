@@ -247,9 +247,10 @@ class FileUploadService
 
 
 
-        if ($file->isValid() && in_array(strtolower($extension), ['jpeg', 'jpg', 'png', 'gif', 'bmp'])) {
+        if (isset($request->upload_image) && $file->isValid() && in_array(strtolower($extension), ['jpeg', 'jpg', 'png', 'gif', 'bmp'])) {
 
-            // Resize image to fit A4 dimensions
+            $image = Image::make($file)->orientate();
+
             $image = Image::make($file)->fit(595, 842); // 595x842 pixels corresponds to 210x297mm at 72dpi
             $tempImagePath = storage_path('app/public/' . $directory . '/temp_image.jpg');
             $image->save($tempImagePath);
