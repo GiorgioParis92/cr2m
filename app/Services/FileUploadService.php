@@ -249,7 +249,23 @@ class FileUploadService
 
         if (isset($request->upload_image) && $file->isValid() && in_array(strtolower($extension), ['jpeg', 'jpg', 'png', 'gif', 'bmp'])) {
 
-            $image = Image::make($file)->orientate();
+            $image = Image::make($file);
+
+            // Correct the image orientation manually if EXIF data is available
+            $exif = @exif_read_data($file);
+            if ($exif && isset($exif['Orientation'])) {
+                switch ($exif['Orientation']) {
+                    case 3:
+                        $image->rotate(180);
+                        break;
+                    case 6:
+                        $image->rotate(-90);
+                        break;
+                    case 8:
+                        $image->rotate(90);
+                        break;
+                }
+            }
 
             $image = Image::make($file)->fit(595, 842); // 595x842 pixels corresponds to 210x297mm at 72dpi
             $tempImagePath = storage_path('app/public/' . $directory . '/temp_image.jpg');
