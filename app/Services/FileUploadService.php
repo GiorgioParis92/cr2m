@@ -270,9 +270,11 @@ class FileUploadService
                 );
 
                 switch ($exif['Orientation']) {
-                 
+                    case 3:
+                        $image->rotate(180);
+                        break;
                     case 6:
-                        $image->rotate(90);
+                        $image->rotate(-90);
                         break;
                     case 8:
                         $image->rotate(90);
