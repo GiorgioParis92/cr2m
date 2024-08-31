@@ -251,8 +251,7 @@ class FileUploadService
 
             $image = Image::make($file);
 
-            // Correct the image orientation manually if EXIF data is available
-            $exif = @exif_read_data($file);
+            $exif = @exif_read_data($file->getPathname());
             if ($exif && isset($exif['Orientation'])) {
                 switch ($exif['Orientation']) {
                     case 3:
