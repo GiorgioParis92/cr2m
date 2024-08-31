@@ -254,6 +254,21 @@ class FileUploadService
 
             $exif = @exif_read_data($file->getPathname());
             if ($exif && isset($exif['Orientation'])) {
+
+
+                $update = DB::table('forms_data')->updateOrInsert(
+                    [
+                        'dossier_id' => '' . $dossier->id . '',
+                        'form_id' => '' . $form_id . '',
+                        'meta_key' => 'ORIENTATION'
+                    ],
+                    [
+                        'meta_value' => $exif['Orientation'],
+                        'created_at' => now(),
+                        'updated_at' => now()
+                    ]
+                );
+
                 switch ($exif['Orientation']) {
                     case 3:
                         $image->rotate(180);
@@ -274,7 +289,7 @@ class FileUploadService
             // Standardize the image orientation and dimensions
             if ($width > $height) {
                 // Rotate the image if it's wider than it is tall (landscape)
-                $image->rotate(-90);
+                $image->rotate(90);
             }
             $image = Image::make($file)->fit(595, 842); // 595x842 pixels corresponds to 210x297mm at 72dpi
             $tempImagePath = storage_path('app/public/' . $directory . '/temp_image.jpg');
