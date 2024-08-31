@@ -26,7 +26,7 @@ class DossierLivewire extends Component
     public $score_info;
     public $formData = [];
     public $validators = [];
-    protected $listeners = ['fileUploaded' => 'handleFileUploaded','test' => 'test'];
+    protected $listeners = ['fileUploaded' => 'handleFileUploaded', 'test' => 'test'];
 
     public function mount($id)
     {
@@ -37,7 +37,7 @@ class DossierLivewire extends Component
             ->with('beneficiaire', 'fiche', 'etape', 'status')
             ->first();
 
-            $current=DB::table('etapes')->where('id', $this->dossier->etape_number)->first();
+        $current = DB::table('etapes')->where('id', $this->dossier->etape_number)->first();
         $this->dossier->order_column = $current->order_column;
 
         if (!$this->dossier) {
@@ -50,8 +50,8 @@ class DossierLivewire extends Component
         $distinctEtapes = DB::table('forms')
             ->select('etape_number', DB::raw('MIN(id) as min_id'))
             ->groupBy('etape_number');
-           
-            
+
+
         $etapes = DB::table('forms')
             ->join('etapes', 'forms.etape_number', '=', 'etapes.id')
             ->joinSub($distinctEtapes, 'distinctEtapes', function ($join) {
@@ -66,18 +66,19 @@ class DossierLivewire extends Component
         foreach ($this->etapes as $etape) {
             $this->validators[$etape->etape_id] = new EtapeValidator($etape->etape_id);
         }
-        $last_etape=1;
-        foreach($this->etapes as $etape) {
-         
-            if(is_user_allowed($etape->etape_name)==true && (($etape->order_column)+1)<=$this->dossier['etape_number']) {
-                $last_etape=($etape->order_column)+1;
+        $last_etape = 1;
+        foreach ($this->etapes as $etape) {
+
+            if (is_user_allowed($etape->etape_name) == true && (($etape->order_column) + 1) <= $this->dossier['etape_number']) {
+                $last_etape = ($etape->order_column) + 1;
             }
         }
-        $this->last_etape=$last_etape;
+        $this->last_etape = $last_etape;
 
         // $this->setTab($this->dossier['etape_number']);
         $this->setTab($last_etape);
         $this->emit('setTab');
+
         // $this->emit('initializeDropzones', ['forms_configs' => $this->forms_configs]);
 
         $auditeurs = User::where('type_id', 4);
@@ -95,7 +96,7 @@ class DossierLivewire extends Component
             return (array) $department; // Convert stdClass to array
         })->toArray();
 
-        $this->rdv_status=RdvStatus::all();
+        $this->rdv_status = RdvStatus::all();
 
         $this->mars = Client::where('type_client', 1)->get();
         $this->financiers = Client::where('type_client', 2)->get();
@@ -116,7 +117,7 @@ class DossierLivewire extends Component
             ->with('beneficiaire', 'fiche', 'etape', 'status')
             ->first();
 
-            $current=DB::table('etapes')->where('id', $this->dossier->etape_number)->first();
+        $current = DB::table('etapes')->where('id', $this->dossier->etape_number)->first();
         $this->dossier->order_column = $current->order_column;
 
         if (!$this->dossier) {
@@ -124,13 +125,13 @@ class DossierLivewire extends Component
 
             abort(404, 'Dossier not found');
         }
-        $this->global_data=[];
+        $this->global_data = [];
         // Fetch distinct etapes
         $distinctEtapes = DB::table('forms')
             ->select('etape_number', DB::raw('MIN(id) as min_id'))
             ->groupBy('etape_number');
-           
-            
+
+
         $etapes = DB::table('forms')
             ->join('etapes', 'forms.etape_number', '=', 'etapes.id')
             ->joinSub($distinctEtapes, 'distinctEtapes', function ($join) {
@@ -140,13 +141,13 @@ class DossierLivewire extends Component
             ->orderBy('etapes.order_column')
             ->get();
         // $this->reinitializeFormsConfigs();
-            
+
         $this->etapes = $this->convertArrayToStdClass($etapes->toArray());
         foreach ($this->etapes as $etape) {
             $this->validators[$etape->etape_id] = new EtapeValidator($etape->etape_id);
         }
 
-   
+
 
 
     }
@@ -173,13 +174,13 @@ class DossierLivewire extends Component
 
     public function handleFileUploaded($request)
     {
-  
+
         $this->forms_configs[$request[0]]->formData[$request[1]]->value = $request[2];
         $this->forms_configs[$request[0]]->formData[$request[1]]->save_value();
 
         $this->formData[$request[0]][$request[1]] = $request[2];
         $this->global_data[$request[1]] = $request[2];
-        $this->reinitializeFormsConfigs(false);
+        $this->reinitializeFormsConfigs(true);
 
         $this->emit('initializeDropzones', ['forms_configs' => $this->forms_configs]);
 
@@ -189,7 +190,7 @@ class DossierLivewire extends Component
     {
         $this->etapes = $this->convertArrayToStdClass($this->etapes);
 
-       $this->reinitializeFormsConfigs(false);
+        $this->reinitializeFormsConfigs(false);
         // $this->emit('initializeDropzones', ['forms_configs' => $this->forms_configs]);
 
     }
@@ -198,14 +199,14 @@ class DossierLivewire extends Component
     public function update_value($propertyName, $value)
     {
         if (strpos($propertyName, 'formData.') === 0) {
-            
+
             $this->updatedFormData($propertyName, $value);
         }
     }
     public function updated($propertyName, $value)
     {
         if (strpos($propertyName, 'formData.') === 0) {
-            
+
             $this->updatedFormData($propertyName, $value);
         }
     }
@@ -214,19 +215,19 @@ class DossierLivewire extends Component
     {
         // Parse the property name
         // Example property names: formData.3.nom, formData.27.ajout_piece#table-0-nom_de_la_piece
-    
+
         // Pattern to match simple formData properties
         $simplePattern = '/^formData\.(\d+)\.(\w+)$/';
         // Pattern to match complex formData properties with table
         $complexPattern = '/^formData\.(\d+)\.(\w+)\.value\.(\d+)\.(\w+)$/';
-    
+
         if (preg_match($complexPattern, $propertyName, $matches)) {
             $formId = $matches[1]; // Extract formId
             $key = $matches[2]; // Extract tag
-            $tableIndex = (int)$matches[3]; // Extract table index
+            $tableIndex = (int) $matches[3]; // Extract table index
             $cellTag = $matches[4]; // Extract cell tag
-       
-            $this->forms_configs[$formId]->formData[$key]->updating=true;
+
+            $this->forms_configs[$formId]->formData[$key]->updating = true;
 
             if (isset($this->forms_configs[$formId]) && isset($this->forms_configs[$formId]->formData[$key])) {
                 $this->forms_configs[$formId]->formData[$key]->value = $this->forms_configs[$formId]->formData[$key]->init_value();
@@ -237,11 +238,11 @@ class DossierLivewire extends Component
 
             }
 
-        
+
         } elseif (preg_match($simplePattern, $propertyName, $matches)) {
             $formId = $matches[1]; // Extract formId
             $key = $matches[2]; // Extract key
-            $this->forms_configs[$formId]->formData[$key]->updating=true;
+            $this->forms_configs[$formId]->formData[$key]->updating = true;
             // Ensure the formId and key exist
             if (isset($this->forms_configs[$formId]) && isset($this->forms_configs[$formId]->formData[$key])) {
                 $this->forms_configs[$formId]->formData[$key]->value = $value;
@@ -250,19 +251,19 @@ class DossierLivewire extends Component
         }
         // dd($this->global_data);
         foreach ($this->forms_configs as $formId => $config) {
-       
+
             $config->save();
-           
+
             foreach ($config->formData as $tag => $data_form) {
-                if(!isset($this->global_data[$tag])) {
-                    $this->global_data[$tag]='';
+                if (!isset($this->global_data[$tag])) {
+                    $this->global_data[$tag] = '';
                 }
                 if ($this->global_data[$tag] != $data_form->value) {
                     $this->global_data[$tag] = $data_form->value;
                 }
             }
         }
-       
+
     }
 
     public function display_form($form_id)
@@ -281,7 +282,7 @@ class DossierLivewire extends Component
         // $this->emit('initializeDropzones', ['forms_configs' => $this->forms_configs]);
     }
 
-    public function reinitializeFormsConfigs($should_save=true)
+    public function reinitializeFormsConfigs($should_save = true)
     {
         if (isset($this->dossier) && $this->dossier->fiche_id) {
             $forms = DB::table('forms')->where('fiche_id', $this->dossier->fiche_id);
@@ -296,33 +297,33 @@ class DossierLivewire extends Component
             $this->formData = [];
 
 
-         
+
             foreach ($forms as $form) {
                 $handler = new FormConfigHandler($this->dossier, $this->convertArrayToStdClass((array) $form));
                 $this->forms_configs[$form->id] = $handler;
-                
+
                 foreach ($handler->formData as $key => $field) {
-            
-                    if (!isset($this->global_data[$key]) ) {
+
+                    if (!isset($this->global_data[$key])) {
                         $this->formData[$form->id][$key] = $field->generate_value();
-                   
+
                         $this->global_data[$key] = $field->generate_value();
                     } else {
 
-                        $this->formData[$form->id][$key] = $this->global_data[$key] ;
-                     
+                        $this->formData[$form->id][$key] = $this->global_data[$key];
+
                         $field->value = $this->global_data[$key];
                     }
-                    if($field->value && $should_save) {
+                    if ($field->value && $should_save) {
                         $field->save_value();
                     }
-                 
+
 
                 }
             }
-            $dossier=Dossier::where('id', $this->dossier->id)->first();
+            $dossier = Dossier::where('id', $this->dossier->id)->first();
 
-            foreach($dossier->getAttributes() as $key=>$value) {
+            foreach ($dossier->getAttributes() as $key => $value) {
                 $this->global_data[$key] = $value;
 
             }
@@ -337,7 +338,7 @@ class DossierLivewire extends Component
             $distinctEtapes = DB::table('forms')
                 ->select('etape_number', DB::raw('MIN(id) as min_id'))
                 ->groupBy('etape_number');
-       
+
             $etapes = DB::table('forms')
                 ->join('etapes', 'forms.etape_number', '=', 'etapes.id')
                 ->joinSub($distinctEtapes, 'distinctEtapes', function ($join) {
@@ -361,11 +362,11 @@ class DossierLivewire extends Component
 
 
         }
-       
+
         $this->get_score_per_etape();
     }
 
- 
+
 
     public function render()
     {
@@ -391,29 +392,30 @@ class DossierLivewire extends Component
     }
 
 
-    public function get_score_per_etape() {
+    public function get_score_per_etape()
+    {
         $scores = [];
         $global_score = 0;
         $total_forms = 0;
-    
+
         foreach ($this->formData as $formId => $fields) {
-            $score = $this->forms_configs[$formId]->get_form_progression_percent()*100;
+            $score = $this->forms_configs[$formId]->get_form_progression_percent() * 100;
             $formatted_score = number_format($score, 2) . ''; // Formater le score à deux décimales et ajouter '%'
             $scores[$formId] = $formatted_score;
-            $total_forms ++;
+            $total_forms++;
             $global_score += $score;
         }
-    
-        if ($total_forms == 0){
+
+        if ($total_forms == 0) {
             $global_score = '0.00%';
         } else {
             $global_score = number_format($global_score / $total_forms, 2) . ''; // Formater le score global à deux décimales et ajouter '%'
         }
-    
+
         $this->score_info = ["form_score" => $scores, "etape_score" => $global_score];
     }
-    
-    
+
+
 
     public function submit()
     {
@@ -437,26 +439,26 @@ class DossierLivewire extends Component
 
 
 
-    public function add_row($table_tag,$form_id)
+    public function add_row($table_tag, $form_id)
     {
 
-        if(isset($this->forms_configs[$form_id])) {
-            $form_configs=$this->forms_configs[$form_id];
+        if (isset($this->forms_configs[$form_id])) {
+            $form_configs = $this->forms_configs[$form_id];
             $form_configs->formData[$table_tag]->add_element();
         }
-        
+
         return '';
     }
 
 
-    public function remove_row($table_tag,$form_id,$index)
+    public function remove_row($table_tag, $form_id, $index)
     {
-        if(isset($this->forms_configs[$form_id])) {
-            $form_configs=$this->forms_configs[$form_id];
+        if (isset($this->forms_configs[$form_id])) {
+            $form_configs = $this->forms_configs[$form_id];
 
-            $this->global_data[$table_tag]=$form_configs->formData[$table_tag]->remove_element($index);
+            $this->global_data[$table_tag] = $form_configs->formData[$table_tag]->remove_element($index);
         }
-        
+
         return '';
     }
 }

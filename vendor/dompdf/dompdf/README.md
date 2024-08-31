@@ -57,9 +57,9 @@ Note that some required dependencies may have further dependencies
 
 ### Recommendations
 
- * GD (for image processing)
-   * Additionally, the IMagick or GMagick extension improves image processing performance for certain image types
  * OPcache (OPcache, XCache, APC, etc.): improves performance
+ * GD (for image processing)
+ * IMagick or GMagick extension: improves image processing performance
 
 Visit the wiki for more information:
 https://github.com/dompdf/dompdf/wiki/Requirements
@@ -222,10 +222,7 @@ Files accessed through the local file system have the following requirement:
      $html = '<img src="data:image/svg+xml;base64,' . base64_encode($svg) . '" ...>';
      ```
      Watch https://github.com/dompdf/dompdf/issues/320 for progress
- * Does not support CSS flexbox.
- * Does not support CSS Grid.
- * A single Dompdf instance should not be used to render more than one HTML document
-   because persisted parsing and rendering artifacts can impact future renders.
+
 ---
 
 [![Donate button](https://www.paypal.com/en_US/i/btn/btn_donate_SM.gif)](http://goo.gl/DSvWf)

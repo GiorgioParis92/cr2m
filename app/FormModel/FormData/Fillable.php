@@ -9,6 +9,7 @@ class Fillable extends AbstractFormData
 {
     public function render(bool $is_error)
     {
+
         $data = '';
 
         $data = '<tr>';
@@ -38,7 +39,10 @@ class Fillable extends AbstractFormData
 
         $data .= '<td class="w-30" ><div >';
 
-        $extension = explode('.', $this->name);
+
+// $data .=$this->value;
+
+        $extension = explode('.', $this->value);
 
         
 
@@ -46,14 +50,21 @@ class Fillable extends AbstractFormData
 
 
             if (file_exists($filePath)) {
-        
+                if (end($extension) != 'pdf') {
+                    $data .= '<button type="button" class="btn btn-success btn-view imageModal"
+            data-toggle="modal" data-target="imageModal"
+            data-img-src="' . asset('storage/' . $this->value) . '?time=' . strtotime('now') . '"
+            data-name="' . $this->config->title . '">
+            <i class="fas fa-eye"></i> Visualiser
+        </button> ';
+                } else {
                     $data .= '<div class="btn btn-success btn-view pdfModal"
             data-toggle="modal" 
              
-            data-img-src="' . asset('storage/dossiers/'.$this->dossier->folder.'/' . $this->name.'.pdf') . '?time=' . strtotime('now') . '"
+            data-img-src="' . asset('storage/' . $this->value) . '?time=' . strtotime('now') . '"
             data-name="' . $this->config->title . '">
             <i class="fas fa-eye"></i> Visualiser</div>';
-                
+                }
             }
 
         

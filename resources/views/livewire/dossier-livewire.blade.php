@@ -275,11 +275,17 @@
 <!-- FullCalendar Locale -->
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/locales/fr.js"></script>
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
+
+  
+
+
+    document.addEventListener('DOMContentLoaded', function(event) {
 
         console.log('DOM fully loaded and parsed');
-
-
+               console.log('Livewire component mounted:', event);
+               // Your code here
+           
+    
 
         Livewire.on('loadCalendar', function() {
 
@@ -494,13 +500,21 @@
         initializeDeleteButtons();
     });
     document.addEventListener('DOMContentLoaded', function() {
-
+      
+        Livewire.on('pageLoaded', (data) => {
+            console.log('pageloaded')
+            var configs = data.forms_configs;
+            console.log(data)
+            initializeDropzones(configs);
+        })
 
         Livewire.on('setTab', (data) => {
+            console.log('settab')
+
+            console.log(data)
             var configs = data.forms_configs;
             initializeDropzones(configs);
             $('.delete_photo').click(function() {
-                alert('stop')
                 console.log($('meta[name="_token"]').attr('content'))
                 var link = $(this).data('val');
                 $.ajax({
@@ -528,7 +542,8 @@
                 });
             })
         });
-        // 
+       
+
         Livewire.on('ok_photo', (data) => {
             alert('ok');
         });
@@ -554,11 +569,12 @@
 
 
         });
-
+       
 
     });
 
     function initializeDropzones(configs) {
+        console.log(configs)
         // Destroy existing Dropzone instances
         if (Dropzone.instances.length > 0) {
             Dropzone.instances.forEach(instance => instance.destroy());
@@ -573,7 +589,7 @@
                     console.log(key)
                     var dropzoneElementId = `#dropzone-${key}`;
                     var dropzoneElement = document.querySelector(dropzoneElementId);
-
+                    console.log('dropzones : '+dropzoneElement)
                     if (!dropzoneElement) {
                         console.warn(`Element ${dropzoneElementId} not found.`);
                         return;
@@ -640,7 +656,6 @@
         // Attach new event listeners
         $(document).on('click', '.imageModal', function(event) {
             $('#imageInModal').attr('src', '');
-
             var imgSrc = $(this).data('img-src');
             imgSrc += `?time=${new Date().getTime()}`;
             $('#imageInModal').attr('src', imgSrc);

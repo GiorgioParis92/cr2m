@@ -842,14 +842,14 @@
                 $('#pdfModal').css('display', 'block');
             });
 
-            $(document).on('click', '.imageModal', function(event) {
-                $('#imageInModal').attr('src', '');
+            // $(document).on('click', '.imageModal', function(event) {
+            //     $('#imageInModal').attr('src', '');
+            //     var imgSrc = $(this).data('img-src');
+            //     imgSrc += `?time=${new Date().getTime()}`;
 
-                var imgSrc = $(this).data('img-src');
-                imgSrc += `?time=${new Date().getTime()}`;
-                $('#imageInModal').attr('src', imgSrc);
-                $('#imageModal').modal('show');
-            });
+            //     $('#imageInModal').attr('src', imgSrc);
+            //     $('#imageModal').modal('show');
+            // });
         });
 
         $(document).ready(function() {

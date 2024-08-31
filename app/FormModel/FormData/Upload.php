@@ -42,7 +42,7 @@ class Upload extends AbstractFormData
 
             $filePath = storage_path('app/public/' . $this->value);  // File system path
 
-        // $data.=$filePath;
+            // $data.=$filePath;
       
             if (file_exists($filePath)) {
                 if (end($extension) != 'pdf') {
@@ -89,7 +89,8 @@ class Upload extends AbstractFormData
     public function check_value()
     {
 
-        return Storage::disk('public')->exists($this->value);
+        return true;
+        // return Storage::disk('public')->exists($this->value);
     }
 
 }

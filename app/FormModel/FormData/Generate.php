@@ -74,7 +74,6 @@ class Generate extends AbstractFormData
             $extension = explode('.', $this->value);
 
 
-
             $filePath = storage_path('app/public/dossiers/' . $this->dossier->folder . '/' . $this->name . '.pdf');  // File system path
 
             // $data.=(asset('storage/' . $this->value));

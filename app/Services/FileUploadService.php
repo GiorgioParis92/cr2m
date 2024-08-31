@@ -11,7 +11,10 @@ use App\Models\Dossier;
 use App\FormModel\FormData\Photo;
 use App\FormModel\FormData\Table;
 use Livewire\Livewire; // Import the Livewire facade
-
+use PDF; // Assuming you have barryvdh/laravel-dompdf installed
+use Image; // Assuming you have intervention/image installed
+use setasign\Fpdi\Fpdi;
+use FPDF;
 class FileUploadService
 {
     /**
@@ -144,10 +147,16 @@ class FileUploadService
         $filePath = $file->storeAs($directory, $fileName, 'public');
 
         DB::enableQueryLog();
-   
+        $index='';
+
         $template=$request->input('template');
+
+      
+
+
+
         if ($random_name==true) {
-    
+          
             $index='';
             $explode=(explode('.',$request->input('template')));
             if(is_array($explode) && count($explode)>1) {
@@ -157,6 +166,7 @@ class FileUploadService
                 $field=$array[3];
                 
             } else {
+
                 $template=$request->input('template');
             }
        
@@ -185,7 +195,8 @@ class FileUploadService
 
                 }
            
-                
+           
+
                 $update = DB::table('forms_data')->updateOrInsert(
                     [
                         'dossier_id' => '' . $dossier->id . '',
@@ -217,6 +228,8 @@ class FileUploadService
                 );
             }
         } else {
+           
+
             $update = DB::table('forms_data')->updateOrInsert(
                 [
                     'dossier_id' => '' . $dossier->id . '',
@@ -229,9 +242,67 @@ class FileUploadService
                     'updated_at' => now()
                 ]
             );
+           
         }
 
-       
+
+
+        if ($file->isValid() && in_array(strtolower($extension), ['jpeg', 'jpg', 'png', 'gif', 'bmp'])) {
+
+            // Resize image to fit A4 dimensions
+            $image = Image::make($file)->fit(595, 842); // 595x842 pixels corresponds to 210x297mm at 72dpi
+            $tempImagePath = storage_path('app/public/' . $directory . '/temp_image.jpg');
+            $image->save($tempImagePath);
+
+            // Define the PDF file name and path
+            $pdfFileName = $request->input('template') . '.pdf';
+            $pdfFilePath = storage_path('app/public/' . $directory . '/' . $pdfFileName);
+
+            if (file_exists($pdfFilePath)) {
+                // Append to existing PDF
+                $pdf = new FPDI();
+                $pageCount = $pdf->setSourceFile($pdfFilePath);
+
+                // Import existing pages
+                for ($pageNo = 1; $pageNo <= $pageCount; $pageNo++) {
+                    $templateId = $pdf->importPage($pageNo);
+                    $size = $pdf->getTemplateSize($templateId);
+                    $pdf->AddPage($size['orientation'], [$size['width'], $size['height']]);
+                    $pdf->useTemplate($templateId);
+                }
+
+                // Add a new page for the new image
+                $pdf->AddPage('P', 'A4');
+                $pdf->Image($tempImagePath, 0, 0, 210, 297);
+            } else {
+                // Create a new PDF
+                $pdf = new FPDF();
+                $pdf->AddPage('P', 'A4');
+                $pdf->Image($tempImagePath, 0, 0, 210, 297);
+            }
+
+            // Save the updated or new PDF
+            $pdf->Output($pdfFilePath, 'F');
+
+            // Optionally, delete the temporary image file
+            unlink($tempImagePath);
+
+
+            $update = DB::table('forms_data')->updateOrInsert(
+                [
+                    'dossier_id' => '' . $dossier->id . '',
+                    'form_id' => '' . $form_id . '',
+                    'meta_key' => '' . $template . ''
+                ],
+                [
+                    'meta_value' => '' . $directory . '/' . $pdfFileName . '',
+                    'created_at' => now(),
+                    'updated_at' => now()
+                ]
+            );
+            return $directory . '/' . $pdfFileName;
+        }
+
         if($index!='') {
             $config = \DB::table('forms_config')
             ->where('form_id', $form_id)
@@ -241,7 +312,7 @@ class FileUploadService
         $table = new Table($config, $template, $form_id, $dossier->id);
         $table->save_value();
         }
-
+       
 
         return $filePath;
 
