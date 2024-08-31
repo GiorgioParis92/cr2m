@@ -49,7 +49,7 @@ class Fillable extends AbstractFormData
             $filePath = storage_path('app/public/dossiers/'.$this->dossier->folder .'/' . $this->name.'.pdf');  // File system path
 
 
-            if (file_exists($filePath)) {
+            if (file_exists($filePath) && !empty($this->value)) {
                 if (end($extension) != 'pdf') {
                     $data .= '<button type="button" class="btn btn-success btn-view imageModal"
             data-toggle="modal" data-target="imageModal"
