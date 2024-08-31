@@ -40,7 +40,7 @@ class Fillable extends AbstractFormData
         $data .= '<td class="w-30" ><div >';
 
 
-$data .=$this->value;
+// $data .=$this->value;
 
         $extension = explode('.', $this->value);
 
