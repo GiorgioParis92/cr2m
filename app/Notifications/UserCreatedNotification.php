@@ -32,6 +32,8 @@ class UserCreatedNotification extends Notification
 
         return (new MailMessage)
             ->subject('Compte créé')
+            ->from('crm@genius-market.fr', 'CRM ATLAS')
+
             ->view('emails.user-created', [
                 'user' => $this->user,
                 'temporaryPassword' => $this->temporaryPassword,
