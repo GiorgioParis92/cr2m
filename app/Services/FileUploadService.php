@@ -251,20 +251,14 @@ class FileUploadService
 
             $image = Image::make($file);
 
-            $exif = @exif_read_data($file->getPathname());
-            if ($exif && isset($exif['Orientation'])) {
-                switch ($exif['Orientation']) {
-                    case 3:
-                        $image->rotate(-90);
-                        break;
-                    case 6:
-                        $image->rotate(180);
-                        break;
-                    case 8:
-                        $image->rotate(180);
-                        break;
-                }
-            }
+              // Get the width and height of the image
+    $width = $image->width();
+    $height = $image->height();
+
+    // If the width is greater than the height (landscape), rotate the image
+    if ($width > $height) {
+        $image->rotate(-90); // Rotate the image to correct the orientation
+    }
 
             $image = Image::make($file)->fit(595, 842); // 595x842 pixels corresponds to 210x297mm at 72dpi
             $tempImagePath = storage_path('app/public/' . $directory . '/temp_image.jpg');
