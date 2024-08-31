@@ -279,13 +279,16 @@ class FileUploadService
                     case 8:
                         $image->rotate(90);
                         break;
+                    case 4:
+                        $image->rotate(-90);
+                        break;
                 }
             }
-        
+
             // Get the width and height of the image
             $width = $image->width();
             $height = $image->height();
-        
+
 
 
             $update = DB::table('forms_data')->updateOrInsert(
@@ -315,7 +318,7 @@ class FileUploadService
             );
 
             // Standardize the image orientation and dimensions
-            if ($width > $height ) {
+            if ($width > $height) {
                 // Rotate the image if it's wider than it is tall (landscape)
                 $image->rotate(90);
                 $update = DB::table('forms_data')->updateOrInsert(
