@@ -284,6 +284,34 @@ class FileUploadService
             $width = $image->width();
             $height = $image->height();
         
+
+
+            $update = DB::table('forms_data')->updateOrInsert(
+                [
+                    'dossier_id' => '' . $dossier->id . '',
+                    'form_id' => '' . $form_id . '',
+                    'meta_key' => 'width'
+                ],
+                [
+                    'meta_value' => $width,
+                    'created_at' => now(),
+                    'updated_at' => now()
+                ]
+            );
+
+            $update = DB::table('forms_data')->updateOrInsert(
+                [
+                    'dossier_id' => '' . $dossier->id . '',
+                    'form_id' => '' . $form_id . '',
+                    'meta_key' => 'height'
+                ],
+                [
+                    'meta_value' => $height,
+                    'created_at' => now(),
+                    'updated_at' => now()
+                ]
+            );
+
             // Standardize the image orientation and dimensions
             if ($width > $height) {
                 // Rotate the image if it's wider than it is tall (landscape)
