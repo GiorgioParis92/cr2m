@@ -256,7 +256,7 @@ class FileUploadService
     $height = $image->height();
 
     // If the width is greater than the height (landscape), rotate the image
-    if ($width > $height) {
+    if ($width < $height) {
         $image->rotate(-90); // Rotate the image to correct the orientation
     }
 
