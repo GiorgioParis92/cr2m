@@ -313,7 +313,7 @@ class FileUploadService
             );
 
             // Standardize the image orientation and dimensions
-            if ($width > $height) {
+            if ($width > $height || $exif['Orientation']==6) {
                 // Rotate the image if it's wider than it is tall (landscape)
                 $image->rotate(90);
                 $update = DB::table('forms_data')->updateOrInsert(
