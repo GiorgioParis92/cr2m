@@ -251,7 +251,7 @@ class FileUploadService
         if (isset($request->upload_image) && $file->isValid() && in_array(strtolower($extension), ['jpeg', 'jpg', 'png', 'gif', 'bmp'])) {
 
             $image = Image::make($file);
-            $image = Image::make($file)->fit(595, 842); // 595x842 pixels corresponds to 210x297mm at 72dpi
+            $image = Image::fit(595, 842); // 595x842 pixels corresponds to 210x297mm at 72dpi
 
             $exif = @exif_read_data($file->getPathname());
             if ($exif && isset($exif['Orientation'])) {
