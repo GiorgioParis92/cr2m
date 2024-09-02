@@ -31,7 +31,7 @@ class YouSign extends Controller
     $dossier = Dossier::where('folder', $request->dossier_id);
     $dossier = $dossier->with('beneficiaire', 'fiche', 'etape', 'status','get_rdv')->first();
 
-    dd($dossier);
+  
 
     if($dossier) {
       $data = json_encode([
@@ -59,7 +59,7 @@ class YouSign extends Controller
 
     // Check if the file exists
 
-
+    
     $file = new \CURLFile($fullPath, 'application/pdf');
    
     $curl = curl_init();

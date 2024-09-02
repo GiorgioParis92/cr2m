@@ -169,7 +169,7 @@ class PDFController extends Controller
                     $pdf->SetFont($font);
 
 
-                    $font_size = isset($fill_data_config["font_size"]) ? $fill_data_config["font_size"] : 12;
+                    $font_size = isset($fill_data_config["font-size"]) ? $fill_data_config["font-size"] : 12;
                     $pdf->SetFontSize($font_size);
 
                     $value = "";
@@ -204,6 +204,15 @@ class PDFController extends Controller
                     }
                     $x_pos = $fill_data_config["position"][0];
                     $y_pos = $fill_data_config["position"][1];
+
+                    if(isset($fill_data_config["letter-spacing"])) {
+                        $pdf->SetFontSpacing($fill_data_config["letter-spacing"]);
+                    } else {
+                        $pdf->SetFontSpacing(0);
+                    }
+
+                    
+
                     $pdf->SetXY($x_pos, $y_pos);
                     $pdf->Write(0, $value);
                 }
