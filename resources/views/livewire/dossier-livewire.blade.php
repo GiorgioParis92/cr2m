@@ -812,7 +812,6 @@
             var signature_request_id = $(this).data('signature_request_id'); // Get the dossier ID from data attribute
             var document_id = $(this).data('document_id'); // Get the dossier ID from data attribute
 
-
             $.ajax({
                 url: '/api/yousign-status', // Adjust this URL to your actual API endpoint
                 type: 'POST',
@@ -851,6 +850,7 @@
             var form_id = $(this).data('form_id'); // Get the dossier ID from data attribute
             var generation = $(this).data('generation'); // Get the dossier ID from data attribute
             var fields = $(this).data('fields'); // Get the dossier ID from data attribute
+            var name = $(this).data('name'); // Get the dossier ID from data attribute
 
             $.ajax({
                 url: '/api/yousign', // Adjust this URL to your actual API endpoint
@@ -860,6 +860,7 @@
                     generation: generation,
                     form_id: form_id,
                     fields: fields,
+                    name: name,
                     template: template
                 },
                 headers: {

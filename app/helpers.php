@@ -218,6 +218,31 @@ if (!function_exists('is_client')) {
     }
 }
 
+function formatFrenchPhoneNumber($phoneNumber) {
+    // Regular expression for French phone number
+    $pattern = '/^(?:(?:\+|00)33|0)[1-9](?:[\s\.\-]?\d{2}){4}$/';
+
+    // Check if the phone number matches the regex pattern
+    if (preg_match($pattern, $phoneNumber)) {
+        // Remove any spaces, dots, or dashes
+        $cleanedNumber = preg_replace('/[\s\.\-]/', '', $phoneNumber);
+
+        // Replace the leading 0 with +33 or remove +33 if already present
+        if (substr($cleanedNumber, 0, 1) === '0') {
+            $cleanedNumber = '+33' . substr($cleanedNumber, 1);
+        } elseif (substr($cleanedNumber, 0, 2) === '00') {
+            $cleanedNumber = '+' . substr($cleanedNumber, 2);
+        } elseif (substr($cleanedNumber, 0, 3) === '+33') {
+            // Already in the correct format
+            return $cleanedNumber;
+        }
+
+        return $cleanedNumber;
+    } else {
+        // Return false or throw an error if the number doesn't match the pattern
+        return false;
+    }
+}
 
 if (!function_exists('load_all_dossier_data')) {
     function load_all_dossier_data($dossier)

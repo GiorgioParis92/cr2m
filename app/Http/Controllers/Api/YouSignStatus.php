@@ -25,15 +25,16 @@ class YouSignStatus extends Controller
 
   public function index(Request $request): \Illuminate\Http\JsonResponse
   {
-
+    
     $url = 'http://192.168.100.40:5010/process_request?service=yousign';
     $data = json_encode([
       'request_type' => 'get_status',
+      'service' => 'yousign', // Add the service field
+
       'request_data' => [
         "signature_request_id" => $request->signature_request_id
       ]
     ]);
-
 
     $curl = curl_init();
 
@@ -46,7 +47,9 @@ class YouSignStatus extends Controller
         'Content-Type: multipart/form-data'
       ],
       CURLOPT_POSTFIELDS => [
-        'data' => $data
+        'data' => $data,
+        'service' => 'yousign', // Add the service field
+
 
       ],
     ]);
@@ -58,7 +61,6 @@ class YouSignStatus extends Controller
     $responseData = json_decode($response, true);
 
     $uuid = $responseData['request_uuid'];
-
 
 
     while (true) {
@@ -117,6 +119,8 @@ class YouSignStatus extends Controller
           $responseData->status === 'error'
         )
       ) {
+
+     
         if ($responseData->result->data->document->status == 'ongoing') {
 
           $update = DB::table('forms_data')->updateOrInsert(
@@ -156,6 +160,8 @@ class YouSignStatus extends Controller
           $url = 'http://192.168.100.40:5010/process_request?service=yousign';
           $data = json_encode([
             'request_type' => 'download_document',
+            'service' => 'yousign', // Add the service field
+
             'request_data' => [
               "signature_request_id" => $request->signature_request_id,
               "document_id" => $request->document_id
@@ -176,7 +182,9 @@ class YouSignStatus extends Controller
               'Content-Type: multipart/form-data'
             ],
             CURLOPT_POSTFIELDS => [
-              'data' => $data
+              'data' => $data,
+              'service' => 'yousign', // Add the service field
+
 
             ],
           ]);
@@ -244,10 +252,10 @@ class YouSignStatus extends Controller
               )
             ) {
 
-
+          
               $url = $responseData->result->data->url_info->url;
               $token = $responseData->result->data->url_info->token; // Replace YOUR_BEARER_TOKEN with your actual token
-
+             
               $path = 'storage/dossiers/'.$request->dossier_id.'/'.$request->template.'.pdf';
 
               $outputFile = public_path($path);
@@ -261,13 +269,15 @@ class YouSignStatus extends Controller
                   'Accept: application/zip, application/pdf',
                   'Authorization: Bearer ' . $token,
               ]);
-          
+              curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+              curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
               // Execute the request and fetch the response
               $response = curl_exec($ch);
-          
+              
               // Check for cURL errors
               if (curl_errno($ch)) {
                   echo 'cURL error: ' . curl_error($ch);
+                
               } else {
                 file_put_contents($outputFile, $response);
 

@@ -29,39 +29,45 @@ class YouSign extends Controller
     $url = 'http://192.168.100.40:5010/process_request?service=yousign';
 
     $dossier = Dossier::where('folder', $request->dossier_id);
-    $dossier = $dossier->with('beneficiaire', 'fiche', 'etape', 'status','get_rdv')->first();
+    $dossier = $dossier->with('beneficiaire', 'fiche', 'etape', 'status', 'get_rdv')->first();
 
-  
 
-    if($dossier) {
+
+    if ($dossier) {
+
+
+
       $data = json_encode([
         'request_type' => 'create_document',
+        'service' => 'yousign', // Add the service field
+
         'request_data' => [
-          'signature_name' => 'Attestation de visite',
+          'service' => 'yousign', // Add the service field
+
+          'signature_name' => $request->name ?? '',
           'delivery_mode' => 'email',
           'signature_level' => 'electronic_signature',
           'fields' => json_decode(json_encode($request->fields), true),
           'signer_info' => [
             'first_name' => $dossier->beneficiaire->prenom ?? '',
             'last_name' => $dossier->beneficiaire->nom ?? '',
-            'email' => 'genius.market.fr@gmail.com',
-            'phone_number' => '+33651980838'
+            'email' => $dossier->beneficiaire->email ?? '',
+            'phone_number' => formatFrenchPhoneNumber($dossier->beneficiaire->telephone) ?? ''
           ]
         ]
       ]);
-  
-  
-  
-      $path = 'storage/dossiers/'.$request->dossier_id.'/'.$request->template.'.pdf';
-  
+
+
+      $path = 'storage/dossiers/' . $request->dossier_id . '/' . $request->template . '.pdf';
+
       $fullPath = public_path($path);
     }
 
     // Check if the file exists
 
-    
+
     $file = new \CURLFile($fullPath, 'application/pdf');
-   
+
     $curl = curl_init();
 
     curl_setopt_array($curl, [
@@ -74,18 +80,23 @@ class YouSign extends Controller
       ],
       CURLOPT_POSTFIELDS => [
         'data' => $data,
-        'file' => $file
+        'file' => $file,
+        'service' => 'yousign'
       ],
     ]);
 
     $response = curl_exec($curl);
 
+    if ($response === false) {
+      die('Curl error: ' . curl_error($curl)); // Output cURL error
+    }
+
+    $responseData = json_decode($response, true);
 
     // Extracting UUID
     $responseData = json_decode($response, true);
 
     $uuid = $responseData['request_uuid'];
-
 
     while (true) {
 
@@ -142,34 +153,42 @@ class YouSign extends Controller
           $responseData->status === 'error'
         )
       ) {
+   
+        $resultData = $responseData->result->data->result ?? null;
 
-        $update = DB::table('forms_data')->updateOrInsert(
-          [
-            'dossier_id' => '' . $dossier->id . '',
-            'form_id' => '' . $request->form_id . '',
-            'meta_key' => 'signature_request_id'
-          ],
-          [
-            'meta_value' => '' . $responseData->result->data->result->signature_request_id . '',
-            'created_at' => now(),
-            'updated_at' => now()
-          ]
-        );
-        $update = DB::table('forms_data')->updateOrInsert(
-          [
-            'dossier_id' => '' . $dossier->id . '',
-            'form_id' => '' . $request->form_id . '',
-            'meta_key' => 'document_id'
-          ],
-          [
-            'meta_value' => '' . $responseData->result->data->result->document_id . '',
-            'created_at' => now(),
-            'updated_at' => now()
-          ]
-        );
+        if ($resultData->signature_request_id) {
+          $signatureRequestId = $resultData->signature_request_id ?? '';
+          $documentId = $resultData->document_id ?? '';
 
 
+          $update = DB::table('forms_data')->updateOrInsert(
+            [
+              'dossier_id' => '' . $dossier->id . '',
+              'form_id' => '' . $request->form_id . '',
+              'meta_key' => 'signature_request_id'
+            ],
+            [
+              'meta_value' => $signatureRequestId,
+              'created_at' => now(),
+              'updated_at' => now()
+            ]
+          );
 
+          $update = DB::table('forms_data')->updateOrInsert(
+            [
+              'dossier_id' => '' . $dossier->id . '',
+              'form_id' => '' . $request->form_id . '',
+              'meta_key' => 'document_id'
+            ],
+            [
+              'meta_value' => $documentId,
+              'created_at' => now(),
+              'updated_at' => now()
+            ]
+          );
+
+          return response()->json('ok', 200);
+        }
       }
 
 
@@ -183,7 +202,7 @@ class YouSign extends Controller
     // Sleep for a while before making the next request
 
 
-    return response()->json($results, 200);
+
 
   }
 

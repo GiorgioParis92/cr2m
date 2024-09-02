@@ -125,6 +125,14 @@ class PDFController extends Controller
             'dossier_id' => 'nullable',
         ]);
 
+        $dossierId = $validated['dossier_id'];
+        $folderPath = "public/dossiers/{$dossierId}";
+        $directPath = "dossiers/{$dossierId}";
+
+        if (!Storage::exists($folderPath)) {
+            Storage::makeDirectory($folderPath);
+        }
+
         if (isset($validated['dossier_id'])) {
             $config = \DB::table('forms_config')
                 ->where('form_id', $request->form_id)
@@ -132,8 +140,7 @@ class PDFController extends Controller
                 ->where('type', 'fillable')
                 ->first();
 
-
-            $jsonString = str_replace(["\n", ' ', "\r"], '', $config->options);
+            $jsonString = str_replace(["\n", '', "\r"], '', $config->options);
             $optionsArray = json_decode($jsonString, true);
             if (!is_array($optionsArray)) {
                 $optionsArray = [];
@@ -200,6 +207,12 @@ class PDFController extends Controller
                                 }
                             }
                         }
+
+                        if(isset($fill_data_config["date_now"])) {
+                          
+                            $current_value = date($fill_data_config["date_now"],strtotime("now"));
+                        }
+
                         $value .= ' ' . $current_value;
                     }
                     $x_pos = $fill_data_config["position"][0];
@@ -228,9 +241,26 @@ class PDFController extends Controller
         $fileName = $request->name . ".pdf";
         $filePath = "{$folderPath}/{$fileName}";
 
+        $directPath ="{$directPath}/{$fileName}";
+
+
         $pdfContent = $pdf->output('', 'S'); // 'S' returns the PDF as a string
         Storage::put($filePath, $pdfContent);
+        $dossier = Dossier::where('folder', $dossierId)->first();
 
+
+        $update = DB::table('forms_data')->updateOrInsert(
+            [
+                'dossier_id' => '' . $dossier->id . '',
+                'form_id' => '' . $request->form_id . '',
+                'meta_key' => '' . $request->name . ''
+            ],
+            [
+                'meta_value' => '' . $directPath . '',
+                'created_at' => now(),
+                'updated_at' => now()
+            ]
+        );
 
         return response()->json([
             'message' => 'PDF generated and saved successfully',

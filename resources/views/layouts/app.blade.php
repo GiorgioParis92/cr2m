@@ -854,7 +854,76 @@
 
         $(document).ready(function() {
 
+            $(document).on('click', '.signable', function(event) {
 
+var template = $(this).data('template'); // Get the template from data attribute
+var dossier_id = $(this).data('dossier_id'); // Get the dossier ID from data attribute
+var form_id = $(this).data('form_id'); // Get the dossier ID from data attribute
+var generation = $(this).data('generation'); // Get the dossier ID from data attribute
+var fields = $(this).data('fields'); // Get the dossier ID from data attribute
+var name = $(this).data('name'); // Get the dossier ID from data attribute
+
+$.ajax({
+    url: '/api/yousign', // Adjust this URL to your actual API endpoint
+    type: 'POST',
+    data: {
+        dossier_id: dossier_id,
+        generation: generation,
+        form_id: form_id,
+        fields: fields,
+        name: name,
+        template: template
+    },
+    headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr(
+            'content') // Include CSRF token if using Laravel's CSRF protection
+    },
+    success: function(response) {
+        console.log(response)
+    },
+    error: function(xhr, status, error) {
+        console.error('Error generating PDF:', error);
+    }
+});
+});
+
+            $(document).on('click', '.check_signature', function(event) {
+            var template = $(this).data('template'); // Get the template from data attribute
+            var dossier_id = $(this).data('dossier_id'); // Get the dossier ID from data attribute
+            var form_id = $(this).data('form_id'); // Get the dossier ID from data attribute
+            var generation = $(this).data('generation'); // Get the dossier ID from data attribute
+            var signature_request_id = $(this).data('signature_request_id'); // Get the dossier ID from data attribute
+            var document_id = $(this).data('document_id'); // Get the dossier ID from data attribute
+
+            $.ajax({
+                url: '/api/yousign-status', // Adjust this URL to your actual API endpoint
+                type: 'POST',
+                data: {
+                    dossier_id: dossier_id,
+                    generation: generation,
+                    form_id: form_id,
+                    signature_request_id: signature_request_id,
+                    document_id: document_id,
+                    template: template
+                },
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr(
+                        'content') // Include CSRF token if using Laravel's CSRF protection
+                },
+                success: function(response) {
+                    console.log(response)
+
+                    if(response=='ongoing') {
+                        $('#message_'+template).html('Le document est en cours de signature');
+                    }
+
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error generating PDF:', error);
+                }
+            });
+
+        });
 
 
             $('#global').on('keyup', function() {
