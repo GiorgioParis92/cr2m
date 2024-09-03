@@ -249,25 +249,13 @@ class FileUploadService
 
 
         if (isset($request->upload_image) && $file->isValid() && in_array(strtolower($extension), ['jpeg', 'jpg', 'png', 'gif', 'bmp'])) {
-
+            
             $image = Image::make($file);
 
             $exif = @exif_read_data($file->getPathname());
             if ($exif && isset($exif['Orientation'])) {
 
 
-                $update = DB::table('forms_data')->updateOrInsert(
-                    [
-                        'dossier_id' => '' . $dossier->id . '',
-                        'form_id' => '' . $form_id . '',
-                        'meta_key' => 'ORIENTATION'
-                    ],
-                    [
-                        'meta_value' => $exif['Orientation'],
-                        'created_at' => now(),
-                        'updated_at' => now()
-                    ]
-                );
 
                 switch ($exif['Orientation']) {
                     case 3:
@@ -291,48 +279,11 @@ class FileUploadService
 
 
 
-            $update = DB::table('forms_data')->updateOrInsert(
-                [
-                    'dossier_id' => '' . $dossier->id . '',
-                    'form_id' => '' . $form_id . '',
-                    'meta_key' => 'width'
-                ],
-                [
-                    'meta_value' => $width,
-                    'created_at' => now(),
-                    'updated_at' => now()
-                ]
-            );
-
-            $update = DB::table('forms_data')->updateOrInsert(
-                [
-                    'dossier_id' => '' . $dossier->id . '',
-                    'form_id' => '' . $form_id . '',
-                    'meta_key' => 'height'
-                ],
-                [
-                    'meta_value' => $height,
-                    'created_at' => now(),
-                    'updated_at' => now()
-                ]
-            );
-
             // Standardize the image orientation and dimensions
             if ($width > $height) {
                 // Rotate the image if it's wider than it is tall (landscape)
                 $image->rotate(90);
-                $update = DB::table('forms_data')->updateOrInsert(
-                    [
-                        'dossier_id' => '' . $dossier->id . '',
-                        'form_id' => '' . $form_id . '',
-                        'meta_key' => 'rotate'
-                    ],
-                    [
-                        'meta_value' => 'yes',
-                        'created_at' => now(),
-                        'updated_at' => now()
-                    ]
-                );
+               
             }
 
             $image = $image->fit(595, 842); // 595x842 pixels corresponds to 210x297mm at 72dpi
@@ -343,6 +294,7 @@ class FileUploadService
             // Define the PDF file name and path
             $pdfFileName = $request->input('template') . '.pdf';
             $pdfFilePath = storage_path('app/public/' . $directory . '/' . $pdfFileName);
+
 
             if (file_exists($pdfFilePath)) {
                 // Append to existing PDF
@@ -365,6 +317,8 @@ class FileUploadService
                 $pdf = new FPDF();
                 $pdf->AddPage('P', 'A4');
                 $pdf->Image($tempImagePath, 0, 0, 210, 297);
+                
+
             }
 
             // Save the updated or new PDF
@@ -372,6 +326,7 @@ class FileUploadService
 
             // Optionally, delete the temporary image file
             unlink($tempImagePath);
+
 
 
             $update = DB::table('forms_data')->updateOrInsert(
@@ -386,10 +341,11 @@ class FileUploadService
                     'updated_at' => now()
                 ]
             );
+          
             return $directory . '/' . $pdfFileName;
         }
 
-        if ($index != '') {
+       
             $config = \DB::table('forms_config')
                 ->where('form_id', $form_id)
                 ->where('name', $template)
@@ -397,7 +353,7 @@ class FileUploadService
 
             $table = new Table($config, $template, $form_id, $dossier->id);
             $table->save_value();
-        }
+        
 
 
         return $filePath;
