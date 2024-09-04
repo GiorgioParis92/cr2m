@@ -133,6 +133,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/generate-pdf', [PDFController::class, 'generatePDF']);
     Route::post('/generate-pdf', [PDFController::class, 'generatePDF']);
 
+
+    Route::get('/generate-config', [PDFController::class, 'generateConfig']);
+    Route::post('/generate-config', [PDFController::class, 'generateConfig']);
+
     Route::get('/fill-pdf', [PDFController::class, 'fillPdf']);
 
     Route::post('upload_file', [FileUploadService::class, 'storeImage'])->name('upload_file');

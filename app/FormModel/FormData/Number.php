@@ -53,4 +53,27 @@ class Number extends AbstractFormData
         return 'Veuillez entrer une valeur numérique';
     }
 
+    public function render_pdf()
+    {
+
+
+      
+
+        $data = '<div  class="form-group col-sm-12 ' . ($this->config->class ?? "") . '">';
+
+
+        $data .= '<div class="s3" style="display:block;margin-top:15px;margin-bottom:8px">' . $this->config->title . '</div>';
+
+
+        $data .= '<div style="display:block;margin-bottom:8px">'.$this->value.'</div>';
+
+   
+
+  
+        $data .= '</div>';
+
+
+        return $data;
+    }
+
 }

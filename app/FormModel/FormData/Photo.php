@@ -169,4 +169,32 @@ class Photo extends AbstractFormData
     {
         // return Storage::disk('public')->exists($this->value);
     }
+
+    public function render_pdf()
+    {
+
+        $json_value=decode_if_json($this->value);
+       
+        // $json_value=json_decode($this->value);
+        
+        if($json_value) {
+            $values=$json_value;
+        }
+        else {
+            $values=[$this->value];
+        }
+        $text='';
+        $text.='<p class="s2" style="padding-top: 5pt;padding-left: 8pt;text-indent: 0pt;text-align: left;">'.$this->config->title.'</p>';
+        $text .= "<div class='row'>";
+        foreach($values as $value) {
+            $filePath = storage_path('app/public/' . $value);  // File system path
+            if (!empty($value) && file_exists($filePath)) {
+            $text .= "<div class='col-lg-3' style='width:33%'>";
+            $text.='<img src="'.(asset('storage/' . $value)).'">';
+            $text.='</div>';
+            }
+        }
+        $text.='</div>';
+        return $text;
+    }
 }

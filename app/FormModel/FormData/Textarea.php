@@ -11,8 +11,8 @@ class Textarea extends AbstractFormData
         $wireModel = "formData.{$this->form_id}.{$this->name}";
 
         $data = '<div class="form-group  col-sm-12 '.($this->config->class ?? "").'">';
-        $data .= '<label>'.$this->config->title.'</label>';
-        $data .= '<textarea wire:blur="update_value(\''.$wireModel.'\',  $event.target.value)" class="form-control" name="'.$this->config->name.'">'.($this->value ?? "") .'</textarea>';
+        $data .= '<label>'.($this->config->title ?? '').'</label>';
+        $data .= '<textarea wire:blur="update_value(\''.$wireModel.'\',  $event.target.value)" class="form-control" name="'.($this->config->name ?? '').'">'.($this->value ?? "") .'</textarea>';
 
         $data .= '</div>';
 

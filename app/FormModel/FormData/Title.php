@@ -77,4 +77,16 @@ class Title extends AbstractFormData
     
         return true;
     }
+
+
+    public function render_pdf()
+    {
+
+
+        $data= '<div class="col-12 form_title s2">'.($this->config->title ?? '').'</div>';
+
+
+
+        return $data;
+    }
 }

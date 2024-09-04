@@ -275,17 +275,13 @@
 <!-- FullCalendar Locale -->
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/locales/fr.js"></script>
 <script>
-
-  
-
-
     document.addEventListener('DOMContentLoaded', function(event) {
 
         console.log('DOM fully loaded and parsed');
-               console.log('Livewire component mounted:', event);
-               // Your code here
-           
-    
+        console.log('Livewire component mounted:', event);
+        // Your code here
+
+
 
         Livewire.on('loadCalendar', function() {
 
@@ -500,7 +496,7 @@
         initializeDeleteButtons();
     });
     document.addEventListener('DOMContentLoaded', function() {
-      
+
         Livewire.on('pageLoaded', (data) => {
             console.log('pageloaded')
             var configs = data.forms_configs;
@@ -542,7 +538,7 @@
                 });
             })
         });
-       
+
 
         Livewire.on('ok_photo', (data) => {
             alert('ok');
@@ -569,7 +565,7 @@
 
 
         });
-       
+
 
     });
 
@@ -589,7 +585,7 @@
                     console.log(key)
                     var dropzoneElementId = `#dropzone-${key}`;
                     var dropzoneElement = document.querySelector(dropzoneElementId);
-                    console.log('dropzones : '+dropzoneElement)
+                    console.log('dropzones : ' + dropzoneElement)
                     if (!dropzoneElement) {
                         console.warn(`Element ${dropzoneElementId} not found.`);
                         return;
@@ -651,7 +647,9 @@
             $('.modal').modal('hide');
         });
         // Remove existing event listeners to prevent multiple bindings
-        $(document).off('click', '.signable').off('click', '.pdfModal').off('click', '.imageModal').off('click','.fillPDF').off('click','.generatePdfButton').off('click','.check_signature').off('rdv_modal', '.generatePdfButton');
+        $(document).off('click', '.signable').off('click', '.pdfModal').off('click', '.imageModal').off('click',
+            '.fillPDF').off('click', '.generatePdfButton').off('click', '.generateConfig').off('click', '.check_signature').off('rdv_modal',
+            '.generatePdfButton');
 
         // Attach new event listeners
         $(document).on('click', '.imageModal', function(event) {
@@ -803,13 +801,59 @@
                 }
             });
         });
+        $(document).on('click', '.generateConfig', function(event) {
 
+            var template = $(this).data('template'); // Get the template from data attribute
+            var dossier_id = $(this).data('dossier_id'); // Get the dossier ID from data attribute
+            var form_id = $(this).data('form_id'); // Get the dossier ID from data attribute
+            var config_id = $(this).data('config_id'); // Get the dossier ID from data attribute
+            var generation = $(this).data('generation'); // Get the dossier ID from data attribute
+       
+            $.ajax({
+                url: '/api/generate-config', // Adjust this URL to your actual API endpoint
+                type: 'POST',
+                data: {
+                    dossier_id: dossier_id,
+                    generation: generation,
+                    form_id: form_id,
+                    config_id: config_id,
+                    template: template
+                },
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr(
+                        'content') // Include CSRF token if using Laravel's CSRF protection
+                },
+                success: function(response) {
+                    if (response.file_path) {
+                        // Display the PDF in an iframe if a file path is returned
+                        $('#pdfFrame').attr('src', response.file_path);
+                        $('#pdfModal').css('display', 'block');
+                    } else {
+                        // Handle the response where the PDF content is returned directly
+                        var blob = new Blob([response], {
+                            type: 'application/pdf'
+                        });
+                        var url = URL.createObjectURL(blob);
+                        var link = document.createElement('a');
+                        link.href = url;
+                        link.download = 'document.pdf';
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error generating PDF:', error);
+                }
+            });
+        });
         $(document).on('click', '.check_signature', function(event) {
             var template = $(this).data('template'); // Get the template from data attribute
             var dossier_id = $(this).data('dossier_id'); // Get the dossier ID from data attribute
             var form_id = $(this).data('form_id'); // Get the dossier ID from data attribute
             var generation = $(this).data('generation'); // Get the dossier ID from data attribute
-            var signature_request_id = $(this).data('signature_request_id'); // Get the dossier ID from data attribute
+            var signature_request_id = $(this).data(
+            'signature_request_id'); // Get the dossier ID from data attribute
             var document_id = $(this).data('document_id'); // Get the dossier ID from data attribute
 
             $.ajax({
@@ -830,8 +874,8 @@
                 success: function(response) {
                     console.log(response)
 
-                    if(response=='ongoing') {
-                        $('#message_'+template).html('Le document est en cours de signature');
+                    if (response == 'ongoing') {
+                        $('#message_' + template).html('Le document est en cours de signature');
                     }
 
                 },

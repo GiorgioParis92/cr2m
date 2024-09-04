@@ -287,7 +287,7 @@
         <tr>
             <td style="border:none;width:50%">
                 <p><b>Le bénéficiaire</b></p>
-                <p>Signature précédé de la mention manuscrite <br /><i>Adresse complète du bénéficiaire </i>
+                {{-- <p>Signature précédé de la mention manuscrite <br /><i>Adresse complète du bénéficiaire </i> --}}
                 </p>
             </td>
 

@@ -46,10 +46,10 @@ class Table extends AbstractFormData
 
                 if (class_exists($className)) {
                     $reflectionClass = new \ReflectionClass($className);
-                    $element_group[$element_config['name']] = $reflectionClass->newInstance((object) $element_config, $div_name, $this->form_id, $this->dossier->id, false);
+                    $element_group[$element_config['name']] = $reflectionClass->newInstance((object) $element_config, $div_name, $this->form_id, $this->dossier_id, false);
                 } else {
                     // Fallback to AbstractFormData if the class does not exist
-                    $element_group[$element_config['name']] = new AbstractFormData((object) $element_config, $div_name, $this->form_id, $this->dossier->id, false);
+                    $element_group[$element_config['name']] = new AbstractFormData((object) $element_config, $div_name, $this->form_id, $this->dossier_id, false);
                 }
               
                 $element_group[$element_config['name']]->set_dossier($this->dossier);
@@ -172,4 +172,62 @@ class Table extends AbstractFormData
         }
         return $value;
     }
+    public function render_pdf()
+    {
+        $data = '<page>';
+    
+        // Decode the JSON value if needed
+        $this->value = $this->decode_if_json($this->value);
+    
+        foreach ($this->value as $index => $element_data) {
+            foreach ($this->optionsArray as $element_config) {
+                $class = 'App\\FormModel\\FormData\\' . ucfirst($element_config['type']);
+                $configInstance = $element_config;
+                $name = $element_config['name'];
+                $form_id = $this->form_id;
+                $dossier_id = $this->dossier_id ?? null;
+    
+                // Instantiate the form element class
+                if (class_exists($class)) {
+                    $instance = new $class($configInstance, $name, $form_id, $dossier_id);
+                } else {
+                    $instance = new AbstractFormData($configInstance, $name, $form_id, $dossier_id);
+                }
+                // Handle array data to avoid Array to string conversion error
+                if (isset($element_data[$element_config['name']])) {
+                    // Recursively decode JSON and handle arrays
+                    $instance->value = $element_data[$element_config['name']]['value'];
+                } else {
+                    $instance->value = ''; // Or handle default value here
+                }
+            
+                // Render the element for PDF
+                $data .= $instance->render_pdf();
+            }
+        }
+        $data = '</page>';
+
+        return $data;
+    }
+    
+    /**
+     * Recursively decode JSON strings and handle arrays for rendering
+     */
+    private function handle_array_or_json($value)
+    {
+        // Decode JSON if applicable
+        $decodedValue = $this->decode_if_json($value);
+    
+        // If it's still an array, flatten it or convert to a string (customize as needed)
+        if (is_array($decodedValue)) {
+            // For example, you could join the array elements as a comma-separated string
+            return implode(', ', array_filter($decodedValue));
+        }
+    
+        return $decodedValue;
+    }
+    
+    
+    
+
 }

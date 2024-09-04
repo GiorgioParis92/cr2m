@@ -37,6 +37,9 @@ Route::apiResource('beneficiaires', BeneficiaireController::class);
 Route::get('/generate-pdf', [PDFController::class, 'generatePDF']);
 Route::post('/generate-pdf', [PDFController::class, 'generatePDF']);
 
+Route::get('/generate-config', [PDFController::class, 'generateConfig']);
+Route::post('/generate-config', [PDFController::class, 'generateConfig']);
+
 Route::get('/fill-pdf', [PDFController::class, 'fillPdf']);
 Route::post('/fill-pdf', [PDFController::class, 'fillPdf']);
 Route::get('/rdvs', [RdvController::class, 'index']);

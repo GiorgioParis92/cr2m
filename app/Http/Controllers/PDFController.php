@@ -34,7 +34,7 @@ class PDFController extends Controller
         
         // Determine the HTML content to use
         if (isset($validated['template'])) {
-            $htmlContent = $this->getTemplateHtml($validated['template'], $validated['dossier_id']);
+            $htmlContent = $this->getTemplateHtml($validated['template'], $validated['dossier_id'],null);
         } else {
             $htmlContent = '';
         }
@@ -101,7 +101,7 @@ class PDFController extends Controller
         }
     }
 
-    private function getTemplateHtml($template, $dossier_id)
+    private function getTemplateHtml($template, $dossier_id,$config=null)
     {
         // Check if the template view exists
         $templatePath = 'templates.' . $template;
@@ -111,7 +111,7 @@ class PDFController extends Controller
         $all_data = load_all_dossier_data($dossier);
 
         if (View::exists($templatePath)) {
-            return view($templatePath, ['dossier' => $dossier, 'all_data' => $all_data])->render();
+            return view($templatePath, ['dossier' => $dossier, 'all_data' => $all_data,'config' => $config])->render();
         } else {
             throw new \Exception('Invalid template specified');
         }
@@ -261,6 +261,53 @@ class PDFController extends Controller
                 'updated_at' => now()
             ]
         );
+
+        return response()->json([
+            'message' => 'PDF generated and saved successfully',
+            'file_path' => Storage::url($filePath) // Adjusted this line
+        ], 200);
+    }
+
+
+    public function generateConfig(Request $request)
+    {
+
+        $dossierId = $request->dossier_id;
+        $folderPath = "public/dossiers/{$dossierId}";
+        $directPath = "dossiers/{$dossierId}";
+
+        // Create the folder if it does not exist
+        if (!Storage::exists($folderPath)) {
+            Storage::makeDirectory($folderPath);
+        }
+ 
+
+        // Fetch the dossier based on the provided dossier_id
+        $dossier = Dossier::where('folder', $request->dossier_id)->first();
+        // Load all the dossier data (assuming load_all_dossier_data is a custom helper function)
+        $all_data = load_all_dossier_data($dossier);
+    
+        $config=DB::table('forms_config')->where('form_id',$request->config_id)->orderBy('ordering')->get();
+
+       
+ 
+        // Get the HTML content for the template
+        $htmlContent = $this->getTemplateHtml('config', $request->dossier_id,$config);
+    
+
+
+ 
+        // Generate the PDF using Html2Pdf
+        $html2pdf = new Html2Pdf();
+    
+        // Convert the HTML content to PDF
+        $html2pdf->writeHTML($htmlContent);
+        $pdfOutput = $html2pdf->output('', 'S'); // Output as string
+        // Save the PDF file to the folder
+        $fileName = ($request->template ?? 'document') . ".pdf";
+        $filePath = "{$folderPath}/{$fileName}";
+        $directPath ="{$directPath}/{$fileName}";
+        Storage::put($filePath, $pdfOutput);
 
         return response()->json([
             'message' => 'PDF generated and saved successfully',

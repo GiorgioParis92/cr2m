@@ -21,8 +21,12 @@ class AbstractFormData
     {
         $this->form_id = $form_id;
         $this->dossier_id = $dossier_id;
-        $this->config = $config;
-    
+        // $this->config = $config;
+        $this->config = (object) $config;
+
+        // $this->title=$config->title;
+       
+
         
         if ($should_load) {
         $config = \DB::table('forms_data')
@@ -177,4 +181,11 @@ class AbstractFormData
 
     return $columnInfo[0]->DATA_TYPE ?? null;
 }
+
+public function render_pdf()
+{
+        return false;
+   
+}
+
 }

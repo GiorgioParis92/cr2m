@@ -84,4 +84,40 @@ class Radio extends AbstractFormData
         return 'Erreur';
     }
 
+ 
+    public function render_pdf()
+    {
+ 
+        $data = '<div class="form-group col-sm-12 '.($this->config->class ?? "").'">';
+        $data .= '<div class="form-group">';
+
+        // Clean and decode the JSON options
+        $jsonString = str_replace(["\n", "\r"], '', $this->config->options);
+        $optionsArray = json_decode($jsonString, true);
+
+ 
+
+        $data .= '<label>'.$this->config->title.'</label>';
+        $data .= '<div>';
+
+        if (is_array($optionsArray)) {
+            foreach ($optionsArray as $key => $element) {
+                $isChecked = $this->value == $element['value'] ? 'checked' : '';
+           
+                $data.='<div class="">';
+                $data .= '<input  type="checkbox" checked="'.$isChecked.'">';
+                $data .= '<label  for="'.$this->name.'_'.$key.'">'.$element['label'].'</label><br>';
+           
+                $data .= '</div>';
+            }
+        }
+
+        $data .= '</div>';
+        $data .= '</div>';
+
+
+        $data .= '</div>';
+     
+        return $data;
+    }
 }
