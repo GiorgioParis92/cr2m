@@ -174,7 +174,7 @@ class Table extends AbstractFormData
     }
     public function render_pdf()
     {
-        $data = '<page>';
+        $data = '';
     
         // Decode the JSON value if needed
         $this->value = $this->decode_if_json($this->value);
@@ -205,27 +205,11 @@ class Table extends AbstractFormData
                 $data .= $instance->render_pdf();
             }
         }
-        $data = '</page>';
 
         return $data;
     }
     
-    /**
-     * Recursively decode JSON strings and handle arrays for rendering
-     */
-    private function handle_array_or_json($value)
-    {
-        // Decode JSON if applicable
-        $decodedValue = $this->decode_if_json($value);
-    
-        // If it's still an array, flatten it or convert to a string (customize as needed)
-        if (is_array($decodedValue)) {
-            // For example, you could join the array elements as a comma-separated string
-            return implode(', ', array_filter($decodedValue));
-        }
-    
-        return $decodedValue;
-    }
+
     
     
     
