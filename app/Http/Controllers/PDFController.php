@@ -31,10 +31,10 @@ class PDFController extends Controller
             eval($validated['generation']);
         }
       
-        
+            $title='';
         // Determine the HTML content to use
         if (isset($validated['template'])) {
-            $htmlContent = $this->getTemplateHtml($validated['template'], $validated['dossier_id'],null);
+            $htmlContent = $this->getTemplateHtml($validated['template'], $validated['dossier_id'],$config=null,$title);
         } else {
             $htmlContent = '';
         }
