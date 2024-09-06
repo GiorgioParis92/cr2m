@@ -61,11 +61,14 @@ class DossierController extends Controller
         $installateurs = Client::where('type_client', 3)->get();
         $fiches = Fiche::all();
 
+        $departments = DB::table('departement')->get()->map(function($department) {
+            return (array) $department; // Convert stdClass to array
+        })->toArray();
         $status = Status::select(DB::raw('MIN(id) as id'), 'status_desc')
             ->groupBy('status_desc')
             ->get();
 
-        return view('dossiers.index', compact('dossiers', 'etapes', 'status', 'mars', 'financiers', 'fiches', 'installateurs'));
+        return view('dossiers.index', compact('dossiers', 'etapes', 'status', 'mars', 'financiers', 'fiches', 'installateurs','departments'));
     }
 
     public function show($id, Request $request)

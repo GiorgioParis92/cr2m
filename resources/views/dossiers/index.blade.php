@@ -87,6 +87,20 @@
 
                     </select>
                 </div>
+
+
+                <div class="mb-2 mb-sm-0 col-12 col-md-3">
+                    <label class="mr-sm-2">Département</label>
+                    <select class="form-control" data-column="21">
+                        <option value="">Filtrer par département</option>
+
+                        @foreach ($departments as $dpt)
+                            <option value="{{ $dpt['departement_code'] }}">{{ $dpt['departement_code'] }} - {{ $dpt['departement_nom'] }}</option>
+                        @endforeach
+
+                    </select>
+                </div>
+
             @endif
 
             {{-- 
@@ -130,6 +144,8 @@
                     <th style="max-width:10%">Détails</th>
                     <th style="max-width:10%">Détails</th>
                     <th style="max-width:10%">Détails</th>
+                    <th style="max-width:10%">CP</th>
+                    <th style="max-width:10%">CP</th>
 
 
                 </tr>
@@ -276,7 +292,11 @@
                             @endforeach
 
                         </td>
+                        <td>
 
+                                {{ substr($dossier->beneficiaire->cp,0,2) }}
+
+                        </td>
 
                     </tr>
                 @endforeach
@@ -290,7 +310,7 @@
             var table = $('#dossiersTable').DataTable({
                 @if (auth()->user()->client_id == 0 && auth()->user()->type_id != 4 && auth()->user()->type_id != 3)
                     columnDefs: [{
-                            targets: [1, 4, 5, 6, 7, 9, 11, 13, 15,17, 19, 20],
+                            targets: [1, 4, 5, 6, 7, 9, 11, 13, 15,17, 19, 20,21],
                             visible: false
                         },
                         {
@@ -305,7 +325,7 @@
                     ],
                 @else
                     columnDefs: [{
-                            targets: [1, 4, 5, 6, 7, 9, 11, 13, 15,17, 19, 20],
+                            targets: [1, 4, 5, 6, 7, 9, 11, 13, 15,17, 19, 20,21],
                             visible: false
                         },
                         {
@@ -346,6 +366,8 @@
                                 // Clear previous searches
                                 columns.forEach(function(col) {
                                     table.column(col).search('');
+
+
                                 });
 
                                 // Apply new search term to each specified column using custom search function
@@ -365,12 +387,15 @@
                                 $.fn.dataTable.ext.search.pop();
                             } else {
                                 var column = columns[0];
-
                                 var searchValue = '^' + $.fn.dataTable.util.escapeRegex(this.value) +
                                     '$';
 
                                 // Use regex: true and smart: false to perform exact match search
                                 table.column(column).search(searchValue, true, false).draw();
+                                console.log((column))
+                                console.log(table.column(column))
+                                console.log(searchValue)
+                                
                             }
                         });
                 }
