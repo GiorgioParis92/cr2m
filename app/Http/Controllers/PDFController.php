@@ -39,7 +39,6 @@ class PDFController extends Controller
             $htmlContent = '';
         }
 
-
         // Generate the PDF using Html2Pdf
         $html2pdf = new Html2Pdf();
 

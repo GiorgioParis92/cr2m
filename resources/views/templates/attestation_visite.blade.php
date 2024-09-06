@@ -189,9 +189,9 @@
     @include('pdf.footer')
     <div class="row">
         <div class="col-12" style="max-width:40%;margin:auto;text-align:center;margin-top:-30px">
-  
-            @if(isset($dossier->client->main_logo) && file_exists(storage_path('app/public/' . $dossier->client->main_logo)))
-            <img src="{{ asset('storage/' . $dossier->client->main_logo) }}" alt="Logo">
+
+            @if (isset($dossier->client->main_logo) && file_exists(storage_path('app/public/' . $dossier->client->main_logo)))
+                <img src="{{ asset('storage/' . $dossier->client->main_logo) }}" alt="Logo">
             @endif
         </div>
     </div>
@@ -201,7 +201,7 @@
     <div class="my-4">
         <p>Madame,Monsieur,</p>
         <p>
-            À la suite de notre visite du {{date('d/m/Y',strtotime('now'))}} à votre domicile, nous résumons les
+            À la suite de notre visite du {{ date('d/m/Y', strtotime('now')) }} à votre domicile, nous résumons les
             principaux points sur lesquels nous avons échangé
         </p>
 
@@ -231,13 +231,13 @@
         </ul>
         <h4>2ème visite</h4>
         <ul>
-    
+
             <li>Cohérence des travaux et conseils écogestes</li>
             <li>Remise du rapport d'accompagnement et attestation de fin de prestation</li>
             <li>Solde de subvention pour travaux et accompagnement</li>
             <li>Questionnaire de satisfaction rempli par les ménages.</li>
-    
-    
+
+
         </ul>
     </div>
 
@@ -246,35 +246,35 @@
     @include('pdf.header')
     @include('pdf.footer')
     <div class="my-4">
-  
-
-
-    <h3>Les obligations de Mon Accompagnateur Rénov (MAR)</h3>
-    <h4>Une indépendance et une neutralité du MAR</h4>
-    <ul>
-
-        <li>Analyse des devis de façon rigoureuse avec des critères objectifs (prix, disponibilités, réalité des
-            scenarios, travaux conformes au scenario retenu).
-        </li>
-        <li>Préconisation de façon neutre et objective, de la solution des travaux répondant au mieux à l'efficacité
-            énergétique,</li>
 
 
 
-    </ul>
+        <h3>Les obligations de Mon Accompagnateur Rénov (MAR)</h3>
+        <h4>Une indépendance et une neutralité du MAR</h4>
+        <ul>
 
-    <h4>Une réorientation vers un accompagnement social renforcé pour les ménages les plus précaires
-    </h4>
-    <ul>
-
-        <li>Une obligation de signalement auprès des autorités compétentes des situations de fragilités constatées.
-
-        </li>
-        <li>Orientation vers un accompagnateur social renforcé pour les ménages qui le nécessitent.</li>
-
+            <li>Analyse des devis de façon rigoureuse avec des critères objectifs (prix, disponibilités, réalité des
+                scenarios, travaux conformes au scenario retenu).
+            </li>
+            <li>Préconisation de façon neutre et objective, de la solution des travaux répondant au mieux à l'efficacité
+                énergétique,</li>
 
 
-    </ul>
+
+        </ul>
+
+        <h4>Une réorientation vers un accompagnement social renforcé pour les ménages les plus précaires
+        </h4>
+        <ul>
+
+            <li>Une obligation de signalement auprès des autorités compétentes des situations de fragilités constatées.
+
+            </li>
+            <li>Orientation vers un accompagnateur social renforcé pour les ménages qui le nécessitent.</li>
+
+
+
+        </ul>
     </div>
     <div class="my-4">
         <p>Nous restons à votre écoute tout au long de notre accompagnement, si vous souhaitez plus de précisions. </p>
@@ -288,7 +288,7 @@
             <td style="border:none;width:50%">
                 <p><b>Le bénéficiaire</b></p>
                 {{-- <p>Signature précédé de la mention manuscrite <br /><i>Adresse complète du bénéficiaire </i> --}}
-                </p>
+                
             </td>
 
 
