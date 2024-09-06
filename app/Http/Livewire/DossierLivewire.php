@@ -108,6 +108,7 @@ class DossierLivewire extends Component
         $lastRdv = Rdv::with('user')
         ->where('dossier_id', $id)
         ->where('type_rdv', 1)
+        ->where('status','!=', 2)
         ->orderBy('created_at', 'desc')
         ->first();
         $this->technicien=$lastRdv ?? '';
