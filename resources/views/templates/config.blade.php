@@ -182,6 +182,7 @@
         }
         .page-break {
         page-break-before: always;
+        
     }
     .radio_line {
     display: inline-block;
@@ -194,19 +195,28 @@
     padding-top: 3px;
     margin-bottom: 11px;
 }
+
+.form_title {
+    background:#EDEDED;
+    width:100%;
+    margin:auto;
+    text-align:center;
+    padding:20px;
+    font-size:13px;
+}
     </style>
 </head>
 
 <body>
 
-  
+
  
-        <div class="textbox" style="background:#EDEDED; display:block; min-height:69.4pt; width:481.9pt;">
+       
             <p style="padding-top: 2pt; text-indent: 0pt; text-align: left;"><br /></p>
-            <p class="s1" style="text-indent: 0pt; line-height: 17pt; text-align: center;">
-                GRILLE D&#39;ANALYSE DU LOGEMENT123
+            <p class="s1" style="background:#EDEDED; display:block; height:69.4pt; width:481.9pt;">
+                {{$title}}
             </p>
-            <p>
+            <div>
                 @foreach ($config as $element)
                 @if (empty($element) || empty($element->type))
                     <p>Error: Configuration element is missing.</p>
@@ -231,8 +241,8 @@
                     
           
                   
-            </p>
-        </div>
+                </div>
+   
    
 
 </body>

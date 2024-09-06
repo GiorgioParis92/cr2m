@@ -6,6 +6,7 @@ use Livewire\Component;
 use App\Models\Dossier;
 use App\Models\Etape;
 use App\Models\User;
+use App\Models\Rdv;
 use App\Models\RdvStatus;
 use App\FormModel\FormConfigHandler;
 use App\FormModel\EtapeValidator;
@@ -101,6 +102,15 @@ class DossierLivewire extends Component
         $this->mars = Client::where('type_client', 1)->get();
         $this->financiers = Client::where('type_client', 2)->get();
         $this->installateurs = Client::where('type_client', 3)->get();
+
+
+
+        $lastRdv = Rdv::with('user')
+        ->where('dossier_id', $id)
+        ->where('type_rdv', 1)
+        ->orderBy('created_at', 'desc')
+        ->first();
+        $this->technicien=$lastRdv ?? '';
 
     }
     public function test()

@@ -26,6 +26,14 @@
 
                             <div class="btn bg-primary bg-{{ couleur_menage($dossier->beneficiaire->menage_mpr) }}">
                                 {{ strtoupper($dossier['beneficiaire']['menage_mpr']) }}</div>
+                                @if (auth()->user()->client_id == 0)
+                                <div class="">
+                                @if(!empty($technicien))
+                                Technicien RDV MAR 1 : 
+                                {{ $technicien->user->name }}
+                                @endif
+                            </div>
+                            @endif
 
                         </div>
                         <div class="ms-auto my-auto mt-lg-0 mt-4">
@@ -648,7 +656,8 @@
         });
         // Remove existing event listeners to prevent multiple bindings
         $(document).off('click', '.signable').off('click', '.pdfModal').off('click', '.imageModal').off('click',
-            '.fillPDF').off('click', '.generatePdfButton').off('click', '.generateConfig').off('click', '.check_signature').off('rdv_modal',
+            '.fillPDF').off('click', '.generatePdfButton').off('click', '.generateConfig').off('click',
+            '.check_signature').off('rdv_modal',
             '.generatePdfButton');
 
         // Attach new event listeners
@@ -808,7 +817,8 @@
             var form_id = $(this).data('form_id'); // Get the dossier ID from data attribute
             var config_id = $(this).data('config_id'); // Get the dossier ID from data attribute
             var generation = $(this).data('generation'); // Get the dossier ID from data attribute
-       
+            var title = $(this).data('title'); // Get the dossier ID from data attribute
+
             $.ajax({
                 url: '/api/generate-config', // Adjust this URL to your actual API endpoint
                 type: 'POST',
@@ -817,6 +827,7 @@
                     generation: generation,
                     form_id: form_id,
                     config_id: config_id,
+                    title: title,
                     template: template
                 },
                 headers: {
@@ -853,7 +864,7 @@
             var form_id = $(this).data('form_id'); // Get the dossier ID from data attribute
             var generation = $(this).data('generation'); // Get the dossier ID from data attribute
             var signature_request_id = $(this).data(
-            'signature_request_id'); // Get the dossier ID from data attribute
+                'signature_request_id'); // Get the dossier ID from data attribute
             var document_id = $(this).data('document_id'); // Get the dossier ID from data attribute
 
             $.ajax({

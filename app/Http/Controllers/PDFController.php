@@ -101,7 +101,7 @@ class PDFController extends Controller
         }
     }
 
-    private function getTemplateHtml($template, $dossier_id,$config=null)
+    private function getTemplateHtml($template, $dossier_id,$config=null,$title)
     {
         // Check if the template view exists
         $templatePath = 'templates.' . $template;
@@ -111,7 +111,7 @@ class PDFController extends Controller
         $all_data = load_all_dossier_data($dossier);
 
         if (View::exists($templatePath)) {
-            return view($templatePath, ['dossier' => $dossier, 'all_data' => $all_data,'config' => $config])->render();
+            return view($templatePath, ['dossier' => $dossier, 'all_data' => $all_data,'config' => $config,'title' => $title])->render();
         } else {
             throw new \Exception('Invalid template specified');
         }
@@ -289,10 +289,10 @@ class PDFController extends Controller
     
         $config=DB::table('forms_config')->where('form_id',$request->config_id)->orderBy('ordering')->get();
 
-       
+        $title=$request->title;
  
         // Get the HTML content for the template
-        $htmlContent = $this->getTemplateHtml('config', $request->dossier_id,$config);
+        $htmlContent = $this->getTemplateHtml('config', $request->dossier_id,$config,$title);
     
 
 
