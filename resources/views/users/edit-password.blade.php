@@ -6,7 +6,7 @@
         <div class="col-md-6">
             <div class="card">
                 <div class="card-header">
-                    <h4>Edit Password for {{ $user->name }}</h4>
+                    <h4>Modifier le mot de passe pour <b> {{ $user->name }}</b></h4>
                 </div>
                 <div class="card-body">
                     <!-- Check for any success messages -->
@@ -32,17 +32,17 @@
                         @method('PUT')
                         
                         <div class="form-group">
-                            <label for="password">New Password</label>
+                            <label for="password">Nouveau mot de passe</label>
                             <input type="password" class="form-control" id="password" name="password" required>
                         </div>
 
                         <div class="form-group">
-                            <label for="password_confirmation">Confirm New Password</label>
+                            <label for="password_confirmation">Confirmer le mot de passe</label>
                             <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" required>
                         </div>
-
-                        <button type="submit" class="btn btn-primary mt-3">Update Password</button>
-                        <a href="{{ route('users.index') }}" class="btn btn-secondary mt-3">Cancel</a>
+                        <br/>
+                        <button type="submit" class="btn btn-primary mt-3">Update</button>
+                        <a href="{{ route('users.index') }}" class="btn btn-secondary mt-3">Annuler</a>
                     </form>
                 </div>
             </div>
