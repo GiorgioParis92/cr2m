@@ -27,7 +27,7 @@ trait ResetsPasswords
     public function showResetForm(Request $request)
     {
         $token = $request->route()->parameter('token');
-
+       
         return view('auth.passwords.reset')->with(
             ['token' => $token, 'email' => $request->email]
         );

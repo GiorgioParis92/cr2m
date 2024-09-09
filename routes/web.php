@@ -52,6 +52,15 @@ Route::middleware('auth')->group(function () {
 
     Route::get('temporary-password/reset/{email}', [UserController::class, 'showTemporaryPasswordForm'])->name('temporary.password.reset');
 Route::post('temporary-password/update', [UserController::class, 'updateTemporaryPassword'])->name('temporary.password.update');
+
+
+    // Show the password edit form
+    Route::get('/user/{id}/edit-password', [UserController::class, 'editPassword'])->name('users.edit-password');
+
+    // Handle the password update
+    Route::put('/user/{id}/update-password', [UserController::class, 'updatePassword'])->name('users.update-password');
+
+
 });
 // Route::middleware(['auth', 'temp_password'])->group(function () {
 //     Route::get('temporary-password/reset', [UserController::class, 'showTemporaryPasswordForm'])->name('temporary.password.reset');

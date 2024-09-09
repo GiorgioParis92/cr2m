@@ -26,7 +26,10 @@
             <select required class="form-control" id="type_id" name="type_id" >
             <option value="">Choisir un type d'utilisateur</option>
             @foreach($types as $type)
-            <option @if(old('type_id')==$type->id) selected @endif value="{{$type->id}}">{{$type->type_desc}}</option>
+                {{-- Check if user client_id > 0 and hide type_id=2 if so --}}
+                @if(auth()->user()->client_id == 0 || $type->id != 2)
+                    <option @if(old('type_id') == $type->id) selected @endif value="{{$type->id}}">{{$type->type_desc}}</option>
+                @endif
             @endforeach
             </select>
         </div>

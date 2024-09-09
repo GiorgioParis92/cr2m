@@ -138,12 +138,13 @@ class UserController extends Controller
 
     public function resetPassword(Request $request)
     {
+        dd($request);
         $request->validate(['email' => 'required|email']);
-
+     
         $status = Password::sendResetLink(
             $request->only('email')
         );
-
+    
         return $status === Password::RESET_LINK_SENT
             ? response()->json(['message' => __($status)], 200)
             : response()->json(['message' => __($status)], 400);
@@ -197,5 +198,31 @@ class UserController extends Controller
         $request->session()->forget('is_temporary_password');
 
         return redirect()->route('dashboard')->with('success', 'Password has been reset successfully.');
+    }
+
+
+    public function editPassword($id)
+    {
+        $user = User::findOrFail($id); // Get the user by ID
+        return view('users.edit-password', compact('user'));
+    }
+
+    // Handle the password update request
+    public function updatePassword(Request $request, $id)
+    {
+        // Validate the request
+        $request->validate([
+            'password' => 'required|confirmed|min:8',
+        ]);
+
+        // Find the user
+        $user = User::findOrFail($id);
+
+        // Update the user's password
+        $user->password = Hash::make($request->password);
+        $user->save();
+
+        // Return a success message
+        return redirect()->route('users.index')->with('success', 'Password updated successfully.');
     }
 }

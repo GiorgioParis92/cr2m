@@ -104,8 +104,20 @@
 
                   
                 @endif
+                @if (auth()->user() && auth()->user()->type_id<=2)
+                <li class="nav-item dropdown">
+                    <a class="nav-link  dropdown-toggle" data-bs-toggle="dropdown">
+                      <i class="fa-solid fa-screwdriver-wrench"></i> Utilisateurs </a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a class="dropdown-item" href="{{ route('users.index') }}">
+                              <i class="fa-solid fa-users-line"></i>   Liste
+                            </a>
+                        </li>
 
-
+                    </ul>
+                </li>
+                @endif
             </ul>
         </div> <!-- navbar-collapse.// -->
 

@@ -5,7 +5,7 @@
         <div class="row">
             <div class="col-md-12">
                 <h4>Utilisateurs</h4>
-                <a href="{{ route('users.create') }}" class="btn btn-primary mb-3">Nouveal utilisateur</a>
+                <a href="{{ route('users.create') }}" class="btn btn-primary mb-3">Nouvel utilisateur</a>
                 @if (session('success'))
                     <div class="alert alert-success">
                         {{ session('success') }}
@@ -42,6 +42,10 @@
                                 <td data-label="Actions">
                                     <a href="{{ route('users.edit', $user->id) }}"
                                         class="btn btn-success"><i class="fa fa-save"></i></a>
+
+                                        <a href="{{ route('users.edit-password', $user->id) }}"
+                                            class="btn btn-warning"><i class="fa fa-key"></i></a>
+
                                     <form action="{{ route('users.destroy', $user->id) }}" method="POST"
                                         style="display:inline;">
                                         @csrf
