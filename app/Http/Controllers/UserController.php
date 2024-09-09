@@ -39,9 +39,10 @@ class UserController extends Controller
         $clients = Client::where('id','>',0)->get();
         $types = DB::table('users_type')->where('type_client_id', '>', 0)->get();
 
+        $user=auth()->user();
 
 
-        return view('users.create', compact('clients', 'types'));
+        return view('users.create', compact('clients', 'types','user'));
     }
     public function createUser(Request $request)
     {
