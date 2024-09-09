@@ -33,7 +33,7 @@
         @if(auth()->user()->client_id==0)
         <div class="form-group">
             <label for="client_id">Client associé</label>
-            <select required class="form-control" id="client_id" name="client_id" >
+            <select  class="form-control" id="client_id" name="client_id" >
             <option value="">Choisir un client</option>
             @foreach($clients as $client)
             <option @if(old('client_id')==$client->id) selected @endif  value="{{$client->id}}">{{$client->client_title}}</option>
