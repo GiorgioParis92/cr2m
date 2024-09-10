@@ -112,6 +112,7 @@
                     </div>
                 </div>
             </div>
+            <div style="display: none">
             <div class="row mt-4">
                 <div class="col-lg-7 mb-lg-0 mb-4">
                     <div class="card">
@@ -767,6 +768,7 @@
                     </div>
                 </div>
             </div>
+          </div>
         </div>
     </main>
 </div>
