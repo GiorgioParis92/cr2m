@@ -27,22 +27,22 @@ if (!function_exists('is_user_allowed')) {
             return false;
         }
 
-        // if($user->client->id==0) {
-        //     $defaultPermission = DB::table('default_permission')->where('type_id', $user->type_id)
-        //     ->where('permission_name', $permission_name)
-        //     ->where('type_client', 0)
+        if($user->client->id==0) {
+            $defaultPermission = DB::table('default_permission')->where('type_id', $user->type_id)
+            ->where('permission_name', $permission_name)
+            ->where('type_client', 0)
 
-        //     ->first();
+            ->first();
 
 
-        // if ($defaultPermission && $defaultPermission->is_active == 0) {
-        //     return false;
-        // }
-        // if ($defaultPermission && $defaultPermission->is_active == 1) {
-        //     return true;
-        // }
-        // return true;
-        // }
+        if ($defaultPermission && $defaultPermission->is_active == 0) {
+            return false;
+        }
+        if ($defaultPermission && $defaultPermission->is_active == 1) {
+            return true;
+        }
+        return true;
+        }
         $userPermission = UserPermission::where('user_id', $user->id)
             ->where('permission_name', $permission_name)
             ->first();
