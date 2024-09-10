@@ -6,6 +6,7 @@ use App\Http\Controllers\BeneficiaireController;
 use App\Http\Controllers\PDFController;
 use App\Http\Controllers\Api\RdvController;
 use App\Http\Controllers\Api\DossiersController;
+use App\Http\Controllers\Api\StatsController;
 use App\Http\Controllers\Api\OcrAnalyze;
 use App\Http\Controllers\Api\YouSign;
 use App\Http\Controllers\Api\YouSignStatus;
@@ -52,12 +53,15 @@ Route::post('/yousign', [YouSign::class, 'index']);
 Route::post('/yousign-status', [YouSignStatus::class, 'index']);
 Route::get('/yousign-status', [YouSignStatus::class, 'index']);
 
-
+Route::get('/stats', [StatsController::class, 'index']);
+Route::post('/stats', [StatsController::class, 'index']);
 
 Route::middleware('auth:api')->group(function () {
 
     Route::get('/dossiers', [DossiersController::class, 'index']);
     Route::post('/dossiers', [DossiersController::class, 'index']);
+
+
 
     // Add other RdvController routes here as needed
 });
