@@ -22,7 +22,7 @@ if (!function_exists('is_user_allowed')) {
     function is_user_allowed($permission_name)
     {
         $user = Auth::user();
-      
+
         if (!$user) {
             return false;
         }
@@ -43,38 +43,40 @@ if (!function_exists('is_user_allowed')) {
             }
         } else {
 
-
-            $defaultPermission = DB::table('default_permission')->where('type_id', $user->type_id)
-            ->where('permission_name', $permission_name)
-            ->where('type_client','>' ,0)
-            
-            ->first();
-
-
-        if ($defaultPermission && $defaultPermission->is_active == 0) {
-            return false;
-        }
-        if ($defaultPermission && $defaultPermission->is_active == 1) {
-            return true;
-        }
-            if(isset($user->client->type_client)) {
+            if (isset($user->client->type_client)) {
                 $defaultPermission = DB::table('default_permission')
-                ->where('type_client', $user->client->type_client)
-                ->where('permission_name', $permission_name)
-                
+                    ->where('type_client', $user->client->type_client)
+                    ->where('permission_name', $permission_name)
+
                     ->first();
-    
-            
+
+
                 if ($defaultPermission && $defaultPermission->is_active == 0) {
                     return false;
                 }
             }
 
 
-          
+            $defaultPermission = DB::table('default_permission')->where('type_id', $user->type_id)
+                ->where('permission_name', $permission_name)
+                ->where('type_client', '>', 0)
+
+                ->first();
 
 
- 
+            if ($defaultPermission && $defaultPermission->is_active == 0) {
+                return false;
+            }
+            if ($defaultPermission && $defaultPermission->is_active == 1) {
+                return true;
+            }
+           
+
+
+
+
+
+
         }
 
 
@@ -163,15 +165,15 @@ if (!function_exists('format_date')) {
 
 
 if (!function_exists('percent_difference')) {
-    function percent_difference($value1,$value2)
+    function percent_difference($value1, $value2)
     {
-        
-        if($value2==0) {
+
+        if ($value2 == 0) {
             return '0%';
         }
 
-        $value=($value1-$value2)/$value2*100;
-        $value=$value.'%';
+        $value = ($value1 - $value2) / $value2 * 100;
+        $value = $value . '%';
         return $value;
     }
 }
@@ -239,7 +241,8 @@ if (!function_exists('is_client')) {
     }
 }
 
-function formatFrenchPhoneNumber($phoneNumber) {
+function formatFrenchPhoneNumber($phoneNumber)
+{
     // Regular expression for French phone number
     $pattern = '/^(?:(?:\+|00)33|0)[1-9](?:[\s\.\-]?\d{2}){4}$/';
 
@@ -363,60 +366,62 @@ function strtoupper_extended($string)
 
 if (!function_exists('generate_num_devis')) {
 
-    function generate_num_devis($client_id,$dossier_id)
+    function generate_num_devis($client_id, $dossier_id)
     {
         $check_num_devis = DB::table('dossiers_data')->where('dossier_id', $dossier_id)->where('meta_key', 'numero_devis')->first();
         if (!isset($check_num_devis)) {
-            
-        $check_devis = DB::table('numerotation_devis')
-        ->where('year', date('Y', strtotime('now')))
-        ->where('month', date('m', strtotime('now')))
-        ->where('client_id',$client_id)->first();
 
-        if (!isset($check_devis)) {
-            DB::table('numerotation_devis')
-            ->insert(['year' => date('Y', strtotime('now')), 'month' => date('m', strtotime('now')), 'client_id' => $client_id,'increment'=>1]);
-        $increment=1;
-        } else {
+            $check_devis = DB::table('numerotation_devis')
+                ->where('year', date('Y', strtotime('now')))
+                ->where('month', date('m', strtotime('now')))
+                ->where('client_id', $client_id)->first();
 
-        $increment=$check_devis->increment+1;
+            if (!isset($check_devis)) {
+                DB::table('numerotation_devis')
+                    ->insert(['year' => date('Y', strtotime('now')), 'month' => date('m', strtotime('now')), 'client_id' => $client_id, 'increment' => 1]);
+                $increment = 1;
+            } else {
 
-        DB::table('numerotation_devis')->where('year', date('Y', strtotime('now')))
-        ->where('month', date('m', strtotime('now')))->where('client_id',$client_id)->update(['increment'=>$increment]);
-        }
+                $increment = $check_devis->increment + 1;
+
+                DB::table('numerotation_devis')->where('year', date('Y', strtotime('now')))
+                    ->where('month', date('m', strtotime('now')))->where('client_id', $client_id)->update(['increment' => $increment]);
+            }
 
 
 
-       
+
             $increment = str_pad($increment, 5, '0', STR_PAD_LEFT);
-        $num="DE-".date('Y', strtotime('now')).date('m', strtotime('now')).$increment;
+            $num = "DE-" . date('Y', strtotime('now')) . date('m', strtotime('now')) . $increment;
 
-         DB::table('dossiers_data')->insert(['dossier_id' => $dossier_id, 'meta_key' => 'numero_devis', 'meta_value' => $num]);
+            DB::table('dossiers_data')->insert(['dossier_id' => $dossier_id, 'meta_key' => 'numero_devis', 'meta_value' => $num]);
         }
 
-}
+    }
 }
 
-function stringToColorCode($str) {
+function stringToColorCode($str)
+{
     // Generate a hash from the string
     $hash = md5($str);
-    
+
     // Extract the first 6 characters from the hash
     $color = substr($hash, 0, 6);
-    
+
     // Return the color code
     return '#' . $color;
 }
 
 
 
-function couleur_menage($couleur) {
+function couleur_menage($couleur)
+{
     // Generate a hash from the string
-$array=[
-    'bleu'=>'Très modestes',
-    'jaune'=>'Très modestes',
-];
-return $array[$couleur] ?? '';
+    $array = [
+        'bleu' => 'Très modestes',
+        'jaune' => 'Très modestes',
+    ];
+    return $array[$couleur] ?? '';
 }
 
 function decode_if_json($value)
@@ -432,14 +437,15 @@ function decode_if_json($value)
         }
     }
 
-    if(is_array($value)) {
+    if (is_array($value)) {
         return $value;
     }
 
     return $value;
 }
 
-function convertToArray($data) {
+function convertToArray($data)
+{
     if (is_object($data)) {
         $data = (array) $data;
     }
