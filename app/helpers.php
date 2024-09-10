@@ -27,7 +27,9 @@ if (!function_exists('is_user_allowed')) {
             return false;
         }
 
-
+        if($user->client->id==0) {
+            return true;
+        }
         $userPermission = UserPermission::where('user_id', $user->id)
             ->where('permission_name', $permission_name)
             ->first();
