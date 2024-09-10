@@ -109,6 +109,19 @@
                                             class="step-icon {{ $isActive && $isAllowed ? 'bg-success' : 'bg-tertiary' }}">{{ $index + 1 }}</span>
                                         <span class="step-text">
                                             {{ strtoupper_extended($e->etape_desc) }}
+
+
+                                          
+                                                @if (!empty($steps) && isset($steps['step_'.$e->etape_number]))
+                                                <div class="col text-center">
+                                                    <p class="text-xs font-weight-bold mb-0"> <br/></p>
+                                                    <p class="text-xs font-weight-bold mb-0"> </p>
+                                                    <p class="text-xs font-weight-bold mb-0">Etape validée le :</p>
+                                                    <h6 class="text-sm mb-0">{{ format_date($steps['step_'.$e->etape_number]) ?? '' }}</h6>
+                                                    </div>
+                                                @endif
+                                          
+
                                             <small>
                                                 @if ($dossier->etape_number == $e->etape_number)
                                                     <p>Status: {{ $dossier->status->status_name ?? '' }}</p>

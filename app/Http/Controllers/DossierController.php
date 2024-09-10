@@ -152,7 +152,17 @@ class DossierController extends Controller
         
         if($next) {
             $next_etape = $next->id;
-
+            DB::table('dossiers_data')->updateOrInsert(
+                [
+                    'dossier_id' => $dossier->id,
+                    'meta_key' => 'step_'.$dossier->etape_number
+                ],
+                [
+                    'meta_value' => now(),
+                    'created_at' => now(),
+                    'updated_at' => now()
+                ]
+            );
        
             Dossier::where('id', $id)->update(['etape_number' => $next_etape]);
         }
