@@ -104,13 +104,13 @@ class DossierLivewire extends Component
         $this->financiers = Client::where('type_client', 2)->get();
         $this->installateurs = Client::where('type_client', 3)->get();
         
-        
+        $this->steps=[];
         $datas = DB::table('dossiers_data')->where('dossier_id', $id)->where('meta_key','like','%step_%')->get();
         foreach ($datas as $data) {
     
             $steps[$data->meta_key] = $data->meta_value;
         }
-        $this->steps=($steps);
+        
 
 
         $lastRdv = Rdv::with('user')
