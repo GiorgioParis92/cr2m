@@ -308,6 +308,20 @@ class PDFController extends Controller
         $directPath ="{$directPath}/{$fileName}";
         Storage::put($filePath, $pdfOutput);
 
+
+        $update = DB::table('forms_data')->updateOrInsert(
+            [
+                'dossier_id' => '' . $dossier->id . '',
+                'form_id' => '' . $request->form_id . '',
+                'meta_key' => '' . $request->template . ''
+            ],
+            [
+                'meta_value' => '' . $directPath . '',
+                'created_at' => now(),
+                'updated_at' => now()
+            ]
+        );
+
         return response()->json([
             'message' => 'PDF generated and saved successfully',
             'file_path' => Storage::url($filePath) // Adjusted this line
