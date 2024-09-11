@@ -38,7 +38,7 @@
                 <li class="nav-item active"> 
                   <a class="nav-link" href="{{ route('dashboard') }}"><i class="fa fa-house"></i> Dashboard </a>
                 </li>
-                @if (auth()->user()->type_id==1 || auth()->user()->type_id==2 || auth()->user()->client_id==0)
+                @if (auth()->user()->type_id==1 || auth()->user()->type_id==2 || auth()->user()->type_id==3 || auth()->user()->client_id==0)
 
                 <li class="nav-item ">
                     <a class="nav-link" href="{{ route('beneficiaires.create') }}">
