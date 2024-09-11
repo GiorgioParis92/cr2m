@@ -72,6 +72,9 @@
          font-weight: bold;
          text-align: left;
      }
+
+
+     
  }
 
  .table {
@@ -1454,4 +1457,34 @@ button img {
     margin-bottom: 1rem;
     vertical-align: top;
     margin-right: 12px;
+}
+
+
+
+@media all and (max-width: 992px) {
+span.step-text small {
+    display: none;
+}
+.etapes_row .step-text {
+    font-size: 5px;
+}
+
+.etapes_row .col-lg-1 {
+    max-width: 10%;
+}
+
+.inter_line {
+    display: none;
+}
+.form-register .title .step-icon {
+    max-width: 20px;
+    max-height: 20px;
+    font-size: 12px;
+    margin: auto;
+    position: relative;
+    padding: 0;
+}
+.step-text .col.text-center {
+    display: none;
+}
 }

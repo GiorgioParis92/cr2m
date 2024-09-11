@@ -110,7 +110,7 @@
                                         <span class="step-text">
                                             {{ strtoupper_extended($e->etape_desc) }}
 
-
+                                       
                                           
                                                 @if (!empty($steps) && isset($steps['step_'.$e->etape_number]))
                                                 <div class="col text-center">
