@@ -112,7 +112,9 @@ class DossierLivewire extends Component
             $steps[$data->meta_key] = $data->meta_value;
         }
         
-
+        if(!empty($steps)) {
+            $this->steps=$steps;
+        }
 
         $lastRdv = Rdv::with('user')
         ->where('dossier_id', $id)
@@ -176,7 +178,10 @@ class DossierLivewire extends Component
     
             $steps[$data->meta_key] = $data->meta_value;
         }
-        $this->steps=$steps;
+        if(!empty($steps)) {
+            $this->steps=$steps;
+        }
+        
 
     }
 
