@@ -393,6 +393,16 @@ class DossierLivewire extends Component
         }
 
         $this->get_score_per_etape();
+
+        $this->steps=[];
+       
+        $datas = DB::table('dossiers_data')->where('dossier_id', $this->dossier->id)->where('meta_key','like','%step_%')->get();
+        
+        foreach ($datas as $data) {
+    
+            $steps[$data->meta_key] = $data->meta_value;
+        }
+        $this->steps=$steps;
     }
 
 
