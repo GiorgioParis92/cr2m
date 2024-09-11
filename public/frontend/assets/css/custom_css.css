@@ -1487,4 +1487,13 @@ span.step-text small {
 .step-text .col.text-center {
     display: none;
 }
+
+.table td {
+    border-collapse: inherit;
+    box-sizing: content-box;
+    display: block;
+    width: 100%;
+    position: relative;
+    padding: 2px !important;
+}
 }
