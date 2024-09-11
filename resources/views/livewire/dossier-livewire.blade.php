@@ -106,7 +106,7 @@
                                     <span class="current-info audible nav-link"></span>
                                     <div class="title">
                                         <span
-                                            class="step-icon {{ $isActive && $isAllowed ? 'bg-success' : 'bg-tertiary' }}">{{ $index + 1 }}</span>
+                                            class="step-icon {{ $isActive && $isAllowed ? 'bg-success' : 'bg-tertiary' }}">{{ $e->etape_icon ?? '' }}</span>
                                         <span class="step-text">
                                             {{ strtoupper_extended($e->etape_desc) }}
 

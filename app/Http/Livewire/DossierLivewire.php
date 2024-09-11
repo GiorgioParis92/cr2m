@@ -59,12 +59,13 @@ class DossierLivewire extends Component
             ->joinSub($distinctEtapes, 'distinctEtapes', function ($join) {
                 $join->on('forms.id', '=', 'distinctEtapes.min_id');
             })
-            ->select('forms.*', 'etapes.etape_name', 'etapes.etape_desc', 'etapes.order_column')
+            // ->select('forms.*', 'etapes.etape_name', 'etapes.etape_desc', 'etapes.etape_icon', 'etapes.order_column')
             ->orderBy('etapes.order_column')
             ->get();
         $this->reinitializeFormsConfigs();
 
         $this->etapes = $this->convertArrayToStdClass($etapes->toArray());
+
         foreach ($this->etapes as $etape) {
             $this->validators[$etape->etape_id] = new EtapeValidator($etape->etape_id);
         }
@@ -156,7 +157,7 @@ class DossierLivewire extends Component
             ->joinSub($distinctEtapes, 'distinctEtapes', function ($join) {
                 $join->on('forms.id', '=', 'distinctEtapes.min_id');
             })
-            ->select('forms.*', 'etapes.etape_name', 'etapes.etape_desc', 'etapes.order_column')
+            // ->select('forms.*', 'etapes.etape_name', 'etapes.etape_desc', 'etapes.etape_icon', 'etapes.order_column')
             ->orderBy('etapes.order_column')
             ->get();
         // $this->reinitializeFormsConfigs();
@@ -363,11 +364,12 @@ class DossierLivewire extends Component
                 ->joinSub($distinctEtapes, 'distinctEtapes', function ($join) {
                     $join->on('forms.id', '=', 'distinctEtapes.min_id');
                 })
-                ->select('forms.*', 'etapes.etape_name', 'etapes.etape_desc', 'etapes.order_column')
+                // ->select('forms.*', 'etapes.etape_name', 'etapes.etape_desc', 'etapes.etape_icon', 'etapes.order_column')
                 ->orderBy('etapes.order_column')
                 ->get();
 
             $this->etapes = $this->convertArrayToStdClass($etapes->toArray());
+
             $this->validators = [];
             foreach ($this->etapes as $etape) {
                 $this->validators[$etape->etape_id] = new EtapeValidator($etape->etape_id);
