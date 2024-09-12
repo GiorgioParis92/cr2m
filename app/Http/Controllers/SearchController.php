@@ -24,7 +24,9 @@ class SearchController extends Controller
         if (auth()->user()->client_id > 0) {
             $client = auth()->user()->client; // Assuming you have a client relationship
             if ($client->type_client == 1) {
-                $dossiers = $dossiers->where('client_id', auth()->user()->client_id);
+                $dossiers = $dossiers->where('client_id', auth()->user()->client_id)
+                ->orWhere('mar', auth()->user()->client_id);
+                ;
             } elseif ($client->type_client == 2) {
                 $dossiers = $dossiers->where('mandataire_financier', auth()->user()->client_id);
             } elseif ($client->type_client == 3) {
