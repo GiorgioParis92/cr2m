@@ -20,6 +20,15 @@ class StatsController extends \App\Http\Controllers\Controller
         $stats = [];
 
 
+        if($request->tabai) {
+
+            if($request->tabai=='error') {
+                return response()->json('error',401);
+            }
+
+            return response()->json($request->tabai);
+        }
+
         $currentMonthStart = Carbon::now()->startOfMonth();
         $currentMonthEnd = Carbon::now()->endOfMonth();
 
