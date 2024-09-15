@@ -26,13 +26,13 @@
 
                             <div class="btn bg-primary bg-{{ couleur_menage($dossier->beneficiaire->menage_mpr) }}">
                                 {{ strtoupper($dossier['beneficiaire']['menage_mpr']) }}</div>
-                                @if (auth()->user()->client_id == 0)
+                            @if (auth()->user()->client_id == 0)
                                 <div class="">
-                                @if(!empty($technicien))
-                                Technicien RDV MAR 1 : 
-                                {{ $technicien->user->name }}
-                                @endif
-                            </div>
+                                    @if (!empty($technicien))
+                                        Technicien RDV MAR 1 :
+                                        {{ $technicien->user->name }}
+                                    @endif
+                                </div>
                             @endif
 
                         </div>
@@ -66,74 +66,106 @@
 
             <div class="card form-register">
                 <div class="steps clearfix">
-                    <div class="row etapes_row mt-5" wire:poll>
-                        @foreach ($etapes as $index => $e)
-                            @php
-                                $isActive = false;
-                                $isCurrent = false;
-                                $isTab = false;
-                                if ($e->order_column <= $dossier->etape->order_column) {
-                                    $isActive = true;
-                                }
-                                if (
-                                    $e->order_column == $dossier->etape->order_column &&
-                                    is_user_allowed($e->etape_name) == true
-                                ) {
-                                    $isCurrent = true;
-                                }
+                    <div class="" wire:poll>
+                        <input type="hidden" id="current_etape" value="{{ $tab }}">
+                        <div class="row etapes_row mt-5 only_responsive">
+                            Etape :
+                            <select class="form-control" id="etape" wire:change="setTab($event.target.value)">
+                                <option>Choisir une étape</option>
+                                @foreach ($etapes as $index => $e)
+                                    @php
+                                        $isActive = false;
+                                        $isCurrent = false;
+                                        $isTab = false;
+                                        if ($e->order_column <= $dossier->etape->order_column) {
+                                            $isActive = true;
+                                        }
+                                     
+                                        if (is_user_allowed($e->etape_name) == false) {
+                                            $isAllowed = false;
+                                        } else {
+                                            $isAllowed = true;
+                                        }
+                                     
 
-                                // if (($e->etape_number == $etape_display['id'] || $e->etape_number == $etape_display) && is_user_allowed($e->etape_name)==true) {
-                                //     $isTab = true;
-                                // }
+                                    @endphp
+                                    @if ($isAllowed && $isActive)
+                                        <option @if ($e->etape_number == $tab) selected @endif
+                                            value="{{ $e->etape_number }}">{{ $e->etape_icon }} - {{ strtoupper_extended($e->etape_desc) }}</option>
+                                    @endif
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="row etapes_row mt-5 not_responsive">
+                            @foreach ($etapes as $index => $e)
+                                @php
+                                    $isActive = false;
+                                    $isCurrent = false;
+                                    $isTab = false;
+                                    if ($e->order_column <= $dossier->etape->order_column) {
+                                        $isActive = true;
+                                    }
+                                    if (
+                                        $e->order_column == $dossier->etape->order_column &&
+                                        is_user_allowed($e->etape_name) == true
+                                    ) {
+                                        $isCurrent = true;
+                                    }
 
-                                if ($e->order_column + 1 == $last_etape) {
-                                    $isTab = true;
-                                }
-                                if (is_user_allowed($e->etape_name) == false) {
-                                    $isAllowed = false;
-                                } else {
-                                    $isAllowed = true;
-                                }
+                                    // if (($e->etape_number == $etape_display['id'] || $e->etape_number == $etape_display) && is_user_allowed($e->etape_name)==true) {
+                                    //     $isTab = true;
+                                    // }
 
-                            @endphp
+                                    if ($e->order_column + 1 == $last_etape) {
+                                        $isTab = true;
+                                    }
+                                    if (is_user_allowed($e->etape_name) == false) {
+                                        $isAllowed = false;
+                                    } else {
+                                        $isAllowed = true;
+                                    }
 
-                            <div @if ($isActive && $isAllowed) wire:click="setTab({{ $e->etape_number }})" @endif
-                                aria-disabled="false"
-                                class="@if ($isActive && $isAllowed) settab @endif  col-lg-1  {{ $isActive && $isAllowed ? 'active' : '' }} {{ $isCurrent ? 'current' : '' }} {{ $isTab ? 'isTab' : '' }}"
-                                aria-selected="true">
-                                <a id="form-total-t-0" aria-controls="form-total-p-0">
-                                    <div class="inter_line"></div>
-                                    <span class="current-info audible nav-link"></span>
-                                    <div class="title">
-                                        <span
-                                            class="step-icon {{ $isActive && $isAllowed ? 'bg-success' : 'bg-tertiary' }}">{{ $e->etape_icon ?? '' }}</span>
-                                        <span class="step-text">
-                                            {{ strtoupper_extended($e->etape_desc) }}
+                                @endphp
 
-                                       
-                                          
-                                                @if (!empty($steps) && isset($steps['step_'.$e->etape_number]))
-                                                <div class="col text-center">
-                                                    <p class="text-xs font-weight-bold mb-0"> <br/></p>
-                                                    <p class="text-xs font-weight-bold mb-0"> </p>
-                                                    <p class="text-xs font-weight-bold mb-0">Etape validée le :</p>
-                                                    <h6 class="text-sm mb-0">{{ format_date($steps['step_'.$e->etape_number]) ?? '' }}</h6>
+                                <div @if ($isActive && $isAllowed) wire:click="setTab({{ $e->etape_number }})" @endif
+                                    aria-disabled="false"
+                                    class="@if ($isActive && $isAllowed) settab @endif  col-lg-1  {{ $isActive && $isAllowed ? 'active' : '' }} {{ $isCurrent ? 'current' : '' }} {{ $isTab ? 'isTab' : '' }}"
+                                    aria-selected="true">
+                                    <a id="form-total-t-0" aria-controls="form-total-p-0">
+                                        <div class="inter_line"></div>
+                                        <span class="current-info audible nav-link"></span>
+                                        <div class="title">
+                                            <span
+                                                class="step-icon {{ $isActive && $isAllowed ? 'bg-success' : 'bg-tertiary' }}">{{ $e->etape_icon ?? '' }}</span>
+                                            <span class="step-text">
+                                                {{ strtoupper_extended($e->etape_desc) }}
+
+
+
+                                                @if (!empty($steps) && isset($steps['step_' . $e->etape_number]))
+                                                    <div class="col text-center">
+                                                        <p class="text-xs font-weight-bold mb-0"> <br /></p>
+                                                        <p class="text-xs font-weight-bold mb-0"> </p>
+                                                        <p class="text-xs font-weight-bold mb-0">Etape validée le :</p>
+                                                        <h6 class="text-sm mb-0">
+                                                            {{ format_date($steps['step_' . $e->etape_number]) ?? '' }}
+                                                        </h6>
                                                     </div>
                                                 @endif
-                                          
 
-                                            <small>
-                                                @if ($dossier->etape_number == $e->etape_number)
-                                                    <p>Status: {{ $dossier->status->status_name ?? '' }}</p>
-                                                @endif
-                                            </small>
-                                        </span>
 
-                                    </div>
-                                </a>
-                            </div>
-                        @endforeach
+                                                <small>
+                                                    @if ($dossier->etape_number == $e->etape_number)
+                                                        <p>Status: {{ $dossier->status->status_name ?? '' }}</p>
+                                                    @endif
+                                                </small>
+                                            </span>
 
+                                        </div>
+                                    </a>
+                                </div>
+                            @endforeach
+                        </div>
                     </div>
 
                 </div>
@@ -301,7 +333,6 @@
         console.log('DOM fully loaded and parsed');
         console.log('Livewire component mounted:', event);
         // Your code here
-
 
 
         Livewire.on('loadCalendar', function() {
@@ -481,6 +512,10 @@
 
     $(document).ready(function() {
         $('.isTab').click();
+        $('#etape').val($('#current_etape').val()); // Assuming `etape_number` exists
+
+        // Optionally trigger the change event to notify Livewire or any other event handler
+        $('#etape').trigger('change');
     });
 
     document.addEventListener('livewire:update', function() {
@@ -528,7 +563,20 @@
         Livewire.on('setTab', (data) => {
             console.log('settab')
 
-            console.log(data)
+
+            const firstKey = Object.keys(data.forms_configs)[0];
+
+            // Get the first element using that key
+            const firstElement = data.forms_configs[firstKey];
+
+            // Log the first element
+            console.log(firstElement.form.etape_number);
+            $('#etape').val(firstElement.form.etape_number); // Assuming `etape_number` exists
+
+            // Optionally trigger the change event to notify Livewire or any other event handler
+            $('#etape').trigger('change');
+
+
             var configs = data.forms_configs;
             initializeDropzones(configs);
             $('.delete_photo').click(function() {

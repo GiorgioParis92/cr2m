@@ -22,8 +22,9 @@ class Photo extends AbstractFormData
         }
         
         $data = '';
-        $wireModel = "formData.{$this->form_id}.{$this->name}";
-        $data .= '<input type="hidden" wire:model.lazy="' . $wireModel . '">';
+        // $wireModel = "formData.{$this->form_id}.{$this->name}";
+        // // $data .= $wireModel ?? '';
+        // $data .= '<input type="text" wire:model.lazy="' . $wireModel . '">';
 
         $csrfToken = csrf_token();
         $data .= "<div class='row'>";
@@ -49,14 +50,14 @@ class Photo extends AbstractFormData
         $data .= "<script>
             var dropzoneElementId = '#dropzone-" . str_replace('.','-',$this->name) . "';
             var dropzoneElement = document.querySelector(dropzoneElementId);
-            
+            if(dropzoneElement) {
             var dropzone = new Dropzone(dropzoneElement, {
-                url: '{$uploadUrl}', // Use the generated upload URL
+                url: '{$uploadUrl}',
                 method: 'post',
                 headers: {
                     'X-CSRF-TOKEN': '{$csrfToken}'
                 },
-                maxFilesize: 50000, // Set the maximum file size to 50 MB
+                maxFilesize: 50000,
 
                 paramName: 'file',
                 sending: function(file, xhr, formData) {
@@ -76,6 +77,7 @@ class Photo extends AbstractFormData
                     });
                 }
             });
+            }
 
             function initializeDeleteButtons() {
                 $('.delete_photo').click(function() {
@@ -108,8 +110,8 @@ class Photo extends AbstractFormData
 
             $(document).ready(function() {
                 initializeDeleteButtons();
-            });
-        </script>";
+            });";
+            $data .="\r\n"."</script>"."\r\n";
         if(!is_array($values)) {
             $values = [$values];  // Transform into array if not already an array
         }

@@ -110,7 +110,6 @@ class Table extends AbstractFormData
             }
             $element_group[$element_config['name']]->set_dossier($this->dossier);
         }
-
         return $element_group;
     }
     public function add_element()
@@ -121,6 +120,7 @@ class Table extends AbstractFormData
         $this->value = $this->decode_if_json($this->value);
         $this->value[] = $element;
         $this->save_value();
+
     }
     public function remove_element($index)
     {
@@ -131,6 +131,7 @@ class Table extends AbstractFormData
         $this->value = array_values($this->value); // Reindex the array
 
         $this->save_value();
+
         return $this->generate_value();
     }
     public function init_value()

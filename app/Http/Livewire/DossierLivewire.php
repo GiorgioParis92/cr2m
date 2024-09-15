@@ -124,6 +124,13 @@ class DossierLivewire extends Component
         ->first();
         $this->technicien=$lastRdv ?? '';
 
+
+        if($this->setTab($last_etape)) {
+            // dd($last_etape);
+        }
+        $this->emit('setTab');
+
+        
     }
     public function test()
     {
@@ -503,8 +510,9 @@ class DossierLivewire extends Component
     {
         if (isset($this->forms_configs[$form_id])) {
             $form_configs = $this->forms_configs[$form_id];
-
-            $this->global_data[$table_tag] = $form_configs->formData[$table_tag]->remove_element($index);
+            $form_configs->formData[$table_tag]->remove_element($index);
+            $this->forms_configs[$form_id]=$form_configs;
+            // $this->global_data[$table_tag] = $form_configs->formData[$table_tag]->remove_element($index);
         }
 
         return '';
