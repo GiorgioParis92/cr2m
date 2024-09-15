@@ -969,7 +969,7 @@
         <p></p>
         <p></p>
         <p><b>Contrat pour la réalisation d'une mission de Mon Accompagnateur Rénov'</b></p>
-        <p> Fait, en deux exemplaires originaux le____________________________, à____________________________-</p>
+        <p> Fait, en deux exemplaires originaux le {{date('d/m/Y',strtotime('now'))}}, à {{ $dossier->beneficiaire->ville }}</p>
     </div>
     <div>
 
