@@ -24,6 +24,7 @@ class PDFController extends Controller
         // Validate the incoming request data
         $validated = $request->validate([
             'template' => 'nullable|string',
+            'name' => 'nullable|string',
             'dossier_id' => 'nullable',
             'generation' => 'nullable',
         ]);
@@ -68,7 +69,7 @@ class PDFController extends Controller
             }
 
             // Save the PDF file to the folder
-            $fileName = ($validated['template'] ?? 'document') . ".pdf";
+            $fileName = ($validated['name'] ?? 'document') . ".pdf";
             $filePath = "{$folderPath}/{$fileName}";
             $directPath ="{$directPath}/{$fileName}";
             Storage::put($filePath, $pdfOutput);

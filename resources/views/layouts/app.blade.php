@@ -777,6 +777,7 @@
                 });
             });
             $('.generatePdfButton').click(function() {
+                var name = $(this).data('name'); // Get the template from data attribute
                 var template = $(this).data('template'); // Get the template from data attribute
                 var form_id = $(this).data('form_id'); // Get the template from data attribute
                 var dossier_id = $(this).data('dossier_id'); // Get the dossier ID from data attribute
@@ -787,6 +788,7 @@
                     data: {
                         dossier_id: dossier_id,
                         form_id: form_id,
+                        name: name,
                         template: template
                     },
                     headers: {

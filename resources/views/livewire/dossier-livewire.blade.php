@@ -830,6 +830,7 @@
         $(document).on('click', '.generatePdfButton', function(event) {
 
             var template = $(this).data('template'); // Get the template from data attribute
+            var name = $(this).data('name'); // Get the template from data attribute
             var dossier_id = $(this).data('dossier_id'); // Get the dossier ID from data attribute
             var form_id = $(this).data('form_id'); // Get the dossier ID from data attribute
             var generation = $(this).data('generation'); // Get the dossier ID from data attribute
@@ -841,6 +842,7 @@
                     dossier_id: dossier_id,
                     generation: generation,
                     form_id: form_id,
+                    name: name,
                     template: template
                 },
                 headers: {
