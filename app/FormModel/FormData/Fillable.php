@@ -22,7 +22,7 @@ class Fillable extends AbstractFormData
             $generation = null;
         }
 
-        if (isset($optionsArray['signable']) && $optionsArray['signable'] == 'true' && auth()->user()->id == 1) {
+        if (isset($optionsArray['signable']) && $optionsArray['signable'] == 'true' ) {
             $check_signature = DB::table('forms_data')->where('form_id', $this->form_id)->where('dossier_id', $this->dossier_id)->where('meta_key', 'signature_request_id')->first();
             $check_status = DB::table('forms_data')->where('form_id', $this->form_id)->where('dossier_id', $this->dossier_id)->where('meta_key', 'signature_status')->first();
             $check_document = DB::table('forms_data')->where('form_id', $this->form_id)->where('dossier_id', $this->dossier_id)->where('meta_key', 'document_id')->first();
@@ -98,7 +98,7 @@ class Fillable extends AbstractFormData
 
         $data .= '</div>';
 
-        if (isset($optionsArray['signable']) && $optionsArray['signable'] == 'true' && auth()->user()->id == 1) {
+        if (isset($optionsArray['signable']) && $optionsArray['signable'] == 'true') {
 
 
             if ((isset($check_status) && $check_status->meta_value != 'finish') || !isset($check_status)) {
