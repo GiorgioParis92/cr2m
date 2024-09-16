@@ -26,7 +26,7 @@ class StatsController extends \App\Http\Controllers\Controller
                 return response()->json('error',401);
             }
 
-            return response()->json($request->tabai);
+            return response()->json('requete ok');
         }
 
         $currentMonthStart = Carbon::now()->startOfMonth();
