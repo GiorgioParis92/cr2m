@@ -57,6 +57,7 @@ class Generate extends AbstractFormData
         data-dossier_id="' . $this->dossier->folder . '"';
         $data .= "data-generation='" . $generation . "'";
         $data .= "data-form_id='" . $this->form_id . "'";
+        $data .= "data-name='" . $this->name . "'";
         $data .= 'data-template="' . $optionsArray['template'] . '">
         <i class="fas fa-file-pdf"></i> Générer';
         }
