@@ -178,7 +178,7 @@
                         <div class="card">
                             <div class="card-body p-3">
                                 <div class="bg-gradient-dark border-radius-lg py-3 pe-1 mb-3">
-                                    <div class="chart">
+                                    <div class="chart" style="max-height:150px">
                                         <canvas id="chart-bars" class="chart-canvas" height="170px"></canvas>
                                     </div>
                                 </div>
