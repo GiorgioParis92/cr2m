@@ -899,7 +899,7 @@
 </div>
 <style>
     #data_byform, #data_byuser {
-        max-height: 200px;
+        max-height: 320px;
         width: 100%; /* You can adjust the width as needed */
     }
 </style>
