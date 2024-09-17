@@ -115,6 +115,7 @@ class Generate extends AbstractFormData
                     $data .= "data-generation='" . $generation . "'";
                     $data .= "data-form_id='" . $this->form_id . "'";
                     $data .= "data-fields='" . json_encode($optionsArray['fields']) . "'";
+                    $data .= "data-name='" . $this->name . "'";
                     $data .= 'data-template="' . $optionsArray['template'] . '"
                     data-name="' . $this->config->title . '">
                     <i class="fas fa-eye"></i> Signer le document

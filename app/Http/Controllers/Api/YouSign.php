@@ -58,7 +58,7 @@ class YouSign extends Controller
       ]);
 
 
-      $path = 'storage/dossiers/' . $request->dossier_id . '/' . $request->template . '.pdf';
+      $path = 'storage/dossiers/' . $request->dossier_id . '/' . $request->name . '.pdf';
 
       $fullPath = public_path($path);
     }
