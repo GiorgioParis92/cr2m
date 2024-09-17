@@ -839,7 +839,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="card-body p-3" style="height:200px" >
+                        <div class="card-body p-3"  >
                             <canvas height="200px" id="data_byuser"></canvas>
                         </div>
                     </div>
@@ -904,6 +904,7 @@
      document.addEventListener('livewire:load', function () {
     const ctx = document.getElementById('data_byform').getContext('2d');
     const chartData = @json($data_byform);
+    ctx.attr('height',200);
 
     // Prepare labels and data
     const labels = chartData.map(item => `${item.form_name}`);
