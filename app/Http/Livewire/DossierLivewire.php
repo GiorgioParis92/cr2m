@@ -222,6 +222,39 @@ class DossierLivewire extends Component
 
         $this->formData[$request[0]][$request[1]] = $request[2];
         $this->global_data[$request[1]] = $request[2];
+        $form_id=$request[0];
+ 
+      
+        $form=Form::find($form_id);
+      
+        
+        $field_name = $request[1]; // Extracts 'revenu_fiscal'
+
+        $dossier_id = $this->dossier->id;
+        $user_id = auth()->user()->id;
+
+        
+        // Try to find an existing record with the same dossier_id, form_id, and user_id
+        $activity = DossiersActivity::where('dossier_id', $dossier_id)
+                                    ->where('form_id', $form_id)
+                                    ->where('user_id', $user_id)
+                                    ->first();
+
+        if ($activity) {
+            // Update the existing record
+            $activity->activity = "Document chargé ".$form->form_title."";
+            $activity->updated_at = now(); // Update the timestamp
+            $activity->save();
+        } else {
+            // Create a new record
+            DossiersActivity::create([
+                'dossier_id' => $dossier_id,
+                'user_id' => $user_id,
+                'form_id' => $form_id,
+                'activity' => "Document chargé ".$form->form_title."",
+            ]);
+        }
+
         $this->reinitializeFormsConfigs(true);
 
         $this->emit('initializeDropzones', ['forms_configs' => $this->forms_configs]);
@@ -270,7 +303,7 @@ class DossierLivewire extends Component
                     'dossier_id' => $dossier_id,
                     'user_id' => $user_id,
                     'form_id' => $form_id,
-                    'activity' => "Updated {$field_name} to {$value}",
+                    'activity' => "".$form->form_title." rempli à ".$this->score_info['form_score'][$form_id]." %",
                 ]);
             }
     
