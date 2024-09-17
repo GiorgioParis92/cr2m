@@ -130,7 +130,6 @@
 
                             @endforeach
                         </slect>
-                        <input type="text" class="form-control" name="client_parent" placeholder="Enter new client parent" required>
                         <button type="submit" class="btn btn-primary">Add</button>
                     </div>
                 </form>
