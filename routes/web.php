@@ -118,7 +118,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('clients/{id}', [ClientController::class, 'destroy'])->name('clients.destroy');
 
     Route::post('clients/{id}/add-parent', [ClientController::class, 'addParent'])->name('clients.add_parent');
-    Route::delete('clients/{id}/remove-parent', [ClientController::class, 'removeParent'])->name('clients.remove_parent');
+    Route::get('clients/{id}/remove-parent', [ClientController::class, 'removeParent'])->name('clients.remove_parent');
     
 
     Route::resource('devis', DevisController::class);

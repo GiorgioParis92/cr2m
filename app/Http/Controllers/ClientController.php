@@ -200,7 +200,7 @@ class ClientController extends Controller
         $clientParent = ClientLinks::findOrFail($id);
         $clientParent->delete();
     
-        return back()->with('success', 'Client parent removed successfully.');
+        return redirect()->route('clients.edit', $id)->with('success', 'Client parent removed successfully.');
     }
     public function addParent(Request $request, $id)
 {
