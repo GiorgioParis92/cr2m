@@ -901,65 +901,74 @@
 <script src="../assets/js/plugins/chartjs.min.js"></script>
 <script src="../assets/js/plugins/Chart.extension.js"></script>
 <script>
-         document.addEventListener('livewire:load', function () {
-        const ctx = document.getElementById('data_byform').getContext('2d');
-        const chartData = @json($data_byform);
+     document.addEventListener('livewire:load', function () {
+    const ctx = document.getElementById('data_byform').getContext('2d');
+    const chartData = @json($data_byform);
 
-        // Prepare labels and data
-        const labels = chartData.map(item => `${item.form_name}`);
-        const avgCompletionRates = chartData.map(item => item.avg_completion_rate);
+    // Prepare labels and data
+    const labels = chartData.map(item => `${item.form_name}`);
+    const avgCompletionRates = chartData.map(item => item.avg_completion_rate);
 
-        // Create the chart
-        const data_byform = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: labels,
-                datasets: [{
-                    label: 'Taux de remplissage',
-                    data: avgCompletionRates,
-                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                    borderColor: 'rgba(75, 192, 192, 1)',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        max: 100
-                    }
+    // Set background and border colors based on value
+    const backgroundColors = avgCompletionRates.map(rate => rate < 80 ? 'rgba(255, 99, 132, 0.2)' : 'rgba(75, 192, 192, 0.2)');
+    const borderColors = avgCompletionRates.map(rate => rate < 80 ? 'rgba(255, 99, 132, 1)' : 'rgba(75, 192, 192, 1)');
+
+    // Create the chart
+    const data_byform = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Taux de remplissage',
+                data: avgCompletionRates,
+                backgroundColor: backgroundColors,
+                borderColor: borderColors,
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    max: 100
                 }
             }
-        });
-
-        const ctx2 = document.getElementById('data_byuser').getContext('2d');
-        const chartData2 = @json($data_byuser);
-
-        // Prepare labels and data
-        const labels2 = chartData2.map(item => `  ${item.user_name}`);
-        const avgCompletionRates2 = chartData2.map(item => item.avg_completion_rate);
-
-        // Create the chart
-        const data_byuser = new Chart(ctx2, {
-            type: 'bar',
-            data: {
-                labels: labels2,
-                datasets: [{
-                    label: 'Taux de remplissage',
-                    data: avgCompletionRates2,
-                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                    borderColor: 'rgba(75, 192, 192, 1)',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        max: 100
-                    }
-                }
-            }
-        });
+        }
     });
+
+    const ctx2 = document.getElementById('data_byuser').getContext('2d');
+    const chartData2 = @json($data_byuser);
+
+    // Prepare labels and data
+    const labels2 = chartData2.map(item => `  ${item.user_name}`);
+    const avgCompletionRates2 = chartData2.map(item => item.avg_completion_rate);
+
+    // Set background and border colors based on value
+    const backgroundColors2 = avgCompletionRates2.map(rate => rate < 80 ? 'rgba(255, 99, 132, 0.2)' : 'rgba(75, 192, 192, 0.2)');
+    const borderColors2 = avgCompletionRates2.map(rate => rate < 80 ? 'rgba(255, 99, 132, 1)' : 'rgba(75, 192, 192, 1)');
+
+    // Create the chart
+    const data_byuser = new Chart(ctx2, {
+        type: 'bar',
+        data: {
+            labels: labels2,
+            datasets: [{
+                label: 'Taux de remplissage',
+                data: avgCompletionRates2,
+                backgroundColor: backgroundColors2,
+                borderColor: borderColors2,
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    max: 100
+                }
+            }
+        }
+    });
+});
+
 </script>
