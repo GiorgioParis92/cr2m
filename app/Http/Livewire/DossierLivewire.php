@@ -244,6 +244,7 @@ class DossierLivewire extends Component
             // Update the existing record
             $activity->activity = "Document chargé ".$form->form_title."";
             $activity->updated_at = now(); // Update the timestamp
+            $activity->score = 100; // Update the timestamp
             $activity->save();
         } else {
             // Create a new record
@@ -251,6 +252,7 @@ class DossierLivewire extends Component
                 'dossier_id' => $dossier_id,
                 'user_id' => $user_id,
                 'form_id' => $form_id,
+                'score' => 100,
                 'activity' => "Document chargé ".$form->form_title."",
             ]);
         }
@@ -295,6 +297,7 @@ class DossierLivewire extends Component
             if ($activity) {
                 // Update the existing record
                 $activity->activity = "".$form->form_title." rempli à ".$this->score_info['form_score'][$form_id]." %";
+                $activity->score = $this->score_info['form_score'][$form_id];
                 $activity->updated_at = now(); // Update the timestamp
                 $activity->save();
             } else {
@@ -303,6 +306,7 @@ class DossierLivewire extends Component
                     'dossier_id' => $dossier_id,
                     'user_id' => $user_id,
                     'form_id' => $form_id,
+                    'score'=>$this->score_info['form_score'][$form_id],
                     'activity' => "".$form->form_title." rempli à ".$this->score_info['form_score'][$form_id]." %",
                 ]);
             }

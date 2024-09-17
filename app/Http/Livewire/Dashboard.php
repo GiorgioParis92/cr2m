@@ -87,6 +87,47 @@ class Dashboard extends Component
         ->with(['dossier','dossier.beneficiaire', 'user', 'form']) // Eager load relationships
         ->latest()                          // Get latest updated records
         ->get();
+
+
+
+        $completionDataByForm = DossiersActivity::select(
+            'dossiers_activities.form_id',
+            'forms.form_title as form_name',
+            DB::raw('AVG(CAST(score AS DECIMAL(5,2))) as avg_completion_rate')
+        )
+        ->join('forms', 'dossiers_activities.form_id', '=', 'forms.id') // Join with users table
+        ->whereNotNull('score')
+        ->groupBy('dossiers_activities.user_id', 'forms.id') // Group by user_id and user_name
+        ->get();
+        
+
+        $this->data_byform = $completionDataByForm->map(function ($data) {
+            return [
+       
+                'form_id' => $data->form_id,
+                'form_name' => $data->form_name,
+                'avg_completion_rate' => $data->avg_completion_rate
+            ];
+        });
+
+        $completionDataByUser = DossiersActivity::select(
+            'dossiers_activities.user_id',
+            'users.name as user_name',
+            DB::raw('AVG(CAST(score AS DECIMAL(5,2))) as avg_completion_rate')
+        )
+        ->join('users', 'dossiers_activities.user_id', '=', 'users.id') // Join with users table
+        ->whereNotNull('score')
+        ->groupBy('dossiers_activities.user_id', 'users.name') // Group by user_id and user_name
+        ->get();
+        
+        $this->data_byuser = $completionDataByUser->map(function ($data) {
+            return [
+                'user_id'            => $data->user_id,
+                'user_name'          => $data->user_name,
+                'avg_completion_rate' => $data->avg_completion_rate
+            ];
+        });
+// dd($this->chartData);
     }
     public function render()
     {
