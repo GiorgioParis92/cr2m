@@ -129,7 +129,7 @@
                             <option value="{{$install->id}}">{{$install->client_title}}</option>
 
                             @endforeach
-                        </slect>
+                        </select>
                         <button type="submit" class="btn btn-primary">Add</button>
                     </div>
                 </form>
