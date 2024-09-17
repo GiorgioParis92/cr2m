@@ -839,7 +839,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="card-body p-3">
+                        <div class="card-body p-3" style="max-height:200px" >
                             <canvas height="200px" id="data_byuser"></canvas>
                         </div>
                     </div>
