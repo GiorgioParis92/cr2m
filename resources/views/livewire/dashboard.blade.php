@@ -916,7 +916,7 @@ document.addEventListener('livewire:load', function () {
     const ctxUser = document.getElementById('data_byuser').getContext('2d');
 
     // Get raw data from backend (should contain form_id, form_name, user_id, user_name, completion_rate)
-    const rawData = @json($rawData);
+    const rawData = @json($data_byuser);
 
     // Functions to aggregate data
     function getDataByForm(data) {
