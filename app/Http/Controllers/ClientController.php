@@ -195,12 +195,13 @@ class ClientController extends Controller
 
         return redirect()->route('clients.index')->with('success', __('messages.client_deleted').'.');
     }
-    public function removeParent($id)
+    public function removeParent(Request $request)
     {
-        $clientParent = ClientLinks::findOrFail($id);
+    
+        $clientParent = ClientLinks::where('client_id',$request->id)->where('client_parent',$request->parent);
         $clientParent->delete();
     
-        return redirect()->route('clients.edit', $id)->with('success', 'Client parent removed successfully.');
+        return back()->with('success', 'Client parent removed successfully.');
     }
     public function addParent(Request $request, $id)
 {
@@ -211,6 +212,20 @@ class ClientController extends Controller
     ClientLinks::create([
         'client_id' => $id,
         'client_parent' => $request->client_parent,
+    ]);
+
+    return redirect()->route('clients.edit', $id)->with('success', 'Client parent added successfully.');
+}
+
+public function addchild(Request $request, $id)
+{
+    $request->validate([
+        'client_child' => 'required',
+    ]);
+
+    ClientLinks::create([
+        'client_id' => $request->client_child,
+        'client_parent' => $id,
     ]);
 
     return redirect()->route('clients.edit', $id)->with('success', 'Client parent added successfully.');

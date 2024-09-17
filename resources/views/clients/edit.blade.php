@@ -92,9 +92,9 @@
                 <button type="submit" class="btn btn-primary">{{ __('forms.submit') }}</button>
             </form>
 
-
+            @if($client->type_client==3)
             <div class="mb-3">
-                <h3>Client Parents</h3>
+                <h3>Clients Parents</h3>
                 <table class="table table-striped">
                     <thead>
                         <tr>
@@ -108,9 +108,11 @@
                             <td>{{ $parent['client_parent']['client_title'] }}</td>
                             <td>
                                 <!-- Delete Button -->
-                                <form action="{{ route('clients.remove_parent', $parent['client_parent']['id']) }}" method="POST" style="display:inline-block;">
+                                <form action="{{ route('clients.remove_parent')}}" method="POST" style="display:inline-block;">
                                     @csrf
-                                    @method('DELETE')
+                                   
+                                    <input type="hidden" name="id" value="{{$client->id}}">
+                                    <input type="hidden" name="parent" value="{{$parent['client_parent']['id']}}">
                                     <button type="submit" class="btn btn-danger btn-sm">Delete</button>
                                 </form>
                             </td>
@@ -119,10 +121,11 @@
                     </tbody>
                 </table>
 
-                <!-- Add New Client Parent -->
+                <h3>Ajouter un parent</h3>
                 <form action="{{ route('clients.add_parent', $client->id) }}" method="POST" class="mt-4">
                     @csrf
                     <div class="input-group">
+                        
                         <select name="client_parent" class="form-control">
                             <option value="">Choisir un client</option>
                             @foreach($installateurs as $install)
@@ -134,6 +137,56 @@
                     </div>
                 </form>
             </div>
+            @endif
+
+
+            @if($client->type_client==4)
+            <div class="mb-3">
+                <h3>Clients "Enfants"</h3>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Client Enfant</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($has_child as $parent)
+                        <tr>
+                            <td>{{ $parent['client_child']['client_title'] }}</td>
+                            <td>
+                                <!-- Delete Button -->
+                                <form action="{{ route('clients.remove_parent')}}" method="POST" style="display:inline-block;">
+                                    @csrf
+                                   
+                                    <input type="hidden" name="id" value="{{$parent['client_child']['id']}}">
+                                    <input type="hidden" name="parent" value="{{$client->id}}">
+                                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+
+                <h3>Ajouter un client "Enfant"</h3>
+                <form action="{{ route('clients.add_child', $client->id) }}" method="POST" class="mt-4">
+                    @csrf
+                    <div class="input-group">
+                        
+                        <select name="client_child" class="form-control">
+                            <option value="">Choisir un client</option>
+                            @foreach($installateurs as $install)
+                            <option value="{{$install->id}}">{{$install->client_title}}</option>
+
+                            @endforeach
+                        </select>
+                        <button type="submit" class="btn btn-primary">Add</button>
+                    </div>
+                </form>
+            </div>
+            @endif
+
         </div>
     </div>
 </div>
