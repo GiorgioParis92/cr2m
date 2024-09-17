@@ -123,6 +123,13 @@
                 <form action="{{ route('clients.add_parent', $client->id) }}" method="POST" class="mt-4">
                     @csrf
                     <div class="input-group">
+                        <select name="client_parent" class="form-control">
+                            <option value="">Choisir un client</option>
+                            @foreach($installateurs as $install)
+                            <option value="{{$install->id}}">{{$install->client_title}}</option>
+
+                            @endforeach
+                        </slect>
                         <input type="text" class="form-control" name="client_parent" placeholder="Enter new client parent" required>
                         <button type="submit" class="btn btn-primary">Add</button>
                     </div>

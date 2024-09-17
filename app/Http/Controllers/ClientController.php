@@ -127,6 +127,8 @@ class ClientController extends Controller
     public function edit($id)
     {
         $client = Client::findOrFail($id);
+        $installateurs = Client::where('type_client',3)->get();
+
         $clientTypes = ClientType::all();
         $has_parent = ClientLinks::where('client_id', $id)->pluck('client_parent')->toArray();
         $has_child = ClientLinks::where('client_parent', $id)->pluck('client_id')->toArray();
@@ -142,7 +144,7 @@ class ClientController extends Controller
         ->toArray();
 
 
-        return view('clients.edit', compact('client', 'clientTypes','has_child','has_parent'));
+        return view('clients.edit', compact('client','installateurs', 'clientTypes','has_child','has_parent'));
     }
 
     public function update(Request $request, $id)
