@@ -897,6 +897,12 @@
         
     </main>
 </div>
+<style>
+    #data_byform, #data_byuser {
+        max-height: 200px;
+        width: 100%; /* You can adjust the width as needed */
+    }
+</style>
 <!--   Core JS Files   -->
 <script src="../assets/js/plugins/chartjs.min.js"></script>
 <script src="../assets/js/plugins/Chart.extension.js"></script>
@@ -904,7 +910,6 @@
      document.addEventListener('livewire:load', function () {
     const ctx = document.getElementById('data_byform').getContext('2d');
     const chartData = @json($data_byform);
-    ctx.height(200);
 
 
     // Prepare labels and data
