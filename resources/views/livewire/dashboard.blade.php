@@ -904,7 +904,8 @@
      document.addEventListener('livewire:load', function () {
     const ctx = document.getElementById('data_byform').getContext('2d');
     const chartData = @json($data_byform);
-    ctx.attr('height',200);
+    ctx.height(200);
+
 
     // Prepare labels and data
     const labels = chartData.map(item => `${item.form_name}`);
