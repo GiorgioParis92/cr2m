@@ -809,7 +809,7 @@
 
 
             <div class="row mb-5">
-                <div class="col-sm-6">
+                <div class="col-sm-12">
                     <div class="card h-100">
                         <div class="card-header pb-0 p-3">
                             <div class="row">
@@ -827,7 +827,7 @@
                     </div>
                 </div>
 
-                <div class="col-sm-6">
+                <div class="col-sm-12">
                     <div class="card h-100">
                         <div class="card-header pb-0 p-3">
                             <div class="row">
