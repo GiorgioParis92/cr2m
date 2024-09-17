@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\Dossier;
 use App\Models\DossiersActivity;
 use App\Models\Client;
+use App\Models\ClientLinks;
 use App\Models\User;
 use Carbon\Carbon;
 class Dashboard extends Component
@@ -16,7 +17,7 @@ class Dashboard extends Component
 
     public function mount()
     {
-       $this->refresh();
+        $this->refresh();
     }
     public function refresh()
     {
@@ -38,26 +39,40 @@ class Dashboard extends Component
         $rdvsForMonth = DB::table('rdv')
             ->select(DB::raw('COUNT(*) as rdv_count'))
             ->whereBetween('date_rdv', [$currentMonthStart, $currentMonthEnd])
-            ->first();
+            ->join('dossiers', 'rdv.dossier_id', '=', 'dossiers.id');
+
+        $rdvsForMonth = $this->filter_dossiers($rdvsForMonth);
+        $rdvsForMonth = $rdvsForMonth->first();
         $stats['rdvsForMonth'] = $rdvsForMonth->rdv_count ?? 0;
 
         $rdvsLastMonth = DB::table('rdv')
             ->select(DB::raw('COUNT(*) as rdv_count'))
             ->whereBetween('date_rdv', [$lastMonthStart, $lastMonthEnd])
-            ->first();
+            ->join('dossiers', 'rdv.dossier_id', '=', 'dossiers.id');
+
+        $rdvsLastMonth = $this->filter_dossiers($rdvsLastMonth);
+        $rdvsLastMonth = $rdvsLastMonth->first();
         $stats['rdvsLastMonth'] = $rdvsLastMonth->rdv_count ?? 0;
 
 
         $rdvsForWeek = DB::table('rdv')
             ->select(DB::raw('COUNT(*) as rdv_count'))
             ->whereBetween('date_rdv', [$currentWeekStart, $currentWeekEnd])
-            ->first();
+            
+            ->join('dossiers', 'rdv.dossier_id', '=', 'dossiers.id');
+
+        $rdvsForWeek = $this->filter_dossiers($rdvsForWeek);
+        $rdvsForWeek = $rdvsForWeek->first();
         $stats['rdvsForWeek'] = $rdvsForWeek->rdv_count ?? 0;
+
 
         $rdvsLastWeek = DB::table('rdv')
             ->select(DB::raw('COUNT(*) as rdv_count'))
             ->whereBetween('date_rdv', [$lastWeekStart, $lastWeekEnd])
-            ->first();
+            ->join('dossiers', 'rdv.dossier_id', '=', 'dossiers.id');
+
+        $rdvsLastWeek = $this->filter_dossiers($rdvsLastWeek);
+        $rdvsLastWeek = $rdvsLastWeek->first();
         $stats['rdvsLastWeek'] = $rdvsLastWeek->rdv_count ?? 0;
 
         $dossiersForMonth = DB::table('dossiers')
@@ -84,9 +99,9 @@ class Dashboard extends Component
 
         $secondsAgo = Carbon::now()->subSeconds(60);
         $this->activities = DossiersActivity::where('updated_at', '>=', $secondsAgo)
-        ->with(['dossier','dossier.beneficiaire', 'user', 'form']) // Eager load relationships
-        ->latest()                          // Get latest updated records
-        ->get();
+            ->with(['dossier', 'dossier.beneficiaire', 'user', 'form']) // Eager load relationships
+            ->latest()                          // Get latest updated records
+            ->get();
 
 
 
@@ -95,15 +110,15 @@ class Dashboard extends Component
             'forms.form_title as form_name',
             DB::raw('AVG(CAST(score AS DECIMAL(5,2))) as avg_completion_rate')
         )
-        ->join('forms', 'dossiers_activities.form_id', '=', 'forms.id') // Join with forms table
-        ->whereNotNull('score')
-        ->groupBy('dossiers_activities.form_id', 'forms.form_title') // Group by form_id and form_name
-        ->get();
-        
+            ->join('forms', 'dossiers_activities.form_id', '=', 'forms.id') // Join with forms table
+            ->whereNotNull('score')
+            ->groupBy('dossiers_activities.form_id', 'forms.form_title') // Group by form_id and form_name
+            ->get();
+
         $this->data_byform = $completionDataByForm->map(function ($data) {
             return [
-                'form_id'             => $data->form_id,
-                'form_name'           => $data->form_name,
+                'form_id' => $data->form_id,
+                'form_name' => $data->form_name,
                 'avg_completion_rate' => $data->avg_completion_rate
             ];
         });
@@ -112,23 +127,70 @@ class Dashboard extends Component
             'users.name as user_name',
             DB::raw('AVG(CAST(score AS DECIMAL(5,2))) as avg_completion_rate')
         )
-        ->join('users', 'dossiers_activities.user_id', '=', 'users.id') // Join with users table
-        ->whereNotNull('score')
-        ->groupBy('dossiers_activities.user_id', 'users.name') // Group by user_id and user_name
-        ->get();
-        
+            ->join('users', 'dossiers_activities.user_id', '=', 'users.id') // Join with users table
+            ->whereNotNull('score')
+            ->groupBy('dossiers_activities.user_id', 'users.name') // Group by user_id and user_name
+            ->get();
+
         $this->data_byuser = $completionDataByUser->map(function ($data) {
             return [
-                'user_id'             => $data->user_id,
-                'user_name'           => $data->user_name,
+                'user_id' => $data->user_id,
+                'user_name' => $data->user_name,
                 'avg_completion_rate' => $data->avg_completion_rate
             ];
         });
-        
-// dd($this->chartData);
+
+        // dd($this->chartData);
     }
     public function render()
     {
         return view('livewire.dashboard');
+    }
+
+
+
+    public function filter_dossiers($dossiers)
+    {
+        $user = auth()->user();
+        $client = Client::where('id', $user->client_id)->first();
+
+        if ($user->client_id > 0 && ($client->type_client == 1)) {
+            $dossiers = $dossiers->where(function ($query) use ($user) {
+                $query->where('dossiers.client_id', $user->client_id)
+                    ->orWhere('dossiers.mar', $user->client_id);
+            });
+        }
+
+        if ($user->client_id > 0 && ($client->type_client == 2)) {
+            $dossiers = $dossiers->where(function ($query) use ($user) {
+                $query->where('dossiers.mandataire_financier', $user->client_id);
+            });
+        }
+        if ($user->client_id > 0 && ($client->type_client == 3)) {
+            $dossiers = $dossiers->where(function ($query) use ($user) {
+                $query->where('dossiers.installateur', $user->client_id);
+            });
+        }
+        if ($user->client_id > 0 && ($client->type_client == 4)) {
+            $has_child = ClientLinks::where('client_parent', $client->id)->pluck('client_id')->toArray();
+
+            $dossiers = $dossiers->where(function ($query) use ($user) {
+                $query->where('dossiers.installateur', $user->client_id);
+            });
+        }
+
+
+        if (auth()->user()->client_id > 0 && ($client->type_client == 4)) {
+            $has_child = ClientLinks::where('client_parent', $client->id)->pluck('client_id')->toArray();
+
+
+            $dossiers = $dossiers->where(function ($query) use ($user, $has_child) {
+                $query->where('dossiers.installateur', $user->client_id)
+                    ->orWhereIn('dossiers.installateur', $has_child);
+            });
+        }
+
+
+        return $dossiers;
     }
 }
