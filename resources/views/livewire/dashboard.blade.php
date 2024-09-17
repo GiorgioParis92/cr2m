@@ -827,8 +827,8 @@
                                     <div class="d-flex">
                                         <div class="d-flex align-items-center">
                                             <button
-                                                class="btn btn-icon-only btn-rounded btn-outline-danger mb-0 me-3 p-3 btn-sm d-flex align-items-center justify-content-center"><i
-                                                    class="fas fa-arrow-down" aria-hidden="true"></i></button>
+                                                class="btn btn-icon-only btn-rounded btn-outline-success mb-0 me-3 p-3 btn-sm d-flex align-items-center justify-content-center"><i
+                                                    class="fas fa-chart-line" aria-hidden="true"></i></button>
                                             <div class="d-flex flex-column">
                                                 <h6 class="mb-1 text-dark text-sm">{{$activity->user->name}}</h6>
                                                 <span class="text-sm"><a href="{{ route('dossiers.show', $activity->dossier->folder) }}">Dossier : {{$activity->dossier->beneficiaire->nom}} {{$activity->dossier->beneficiaire->prenom}}</a></span>
