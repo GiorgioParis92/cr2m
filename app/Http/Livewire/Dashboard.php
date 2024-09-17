@@ -82,7 +82,7 @@ class Dashboard extends Component
         $this->stats = $stats;
 
 
-        $secondsAgo = Carbon::now()->subSeconds(10);
+        $secondsAgo = Carbon::now()->subSeconds(60);
         $this->activities = DossiersActivity::where('updated_at', '>=', $secondsAgo)
         ->with(['dossier','dossier.beneficiaire', 'user', 'form']) // Eager load relationships
         ->latest()                          // Get latest updated records
