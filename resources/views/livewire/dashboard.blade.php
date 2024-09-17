@@ -3,7 +3,7 @@
 <div wire:poll="refresh">
 
     <main class="main-content">
-        @if(auth()->user()->client_id==0 || auth()->user()->client->type_client==1 || auth()->user()->client->type_client==2)
+        @if(1==1)
         <div class="container-fluid py-4" wire:poll>
 
             <div class="row mb-5">
@@ -114,7 +114,7 @@
                     </div>
                 </div>
             </div>
-
+            @endif
          
 
             <div style="display: none">
