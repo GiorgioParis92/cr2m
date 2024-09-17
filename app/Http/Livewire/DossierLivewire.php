@@ -7,6 +7,7 @@ use App\Models\Dossier;
 use App\Models\Etape;
 use App\Models\DossiersActivity;
 use App\Models\User;
+use App\Models\Form;
 use App\Models\Rdv;
 use App\Models\RdvStatus;
 use App\FormModel\FormConfigHandler;
@@ -243,6 +244,9 @@ class DossierLivewire extends Component
     
             $parts = explode('.', $propertyName);
             $form_id = $parts[1]; // Extracts '1' from 'formData.1.revenu_fiscal'
+            $form=Form::find($form_id);
+          
+            
             $field_name = $parts[2]; // Extracts 'revenu_fiscal'
     
             $dossier_id = $this->dossier->id;
@@ -257,7 +261,7 @@ class DossierLivewire extends Component
     
             if ($activity) {
                 // Update the existing record
-                $activity->activity = "Formulaire rempli à ".$this->score_info['form_score'][$form_id]." %";
+                $activity->activity = "".$form->form_title." rempli à ".$this->score_info['form_score'][$form_id]." %";
                 $activity->updated_at = now(); // Update the timestamp
                 $activity->save();
             } else {

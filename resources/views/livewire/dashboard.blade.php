@@ -835,7 +835,7 @@
                                             </div>
                                         </div>
                                         <div
-                                            class="d-flex align-items-center text-danger text-gradient text-sm font-weight-bold ms-auto">
+                                            class="d-flex align-items-center text-sm font-weight-bold ms-auto">
                                             {{$activity->activity}}
                                         </div>
                                     </div>
