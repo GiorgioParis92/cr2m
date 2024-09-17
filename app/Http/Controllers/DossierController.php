@@ -6,6 +6,7 @@ use App\Models\Beneficiaire;
 use App\Models\Client;
 use App\Models\Fiche;
 use App\Models\Dossier;
+use App\Models\ClientLinks;
 use App\Models\Etape;
 use App\Models\Status;
 use App\Models\RdvStatus;
@@ -39,6 +40,15 @@ class DossierController extends Controller
         }
         if (auth()->user()->client_id > 0 && ($client->type_client == 3)) {
             $dossiers = $dossiers->where('installateur', auth()->user()->client_id);
+        }
+
+        if (auth()->user()->client_id > 0 && ($client->type_client == 4)) {
+            $has_child = ClientLinks::where('client_parent', $client->id)->pluck('client_id')->toArray();
+
+            $dossiers = $dossiers->where(function($query) use ($has_child) {
+                $query->where('installateur', auth()->user()->client_id)
+                      ->orWhereIn('installateur', $has_child);
+            });
         }
         $dossiers = $dossiers->with('beneficiaire', 'fiche', 'etape', 'status','get_rdv');
         $dossiers = $dossiers->get();
