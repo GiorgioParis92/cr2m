@@ -940,7 +940,12 @@
                     max: 100
                 }
             }
-        }
+        },
+        plugins: {
+                legend: {
+                    display: false // Hide the legend
+                }
+            }
     });
 
     const ctx2 = document.getElementById('data_byuser').getContext('2d');
@@ -974,7 +979,12 @@
                     max: 100
                 }
             }
-        }
+        },
+        plugins: {
+                legend: {
+                    display: false // Hide the legend
+                }
+            }
     });
 });
 
