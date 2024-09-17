@@ -906,171 +906,86 @@
 <!--   Core JS Files   -->
 <script src="../assets/js/plugins/chartjs.min.js"></script>
 <script src="../assets/js/plugins/Chart.extension.js"></script>
-<!-- Include Chart.js library in your HTML -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
 <script>
-document.addEventListener('livewire:load', function () {
-    // Get contexts for both charts
-    const ctxForm = document.getElementById('data_byform').getContext('2d');
-    const ctxUser = document.getElementById('data_byuser').getContext('2d');
+     document.addEventListener('livewire:load', function () {
+    const ctx = document.getElementById('data_byform').getContext('2d');
+    const chartData = @json($data_byform);
 
-    // Get raw data from backend (should contain form_id, form_name, user_id, user_name, completion_rate)
-    const rawData = @json($data_byuser);
 
-    // Functions to aggregate data
-    function getDataByForm(data) {
-        const formDataMap = {};
-        data.forEach(item => {
-            if (!formDataMap[item.form_id]) {
-                formDataMap[item.form_id] = {
-                    form_id: item.form_id,
-                    form_name: item.form_name,
-                    total_completion_rate: 0,
-                    count: 0
-                };
-            }
-            formDataMap[item.form_id].total_completion_rate += item.completion_rate;
-            formDataMap[item.form_id].count += 1;
-        });
-        return Object.values(formDataMap).map(item => ({
-            form_id: item.form_id,
-            form_name: item.form_name,
-            avg_completion_rate: item.total_completion_rate / item.count
-        }));
-    }
+    // Prepare labels and data
+    const labels = chartData.map(item => `${item.form_name}`);
+    const avgCompletionRates = chartData.map(item => item.avg_completion_rate);
 
-    function getDataByUser(data) {
-        const userDataMap = {};
-        data.forEach(item => {
-            if (!userDataMap[item.user_id]) {
-                userDataMap[item.user_id] = {
-                    user_id: item.user_id,
-                    user_name: item.user_name,
-                    total_completion_rate: 0,
-                    count: 0
-                };
-            }
-            userDataMap[item.user_id].total_completion_rate += item.completion_rate;
-            userDataMap[item.user_id].count += 1;
-        });
-        return Object.values(userDataMap).map(item => ({
-            user_id: item.user_id,
-            user_name: item.user_name,
-            avg_completion_rate: item.total_completion_rate / item.count
-        }));
-    }
+    // Set background and border colors based on value
+    const backgroundColors = avgCompletionRates.map(rate => rate < 80 ? 'rgba(255, 99, 132, 0.2)' : 'rgba(75, 192, 192, 0.2)');
+    const borderColors = avgCompletionRates.map(rate => rate < 80 ? 'rgba(255, 99, 132, 1)' : 'rgba(75, 192, 192, 1)');
 
-    // Prepare data for charts
-    function getFormChartData(data) {
-        const labels = data.map(item => item.form_name);
-        const avgCompletionRates = data.map(item => item.avg_completion_rate);
-        const backgroundColors = avgCompletionRates.map(rate =>
-            rate < 80 ? 'rgba(255, 99, 132, 0.2)' : 'rgba(75, 192, 192, 0.2)'
-        );
-        const borderColors = avgCompletionRates.map(rate =>
-            rate < 80 ? 'rgba(255, 99, 132, 1)' : 'rgba(75, 192, 192, 1)'
-        );
-        return { labels, avgCompletionRates, backgroundColors, borderColors };
-    }
-
-    function getUserChartData(data) {
-        const labels = data.map(item => item.user_name);
-        const avgCompletionRates = data.map(item => item.avg_completion_rate);
-        const backgroundColors = avgCompletionRates.map(rate =>
-            rate < 80 ? 'rgba(255, 99, 132, 0.2)' : 'rgba(75, 192, 192, 0.2)'
-        );
-        const borderColors = avgCompletionRates.map(rate =>
-            rate < 80 ? 'rgba(255, 99, 132, 1)' : 'rgba(75, 192, 192, 1)'
-        );
-        return { labels, avgCompletionRates, backgroundColors, borderColors };
-    }
-
-    // Initialize data_byform chart
-    const dataByForm = getDataByForm(rawData);
-    let formChartData = getFormChartData(dataByForm);
-    const data_byform = new Chart(ctxForm, {
+    // Create the chart
+    const data_byform = new Chart(ctx, {
         type: 'bar',
         data: {
-            labels: formChartData.labels,
+            labels: labels,
             datasets: [{
                 label: 'Taux de remplissage',
-                data: formChartData.avgCompletionRates,
-                backgroundColor: formChartData.backgroundColors,
-                borderColor: formChartData.borderColors,
+                data: avgCompletionRates,
+                backgroundColor: backgroundColors,
+                borderColor: borderColors,
                 borderWidth: 1
             }]
         },
         options: {
             scales: {
-                y: { beginAtZero: true, max: 100 }
-            },
-            plugins: { legend: { display: false } },
-            onClick: function (evt, elements) {
-                if (elements.length > 0) {
-                    const elementIndex = elements[0].index;
-                    const selectedFormId = dataByForm[elementIndex].form_id;
-                    filterDataByUser(selectedFormId);
+                y: {
+                    beginAtZero: true,
+                    max: 100
                 }
             }
-        }
+        },
+        plugins: {
+                legend: {
+                    display: false // Hide the legend
+                }
+            }
     });
 
-    // Initialize data_byuser chart
-    const dataByUser = getDataByUser(rawData);
-    let userChartData = getUserChartData(dataByUser);
-    const data_byuser = new Chart(ctxUser, {
+    const ctx2 = document.getElementById('data_byuser').getContext('2d');
+    const chartData2 = @json($data_byuser);
+
+    // Prepare labels and data
+    const labels2 = chartData2.map(item => `  ${item.user_name}`);
+    const avgCompletionRates2 = chartData2.map(item => item.avg_completion_rate);
+
+    // Set background and border colors based on value
+    const backgroundColors2 = avgCompletionRates2.map(rate => rate < 80 ? 'rgba(255, 99, 132, 0.2)' : 'rgba(75, 192, 192, 0.2)');
+    const borderColors2 = avgCompletionRates2.map(rate => rate < 80 ? 'rgba(255, 99, 132, 1)' : 'rgba(75, 192, 192, 1)');
+
+    // Create the chart
+    const data_byuser = new Chart(ctx2, {
         type: 'bar',
         data: {
-            labels: userChartData.labels,
+            labels: labels2,
             datasets: [{
                 label: 'Taux de remplissage',
-                data: userChartData.avgCompletionRates,
-                backgroundColor: userChartData.backgroundColors,
-                borderColor: userChartData.borderColors,
+                data: avgCompletionRates2,
+                backgroundColor: backgroundColors2,
+                borderColor: borderColors2,
                 borderWidth: 1
             }]
         },
         options: {
             scales: {
-                y: { beginAtZero: true, max: 100 }
-            },
-            plugins: { legend: { display: false } },
-            onClick: function (evt, elements) {
-                if (elements.length > 0) {
-                    const elementIndex = elements[0].index;
-                    const selectedUserId = dataByUser[elementIndex].user_id;
-                    filterDataByForm(selectedUserId);
+                y: {
+                    beginAtZero: true,
+                    max: 100
                 }
             }
-        }
+        },
+        plugins: {
+                legend: {
+                    display: false // Hide the legend
+                }
+            }
     });
-
-    // Function to filter and update the data_byuser chart
-    function filterDataByUser(form_id) {
-        const filteredData = rawData.filter(item => item.form_id === form_id);
-        const filteredUserData = getDataByUser(filteredData);
-        userChartData = getUserChartData(filteredUserData);
-
-        data_byuser.data.labels = userChartData.labels;
-        data_byuser.data.datasets[0].data = userChartData.avgCompletionRates;
-        data_byuser.data.datasets[0].backgroundColor = userChartData.backgroundColors;
-        data_byuser.data.datasets[0].borderColor = userChartData.borderColors;
-        data_byuser.update();
-    }
-
-    // Function to filter and update the data_byform chart
-    function filterDataByForm(user_id) {
-        const filteredData = rawData.filter(item => item.user_id === user_id);
-        const filteredFormData = getDataByForm(filteredData);
-        formChartData = getFormChartData(filteredFormData);
-
-        data_byform.data.labels = formChartData.labels;
-        data_byform.data.datasets[0].data = formChartData.avgCompletionRates;
-        data_byform.data.datasets[0].backgroundColor = formChartData.backgroundColors;
-        data_byform.data.datasets[0].borderColor = formChartData.borderColors;
-        data_byform.update();
-    }
 });
-</script>
 
+</script>
