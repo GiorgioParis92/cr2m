@@ -807,7 +807,7 @@
                 </div>
             </div>
 
-
+            @if(auth()->user()->client_id==0 )
             <div class="row mb-5">
                 <div class="col-sm-12">
                     <div class="card h-100">
