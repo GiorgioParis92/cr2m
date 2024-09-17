@@ -6,6 +6,7 @@ use Livewire\Component;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Models\Dossier;
+use App\Models\DossiersActivity;
 use App\Models\Client;
 use App\Models\User;
 use Carbon\Carbon;
@@ -79,6 +80,13 @@ class Dashboard extends Component
             ->count();
         $stats['dossiersLastWeek'] = $dossiersLastWeek ?? 0;
         $this->stats = $stats;
+
+
+        $secondsAgo = Carbon::now()->subSeconds(10);
+        $this->activities = DossiersActivity::where('updated_at', '>=', $secondsAgo)
+        ->with(['dossier','dossier.beneficiaire', 'user', 'form']) // Eager load relationships
+        ->latest()                          // Get latest updated records
+        ->get();
     }
     public function render()
     {

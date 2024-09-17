@@ -36,4 +36,9 @@ class Client extends Model
         return $this->belongsTo(ClientType::class, 'type_client');
     }
 
+    public function link()
+    {
+        return $this->HasMany(ClientLinks::class, 'client_id');
+    }
+
 }

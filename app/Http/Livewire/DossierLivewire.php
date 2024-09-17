@@ -5,6 +5,7 @@ namespace App\Http\Livewire;
 use Livewire\Component;
 use App\Models\Dossier;
 use App\Models\Etape;
+use App\Models\DossiersActivity;
 use App\Models\User;
 use App\Models\Rdv;
 use App\Models\RdvStatus;
@@ -239,12 +240,43 @@ class DossierLivewire extends Component
     public function update_value($propertyName, $value)
     {
         if (strpos($propertyName, 'formData.') === 0) {
-
+    
+            $parts = explode('.', $propertyName);
+            $form_id = $parts[1]; // Extracts '1' from 'formData.1.revenu_fiscal'
+            $field_name = $parts[2]; // Extracts 'revenu_fiscal'
+    
+            $dossier_id = $this->dossier->id;
+            $user_id = auth()->user()->id;
+    
+            
+            // Try to find an existing record with the same dossier_id, form_id, and user_id
+            $activity = DossiersActivity::where('dossier_id', $dossier_id)
+                                        ->where('form_id', $form_id)
+                                        ->where('user_id', $user_id)
+                                        ->first();
+    
+            if ($activity) {
+                // Update the existing record
+                $activity->activity = "Formulaire rempli à ".$this->score_info['form_score'][$form_id]." %";
+                $activity->updated_at = now(); // Update the timestamp
+                $activity->save();
+            } else {
+                // Create a new record
+                DossiersActivity::create([
+                    'dossier_id' => $dossier_id,
+                    'user_id' => $user_id,
+                    'form_id' => $form_id,
+                    'activity' => "Updated {$field_name} to {$value}",
+                ]);
+            }
+    
             $this->updatedFormData($propertyName, $value);
         }
     }
+    
     public function updated($propertyName, $value)
     {
+
         if (strpos($propertyName, 'formData.') === 0) {
 
             $this->updatedFormData($propertyName, $value);

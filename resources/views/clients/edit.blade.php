@@ -91,6 +91,43 @@
 
                 <button type="submit" class="btn btn-primary">{{ __('forms.submit') }}</button>
             </form>
+
+
+            <div class="mb-3">
+                <h3>Client Parents</h3>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Client Parent</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($has_parent as $parent)
+                        <tr>
+                            <td>{{ $parent['client_parent']['client_title'] }}</td>
+                            <td>
+                                <!-- Delete Button -->
+                                <form action="{{ route('clients.remove_parent', $parent['client_parent']['id']) }}" method="POST" style="display:inline-block;">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+
+                <!-- Add New Client Parent -->
+                <form action="{{ route('clients.add_parent', $client->id) }}" method="POST" class="mt-4">
+                    @csrf
+                    <div class="input-group">
+                        <input type="text" class="form-control" name="client_parent" placeholder="Enter new client parent" required>
+                        <button type="submit" class="btn btn-primary">Add</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 </div>

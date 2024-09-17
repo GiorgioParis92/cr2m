@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Services\FileUploadService;
+use App\Models\ClientLinks;
 use App\Models\ClientType;
 use App\Models\Client;
 use Illuminate\Support\Facades\Storage;
@@ -127,7 +128,21 @@ class ClientController extends Controller
     {
         $client = Client::findOrFail($id);
         $clientTypes = ClientType::all();
-        return view('clients.edit', compact('client', 'clientTypes'));
+        $has_parent = ClientLinks::where('client_id', $id)->pluck('client_parent')->toArray();
+        $has_child = ClientLinks::where('client_parent', $id)->pluck('client_id')->toArray();
+      
+        $has_parent = ClientLinks::where('client_id', $id)
+        ->with('client_parent') // Load the related client model
+        ->get(['client_parent']) // Only select the client_parent field
+        ->toArray();
+
+        $has_child = ClientLinks::where('client_parent', $id)
+        ->with('client_child') // Load the related client model
+        ->get(['client_id']) // Only select the client_parent field
+        ->toArray();
+
+
+        return view('clients.edit', compact('client', 'clientTypes','has_child','has_parent'));
     }
 
     public function update(Request $request, $id)
