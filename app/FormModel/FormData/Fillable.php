@@ -110,7 +110,7 @@ class Fillable extends AbstractFormData
                     $data .= "data-form_id='" . $this->form_id . "'";
                     $data .= "data-fields='" . json_encode($optionsArray['fields']) . "'";
                     $data .= 'data-template="' . $optionsArray['template'] . '"
-                data-name="' . $this->config->title . '">
+                data-name="' . $this->name . '">
                 <i class="fas fa-eye"></i> Signer le document
             </button> ';
                 } else {
