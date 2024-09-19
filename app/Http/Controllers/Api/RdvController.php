@@ -276,22 +276,24 @@ class RdvController extends \App\Http\Controllers\Controller
         }
         $updateData = [];
 
-        // Assuming 'date_rdv', 'hour', and 'minute' are passed in the request
-        if (isset($request->date_rdv)) {
-            // Check if both hour and minute are provided; default to '00' if missing
-            $hour = isset($request->hour) ? str_pad($request->hour, 2, '0', STR_PAD_LEFT) : '00';
-            $minute = isset($request->minute) ? str_pad($request->minute, 2, '0', STR_PAD_LEFT) : '00';
-        
-            // Combine date, hour, and minute into a full datetime string
-            $updateData['date_rdv'] = date('Y-m-d', strtotime($request->date_rdv)) . " $hour:$minute:00";
-        }
-        
-        // Continue processing other fields as before...
-        foreach ($request->all() as $key => $value) {
-            if (isset($key) && Schema::hasColumn('rdv', $key) && $key != 'date_rdv') {
-                $updateData[$key] = $value;
-            }
-        }
+// Check and ensure 'date_rdv' is properly set
+if (isset($request->date_rdv)) {
+    $hour = isset($request->hour) ? str_pad($request->hour, 2, '0', STR_PAD_LEFT) : '00';
+    $minute = isset($request->minute) ? str_pad($request->minute, 2, '0', STR_PAD_LEFT) : '00';
+
+    $updateData['date_rdv'] = date('Y-m-d', strtotime($request->date_rdv)) . " $hour:$minute:00";
+}
+
+// Ensure 'type_rdv' is not null, default to 1 if not provided
+$updateData['type_rdv'] = isset($request->type_rdv) && is_numeric($request->type_rdv) ? $request->type_rdv : 1;
+
+// Continue processing other fields
+foreach ($request->all() as $key => $value) {
+    if (isset($key) && Schema::hasColumn('rdv', $key) && $key != 'date_rdv' && $key != 'type_rdv') {
+        $updateData[$key] = $value;
+    }
+}
+
 
         if (!empty($updateData)) {
             DB::table('rdv')->where('id', $rdvId)->update($updateData);
