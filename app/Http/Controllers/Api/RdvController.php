@@ -222,7 +222,7 @@ class RdvController extends \App\Http\Controllers\Controller
         if ($rdvId == 0 || !isset($rdvId)) {
             // Insert a new record and get the id
             $rdvId = DB::table('rdv')->insertGetId([
-                'date_rdv' => date('Y-m-d 00:00:00', strtotime(str_replace('/', '-', $request->date_rdv))) ?? '2024-01-01 00:00:00', // Insert default values, adjust as needed
+                'date_rdv' => ''.date('Y-m-d 00:00:00', strtotime(str_replace('/', '-', $request->date_rdv))).'' ?? '2024-01-01 00:00:00', // Insert default values, adjust as needed
                 'user_id' => $request->user_id ?? 0,
                 'type_rdv' => $request->type_rdv ?? 1,
                 'dossier_id' => $request->dossier_id ?? 0,
