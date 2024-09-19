@@ -276,17 +276,20 @@ class RdvController extends \App\Http\Controllers\Controller
         }
         $updateData = [];
 
+        // Assuming 'date_rdv', 'hour', and 'minute' are passed in the request
+        if (isset($request->date_rdv)) {
+            // Check if both hour and minute are provided; default to '00' if missing
+            $hour = isset($request->hour) ? str_pad($request->hour, 2, '0', STR_PAD_LEFT) : '00';
+            $minute = isset($request->minute) ? str_pad($request->minute, 2, '0', STR_PAD_LEFT) : '00';
+        
+            // Combine date, hour, and minute into a full datetime string
+            $updateData['date_rdv'] = date('Y-m-d', strtotime($request->date_rdv)) . " $hour:$minute:00";
+        }
+        
+        // Continue processing other fields as before...
         foreach ($request->all() as $key => $value) {
-            if ($key == 'date_rdv') {
-                $value = date('Y-m-d', strtotime(str_replace('/', '-', $value))) . ' ' . $request->hour . ':' . $request->minute . ':00';
-
-            }
-
-
-            if (isset($key) && Schema::hasColumn('rdv', $key)) {
-
+            if (isset($key) && Schema::hasColumn('rdv', $key) && $key != 'date_rdv') {
                 $updateData[$key] = $value;
-
             }
         }
 
