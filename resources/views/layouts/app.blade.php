@@ -542,7 +542,7 @@
 
 
             $('#save_rdv').click(function() {
-                alert('ok')
+            
 
                 // Collect form data
                 var formData = {
