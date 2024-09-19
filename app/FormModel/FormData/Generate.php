@@ -103,7 +103,7 @@ class Generate extends AbstractFormData
 
             $data .= '</div>';
 
-            if (isset($optionsArray['signable']) && $optionsArray['signable'] == 'true') {
+            if (isset($optionsArray['signable']) && $optionsArray['signable'] == 'true' && $this->value) {
 
 
                 if((isset($check_status) && $check_status->meta_value!='finish') || !isset($check_status)) {
