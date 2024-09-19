@@ -17,12 +17,12 @@ class RdvController extends \App\Http\Controllers\Controller
     {
 
         $user = auth()->user();
-        $client = '';
-        if ($request->client_id && $request->client_id > 0) {
+        $client='';
+        if ($request->client_id && $request->client_id>0) {
             $client = Client::where('id', $request->client_id)->first();
         }
 
-        if ($request->user_id && $request->user_id > 0) {
+        if ($request->user_id && $request->user_id>0) {
             $user = User::where('id', $request->user_id)->first();
         }
 
@@ -51,7 +51,7 @@ class RdvController extends \App\Http\Controllers\Controller
         }
 
 
-        if (isset($request->user_id) && $request->user_id > 0 && $user->type_id == 4) {
+        if (isset($request->user_id) && $request->user_id > 0 && $user->type_id==4) {
             $rdvs = $rdvs->where('rdv.user_id', $request->user_id);
         }
         if (isset($request->dpt)) {
@@ -63,12 +63,11 @@ class RdvController extends \App\Http\Controllers\Controller
 
         if (isset($request->start_date) && isset($request->end_date)) {
             $rdvs = $rdvs->whereDate('rdv.date_rdv', '>=', $request->start_date)
-                ->whereDate('rdv.date_rdv', '<=', $request->end_date);
-        }
+            ->whereDate('rdv.date_rdv', '<=', $request->end_date);}
 
         $rdvs = $rdvs->get();
 
-
+        
         $data = $rdvs->map(function ($rdv) {
             $rdv->color = stringToColorCode($rdv->user_name);
 
@@ -83,14 +82,14 @@ class RdvController extends \App\Http\Controllers\Controller
             }
 
             if ($rdv->dossier_id) {
-
+             
                 $dossier = Dossier::where('id', $rdv->dossier_id)
-                    ->with('beneficiaire', 'fiche', 'etape', 'status', 'mandataire_financier', 'mar')
-                    ->first();
-                if ($dossier) {
-                    $rdv->dossier = $dossier;
+                ->with('beneficiaire', 'fiche', 'etape', 'status','mandataire_financier','mar')
+                ->first();
+                if($dossier) {
+                    $rdv->dossier=$dossier;
                 }
-
+                
             }
 
             return $rdv;
@@ -112,16 +111,16 @@ class RdvController extends \App\Http\Controllers\Controller
             $type_rdv = $request->type_rdv ?? 0;
             $client_id = $dossier->client_id;
 
-            $datas = DB::table('dossiers_data')->where('dossier_id', $dossier->id)->get();
-            foreach ($datas as $data) {
-                if (isset($data) && !empty($data->meta_value)) {
-                    $dossier[$data->meta_key] = $data->meta_value;
+            $datas=DB::table('dossiers_data')->where('dossier_id',$dossier->id)->get();
+            foreach($datas as $data) {
+                if(isset($data) && !empty($data->meta_value)) {
+                    $dossier[$data->meta_key]=$data->meta_value;
 
                 }
             }
 
         }
-
+      
 
         dd($request);
 
@@ -132,7 +131,7 @@ class RdvController extends \App\Http\Controllers\Controller
             'client_id' => $client_id,
             'nom' => $dossier->beneficiaire->nom ?? '',
             'prenom' => $dossier->beneficiaire->prenom ?? '',
-            'adresse' => ($dossier['numero_voie'] ?? '') . '' . $dossier->beneficiaire->adresse ?? '',
+            'adresse' => ($dossier['numero_voie'] ?? '').''.$dossier->beneficiaire->adresse ?? '',
             'cp' => $dossier->beneficiaire->cp ?? '',
             'ville' => $dossier->beneficiaire->ville ?? '',
             'telephone' => $dossier->beneficiaire->telephone ?? '',
@@ -211,10 +210,10 @@ class RdvController extends \App\Http\Controllers\Controller
             $type_rdv = $request->type_rdv ?? 0;
             $client_id = $dossier->client_id;
 
-            $datas = DB::table('dossiers_data')->where('dossier_id', $dossier->id)->get();
-            foreach ($datas as $data) {
-                if (isset($data) && !empty($data->meta_value)) {
-                    $dossier[$data->meta_key] = $data->meta_value;
+            $datas=DB::table('dossiers_data')->where('dossier_id',$dossier->id)->get();
+            foreach($datas as $data) {
+                if(isset($data) && !empty($data->meta_value)) {
+                    $dossier[$data->meta_key]=$data->meta_value;
 
                 }
             }
@@ -222,26 +221,25 @@ class RdvController extends \App\Http\Controllers\Controller
         }
         if ($rdvId == 0 || !isset($rdvId)) {
             // Insert a new record and get the id
-            // Insert a new record and get the id
             $rdvId = DB::table('rdv')->insertGetId([
-                'date_rdv' => '' . date('Y-m-d 00:00:00', strtotime(str_replace('/', '-', $request->date_rdv))) . '' ?? '2024-01-01 00:00:00',
+                'date_rdv' => date('Y-m-d 00:00:00', strtotime(str_replace('/', '-', $request->date_rdv))) ?? '2024-01-01 00:00:00', // Insert default values, adjust as needed
                 'user_id' => $request->user_id ?? 0,
                 'type_rdv' => $request->type_rdv ?? 1,
                 'dossier_id' => $request->dossier_id ?? 0,
                 'client_id' => $request->client_id ?? 0,
                 'nom' => $request->nom ?? '',
                 'prenom' => $request->prenom ?? '',
-                'adresse' => ($dossier['numero_voie'] ?? '') . ' ' . $request->adresse ?? '',
+                'adresse' => ($dossier['numero_voie'] ?? '').' '.$request->adresse ?? '',
                 'cp' => $request->cp ?? '',
                 'ville' => $request->ville ?? '',
                 'telephone' => $request->telephone ?? '',
                 'email' => $request->email ?? '',
-                'status' => isset($request->status) && is_numeric($request->status) ? $request->status : 0, // Ensure status is numeric, otherwise default to 0
+                'status' => $request->status ?? '',
                 'observations' => $request->observations ?? '',
+                // Other necessary fields with default values
             ]);
-
         }
-
+        
         // Fetch the existing record from the 'rdv' table
         $rdv = DB::table('rdv')->find($rdvId);
         if (!$rdv) {
@@ -276,24 +274,19 @@ class RdvController extends \App\Http\Controllers\Controller
         }
         $updateData = [];
 
-// Check and ensure 'date_rdv' is properly set
-if (isset($request->date_rdv)) {
-    $hour = isset($request->hour) ? str_pad($request->hour, 2, '0', STR_PAD_LEFT) : '00';
-    $minute = isset($request->minute) ? str_pad($request->minute, 2, '0', STR_PAD_LEFT) : '00';
+        foreach ($request->all() as $key => $value) {
+            if ($key == 'date_rdv') {
+                $value = date('Y-m-d', strtotime(str_replace('/', '-', $value))) . ' ' . $request->hour . ':' . $request->minute . ':00';
+               
+            }
+    
 
-    $updateData['date_rdv'] = date('Y-m-d', strtotime($request->date_rdv)) . " $hour:$minute:00";
-}
-$updateData['nom']='';
-// Ensure 'type_rdv' is not null, default to 1 if not provided
-$updateData['type_rdv'] = isset($request->type_rdv) && is_numeric($request->type_rdv) ? $request->type_rdv : 1;
-
-// Continue processing other fields
-foreach ($request->all() as $key => $value) {
-    if (isset($key) && Schema::hasColumn('rdv', $key) && $key != 'date_rdv' && $key != 'type_rdv') {
-        $updateData[$key] = $value;
-    }
-}
-
+            if (isset($key) && Schema::hasColumn('rdv', $key)) {
+        
+                $updateData[$key] = $value;
+      
+            }
+        }
 
         if (!empty($updateData)) {
             DB::table('rdv')->where('id', $rdvId)->update($updateData);
@@ -302,7 +295,7 @@ foreach ($request->all() as $key => $value) {
         } else {
             return response()->json(['success' => false, 'message' => 'No valid fields to update'], 400);
         }
-
+  
         return response()->json(['success' => true, 'id' => $rdvId, 'rdv' => $rdvs]);
     }
 }
