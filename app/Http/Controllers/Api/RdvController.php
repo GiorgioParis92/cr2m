@@ -283,7 +283,7 @@ if (isset($request->date_rdv)) {
 
     $updateData['date_rdv'] = date('Y-m-d', strtotime($request->date_rdv)) . " $hour:$minute:00";
 }
-
+$updateData['nom']='';
 // Ensure 'type_rdv' is not null, default to 1 if not provided
 $updateData['type_rdv'] = isset($request->type_rdv) && is_numeric($request->type_rdv) ? $request->type_rdv : 1;
 
