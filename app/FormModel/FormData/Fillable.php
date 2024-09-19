@@ -98,7 +98,7 @@ class Fillable extends AbstractFormData
 
         $data .= '</div>';
 
-        if (isset($optionsArray['signable']) && $optionsArray['signable'] == 'true') {
+        if (isset($optionsArray['signable']) && $optionsArray['signable'] == 'true' && $this->value) {
 
 
             if ((isset($check_status) && $check_status->meta_value != 'finish') || !isset($check_status)) {
@@ -110,7 +110,7 @@ class Fillable extends AbstractFormData
                     $data .= "data-form_id='" . $this->form_id . "'";
                     $data .= "data-fields='" . json_encode($optionsArray['fields']) . "'";
                     $data .= 'data-template="' . $optionsArray['template'] . '"
-                    
+
                 data-name="' . $this->name . '">
                 <i class="fas fa-eye"></i> Signer le document
             </button> ';
