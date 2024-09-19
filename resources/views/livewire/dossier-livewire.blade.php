@@ -301,9 +301,6 @@
 
                     @if ($form->form->type == 'rdv')
 
-                        @if(auth()->user()->id==1)
-                        rdv
-                        @endif
                         {!! $form->render([]) !!}
                         <div class="card container mt-5 pd-5">
 

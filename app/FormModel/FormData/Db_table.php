@@ -27,6 +27,7 @@ class Db_table extends AbstractFormData
    
         $data = '<div class="form-group  col-lg-12">';
 
+        $data .= 'rdv';
         $data .= '<table class="table table-bordered responsive-table table-responsive dataTable no-footer">';
         $data .= '<thead>';
         $data .= '<th>';
