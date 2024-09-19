@@ -20,7 +20,7 @@ class Upload extends AbstractFormData
 
         $data .= '<td>';
         $data .= '<div class="d-flex px-2 py-1 align-items-center">';
-        $data .= $this->value ?? '';
+        $data .= $this->config->title ?? '';
         $data .= $this->config->title;
 
         $data .= '</div>';
