@@ -28,7 +28,7 @@
                                 {{ strtoupper($dossier['beneficiaire']['menage_mpr']) }}</div>
                             @if (auth()->user()->client_id == 0)
                                 <div class="">
-                                    @if (!empty($technicien))
+                                    @if (isset($technicien) && !empty($technicien))
                                         Technicien RDV MAR 1 :
                                         {{ $technicien->user->name }}
                                     @endif
