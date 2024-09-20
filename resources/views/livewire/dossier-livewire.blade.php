@@ -30,7 +30,7 @@
                                 <div class="">
                                     @if (isset($technicien) && !empty($technicien))
                                         Technicien RDV MAR 1 :
-                                        {{ $technicien->user->name }}
+                                        {{ $technicien->user->name ?? '' }}
                                     @endif
                                 </div>
                             @endif
