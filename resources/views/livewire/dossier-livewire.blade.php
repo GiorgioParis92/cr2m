@@ -80,7 +80,7 @@
                                 if ($e->order_column+1 <= $dossier->etape->order_column) {
                                     $isActive = true;
                                 }
-                             
+                                dump(is_user_allowed($e->etape_name));
                                 if (is_user_allowed($e->etape_name) == false) {
                                     $isAllowed = false;
                                  
