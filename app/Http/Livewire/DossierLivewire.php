@@ -74,12 +74,13 @@ class DossierLivewire extends Component
         $last_etape = 1;
         foreach ($this->etapes as $etape) {
            
-            if (is_user_allowed($etape->etape_name) == true && (($etape->order_column) + 1) <= $this->dossier->etape->order_column) {
+            if (is_user_allowed($etape->etape_name) == true && (($etape->order_column) ) <= $this->dossier->etape->order_column) {
                 $last_etape = ($etape->id);
             }
         }
        
         $this->last_etape = $last_etape;
+        dd($last_etape);
         // $this->setTab($this->dossier['etape_number']);
         if($last_etape) {
             $this->setTab($last_etape);
