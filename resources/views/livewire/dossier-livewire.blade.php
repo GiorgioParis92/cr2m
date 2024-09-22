@@ -123,7 +123,7 @@
                                     //     $isTab = true;
                                     // }
 
-                                    if ($e->order_column  == $last_etape) {
+                                    if ($e->id  == $last_etape) {
                                         $isTab = true;
                                     }
                                     if (is_user_allowed($e->etape_name) == false) {
