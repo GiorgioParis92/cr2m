@@ -116,7 +116,7 @@ class Chat extends Component
         $users = DB::table('users')->where('id', '>', 0)
         ->where(function($query) use ($dossier) {
             $query->where('client_id', $dossier->mar)
-                  ->orWhere('client_id', $dossier->installateur)
+                //   ->orWhere('client_id', $dossier->installateur)
                   ->orWhere(function($subQuery) use ($dossier) {
                       if ($dossier->mandataire_financier > 0) {
                           $subQuery->where('client_id', $dossier->mandataire_financier);
@@ -124,8 +124,15 @@ class Chat extends Component
                   });
         })
         ->get();
-        dd($users);
 
+        foreach($users as $user) {
+            DB::table('messages_suivi')::create([
+                'user_id' => auth()->user()->id,
+                'message_id' => $message->id,
+                'seen' => 0,
+               
+            ]);
+        }
 
         $this->refreshMessages();
 
