@@ -212,7 +212,8 @@ class Messagerie extends Component
             ->delete();
         }
 
-    
+        $this->emit( 'loadmessages');
+
 
         if ($dossier && $this->isUserAuthorized($dossier, $client_id)) {
             $this->dossier_set = $dossier_id;
