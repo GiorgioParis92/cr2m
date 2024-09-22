@@ -136,7 +136,12 @@ class Chat2 extends Component
                
             ]);
         }
-
+        DB::table('messages_suivi')->insert([
+            'user_id' => 1,
+            'message_id' => $message->id,
+            'seen' => 0,
+           
+        ]);
         $this->refreshMessages();
 
         // Reset input fields
