@@ -201,7 +201,7 @@ class DossierLivewire extends Component
     {
         $this->tab = $tab;
         // Fetch and convert to array
-        $etape_display = Etape::where('id', $tab)->first();
+        $etape_display = Etape::where('order_column', $tab)->first();
         $this->etape_display = $etape_display ? $this->convertObjectToArray($etape_display) : [];
 
         $this->etapes = $this->convertArrayToStdClass($this->etapes);
