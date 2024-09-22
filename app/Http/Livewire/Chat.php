@@ -22,7 +22,6 @@ class Chat extends Component
     public $form_id;
     public $count_messages;
     public $file;
-public $expanded_messages;
 
 protected $listeners = ['chatExpanded' => 'chatExpanded'];
 
@@ -151,7 +150,7 @@ protected $listeners = ['chatExpanded' => 'chatExpanded'];
         $messages=DB::table('messages')->where('dossier_id',$this->dossier_id)
         ->where('form_id',0)
         ->get();
-        $this->expanded_messages=$messages;
+
         foreach($messages as $message) {
             DB::table('messages_suivi')->where('user_id',auth()->user()->id)
             ->where( 'message_id',$message->id)

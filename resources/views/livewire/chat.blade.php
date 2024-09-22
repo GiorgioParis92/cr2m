@@ -154,11 +154,7 @@
             <div><i class="fa fa-comments"></i> Discussion</div>
             <div class="chat-toggle"><i class="fa fa-arrow-up"></i></div>
         </div>
-        @if($expanded_messages)
-
-        @dump($expanded_messages)
-    
-        @endif
+        
 
         <div class="chat-messages" id="chat-messages" wire:poll="refresh">
             @foreach ($chatMessages as $message)
