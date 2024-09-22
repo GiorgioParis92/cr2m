@@ -64,7 +64,10 @@ if (!function_exists('is_user_allowed')) {
                     ->where('type_id', 0)
 
                     ->first();
-                dd($defaultPermission);
+
+                if($permission_name=='planification_mar1') {
+                    dd($defaultPermission);
+                }
 
                 if ($defaultPermission && $defaultPermission->is_active == 0) {
                     return false;
