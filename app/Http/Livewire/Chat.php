@@ -114,7 +114,7 @@ class Chat extends Component
      
         $dossier=Dossier::where('id',$this->dossier_id)->first();
 
-        $users = User::where('id', '>', 0)
+        $users = DB::table('users')->where('id', '>', 0)
         ->where(function($query) use ($dossier) {
             $query->where('client_id', $dossier->mar)
                   ->orWhere('client_id', $dossier->installateur)
