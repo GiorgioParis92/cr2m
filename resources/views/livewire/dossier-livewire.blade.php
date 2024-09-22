@@ -87,7 +87,6 @@
                                 } else {
                                     $isAllowed = true;
                                     dump($e->etape_name);
-                                    dump(auth()->user());
                                 }
                                 if($isAllowed && $isActive) {
                                     $i++;
