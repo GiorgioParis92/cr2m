@@ -76,7 +76,7 @@ class Messagerie extends Component
                     ->where('user_id',auth()->user()->id)
                     ->first();
 
-                    if($seen->seen==0) {
+                    if($seen && $seen->seen==0) {
                         $this->not_seen[$message->dossier_id]=$this->not_seen[$message->dossier_id]+1;
                     }
                 }
