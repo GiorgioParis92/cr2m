@@ -134,16 +134,36 @@
             border-bottom: 1px solid #ccc !important;
             padding-bottom: 13px;
         }
+
         img.chat_img {
-    max-width: 30%;
-    display: block;
-    text-align: right;
-    position: relative;
+            max-width: 30%;
+            display: block;
+            text-align: right;
+            position: relative;
+        }
+
+        .chat-message-right {
+            flex-direction: row-reverse;
+            margin-left: auto;
+            text-align: right;
+        }
+
+        .chat-message-right a {
+            display: block;
+            float: right;
+        }
+        .chat-container2 .chat-messages {
+    display: flex;
+    flex-direction: column;
+    max-height: 500px !important;
+    overflow-y: scroll;
+    min-height: 500px !important;
+    height: 500px !important;
 }
     </style>
     <div class="chat-container2" style="padding:0!important">
         <div class="chat-header bg-primary btn-primary" style="background-position: 0!important">
-            <div><i class="fa fa-arrow-right-arrow-left"></i> {{$title ?? ''}} </div>
+            <div><i class="fa fa-arrow-right-arrow-left"></i> {{ $title ?? '' }} </div>
             {{-- <div class="chat-toggle"><i class="fa fa-arrow-up"></i></div> --}}
         </div>
 
@@ -164,24 +184,28 @@
                                     @endphp
 
                                     @if ($extension === 'pdf')
-                                         
-                                            <div class="btn btn-success btn-view pdfModal" data-toggle="modal" data-img-src="{{ Storage::url($message->file_path) }}" data-name="{{ $filename }}">
-                                                <i class="fa fa-file-pdf fa-2x"></i> {{ $filename }}
-                                            </div>
-                                        
-                                    @elseif (in_array(strtolower($extension), ['webp','jpg', 'jpeg', 'png', 'gif']))
+                                        <div class="btn btn-success btn-view pdfModal" data-toggle="modal"
+                                            data-img-src="{{ Storage::url($message->file_path) }}"
+                                            data-name="{{ $filename }}">
+                                            <i class="fa fa-file-pdf fa-2x"></i> {{ $filename }}
+                                        </div>
+                                    @elseif (in_array(strtolower($extension), ['webp', 'jpg', 'jpeg', 'png', 'gif']))
                                         <a href="{{ Storage::url($message->file_path) }}" target="_blank">
                                             <img class="chat_img" src="{{ Storage::url($message->file_path) }}"
                                                 alt="Image" />
+                                        </a>
+                                        <a href="{{ Storage::url($message->file_path) }}" target="_blank">
+
                                             {{ $filename }}
                                         </a>
-                                    @elseif (in_array(strtolower($extension), ['xls','xlsx','csv']))
+                                    @elseif (in_array(strtolower($extension), ['xls', 'xlsx', 'csv']))
                                         <a href="{{ Storage::url($message->file_path) }}" target="_blank">
                                             <i class="fa fa-file-excel fa-2x"></i>
                                             {{ $filename }}
                                         </a>
                                     @else
-                                        <a class=" bg-success text-success" href="{{ Storage::url($message->file_path) }}" target="_blank">
+                                        <a class=" bg-success text-success"
+                                            href="{{ Storage::url($message->file_path) }}" target="_blank">
                                             <i class="fa fa-file fa-2x "></i>
                                             {{ $filename }}
                                         </a>
@@ -200,37 +224,41 @@
                             </div>
                             {{ $message->content }}
                             @if ($message->file_path)
-                            <div>
-                                @php
-                                    $extension = strtolower(pathinfo($message->file_path, PATHINFO_EXTENSION));
-                                    $filename = basename($message->file_path);
-                                @endphp
+                                <div>
+                                    @php
+                                        $extension = strtolower(pathinfo($message->file_path, PATHINFO_EXTENSION));
+                                        $filename = basename($message->file_path);
+                                    @endphp
 
-                                @if ($extension === 'pdf')
-                                     
-                                        <div class="btn btn-success btn-view pdfModal" data-toggle="modal" data-img-src="{{ Storage::url($message->file_path) }}" data-name="{{ $filename }}">
+                                    @if ($extension === 'pdf')
+                                        <div class="btn btn-success btn-view pdfModal" data-toggle="modal"
+                                            data-img-src="{{ Storage::url($message->file_path) }}"
+                                            data-name="{{ $filename }}">
                                             <i class="fa fa-file-pdf fa-2x"></i> {{ $filename }}
                                         </div>
-                                    
-                                @elseif (in_array(strtolower($extension), ['webp','jpg', 'jpeg', 'png', 'gif']))
-                                    <a href="{{ Storage::url($message->file_path) }}" target="_blank">
-                                        <img class="chat_img" src="{{ Storage::url($message->file_path) }}"
-                                            alt="Image" />
-                                        {{ $filename }}
-                                    </a>
-                                @elseif (in_array(strtolower($extension), ['xls','xlsx','csv']))
-                                    <a href="{{ Storage::url($message->file_path) }}" target="_blank">
-                                        <i class="fa fa-file-excel fa-2x"></i>
-                                        {{ $filename }}
-                                    </a>
-                                @else
-                                    <a class=" bg-success text-success" href="{{ Storage::url($message->file_path) }}" target="_blank">
-                                        <i class="fa fa-file fa-2x "></i>
-                                        {{ $filename }}
-                                    </a>
-                                @endif
-                            </div>
-                        @endif
+                                    @elseif (in_array(strtolower($extension), ['webp', 'jpg', 'jpeg', 'png', 'gif']))
+                                        <a href="{{ Storage::url($message->file_path) }}" target="_blank">
+                                            <img class="chat_img" src="{{ Storage::url($message->file_path) }}"
+                                                alt="Image" />
+                                        </a>
+                                        <a href="{{ Storage::url($message->file_path) }}" target="_blank">
+
+                                            {{ $filename }}
+                                        </a>
+                                    @elseif (in_array(strtolower($extension), ['xls', 'xlsx', 'csv']))
+                                        <a href="{{ Storage::url($message->file_path) }}" target="_blank">
+                                            <i class="fa fa-file-excel fa-2x"></i>
+                                            {{ $filename }}
+                                        </a>
+                                    @else
+                                        <a class=" bg-success text-success"
+                                            href="{{ Storage::url($message->file_path) }}" target="_blank">
+                                            <i class="fa fa-file fa-2x "></i>
+                                            {{ $filename }}
+                                        </a>
+                                    @endif
+                                </div>
+                            @endif
                         </div>
                     </div>
                 @endif
@@ -257,10 +285,11 @@
     <script>
         setupChat()
         window.addEventListener('clearFileInput', function() {
-        document.getElementById('fileInput').value = null;
+            document.getElementById('fileInput').value = null;
         });
+
         function setupChat() {
-           
+
             document.getElementById('chat-toggle').onclick = function() {
                 const chatContainer = document.getElementById('chat-container');
                 chatContainer.classList.toggle('collapsed');
@@ -292,7 +321,7 @@
 
         document.addEventListener('livewire:load', function() {
             setupChat();
-           
+
             Livewire.on('new_message', function() {
 
                 var chatMessages = document.getElementById('chat-messages');

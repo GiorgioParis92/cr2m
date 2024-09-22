@@ -22,8 +22,9 @@
             </div>
         @endif
         @if(isset($dossier))
-
+            @if(is_user_allowed('chat'))
         @livewire('chat',['dossier_id' => $dossier['id']])
+        @endif
         @endif
     </div>
     <script>

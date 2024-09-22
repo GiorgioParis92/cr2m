@@ -276,13 +276,13 @@
     </div>
     <div class="row">
         @if(isset($conversation_id))
-        <div class="col-lg-4">
+        <div class="col-lg-12">
             <div class="card form-register container mt-5 pt-5" style="padding:0!important">
                 @livewire('chat2',['dossier_id' => $dossier['id'],'form_id' => $conversation_id])
             </div>
         </div>
         @endif
-        <div class="@if(isset($conversation_id)) col-lg-8 @else col-lg-12 @endif">
+        <div class="@if(isset($conversation_id)) col-lg-12 @else col-lg-12 @endif">
             <div class="card form-register container mt-5 pt-5">
                 @if (isset($form_id))
 
