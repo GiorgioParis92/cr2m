@@ -61,6 +61,9 @@
                             <div class="d-flex align-items-center py-1" style="max-height:50px">
                                 <div class="position-relative">
                                     <a class="btn btn-primary" href="{{ route('dossiers.show', $dossier->folder) }}">
+                                        @if($not_seen[$dossier->id])
+                                        {{$not_seen[$dossier->id]}}
+                                        @endif
                                         Dossier :
                                         {{ $dossier->beneficiaire->nom }}
                                         {{ $dossier->beneficiaire->prenom }} <i class="fa fa-eye"></i></a>
