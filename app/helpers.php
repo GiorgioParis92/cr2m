@@ -61,6 +61,7 @@ if (!function_exists('is_user_allowed')) {
                 $defaultPermission = DB::table('default_permission')
                     ->where('type_client', $user->client->type_client)
                     ->where('permission_name', $permission_name)
+                    ->where('type_id', 0)
 
                     ->first();
 
@@ -71,7 +72,8 @@ if (!function_exists('is_user_allowed')) {
             }
 
 
-            $defaultPermission = DB::table('default_permission')->where('type_id', $user->type_id)
+            $defaultPermission = DB::table('default_permission')
+            ->where('type_id', $user->type_id)
                 ->where('permission_name', $permission_name)
                 ->where('type_client', $user->client->type_client)
 
