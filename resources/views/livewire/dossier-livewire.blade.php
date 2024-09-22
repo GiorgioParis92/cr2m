@@ -70,32 +70,7 @@
                         <input type="hidden" id="current_etape" value="{{ $tab }}">
                         <div class="row etapes_row mt-5 only_responsive">
                             Etape :
-                            @foreach ($etapes as $index => $e)
-                            @php
-                            $isActive = false;
-                            $isCurrent = false;
-                            $isTab = false;
-                            if ($e->order_column <= $dossier->etape->order_column) {
-                                $isActive = true;
-                            }
-                         
-                            if (is_user_allowed($e->etape_name) == false) {
-                                $isAllowed = false;
-                            } else {
-                                $isAllowed = true;
-                            }
-                         
-
-                        @endphp
-
-
-                            {{$e->etape_name}}<br/>
-                            {{$e->order_column}}<br/>
-                            {{$e->etape_number}}<br/>
-                            {{$isActive}}<br/>
-                            {{$isAllowed}}<br/>
-                            {{$dossier->etape->order_column}}<br/><br/><br/><br/><br/>
-                            @endforeach
+                          
                             <select class="form-control" id="etape" wire:change="setTab($event.target.value)">
                                 <option>Choisir une étape</option>
                                 @foreach ($etapes as $index => $e)
@@ -113,9 +88,10 @@
                                             $isAllowed = true;
                                         }
                                      
-
+                                        $i=0;
                                     @endphp
                                     @if ($isAllowed && $isActive)
+                                    @php $i++ @endphp
                                         <option @if ($e->order_column == $tab) selected @endif
                                             value="{{ $e->etape_number }}">{{ $e->etape_icon }} - {{ strtoupper_extended($e->etape_desc) }}</option>
                                     @endif
@@ -197,7 +173,7 @@
                 </div>
 
                 <div class="card-body px-0 pb-0">
-                    @if (isset($tab))
+                    @if (isset($tab) && $i>0)
                         <div class="row">
                             <div class="col-lg-12">
                                 <h3 class="border-bottom border-gray pb-2 p-2">{{ $etape_display['etape_desc'] }}
