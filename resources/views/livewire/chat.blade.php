@@ -302,8 +302,12 @@
             const isCollapsed = localStorage.getItem('chatCollapsed') === 'true';
             if (isCollapsed) {
                 chatContainer.classList.add('collapsed');
+                localStorage.setItem('chatCollapsed', true);
+
             } else {
                 chatContainer.classList.remove('collapsed');
+                localStorage.setItem('chatCollapsed', false);
+
                 $('.chat-toggle').html('<i class="fa fa-arrow-down"></i>');
                 Livewire.emit('chatExpanded'); // Or use Livewire.call('chatExpandedFunction')
 
