@@ -84,10 +84,7 @@ class DossierLivewire extends Component
         if($last_etape) {
             $this->setTab($last_etape);
             $this->emit('setTab');
-        } else {
-            $this->setTab($this->dossier->etape_number);
-            $this->emit('setTab');
-        }
+        } 
 
 
         // $this->emit('initializeDropzones', ['forms_configs' => $this->forms_configs]);
