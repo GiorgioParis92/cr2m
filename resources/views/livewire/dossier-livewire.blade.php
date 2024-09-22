@@ -87,12 +87,14 @@
                                         } else {
                                             $isAllowed = true;
                                         }
-                                     
-                                       
+                                        if($isAllowed && $isActive) {
+                                            $i++;
+                                        }
+                                        
                                     @endphp
                                     @if ($isAllowed && $isActive)
-                                    @php $i++ @endphp
-                                        <option @if ($e->order_column == $tab) selected @endif
+                                    
+                                        <option @if ($e->order_column+1 == $tab) selected @endif
                                             value="{{ $e->etape_number }}">{{ $e->etape_icon }} - {{ strtoupper_extended($e->etape_desc) }}</option>
                                     @endif
                                 @endforeach
