@@ -79,7 +79,6 @@ class DossierLivewire extends Component
             }
         }
         $this->last_etape = $last_etape;
-        dd($last_etape);
         // $this->setTab($this->dossier['etape_number']);
         if($last_etape) {
             $this->setTab($last_etape);
@@ -391,7 +390,7 @@ class DossierLivewire extends Component
 
         // Fetch and convert to array
         $etape_display = Etape::where('id', $this->tab)->first();
-        dd($this->tab);
+
         $this->etape_display = $etape_display ? $this->convertObjectToArray($etape_display) : [];
         $this->etapes = $this->convertArrayToStdClass($this->etapes);
 
