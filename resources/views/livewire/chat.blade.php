@@ -267,7 +267,7 @@
         setupChat()
        
         function setupChat() {
-            const isCollapsed = chatContainer.classList.contains('collapsed');
+            var isCollapsed = chatContainer.classList.contains('collapsed');
 
 // Call Livewire function when the chat is collapsed or expanded
 if (isCollapsed) {
@@ -278,10 +278,10 @@ if (isCollapsed) {
     Livewire.emit('chatExpanded'); // Or use Livewire.call('chatExpandedFunction')
 }
             document.getElementById('chat-toggle').onclick = function() {
-                const chatContainer = document.getElementById('chat-container');
+                var chatContainer = document.getElementById('chat-container');
                 chatContainer.classList.toggle('collapsed');
 
-                const isCollapsed = chatContainer.classList.contains('collapsed');
+                var isCollapsed = chatContainer.classList.contains('collapsed');
 
                 // Call Livewire function when the chat is collapsed or expanded
                 if (isCollapsed) {
