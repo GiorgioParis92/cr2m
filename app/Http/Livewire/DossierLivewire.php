@@ -77,7 +77,7 @@ class DossierLivewire extends Component
             dump(is_user_allowed($etape->etape_name));
             if (is_user_allowed($etape->etape_name) == true && (($etape->order_column) + 1) <= $this->dossier->etape->order_column) {
                 $last_etape = ($etape->id);
-                
+                dump($etape->id);
             }
         }
        
