@@ -262,33 +262,14 @@
         </div>
     </div>
 </div>
-<script>
-     $('.pdfModal').click(function() {
 
-$('#pdfFrame').attr('src', '');
-
-var imgSrc = $(this).data('img-src');
-imgSrc += `?time=${new Date().getTime()}`;
-$('#pdfFrame').attr('src', imgSrc);
-$('#pdfModal').css('display', 'block');
-});
-
-</script>
 
 @section('scripts')
     <script>
         setupChat()
 
         function setupChat() {
-            $('.pdfModal').click(function() {
-
-                $('#pdfFrame').attr('src', '');
-
-                var imgSrc = $(this).data('img-src');
-                imgSrc += `?time=${new Date().getTime()}`;
-                $('#pdfFrame').attr('src', imgSrc);
-                $('#pdfModal').css('display', 'block');
-            });
+           
             document.getElementById('chat-toggle').onclick = function() {
                 const chatContainer = document.getElementById('chat-container');
                 chatContainer.classList.toggle('collapsed');

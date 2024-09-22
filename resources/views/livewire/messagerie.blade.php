@@ -303,6 +303,16 @@
 
 <script>
     document.addEventListener('livewire:load', function() {
+
+        $('.pdfModal').click(function() {
+
+$('#pdfFrame').attr('src', '');
+
+var imgSrc = $(this).data('img-src');
+imgSrc += `?time=${new Date().getTime()}`;
+$('#pdfFrame').attr('src', imgSrc);
+$('#pdfModal').css('display', 'block');
+});
         Livewire.on('messageSent', function() {
 
             let chatMessages = document.querySelector('.chat-messages');
