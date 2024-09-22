@@ -79,7 +79,7 @@
                                         $isActive = false;
                                         $isCurrent = false;
                                         $isTab = false;
-                                        if ($e->order_column+1 <= $dossier->etape->order_column) {
+                                        if ($e->order_column <= $dossier->etape->order_column) {
                                             $isActive = true;
                                         }
                                      
