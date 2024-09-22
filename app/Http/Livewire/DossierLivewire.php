@@ -73,10 +73,10 @@ class DossierLivewire extends Component
         }
         $last_etape = 1;
         foreach ($this->etapes as $etape) {
-            dump(($etape->order_column) + 1);
+            dump('ETAPE : '.(($etape->order_column) + 1));
+            dump('ETAPE DOSSIEZR'.$this->dossier['etape_number']);
             if (is_user_allowed($etape->etape_name) == true && (($etape->order_column) + 1) <= $this->dossier['etape_number']) {
                 $last_etape = ($etape->id);
-                dump($last_etape);
             }
         }
        
