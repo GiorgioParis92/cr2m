@@ -28,8 +28,8 @@
                                             class="rounded-circle mr-1" alt="Vanessa Tucker" width="40"
                                             height="40" style="    margin-right: 12px;">
                                         <div class="flex-grow-1 ml-3">
-                                            @if($not_seen[$dossier->id])
-                                            {{$not_seen[$dossier->id]}}
+                                            @if($not_seen[$last->dossier->id])
+                                            {{$not_seen[$last->dossier->id]}}
                                             @endif
                                             Dossier: <b>{{ $last->dossier->beneficiaire->nom }}
                                                 {{ $last->dossier->beneficiaire->prenom }}</b>
