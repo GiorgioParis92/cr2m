@@ -45,6 +45,22 @@ class Messagerie extends Component
             ->get();
 
         if ($messages->isNotEmpty()) {
+
+            foreach($messages as $message) {
+                $this->not_seen[$message->dossier_id]=0;
+                }
+                foreach($messages as $message) {
+                    $seen=DB::table('messages_suivi')
+                    ->where('message_id',$message->id)
+                    ->where('user_id',auth()->user()->id)
+                    ->first();
+
+                    if($seen && $seen->seen==0) {
+                        $this->not_seen[$message->dossier_id]=$this->not_seen[$message->dossier_id]+1;
+                    }
+                }
+
+
             // Group messages by `dossier_id`
             $grouped = $messages->groupBy('dossier_id');
 
@@ -69,19 +85,7 @@ class Messagerie extends Component
                 })
                 ->orderBy('messages.created_at', 'desc') // Order by `created_at` descending
                 ->get();
-                foreach($this->lastMessages as $message) {
-                $this->not_seen[$message->dossier_id]=0;
-                }
-                foreach($this->lastMessages as $message) {
-                    $seen=DB::table('messages_suivi')
-                    ->where('message_id',$message->id)
-                    ->where('user_id',auth()->user()->id)
-                    ->first();
-
-                    if($seen && $seen->seen==0) {
-                        $this->not_seen[$message->dossier_id]=$this->not_seen[$message->dossier_id]+1;
-                    }
-                }
+               
 
                 // Get messages for the selected dossier and sort by `created_at` ascending
             if ($this->dossier_set) {
