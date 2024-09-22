@@ -64,10 +64,13 @@ if (!function_exists('is_user_allowed')) {
                     ->where('type_id', 0)
 
                     ->first();
-
+                dd($defaultPermission);
 
                 if ($defaultPermission && $defaultPermission->is_active == 0) {
                     return false;
+                }
+                if ($defaultPermission && $defaultPermission->is_active == 1) {
+                    return true;
                 }
             }
 
