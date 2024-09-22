@@ -83,10 +83,7 @@ if (!function_exists('is_user_allowed')) {
 
                     ->first();
 
-                if($permission_name=='planification_mar') {
-                    dump($user);
-                    dd($defaultPermission);
-                }
+         
 
                 if ($defaultPermission && $defaultPermission->is_active == 0) {
                     return false;
