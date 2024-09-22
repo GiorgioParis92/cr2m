@@ -267,16 +267,7 @@
         setupChat()
        
         function setupChat() {
-            var isCollapsed = chatContainer.classList.contains('collapsed');
-
-// Call Livewire function when the chat is collapsed or expanded
-if (isCollapsed) {
-    // Chat is collapsed
-    Livewire.emit('chatCollapsed'); 
-} else {
-    // Chat is expanded
-    Livewire.emit('chatExpanded'); // Or use Livewire.call('chatExpandedFunction')
-}
+         
             document.getElementById('chat-toggle').onclick = function() {
                 var chatContainer = document.getElementById('chat-container');
                 chatContainer.classList.toggle('collapsed');
