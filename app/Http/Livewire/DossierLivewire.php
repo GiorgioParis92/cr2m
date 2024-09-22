@@ -79,6 +79,8 @@ class DossierLivewire extends Component
                 dump($last_etape);
             }
         }
+        dump($last_etape);
+
         dd($this->dossier['etape_number']);
         $this->last_etape = $last_etape;
         // $this->setTab($this->dossier['etape_number']);
