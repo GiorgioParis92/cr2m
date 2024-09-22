@@ -66,6 +66,7 @@ if (!function_exists('is_user_allowed')) {
                     ->first();
 
                 if($permission_name=='planification_mar') {
+                    dump($user);
                     dd($defaultPermission);
                 }
 
