@@ -148,7 +148,7 @@ class Chat extends Component
         $messages=DB::table('messages')->where('dossier_id',$this->dossier_id)
         ->where('form_id',0)
         ->get();
-
+        dd($messages);
         foreach($messages as $message) {
             DB::table('messages_suivi')->where('user_id',auth()->user()->id)
             ->where( 'message_id',$message->id)
