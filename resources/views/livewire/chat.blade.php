@@ -275,7 +275,8 @@
                 // Call Livewire function when the chat is collapsed or expanded
                 if (isCollapsed) {
                     // Chat is collapsed
-                    Livewire.emit('chatCollapsed'); // Or use Livewire.call('chatCollapsedFunction')
+                    Livewire.emit('chatCollapsed'); 
+                    alert('ok');// Or use Livewire.call('chatCollapsedFunction')
                 } else {
                     // Chat is expanded
                     Livewire.emit('chatExpanded'); // Or use Livewire.call('chatExpandedFunction')
