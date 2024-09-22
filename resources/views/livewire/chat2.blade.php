@@ -283,25 +283,17 @@
 </div>
 @section('scripts')
     <script>
-        setupChat()
-        window.addEventListener('clearFileInput', function() {
-            document.getElementById('fileInput').value = null;
-        });
-
+  
 
         document.addEventListener('livewire:load', function() {
-            setupChat();
 
             Livewire.on('new_message', function() {
 
                 var chatMessages = document.getElementById('chat-messages');
                 chatMessages.scrollTop = (chatMessages.scrollHeight) + 600;
-                setupChat();
             });
         });
 
-        document.addEventListener('livewire:update', function() {
-            setupChat();
-        });
+   
     </script>
 @endsection
