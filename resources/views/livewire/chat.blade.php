@@ -298,7 +298,6 @@
 
             // Set initial state from localStorage
             const chatContainer = document.getElementById('chat-container');
-            const isCollapsed = localStorage.getItem('chatCollapsed') === 'true';
             if (isCollapsed) {
                 chatContainer.classList.add('collapsed');
             } else {
