@@ -70,6 +70,34 @@
                         <input type="hidden" id="current_etape" value="{{ $tab }}">
                         <div class="row etapes_row mt-5 only_responsive">
                             Etape :
+                            @foreach ($etapes as $index => $e)
+                            @php
+                                $isActive = false;
+                                $isCurrent = false;
+                                $isTab = false;
+                                if ($e->order_column+1 <= $dossier->etape->order_column) {
+                                    $isActive = true;
+                                }
+                             
+                                if (is_user_allowed($e->etape_name) == false) {
+                                    $isAllowed = false;
+                                 
+                                } else {
+                                    $isAllowed = true;
+                                    dump($e->etape_name);
+                                    dump(auth()->user());
+                                }
+                                if($isAllowed && $isActive) {
+                                    $i++;
+                                }
+                                
+                            @endphp
+                            @if ($isAllowed==true && $isActive==true)
+                            
+                                <option @if ($e->order_column+1 == $tab) selected @endif
+                                    value="{{ $e->etape_number }}">{{ $e->etape_icon }} - {{ strtoupper_extended($e->etape_desc) }}</option>
+                            @endif
+                        @endforeach
                             @php $i=0 @endphp
                             <select class="form-control" id="etape" wire:change="setTab($event.target.value)">
                                 <option>Choisir une étape</option>
