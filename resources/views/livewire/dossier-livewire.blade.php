@@ -67,7 +67,7 @@
             <div class="card form-register">
                 <div class="steps clearfix">
                     <div class="" wire:poll>
-                        <input type="hidden" id="current_etape" value="{{ $tab }}">
+                        <input type="text" id="current_etape" value="{{ $tab }}">
                         <div class="row etapes_row mt-5 only_responsive">
                             Etape :
                            
