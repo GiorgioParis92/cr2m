@@ -98,7 +98,7 @@
                                     @endphp
                                     @if ($isAllowed==true && $isActive==true)
                                     
-                                        <option @if ($e->order_column == $tab) selected @endif
+                                        <option @if ($e->id == $tab) selected @endif
                                             value="{{ $e->etape_number }}">{{ $e->etape_icon }} - {{ strtoupper_extended($e->etape_desc) }}</option>
                                     @endif
                                 @endforeach
