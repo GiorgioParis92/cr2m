@@ -303,6 +303,12 @@
         border-bottom: 1px solid #ccc !important;
         padding-bottom: 13px;
     }
+    img.chat_img {
+    max-width: 30%;
+    display: block;
+    text-align: right;
+    float: right;
+}
 </style>
 
 <script>
