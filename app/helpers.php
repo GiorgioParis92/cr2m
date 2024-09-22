@@ -65,11 +65,7 @@ if (!function_exists('is_user_allowed')) {
 
                 ->first();
 
-            if($permission_name=='previsite') {
-                dump($user->type_id);
-                dump($user->client->type_client);
-                dump($defaultPermission);
-            }
+           
             if ($defaultPermission && $defaultPermission->is_active == 0) {
                 return false;
             }
