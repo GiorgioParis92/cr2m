@@ -296,16 +296,17 @@
                 chatMessages.scrollTop = chatMessages.scrollHeight;
             }
 
-            // Set initial state from localStorage
-            const chatContainer = document.getElementById('chat-container');
-            if (isCollapsed) {
-                chatContainer.classList.add('collapsed');
-            } else {
-                chatContainer.classList.remove('collapsed');
-                $('.chat-toggle').html('<i class="fa fa-arrow-down"></i>');
-                Livewire.emit('chatExpanded'); // Or use Livewire.call('chatExpandedFunction')
+            // // Set initial state from localStorage
+            // const chatContainer = document.getElementById('chat-container');
+            // const isCollapsed = localStorage.getItem('chatCollapsed') === 'true';
+            // if (isCollapsed) {
+            //     chatContainer.classList.add('collapsed');
+            // } else {
+            //     chatContainer.classList.remove('collapsed');
+            //     $('.chat-toggle').html('<i class="fa fa-arrow-down"></i>');
+            //     Livewire.emit('chatExpanded'); // Or use Livewire.call('chatExpandedFunction')
 
-            }
+            // }
         }
 
 
