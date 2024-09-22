@@ -21,6 +21,7 @@ class Messagerie extends Component
     public $searchTerm = ''; // New property for search term
     private $lastChecked;
     public $count_messages_dossier;
+    public $file;
 
 
     public function mount()
