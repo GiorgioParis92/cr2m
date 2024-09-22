@@ -158,7 +158,7 @@ class DossierController extends Controller
             $current_plus=(($current->order_column)+1);
            
 
-        $next=DB::table('etapes')->where('order_column', ($current->order_column+1))->first();
+        $next=DB::table('etapes')->where('id', ($current->order_column+1))->first();
             
         if($next) {
             $next_etape = $next->id;
