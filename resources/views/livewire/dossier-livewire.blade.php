@@ -71,9 +71,29 @@
                         <div class="row etapes_row mt-5 only_responsive">
                             Etape :
                             @foreach ($etapes as $index => $e)
+                            @php
+                            $isActive = false;
+                            $isCurrent = false;
+                            $isTab = false;
+                            if ($e->order_column <= $dossier->etape->order_column) {
+                                $isActive = true;
+                            }
+                         
+                            if (is_user_allowed($e->etape_name) == false) {
+                                $isAllowed = false;
+                            } else {
+                                $isAllowed = true;
+                            }
+                         
+
+                        @endphp
+
+
                             {{$e->etape_name}}<br/>
                             {{$e->order_column}}<br/>
                             {{$e->etape_number}}<br/>
+                            {{$isActive}}<br/>
+                            {{$isAllowed}}<br/>
                             {{$dossier->etape->order_column}}<br/><br/><br/><br/><br/>
                             @endforeach
                             <select class="form-control" id="etape" wire:change="setTab($event.target.value)">
