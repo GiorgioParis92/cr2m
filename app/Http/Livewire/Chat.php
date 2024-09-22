@@ -9,7 +9,9 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
-
+use App\Models\Client;
+use App\Models\User;
+use App\Models\Dossier;
 class Chat extends Component
 {
     use WithFileUploads;
@@ -101,15 +103,30 @@ class Chat extends Component
             $this->file->storeAs('chat_files', $filename, 'public');
         }
 
-        Message::create([
+       $message= Message::create([
             'user_id' => auth()->user()->id,
             'dossier_id' => $this->dossier_id,
             'form_id' => 0,
             'content' => $this->messageContent,
             'file_path' => $filePath,
         ]);
-
+        dd($message->id);
      
+        $dossier=Dossier::where('id',$this->dossier_id)->first();
+
+        $users = User::where('id', '>', 0)
+        ->where(function($query) use ($dossier) {
+            $query->where('client_id', $dossier->mar)
+                  ->orWhere('client_id', $dossier->installateur)
+                  ->orWhere(function($subQuery) use ($dossier) {
+                      if ($dossier->mandataire_financier > 0) {
+                          $subQuery->where('client_id', $dossier->mandataire_financier);
+                      }
+                  });
+        })
+        ->get();
+        dd($users);
+
 
         $this->refreshMessages();
 
