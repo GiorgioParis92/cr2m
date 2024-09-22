@@ -1,5 +1,5 @@
 <div>
-
+   
     <style>
         .chat-container {
             width: 100%;
@@ -154,7 +154,7 @@
             <div><i class="fa fa-comments"></i> Discussion</div>
             <div class="chat-toggle"><i class="fa fa-arrow-up"></i></div>
         </div>
-
+        
 
         <div class="chat-messages" id="chat-messages" wire:poll="refresh">
             @foreach ($chatMessages as $message)
@@ -262,16 +262,13 @@
         </div>
     </div>
 </div>
-
-
 @section('scripts')
     <script>
         setupChat()
 
         function setupChat() {
-           
             document.getElementById('chat-toggle').onclick = function() {
-                var chatContainer = document.getElementById('chat-container');
+                const chatContainer = document.getElementById('chat-container');
                 chatContainer.classList.toggle('collapsed');
 
                 const isCollapsed = chatContainer.classList.contains('collapsed');
@@ -279,9 +276,13 @@
                 // Call Livewire function when the chat is collapsed or expanded
                 if (isCollapsed) {
                     // Chat is collapsed
-                    Livewire.emit('chatCollapsed');
+                    Livewire.emit('chatCollapsed'); 
+                    localStorage.setItem('chatCollapsed', true);
+
                 } else {
                     // Chat is expanded
+                    localStorage.setItem('chatCollapsed', false);
+
                     Livewire.emit('chatExpanded'); // Or use Livewire.call('chatExpandedFunction')
                 }
 
@@ -296,22 +297,21 @@
                 chatMessages.scrollTop = chatMessages.scrollHeight;
             }
 
-            // // Set initial state from localStorage
-            // const chatContainer = document.getElementById('chat-container');
-            // const isCollapsed = localStorage.getItem('chatCollapsed') === 'true';
-            // if (isCollapsed) {
-            //     chatContainer.classList.add('collapsed');
-            // } else {
-            //     chatContainer.classList.remove('collapsed');
-            //     $('.chat-toggle').html('<i class="fa fa-arrow-down"></i>');
-            //     Livewire.emit('chatExpanded'); // Or use Livewire.call('chatExpandedFunction')
+            // Set initial state from localStorage
+            const chatContainer = document.getElementById('chat-container');
+            const isCollapsed = localStorage.getItem('chatCollapsed') === 'true';
+            if (isCollapsed) {
+                chatContainer.classList.add('collapsed');
+            } else {
+                chatContainer.classList.remove('collapsed');
+                $('.chat-toggle').html('<i class="fa fa-arrow-down"></i>');
+                Livewire.emit('chatExpanded'); // Or use Livewire.call('chatExpandedFunction')
 
-            // }
+            }
         }
 
 
         document.addEventListener('livewire:load', function() {
-
             setupChat();
             Livewire.on('new_message', function() {
 
