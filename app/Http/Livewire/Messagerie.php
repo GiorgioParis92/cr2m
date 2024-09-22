@@ -178,7 +178,7 @@ class Messagerie extends Component
 
        $message= Message::create([
             'user_id' => auth()->user()->id,
-            'dossier_id' => $this->dossier_id,
+            'dossier_id' => $dossier_id,
             'form_id' => 0,
             'content' => $this->messageContent,
             'file_path' => $filePath,
