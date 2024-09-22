@@ -302,6 +302,8 @@
             } else {
                 chatContainer.classList.remove('collapsed');
                 $('.chat-toggle').html('<i class="fa fa-arrow-down"></i>');
+                Livewire.emit('chatExpanded'); // Or use Livewire.call('chatExpandedFunction')
+
             }
         }
 
