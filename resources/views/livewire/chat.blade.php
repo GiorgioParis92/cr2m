@@ -1,4 +1,9 @@
 <div>
+    @if($expanded_messages)
+
+    @dump($expanded_messages)
+
+    @endif
     <style>
         .chat-container {
             width: 100%;
