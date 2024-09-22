@@ -214,6 +214,18 @@ class DossierLivewire extends Component
         $this->emit('initializeDropzones', ['forms_configs' => $this->forms_configs]);
         $this->emit('setTab', ['forms_configs' => $this->forms_configs]);
 
+        dd($this->forms_configs);
+
+        // $messages=DB::table('messages')->where('dossier_id',$this->dossier->id)
+        // ->where('form_id',)
+        // ->get();
+
+        // foreach($messages as $message) {
+        //     DB::table('messages_suivi')->where('user_id',auth()->user()->id)
+        //     ->where( 'message_id',$message->id)
+        //     ->delete();
+        // }
+
     }
 
 
