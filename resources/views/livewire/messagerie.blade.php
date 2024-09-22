@@ -302,6 +302,16 @@
 </style>
 
 <script>
+  $('.pdfModal').click(function() {
+alert('ok');
+$('#pdfFrame').attr('src', '');
+
+var imgSrc = $(this).data('img-src');
+imgSrc += `?time=${new Date().getTime()}`;
+$('#pdfFrame').attr('src', imgSrc);
+$('#pdfModal').css('display', 'block');
+});
+
     document.addEventListener('livewire:load', function() {
 
         $('.pdfModal').click(function() {
