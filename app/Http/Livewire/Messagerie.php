@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 class Messagerie extends Component
 {
     public $messageContent;
@@ -134,11 +136,49 @@ class Messagerie extends Component
 
         $dossier = Dossier::find($dossier_id);
         if ($dossier && $this->isUserAuthorized($dossier, $client_id)) {
-            $message = new Message();
-            $message->user_id = $user_id;
-            $message->dossier_id = $dossier_id;
-            $message->content = $this->messageContent;
-            $message->save();
+            $filePath = null;
+
+        if ($this->file) {
+            // Get original filename
+            $originalFilename = $this->file->getClientOriginalName();
+
+            // Sanitize filename
+            $safeFilename = pathinfo($originalFilename, PATHINFO_FILENAME);
+            $extension = $this->file->getClientOriginalExtension();
+
+            // Option 1: Use Str::slug to replace spaces and special characters
+            $safeFilename = Str::slug($safeFilename);
+
+            // Option 2: Remove unwanted characters but keep spaces and dots
+            // $safeFilename = preg_replace('/[^\w\s.-]+/', '', $safeFilename);
+            // $safeFilename = trim($safeFilename);
+
+            // Limit filename length
+            $safeFilename = Str::limit($safeFilename, 50, '');
+
+            // Reconstruct safe filename
+            $filename = $safeFilename . '.' . $extension;
+
+            // Check for filename conflicts
+            $i = 1;
+            $filePath = 'chat_files/' . $filename;
+            while (Storage::disk('public')->exists($filePath)) {
+                $filename = $safeFilename . '_' . $i . '.' . $extension;
+                $filePath = 'chat_files/' . $filename;
+                $i++;
+            }
+
+            // Store the file
+            $this->file->storeAs('chat_files', $filename, 'public');
+        }
+
+       $message= Message::create([
+            'user_id' => auth()->user()->id,
+            'dossier_id' => $this->dossier_id,
+            'form_id' => 0,
+            'content' => $this->messageContent,
+            'file_path' => $filePath,
+        ]);
 
             $this->messageContent = '';
 
