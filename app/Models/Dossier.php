@@ -39,7 +39,7 @@ class Dossier extends Model
     public function etape()
     {
         return $this->belongsTo(Etape::class, 'etape_number', 'order_column')
-                    ->whereRaw('etapes.order_column = etape_number - 1');
+                    ->whereRaw('etapes.order_column = dossiers.etape_number - 1');
     }
     public function get_rdv()
     {
