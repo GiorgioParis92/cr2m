@@ -267,6 +267,15 @@
         setupChat()
 
         function setupChat() {
+            $('.pdfModal').click(function() {
+
+$('#pdfFrame').attr('src', '');
+
+var imgSrc = $(this).data('img-src');
+imgSrc += `?time=${new Date().getTime()}`;
+$('#pdfFrame').attr('src', imgSrc);
+$('#pdfModal').css('display', 'block');
+});
             document.getElementById('chat-toggle').onclick = function() {
                 const chatContainer = document.getElementById('chat-container');
                 chatContainer.classList.toggle('collapsed');
@@ -308,15 +317,7 @@
 
 
         document.addEventListener('livewire:load', function() {
-            $('.pdfModal').click(function() {
-
-$('#pdfFrame').attr('src', '');
-
-var imgSrc = $(this).data('img-src');
-imgSrc += `?time=${new Date().getTime()}`;
-$('#pdfFrame').attr('src', imgSrc);
-$('#pdfModal').css('display', 'block');
-});
+          
             setupChat();
             Livewire.on('new_message', function() {
 
