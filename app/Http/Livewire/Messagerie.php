@@ -82,8 +82,8 @@ class Messagerie extends Component
                         $this->not_seen[$message->dossier_id]=$this->not_seen[$message->dossier_id]+1;
                     }
                 }
-                dd($this->not_seen);
-            // Get messages for the selected dossier and sort by `created_at` ascending
+
+                // Get messages for the selected dossier and sort by `created_at` ascending
             if ($this->dossier_set) {
                 $dossier = Dossier::find($this->dossier_set);
 
