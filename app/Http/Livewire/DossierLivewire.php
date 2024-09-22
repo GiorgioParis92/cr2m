@@ -388,12 +388,13 @@ class DossierLivewire extends Component
         $this->etape_display = $etape_display ? $this->convertObjectToArray($etape_display) : [];
         $this->etapes = $this->convertArrayToStdClass($this->etapes);
 
-        dump($this->etape_display);
-        dd($this->etapes);
+     
+        if(!empty($this->etape_display)) {
+            $this->forms_configs = array_filter($this->forms_configs, function ($config) use ($etape_display) {
+                return isset($config->form->etape_id) && $config->form->etape_id == $etape_display['id'];
+            });
+        }
 
-        $this->forms_configs = array_filter($this->forms_configs, function ($config) use ($etape_display) {
-            return isset($config->form->etape_id) && $config->form->etape_id == $etape_display['id'];
-        });
         $this->reinitializeFormsConfigs();
 
         // $this->emit('initializeDropzones', ['forms_configs' => $this->forms_configs]);
