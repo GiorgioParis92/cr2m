@@ -97,7 +97,7 @@
                                     @endphp
                                     @if ($isAllowed==true && $isActive==true)
                                     
-                                        <option @if ($e->order_column+1 == $tab) selected @endif
+                                        <option @if ($e->order_column == $tab) selected @endif
                                             value="{{ $e->etape_number }}">{{ $e->etape_icon }} - {{ strtoupper_extended($e->etape_desc) }}</option>
                                     @endif
                                 @endforeach
@@ -123,7 +123,7 @@
                                     //     $isTab = true;
                                     // }
 
-                                    if ($e->order_column + 1 == $last_etape) {
+                                    if ($e->order_column  == $last_etape) {
                                         $isTab = true;
                                     }
                                     if (is_user_allowed($e->etape_name) == false) {
