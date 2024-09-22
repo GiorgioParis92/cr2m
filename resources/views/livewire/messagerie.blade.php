@@ -28,6 +28,9 @@
                                             class="rounded-circle mr-1" alt="Vanessa Tucker" width="40"
                                             height="40" style="    margin-right: 12px;">
                                         <div class="flex-grow-1 ml-3">
+                                            @if($not_seen[$dossier->id])
+                                            {{$not_seen[$dossier->id]}}
+                                            @endif
                                             Dossier: <b>{{ $last->dossier->beneficiaire->nom }}
                                                 {{ $last->dossier->beneficiaire->prenom }}</b>
                                             <div class="small">
@@ -61,9 +64,7 @@
                             <div class="d-flex align-items-center py-1" style="max-height:50px">
                                 <div class="position-relative">
                                     <a class="btn btn-primary" href="{{ route('dossiers.show', $dossier->folder) }}">
-                                        @if($not_seen[$dossier->id])
-                                        {{$not_seen[$dossier->id]}}
-                                        @endif
+                                      
                                         Dossier :
                                         {{ $dossier->beneficiaire->nom }}
                                         {{ $dossier->beneficiaire->prenom }} <i class="fa fa-eye"></i></a>
