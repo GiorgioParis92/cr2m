@@ -29,7 +29,8 @@
                                             height="40" style="    margin-right: 12px;">
                                         <div class="flex-grow-1 ml-3">
                                             @if($not_seen[$last->dossier->id])
-                                            {{$not_seen[$last->dossier->id]}}
+                                            <span class="badge badge-danger">{{$not_seen[$last->dossier->id]}}</span>
+                                            
                                             @endif
                                             Dossier: <b>{{ $last->dossier->beneficiaire->nom }}
                                                 {{ $last->dossier->beneficiaire->prenom }}</b>
