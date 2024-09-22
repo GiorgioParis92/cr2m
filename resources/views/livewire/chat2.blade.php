@@ -141,10 +141,10 @@
     position: relative;
 }
     </style>
-    <div class="chat-container collapsed" id="chat-container">
-        <div class="chat-header bg-primary btn-primary" style="background-position: 0!important" id="chat-toggle">
-            <div><i class="fa fa-comments"></i> Discussion</div>
-            <div class="chat-toggle"><i class="fa fa-arrow-up"></i></div>
+    <div class="chat-container2" style="padding:0!important">
+        <div class="chat-header bg-primary btn-primary" style="background-position: 0!important">
+            <div><i class="fa fa-arrow-right-arrow-left"></i> {{$title ?? ''}} </div>
+            {{-- <div class="chat-toggle"><i class="fa fa-arrow-up"></i></div> --}}
         </div>
 
 
@@ -235,6 +235,7 @@
                     </div>
                 @endif
             @endforeach
+
         </div>
         <div class="chat-input">
             <input type="text" id="message-input" wire:model="messageContent" placeholder="Tapez votre message..."
@@ -254,8 +255,12 @@
 </div>
 @section('scripts')
     <script>
-       setupChat()
+        setupChat()
+        window.addEventListener('clearFileInput', function() {
+        document.getElementById('fileInput').value = null;
+        });
         function setupChat() {
+           
             document.getElementById('chat-toggle').onclick = function() {
                 const chatContainer = document.getElementById('chat-container');
                 chatContainer.classList.toggle('collapsed');
@@ -287,6 +292,7 @@
 
         document.addEventListener('livewire:load', function() {
             setupChat();
+           
             Livewire.on('new_message', function() {
 
                 var chatMessages = document.getElementById('chat-messages');

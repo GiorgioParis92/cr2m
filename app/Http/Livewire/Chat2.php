@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 
-class Chat extends Component
+class Chat2 extends Component
 {
     use WithFileUploads;
 
@@ -28,10 +28,13 @@ class Chat extends Component
 
     protected $messages = [];
 
-    public function mount($dossier_id)
+    public function mount($dossier_id, $form_id)
     {
         $this->dossier_id = $dossier_id;
+        $this->form_id = $form_id;
 
+        $title=DB::table('forms')->where('id',$this->form_id)->first();
+        $this->title=$title->form_title;
 
         $this->refreshMessages();
     }
@@ -40,7 +43,7 @@ class Chat extends Component
     {
         $this->chatMessages = Message::with('user')
             ->where('dossier_id', $this->dossier_id)
-            ->where('form_id', 0)
+            ->where('form_id', $this->form_id)
             ->orderBy('created_at', 'asc')
             ->get();
 
@@ -104,7 +107,7 @@ class Chat extends Component
         Message::create([
             'user_id' => auth()->user()->id,
             'dossier_id' => $this->dossier_id,
-            'form_id' => 0,
+            'form_id' => $this->form_id,
             'content' => $this->messageContent,
             'file_path' => $filePath,
         ]);
@@ -123,6 +126,6 @@ class Chat extends Component
 
     public function render()
     {
-        return view('livewire.chat');
+        return view('livewire.chat2');
     }
 }

@@ -210,7 +210,11 @@
                                             <div class="nav-wrapper position-relative end-0">
                                                 <ul class="nav nav-pills nav-fill p-1" role="tablist">
                                                     @foreach ($forms_configs as $index => $form_handler)
-                                                        @if ($form_handler->form->etape_number == $tab && $form_handler->form->type == 'form')
+                                                    @if ($form_handler->form->etape_number == $tab && $form_handler->form->type == 'conversation')
+                                                   @php $conversation_id=$form_handler->form->id @endphp
+                                                    @endif
+
+                                                    @if ($form_handler->form->etape_number == $tab && $form_handler->form->type == 'form')
                                                             <li class="nav-item">
                                                                 <a wire:click="display_form({{ $form_handler->form->id }})"
                                                                     class="nav-link mb-0 px-0 py-1 {{ $form_handler->form->id == $form_id ? 'active' : '' }}">
@@ -271,7 +275,14 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-12">
+        @if(isset($conversation_id))
+        <div class="col-lg-4">
+            <div class="card form-register container mt-5 pt-5" style="padding:0!important">
+                @livewire('chat2',['dossier_id' => $dossier['id'],'form_id' => $conversation_id])
+            </div>
+        </div>
+        @endif
+        <div class="@if(isset($conversation_id)) col-lg-8 @else col-lg-12 @endif">
             <div class="card form-register container mt-5 pt-5">
                 @if (isset($form_id))
 
