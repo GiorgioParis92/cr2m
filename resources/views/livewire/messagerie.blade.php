@@ -38,8 +38,12 @@
                                                 {{-- <span class="fas fa-circle chat-online"></span>  --}}
                                                 <span class="text-muted">Le
                                                     {{ date('d/m/Y à H:i', strtotime($last->created_at)) }}</span><br />
+                                                @if($last->content)
                                                 {{ $last->user->name }} a dit :<br />
                                                 {{ $last->content }}
+                                                @elseif($last->file_path)
+                                                {{ $last->user->name }} a envoyé un fichier
+                                                @endif
                                             </div>
                                         </div>
                                     </div>
