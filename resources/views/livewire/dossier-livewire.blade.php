@@ -277,7 +277,7 @@
         </div>
     </div>
     <div class="row">
-        @if(isset($conversation_id))
+        @if(isset($conversation_id) && $i>0)
         <div class="col-lg-4">
             <div class="card form-register container mt-5 pt-5" style="padding:0!important">
                 @livewire('chat2',['dossier_id' => $dossier['id'],'form_id' => $conversation_id])
@@ -290,7 +290,7 @@
 
                     @php $form = $forms_configs[$form_id] @endphp
 
-                    @if ($form->form->type == 'form')
+                    @if ($form->form->type == 'form' && $i>0)
                         <div class="row">
                             <div class="">
                                 <h4>{{ $form->form->form_title }}</h4>
