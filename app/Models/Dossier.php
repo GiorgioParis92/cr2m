@@ -38,7 +38,7 @@ class Dossier extends Model
 
     public function etape()
     {
-        return $this->belongsTo(Etape::class, 'etape_number','order_column');
+        return $this->belongsTo(Etape::class, 'etape_number','id');
     }
     public function get_rdv()
     {
