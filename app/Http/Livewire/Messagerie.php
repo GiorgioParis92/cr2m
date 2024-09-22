@@ -7,6 +7,7 @@ use App\Models\Dossier;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use Livewire\WithFileUploads;
 
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
