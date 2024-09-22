@@ -159,9 +159,9 @@ class DossierController extends Controller
            
 
         $next=DB::table('etapes')->where('order_column', ($current->order_column+1))->first();
-
+            
         if($next) {
-            $next_etape = $next->order_column;
+            $next_etape = $next->id;
             DB::table('dossiers_data')->updateOrInsert(
                 [
                     'dossier_id' => $dossier->id,
