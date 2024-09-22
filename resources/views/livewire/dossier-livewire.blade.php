@@ -70,6 +70,12 @@
                         <input type="hidden" id="current_etape" value="{{ $tab }}">
                         <div class="row etapes_row mt-5 only_responsive">
                             Etape :
+                            @foreach ($etapes as $index => $e)
+                            {{$e->etape_name}}<br/>
+                            {{$e->order_column}}<br/>
+                            {{$e->etape_number}}<br/>
+                            {{$dossier->etape->order_column}}<br/><br/><br/><br/><br/>
+                            @endforeach
                             <select class="form-control" id="etape" wire:change="setTab($event.target.value)">
                                 <option>Choisir une étape</option>
                                 @foreach ($etapes as $index => $e)
