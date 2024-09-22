@@ -1,5 +1,5 @@
 <div>
-   
+
     <style>
         .chat-container {
             width: 100%;
@@ -154,7 +154,7 @@
             <div><i class="fa fa-comments"></i> Discussion</div>
             <div class="chat-toggle"><i class="fa fa-arrow-up"></i></div>
         </div>
-        
+
 
         <div class="chat-messages" id="chat-messages" wire:poll="refresh">
             @foreach ($chatMessages as $message)
@@ -262,12 +262,8 @@
         </div>
     </div>
 </div>
-@section('scripts')
-    <script>
-        setupChat()
-
-        function setupChat() {
-            $('.pdfModal').click(function() {
+<script>
+     $('.pdfModal').click(function() {
 
 $('#pdfFrame').attr('src', '');
 
@@ -276,6 +272,23 @@ imgSrc += `?time=${new Date().getTime()}`;
 $('#pdfFrame').attr('src', imgSrc);
 $('#pdfModal').css('display', 'block');
 });
+
+</script>
+
+@section('scripts')
+    <script>
+        setupChat()
+
+        function setupChat() {
+            $('.pdfModal').click(function() {
+
+                $('#pdfFrame').attr('src', '');
+
+                var imgSrc = $(this).data('img-src');
+                imgSrc += `?time=${new Date().getTime()}`;
+                $('#pdfFrame').attr('src', imgSrc);
+                $('#pdfModal').css('display', 'block');
+            });
             document.getElementById('chat-toggle').onclick = function() {
                 const chatContainer = document.getElementById('chat-container');
                 chatContainer.classList.toggle('collapsed');
@@ -285,7 +298,7 @@ $('#pdfModal').css('display', 'block');
                 // Call Livewire function when the chat is collapsed or expanded
                 if (isCollapsed) {
                     // Chat is collapsed
-                    Livewire.emit('chatCollapsed'); 
+                    Livewire.emit('chatCollapsed');
                 } else {
                     // Chat is expanded
                     Livewire.emit('chatExpanded'); // Or use Livewire.call('chatExpandedFunction')
@@ -317,7 +330,7 @@ $('#pdfModal').css('display', 'block');
 
 
         document.addEventListener('livewire:load', function() {
-          
+
             setupChat();
             Livewire.on('new_message', function() {
 
