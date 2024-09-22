@@ -69,8 +69,9 @@ class Messagerie extends Component
                 })
                 ->orderBy('messages.created_at', 'desc') // Order by `created_at` descending
                 ->get();
-
-
+                foreach($this->lastMessages as $message) {
+                $this->not_seen[$message->dossier_id]=0;
+                }
                 foreach($this->lastMessages as $message) {
                     $seen=DB::table('messages_suivi')
                     ->where('message_id',$message->id)
