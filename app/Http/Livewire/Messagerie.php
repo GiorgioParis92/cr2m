@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 class Messagerie extends Component
 {
+
+    use WithFileUploads;
     public $messageContent;
     public $dossier_set;
     public $lastMessages;
