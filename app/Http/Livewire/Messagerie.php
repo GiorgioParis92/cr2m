@@ -155,9 +155,16 @@ class Messagerie extends Component
         $dossier = Dossier::find($dossier_id);
         $this->dossier=$dossier;
 
-        DB::table('messages_suivi')->where('user_id',auth()->user()->id)
-        ->where('dossier_id',$this->dossier->id)
-        ->delete();
+        $messages=DB::table('messages')->where('dossier_id',$this->dossier->id)
+        ->get();
+
+        foreach($messages as $message) {
+            DB::table('messages_suivi')->where('user_id',auth()->user()->id)
+            ->where( 'message_id',$message->id)
+            ->delete();
+        }
+
+    
 
         if ($dossier && $this->isUserAuthorized($dossier, $client_id)) {
             $this->dossier_set = $dossier_id;
