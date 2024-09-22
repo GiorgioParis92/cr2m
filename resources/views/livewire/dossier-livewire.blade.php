@@ -67,8 +67,7 @@
             <div class="card form-register">
                 <div class="steps clearfix">
                     <div class="" wire:poll>
-                        <input type="text" id="current_etape" value="{{ $tab }}">
-                        <input type="text"  value="{{ $last_etape }}">
+                        <input type="hidden" id="current_etape" value="{{ $tab }}">
                         <div class="row etapes_row mt-5 only_responsive">
                             Etape :
                            
@@ -114,7 +113,7 @@
                                         $isActive = true;
                                     }
                                     if (
-                                        $e->order_column == $dossier->etape->order_column &&
+                                        $e->id == $dossier->etape->order_column &&
                                         is_user_allowed($e->etape_name) == true
                                     ) {
                                         $isCurrent = true;
