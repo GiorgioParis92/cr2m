@@ -70,6 +70,8 @@
                         <input type="hidden" id="current_etape" value="{{ $tab }}">
                         <div class="row etapes_row mt-5 only_responsive">
                             Etape :
+                            @php $i=0 @endphp
+
                             @foreach ($etapes as $index => $e)
                             @php
                                 $isActive = false;
