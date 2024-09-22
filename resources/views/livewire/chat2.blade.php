@@ -288,36 +288,6 @@
             document.getElementById('fileInput').value = null;
         });
 
-        function setupChat() {
-
-            document.getElementById('chat-toggle').onclick = function() {
-                const chatContainer = document.getElementById('chat-container');
-                chatContainer.classList.toggle('collapsed');
-
-                if (!chatContainer.classList.contains('collapsed')) {
-                    scrollToBottom();
-                }
-
-                localStorage.setItem('chatCollapsed', chatContainer.classList.contains('collapsed'));
-            };
-
-            function scrollToBottom() {
-                const chatMessages = document.getElementById('chat-messages');
-                chatMessages.scrollTop = chatMessages.scrollHeight;
-
-            }
-
-            // Set initial state from localStorage
-            const chatContainer = document.getElementById('chat-container');
-            const isCollapsed = localStorage.getItem('chatCollapsed') === 'true';
-            if (isCollapsed) {
-                chatContainer.classList.add('collapsed');
-            } else {
-                chatContainer.classList.remove('collapsed');
-                $('.chat-toggle').html('<i class="fa fa-arrow-down"></i>')
-
-            }
-        }
 
         document.addEventListener('livewire:load', function() {
             setupChat();
