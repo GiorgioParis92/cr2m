@@ -110,7 +110,6 @@ class Chat extends Component
             'content' => $this->messageContent,
             'file_path' => $filePath,
         ]);
-        dd($message->id);
      
         $dossier=Dossier::where('id',$this->dossier_id)->first();
 
