@@ -119,7 +119,7 @@ class Chat2 extends Component
         $users = DB::table('users')->where('id', '>', 0)
         ->where(function($query) use ($dossier) {
             $query->where('client_id', $dossier->mar)
-                //   ->orWhere('client_id', $dossier->installateur)
+                  ->orWhere('client_id', $dossier->installateur)
                   ->orWhere(function($subQuery) use ($dossier) {
                       if ($dossier->mandataire_financier > 0) {
                           $subQuery->where('client_id', $dossier->mandataire_financier);
