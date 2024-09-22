@@ -109,38 +109,93 @@
 
 
 
-                                @foreach ($dossier_messages as $m)
-                                    @if (auth()->user()->id == $m['user_id'])
-                                        <div class="chat-message-right pb-4">
-                                            <div>
-                                                <img src="https://bootdey.com/img/Content/avatar/avatar1.png"
-                                                    class="rounded-circle mr-1" alt="Chris Wood" width="40"
-                                                    height="40">
-                                                <div class="text-muted small text-nowrap mt-2">
-                                                    {{ date('d/m/Y à H:i', strtotime($m['created_at'])) }}</div>
-                                            </div>
-                                            <div class="flex-shrink-1 bg-light rounded py-2 px-3 mr-3">
-                                                <div class="font-weight-bold mb-1">Moi</div>
-                                                {{ $m['content'] }}
-                                            </div>
-                                        </div>
-                                    @else
-                                        <div class="chat-message-left pb-4">
-                                            <div>
-                                                <img src="https://bootdey.com/img/Content/avatar/avatar3.png"
-                                                    class="rounded-circle mr-1" alt="Sharon Lessman" width="40"
-                                                    height="40">
-                                                <div class="text-muted small text-nowrap mt-2">
-                                                    {{ date('d/m/Y à H:i', strtotime($m['created_at'])) }}</div>
-                                            </div>
-                                            <div class="flex-shrink-1 bg-light rounded py-2 px-3 ml-3">
-                                                <div class="font-weight-bold mb-1">
-                                                    {{ $m['user']['name'] }}
+                                @foreach ($dossier_messages as $message)
+                                @if (auth()->user()->id == $message->user->id)
+                                    <div class="chat-message-right pb-4">
+                                        <!-- Existing code -->
+                                        <div class="flex-shrink-1 bg-light rounded py-2 px-3 mr-3">
+                                            <div class="font-weight-bold mb-1">Moi</div>
+                                            {{ $message->content }}
+                                            @if ($message->file_path)
+                                                <div>
+                                                    @php
+                                                        $extension = strtolower(pathinfo($message->file_path, PATHINFO_EXTENSION));
+                                                        $filename = basename($message->file_path);
+                                                    @endphp
+                
+                                                    @if ($extension === 'pdf')
+                                                        <div class="btn btn-success btn-view pdfModal" data-toggle="modal"
+                                                            data-img-src="{{ Storage::url($message->file_path) }}"
+                                                            data-name="{{ $filename }}">
+                                                            <i class="fa fa-file-pdf fa-2x"></i> {{ $filename }}
+                                                        </div>
+                                                    @elseif (in_array(strtolower($extension), ['webp', 'jpg', 'jpeg', 'png', 'gif']))
+                                                        <a href="{{ Storage::url($message->file_path) }}" target="_blank">
+                                                            <img class="chat_img" src="{{ Storage::url($message->file_path) }}"
+                                                                alt="Image" />
+                                                            {{ $filename }}
+                                                        </a>
+                                                    @elseif (in_array(strtolower($extension), ['xls', 'xlsx', 'csv']))
+                                                        <a href="{{ Storage::url($message->file_path) }}" target="_blank">
+                                                            <i class="fa fa-file-excel fa-2x"></i>
+                                                            {{ $filename }}
+                                                        </a>
+                                                    @else
+                                                        <a class=" bg-success text-success"
+                                                            href="{{ Storage::url($message->file_path) }}" target="_blank">
+                                                            <i class="fa fa-file fa-2x "></i>
+                                                            {{ $filename }}
+                                                        </a>
+                                                    @endif
                                                 </div>
-                                                {{ $m['content'] }}
-                                            </div>
+                                            @endif
+                
                                         </div>
-                                    @endif
+                                    </div>
+                                @else
+                                    <div class="chat-message-left pb-4">
+                                        <!-- Existing code -->
+                                        <div class="flex-shrink-1 bg-light rounded py-2 px-3 ml-3">
+                                            <div class="font-weight-bold mb-1">
+                                                {{ $message->user->name }}
+                                            </div>
+                                            {{ $message->content }}
+                                            @if ($message->file_path)
+                                                <div>
+                                                    @php
+                                                        $extension = strtolower(pathinfo($message->file_path, PATHINFO_EXTENSION));
+                                                        $filename = basename($message->file_path);
+                                                    @endphp
+                
+                                                    @if ($extension === 'pdf')
+                                                        <div class="btn btn-success btn-view pdfModal" data-toggle="modal"
+                                                            data-img-src="{{ Storage::url($message->file_path) }}"
+                                                            data-name="{{ $filename }}">
+                                                            <i class="fa fa-file-pdf fa-2x"></i> {{ $filename }}
+                                                        </div>
+                                                    @elseif (in_array(strtolower($extension), ['webp', 'jpg', 'jpeg', 'png', 'gif']))
+                                                        <a href="{{ Storage::url($message->file_path) }}" target="_blank">
+                                                            <img class="chat_img" src="{{ Storage::url($message->file_path) }}"
+                                                                alt="Image" />
+                                                            {{ $filename }}
+                                                        </a>
+                                                    @elseif (in_array(strtolower($extension), ['xls', 'xlsx', 'csv']))
+                                                        <a href="{{ Storage::url($message->file_path) }}" target="_blank">
+                                                            <i class="fa fa-file-excel fa-2x"></i>
+                                                            {{ $filename }}
+                                                        </a>
+                                                    @else
+                                                        <a class=" bg-success text-success"
+                                                            href="{{ Storage::url($message->file_path) }}" target="_blank">
+                                                            <i class="fa fa-file fa-2x "></i>
+                                                            {{ $filename }}
+                                                        </a>
+                                                    @endif
+                                                </div>
+                                            @endif
+                                        </div>
+                                    </div>
+                                @endif
                                 @endforeach
 
                 @endif
