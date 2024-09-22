@@ -65,7 +65,7 @@ if (!function_exists('is_user_allowed')) {
 
                     ->first();
 
-                if($permission_name=='planification_mar1') {
+                if($permission_name=='planification_mar') {
                     dd($defaultPermission);
                 }
 
