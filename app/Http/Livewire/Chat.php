@@ -144,8 +144,16 @@ class Chat extends Component
         $this->dispatchBrowserEvent('clearFileInput');
     }
 
-    public function chatCollapsed() {
-        dd('collapsed');
+    public function chatExpanded() {
+        $messages=DB::table('messages')->where('dossier_id',$this->dossier_id)
+        ->where('form_id',0)
+        ->get();
+
+        foreach($messages as $message) {
+            DB::table('messages_suivi')->where('user_id',auth()->user()->id)
+            ->where( 'message_id',$message->id)
+            ->delete();
+        }
     }
     public function render()
     {
