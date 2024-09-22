@@ -144,6 +144,9 @@ class Chat extends Component
         $this->dispatchBrowserEvent('clearFileInput');
     }
 
+    public function chatCollapsed() {
+        dd('collapsed');
+    }
     public function render()
     {
         return view('livewire.chat');
