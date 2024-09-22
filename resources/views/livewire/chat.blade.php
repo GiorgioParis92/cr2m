@@ -141,11 +141,12 @@
             text-align: right;
             position: relative;
         }
+
         .chat-message-right {
-    flex-direction: row-reverse;
-    margin-left: auto;
-    text-align: right;
-}
+            flex-direction: row-reverse;
+            margin-left: auto;
+            text-align: right;
+        }
     </style>
     <div class="chat-container collapsed" id="chat-container">
         <div class="chat-header bg-primary btn-primary" style="background-position: 0!important" id="chat-toggle">
@@ -269,17 +270,27 @@
                 const chatContainer = document.getElementById('chat-container');
                 chatContainer.classList.toggle('collapsed');
 
-                if (!chatContainer.classList.contains('collapsed')) {
-                    scrollToBottom();
+                const isCollapsed = chatContainer.classList.contains('collapsed');
+
+                // Call Livewire function when the chat is collapsed or expanded
+                if (isCollapsed) {
+                    // Chat is collapsed
+                    Livewire.emit('chatCollapsed'); // Or use Livewire.call('chatCollapsedFunction')
+                } else {
+                    // Chat is expanded
+                    Livewire.emit('chatExpanded'); // Or use Livewire.call('chatExpandedFunction')
                 }
 
-                localStorage.setItem('chatCollapsed', chatContainer.classList.contains('collapsed'));
+                localStorage.setItem('chatCollapsed', isCollapsed);
+
+                if (!isCollapsed) {
+                    scrollToBottom();
+                }
             };
 
             function scrollToBottom() {
                 const chatMessages = document.getElementById('chat-messages');
                 chatMessages.scrollTop = chatMessages.scrollHeight;
-
             }
 
             // Set initial state from localStorage
@@ -289,10 +300,10 @@
                 chatContainer.classList.add('collapsed');
             } else {
                 chatContainer.classList.remove('collapsed');
-                $('.chat-toggle').html('<i class="fa fa-arrow-down"></i>')
-
+                $('.chat-toggle').html('<i class="fa fa-arrow-down"></i>');
             }
         }
+
 
         document.addEventListener('livewire:load', function() {
             setupChat();
