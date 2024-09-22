@@ -153,7 +153,7 @@ class DossierController extends Controller
             ->with('beneficiaire', 'fiche', 'etape', 'status')
             ->first();
        
-            $current=DB::table('etapes')->where('order_column', $dossier->etape_number)->first();
+            $current=DB::table('etapes')->where('id', $dossier->etape_number)->first();
         
             $current_plus=(($current->order_column)+1);
            
