@@ -15,6 +15,7 @@ class Messagerie extends Component
     public $lastMessages;
     public $grouped_messages;
     public $dossier_messages;
+    public $not_seen=[];
     public $searchTerm = ''; // New property for search term
     private $lastChecked;
     public $count_messages_dossier;
