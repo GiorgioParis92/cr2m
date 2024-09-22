@@ -74,7 +74,7 @@ class DossierLivewire extends Component
         $last_etape = 1;
         foreach ($this->etapes as $etape) {
             if (is_user_allowed($etape->etape_name) == true && (($etape->order_column) + 1) <= $this->dossier['etape_number']) {
-                $last_etape = ($etape->order_column) + 1;
+                $last_etape = ($etape->id);
                 dump($last_etape);
             }
         }
@@ -201,7 +201,7 @@ class DossierLivewire extends Component
     {
         $this->tab = $tab;
         // Fetch and convert to array
-        $etape_display = Etape::where('order_column', $tab)->first();
+        $etape_display = Etape::where('id', $tab)->first();
         $this->etape_display = $etape_display ? $this->convertObjectToArray($etape_display) : [];
 
         $this->etapes = $this->convertArrayToStdClass($this->etapes);
