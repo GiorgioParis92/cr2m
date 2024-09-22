@@ -22,7 +22,7 @@ if (!function_exists('is_user_allowed')) {
     function is_user_allowed($permission_name)
     {
         $user = Auth::user();
-
+dd($user);
         if (!$user) {
             return false;
         }
