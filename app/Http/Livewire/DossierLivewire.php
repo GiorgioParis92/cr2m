@@ -200,7 +200,7 @@ class DossierLivewire extends Component
     public function setTab($tab)
     {
         $this->tab = $tab;
-
+        dd($this->tab);
         // Fetch and convert to array
         $etape_display = Etape::where('id', $tab)->first();
         $this->etape_display = $etape_display ? $this->convertObjectToArray($etape_display) : [];
