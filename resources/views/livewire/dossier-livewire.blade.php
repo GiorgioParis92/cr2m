@@ -70,7 +70,7 @@
                         <input type="hidden" id="current_etape" value="{{ $tab }}">
                         <div class="row etapes_row mt-5 only_responsive">
                             Etape :
-                          
+                            @php $i=0 @endphp
                             <select class="form-control" id="etape" wire:change="setTab($event.target.value)">
                                 <option>Choisir une étape</option>
                                 @foreach ($etapes as $index => $e)
@@ -88,7 +88,7 @@
                                             $isAllowed = true;
                                         }
                                      
-                                        $i=0;
+                                       
                                     @endphp
                                     @if ($isAllowed && $isActive)
                                     @php $i++ @endphp
