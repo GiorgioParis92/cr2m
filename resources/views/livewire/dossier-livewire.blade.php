@@ -113,7 +113,7 @@
                                         $isActive = true;
                                     }
                                     if (
-                                        $e->id == $dossier->etape->order_column &&
+                                        $e->order_column == $dossier->etape->order_column &&
                                         is_user_allowed($e->etape_name) == true
                                     ) {
                                         $isCurrent = true;
