@@ -110,39 +110,39 @@
 
 
                                 @foreach ($dossier_messages as $message)
-                                @if (auth()->user()->id == $message->user->id)
+                                @if (auth()->user()->id == $message['user_id'])
                                     <div class="chat-message-right pb-4">
                                         <!-- Existing code -->
                                         <div class="flex-shrink-1 bg-light rounded py-2 px-3 mr-3">
                                             <div class="font-weight-bold mb-1">Moi</div>
-                                            {{ $message->content }}
-                                            @if ($message->file_path)
+                                            {{ $message['content'] }}
+                                            @if ($message['file_path'])
                                                 <div>
                                                     @php
-                                                        $extension = strtolower(pathinfo($message->file_path, PATHINFO_EXTENSION));
-                                                        $filename = basename($message->file_path);
+                                                        $extension = strtolower(pathinfo($message['file_path'], PATHINFO_EXTENSION));
+                                                        $filename = basename($message['file_path']);
                                                     @endphp
                 
                                                     @if ($extension === 'pdf')
                                                         <div class="btn btn-success btn-view pdfModal" data-toggle="modal"
-                                                            data-img-src="{{ Storage::url($message->file_path) }}"
+                                                            data-img-src="{{ Storage::url($message['file_path']) }}"
                                                             data-name="{{ $filename }}">
                                                             <i class="fa fa-file-pdf fa-2x"></i> {{ $filename }}
                                                         </div>
                                                     @elseif (in_array(strtolower($extension), ['webp', 'jpg', 'jpeg', 'png', 'gif']))
-                                                        <a href="{{ Storage::url($message->file_path) }}" target="_blank">
-                                                            <img class="chat_img" src="{{ Storage::url($message->file_path) }}"
+                                                        <a href="{{ Storage::url($message['file_path']) }}" target="_blank">
+                                                            <img class="chat_img" src="{{ Storage::url($message['file_path']) }}"
                                                                 alt="Image" />
                                                             {{ $filename }}
                                                         </a>
                                                     @elseif (in_array(strtolower($extension), ['xls', 'xlsx', 'csv']))
-                                                        <a href="{{ Storage::url($message->file_path) }}" target="_blank">
+                                                        <a href="{{ Storage::url($message['file_path']) }}" target="_blank">
                                                             <i class="fa fa-file-excel fa-2x"></i>
                                                             {{ $filename }}
                                                         </a>
                                                     @else
                                                         <a class=" bg-success text-success"
-                                                            href="{{ Storage::url($message->file_path) }}" target="_blank">
+                                                            href="{{ Storage::url($message['file_path']) }}" target="_blank">
                                                             <i class="fa fa-file fa-2x "></i>
                                                             {{ $filename }}
                                                         </a>
@@ -160,33 +160,33 @@
                                                 {{ $message->user->name }}
                                             </div>
                                             {{ $message->content }}
-                                            @if ($message->file_path)
+                                            @if ($message['file_path'])
                                                 <div>
                                                     @php
-                                                        $extension = strtolower(pathinfo($message->file_path, PATHINFO_EXTENSION));
-                                                        $filename = basename($message->file_path);
+                                                        $extension = strtolower(pathinfo($message['file_path'], PATHINFO_EXTENSION));
+                                                        $filename = basename($message['file_path']);
                                                     @endphp
                 
                                                     @if ($extension === 'pdf')
                                                         <div class="btn btn-success btn-view pdfModal" data-toggle="modal"
-                                                            data-img-src="{{ Storage::url($message->file_path) }}"
+                                                            data-img-src="{{ Storage::url($message['file_path']) }}"
                                                             data-name="{{ $filename }}">
                                                             <i class="fa fa-file-pdf fa-2x"></i> {{ $filename }}
                                                         </div>
                                                     @elseif (in_array(strtolower($extension), ['webp', 'jpg', 'jpeg', 'png', 'gif']))
-                                                        <a href="{{ Storage::url($message->file_path) }}" target="_blank">
-                                                            <img class="chat_img" src="{{ Storage::url($message->file_path) }}"
+                                                        <a href="{{ Storage::url($message['file_path']) }}" target="_blank">
+                                                            <img class="chat_img" src="{{ Storage::url($message['file_path']) }}"
                                                                 alt="Image" />
                                                             {{ $filename }}
                                                         </a>
                                                     @elseif (in_array(strtolower($extension), ['xls', 'xlsx', 'csv']))
-                                                        <a href="{{ Storage::url($message->file_path) }}" target="_blank">
+                                                        <a href="{{ Storage::url($message['file_path']) }}" target="_blank">
                                                             <i class="fa fa-file-excel fa-2x"></i>
                                                             {{ $filename }}
                                                         </a>
                                                     @else
                                                         <a class=" bg-success text-success"
-                                                            href="{{ Storage::url($message->file_path) }}" target="_blank">
+                                                            href="{{ Storage::url($message['file_path']) }}" target="_blank">
                                                             <i class="fa fa-file fa-2x "></i>
                                                             {{ $filename }}
                                                         </a>
