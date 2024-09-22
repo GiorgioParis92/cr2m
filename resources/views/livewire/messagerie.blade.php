@@ -153,6 +153,8 @@
                 <div class="input-group">
                     <input type="text" class="form-control" placeholder="Type your message"
                         wire:model="messageContent" wire:keydown.enter="sendMessage({{ $dossier_set }})">
+                        <input type="file" id="file_chat" wire:model="file">
+
                     <button class="btn btn-primary" wire:click="sendMessage({{ $dossier_set }})"><i
                             class="fa fa-paper-plane"></i></button>
                 </div>
