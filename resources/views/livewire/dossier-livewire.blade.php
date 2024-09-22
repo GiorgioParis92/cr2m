@@ -78,7 +78,7 @@
                                         $isActive = false;
                                         $isCurrent = false;
                                         $isTab = false;
-                                        if ($e->order_column <= $dossier->etape->order_column) {
+                                        if ($e->order_column+1 <= $dossier->etape->order_column) {
                                             $isActive = true;
                                         }
                                      
@@ -95,7 +95,7 @@
                                         }
                                         
                                     @endphp
-                                    @if ($isAllowed && $isActive)
+                                    @if ($isAllowed==true && $isActive==true)
                                     
                                         <option @if ($e->order_column+1 == $tab) selected @endif
                                             value="{{ $e->etape_number }}">{{ $e->etape_icon }} - {{ strtoupper_extended($e->etape_desc) }}</option>
