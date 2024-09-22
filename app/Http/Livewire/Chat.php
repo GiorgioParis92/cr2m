@@ -23,6 +23,9 @@ class Chat extends Component
     public $count_messages;
     public $file;
 public $expanded_messages;
+
+protected $listeners = ['chatExpanded' => 'chatExpanded'];
+
     protected $rules = [
         'messageContent' => 'nullable|string',
         'file' => 'nullable|file|max:1024000',
