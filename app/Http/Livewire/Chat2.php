@@ -129,12 +129,15 @@ class Chat2 extends Component
         ->get();
 
         foreach($users as $user) {
-            DB::table('messages_suivi')->insert([
-                'user_id' => $user->id,
-                'message_id' => $message->id,
-                'seen' => 0,
-               
-            ]);
+            if($user->id!=auth()->user()->id) {
+                DB::table('messages_suivi')->insert([
+                    'user_id' => $user->id,
+                    'message_id' => $message->id,
+                    'seen' => 0,
+                   
+                ]);
+            }
+         
         }
         DB::table('messages_suivi')->insert([
             'user_id' => 1,
