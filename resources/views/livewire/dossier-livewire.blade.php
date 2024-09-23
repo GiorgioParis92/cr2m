@@ -853,6 +853,7 @@
             var dossier_id = $(this).data('dossier_id'); // Get the dossier ID from data attribute
             var form_id = $(this).data('form_id'); // Get the dossier ID from data attribute
             var generation = $(this).data('generation'); // Get the dossier ID from data attribute
+            var identify = $(this).data('identify'); // Get the dossier ID from data attribute
 
             $.ajax({
                 url: '/api/generate-pdf', // Adjust this URL to your actual API endpoint
@@ -862,6 +863,7 @@
                     generation: generation,
                     form_id: form_id,
                     name: name,
+                    identify: identify,
                     template: template
                 },
                 headers: {

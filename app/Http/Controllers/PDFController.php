@@ -27,15 +27,16 @@ class PDFController extends Controller
             'name' => 'nullable|string',
             'dossier_id' => 'nullable',
             'generation' => 'nullable',
+            'identify' => 'nullable',
         ]);
         if (isset($validated['generation'])) {
-            eval($validated['generation']);
+            eval ($validated['generation']);
         }
-      
-            $title='';
+
+        $title = '';
         // Determine the HTML content to use
         if (isset($validated['template'])) {
-            $htmlContent = $this->getTemplateHtml($validated['template'], $validated['dossier_id'],$config=null,$title);
+            $htmlContent = $this->getTemplateHtml($validated['template'], $validated['dossier_id'], $config = null, $title);
         } else {
             $htmlContent = '';
         }
@@ -71,8 +72,12 @@ class PDFController extends Controller
             // Save the PDF file to the folder
             $fileName = ($validated['name'] ?? 'document') . ".pdf";
             $filePath = "{$folderPath}/{$fileName}";
-            $directPath ="{$directPath}/{$fileName}";
-            Storage::put($filePath, $pdfOutput);
+            $directPath = "{$directPath}/{$fileName}";
+            $result = Storage::put($filePath, $pdfOutput);
+            if (!$result) {
+                \Log::error("Failed to save file at path: " . $filePath);
+                return response()->json(['error' => 'Failed to save file'], 500);
+            } 
 
             $dossier = Dossier::where('folder', $dossierId)->first();
 
@@ -88,6 +93,16 @@ class PDFController extends Controller
                     'updated_at' => now()
                 ]
             );
+
+            $data = [];
+
+            if (isset($validated['identify'])) {
+                $fullFilePath = Storage::path($filePath); // This will return the absolute path
+                // Call identify_doc with the full path
+                $identify = $this->identify_doc($fullFilePath, $data);
+                dd($identify);
+            }
+
             // Return success response
             return response()->json([
                 'message' => 'PDF generated and saved successfully',
@@ -101,7 +116,7 @@ class PDFController extends Controller
         }
     }
 
-    private function getTemplateHtml($template, $dossier_id,$config=null,$title)
+    private function getTemplateHtml($template, $dossier_id, $config = null, $title)
     {
         // Check if the template view exists
         $templatePath = 'templates.' . $template;
@@ -111,7 +126,7 @@ class PDFController extends Controller
         $all_data = load_all_dossier_data($dossier);
 
         if (View::exists($templatePath)) {
-            return view($templatePath, ['dossier' => $dossier, 'all_data' => $all_data,'config' => $config,'title' => $title])->render();
+            return view($templatePath, ['dossier' => $dossier, 'all_data' => $all_data, 'config' => $config, 'title' => $title])->render();
         } else {
             throw new \Exception('Invalid template specified');
         }
@@ -208,9 +223,9 @@ class PDFController extends Controller
                             }
                         }
 
-                        if(isset($fill_data_config["date_now"])) {
-                          
-                            $current_value = date($fill_data_config["date_now"],strtotime("now"));
+                        if (isset($fill_data_config["date_now"])) {
+
+                            $current_value = date($fill_data_config["date_now"], strtotime("now"));
                         }
 
                         $value .= ' ' . $current_value;
@@ -218,13 +233,13 @@ class PDFController extends Controller
                     $x_pos = $fill_data_config["position"][0];
                     $y_pos = $fill_data_config["position"][1];
 
-                    if(isset($fill_data_config["letter-spacing"])) {
+                    if (isset($fill_data_config["letter-spacing"])) {
                         $pdf->SetFontSpacing($fill_data_config["letter-spacing"]);
                     } else {
                         $pdf->SetFontSpacing(0);
                     }
 
-                    
+
 
                     $pdf->SetXY($x_pos, $y_pos);
                     $pdf->Write(0, $value);
@@ -241,7 +256,7 @@ class PDFController extends Controller
         $fileName = $request->name . ".pdf";
         $filePath = "{$folderPath}/{$fileName}";
 
-        $directPath ="{$directPath}/{$fileName}";
+        $directPath = "{$directPath}/{$fileName}";
 
 
         $pdfContent = $pdf->output('', 'S'); // 'S' returns the PDF as a string
@@ -280,33 +295,33 @@ class PDFController extends Controller
         if (!Storage::exists($folderPath)) {
             Storage::makeDirectory($folderPath);
         }
- 
+
 
         // Fetch the dossier based on the provided dossier_id
         $dossier = Dossier::where('folder', $request->dossier_id)->first();
         // Load all the dossier data (assuming load_all_dossier_data is a custom helper function)
         $all_data = load_all_dossier_data($dossier);
-    
-        $config=DB::table('forms_config')->where('form_id',$request->config_id)->orderBy('ordering')->get();
 
-        $title=$request->title;
- 
+        $config = DB::table('forms_config')->where('form_id', $request->config_id)->orderBy('ordering')->get();
+
+        $title = $request->title;
+
         // Get the HTML content for the template
-        $htmlContent = $this->getTemplateHtml('config', $request->dossier_id,$config,$title);
-    
+        $htmlContent = $this->getTemplateHtml('config', $request->dossier_id, $config, $title);
 
 
- 
+
+
         // Generate the PDF using Html2Pdf
         $html2pdf = new Html2Pdf();
-    
+
         // Convert the HTML content to PDF
         $html2pdf->writeHTML($htmlContent);
         $pdfOutput = $html2pdf->output('', 'S'); // Output as string
         // Save the PDF file to the folder
         $fileName = ($request->template ?? 'document') . ".pdf";
         $filePath = "{$folderPath}/{$fileName}";
-        $directPath ="{$directPath}/{$fileName}";
+        $directPath = "{$directPath}/{$fileName}";
         Storage::put($filePath, $pdfOutput);
 
 
@@ -328,4 +343,31 @@ class PDFController extends Controller
             'file_path' => Storage::url($filePath) // Adjusted this line
         ], 200);
     }
+
+
+    public function identify_doc($filePath, $data)
+    {
+
+        // Get the real path of the file
+        $file = Storage::path($filePath);
+    
+        // Check if the file exists and get its real path
+        if (!file_exists($filePath)) {
+            return response()->json(['error' => 'File not found'], 404);
+        }
+
+        // Use the file path directly
+        $data = array(
+            'service' => 'document_detection',
+            'data' => $data ? json_encode($data, JSON_NUMERIC_CHECK) : '{}',
+            'file' => new \CURLFile($filePath), // Use \CURLFile to send file via cURL
+        );
+        
+        // Send the request
+        $response = makeRequest('http://192.168.100.40:5010/process_request', $data);
+        
+        return response()->json($response, 200);
+    }
+
+
 }

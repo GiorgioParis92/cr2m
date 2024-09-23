@@ -133,15 +133,16 @@ function makeRequest($url, $data)
     $multipartData = [];
 
     foreach ($data as $key => $value) {
-        if ($key === 'file' && $value != '{}' && $value != null) {
-
-            $multipartData[$key] = new CURLFile($value->getRealPath(), $value->getClientMimeType(), $value->getClientOriginalName());
+        if ($key === 'file' && $value instanceof \CURLFile) {
+            // Use the provided CURLFile instance
+            $multipartData[$key] = $value;
         } else {
+            // Add other data as usual
             $multipartData[$key] = $value;
         }
     }
-    curl_setopt($ch, CURLOPT_POSTFIELDS, $multipartData);
 
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $multipartData);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
     // Execute cURL request
@@ -157,6 +158,7 @@ function makeRequest($url, $data)
 
     return $response;
 }
+
 
 
 
