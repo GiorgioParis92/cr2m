@@ -110,13 +110,13 @@ class FileUploadService
 
         // Save the new file
         $filePath = $file->storeAs($directory, $fileName, 'public');
-        if (auth()->user()->id == 1) {
+    
 
             $fullPath = storage_path('app/public/' . $filePath);
 
             // Set the file permissions to 775
             chmod($fullPath, 0775);
-        }
+        
         // Save the compressed thumbnail version
         $thumbnailFileName = pathinfo($fileName, PATHINFO_FILENAME) . '_thumbnail.' . $extension;
 
@@ -124,7 +124,7 @@ class FileUploadService
 
         //  convert $fileName -resize 800x600\> $thumbnailFileName
 
-        if (auth()->user()->id == 1) {
+ 
             if (in_array($extension, $allowedExtensions)) {
                 $path = storage_path('app/public/' . $filePath);
                 $thumbnail_path = storage_path('app/public/' . $directory . '/' . $thumbnailFileName);
@@ -135,7 +135,7 @@ class FileUploadService
                 }
      
             }
-        }
+        
 
 
         DB::enableQueryLog();
