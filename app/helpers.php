@@ -121,7 +121,7 @@ function generateRandomString($length = 12)
     return $randomString;
 }
 
-function compressImage($filePath, $quality = 75) {
+function compressImage($filePath, $quality = 20) {
     $imageInfo = getimagesize($filePath);
     if ($imageInfo['mime'] == 'image/jpeg') {
         $image = imagecreatefromjpeg($filePath);
@@ -133,7 +133,7 @@ function compressImage($filePath, $quality = 75) {
     } elseif ($imageInfo['mime'] == 'image/png') {
         $image = imagecreatefrompng($filePath);
         ob_start();
-        imagepng($image, null, 8);  // Reduce quality for PNG
+        imagepng($image, null, 4);  // Reduce quality for PNG
         $compressedImage = ob_get_clean();
         imagedestroy($image);
         return base64_encode($compressedImage);
