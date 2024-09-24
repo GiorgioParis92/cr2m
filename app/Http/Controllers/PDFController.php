@@ -355,7 +355,8 @@ class PDFController extends Controller
                 $instance_result = $instance->render_pdf();
                 if ($instance_result) {
                     $title_content_count ++;
-                    $title_content .= $instance_result;
+
+                    $title_content .= '<tr><td>'.$instance_result.'</td></tr>';
                 }
             
             } catch (\Throwable $th) {
