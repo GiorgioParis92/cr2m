@@ -98,7 +98,7 @@ class Checkbox extends AbstractFormData
 
         if (is_array($optionsArray)) {
             $data .= '<label class="switch" >';
-            $data .= $value;
+           
             $data .= '<input type="checkbox" ';
             if ($this->value == "1") {
                 $data .= 'checked="checked"';
@@ -113,7 +113,7 @@ class Checkbox extends AbstractFormData
             $data .= '<label class="custom-control-label" for="checkbox_'.$this->config->name.'">';
             $data .= $optionsArray[1]['label'] ?? 'Checkbox Label';
             $data .= '</label>';
-
+            $data .= $value;
         
         }
 
