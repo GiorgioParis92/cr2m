@@ -120,6 +120,8 @@ class FileUploadService
 
         if(auth()->user()->id==1) {
             $resizeCommand = "convert $filePath -resize 800x600> $thumbnailFileName";
+            dump( $resizeCommand);
+
             exec($resizeCommand, $output, $returnCode);
     
             if ($returnCode !== 0) {
