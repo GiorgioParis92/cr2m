@@ -217,7 +217,7 @@
                 {{$title}}
             </p>
             <div>
-                {{$content}}
+                {! $content !}
                 
                     
           
