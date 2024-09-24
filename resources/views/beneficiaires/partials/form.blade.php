@@ -110,7 +110,7 @@
             @endforeach
         </select>
     </div>
-    @if($user->client->id>0 && $user->client->type_client == 1)
+    @if(isset($user->client) && $user->client->id>0 && $user->client->type_client == 1)
 
     <input type="hidden" name="mar" value="{{ $user->client->id }}">
 
