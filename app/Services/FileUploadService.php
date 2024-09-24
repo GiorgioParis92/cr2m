@@ -119,9 +119,11 @@ class FileUploadService
         //  convert $fileName -resize 800x600\> $thumbnailFileName
 
         if(auth()->user()->id==1) {
-            $resizeCommand = "convert $filePath -resize 800x600\> $thumbnailFileName";
-            dump( $resizeCommand);
             $path=Storage::path($filePath);
+            dump($path);
+            dd(Storage::path($directory.'/'.$thumbnailFileName));
+            $resizeCommand = "convert $path -resize 800x600\> $thumbnailFileName";
+            dump( $resizeCommand);
             dd($path);
             exec($resizeCommand, $output, $returnCode);
     
