@@ -327,7 +327,7 @@ class PDFController extends Controller
 
         $title = $request->title;
         $content = '';
-        $title_content = '';
+        $title_content = '<table>';
         $title_content_count = 0;
         
         foreach ($config as $element) {
@@ -345,9 +345,9 @@ class PDFController extends Controller
             try {
                 if ($element->type == 'title') {
                     if ($title_content_count > 1) {
-                        $content .= $title_content;
+                        $content .= $title_content.'</table>';
                     }
-                    $title_content = '';
+                    $title_content = '<table>';
                     $title_content_count = 0;
                 }
                 $instance = new $class($element, $element->name, $element->form_id, $dossier->id ?? null);
