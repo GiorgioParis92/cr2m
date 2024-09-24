@@ -965,9 +965,7 @@
     </div>
 
     <div class="my-4">
-        <p></p>
-        <p></p>
-        <p></p>
+
         <p><b>Contrat pour la réalisation d'une mission de Mon Accompagnateur Rénov'</b></p>
         <p> Fait, en deux exemplaires originaux le {{date('d/m/Y',strtotime('now'))}}, à {{ $dossier->beneficiaire->ville }}</p>
     </div>
@@ -986,7 +984,7 @@
                     <p><b>Mon Accompagnateur Rénov'</b> <br />{{ $dossier->client->client_title }}  </p>
                     @if(isset($dossier->client->signature) && file_exists(storage_path('app/public/' . $dossier->client->signature)))
 
-                    <img src="{{ asset('storage/' . $dossier->client->signature) }}" alt="Logo">
+                    <img style="max-width:250px" src="{{ asset('storage/' . $dossier->client->signature) }}" alt="Logo">
         
                     @endif
 
