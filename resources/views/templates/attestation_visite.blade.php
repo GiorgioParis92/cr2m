@@ -294,7 +294,11 @@
 
             <td style="border:none;width:50%;padding-left:45px;">
                 <p><b>Mon Accompagnateur Rénov'</b> <br />{{ $dossier->client->client_title }} </p>
+                @if(isset($dossier->client->signature) && file_exists(storage_path('app/public/' . $dossier->client->signature)))
 
+                <img style="max-width:150px;margin-top:-10px" src="{{ asset('storage/' . $dossier->client->signature) }}" alt="Logo">
+    
+                @endif
 
 
             </td>
