@@ -83,7 +83,8 @@ class Title extends AbstractFormData
     {
 
 
-        $data= '<div class="col-12 form_title s2">'.($this->config->title ?? '').'</div>';
+        // $data= '<div class="col-12 form_title s2">'.($this->config->title ?? '').'</div>';
+        $data= ($this->config->title ?? '');
 
 
 
