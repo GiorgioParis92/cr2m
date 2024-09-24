@@ -344,13 +344,11 @@ class PDFController extends Controller
 
             try {
                 if ($element->type == 'title') {
-                    if ($title_content_count != 0) {
+                    if ($title_content_count > 1) {
                         $content .= $title_content;
                     }
                     $title_content = '';
                     $title_content_count = 0;
-                } else {
-                    $title_content_count ++;
                 }
                 $instance = new $class($element, $element->name, $element->form_id, $dossier->id ?? null);
                 $instance->set_dossier($dossier);
@@ -358,8 +356,9 @@ class PDFController extends Controller
             
             } catch (\Throwable $th) {
                 $title_content .= $element->name . ' Error: ' . $th->getMessage();
-                $title_content_count ++;
             }
+
+            $title_content_count ++;
         }
 
         if ($title_content_count != 0) {
