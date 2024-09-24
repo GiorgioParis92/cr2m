@@ -213,7 +213,7 @@ class Photo extends AbstractFormData
                 $imageData = compressImage($filePath, 70);  // Compress the image with 70% quality for JPEGs
                 $src = 'data:image/' . pathinfo($filePath, PATHINFO_EXTENSION) . ';base64,' . $imageData;
         
-                $text .= "<div class='col-lg-3' style='width:33%;display:inline-block'>";
+                $text .= "<div class='col-lg-3' style='width:33%;display:inline-block;vertical-align:top;margin-right:5px;'>";
                 $text .= '<img src="' . $src . '" style="width:100%; height:auto;">';
                 $text .= '</div>';
             }
