@@ -34,7 +34,7 @@ class FileUploadService
 
 
         if ($request->folder == 'dossiers') {
-           
+
         }
 
         if (isset($request->folder)) {
@@ -110,34 +110,36 @@ class FileUploadService
 
         // Save the new file
         $filePath = $file->storeAs($directory, $fileName, 'public');
-        if(auth()->user()->id==1) {
+        if (auth()->user()->id == 1) {
 
-        $fullPath = storage_path('app/public/' . $filePath);
+            $fullPath = storage_path('app/public/' . $filePath);
 
-        // Set the file permissions to 775
-        chmod($fullPath, 0775);
+            // Set the file permissions to 775
+            chmod($fullPath, 0775);
         }
-            // Save the compressed thumbnail version
-    $thumbnailFileName = pathinfo($fileName, PATHINFO_FILENAME) . '_thumbnail.' . $extension;
-    
+        // Save the compressed thumbnail version
+        $thumbnailFileName = pathinfo($fileName, PATHINFO_FILENAME) . '_thumbnail.' . $extension;
+
         //use this linux command to compress filepath filepath thumbnail
 
         //  convert $fileName -resize 800x600\> $thumbnailFileName
 
-        if(auth()->user()->id==1) {
-            $path=storage_path('app/public/' . $filePath);
-            $thumbnail_path=storage_path('app/public/' . $directory.'/'.$thumbnailFileName);
-            $resizeCommand = "convert $path -resize 800x600\> $thumbnail_path";
-            exec($resizeCommand, $output, $returnCode);
-            chmod($thumbnail_path, 0775);
+        if (auth()->user()->id == 1) {
+            if (in_array($extension, $allowedExtensions)) {
+                $path = storage_path('app/public/' . $filePath);
+                $thumbnail_path = storage_path('app/public/' . $directory . '/' . $thumbnailFileName);
+                $resizeCommand = "convert $path -resize 800x600\> $thumbnail_path";
+                exec($resizeCommand, $output, $returnCode);
+                chmod($thumbnail_path, 0775);
 
-            if ($returnCode !== 0) {
-                // Handle error
-                return response()->json(['error' => 'Failed to create thumbnail.'], 500);
+                if ($returnCode !== 0) {
+                    // Handle error
+                    return response()->json(['error' => 'Failed to create thumbnail.'], 500);
+                }
             }
         }
 
-    
+
         DB::enableQueryLog();
         $index = '';
 
@@ -240,7 +242,7 @@ class FileUploadService
 
 
         if (isset($request->upload_image) && $file->isValid() && in_array(strtolower($extension), ['jpeg', 'jpg', 'png', 'gif', 'bmp'])) {
-            
+
             $image = Image::make($file);
 
             $exif = @exif_read_data($file->getPathname());
@@ -274,7 +276,7 @@ class FileUploadService
             if ($width > $height) {
                 // Rotate the image if it's wider than it is tall (landscape)
                 $image->rotate(90);
-               
+
             }
 
             $image = $image->fit(595, 842); // 595x842 pixels corresponds to 210x297mm at 72dpi
@@ -308,7 +310,7 @@ class FileUploadService
                 $pdf = new FPDF();
                 $pdf->AddPage('P', 'A4');
                 $pdf->Image($tempImagePath, 0, 0, 210, 297);
-                
+
 
             }
 
@@ -334,32 +336,32 @@ class FileUploadService
                     'updated_at' => now()
                 ]
             );
-          
+
             return $directory . '/' . $pdfFileName;
         }
 
-       
-            $config = \DB::table('forms_config')
-                ->where('form_id', $form_id)
-                ->where('name', $template)
-                ->first();
 
-            $table = new Table($config, $template, $form_id, $dossier->id);
-            $table->save_value();
+        $config = \DB::table('forms_config')
+            ->where('form_id', $form_id)
+            ->where('name', $template)
+            ->first();
 
-            $pdfFileName = $request->input('template') . '.pdf';
-            $pdfFilePath = storage_path('app/public/' . $directory . '/' . $pdfFileName);
+        $table = new Table($config, $template, $form_id, $dossier->id);
+        $table->save_value();
 
-            if($request->identify) {
-                $identify = json_decode($this->identify_doc($pdfFilePath),true);
+        $pdfFileName = $request->input('template') . '.pdf';
+        $pdfFilePath = storage_path('app/public/' . $directory . '/' . $pdfFileName);
 
-                $final_result=$identify['result']['data']['results'];
-                $filename=str_replace('.pdf','',$pdfFileName);
-                $bestMatch = $this->getBestMatch($final_result, $filename);
-            }
-           
+        if ($request->identify) {
+            $identify = json_decode($this->identify_doc($pdfFilePath), true);
 
-            // return $bestMatch;
+            $final_result = $identify['result']['data']['results'];
+            $filename = str_replace('.pdf', '', $pdfFileName);
+            $bestMatch = $this->getBestMatch($final_result, $filename);
+        }
+
+
+        // return $bestMatch;
 
         return $filePath;
 
@@ -367,24 +369,25 @@ class FileUploadService
 
     }
 
-    private function getBestMatch($resultData, $pdfFileName) {
+    private function getBestMatch($resultData, $pdfFileName)
+    {
 
-    
+
         // Find the key with the highest score
         $bestResultKey = array_keys($resultData[0], max($resultData[0]))[0];
         // If the best result is "other", return "other"
         if ($bestResultKey === "other") {
             return "other";
         }
-    
+
         // Remove '_first' from the best result key
         $bestResultKeyClean = str_replace('_first', '', $bestResultKey);
-    
+
         // Check if the cleaned key matches the PDF file name
         if ($bestResultKeyClean === $pdfFileName) {
             return $bestResultKeyClean;
         }
-    
+
         // If no match, return "other"
         return "other";
     }
@@ -444,8 +447,8 @@ class FileUploadService
 
         // Get the real path of the file
         $file = $filePath;
-      
-     
+
+
         // Check if the file exists and get its real path
         if (!file_exists($file)) {
             return response()->json(['error' => 'File not found'], 404);
@@ -454,14 +457,14 @@ class FileUploadService
         // Use the file path directly
         $data = array(
             'service' => 'document_detection',
-            'token'=>'6b22c62c-924a-4aac-9eab-9faafe55e394',
-            'model'=>'atlas',
+            'token' => '6b22c62c-924a-4aac-9eab-9faafe55e394',
+            'model' => 'atlas',
             'file' => new \CURLFile($file), // Use \CURLFile to send file via cURL
         );
-        
+
         // Send the request
         $response = makeRequest('https://oceer.fr/api/document_detection', $data);
-        
+
         return $response;
     }
 
