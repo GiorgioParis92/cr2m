@@ -327,7 +327,7 @@ class PDFController extends Controller
 
         $title = $request->title;
         $content = '';
-        $title_content = '<table style="margin:auto;width:90%;border:3px solid red">';
+        $title_content = '<table style="margin:auto;width:90%;margin-top:12px;border-collapse: collapse;">';
         $title_content_count = 0;
         
         foreach ($config as $element) {
@@ -347,7 +347,7 @@ class PDFController extends Controller
                     if ($title_content_count > 1) {
                         $content .= $title_content.'</table>';
                     }
-                    $title_content = '<table style="margin:auto;width:90%;border-collapse: collapse;">';
+                    $title_content = '<table style="margin:auto;width:90%;border-collapse: collapse;margin-top:12px">';
                     $title_content_count = 0;
                 }
                 $instance = new $class($element, $element->name, $element->form_id, $dossier->id ?? null);
