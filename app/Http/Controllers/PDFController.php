@@ -17,7 +17,6 @@ use App\Models\Etape;
 use PDF; // Import the PDF facade at the top
 use Dompdf\Dompdf;
 use Dompdf\Options;
-use Illuminate\Support\Str;
 
 
 
@@ -121,7 +120,7 @@ class PDFController extends Controller
         }
     }
 
-    private function getTemplateHtml($template, $dossier_id, $config = null, $title='',$content=null)
+    private function getTemplateHtml($template, $dossier_id, $config = null, $title = '', $content = null)
     {
         // Check if the template view exists
         $templatePath = 'templates.' . $template;
@@ -131,7 +130,7 @@ class PDFController extends Controller
         // $all_data = load_all_dossier_data($dossier);
 
         if (View::exists($templatePath)) {
-            return view( $templatePath, ['dossier' => $dossier,  'config' => $config, 'title' => $title,'content' => $content])->render();
+            return view($templatePath, ['dossier' => $dossier, 'config' => $config, 'title' => $title, 'content' => $content])->render();
         } else {
             throw new \Exception('Invalid template specified');
         }
@@ -306,21 +305,21 @@ class PDFController extends Controller
         $dossier = Dossier::where('folder', $request->dossier_id)->first();
         $startTime = microtime(true);
         // Load all the dossier data (assuming load_all_dossier_data is a custom helper function)
-       
 
-        
+
+
 
         $timeAfterDossier = microtime(true) - $startTime;
-     
 
-            // dump($timeAfterDossier);
-        
+
+        // dump($timeAfterDossier);
+
         $config = DB::table('forms_config')->where('form_id', $request->config_id)->orderBy('ordering')->get();
         $timeAfterConfig = microtime(true) - $startTime;
- 
 
-            // dump($timeAfterConfig);
-        
+
+        // dump($timeAfterConfig);
+
         $title = $request->title;
         $content = '';
         foreach ($config as $element) {
@@ -328,13 +327,13 @@ class PDFController extends Controller
                 $content .= '<p>Error: Configuration element is missing.</p>';
                 continue;
             }
-        
+
             $class = 'App\\FormModel\\FormData\\' . ucfirst($element->type);
             if (!class_exists($class)) {
                 $content .= "Error: Class $class does not exist.";
                 continue;
             }
-        
+
             try {
                 $instance = new $class($element, $element->name, $element->form_id, $dossier->id ?? null);
                 $instance->set_dossier($dossier);
@@ -343,67 +342,50 @@ class PDFController extends Controller
                 $content .= $element->name . ' Error: ' . $th->getMessage();
             }
         }
-        
+
         // Get the HTML content for the template
         $htmlContent = $this->getTemplateHtml('config', $request->dossier_id, $config, $title, $content);
-        
+
         // Generate the PDF using Dompdf
         $options = new Options();
-$options->set('defaultFont', 'DejaVu Sans'); // Set a default font to avoid embedding multiple fonts
-$options->set('isFontSubsettingEnabled', true); // Enable font subsetting to embed only used glyphs
-$options->set('dpi', 72); // Reduce DPI (default is 96)
-$options->set('isRemoteEnabled', true); // Enable loading remote images
+        $options->set('defaultFont', 'DejaVu Sans'); // Set a default font to avoid embedding multiple fonts
+        $options->set('isFontSubsettingEnabled', true); // Enable font subsetting to embed only used glyphs
+        $options->set('dpi', 72); // Reduce DPI (default is 96)
+        $options->set('isRemoteEnabled', true); // Enable loading remote images
 
-// Create new Dompdf instance with the defined options
-$dompdf = new Dompdf($options);
+        // Create new Dompdf instance with the defined options
+        $dompdf = new Dompdf($options);
         $dompdf = new Dompdf();
         $dompdf->setPaper('A4', 'portrait'); // Set paper size and orientation
-        
+
         // Load HTML content into Dompdf
         $dompdf->loadHtml($htmlContent);
-        
+
         // Render the HTML as PDF
         $dompdf->render();
-        
+
         // Set compression level (optional)
         // $dompdf->getCanvas()->get_cpdf()->setCompression(true);
-        
+
         // Output the generated PDF as a string
         $pdfOutput = $dompdf->output();
-        
-        $timeaftergenerate = microtime(true) - $startTime;
-  
 
-            // dump($timeaftergenerate);
-        
+        $timeaftergenerate = microtime(true) - $startTime;
+
+
+        // dump($timeaftergenerate);
+
         // Save the PDF file to the folder
         $fileName = ($request->template ?? 'document') . ".pdf";
         $filePath = "{$folderPath}/{$fileName}";
         $directPath = "{$directPath}/{$fileName}";
-        // Storage::put($filePath, $pdfOutput);
-
-        $uniqueId = (string) Str::uuid(); // Generates a unique identifier
-
-        // Step 2: Save the uncompressed PDF to a temporary file with a unique name
-        $tempFilePath = storage_path("app/temp/uncompressed_{$uniqueId}.pdf");
-        file_put_contents($tempFilePath, $pdfOutput);
-        
-        // Step 3: Compress the PDF using Ghostscript and generate a unique name for the compressed file
-        $compressedFilePath = storage_path("app/temp/compressed_{$uniqueId}.pdf");
-        exec("gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 -dPDFSETTINGS=/screen -dNOPAUSE -dQUIET -dBATCH -sOutputFile={$compressedFilePath} {$tempFilePath}");
-        
-        // Step 4: Store the compressed PDF in Laravel's storage
-        Storage::put($filePath, file_get_contents($compressedFilePath));
-        
-        // Optionally, clean up temporary files
-        unlink($tempFilePath);
-        unlink($compressedFilePath);
+        Storage::put($filePath, $pdfOutput);
 
         $timeafterstore = microtime(true) - $startTime;
-  
 
-            // dump($timeafterstore);
-        
+
+        // dump($timeafterstore);
+
 
         $update = DB::table('forms_data')->updateOrInsert(
             [
