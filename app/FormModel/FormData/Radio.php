@@ -96,7 +96,7 @@ class Radio extends AbstractFormData
         $optionsArray = json_decode($jsonString, true);
 
  
-
+        if($this->value) {
         $data .= '<label>'.$this->config->title.'</label>';
         $data .= '<div>';
 
@@ -113,6 +113,7 @@ class Radio extends AbstractFormData
         }
 
         $data .= '</div>';
+    }
         $data .= '</div>';
 
 
