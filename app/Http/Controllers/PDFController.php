@@ -39,8 +39,9 @@ class PDFController extends Controller
         $title = '';
         // Determine the HTML content to use
         if (isset($validated['template'])) {
-            $htmlContent = $this->getTemplateHtml($validated['template'], $validated['dossier_id'], $config = null, $title);
-        } else {
+            $htmlContent = $this->getTemplateHtml($validated['template'], $validated['dossier_id'], $config = null, $title,$content=null,$send_data=true);
+        } 
+        else {
             $htmlContent = '';
         }
 
@@ -120,14 +121,18 @@ class PDFController extends Controller
         }
     }
 
-    private function getTemplateHtml($template, $dossier_id, $config = null, $title = '', $content = null)
+    private function getTemplateHtml($template, $dossier_id, $config = null, $title = '', $content = null,$send_data=null)
     {
         // Check if the template view exists
         $templatePath = 'templates.' . $template;
 
         $dossier = Dossier::where('folder', $dossier_id)->first();
-
-        $all_data = load_all_dossier_data($dossier);
+        if($send_data) {
+            $all_data = load_all_dossier_data($dossier);
+        } else {
+            $all_data=[];
+        }
+        
 
         if (View::exists($templatePath)) {
             return view($templatePath, ['all_data' => $all_data,'dossier' => $dossier, 'config' => $config, 'title' => $title, 'content' => $content])->render();
