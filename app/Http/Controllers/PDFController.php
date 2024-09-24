@@ -357,6 +357,7 @@ class PDFController extends Controller
                 if (!($instance_result == False || $instance_result == '')) {
                     $title_content_count ++;
                     $title_content .= $instance_result;
+                    $title_content .=$element->type;
                 }
             
             } catch (\Throwable $th) {
