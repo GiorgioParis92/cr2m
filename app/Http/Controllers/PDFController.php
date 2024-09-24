@@ -347,7 +347,7 @@ class PDFController extends Controller
                     if ($title_content_count > 1) {
                         $content .= $title_content.'</table>';
                     }
-                    $title_content = '<table style="margin:auto;width:90%;border:3px solid red">';
+                    $title_content = '<table style="margin:auto;width:90%;">';
                     $title_content_count = 0;
                 }
                 $instance = new $class($element, $element->name, $element->form_id, $dossier->id ?? null);
@@ -356,7 +356,7 @@ class PDFController extends Controller
                 if ($instance_result) {
                     $title_content_count ++;
 
-                    $title_content .= '<tr><td style="width:100%;border:3px solid black">'.$instance_result.'</td></tr>';
+                    $title_content .= '<tr><td style="width:100%;border:1px solid #ccc;border-collapse: collapse;">'.$instance_result.'</td></tr>';
                 }
             
             } catch (\Throwable $th) {
