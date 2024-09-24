@@ -65,6 +65,10 @@ class Checkbox extends AbstractFormData
 
     public function render_pdf()
     {
+
+        if(!$this->value) {
+           return false; 
+        }
         if(!is_array($this->config->options)) {
             $jsonString = str_replace(["\n", '', "\r"], '', $this->config->options);
             $optionsArray = json_decode($jsonString, true);
@@ -75,9 +79,10 @@ class Checkbox extends AbstractFormData
             $optionsArray = [];
         }
 
+
+
         if($this->value==0) {
             $this->value='';
-            // $this->save_value();
         }
 
         $wireModel = "formData.{$this->form_id}.{$this->name}";

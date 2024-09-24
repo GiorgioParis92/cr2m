@@ -174,7 +174,9 @@ class Photo extends AbstractFormData
 
     public function render_pdf()
     {
-
+        if(!$this->value) {
+            return false; 
+         }
         $json_value=decode_if_json($this->value);
        
         // $json_value=json_decode($this->value);

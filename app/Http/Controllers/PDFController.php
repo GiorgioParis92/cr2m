@@ -354,7 +354,7 @@ class PDFController extends Controller
                 $instance = new $class($element, $element->name, $element->form_id, $dossier->id ?? null);
                 $instance->set_dossier($dossier);
                 $instance_result = $instance->render_pdf();
-                if ($instance->value) {
+                if ($instance_result) {
                     $title_content_count ++;
                     $title_content .= $instance->render_pdf();
                     $title_content .=$element->type;

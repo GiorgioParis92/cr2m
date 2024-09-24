@@ -87,6 +87,9 @@ class Radio extends AbstractFormData
  
     public function render_pdf()
     {
+        if(!$this->value) {
+            return false; 
+         }
         $data='';
         if($this->value) {
         $data = '<div class="form-group col-sm-12 '.($this->config->class ?? "").'">';

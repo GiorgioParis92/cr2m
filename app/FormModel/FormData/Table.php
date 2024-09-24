@@ -175,6 +175,8 @@ class Table extends AbstractFormData
     }
     public function render_pdf()
     {
+        
+        $should_render = false;
         $data = '';
     
         // Decode the JSON value if needed
@@ -203,11 +205,15 @@ class Table extends AbstractFormData
                 }
             
                 // Render the element for PDF
-                $data .= $instance->render_pdf();
+                $result_instance = $instance->render_pdf();
+                if ($result_instance != false) {
+                    $should_render = true;
+                    $data .= $result_instance;
+                }
             }
         }
-
-        return $data;
+             
+        return $should_render ? $data : false;
     }
     
 
