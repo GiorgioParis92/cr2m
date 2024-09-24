@@ -327,6 +327,9 @@ class PDFController extends Controller
 
         $title = $request->title;
         $content = '';
+        $title_content = '';
+        $title_content_count = 0;
+        
         foreach ($config as $element) {
             if (empty($element) || empty($element->type)) {
                 $content .= '<p>Error: Configuration element is missing.</p>';
@@ -340,12 +343,27 @@ class PDFController extends Controller
             }
 
             try {
+                if ($element->type == 'title') {
+                    if ($title_content_count != 0) {
+                        $content .= $title_content;
+                    }
+                    $title_content = '';
+                    $title_content_count = 0;
+                } else {
+                    $title_content_count ++;
+                }
                 $instance = new $class($element, $element->name, $element->form_id, $dossier->id ?? null);
                 $instance->set_dossier($dossier);
-                $content .= $instance->render_pdf();
+                $title_content .= $instance->render_pdf();
+            
             } catch (\Throwable $th) {
-                $content .= $element->name . ' Error: ' . $th->getMessage();
+                $title_content .= $element->name . ' Error: ' . $th->getMessage();
+                $title_content_count ++;
             }
+        }
+
+        if ($title_content_count != 0) {
+            $content .= $title_content;
         }
 
         // Get the HTML content for the template
