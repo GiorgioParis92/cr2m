@@ -353,13 +353,15 @@ class PDFController extends Controller
                 }
                 $instance = new $class($element, $element->name, $element->form_id, $dossier->id ?? null);
                 $instance->set_dossier($dossier);
-                $title_content .= $instance->render_pdf();
+                $instance_result = $instance->render_pdf();
+                if (!($instance_result == False || $instance_result == '')) {
+                    $title_content_count ++;
+                    $title_content .= $instance_result;
+                }
             
             } catch (\Throwable $th) {
                 $title_content .= $element->name . ' Error: ' . $th->getMessage();
             }
-
-            $title_content_count ++;
         }
 
         if ($title_content_count != 0) {
