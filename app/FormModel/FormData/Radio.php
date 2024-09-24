@@ -87,7 +87,7 @@ class Radio extends AbstractFormData
  
     public function render_pdf()
     {
- 
+        if($this->value) {
         $data = '<div class="form-group col-sm-12 '.($this->config->class ?? "").'">';
         $data .= '<div class="form-group">';
 
@@ -96,7 +96,7 @@ class Radio extends AbstractFormData
         $optionsArray = json_decode($jsonString, true);
 
  
-        if($this->value) {
+        
         $data .= '<label>'.$this->config->title.'</label>';
         $data .= '<div>';
 
@@ -113,12 +113,12 @@ class Radio extends AbstractFormData
         }
 
         $data .= '</div>';
+    
+        $data .= '</div>';
+
+
+        $data .= '</div>';
     }
-        $data .= '</div>';
-
-
-        $data .= '</div>';
-     
         return $data;
     }
 }

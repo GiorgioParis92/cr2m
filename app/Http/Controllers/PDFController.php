@@ -344,7 +344,7 @@ class PDFController extends Controller
 
             try {
                 if ($element->type == 'title') {
-                    if ($title_content_count > 1) {
+                    if ($title_content_count > 2) {
                         $content .= $title_content;
                         $content .= $title_content_count;
                     }
