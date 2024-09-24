@@ -343,7 +343,7 @@ class PDFController extends Controller
             }
         }
   
-
+        dd($content);
         // Get the HTML content for the template
         $htmlContent = $this->getTemplateHtml('config', $request->dossier_id, $config, $title,$content);
 
