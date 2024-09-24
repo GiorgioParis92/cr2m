@@ -17,6 +17,7 @@ use App\Models\Etape;
 use PDF; // Import the PDF facade at the top
 use Dompdf\Dompdf;
 use Dompdf\Options;
+use Illuminate\Support\Str;
 
 
 
@@ -351,6 +352,7 @@ class PDFController extends Controller
 $options->set('defaultFont', 'DejaVu Sans'); // Set a default font to avoid embedding multiple fonts
 $options->set('isFontSubsettingEnabled', true); // Enable font subsetting to embed only used glyphs
 $options->set('dpi', 72); // Reduce DPI (default is 96)
+$options->set('isRemoteEnabled', true); // Enable loading remote images
 
 // Create new Dompdf instance with the defined options
 $dompdf = new Dompdf($options);
@@ -378,7 +380,25 @@ $dompdf = new Dompdf($options);
         $fileName = ($request->template ?? 'document') . ".pdf";
         $filePath = "{$folderPath}/{$fileName}";
         $directPath = "{$directPath}/{$fileName}";
-        Storage::put($filePath, $pdfOutput);
+        // Storage::put($filePath, $pdfOutput);
+
+        $uniqueId = (string) Str::uuid(); // Generates a unique identifier
+
+        // Step 2: Save the uncompressed PDF to a temporary file with a unique name
+        $tempFilePath = storage_path("app/temp/uncompressed_{$uniqueId}.pdf");
+        file_put_contents($tempFilePath, $pdfOutput);
+        
+        // Step 3: Compress the PDF using Ghostscript and generate a unique name for the compressed file
+        $compressedFilePath = storage_path("app/temp/compressed_{$uniqueId}.pdf");
+        exec("gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 -dPDFSETTINGS=/screen -dNOPAUSE -dQUIET -dBATCH -sOutputFile={$compressedFilePath} {$tempFilePath}");
+        
+        // Step 4: Store the compressed PDF in Laravel's storage
+        Storage::put($filePath, file_get_contents($compressedFilePath));
+        
+        // Optionally, clean up temporary files
+        unlink($tempFilePath);
+        unlink($compressedFilePath);
+
         $timeafterstore = microtime(true) - $startTime;
   
 
