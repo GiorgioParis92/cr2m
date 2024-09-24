@@ -217,27 +217,8 @@
                 {{$title}}
             </p>
             <div>
-                @foreach ($config as $element)
-                @if (empty($element) || empty($element->type))
-                    <p>Error: Configuration element is missing.</p>
-                    @continue
-                @endif
-                @php
-                    $class = 'App\\FormModel\\FormData\\' . ucfirst($element->type);
-                    if (!class_exists($class)) {
-                        echo "Error: Class $class does not exist.";
-                        continue;
-                    }
-                    
-                    try {
-                        $instance = new $class($element, $element->name, $element->form_id, $dossier->id ?? null);
-                        $instance->set_dossier($dossier);
-                        echo $instance->render_pdf();
-                    } catch (\Throwable $th) {
-                        echo $element->name . ' Error: ' . $th->getMessage();
-                    }
-                @endphp
-            @endforeach
+                {{$content}}
+                
                     
           
                   

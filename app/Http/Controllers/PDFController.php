@@ -117,7 +117,7 @@ class PDFController extends Controller
         }
     }
 
-    private function getTemplateHtml($template, $dossier_id, $config = null, $title)
+    private function getTemplateHtml($template, $dossier_id, $config = null, $title='',$content=null)
     {
         // Check if the template view exists
         $templatePath = 'templates.' . $template;
@@ -127,7 +127,7 @@ class PDFController extends Controller
         // $all_data = load_all_dossier_data($dossier);
 
         if (View::exists($templatePath)) {
-            return view($templatePath, ['dossier' => $dossier,  'config' => $config, 'title' => $title])->render();
+            return view(view: $templatePath, ['dossier' => $dossier,  'config' => $config, 'title' => $title])->render();
         } else {
             throw new \Exception('Invalid template specified');
         }
@@ -318,9 +318,34 @@ class PDFController extends Controller
             // dump($timeAfterConfig);
         
         $title = $request->title;
+        $content='';
+        foreach ($config as $element) {
+        if (empty($element) || empty($element->type)) {
+            $content.='<p>Error: Configuration element is missing.</p>';
+            continue;
+        }
+
+     
+        
+       
+            $class = 'App\\FormModel\\FormData\\' . ucfirst($element->type);
+            if (!class_exists($class)) {
+                $content.="Error: Class $class does not exist.";
+                continue;
+            }
+            
+            try {
+                $instance = new $class($element, $element->name, $element->form_id, $dossier->id ?? null);
+                $instance->set_dossier($dossier);
+                $content.=$instance->render_pdf();
+            } catch (\Throwable $th) {
+                $content.=$element->name . ' Error: ' . $th->getMessage();
+            }
+        }
+  
 
         // Get the HTML content for the template
-        $htmlContent = $this->getTemplateHtml('config', $request->dossier_id, $config, $title);
+        $htmlContent = $this->getTemplateHtml('config', $request->dossier_id, $config, $title,$content);
 
 
 
