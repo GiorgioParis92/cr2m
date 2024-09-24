@@ -14,6 +14,8 @@ use App\Models\Fiche;
 use App\Models\Dossier;
 use Illuminate\Support\Facades\DB;
 use App\Models\Etape;
+use PDF; // Import the PDF facade at the top
+use Dompdf\Dompdf;
 
 
 
@@ -318,47 +320,48 @@ class PDFController extends Controller
             // dump($timeAfterConfig);
         
         $title = $request->title;
-        $content='';
+        $content = '';
         foreach ($config as $element) {
-        if (empty($element) || empty($element->type)) {
-            $content.='<p>Error: Configuration element is missing.</p>';
-            continue;
-        }
-
-     
-        
-       
-            $class = 'App\\FormModel\\FormData\\' . ucfirst($element->type);
-            if (!class_exists($class)) {
-                $content.="Error: Class $class does not exist.";
+            if (empty($element) || empty($element->type)) {
+                $content .= '<p>Error: Configuration element is missing.</p>';
                 continue;
             }
-            
+        
+            $class = 'App\\FormModel\\FormData\\' . ucfirst($element->type);
+            if (!class_exists($class)) {
+                $content .= "Error: Class $class does not exist.";
+                continue;
+            }
+        
             try {
                 $instance = new $class($element, $element->name, $element->form_id, $dossier->id ?? null);
                 $instance->set_dossier($dossier);
-                $content.=$instance->render_pdf();
+                $content .= $instance->render_pdf();
             } catch (\Throwable $th) {
-                $content.=$element->name . ' Error: ' . $th->getMessage();
+                $content .= $element->name . ' Error: ' . $th->getMessage();
             }
         }
-  
-        dd($content);
+        
         // Get the HTML content for the template
-        $htmlContent = $this->getTemplateHtml('config', $request->dossier_id, $config, $title,$content);
-
-
-
-
-        // Generate the PDF using Html2Pdf
-        $html2pdf = new Html2Pdf();
-        $html2pdf->pdf->SetCompression(true); // Enable compression
-        $html2pdf->pdf->SetDisplayMode('real', 'default', 'default', 'default', 72); // Set DPI to 72
-
-        // Convert the HTML content to PDF
-        $html2pdf->writeHTML($htmlContent);
-        $pdfOutput = $html2pdf->output('', 'S'); // Output as string
-
+        $htmlContent = $this->getTemplateHtml('config', $request->dossier_id, $config, $title, $content);
+        
+        // Generate the PDF using Dompdf
+        
+        $dompdf = new Dompdf();
+        $dompdf->setPaper('A4', 'portrait'); // Set paper size and orientation
+        
+        // Load HTML content into Dompdf
+        $dompdf->loadHtml($htmlContent);
+        
+        // Render the HTML as PDF
+        $dompdf->render();
+        
+        // Set compression level (optional)
+        $dompdf->getCanvas()->get_cpdf()->setCompression(true);
+        
+        // Output the generated PDF as a string
+        $pdfOutput = $dompdf->output();
+        
         $timeaftergenerate = microtime(true) - $startTime;
   
 
