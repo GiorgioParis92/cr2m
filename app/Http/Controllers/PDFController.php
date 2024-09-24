@@ -315,6 +315,8 @@ class PDFController extends Controller
 
         // Generate the PDF using Html2Pdf
         $html2pdf = new Html2Pdf();
+        $html2pdf->pdf->SetCompression(true); // Enable compression
+        $html2pdf->pdf->SetDisplayMode('real', 'default', 'default', 'default', 72); // Set DPI to 72
 
         // Convert the HTML content to PDF
         $html2pdf->writeHTML($htmlContent);
