@@ -133,7 +133,7 @@ class Text extends AbstractFormData
     {
 
 
-        if(!$this->value) {
+        if(!$this->value || $this->value=='') {
             return '';
         }
 
