@@ -346,7 +346,6 @@ class PDFController extends Controller
                 if ($element->type == 'title') {
                     if ($title_content_count > 1) {
                         $content .= $title_content;
-                        $content .= $title_content_count;
                     }
                     $title_content = '';
                     $title_content_count = 0;
@@ -356,8 +355,7 @@ class PDFController extends Controller
                 $instance_result = $instance->render_pdf();
                 if ($instance_result) {
                     $title_content_count ++;
-                    $title_content .= $instance->render_pdf();
-                    $title_content .=$element->type;
+                    $title_content .= $instance_result;
                 }
             
             } catch (\Throwable $th) {
