@@ -102,10 +102,10 @@ class Radio extends AbstractFormData
 
         if (is_array($optionsArray)) {
             foreach ($optionsArray as $key => $element) {
-                $isChecked = $this->value == $element['value'] ? 'checked' : '';
+                $isChecked = $this->value == $element['value'] ? 'checked="checked"' : '';
            
                 $data.='<div class="">';
-                $data .= '<input  type="checkbox" checked="'.$isChecked.'">';
+                $data .= '<input  type="checkbox" '.$isChecked.'>';
                 $data .= '<label  for="'.$this->name.'_'.$key.'">'.$element['label'].'</label><br>';
            
                 $data .= $this->value;
