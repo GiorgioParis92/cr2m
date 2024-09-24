@@ -188,28 +188,48 @@ class Photo extends AbstractFormData
         $text='';
         $text.='<p class="s2" style="padding-top: 5pt;padding-left: 8pt;text-indent: 0pt;text-align: left;">'.$this->config->title.'</p>';
         $text .= "<div class='row'>";
+        function compressImage($filePath, $quality = 75) {
+            $imageInfo = getimagesize($filePath);
+            if ($imageInfo['mime'] == 'image/jpeg') {
+                $image = imagecreatefromjpeg($filePath);
+                ob_start();
+                imagejpeg($image, null, $quality);  // Compress the image
+                $compressedImage = ob_get_clean();
+                imagedestroy($image);
+                return base64_encode($compressedImage);
+            } elseif ($imageInfo['mime'] == 'image/png') {
+                $image = imagecreatefrompng($filePath);
+                ob_start();
+                imagepng($image, null, 8);  // Reduce quality for PNG
+                $compressedImage = ob_get_clean();
+                imagedestroy($image);
+                return base64_encode($compressedImage);
+            }
+            return base64_encode(file_get_contents($filePath));  // Fallback for other formats
+        }
+        
         foreach($values as $value) {
-            // Check for thumbnail
             $value_thumbnail = str_replace('.', '_thumbnail.', $value);
-            $filePath_thumbnail = storage_path('app/public/' . $value_thumbnail);  // File system path
+            $filePath_thumbnail = storage_path('app/public/' . $value_thumbnail);
         
             if (file_exists($filePath_thumbnail)) {
                 $value = $value_thumbnail;
             }
         
-            $filePath = storage_path('app/public/' . $value);  // File system path
+            $filePath = storage_path('app/public/' . $value);
         
             if (!empty($value) && file_exists($filePath)) {
-                // Convert the image to base64
-                $imageData = base64_encode(file_get_contents($filePath));
+                // Compress the image and then convert it to Base64
+                $imageData = compressImage($filePath, 70);  // Compress the image with 70% quality for JPEGs
                 $src = 'data:image/' . pathinfo($filePath, PATHINFO_EXTENSION) . ';base64,' . $imageData;
         
                 $text .= "<div class='col-lg-3' style='width:33%'>";
-                $text .= '<img src="' . $src . '" style="width:100%; height:auto;">';  // Embed base64 image
-                $text .= '<p>' . $value . '</p>';  // Optionally show the file name
+                $text .= '<img src="' . $src . '" style="width:100%; height:auto;">';
+                $text .= '<p>' . $value . '</p>';
                 $text .= '</div>';
             }
         }
+        
         $text.='</div>';
         return $text;
     }
