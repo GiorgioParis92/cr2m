@@ -77,7 +77,7 @@ class PDFController extends Controller
             if (!$result) {
                 \Log::error("Failed to save file at path: " . $filePath);
                 return response()->json(['error' => 'Failed to save file'], 500);
-            } 
+            }
 
             $dossier = Dossier::where('folder', $dossierId)->first();
 
@@ -94,7 +94,7 @@ class PDFController extends Controller
                 ]
             );
 
-      
+
 
             // if (isset($validated['identify'])) {
             //     $fullFilePath = Storage::path($filePath); // This will return the absolute path
@@ -124,10 +124,10 @@ class PDFController extends Controller
 
         $dossier = Dossier::where('folder', $dossier_id)->first();
 
-        $all_data = load_all_dossier_data($dossier);
+        // $all_data = load_all_dossier_data($dossier);
 
         if (View::exists($templatePath)) {
-            return view($templatePath, ['dossier' => $dossier, 'all_data' => $all_data, 'config' => $config, 'title' => $title])->render();
+            return view($templatePath, ['dossier' => $dossier,  'config' => $config, 'title' => $title])->render();
         } else {
             throw new \Exception('Invalid template specified');
         }
@@ -300,11 +300,23 @@ class PDFController extends Controller
 
         // Fetch the dossier based on the provided dossier_id
         $dossier = Dossier::where('folder', $request->dossier_id)->first();
+        $startTime = microtime(true);
         // Load all the dossier data (assuming load_all_dossier_data is a custom helper function)
-        $all_data = load_all_dossier_data($dossier);
+       
 
+        
+
+        $timeAfterDossier = microtime(true) - $startTime;
+     
+
+            // dump($timeAfterDossier);
+        
         $config = DB::table('forms_config')->where('form_id', $request->config_id)->orderBy('ordering')->get();
+        $timeAfterConfig = microtime(true) - $startTime;
+ 
 
+            // dump($timeAfterConfig);
+        
         $title = $request->title;
 
         // Get the HTML content for the template
@@ -321,12 +333,22 @@ class PDFController extends Controller
         // Convert the HTML content to PDF
         $html2pdf->writeHTML($htmlContent);
         $pdfOutput = $html2pdf->output('', 'S'); // Output as string
+
+        $timeaftergenerate = microtime(true) - $startTime;
+  
+
+            // dump($timeaftergenerate);
+        
         // Save the PDF file to the folder
         $fileName = ($request->template ?? 'document') . ".pdf";
         $filePath = "{$folderPath}/{$fileName}";
         $directPath = "{$directPath}/{$fileName}";
         Storage::put($filePath, $pdfOutput);
+        $timeafterstore = microtime(true) - $startTime;
+  
 
+            // dump($timeafterstore);
+        
 
         $update = DB::table('forms_data')->updateOrInsert(
             [
@@ -353,7 +375,7 @@ class PDFController extends Controller
 
         // Get the real path of the file
         $file = Storage::path($filePath);
-    
+
         // Check if the file exists and get its real path
         if (!file_exists($filePath)) {
             return response()->json(['error' => 'File not found'], 404);
@@ -362,14 +384,14 @@ class PDFController extends Controller
         // Use the file path directly
         $data = array(
             'service' => 'document_detection',
-            'token'=>'6b22c62c-924a-4aac-9eab-9faafe55e394',
-            'model'=>'atlas',
+            'token' => '6b22c62c-924a-4aac-9eab-9faafe55e394',
+            'model' => 'atlas',
             'file' => new \CURLFile($filePath), // Use \CURLFile to send file via cURL
         );
-        
+
         // Send the request
         $response = makeRequest('https://oceer.fr/api/document_detection', $data);
-       
+
         return $response;
     }
 
