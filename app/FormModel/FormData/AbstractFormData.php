@@ -184,6 +184,9 @@ class AbstractFormData
 
 public function render_pdf()
 {
+    if(!$this->value) {
+        return '';
+    }
         return false;
    
 }
