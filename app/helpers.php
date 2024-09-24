@@ -144,7 +144,8 @@ function makeRequest($url, $data)
 
     curl_setopt($ch, CURLOPT_POSTFIELDS, $multipartData);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
     // Execute cURL request
     $response = curl_exec($ch);
 

@@ -94,19 +94,20 @@ class PDFController extends Controller
                 ]
             );
 
-            $data = [];
+      
 
-            if (isset($validated['identify'])) {
-                $fullFilePath = Storage::path($filePath); // This will return the absolute path
-                // Call identify_doc with the full path
-                $identify = $this->identify_doc($fullFilePath, $data);
-                dd($identify);
-            }
+            // if (isset($validated['identify'])) {
+            //     $fullFilePath = Storage::path($filePath); // This will return the absolute path
+            //     // Call identify_doc with the full path
+            //     $identify = $this->identify_doc($fullFilePath);
+
+            // }
 
             // Return success response
             return response()->json([
                 'message' => 'PDF generated and saved successfully',
-                'file_path' => Storage::url($filePath) // Adjusted this line
+                'file_path' => Storage::url($filePath), // Adjusted this line
+                'identify' => json_decode($identify) ?? '' // Adjusted this line
             ], 200);
         } else {
             // Return the PDF as a response
@@ -345,7 +346,7 @@ class PDFController extends Controller
     }
 
 
-    public function identify_doc($filePath, $data)
+    public function identify_doc($filePath)
     {
 
         // Get the real path of the file
@@ -359,14 +360,15 @@ class PDFController extends Controller
         // Use the file path directly
         $data = array(
             'service' => 'document_detection',
-            'data' => $data ? json_encode($data, JSON_NUMERIC_CHECK) : '{}',
+            'token'=>'6b22c62c-924a-4aac-9eab-9faafe55e394',
+            'model'=>'atlas',
             'file' => new \CURLFile($filePath), // Use \CURLFile to send file via cURL
         );
         
         // Send the request
-        $response = makeRequest('http://192.168.100.40:5010/process_request', $data);
-        
-        return response()->json($response, 200);
+        $response = makeRequest('https://oceer.fr/api/document_detection', $data);
+       
+        return $response;
     }
 
 

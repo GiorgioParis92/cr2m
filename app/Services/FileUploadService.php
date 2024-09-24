@@ -15,6 +15,7 @@ use PDF; // Assuming you have barryvdh/laravel-dompdf installed
 use Image; // Assuming you have intervention/image installed
 use setasign\Fpdi\Fpdi;
 use FPDF;
+use Spatie\ImageOptimizer\OptimizerChainFactory;
 
 class FileUploadService
 {
@@ -29,48 +30,11 @@ class FileUploadService
      */
     public function storeImage(Request $request, string $folder = null, int $clientId = null, string $inputName = 'file', bool $random_name = false)
     {
+
+
+
         if ($request->folder == 'dossiers') {
-            if (isset($request->analyze)) {
-                // $ocrResponse = $this->callOcrAnalyzeDirectly($request);
-            } else {
-                // $ocrResponse = false;
-            }
-
-            // 
-
-            // if (!$ocrResponse) {
-            //     return false; // Handle OCR failure as needed
-            // } else {
-            //     $result = $ocrResponse['result']['data']['analyze_result'];
-            //     $array_result = $result;
-            //     foreach ($array_result as $key => $value) {
-            //         $meta_value='';
-
-            //         // Check if the value is an array and convert to JSON string if true
-            //         if(isset($value['value'])) {
-
-            //             if (is_array($value['value'])) {
-            //                 $meta_value = json_encode($value['value']);
-            //             } else {
-            //                 $meta_value = $value['value'];
-            //             }
-            //         }
-
-
-            //         \DB::table('dossiers_data')->updateOrInsert(
-            //             [
-            //                 'dossier_id' => $request->clientId,
-            //                 'meta_key' => $key
-            //             ],
-            //             [
-            //                 'meta_value' => $meta_value,
-            //                 'created_at' => now(),
-            //                 'updated_at' => now()
-            //             ]
-            //         );
-            //     }
-
-            // }
+           
         }
 
         if (isset($request->folder)) {
@@ -147,6 +111,22 @@ class FileUploadService
         // Save the new file
         $filePath = $file->storeAs($directory, $fileName, 'public');
 
+            // Save the compressed thumbnail version
+    $thumbnailFileName = pathinfo($fileName, PATHINFO_FILENAME) . '_thumbnail.' . $extension;
+    
+        //use this linux command to compress filepath filepath thumbnail
+
+        //  convert $fileName -resize 800x600\> $thumbnailFileName
+
+   
+        $resizeCommand = "convert $filePath -resize 800x600> $thumbnailFileName";
+        exec($resizeCommand, $output, $returnCode);
+
+        if ($returnCode !== 0) {
+            // Handle error
+            return response()->json(['error' => 'Failed to create thumbnail.'], 500);
+        }
+    
         DB::enableQueryLog();
         $index = '';
 
@@ -324,6 +304,8 @@ class FileUploadService
             // Save the updated or new PDF
             $pdf->Output($pdfFilePath, 'F');
 
+
+
             // Optionally, delete the temporary image file
             unlink($tempImagePath);
 
@@ -353,13 +335,47 @@ class FileUploadService
 
             $table = new Table($config, $template, $form_id, $dossier->id);
             $table->save_value();
-        
 
+            $pdfFileName = $request->input('template') . '.pdf';
+            $pdfFilePath = storage_path('app/public/' . $directory . '/' . $pdfFileName);
+
+            if($request->identify) {
+                $identify = json_decode($this->identify_doc($pdfFilePath),true);
+
+                $final_result=$identify['result']['data']['results'];
+                $filename=str_replace('.pdf','',$pdfFileName);
+                $bestMatch = $this->getBestMatch($final_result, $filename);
+            }
+           
+
+            // return $bestMatch;
 
         return $filePath;
 
 
 
+    }
+
+    private function getBestMatch($resultData, $pdfFileName) {
+
+    
+        // Find the key with the highest score
+        $bestResultKey = array_keys($resultData[0], max($resultData[0]))[0];
+        // If the best result is "other", return "other"
+        if ($bestResultKey === "other") {
+            return "other";
+        }
+    
+        // Remove '_first' from the best result key
+        $bestResultKeyClean = str_replace('_first', '', $bestResultKey);
+    
+        // Check if the cleaned key matches the PDF file name
+        if ($bestResultKeyClean === $pdfFileName) {
+            return $bestResultKeyClean;
+        }
+    
+        // If no match, return "other"
+        return "other";
     }
     protected function callOcrAnalyzeDirectly(Request $request)
     {
@@ -410,4 +426,32 @@ class FileUploadService
 
 
     }
+
+
+    public function identify_doc($filePath)
+    {
+
+        // Get the real path of the file
+        $file = $filePath;
+      
+     
+        // Check if the file exists and get its real path
+        if (!file_exists($file)) {
+            return response()->json(['error' => 'File not found'], 404);
+        }
+
+        // Use the file path directly
+        $data = array(
+            'service' => 'document_detection',
+            'token'=>'6b22c62c-924a-4aac-9eab-9faafe55e394',
+            'model'=>'atlas',
+            'file' => new \CURLFile($file), // Use \CURLFile to send file via cURL
+        );
+        
+        // Send the request
+        $response = makeRequest('https://oceer.fr/api/document_detection', $data);
+        
+        return $response;
+    }
+
 }

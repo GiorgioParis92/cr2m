@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 
-class Controller 
+class FormController extends Controller
 {
     public function show($id)
     {
