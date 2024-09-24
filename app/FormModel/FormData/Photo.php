@@ -203,6 +203,7 @@ class Photo extends AbstractFormData
             if (!empty($value) && file_exists($filePath)) {
             $text .= "<div class='col-lg-3' style='width:33%'>";
             $text.='<img src="'.(asset('storage/' . $value)).'">';
+            $text.=$value;
             $text.='</div>';
             }
         }
