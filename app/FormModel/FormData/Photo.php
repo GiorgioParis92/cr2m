@@ -197,20 +197,19 @@ class Photo extends AbstractFormData
                 $value = $value_thumbnail;
             }
         
-            // Get the actual file path
             $filePath = storage_path('app/public/' . $value);  // File system path
         
             if (!empty($value) && file_exists($filePath)) {
-                // Use asset() to generate the public URL for the image
-                $imageUrl = asset('storage/' . $value);
+                // Convert the image to base64
+                $imageData = base64_encode(file_get_contents($filePath));
+                $src = 'data:image/' . pathinfo($filePath, PATHINFO_EXTENSION) . ';base64,' . $imageData;
         
                 $text .= "<div class='col-lg-3' style='width:33%'>";
-                $text .= '<img src="' . $imageUrl . '" style="width:100%; height:auto;">';  // Relative URL for the image
-                $text .= '<p>' . $value . '</p>';  // Optionally show the file name or value
+                $text .= '<img src="' . $src . '" style="width:100%; height:auto;">';  // Embed base64 image
+                $text .= '<p>' . $value . '</p>';  // Optionally show the file name
                 $text .= '</div>';
             }
         }
-        
         $text.='</div>';
         return $text;
     }
