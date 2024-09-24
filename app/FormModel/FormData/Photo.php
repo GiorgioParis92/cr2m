@@ -189,25 +189,28 @@ class Photo extends AbstractFormData
         $text.='<p class="s2" style="padding-top: 5pt;padding-left: 8pt;text-indent: 0pt;text-align: left;">'.$this->config->title.'</p>';
         $text .= "<div class='row'>";
         foreach($values as $value) {
-
-            $value_thumbnail=str_replace('.','_thumbnail.',$value);
+            // Check for thumbnail
+            $value_thumbnail = str_replace('.', '_thumbnail.', $value);
             $filePath_thumbnail = storage_path('app/public/' . $value_thumbnail);  // File system path
-
+        
             if (file_exists($filePath_thumbnail)) {
-                $value=$value_thumbnail;
-                $filePath=$filePath_thumbnail;
+                $value = $value_thumbnail;
             }
-
-
+        
+            // Get the actual file path
             $filePath = storage_path('app/public/' . $value);  // File system path
+        
             if (!empty($value) && file_exists($filePath)) {
-            $text .= "<div class='col-lg-3' style='width:33%'>";
-            $text.='<img src="'.$filePath.'">';
-            $text.=$filePath;
-            $text.=$value;
-            $text.='</div>';
+                // Use asset() to generate the public URL for the image
+                $imageUrl = asset('storage/' . $value);
+        
+                $text .= "<div class='col-lg-3' style='width:33%'>";
+                $text .= '<img src="' . $imageUrl . '" style="width:100%; height:auto;">';  // Relative URL for the image
+                $text .= '<p>' . $value . '</p>';  // Optionally show the file name or value
+                $text .= '</div>';
             }
         }
+        
         $text.='</div>';
         return $text;
     }
