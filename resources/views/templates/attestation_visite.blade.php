@@ -285,14 +285,14 @@
 
     <table style="width:100%">
         <tr>
-            <td style="border:none;width:50%">
+            <td style="border:none;width:50%;vertical-align:top">
                 <p><b>Le bénéficiaire</b></p>
                 {{-- <p>Signature précédé de la mention manuscrite <br /><i>Adresse complète du bénéficiaire </i> --}}
                 
             </td>
 
 
-            <td style="border:none;width:50%;padding-left:45px;">
+            <td style="border:none;width:50%;padding-left:45px;vertical-align:top">
                 <p><b>Mon Accompagnateur Rénov'</b> <br />{{ $dossier->client->client_title }} </p>
                 @if(isset($dossier->client->signature) && file_exists(storage_path('app/public/' . $dossier->client->signature)))
 
