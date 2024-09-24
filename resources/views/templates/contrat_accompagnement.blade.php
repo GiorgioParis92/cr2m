@@ -984,7 +984,7 @@
                     <p><b>Mon Accompagnateur Rénov'</b> <br />{{ $dossier->client->client_title }}  </p>
                     @if(isset($dossier->client->signature) && file_exists(storage_path('app/public/' . $dossier->client->signature)))
 
-                    <img style="max-width:250px" src="{{ asset('storage/' . $dossier->client->signature) }}" alt="Logo">
+                    <img style="max-width:150px;margin-top:-20px" src="{{ asset('storage/' . $dossier->client->signature) }}" alt="Logo">
         
                     @endif
 
