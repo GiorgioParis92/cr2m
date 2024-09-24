@@ -356,7 +356,7 @@ class PDFController extends Controller
                 if ($instance_result) {
                     $title_content_count ++;
 
-                    $title_content .= '<tr><td>'.$instance_result.'</td></tr>';
+                    $title_content .= '<tr><td style="border:1px solid #ccc">'.$instance_result.'</td></tr>';
                 }
             
             } catch (\Throwable $th) {
