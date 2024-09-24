@@ -183,6 +183,9 @@ class Table extends AbstractFormData
         $this->value = $this->decode_if_json($this->value);
     
         foreach ($this->value as $index => $element_data) {
+            $title_content = '';
+            $title_content_count = 0;
+
             foreach ($this->optionsArray as $element_config) {
                 $class = 'App\\FormModel\\FormData\\' . ucfirst($element_config['type']);
                 $configInstance = $element_config;
@@ -203,12 +206,21 @@ class Table extends AbstractFormData
                 } else {
                     $instance->value = ''; // Or handle default value here
                 }
-            
-                // Render the element for PDF
-                $result_instance = $instance->render_pdf();
-                if ($result_instance != false) {
+                
+                if ($element_config['type'] == 'title') {
+                    if ($title_content_count > 1) {
+                        $data .= $title_content;
+                        $data .= $title_content_count;
+                    }
+                    $title_content = '';
+                    $title_content_count = 0;
+                }
+                $instance_result = $instance->render_pdf();
+                if ($instance_result) {
+                    $title_content_count ++;
+                    $title_content .= $instance_result;
+                    $title_content .= $element_config['type'];
                     $should_render = true;
-                    $data .= $result_instance;
                 }
             }
         }
