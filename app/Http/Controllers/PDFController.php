@@ -327,7 +327,7 @@ class PDFController extends Controller
 
         $title = $request->title;
         $content = '';
-        $title_content = '<table style="margin:auto;width:90%;margin-top:12px;border-collapse: collapse;">';
+        $title_content = '<div><table style="margin:auto;width:90%;margin-top:20px;border-collapse: collapse;">';
         $title_content_count = 0;
         
         foreach ($config as $element) {
@@ -345,9 +345,9 @@ class PDFController extends Controller
             try {
                 if ($element->type == 'title') {
                     if ($title_content_count > 1) {
-                        $content .= $title_content.'</table>';
+                        $content .= $title_content.'</table></div>';
                     }
-                    $title_content = '<table style="margin:auto;width:90%;border-collapse: collapse;margin-top:12px">';
+                    $title_content = '<div><table style="margin:auto;width:90%;border-collapse: collapse;margin-top:20px">';
                     $title_content_count = 0;
                 }
                 $instance = new $class($element, $element->name, $element->form_id, $dossier->id ?? null);
@@ -356,7 +356,7 @@ class PDFController extends Controller
                 if ($instance_result) {
                     $title_content_count ++;
 
-                    $title_content .= '<tr><td style="width:100%;border:1px solid #ccc;border-collapse: collapse;">'.$instance_result.'</td></tr>';
+                    $title_content .= '<tr><td style="width:100%;border:1px solid #ccc;border-collapse: collapse;padding-left:12px">'.$instance_result.'</td></tr>';
                 }
             
             } catch (\Throwable $th) {
