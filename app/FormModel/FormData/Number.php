@@ -57,7 +57,9 @@ class Number extends AbstractFormData
     {
 
 
-      
+        if(!$this->value || $this->value=='') {
+            return '';
+        }
 
         $data = '<div  class="form-group col-sm-12 ' . ($this->config->class ?? "") . '">';
 
