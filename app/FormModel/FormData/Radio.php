@@ -108,7 +108,8 @@ class Radio extends AbstractFormData
                 $data .= '<input  type="checkbox" checked="'.$isChecked.'">';
                 $data .= '<label  for="'.$this->name.'_'.$key.'">'.$element['label'].'</label><br>';
            
-                $data .= '</div>';
+                $data .= $this->value;
+                $data .= $element['value'];
             }
         }
 

@@ -111,7 +111,6 @@ class Checkbox extends AbstractFormData
             $data .= '<label class="custom-control-label" for="checkbox_'.$this->config->name.'">';
             $data .= $optionsArray[1]['label'] ?? 'Checkbox Label';
             $data .= '</label>';
-            $data .= $value;
         
         }
 
