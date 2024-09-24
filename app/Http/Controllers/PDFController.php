@@ -97,7 +97,7 @@ class PDFController extends Controller
                 ]
             );
 
-
+            $identify='';
 
             // if (isset($validated['identify'])) {
             //     $fullFilePath = Storage::path($filePath); // This will return the absolute path
@@ -127,10 +127,10 @@ class PDFController extends Controller
 
         $dossier = Dossier::where('folder', $dossier_id)->first();
 
-        // $all_data = load_all_dossier_data($dossier);
+        $all_data = load_all_dossier_data($dossier);
 
         if (View::exists($templatePath)) {
-            return view($templatePath, ['dossier' => $dossier, 'config' => $config, 'title' => $title, 'content' => $content])->render();
+            return view($templatePath, ['all_data' => $all_data,'dossier' => $dossier, 'config' => $config, 'title' => $title, 'content' => $content])->render();
         } else {
             throw new \Exception('Invalid template specified');
         }
