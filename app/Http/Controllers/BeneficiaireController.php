@@ -34,6 +34,7 @@ class BeneficiaireController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $validated = $request->validate([
+            'reference_unique' => 'required|max:200',
             'nom' => 'required|max:200',
             'prenom' => 'required|max:200',
             'numero_voie' => 'required|max:250',
@@ -155,6 +156,7 @@ class BeneficiaireController extends Controller
                 'mandataire_financier' => $request->input('mandataire_financier') ?? 0,
                 'mar' => $request->input('mar') ?? 0,
                 'installateur' => $request->input('installateur') ?? 0,
+                'reference_unique' => $request->input('reference_unique') ?? 0,
                 'lat' => $validated['lat'] ?? 0,
                 'lng' => $validated['lng'] ?? 0,
             ]);

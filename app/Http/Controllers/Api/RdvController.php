@@ -122,7 +122,6 @@ class RdvController extends \App\Http\Controllers\Controller
         }
       
 
-        dd($request);
 
         $data = [
             'type_rdv' => $type_rdv,
@@ -193,8 +192,33 @@ class RdvController extends \App\Http\Controllers\Controller
     public function update(Request $request): \Illuminate\Http\JsonResponse
     {
         // Assuming rdvId is passed as a route parameter or can be retrieved from the request in some way.
-
-        $rdvId = $request->input('rdv_id');
+        if(!$request->rdv_id) {
+            $data = [
+                'type_rdv' => 1,
+                'user_id' => 1,
+                'date_rdv' => now(),
+                'client_id' => 1,
+                'nom' => '',
+                'prenom' => '',
+                'adresse' => '',
+                'cp' =>  '',
+                'ville' =>  '',
+                'telephone' =>  '',
+                'telephone_2' => '',
+                'email' =>  '',
+                'lat' =>  '',
+                'lng' =>  '',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ];
+    
+            // Insert the data into the database
+            $rdvId = DB::table('rdv')->insertGetId($data);
+         
+        } else {
+            $rdvId = $request->input('rdv_id');
+        }
+        
 
         if (empty($request->date_rdv)) {
             return response()->json(['success' => false, 'message' => 'Entrez une date'], 200);

@@ -1,3 +1,10 @@
+
+<div class="form-group col-sm-12 col-lg-6">
+    <label for="reference_unique">Référence unique</label>
+    <input type="text" class="form-control" id="reference_unique" name="reference_unique"
+        value="{{ old('reference_unique', $beneficiaire->reference_unique ?? '') }}" required>
+</div>
+
 <div class="form-group col-sm-12 col-lg-6">
     <label for="nom">Nom</label>
     <input type="text" class="form-control" id="nom" name="nom"

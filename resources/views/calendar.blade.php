@@ -15,7 +15,7 @@
         @if(auth()->user()->type_id==4)
         <input type="hidden" value="{{auth()->user()->id}}" id="form_config_user_id">
         @else
-            @if(auth()->user()->client->type_client!=3)
+            @if((isset(auth()->user()->client->type_client) && auth()->user()->client->type_client!=3) || !isset(auth()->user()->client->type_client))
             <div class="form-group col-lg-6">
                 <select class="form-control" id="form_config_user_id">
                     <option value="">Choisir un auditeur / Voir tous les auditeurs</option>
