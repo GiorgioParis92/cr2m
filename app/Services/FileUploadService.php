@@ -118,14 +118,16 @@ class FileUploadService
 
         //  convert $fileName -resize 800x600\> $thumbnailFileName
 
-   
-        $resizeCommand = "convert $filePath -resize 800x600> $thumbnailFileName";
-        exec($resizeCommand, $output, $returnCode);
-
-        if ($returnCode !== 0) {
-            // Handle error
-            return response()->json(['error' => 'Failed to create thumbnail.'], 500);
+        if(auth()->user()->id==1) {
+            $resizeCommand = "convert $filePath -resize 800x600> $thumbnailFileName";
+            exec($resizeCommand, $output, $returnCode);
+    
+            if ($returnCode !== 0) {
+                // Handle error
+                return response()->json(['error' => 'Failed to create thumbnail.'], 500);
+            }
         }
+
     
         DB::enableQueryLog();
         $index = '';
