@@ -133,12 +133,7 @@ class FileUploadService
                 if(file_exists($thumbnail_path)) {
                     chmod($thumbnail_path, 0775);
                 }
-               
-
-                if ($returnCode !== 0) {
-                    // Handle error
-                    return response()->json(['error' => 'Failed to create thumbnail.'], 500);
-                }
+     
             }
         }
 
