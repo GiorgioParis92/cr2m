@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\Etape;
 use PDF; // Import the PDF facade at the top
 use Dompdf\Dompdf;
+use Dompdf\Options;
 
 
 
@@ -346,7 +347,13 @@ class PDFController extends Controller
         $htmlContent = $this->getTemplateHtml('config', $request->dossier_id, $config, $title, $content);
         
         // Generate the PDF using Dompdf
-        
+        $options = new Options();
+$options->set('defaultFont', 'DejaVu Sans'); // Set a default font to avoid embedding multiple fonts
+$options->set('isFontSubsettingEnabled', true); // Enable font subsetting to embed only used glyphs
+$options->set('dpi', 72); // Reduce DPI (default is 96)
+
+// Create new Dompdf instance with the defined options
+$dompdf = new Dompdf($options);
         $dompdf = new Dompdf();
         $dompdf->setPaper('A4', 'portrait'); // Set paper size and orientation
         

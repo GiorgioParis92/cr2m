@@ -207,7 +207,6 @@ class Photo extends AbstractFormData
         
                 $text .= "<div class='col-lg-3' style='width:33%'>";
                 $text .= '<img src="' . $src . '" style="width:100%; height:auto;">';
-                $text .= '<p>' . $value . '</p>';
                 $text .= '</div>';
             }
         }
