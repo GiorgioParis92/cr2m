@@ -188,7 +188,7 @@ class Photo extends AbstractFormData
         $text='';
 
         if(!empty($values)) {
-            @dd($values);
+          
         $text.='<p class="s2" style="padding-top: 5pt;padding-left: 8pt;text-indent: 0pt;text-align: left;">'.$this->config->title.'</p>';
         $text .= "<div class='row'>";
       
