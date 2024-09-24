@@ -104,9 +104,7 @@ class Checkbox extends AbstractFormData
                 $data .= 'checked="checked"';
 
             }
-            $data .= ' 
-           
-            value="'.$optionsArray[1]['value'].'">';
+            $data .= ' value="'.$optionsArray[1]['value'].'">';
 
             $data .= '<span class="slider round"></span>';
             $data .= '</label>';
