@@ -127,7 +127,7 @@ class PDFController extends Controller
         // $all_data = load_all_dossier_data($dossier);
 
         if (View::exists($templatePath)) {
-            return view(view: $templatePath, ['dossier' => $dossier,  'config' => $config, 'title' => $title])->render();
+            return view( $templatePath, ['dossier' => $dossier,  'config' => $config, 'title' => $title,'content' => $content])->render();
         } else {
             throw new \Exception('Invalid template specified');
         }
