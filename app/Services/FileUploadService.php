@@ -129,7 +129,8 @@ class FileUploadService
             $thumbnail_path=storage_path('app/public/' . $directory.'/'.$thumbnailFileName);
             $resizeCommand = "convert $path -resize 800x600\> $thumbnail_path";
             exec($resizeCommand, $output, $returnCode);
-    
+            chmod($thumbnail_path, 0775);
+
             if ($returnCode !== 0) {
                 // Handle error
                 return response()->json(['error' => 'Failed to create thumbnail.'], 500);
