@@ -133,7 +133,9 @@ class Text extends AbstractFormData
     {
 
 
-      
+        if(!$this->value) {
+            return '';
+        }
 
         $data = '<div  class="form-group col-sm-12 ' . ($this->config->class ?? "") . '">';
 
