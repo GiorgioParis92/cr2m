@@ -120,6 +120,26 @@ function generateRandomString($length = 12)
     }
     return $randomString;
 }
+
+function compressImage($filePath, $quality = 75) {
+    $imageInfo = getimagesize($filePath);
+    if ($imageInfo['mime'] == 'image/jpeg') {
+        $image = imagecreatefromjpeg($filePath);
+        ob_start();
+        imagejpeg($image, null, $quality);  // Compress the image
+        $compressedImage = ob_get_clean();
+        imagedestroy($image);
+        return base64_encode($compressedImage);
+    } elseif ($imageInfo['mime'] == 'image/png') {
+        $image = imagecreatefrompng($filePath);
+        ob_start();
+        imagepng($image, null, 8);  // Reduce quality for PNG
+        $compressedImage = ob_get_clean();
+        imagedestroy($image);
+        return base64_encode($compressedImage);
+    }
+    return base64_encode(file_get_contents($filePath));  // Fallback for other formats
+}
 function makeRequest($url, $data)
 {
     // Initialize cURL

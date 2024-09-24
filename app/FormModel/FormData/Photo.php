@@ -188,25 +188,7 @@ class Photo extends AbstractFormData
         $text='';
         $text.='<p class="s2" style="padding-top: 5pt;padding-left: 8pt;text-indent: 0pt;text-align: left;">'.$this->config->title.'</p>';
         $text .= "<div class='row'>";
-        function compressImage($filePath, $quality = 75) {
-            $imageInfo = getimagesize($filePath);
-            if ($imageInfo['mime'] == 'image/jpeg') {
-                $image = imagecreatefromjpeg($filePath);
-                ob_start();
-                imagejpeg($image, null, $quality);  // Compress the image
-                $compressedImage = ob_get_clean();
-                imagedestroy($image);
-                return base64_encode($compressedImage);
-            } elseif ($imageInfo['mime'] == 'image/png') {
-                $image = imagecreatefrompng($filePath);
-                ob_start();
-                imagepng($image, null, 8);  // Reduce quality for PNG
-                $compressedImage = ob_get_clean();
-                imagedestroy($image);
-                return base64_encode($compressedImage);
-            }
-            return base64_encode(file_get_contents($filePath));  // Fallback for other formats
-        }
+      
         
         foreach($values as $value) {
             $value_thumbnail = str_replace('.', '_thumbnail.', $value);
