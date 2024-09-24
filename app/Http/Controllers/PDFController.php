@@ -359,7 +359,7 @@ class PDFController extends Controller
                         $title_content .= '<tr><td class="s2 form_title" style="width:100%;border:1px solid #ccc;border-collapse: collapse;padding-left:12px">'.$instance_result.'</td></tr>';
 
                     } else {
-                        $title_content .= '<tr><td style="width:100%;border:1px solid #ccc;border-collapse: collapse;padding-left:12px">'.$instance_result.'</td></tr>';
+                        $title_content .= '<tr><td style="width:100%;border:1px solid #ccc;border-collapse: collapse;padding-left:12px;padding-bottom:15px">'.$instance_result.'</td></tr>';
 
                     }
                 }
