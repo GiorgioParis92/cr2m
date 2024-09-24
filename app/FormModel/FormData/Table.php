@@ -210,7 +210,6 @@ class Table extends AbstractFormData
                 if ($element_config['type'] == 'title') {
                     if ($title_content_count > 1) {
                         $data .= $title_content;
-                        $data .= $title_content_count;
                     }
                     $title_content = '';
                     $title_content_count = 0;
@@ -219,7 +218,6 @@ class Table extends AbstractFormData
                 if ($instance_result) {
                     $title_content_count ++;
                     $title_content .= $instance_result;
-                    $title_content .= $element_config['type'];
                     $should_render = true;
                 }
             }
