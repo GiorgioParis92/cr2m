@@ -77,7 +77,7 @@ class Checkbox extends AbstractFormData
 
         if($this->value==0) {
             $this->value='';
-            $this->save_value();
+            // $this->save_value();
         }
 
         $wireModel = "formData.{$this->form_id}.{$this->name}";
@@ -98,6 +98,7 @@ class Checkbox extends AbstractFormData
 
         if (is_array($optionsArray)) {
             $data .= '<label class="switch" >';
+            $data .= $value;
             $data .= '<input type="checkbox" ';
             if ($this->value == "1") {
                 $data .= 'checked="checked"';
