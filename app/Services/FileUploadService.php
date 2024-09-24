@@ -123,7 +123,7 @@ class FileUploadService
   
             $thumbnail_path=Storage::path($directory.'/'.$thumbnailFileName);
             $resizeCommand = "convert $path -resize 800x600\> $thumbnail_path";
-       
+            dd($resizeCommand);
             exec($resizeCommand, $output, $returnCode);
     
             if ($returnCode !== 0) {
