@@ -212,10 +212,15 @@
 
  
        
-            <p style="padding-top: 2pt; text-indent: 0pt; text-align: left;"><br /></p>
+            {{-- <p style="padding-top: 2pt; text-indent: 0pt; text-align: left;"><br /></p>
             <p class="s1" style="background:#EDEDED; display:block; height:69.4pt; width:481.9pt;">
                 {{$title}}
-            </p>
+            </p> --}}
+
+            <table style="margin:auto;width:90%;border-collapse: collapse;margin-top:20px">
+                <tr><td class="s1 form_title">{{$title}}</td></tr>
+            </table>
+
             <div>
                 {!! nl2br($content) !!}
                 
