@@ -185,29 +185,36 @@ class Photo extends AbstractFormData
         else {
             $values=[$this->value];
         }
-        $text='';
-        $text.='<p class="s2" style="padding-top: 5pt;padding-left: 8pt;text-indent: 0pt;text-align: left;">'.$this->config->title.'</p>';
-        $text .= "<div class='row'>";
-        foreach($values as $value) {
+        $text = '';
+$text .= '<p class="s2" style="padding-top: 5pt;padding-left: 8pt;text-indent: 0pt;text-align: left;">' . $this->config->title . '</p>';
+$text .= "<div class='row'>";
 
-            $value_thumbnail=str_replace('.','_thumbnail.',$value);
-            $filePath_thumbnail = storage_path('app/public/' . $value_thumbnail);  // File system path
+foreach ($values as $value) {
+    // Check for thumbnail
+    $value_thumbnail = str_replace('.', '_thumbnail.', $value);
+    $filePath_thumbnail = storage_path('app/public/' . $value_thumbnail);
 
-            if (file_exists($filePath_thumbnail)) {
-                $value=$value_thumbnail;
-                $filePath=$filePath_thumbnail;
-            }
+    if (file_exists($filePath_thumbnail)) {
+        $value = $value_thumbnail;  // Use thumbnail if it exists
+    }
 
+    $filePath = storage_path('app/public/' . $value);  // Full file system path to image
 
-            $filePath = storage_path('app/public/' . $value);  // File system path
-            if (!empty($value) && file_exists($filePath)) {
-            $text .= "<div class='col-lg-3' style='width:33%'>";
-            $text.='<img src="'.(asset('storage/' . $value)).'">';
-            $text.=$value;
-            $text.='</div>';
-            }
-        }
-        $text.='</div>';
-        return $text;
+    if (!empty($value) && file_exists($filePath)) {
+        // Base64 encode the image for direct embedding
+        $imageData = base64_encode(file_get_contents($filePath));
+        $src = 'data:image/' . pathinfo($filePath, PATHINFO_EXTENSION) . ';base64,' . $imageData;
+
+        // Add the image and its value to the HTML content
+        $text .= "<div class='col-lg-3' style='width:33%; padding: 5px;'>";
+        $text .= '<img src="' . $src . '" style="width: 100%; height: auto;">';  // Adjust image size
+        $text .= '<p>' . $value . '</p>';  // Optionally show the file name
+        $text .= '</div>';
+    }
+}
+
+$text .= '</div>';
+return $text;
+
     }
 }
