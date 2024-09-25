@@ -204,6 +204,12 @@
     padding:20px;
     font-size:13px;
 }
+@page {
+            margin-top: 40px;
+            margin-right: 30px;
+            margin-bottom: 40px;
+            margin-left: 30px;
+        }
     </style>
 </head>
 
