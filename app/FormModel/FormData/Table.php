@@ -214,7 +214,7 @@ class Table extends AbstractFormData
                 //     $title_content = '';
                 //     $title_content_count = 0;
                 // }
-                $should_render = true;
+                $should_render = false;
                 $data = $instance->render_pdf();
                 // if ($instance_result) {
                 //     $title_content_count ++;
