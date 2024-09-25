@@ -36,7 +36,9 @@ class RdvController extends Controller
             return (array) $department; // Convert stdClass to array
         })->toArray();
 
-        return view('rdv.planning',compact('auditeurs','departments'));
+        $rdv_type=DB::table('rdv_type')->get();
+
+        return view('rdv.planning',compact('auditeurs','departments','rdv_type'));
     }
 
 

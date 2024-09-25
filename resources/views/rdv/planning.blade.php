@@ -157,7 +157,15 @@ var calendar = new FullCalendar.Calendar(calendarEl, {
                     clearMarkers(); // Clear existing markers
                     var events = data.map(function(rdv) {
                         var eventStart = new Date(rdv.date_rdv);
-                        var eventEnd = new Date(eventStart.getTime() + 90 * 60 *
+
+                        if(rdv.duration) {
+                            var duration = rdv.duration;
+                        } else {
+                            var duration = 1;
+                        }
+
+
+                        var eventEnd = new Date(eventStart.getTime() + 90 * (duration*60) *
                         1000); // Add 1 hour to the start date
                         console.log(eventStart)
                         console.log(eventEnd)
@@ -166,11 +174,11 @@ var calendar = new FullCalendar.Calendar(calendarEl, {
                             // Create event object for FullCalendar
                             console.log(rdv)
                             var event = {
-                                title: ''+ rdv.user_name+'<br/>'+rdv.nom + ' ' + rdv.prenom,
+                                title: ''+ (rdv.user_name ?? '')+'<br/>'+(rdv.nom ?? '') + ' ' + (rdv.prenom ?? '')+(rdv.type_rdv==3 ? 'Indisponibilité' : ''),
                                 start: rdv.date_rdv,
                                 end: eventEnd.toISOString(),
-                                description: rdv.adresse + ' ' + rdv.cp + ' ' + rdv.ville + '<br/>' + formatFrenchPhoneNumber(rdv.telephone) + 
-                 (rdv.dossier ? '<br/> MAR : ' + rdv.dossier.mar.client_title + ' / ' + rdv.dossier.mandataire_financier.client_title : ''),
+                                description: (rdv.adresse ?? '') + ' ' + (rdv.cp ?? '') + ' ' + (rdv.ville ?? '') + '<br/>' + (rdv.telephone ? formatFrenchPhoneNumber(rdv.telephone) : '') + 
+                 (rdv.dossier>0 ? '<br/> MAR : ' + rdv.dossier.mar.client_title + ' / ' + rdv.dossier.mandataire_financier.client_title : ''),
     backgroundColor: rdv.color,
                                 borderColor: rdv.color,
                                 dossier_id: rdv.dossier_id,

@@ -8,7 +8,8 @@ use Illuminate\Http\Request;
 use App\Models\Dossier;
 use App\Models\Client;
 use App\Models\User;
-
+use Carbon\Carbon;
+use Carbon\CarbonPeriod;
 use Illuminate\Support\Facades\Schema; // Import Schema for checking columns
 
 class RdvController extends \App\Http\Controllers\Controller
@@ -65,6 +66,7 @@ class RdvController extends \App\Http\Controllers\Controller
             $rdvs = $rdvs->whereDate('rdv.date_rdv', '>=', $request->start_date)
             ->whereDate('rdv.date_rdv', '<=', $request->end_date);}
 
+        $rdvs = $rdvs->where('status','!=',2);
         $rdvs = $rdvs->get();
 
         
@@ -191,32 +193,9 @@ class RdvController extends \App\Http\Controllers\Controller
 
     public function update(Request $request): \Illuminate\Http\JsonResponse
     {
-        // Assuming rdvId is passed as a route parameter or can be retrieved from the request in some way.
-        if(!$request->rdv_id) {
-            $data = [
-                'type_rdv' => 1,
-                'user_id' => 1,
-                'date_rdv' => now(),
-                'client_id' => 1,
-                'nom' => '',
-                'prenom' => '',
-                'adresse' => '',
-                'cp' =>  '',
-                'ville' =>  '',
-                'telephone' =>  '',
-                'telephone_2' => '',
-                'email' =>  '',
-                'lat' =>  '',
-                'lng' =>  '',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ];
-    
-            // Insert the data into the database
-            $rdvId = DB::table('rdv')->insertGetId($data);
-         
-        } else {
-            $rdvId = $request->input('rdv_id');
+  
+        if(isset($request->type_indispo)) {
+            $request->type_rdv=$request->type_indispo;
         }
         
 
@@ -224,6 +203,7 @@ class RdvController extends \App\Http\Controllers\Controller
             return response()->json(['success' => false, 'message' => 'Entrez une date'], 200);
 
         }
+
         if (isset($request->dossier_id)) {
             $id = $request->dossier_id;
             $dossier = Dossier::where('id', $id)
@@ -243,10 +223,35 @@ class RdvController extends \App\Http\Controllers\Controller
             }
 
         }
+
+
+        if(isset($request->date_fin)) {
+            $startDate = Carbon::createFromFormat('d/m/Y', $request->date_rdv);
+            $endDate = Carbon::createFromFormat('d/m/Y', $request->date_fin);
+            
+            // Create a CarbonPeriod to iterate from start date to end date
+            $period = CarbonPeriod::create($startDate, $endDate);
+        
+            // Create an array to hold the dates in dd/mm/YYYY format
+            $dates = [];
+        
+            // Loop through the CarbonPeriod and add formatted dates to the array
+            foreach ($period as $date) {
+                $dates[] = $date->format('d/m/Y');
+            }
+        } else {
+            $dates[]=$request->date_rdv;
+        }
+        
+        foreach($dates as $date) {
+
+            $rdvId = $request->input('rdv_id');
+
+
         if ($rdvId == 0 || !isset($rdvId)) {
             // Insert a new record and get the id
             $rdvId = DB::table('rdv')->insertGetId([
-                'date_rdv' => date('Y-m-d 00:00:00', strtotime(str_replace('/', '-', $request->date_rdv))) ?? '2024-01-01 00:00:00', // Insert default values, adjust as needed
+                'date_rdv' => date('Y-m-d 00:00:00', strtotime(str_replace('/', '-', $date))) ?? '2024-01-01 00:00:00', // Insert default values, adjust as needed
                 'user_id' => $request->user_id ?? 0,
                 'type_rdv' => $request->type_rdv ?? 1,
                 'dossier_id' => $request->dossier_id ?? 0,
@@ -258,18 +263,18 @@ class RdvController extends \App\Http\Controllers\Controller
                 'ville' => $request->ville ?? '',
                 'telephone' => $request->telephone ?? '',
                 'email' => $request->email ?? '',
-                'status' => $request->status ?? '',
+                'status' => $request->status ?? 0,
                 'observations' => $request->observations ?? '',
                 // Other necessary fields with default values
             ]);
         }
-        
+    
         // Fetch the existing record from the 'rdv' table
         $rdv = DB::table('rdv')->find($rdvId);
+        
         if (!$rdv) {
             return response()->json(['success' => false, 'message' => 'Record not found'], 404);
         }
-
 
 
         if ($request->type_rdv == 1) {
@@ -297,21 +302,41 @@ class RdvController extends \App\Http\Controllers\Controller
                 ]);
         }
         $updateData = [];
+        
 
+        if(isset($request->type_indispo)) {
+            $hour='08';
+            $minute='00';
+            $duration=10;
+            $client_id=0;
+        } else {
+            $hour=$request->hour;
+            $minute=$request->minute;  
+            $duration=2; 
+            $client_id=$request->client_id; 
+        }
+        
+      
         foreach ($request->all() as $key => $value) {
-            if ($key == 'date_rdv') {
-                $value = date('Y-m-d', strtotime(str_replace('/', '-', $value))) . ' ' . $request->hour . ':' . $request->minute . ':00';
-               
+            // if ($key == 'date_rdv') {
+            //     $value = date('Y-m-d', strtotime(str_replace('/', '-', $date))) . ' ' . $hour . ':' . $minute . ':00';
+            // }
+            if($key=='type_indispo')
+            {
+                $key='type_rdv';
             }
-    
-
-            if (isset($key) && Schema::hasColumn('rdv', $key)) {
+            if (isset($key) && Schema::hasColumn('rdv', $key) && $key!='date_rdv') {
         
                 $updateData[$key] = $value;
       
             }
         }
 
+        if(isset($duration) && !empty($duration)) {
+            $updateData['duration'] = $duration;
+        }
+        $updateData['client_id'] = $client_id;
+        $updateData['date_rdv']=date('Y-m-d', strtotime(str_replace('/', '-', $date))) . ' ' . $hour . ':' . $minute . ':00';
         if (!empty($updateData)) {
             DB::table('rdv')->where('id', $rdvId)->update($updateData);
             // Refetch updated record for response
@@ -319,7 +344,8 @@ class RdvController extends \App\Http\Controllers\Controller
         } else {
             return response()->json(['success' => false, 'message' => 'No valid fields to update'], 400);
         }
-  
+    }
+   
         return response()->json(['success' => true, 'id' => $rdvId, 'rdv' => $rdvs]);
     }
 }

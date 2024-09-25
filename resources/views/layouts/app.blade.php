@@ -22,13 +22,17 @@
     <link href="{{ asset('frontend/assets/css/custom_css.css') }}" rel="stylesheet" />
     <!-- CSS Files -->
     <link id="pagestyle" href="{{ asset('frontend/assets/css/soft-ui-dashboard.css?v=1.0.7') }}" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap-theme.min.css"
+        integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.2/dropzone.min.css" rel="stylesheet">
     <link id="pagestyle" href="{{ asset('frontend/assets/css/jquery-radiocharm.css') }}" rel="stylesheet" />
     <script src="{{ asset('frontend/assets/js/jquery-radiocharm.js') }}"></script>
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.10.0/css/bootstrap-datepicker.min.css" integrity="sha512-34s5cpvaNG3BknEWSuOncX28vz97bRI59UnVtEEpFX536A7BtZSJHsDyFoCl8S7Dt2TPzcrCEoHBGeM4SUBDBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.10.0/css/bootstrap-datepicker.min.css"
+        integrity="sha512-34s5cpvaNG3BknEWSuOncX28vz97bRI59UnVtEEpFX536A7BtZSJHsDyFoCl8S7Dt2TPzcrCEoHBGeM4SUBDBw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script src="https://code.jquery.com/ui/1.13.3/jquery-ui.js"></script>
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/base/jquery-ui.css">
     <link rel="stylesheet" href="{{ asset('css/fontawesome.css') }}">
@@ -36,11 +40,16 @@
     <script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/4.2.0/bootstrap/main.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.14.0/Sortable.min.js"></script>
-    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/2.2.2/js/dataTables.buttons.min.js"></script>
-    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.flash.min.js"></script>
-    <script type="text/javascript" charset="utf8" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.html5.min.js"></script>
-    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.print.min.js"></script>
+    <script type="text/javascript" charset="utf8"
+        src="https://cdn.datatables.net/buttons/2.2.2/js/dataTables.buttons.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.flash.min.js">
+    </script>
+    <script type="text/javascript" charset="utf8" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js">
+    </script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.html5.min.js">
+    </script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.print.min.js">
+    </script>
     {{-- <script  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCzcaFvxwi1XLyRHmPRnlKO4zcJXPOT5gM&loading=async&callback=initMap"></script> --}}
     @livewireStyles
     @include('partials.css_variables')
@@ -91,7 +100,8 @@
         </div>
     </div>
     <!-- Bootstrap Modal -->
-    <div class="modal fade" id="eventModal" tabindex="-1" role="dialog" aria-labelledby="eventModalLabel" aria-hidden="true">
+    <div class="modal fade" id="eventModal" tabindex="-1" role="dialog" aria-labelledby="eventModalLabel"
+        aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -112,7 +122,8 @@
             </div>
         </div>
     </div>
-    <div class="modal fade" id="rdv_modal" tabindex="-1" role="dialog" aria-labelledby="eventModalLabel" aria-hidden="true">
+    <div class="modal fade" id="rdv_modal" tabindex="-1" role="dialog" aria-labelledby="eventModalLabel"
+        aria-hidden="true">
         <div class="modal-dialog" role="document" style="min-width: 50%;">
             <div class="modal-content" style="height: auto; min-height: auto !important;">
                 <div class="modal-header">
@@ -139,51 +150,71 @@
                             <input class="form-control" type="hidden" id="rdv_lng" name="lng">
                             <input class="form-control" type="hidden" id="rdv_type_rdv" name="type_rdv">
                             <label>Date</label>
-                            <input class="form-control datepicker" type="text" id="rdv_french_date" name="date_rdv">
+                            <input class="form-control datepicker" type="text" id="rdv_french_date"
+                                name="date_rdv">
                         </div>
                         <div class="form-group" id="new_day" style="display:none">
-                             <label>Date de fin</label>
-                            <input class="form-control datepicker" type="text" id="rdv_french_date_end" name="date_rdv_end">
+                            <label>Date de fin</label>
+                            <input class="form-control datepicker" type="text" id="rdv_french_date_end"
+                                name="date_rdv_end">
                         </div>
                         <div class="form-group" id="hour_group">
                             <label>Heure</label>
                             <div class="row">
                                 <div class="col-6">
                                     <select class="form-control" id="rdv_hour" name="hour">
-                                        @for ($hour = 0; $hour < 24; $hour++) <option value="{{ sprintf('%02d', $hour) }}">{{ sprintf('%02d', $hour) }}</option>
-                                            @endfor
+                                        @for ($hour = 0; $hour < 24; $hour++)
+                                            <option value="{{ sprintf('%02d', $hour) }}">{{ sprintf('%02d', $hour) }}
+                                            </option>
+                                        @endfor
                                     </select>
                                 </div>
                                 <div class="col-6">
                                     <select class="form-control" id="rdv_minute" name="minute">
-                                        @for ($minute = 0; $minute < 60; $minute +=5) <option value="{{ sprintf('%02d', $minute) }}">{{ sprintf('%02d', $minute) }}</option>
-                                            @endfor
+                                        @for ($minute = 0; $minute < 60; $minute += 5)
+                                            <option value="{{ sprintf('%02d', $minute) }}">
+                                                {{ sprintf('%02d', $minute) }}</option>
+                                        @endfor
                                     </select>
                                 </div>
                             </div>
                         </div>
-                        @if(isset($auditeurs))
-                        <div class="form-group">
-                            <label>Auditeur</label>
-                            <select class="form-control" id="rdv_user_id" name="user_id">
-                                <option value="">Choisir un auditeur</option>
-                                @foreach ($auditeurs as $auditeur)
-                                <option value="{{ $auditeur->id }}">{{ $auditeur->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
+                        @if (isset($auditeurs))
+                            <div class="form-group">
+                                <label>Auditeur</label>
+                                <select required class="form-control" id="rdv_user_id" name="user_id">
+                                    <option value="">Choisir un auditeur</option>
+                                    @foreach ($auditeurs as $auditeur)
+                                        <option value="{{ $auditeur->id }}">{{ $auditeur->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
                         @endif
-                        @if(isset($rdv_status))
-                        <div class="form-group">
-                            <label>Statut</label>
-                            <select class="form-control" id="rdv_status" name="status">
-                                <option value="">Changer de status</option>
-                                @foreach ($rdv_status as $status)
-                                <option value="{{ $status->id }}">{{ $status->rdv_desc }}</option>
-                                @endforeach
-                            </select>
-                        </div>
+                        @if (isset($rdv_status))
+                            <div class="form-group">
+                                <label>Statut</label>
+                                <select class="form-control" id="rdv_status" name="status">
+                                    <option value="">Changer de status</option>
+                                    @foreach ($rdv_status as $status)
+                                        <option value="{{ $status->id }}">{{ $status->rdv_desc }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
                         @endif
+
+
+                        @if (isset($rdv_type))
+                            <div class="form-group">
+                                <label>Type</label>
+                                <select required class="form-control" id="rdv_type_indispo" name="status">
+                                    <option value="">Type</option>
+                                    @foreach ($rdv_type as $type)
+                                        <option value="{{ $type->id }}">{{ $type->title }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        @endif
+
                         <div class="form-group">
                             <label>Observations</label>
                             <textarea class="form-control" name="observations" id="rdv_observations"></textarea>
@@ -192,16 +223,19 @@
                 </div>
                 <div class="modal-footer">
                     <div id="save_rdv" class="btn btn-primary">Enregistrer</div>
-                    <button type="button" class="btn btn-secondary close_button" data-dismiss="modal">Fermer</button>
-                    
-                    @if(auth()->user()->id==1)    
-                    <button type="button" class="btn btn-info" data-toggle="modal" id="open_auto_planification" data-target="#auto_planification_modal">Planification Auto</button>
+                    <button type="button" class="btn btn-secondary close_button"
+                        data-dismiss="modal">Fermer</button>
+
+                    @if (auth()->user()->id == 1)
+                        <button type="button" class="btn btn-info" data-toggle="modal" id="open_auto_planification"
+                            data-target="#auto_planification_modal">Planification Auto</button>
                     @endif
                 </div>
             </div>
         </div>
     </div>
-    <div class="modal fade" id="auto_planification_modal" tabindex="-1" aria-labelledby="schedulingModalLabel" aria-hidden="true">
+    <div class="modal fade" id="auto_planification_modal" tabindex="-1" aria-labelledby="schedulingModalLabel"
+        aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
@@ -212,44 +246,54 @@
                     <form id="schedulingForm" method="GET" action="..">
                         <div>
                             <label for="dateTime" class="form-label">Sélectionner la date du RDV</label>
-                            <input type="date" class="form-control" id="dateTime" name="dateTime" value="auto">
+                            <input type="date" class="form-control" id="dateTime" name="dateTime"
+                                value="auto">
                         </div>
                         <div>
                             <label for="inspectorSelect" class="form-label">Sélectionner l'Inspecteur</label>
                             <select class="form-select" id="inspectorSelect" name="inspector">
                                 <option value="auto" selected>Automatique</option>
-                                @if(isset($auditeurs))
-                                @foreach ($auditeurs as $auditeur)
-                                <option value="{{ $auditeur->id }}">{{ $auditeur->name }}</option>
-                                @endforeach
+                                @if (isset($auditeurs))
+                                    @foreach ($auditeurs as $auditeur)
+                                        <option value="{{ $auditeur->id }}">{{ $auditeur->name }}</option>
+                                    @endforeach
                                 @endif
                             </select>
                         </div>
                         <div>
                             <label for="rdvTime" class="form-label">Heure de Rendez-vous (HH:mm)</label>
-                            <input type="time" class="form-control" id="rdvTime" name="rdvTime" value="auto">
+                            <input type="time" class="form-control" id="rdvTime" name="rdvTime"
+                                value="auto">
                             <div class="form-text">Laissez "--:--" pour une attribution automatique de l'heure</div>
                         </div>
                         <div>
-                            <button class="btn btn-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#advancedOptions" aria-expanded="false" aria-controls="advancedOptions">
+                            <button class="btn btn-secondary" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#advancedOptions" aria-expanded="false"
+                                aria-controls="advancedOptions">
                                 Options Avancées
                             </button>
                         </div>
                         <div class="collapse" id="advancedOptions">
                             <div class="card card-body">
-                                <p class="text-muted">Ces options permettent un contrôle précis de la planification des visites. Ajustez-les avec précaution pour optimiser les itinéraires.</p>
+                                <p class="text-muted">Ces options permettent un contrôle précis de la planification des
+                                    visites. Ajustez-les avec précaution pour optimiser les itinéraires.</p>
                                 <div>
                                     <label for="startingHourMin" class="form-label">Heure de début minimale</label>
-                                    <input type="time" class="form-control" id="startingHourMin" name="startingHourMin" value="05:20">
-                                    <div class="form-text">Par défaut 05:20. C'est la première heure possible pour commencer les visites.</div>
+                                    <input type="time" class="form-control" id="startingHourMin"
+                                        name="startingHourMin" value="05:20">
+                                    <div class="form-text">Par défaut 05:20. C'est la première heure possible pour
+                                        commencer les visites.</div>
                                 </div>
                                 <div>
                                     <label for="startingHourMax" class="form-label">Heure de début maximale</label>
-                                    <input type="time" class="form-control" id="startingHourMax" name="startingHourMax" value="10:00">
-                                    <div class="form-text">Par défaut 10:00. Les visites ne peuvent pas commencer après cette heure.</div>
+                                    <input type="time" class="form-control" id="startingHourMax"
+                                        name="startingHourMax" value="10:00">
+                                    <div class="form-text">Par défaut 10:00. Les visites ne peuvent pas commencer après
+                                        cette heure.</div>
                                 </div>
                                 <div>
-                                    <label for="hoursMinForUnknown" class="form-label">Heure minimale pour les visites à horaire inconnu</label>
+                                    <label for="hoursMinForUnknown" class="form-label">Heure minimale pour les visites
+                                        à horaire inconnu</label>
                                     <select class="form-select" id="hoursMinForUnknown" name="hoursMinForUnknown">
                                         <option value="0">00:00</option>
                                         <option value="1">01:00</option>
@@ -276,10 +320,12 @@
                                         <option value="22">22:00</option>
                                         <option value="23">23:00</option>
                                     </select>
-                                    <div class="form-text">Par défaut 11:00. Les visites sans horaire fixe seront planifiées au plus tôt à cette heure.</div>
+                                    <div class="form-text">Par défaut 11:00. Les visites sans horaire fixe seront
+                                        planifiées au plus tôt à cette heure.</div>
                                 </div>
                                 <div>
-                                    <label for="hoursMaxForUnknown" class="form-label">Heure maximale pour les visites à horaire inconnu</label>
+                                    <label for="hoursMaxForUnknown" class="form-label">Heure maximale pour les visites
+                                        à horaire inconnu</label>
                                     <select class="form-select" id="hoursMaxForUnknown" name="hoursMaxForUnknown">
                                         <option value="0">00:00</option>
                                         <option value="1">01:00</option>
@@ -306,31 +352,47 @@
                                         <option value="22">22:00</option>
                                         <option value="23">23:00</option>
                                     </select>
-                                    <div class="form-text">Par défaut 18:00. Les visites sans horaire fixe seront planifiées au plus tard à cette heure.</div>
+                                    <div class="form-text">Par défaut 18:00. Les visites sans horaire fixe seront
+                                        planifiées au plus tard à cette heure.</div>
                                 </div>
                                 <div>
-                                    <label for="hoursDividerAddForUnknown" class="form-label">Diviseur pour l'ajout d'heures pour les visites inconnues</label>
-                                    <input type="number" class="form-control" id="hoursDividerAddForUnknown" name="hoursDividerAddForUnknown" value="2" min="1">
-                                    <div class="form-text">Par défaut, cette valeur est 2. Par exemple, pour une heure de 15h, si la valeur est 2, les créneaux seront 15h et 15h30. Si la valeur est 4, les créneaux seront 15h, 15h15, 15h30 et 15h45. Avec une valeur de 6, les créneaux seront 15h, 15h10, 15h20, etc. Cette option permet de répartir les visites à horaire inconnu sur la plage horaire définie.</div>
+                                    <label for="hoursDividerAddForUnknown" class="form-label">Diviseur pour l'ajout
+                                        d'heures pour les visites inconnues</label>
+                                    <input type="number" class="form-control" id="hoursDividerAddForUnknown"
+                                        name="hoursDividerAddForUnknown" value="2" min="1">
+                                    <div class="form-text">Par défaut, cette valeur est 2. Par exemple, pour une heure
+                                        de 15h, si la valeur est 2, les créneaux seront 15h et 15h30. Si la valeur est
+                                        4, les créneaux seront 15h, 15h15, 15h30 et 15h45. Avec une valeur de 6, les
+                                        créneaux seront 15h, 15h10, 15h20, etc. Cette option permet de répartir les
+                                        visites à horaire inconnu sur la plage horaire définie.</div>
                                 </div>
                                 <div>
-                                    <label for="timeWindowSize" class="form-label">Taille de la fenêtre de temps</label>
+                                    <label for="timeWindowSize" class="form-label">Taille de la fenêtre de
+                                        temps</label>
                                     <div class="input-group">
-                                        <input type="number" class="form-control" id="timeWindowSize" name="timeWindowSize" value="60" min="1">
+                                        <input type="number" class="form-control" id="timeWindowSize"
+                                            name="timeWindowSize" value="60" min="1">
                                         <span class="input-group-text">minutes</span>
                                     </div>
-                                    <div class="form-text">Par défaut 60 minutes. Définit la flexibilité autour de l'heure prévue pour chaque visite.</div>
+                                    <div class="form-text">Par défaut 60 minutes. Définit la flexibilité autour de
+                                        l'heure prévue pour chaque visite.</div>
                                 </div>
                                 <div>
-                                    <label for="maxIterationToSolve" class="form-label">Nombre maximum d'itérations pour résoudre le VRP</label>
-                                    <input type="number" class="form-control" id="maxIterationToSolve" name="maxIterationToSolve" value="25" min="1">
-                                    <div class="form-text">Par défaut 25. Augmentez ce nombre pour des solutions potentiellement meilleures, mais avec un temps de calcul plus long.</div>
+                                    <label for="maxIterationToSolve" class="form-label">Nombre maximum d'itérations
+                                        pour résoudre le VRP</label>
+                                    <input type="number" class="form-control" id="maxIterationToSolve"
+                                        name="maxIterationToSolve" value="25" min="1">
+                                    <div class="form-text">Par défaut 25. Augmentez ce nombre pour des solutions
+                                        potentiellement meilleures, mais avec un temps de calcul plus long.</div>
                                 </div>
                                 <div class="alert alert-info" role="alert">
                                     <h4 class="alert-heading">Informations supplémentaires</h4>
-                                    <p>Le VRP (Vehicle Routing Problem) est un problème d'optimisation complexe. Les paramètres ci-dessus influencent directement la qualité et l'efficacité des itinéraires générés.</p>
+                                    <p>Le VRP (Vehicle Routing Problem) est un problème d'optimisation complexe. Les
+                                        paramètres ci-dessus influencent directement la qualité et l'efficacité des
+                                        itinéraires générés.</p>
                                     <hr>
-                                    <p class="mb-0">Ajustez ces valeurs avec précaution. Des valeurs extrêmes peuvent conduire à des temps de calcul très longs ou à des solutions sous-optimales.</p>
+                                    <p class="mb-0">Ajustez ces valeurs avec précaution. Des valeurs extrêmes peuvent
+                                        conduire à des temps de calcul très longs ou à des solutions sous-optimales.</p>
                                 </div>
                             </div>
                         </div>
@@ -356,7 +418,7 @@
     <script src="{{ asset('frontend/assets/js/soft-ui-dashboard.min.js?v=1.0.7') }}"></script>
     <!-- Bootstrap Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-   
+
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/i18n/datepicker-fr.js"></script>
@@ -513,36 +575,37 @@
 
             });
 
-            jQuery(function($){
-	$.datepicker.regional['fr'] = {
-		closeText: 'Fermer',
-		prevText: '&#x3c;Préc',
-		nextText: 'Suiv&#x3e;',
-		currentText: 'Aujourd\'hui',
-		monthNames: ['Janvier','Fevrier','Mars','Avril','Mai','Juin',
-		'Juillet','Aout','Septembre','Octobre','Novembre','Decembre'],
-		monthNamesShort: ['Jan','Fev','Mar','Avr','Mai','Jun',
-		'Jul','Aou','Sep','Oct','Nov','Dec'],
-		dayNames: ['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'],
-		dayNamesShort: ['Dim','Lun','Mar','Mer','Jeu','Ven','Sam'],
-		dayNamesMin: ['Di','Lu','Ma','Me','Je','Ve','Sa'],
-		weekHeader: 'Sm',
-		dateFormat: 'dd-mm-yy',
-		firstDay: 1,
-		isRTL: false,
-		showMonthAfterYear: false,
-		yearSuffix: '',
-		
-		numberOfMonths: 1,
-		showButtonPanel: true
-		};
-	$.datepicker.setDefaults($.datepicker.regional['fr']);
-});
+            jQuery(function($) {
+                $.datepicker.regional['fr'] = {
+                    closeText: 'Fermer',
+                    prevText: '&#x3c;Préc',
+                    nextText: 'Suiv&#x3e;',
+                    currentText: 'Aujourd\'hui',
+                    monthNames: ['Janvier', 'Fevrier', 'Mars', 'Avril', 'Mai', 'Juin',
+                        'Juillet', 'Aout', 'Septembre', 'Octobre', 'Novembre', 'Decembre'
+                    ],
+                    monthNamesShort: ['Jan', 'Fev', 'Mar', 'Avr', 'Mai', 'Jun',
+                        'Jul', 'Aou', 'Sep', 'Oct', 'Nov', 'Dec'
+                    ],
+                    dayNames: ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'],
+                    dayNamesShort: ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'],
+                    dayNamesMin: ['Di', 'Lu', 'Ma', 'Me', 'Je', 'Ve', 'Sa'],
+                    weekHeader: 'Sm',
+                    dateFormat: 'dd-mm-yy',
+                    firstDay: 1,
+                    isRTL: false,
+                    showMonthAfterYear: false,
+                    yearSuffix: '',
+
+                    numberOfMonths: 1,
+                    showButtonPanel: true
+                };
+                $.datepicker.setDefaults($.datepicker.regional['fr']);
+            });
             $('.datatable').DataTable()
 
 
             $('#save_rdv').click(function() {
-            
 
                 // Collect form data
                 var formData = {
@@ -552,6 +615,7 @@
                     minute: $('#rdv_minute').val(),
                     user_id: $('#rdv_user_id').val(),
                     type_rdv: $('#rdv_type_rdv').val(),
+                    type_indispo: $('#rdv_type_indispo').val(),
                     nom: $('#rdv_nom').val(),
                     prenom: $('#rdv_prenom').val(),
                     adresse: $('#rdv_adresse').val(),
@@ -564,6 +628,7 @@
                     status: $('#rdv_status').val(),
                     observations: $('#rdv_observations').val(),
                     client_id: $('#rdv_client_id').val(),
+                    date_fin: $('#rdv_french_date_end').val(),
                     lat: $('#rdv_lat').val(),
                     lng: $('#rdv_lng').val(),
                     // Include additional fields if present
@@ -622,16 +687,20 @@
                 const promises = $("#inspectorSelect option").map(async function() {
                     let inspector_id = $(this).val();
                     if (inspector_id !== 'auto') {
-                        final_data["inspectors"][inspector_id] = await get_inspector_position(inspector_id, $('#dateTime').val());
+                        final_data["inspectors"][inspector_id] = await get_inspector_position(
+                            inspector_id, $('#dateTime').val());
                         inspector_rdv = await get_inspector_rdv(inspector_id, $('#dateTime').val());
                         if (inspector_rdv !== null) {
                             for (rdv in inspector_rdv) {
                                 final_data["address_to_visit"].push({
-                                    "loc": rdv["adresse"] + " " + rdv["ville"] + " " + rdv["cp"],
-                                    "time": "2000-06-06 " + rdv["hour"] + ":" + rdv["minute"] + ":00",
+                                    "loc": rdv["adresse"] + " " + rdv["ville"] + " " + rdv[
+                                        "cp"],
+                                    "time": "2000-06-06 " + rdv["hour"] + ":" + rdv[
+                                        "minute"] + ":00",
                                     "duration": "1:00"
                                 });
-                                final_data["forced_visits"][inspector_id] = final_data["address_to_visit"].length - 1
+                                final_data["forced_visits"][inspector_id] = final_data[
+                                    "address_to_visit"].length - 1
                             }
                         }
                     }
@@ -675,7 +744,8 @@
             }
 
             async function get_inspector_position(inspector_id, date) {
-                const inspector_address = "28 Rue de Solférino 92100 Boulogne-Billancourt"; // TODO ADRESSE INSPECTEUR
+                const inspector_address =
+                "28 Rue de Solférino 92100 Boulogne-Billancourt"; // TODO ADRESSE INSPECTEUR
                 const date_info = getDayBefore(date);
 
                 if (date_info['dayIndex'] == 0) {
@@ -704,7 +774,8 @@
             $('#predict_rdv').click(function() {
                 var formData = {
                     dateTime: $('#dateTime').val(),
-                    inspector: $('#inspectorSelect').val() === 'auto' ? null : $('#inspectorSelect').val(),
+                    inspector: $('#inspectorSelect').val() === 'auto' ? null : $('#inspectorSelect')
+                        .val(),
                     rdvTime: $('#rdvTime').val() === '' ? null : $('#rdvTime').val(),
                     startingHourMin: $('#startingHourMin').val(),
                     startingHourMax: $('#startingHourMax').val(),
@@ -860,74 +931,76 @@
 
             $(document).on('click', '.signable', function(event) {
 
-var template = $(this).data('template'); // Get the template from data attribute
-var dossier_id = $(this).data('dossier_id'); // Get the dossier ID from data attribute
-var form_id = $(this).data('form_id'); // Get the dossier ID from data attribute
-var generation = $(this).data('generation'); // Get the dossier ID from data attribute
-var fields = $(this).data('fields'); // Get the dossier ID from data attribute
-var name = $(this).data('name'); // Get the dossier ID from data attribute
+                var template = $(this).data('template'); // Get the template from data attribute
+                var dossier_id = $(this).data('dossier_id'); // Get the dossier ID from data attribute
+                var form_id = $(this).data('form_id'); // Get the dossier ID from data attribute
+                var generation = $(this).data('generation'); // Get the dossier ID from data attribute
+                var fields = $(this).data('fields'); // Get the dossier ID from data attribute
+                var name = $(this).data('name'); // Get the dossier ID from data attribute
 
-$.ajax({
-    url: '/api/yousign', // Adjust this URL to your actual API endpoint
-    type: 'POST',
-    data: {
-        dossier_id: dossier_id,
-        generation: generation,
-        form_id: form_id,
-        fields: fields,
-        name: name,
-        template: template
-    },
-    headers: {
-        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr(
-            'content') // Include CSRF token if using Laravel's CSRF protection
-    },
-    success: function(response) {
-        console.log(response)
-    },
-    error: function(xhr, status, error) {
-        console.error('Error generating PDF:', error);
-    }
-});
-});
-
-            $(document).on('click', '.check_signature', function(event) {
-            var template = $(this).data('template'); // Get the template from data attribute
-            var dossier_id = $(this).data('dossier_id'); // Get the dossier ID from data attribute
-            var form_id = $(this).data('form_id'); // Get the dossier ID from data attribute
-            var generation = $(this).data('generation'); // Get the dossier ID from data attribute
-            var signature_request_id = $(this).data('signature_request_id'); // Get the dossier ID from data attribute
-            var document_id = $(this).data('document_id'); // Get the dossier ID from data attribute
-
-            $.ajax({
-                url: '/api/yousign-status', // Adjust this URL to your actual API endpoint
-                type: 'POST',
-                data: {
-                    dossier_id: dossier_id,
-                    generation: generation,
-                    form_id: form_id,
-                    signature_request_id: signature_request_id,
-                    document_id: document_id,
-                    template: template
-                },
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr(
-                        'content') // Include CSRF token if using Laravel's CSRF protection
-                },
-                success: function(response) {
-                    console.log(response)
-
-                    if(response=='ongoing') {
-                        $('#message_'+template).html('Le document est en cours de signature');
+                $.ajax({
+                    url: '/api/yousign', // Adjust this URL to your actual API endpoint
+                    type: 'POST',
+                    data: {
+                        dossier_id: dossier_id,
+                        generation: generation,
+                        form_id: form_id,
+                        fields: fields,
+                        name: name,
+                        template: template
+                    },
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr(
+                            'content') // Include CSRF token if using Laravel's CSRF protection
+                    },
+                    success: function(response) {
+                        console.log(response)
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error generating PDF:', error);
                     }
-
-                },
-                error: function(xhr, status, error) {
-                    console.error('Error generating PDF:', error);
-                }
+                });
             });
 
-        });
+            $(document).on('click', '.check_signature', function(event) {
+                var template = $(this).data('template'); // Get the template from data attribute
+                var dossier_id = $(this).data('dossier_id'); // Get the dossier ID from data attribute
+                var form_id = $(this).data('form_id'); // Get the dossier ID from data attribute
+                var generation = $(this).data('generation'); // Get the dossier ID from data attribute
+                var signature_request_id = $(this).data(
+                'signature_request_id'); // Get the dossier ID from data attribute
+                var document_id = $(this).data('document_id'); // Get the dossier ID from data attribute
+
+                $.ajax({
+                    url: '/api/yousign-status', // Adjust this URL to your actual API endpoint
+                    type: 'POST',
+                    data: {
+                        dossier_id: dossier_id,
+                        generation: generation,
+                        form_id: form_id,
+                        signature_request_id: signature_request_id,
+                        document_id: document_id,
+                        template: template
+                    },
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr(
+                            'content') // Include CSRF token if using Laravel's CSRF protection
+                    },
+                    success: function(response) {
+                        console.log(response)
+
+                        if (response == 'ongoing') {
+                            $('#message_' + template).html(
+                                'Le document est en cours de signature');
+                        }
+
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error generating PDF:', error);
+                    }
+                });
+
+            });
 
 
             $('#global').on('keyup', function() {
@@ -938,7 +1011,7 @@ $.ajax({
                 console.log(query)
                 if (query.length > 2) {
                     $.ajax({
-                        url: '{{ route("search") }}',
+                        url: '{{ route('search') }}',
                         type: 'GET',
                         data: {
                             query: query
@@ -951,7 +1024,11 @@ $.ajax({
                                 if (items.length > 0) {
 
                                     $.each(items, function(index, item) {
-                                        resultsContainer.append('<div><a href="' + item.url + '">' + (item.beneficiaire.nom + ' ' + item.beneficiaire.prenom) + '</a></div>');
+                                        resultsContainer.append(
+                                            '<div><a href="' + item.url +
+                                            '">' + (item.beneficiaire.nom +
+                                                ' ' + item.beneficiaire
+                                                .prenom) + '</a></div>');
                                     });
                                     $('#search-results').show()
                                 } else {
