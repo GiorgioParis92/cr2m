@@ -330,6 +330,8 @@ class PDFController extends Controller
         $title_content = '<div><table style="margin:auto;width:90%;margin-top:20px;border-collapse: collapse;">';
         $title_content_count = 0;
         
+        dd('test');
+
         foreach ($config as $element) {
             if (empty($element) || empty($element->type)) {
                 $content .= '<p>Error: Configuration element is missing.</p>';

@@ -175,9 +175,7 @@ class Table extends AbstractFormData
     }
     public function render_pdf()
     {
-        try {
-            //code...
-
+        
         $should_render = false;
         $data = '';
     
@@ -230,11 +228,6 @@ class Table extends AbstractFormData
         // print_r($data);
         // return false;
         return $data;
-
-    } catch (\Throwable $th) {
-        return $th;
-    }
-
     }
     
 
