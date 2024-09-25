@@ -224,7 +224,7 @@ class Table extends AbstractFormData
             }
         }
              
-        return $should_render ? $data : false;
+        return $data;
     }
     
 
