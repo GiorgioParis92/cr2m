@@ -394,9 +394,9 @@ class PDFController extends Controller
         if ($title_content_count != 0) {
             $content .= $title_content;
         }
-        // echo $content;
+       
         // Get the HTML content for the template
-        $htmlContent = $this->getTemplateHtml('config', $request->dossier_id, $config, $title, $content,$send_data=true);
+        $htmlContent = $this->getTemplateHtml('config', $request->dossier_id, $config, $title, $content);
 
         // Generate the PDF using Dompdf
         $options = new Options();
