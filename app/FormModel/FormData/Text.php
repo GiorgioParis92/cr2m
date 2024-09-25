@@ -130,7 +130,9 @@ class Text extends AbstractFormData
     public function generate_value()
     {
 
-        // $this->value=str_replace('&','et',$this->value);
+        $this->value=str_replace('&','et',$this->value);
+        $this->value = preg_replace('/[^\p{L}\p{N}@(),.:!?_\-\s]/u', '', $this->value);
+
         return $this->value;
     }
 
