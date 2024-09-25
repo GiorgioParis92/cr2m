@@ -343,7 +343,13 @@ class PDFController extends Controller
                 $content .= "Error: Class $class does not exist.";
                 continue;
             }
+            $instance = new $class($element, $element->name, $element->form_id, $dossier->id ?? null);
+            $instance->set_dossier($dossier);
+            $instance_result = $instance->render_pdf();
 
+            if($element->name=='ajout_piece') {
+                dd($instance_result);
+            }
             try {
                 if ($element->type == 'title') {
                     if ($title_content_count > 1) {
