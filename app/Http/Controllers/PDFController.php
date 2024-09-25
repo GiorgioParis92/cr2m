@@ -345,8 +345,8 @@ class PDFController extends Controller
         $content.='<td class="s2 form_title" style="width:100%;border:1px solid #ccc;border-collapse: collapse;padding-left:12px;text-align:center">';
         $content.='<div>Coordonnées bénéficiaire</div></td></tr><tr>';
         $content.='<td style="width:100%;border:1px solid #ccc;border-collapse: collapse;padding-left:12px;padding-bottom:15px;text-align:center"><div>';
-        $content.='<h5 class="mb-0" style="text-align:center"><b>'.$dossier_data['nom'].' '.$dossier_data['prenom'].'</b><br>'.$dossier_data['numero_voie'].' '.($dossier_data['adresse'] ?? '').' '.$dossier_data['cp'].' '.$dossier_data['ville'].'<br> </h5>';
-        $content.='<h6 class="mb-0"><b>Tél : '.$dossier_data['telephone'].'</b> -Email : '.$dossier_data['email'].'<br></h6>';
+        $content.='<h5 class="mb-0" style="text-align:center"><b>'.$dossier_data['beneficiaire']['nom'].' '.$dossier_data['beneficiaire']['prenom'].'</b><br>'.$dossier_data['beneficiaire']['numero_voie'].' '.($dossier_data['beneficiaire']['adresse'] ?? '').' '.$dossier_data['beneficiaire']['cp'].' '.$dossier_data['beneficiaire']['ville'].'<br> </h5>';
+        $content.='<h6 class="mb-0"><b>Tél : '.$dossier_data['beneficiaire']['telephone'].'</b> -Email : '.$dossier_data['beneficiaire']['email'].'<br></h6>';
         $content.='<div class="btn bg-primary bg-Très modestes">JAUNE</div><div class="">Technicien RDV MAR 1 :'.($lastRdv ? $lastRdv->user->name : '').'</div></div></td></tr></table>';
         $content.='</div>';
 
