@@ -127,6 +127,7 @@ class Text extends AbstractFormData
         return true;
     }
 
+    
     public function generate_value()
     {
 
