@@ -218,7 +218,7 @@
     margin: 20px auto;
     border-collapse: collapse;
 }
-page {
+body {
             margin-top: 80px;
             margin-right: 30px;
             margin-bottom: 40px;
@@ -253,7 +253,7 @@ td {
             <p class="s1" style="background:#EDEDED; display:block; height:69.4pt; width:481.9pt;">
                 {{$title}}
             </p> --}}
-
+            <div>
             <table style="margin:auto;width:90%;border-collapse: collapse;margin-top:20px">
                 <tr><td class="s1 form_title" style="font-size:18px">{{$title}}</td></tr>
             </table>
@@ -265,7 +265,7 @@ td {
           
                   
                 </div>
-   
+            </div>
    
 
 </body>
