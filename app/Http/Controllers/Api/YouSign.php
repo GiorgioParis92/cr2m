@@ -56,7 +56,7 @@ class YouSign extends Controller
           ]
         ]
       ]);
-
+      dd($data);
 
       $path = 'storage/dossiers/' . $request->dossier_id . '/' . $request->name . '.pdf';
 
