@@ -394,7 +394,7 @@ class PDFController extends Controller
         if ($title_content_count != 0) {
             $content .= $title_content;
         }
-
+        echo $content;
         // Get the HTML content for the template
         $htmlContent = $this->getTemplateHtml('config', $request->dossier_id, $config, $title, $content);
 
