@@ -204,7 +204,7 @@ class Table extends AbstractFormData
                     // Recursively decode JSON and handle arrays
                     $instance->value = $element_data[$element_config['name']]['value'];
                 } else {
-                    $instance->value = ''; // Or handle default value here
+                    $instance->value = 'DEFAULT VALUE'; // Or handle default value here
                 }
                 
                 // if ($element_config['type'] == 'title') {
