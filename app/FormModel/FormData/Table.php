@@ -208,9 +208,9 @@ class Table extends AbstractFormData
                 }
                 
        
-              
+                
                 $data .= '<tr><td style="width:100%;border:1px solid #ccc;border-collapse: collapse;padding-left:12px;padding-bottom:15px">';
-                $data .= $instance->render_pdf();
+                $data .= false;
                 $data .= '</td></tr>';
        
             }
