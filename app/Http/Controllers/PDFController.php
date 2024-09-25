@@ -330,7 +330,15 @@ class PDFController extends Controller
         $title_content = '<div><table style="margin:auto;width:90%;margin-top:20px;border-collapse: collapse;">';
         $title_content_count = 0;
         
-      
+        $all_data = load_all_dossier_data($dossier);
+
+        $content.='<table>';
+        $content.='<tr>';
+        $content.='<td>';
+        $content.='Coordonnées Bénéficiaire';
+        $content.='</td>';
+        $content.='</tr>';
+        $content.='</table>';
 
         foreach ($config as $element) {
             if (empty($element) || empty($element->type)) {
