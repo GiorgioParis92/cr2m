@@ -153,7 +153,7 @@ class YouSign extends Controller
           $responseData->status === 'error'
         )
       ) {
-   
+        dd($responseData);
         $resultData = $responseData->result->data->result ?? null;
 
         if ($resultData->signature_request_id) {
