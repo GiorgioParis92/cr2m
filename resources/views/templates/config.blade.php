@@ -213,6 +213,21 @@
         .page-break {
             page-break-before: always;
         }
+        table {
+    width: 90%;
+    margin: 20px auto;
+    border-collapse: collapse;
+}
+
+tr {
+    page-break-inside: avoid; /* Prevent row splitting across pages */
+}
+
+td {
+    border: 1px solid #ccc;
+    padding-left: 12px;
+    padding-bottom: 15px;
+}
     </style>
 </head>
 
