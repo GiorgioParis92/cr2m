@@ -359,16 +359,16 @@ class PDFController extends Controller
                 $instance->set_dossier($dossier);
                 $instance_result = $instance->render_pdf();
                 
-                if ($element->type == 'table' && $element->name=='ajout_mur') {
+                // if ($element->type == 'table' && $element->name=='ajout_mur') {
           
-                    echo($instance_result);
+                //     echo($instance_result);
                   
-                }
-                if ($element->type == 'table' && $element->name=='ajout_piece') {
+                // }
+                // if ($element->type == 'table' && $element->name=='ajout_piece') {
           
-                    echo($instance_result);
+                //     echo($instance_result);
                   
-                }
+                // }
 
              
 
