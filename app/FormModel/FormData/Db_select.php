@@ -133,7 +133,7 @@ class Db_select extends AbstractFormData
       
 
             if ($this->value == $result->$fieldValue) {
-                $found_value = $result->$fieldValue;
+                $found_value = $result->$fieldLabel;
             }
 
 
