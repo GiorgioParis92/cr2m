@@ -362,8 +362,8 @@ class PDFController extends Controller
 
                 if ($element->type == 'table') {
           
-                    dd($instance_result);
-
+                    print_r($instance_result);
+                    dd('ok');
                 }
 
                 // if($element->name=='ajout_piece') {
