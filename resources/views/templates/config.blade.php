@@ -205,7 +205,7 @@
     font-size:13px;
 }
 @page {
-            margin-top: 80px;
+            margin-top: 40px;
             margin-right: 30px;
             margin-bottom: 40px;
             margin-left: 30px;
@@ -219,7 +219,7 @@
     border-collapse: collapse;
 }
 body {
-            margin-top: 80px;
+            margin-top: 40px;
             margin-right: 30px;
             margin-bottom: 40px;
             margin-left: 30px;
