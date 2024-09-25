@@ -92,4 +92,74 @@ class Db_select extends AbstractFormData
         return 'Erreur';
     }
 
+
+    public function render_pdf()
+    {
+        if(!is_array($this->config->options)) {
+            $jsonString = str_replace(["\n", '', "\r"], '', $this->config->options);
+            $optionsArray = json_decode($jsonString, true);
+        } else {
+            $optionsArray = $this->config->options;
+        }
+
+
+        $sql_command = $optionsArray['sql'];
+      
+        if (isset($optionsArray['arguments'])) {
+            foreach ($optionsArray['arguments'] as $key => $data) {
+                $sql_command = str_replace($key, eval ($data), $sql_command);
+            }
+        }
+        $class_prediction = '';
+        if (!$this->check_value()) {
+            $class_prediction = ' is-invalid';
+        }
+
+        $request = DB::select($sql_command);
+
+
+        if(!$this->value || $this->value=='') {
+            return false;
+        }
+
+        $data = '<div  class="form-group col-sm-12 ' . ($this->config->class ?? "") . '">';
+
+
+        $data .= '<div class="s3" style="display:block;margin-top:15px;margin-bottom:8px">' . $this->config->title . '</div>';
+
+        foreach ($request as $result) {
+            $fieldValue = $optionsArray['value'];
+            $fieldLabel = $optionsArray['label'];
+      
+
+            if ($this->value == $result->$fieldValue) {
+                $found_value = $result->$fieldValue;
+            }
+
+
+        }
+
+
+        $data .= '<div style="display:block;margin-bottom:8px">'.$found_value.'</div>';
+
+   
+
+  
+        $data .= '</div>';
+
+
+        return $data;
+
+
+        
+
+      
+
+
+
+
+        return $data;
+    }
+
+
 }
