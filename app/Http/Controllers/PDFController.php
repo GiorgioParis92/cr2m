@@ -360,11 +360,11 @@ class PDFController extends Controller
                 $instance_result = $instance->render_pdf();
                 
 
-                if ($element->type == 'table' && $element->name=='ajout_piece') {
+                // if ($element->type == 'table' && $element->name=='ajout_piece') {
           
-                    print_r($instance_result);
-                    dd('ok');
-                }
+                //     print_r($instance_result);
+                //     dd('ok');
+                // }
 
                 // if($element->name=='ajout_piece') {
                     
