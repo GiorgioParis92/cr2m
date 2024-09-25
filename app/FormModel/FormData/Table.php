@@ -204,30 +204,30 @@ class Table extends AbstractFormData
                     // Recursively decode JSON and handle arrays
                     $instance->value = $element_data[$element_config['name']]['value'];
                 } else {
-                    $instance->value = 'DEFAULT VALUE'; // Or handle default value here
+                    $instance->value = ''; // Or handle default value here
                 }
                 
-                // if ($element_config['type'] == 'title') {
-                //     if ($title_content_count > 1) {
-                //         $data .= $title_content;
-                //     }
-                //     $title_content = '';
-                //     $title_content_count = 0;
-                // }
-                $should_render = false;
+                if ($element_config['type'] == 'title') {
+                    if ($title_content_count > 1) {
+                        $data .= $title_content;
+                    }
+                    $title_content = '';
+                    $title_content_count = 0;
+                }
+              
                 
-                $instance_render = $instance->render_pdf();
-                $data .='<table><tr><td>'.($instance_render ?? '').'</td></tr></table>';
-                // if ($instance_result) {
-                //     $title_content_count ++;
-                //     $title_content .= $instance_result;
-                //     $should_render = true;
-                // }
+                $instance_result = $instance->render_pdf();
+
+                if ($instance_result) {
+                    $title_content_count ++;
+                    $title_content .= $instance_result;
+                    $should_render = true;
+                }
             }
         }
         // print_r($data);
         // return false;
-        return $data;
+        return $should_render ? $data : false;
     }
     
 
