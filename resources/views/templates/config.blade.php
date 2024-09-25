@@ -205,7 +205,7 @@
     font-size:13px;
 }
 @page {
-            margin-top: 40px;
+            margin-top: 80px;
             margin-right: 30px;
             margin-bottom: 40px;
             margin-left: 30px;
@@ -218,7 +218,20 @@
     margin: 20px auto;
     border-collapse: collapse;
 }
-
+page {
+            margin-top: 80px;
+            margin-right: 30px;
+            margin-bottom: 40px;
+            margin-left: 30px;
+        }
+        .page-break {
+            page-break-before: always;
+        }
+        table {
+    width: 90%;
+    margin: 20px auto;
+    border-collapse: collapse;
+}
 tr {
     page-break-inside: avoid; /* Prevent row splitting across pages */
 }
