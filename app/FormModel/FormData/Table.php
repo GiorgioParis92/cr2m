@@ -223,8 +223,8 @@ class Table extends AbstractFormData
                 // }
             }
         }
-        print_r($data);
-        return false;
+        // print_r($data);
+        // return false;
         return $data;
     }
     
