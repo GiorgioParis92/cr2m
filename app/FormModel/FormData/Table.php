@@ -217,7 +217,7 @@ class Table extends AbstractFormData
                 $should_render = false;
                 
                 $instance_render = $instance->render_pdf();
-                $data .='<div>Table'.($instance_render ?? '').'</div>';
+                $data .='<div>'.$element_config['type'].($instance_render ?? '').'</div>';
                 // if ($instance_result) {
                 //     $title_content_count ++;
                 //     $title_content .= $instance_result;
