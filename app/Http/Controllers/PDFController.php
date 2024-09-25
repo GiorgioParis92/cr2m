@@ -338,8 +338,8 @@ class PDFController extends Controller
         ->where('status','!=', 2)
         ->orderBy('created_at', 'desc')
         ->first();
-    
-        
+     
+        dd($all_data['dossiers_data']);
         $content.='<div><table style="margin:auto;width:90%;border-collapse: collapse;margin-top:20px"><tr>';
         $content.='<td class="s2 form_title" style="width:100%;border:1px solid #ccc;border-collapse: collapse;padding-left:12px;text-align:center">';
         $content.='<div>Coordonnées bénéficiaire</div></td></tr><tr>';
