@@ -130,7 +130,7 @@ class Text extends AbstractFormData
     public function generate_value()
     {
 
-        $this->value=str_replace('&',' et ',$this->value);
+        // $this->value=str_replace('&','et',$this->value);
         return $this->value;
     }
 
