@@ -11,6 +11,7 @@ use setasign\Fpdi\PdfReader;  // Import PdfReader if needed
 use App\Models\Beneficiaire;
 use App\Models\Client;
 use App\Models\Fiche;
+use App\Models\Rdv;
 use App\Models\Dossier;
 use Illuminate\Support\Facades\DB;
 use App\Models\Etape;
@@ -331,14 +332,22 @@ class PDFController extends Controller
         $title_content_count = 0;
         
         $all_data = load_all_dossier_data($dossier);
+        $lastRdv = Rdv::with('user')
+        ->where('dossier_id', $dossier->id)
+        ->where('type_rdv', 1)
+        ->where('status','!=', 2)
+        ->orderBy('created_at', 'desc')
+        ->first();
+     
 
-        $content.='<table>';
-        $content.='<tr>';
-        $content.='<td>';
-        $content.='Coordonnées Bénéficiaire';
-        $content.='</td>';
-        $content.='</tr>';
-        $content.='</table>';
+        $content.='<div><table style="margin:auto;width:90%;border-collapse: collapse;margin-top:20px"><tr>';
+        $content.='<td class="s2 form_title" style="width:100%;border:1px solid #ccc;border-collapse: collapse;padding-left:12px;text-align:center">';
+        $content.='<div>Coordonnées bénéficiaire</div></td></tr><tr>';
+        $content.='<td style="width:100%;border:1px solid #ccc;border-collapse: collapse;padding-left:12px;padding-bottom:15px;text-align:center"><div>';
+        $content.='<h5 class="mb-0" style="text-align:center"><b>'.$all_data['nom'].' '.$all_data['prenom'].'</b><br>'.$all_data['numero_voie'].' '.$all_data['adresse '].' '.$all_data['cp'].' '.$all_data['ville'].'<br> </h5>';
+        $content.='<h6 class="mb-0"><b>Tél : '.$all_data['telephone'].'</b> -Email : '.$all_data['email'].'<br></h6>';
+        $content.='<div class="btn bg-primary bg-Très modestes">JAUNE</div><div class="">Technicien RDV MAR 1 :'.($lastRdv ? $lastRdv->->user->name).'</div></div></td></tr></table>';
+        $content.='</div>';
 
         foreach ($config as $element) {
             if (empty($element) || empty($element->type)) {
