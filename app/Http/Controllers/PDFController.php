@@ -316,7 +316,8 @@ class PDFController extends Controller
         $dossier_data = Dossier::where('id', $dossier->id)
             ->with('beneficiaire', 'fiche', 'etape', 'status')
             ->first();
-        dd($dossier_data);
+      
+            
         $timeAfterDossier = microtime(true) - $startTime;
 
 
