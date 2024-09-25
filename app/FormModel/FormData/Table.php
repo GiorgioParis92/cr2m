@@ -177,7 +177,7 @@ class Table extends AbstractFormData
     {
         
         $should_render = false;
-        $data = '<div><table>';
+        $data = '<div>';
     
         // Decode the JSON value if needed
         $this->value = $this->decode_if_json($this->value);
@@ -209,13 +209,13 @@ class Table extends AbstractFormData
                 
        
               
-                $data = '<tr><td>';
+                $data = '<table><tr><td>';
                 $data .= $instance->render_pdf();
-                $data = '</td></tr>';
+                $data = '</td></tr></table>';
        
             }
         }
-        $data = '</table></div>';
+        $data = '</div>';
         // print_r($data);
         // return false;
         return $data;
