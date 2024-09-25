@@ -127,7 +127,12 @@ class Text extends AbstractFormData
         return true;
     }
 
+    public function generate_value()
+    {
 
+        $this->value=str_replace('&',' et ',$this->value);
+        return $this->value;
+    }
 
     public function render_pdf()
     {
