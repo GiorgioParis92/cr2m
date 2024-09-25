@@ -359,11 +359,11 @@ class PDFController extends Controller
                 $instance->set_dossier($dossier);
                 $instance_result = $instance->render_pdf();
                 
-                if($element->name=='ajout_piece') {
+                // if($element->name=='ajout_piece') {
                     
-                    print_r($instance_result);
-                    dd('test');
-                }
+                //     print_r($instance_result);
+                //     dd('test');
+                // }
 
                 if ($instance_result) {
                     $title_content_count ++;
