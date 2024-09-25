@@ -346,7 +346,7 @@ class PDFController extends Controller
         $content.='<td style="width:100%;border:1px solid #ccc;border-collapse: collapse;padding-left:12px;padding-bottom:15px;text-align:center"><div>';
         $content.='<h5 class="mb-0" style="text-align:center"><b>'.$all_data['nom'].' '.$all_data['prenom'].'</b><br>'.$all_data['numero_voie'].' '.$all_data['adresse '].' '.$all_data['cp'].' '.$all_data['ville'].'<br> </h5>';
         $content.='<h6 class="mb-0"><b>Tél : '.$all_data['telephone'].'</b> -Email : '.$all_data['email'].'<br></h6>';
-        $content.='<div class="btn bg-primary bg-Très modestes">JAUNE</div><div class="">Technicien RDV MAR 1 :'.($lastRdv ? $lastRdv->user->name).'</div></div></td></tr></table>';
+        $content.='<div class="btn bg-primary bg-Très modestes">JAUNE</div><div class="">Technicien RDV MAR 1 :'.($lastRdv ? $lastRdv->user->name : '').'</div></div></td></tr></table>';
         $content.='</div>';
 
         foreach ($config as $element) {
