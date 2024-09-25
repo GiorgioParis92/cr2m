@@ -207,19 +207,20 @@ class Table extends AbstractFormData
                     $instance->value = ''; // Or handle default value here
                 }
                 
-                if ($element_config['type'] == 'title') {
-                    if ($title_content_count > 1) {
-                        $data .= $title_content;
-                    }
-                    $title_content = '';
-                    $title_content_count = 0;
-                }
+                // if ($element_config['type'] == 'title') {
+                //     if ($title_content_count > 1) {
+                //         $data .= $title_content;
+                //     }
+                //     $title_content = '';
+                //     $title_content_count = 0;
+                // }
+                $should_render = true;
                 $instance_result = $instance->render_pdf();
-                if ($instance_result) {
-                    $title_content_count ++;
-                    $title_content .= $instance_result;
-                    $should_render = true;
-                }
+                // if ($instance_result) {
+                //     $title_content_count ++;
+                //     $title_content .= $instance_result;
+                //     $should_render = true;
+                // }
             }
         }
              
