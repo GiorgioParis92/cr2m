@@ -313,7 +313,9 @@ class PDFController extends Controller
         // Load all the dossier data (assuming load_all_dossier_data is a custom helper function)
 
 
-
+        $dossier_data = Dossier::where('id', $dossier->id)
+            ->with('beneficiaire', 'fiche', 'etape', 'status')
+            ->first();
 
         $timeAfterDossier = microtime(true) - $startTime;
 
@@ -331,7 +333,7 @@ class PDFController extends Controller
         $title_content = '<div><table style="margin:auto;width:90%;margin-top:20px;border-collapse: collapse;">';
         $title_content_count = 0;
         
-        $all_data = load_all_dossier_data($dossier);
+        // $all_data = load_all_dossier_data($dossier);
         $lastRdv = Rdv::with('user')
         ->where('dossier_id', $dossier->id)
         ->where('type_rdv', 1)
@@ -343,8 +345,8 @@ class PDFController extends Controller
         $content.='<td class="s2 form_title" style="width:100%;border:1px solid #ccc;border-collapse: collapse;padding-left:12px;text-align:center">';
         $content.='<div>Coordonnées bénéficiaire</div></td></tr><tr>';
         $content.='<td style="width:100%;border:1px solid #ccc;border-collapse: collapse;padding-left:12px;padding-bottom:15px;text-align:center"><div>';
-        $content.='<h5 class="mb-0" style="text-align:center"><b>'.$all_data['dossiers_data']['nom'].' '.$all_data['dossiers_data']['prenom'].'</b><br>'.$all_data['dossiers_data']['numero_voie'].' '.($all_data['dossiers_data']['adresse'] ?? '').' '.$all_data['dossiers_data']['cp'].' '.$all_data['dossiers_data']['ville'].'<br> </h5>';
-        $content.='<h6 class="mb-0"><b>Tél : '.$all_data['dossiers_data']['telephone'].'</b> -Email : '.$all_data['dossiers_data']['email'].'<br></h6>';
+        $content.='<h5 class="mb-0" style="text-align:center"><b>'.$dossier_data['nom'].' '.$dossier_data['prenom'].'</b><br>'.$dossier_data['numero_voie'].' '.($dossier_data['adresse'] ?? '').' '.$dossier_data['cp'].' '.$dossier_data['ville'].'<br> </h5>';
+        $content.='<h6 class="mb-0"><b>Tél : '.$dossier_data['telephone'].'</b> -Email : '.$dossier_data['email'].'<br></h6>';
         $content.='<div class="btn bg-primary bg-Très modestes">JAUNE</div><div class="">Technicien RDV MAR 1 :'.($lastRdv ? $lastRdv->user->name : '').'</div></div></td></tr></table>';
         $content.='</div>';
 
