@@ -208,10 +208,14 @@ class Table extends AbstractFormData
                 }
                 
        
-                
-                $data .= '<tr><td style="width:100%;border:1px solid #ccc;border-collapse: collapse;padding-left:12px;padding-bottom:15px">';
-                $data .= false;
-                $data .= '</td></tr>';
+                $element_render=$instance->render_pdf();
+
+                if($element_render) {
+                    $data .= '<tr><td style="width:100%;border:1px solid #ccc;border-collapse: collapse;padding-left:12px;padding-bottom:15px">';
+                    $data .= $element_render;
+                    $data .= '</td></tr>';
+                }
+
        
             }
         }
