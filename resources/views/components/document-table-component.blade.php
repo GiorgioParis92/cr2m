@@ -1,12 +1,6 @@
 @props(['docs'])
 @foreach ($docs as $doc)
     @php $data=[] @endphp
-    @if (isset($doc['options']))
-        @if (isset($doc['options']['signable']) && $doc['options']['signable'] == 'true')
-            @php $data=($doc['additional_data']) @endphp
-        @endif
-    @endif
-
 
     @if (isset($doc['meta_value']) && $doc['meta_value'] != null)
         @php $color ='success' @endphp
@@ -14,9 +8,24 @@
         @php $color ='danger' @endphp
     @endif
 
+
+    @if (isset($doc['options']))
+        @if (isset($doc['options']['signable']) && $doc['options']['signable'] == 'true')
+            @php $data=($doc['additional_data']) @endphp
+            @php $color ='danger' @endphp
+        @endif
+    @endif
+
+
+
+
     @if (!empty($data) && isset($doc['signature_status']))
-        @if($doc['signature_status']=='finish') @php $color='success' @endphp @endif
-        @if($doc['signature_status']=='ongoing') @php $color='warning' @endphp @endif
+        @if ($doc['signature_status'] == 'finish')
+            @php $color='success' @endphp
+        @endif
+        @if ($doc['signature_status'] == 'ongoing')
+            @php $color='warning' @endphp
+        @endif
     @endif
 
     <div class="btn btn-{{ $color }} btn-view @if (isset($doc['meta_value']) && !empty($doc['meta_value'])) pdfModal @endif"
