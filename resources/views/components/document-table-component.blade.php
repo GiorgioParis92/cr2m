@@ -16,18 +16,20 @@
         @endif
     @endif
 
-    @if (!empty($data) && !isset($doc['signature_status']))
-    @php $color ='danger' @endphp
-
-    @endif
+ 
 
 
-    @if (!empty($data) && isset($doc['signature_status']))
+    @if (!empty($data) && isset($doc['signature_request_id']))
+    @if(isset($doc['signature_status']))
         @if ($doc['signature_status'] == 'finish')
             @php $color='success' @endphp
         @endif
         @if ($doc['signature_status'] == 'ongoing')
             @php $color='warning' @endphp
+        @endif
+        @else
+        @php $color='danger' @endphp
+
         @endif
     @endif
 
