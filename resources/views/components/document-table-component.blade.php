@@ -4,7 +4,7 @@
     @if ($doc['required'] == 1 || ($doc['required'] == 0 && isset($doc['meta_value']) && !empty($doc['meta_value'])))
 
         @php $data=[] @endphp
-        @php $text='<br/> ' @endphp
+        @php $text='<br/> <span style="color:none">.</span>' @endphp
 
         @if (isset($doc['meta_value']) && $doc['meta_value'] != null)
             @php $color ='success' @endphp
