@@ -31,7 +31,7 @@
                     @endif
                 @endif
                 @if (!empty($data) && !isset($doc['signature_request_id']))
-                    @php $color='primary' @endphp
+                    @php $color='danger btn-outline-default' @endphp
                     @php $text="\n".'<br/>Non signé' @endphp
                 @endif
 
