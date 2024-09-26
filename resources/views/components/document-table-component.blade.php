@@ -16,7 +16,10 @@
         @endif
     @endif
 
+    @if (!empty($data) && !isset($doc['signature_status']))
+    @php $color ='danger' @endphp
 
+    @endif
 
 
     @if (!empty($data) && isset($doc['signature_status']))
