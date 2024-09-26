@@ -4,6 +4,7 @@
     @if ($doc['required'] == 1 || ($doc['required'] == 0 && isset($doc['meta_value']) && !empty($doc['meta_value'])))
 
         @php $data=[] @endphp
+        @php $text='' @endphp
 
         @if (isset($doc['meta_value']) && $doc['meta_value'] != null)
             @php $color ='success' @endphp
@@ -24,11 +25,14 @@
                         @endif
                         @if ($doc['signature_status'] == 'ongoing')
                             @php $color='warning' @endphp
+                            @php $text='En attente de signature' @endphp
+
                         @endif
                     @endif
                 @endif
                 @if (!empty($data) && !isset($doc['signature_request_id']))
                     @php $color='danger' @endphp
+                    @php $text='Non signé' @endphp
                 @endif
 
             @endif
@@ -37,7 +41,7 @@
         <div class="btn btn-{{ $color }} btn-view @if (isset($doc['meta_value']) && !empty($doc['meta_value'])) pdfModal @endif"
             @if (isset($doc['meta_value']) && !empty($doc['meta_value'])) data-toggle="modal" data-img-src="{{ asset('storage/' . $doc['meta_value']) }}?time=1727288485"
         data-name="Fiche navette" @endif>
-            <i class="fas fa-eye"></i> {{ $doc['title'] }}
+            <i class="fas fa-eye"></i> {{ $doc['title']. ' '.$text }}
         </div>
     @endif
 @endforeach
