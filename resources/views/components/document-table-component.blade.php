@@ -14,10 +14,6 @@
             @php $data=($doc['additional_data']) @endphp
             @php $color ='danger' @endphp
 
-
-
-
-
             @if (!empty($data) && isset($doc['signature_request_id']))
                 @if (isset($doc['signature_status']))
                     @if ($doc['signature_status'] == 'finish')
@@ -27,7 +23,8 @@
                         @php $color='warning' @endphp
                     @endif
                 @endif
-            @else
+            @endif
+            @if(!empty($data) && !isset($doc['signature_request_id']))
                 @php $color='danger' @endphp
             @endif
 
