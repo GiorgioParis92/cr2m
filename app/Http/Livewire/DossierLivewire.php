@@ -146,9 +146,9 @@ class DossierLivewire extends Component
         ->where(function($query) {
             $query->where('forms_data.dossier_id', $this->dossier->id);
         })
-        ->where('forms_config.required',1)
         ->orderBy('forms.etape_number') // Order the results by forms.etape_number
         ->get()
+
         ->toArray();
         $this->docs=[];
 
@@ -330,7 +330,6 @@ class DossierLivewire extends Component
         ->where(function($query) {
             $query->where('forms_data.dossier_id', $this->dossier->id);
         })
-        ->where('forms_config.required',1)
         ->orderBy('forms.etape_number') // Order the results by forms.etape_number
         ->get()
         ->toArray();
@@ -361,6 +360,7 @@ class DossierLivewire extends Component
         
             $this->docs[] = $doc; // Add the modified array to docs
         }
+
     }
 
 

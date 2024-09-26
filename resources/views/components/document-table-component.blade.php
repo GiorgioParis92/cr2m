@@ -1,5 +1,8 @@
 @props(['docs'])
 @foreach ($docs as $doc)
+
+    @if($doc['required']==1 || ($doc['required']==0 && isset($doc['meta_value']) && !empty($doc['meta_value'])))
+
     @php $data=[] @endphp
 
     @if (isset($doc['meta_value']) && $doc['meta_value'] != null)
@@ -36,4 +39,5 @@
         data-name="Fiche navette">
         <i class="fas fa-eye"></i> {{ $doc['title'] }}
     </div>
+    @endif
 @endforeach
