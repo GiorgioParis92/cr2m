@@ -466,11 +466,28 @@ function couleur_menage($couleur)
 {
     // Generate a hash from the string
     $array = [
-        'bleu' => 'Très modestes',
-        'jaune' => 'Très modestes',
+        'bleu' => 'bleu',
+        'jaune' => 'jaune',
+        'violet' => 'violet',
+        'rose' => 'rose',
     ];
     return $array[$couleur] ?? '';
 }
+
+
+
+function texte_menage($couleur)
+{
+    // Generate a hash from the string
+    $array = [
+        'bleu' => 'Bleu : Très modestes',
+        'jaune' => 'Jaune : Modestes',
+        'violet' => 'Violet : Intermédiaires',
+        'rose' => 'Rose : Aisés',
+    ];
+    return $array[$couleur] ?? '';
+}
+
 
 function decode_if_json($value)
 {

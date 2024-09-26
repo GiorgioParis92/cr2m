@@ -25,7 +25,7 @@
                             </h6>
 
                             <div class="btn bg-primary bg-{{ couleur_menage($dossier->beneficiaire->menage_mpr) }}">
-                                {{ strtoupper($dossier['beneficiaire']['menage_mpr']) }}</div>
+                                {{ strtoupper(texte_menage($dossier['beneficiaire']['menage_mpr'])) }}</div>
                             @if (auth()->user()->client_id == 0)
                                 <div class="">
                                     @if (isset($technicien) && !empty($technicien))
@@ -70,7 +70,7 @@
                         <input type="hidden" id="current_etape" value="{{ $tab }}">
                         <div class="row etapes_row mt-5 only_responsive">
                             Etape :
-                           
+
                             @php $i=0 @endphp
                             <select class="form-control" id="etape" wire:change="setTab($event.target.value)">
                                 <option>Choisir une étape</option>
@@ -82,23 +82,21 @@
                                         if ($e->order_column <= $dossier->etape->order_column) {
                                             $isActive = true;
                                         }
-                                     
+
                                         if (is_user_allowed($e->etape_name) == false) {
                                             $isAllowed = false;
-                                         
                                         } else {
                                             $isAllowed = true;
-                                          
                                         }
-                                        if($isAllowed && $isActive) {
+                                        if ($isAllowed && $isActive) {
                                             $i++;
                                         }
-                                        
+
                                     @endphp
-                                    @if ($isAllowed==true && $isActive==true)
-                                    
+                                    @if ($isAllowed == true && $isActive == true)
                                         <option @if ($e->id == $tab) selected @endif
-                                            value="{{ $e->etape_number }}">{{ $e->etape_icon }} - {{ strtoupper_extended($e->etape_desc) }}</option>
+                                            value="{{ $e->etape_number }}">{{ $e->etape_icon }} -
+                                            {{ strtoupper_extended($e->etape_desc) }}</option>
                                     @endif
                                 @endforeach
                             </select>
@@ -123,7 +121,7 @@
                                     //     $isTab = true;
                                     // }
 
-                                    if ($e->id  == $last_etape) {
+                                    if ($e->id == $last_etape) {
                                         $isTab = true;
                                     }
                                     if (is_user_allowed($e->etape_name) == false) {
@@ -176,9 +174,23 @@
                     </div>
 
                 </div>
+                <div class="row mt-4">
+                    <div class="col-12 col-lg-12">
+                        <div class="card ">
+                            <div class="card-header pb-0 p-3">
+                                <div class="d-flex justify-content-between">
+                                    <h6 class="mb-2">Documents du dossier</h6>
+                                </div>
+                            </div>
+                            <div class="table-responsive">
+                                <x-document-table-component :docs="$docs" />
 
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="card-body px-0 pb-0">
-                    @if (isset($tab) && $i>0)
+                    @if (isset($tab) && $i > 0)
                         <div class="row">
                             <div class="col-lg-12">
                                 <h3 class="border-bottom border-gray pb-2 p-2">{{ $etape_display['etape_desc'] }}
@@ -192,8 +204,8 @@
                                     <div class="progress">
                                         <div class="progress-bar" role="progressbar"
                                             style="width: {{ $score_info['etape_score'] ?? '100' }}%;"
-                                            aria-valuenow="{{ $score_info['etape_score'] ?? '100' }}" aria-valuemin="0"
-                                            aria-valuemax="100">
+                                            aria-valuenow="{{ $score_info['etape_score'] ?? '100' }}"
+                                            aria-valuemin="0" aria-valuemax="100">
                                         </div>
 
 
@@ -217,11 +229,11 @@
                                             <div class="nav-wrapper position-relative end-0">
                                                 <ul class="nav nav-pills nav-fill p-1" role="tablist">
                                                     @foreach ($forms_configs as $index => $form_handler)
-                                                    @if ($form_handler->form->etape_number == $tab && $form_handler->form->type == 'conversation')
-                                                   @php $conversation_id=$form_handler->form->id @endphp
-                                                    @endif
+                                                        @if ($form_handler->form->etape_number == $tab && $form_handler->form->type == 'conversation')
+                                                            @php $conversation_id=$form_handler->form->id @endphp
+                                                        @endif
 
-                                                    @if ($form_handler->form->etape_number == $tab && $form_handler->form->type == 'form')
+                                                        @if ($form_handler->form->etape_number == $tab && $form_handler->form->type == 'form')
                                                             <li class="nav-item">
                                                                 <a wire:click="display_form({{ $form_handler->form->id }})"
                                                                     class="nav-link mb-0 px-0 py-1 {{ $form_handler->form->id == $form_id ? 'active' : '' }}">
@@ -282,20 +294,20 @@
         </div>
     </div>
     <div class="row">
-        @if(isset($conversation_id) && $i>0)
-        <div class="col-lg-4">
-            <div class="card form-register container mt-5 pt-5" style="padding:0!important">
-                @livewire('chat2',['dossier_id' => $dossier['id'],'form_id' => $conversation_id])
+        @if (isset($conversation_id) && $i > 0)
+            <div class="col-lg-4">
+                <div class="card form-register container mt-5 pt-5" style="padding:0!important">
+                    @livewire('chat2', ['dossier_id' => $dossier['id'], 'form_id' => $conversation_id])
+                </div>
             </div>
-        </div>
         @endif
-        <div class="@if(isset($conversation_id)) col-lg-8 @else col-lg-12 @endif">
+        <div class="@if (isset($conversation_id)) col-lg-8 @else col-lg-12 @endif">
             <div class="card form-register container mt-5 pt-5">
                 @if (isset($form_id))
 
                     @php $form = $forms_configs[$form_id] @endphp
 
-                    @if ($form->form->type == 'form' && $i>0)
+                    @if ($form->form->type == 'form' && $i > 0)
                         <div class="row">
                             <div class="">
                                 <h4>{{ $form->form->form_title }}</h4>
@@ -318,7 +330,6 @@
                     @endif
 
                     @if ($form->form->type == 'rdv')
-
                         {!! $form->render([]) !!}
                         <div class="card container mt-5 pd-5">
 
@@ -629,7 +640,7 @@
 
 
         Livewire.on('ok_photo', (data) => {
-          
+
         });
         // Listen for the Livewire event to reinitialize Dropzone
         Livewire.on('initializeDropzones', (data) => {

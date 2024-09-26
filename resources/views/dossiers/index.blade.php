@@ -159,10 +159,9 @@
                         <td><b><a href="{{ route('dossiers.show', $dossier->folder) }}">{{ $dossier->beneficiaire->nom }}
                                     {{ $dossier->beneficiaire->prenom }}</a></b><br />
                             <a href="{{ route('dossiers.show', $dossier->folder) }}">
-                                <div style="color:white"
+                                <div 
                                     class="btn bg-primary bg-{{ couleur_menage($dossier->beneficiaire->menage_mpr) }}">
-                                    {{ $dossier->beneficiaire->menage_mpr }}
-                                    {{ couleur_menage($dossier->beneficiaire->menage_mpr) }}
+                                    {{ texte_menage($dossier->beneficiaire->menage_mpr) }}
                                 </div>
                             </a>
                         </td>

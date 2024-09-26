@@ -19,6 +19,7 @@ use App\Models\Client;
 class DossierLivewire extends Component
 {
     public $time;
+    public $docs;
 
     public $etape_display;
     public $etapes;
@@ -135,8 +136,42 @@ class DossierLivewire extends Component
             // dd($last_etape);
         }
         $this->emit('setTab');
+        $dossierId = $this->dossier->id; // Assuming $this->dossier_id is available in the controller
 
+
+        $results = DB::table('forms_config')
+        ->leftJoin('forms_data', 'forms_config.name', '=', 'forms_data.meta_key')
+        ->whereIn('forms_config.type', ['generate', 'fillable', 'upload'])
+        ->where(function($query) {
+            $query->where('forms_data.dossier_id', $this->dossier->id);
+                //   ->orWhereNull('forms_data.dossier_id'); // To handle cases where there's no match
+        })
         
+        ->get()
+        ->toArray();
+        $this->docs=[];
+
+        foreach ($results as $result) {
+            $options = json_decode($result->options, true); // Decode as associative array
+            $doc = get_object_vars($result); // Convert the object to an array
+            $doc['options'] = $options; // Add the options array
+        
+            // Check if 'signable' exists in options and is true
+            if (isset($options['signable']) && $options['signable'] === "true") {
+                // Perform your additional DB request here
+                // Example:
+                $additionalData = DB::table('forms_data')
+                                    ->where('dossier_id', $this->dossier->id)
+                                    ->where('form_id', $result->form_id)
+                                    ->get();
+        
+                // You can then add this additional data to the doc if needed
+                $doc['additional_data'] = $additionalData;
+            }
+        
+            $this->docs[] = $doc; // Add the modified array to docs
+        }
+
     }
     public function test()
     {
@@ -195,7 +230,7 @@ class DossierLivewire extends Component
             $this->steps=$steps;
         }
         
-
+      
     }
 
     public function setTab($tab)
@@ -226,6 +261,7 @@ class DossierLivewire extends Component
         }
         }
        
+     
 
     }
 
@@ -285,7 +321,44 @@ class DossierLivewire extends Component
 
         $this->reinitializeFormsConfigs(false);
         // $this->emit('initializeDropzones', ['forms_configs' => $this->forms_configs]);
+   
+        $results = DB::table('forms_config')
+        ->leftJoin('forms_data', 'forms_config.name', '=', 'forms_data.meta_key')
+        ->join('forms', 'forms.id', '=', 'forms_config.form_id') // Join with the forms table
+        ->whereIn('forms_config.type', ['generate', 'fillable', 'upload'])
+        ->where(function($query) {
+            $query->where('forms_data.dossier_id', $this->dossier->id);
+        })
+        ->orderBy('forms.etape_number') // Order the results by forms.etape_number
+        ->get()
+        ->toArray();
+        $this->docs=[];
 
+        foreach ($results as $result) {
+            $options = json_decode($result->options, true); // Decode as associative array
+            $doc = get_object_vars($result); // Convert the object to an array
+            $doc['options'] = $options; // Add the options array
+        
+            // Check if 'signable' exists in options and is true
+            if (isset($options['signable']) && $options['signable'] === "true") {
+                // Perform your additional DB request here
+                // Example:
+                $additionalData = DB::table('forms_data')
+                                    ->where('dossier_id', $this->dossier->id)
+                                    ->where('form_id', $result->form_id)
+                                    ->get();
+        
+                // You can then add this additional data to the doc if needed
+                $doc['additional_data'] = $additionalData;
+
+                foreach($doc['additional_data'] as $data) {
+                    $doc[$data->meta_key]=$data->meta_value;
+                }
+
+            }
+        
+            $this->docs[] = $doc; // Add the modified array to docs
+        }
     }
 
 
@@ -523,6 +596,8 @@ class DossierLivewire extends Component
 
         return view('livewire.dossier-livewire', [
             'dossier' => $this->dossier,
+            'docs' => $this->docs,  // Pass docs to the view
+
         ]);
     }
 

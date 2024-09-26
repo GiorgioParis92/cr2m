@@ -1262,6 +1262,7 @@ label.custom-control-label {
 
 .btn.bg-primary.bg-bleu {
     background: cyan !important;
+    color: black !important;
 }
 
 .btn.bg-primary.bg-jaune {
