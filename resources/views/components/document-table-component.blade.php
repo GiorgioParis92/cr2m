@@ -9,7 +9,7 @@
         @if (isset($doc['meta_value']) && $doc['meta_value'] != null)
             @php $color ='success' @endphp
         @else
-            @php $color ='btn-outline-danger' @endphp
+            @php $color =' btn-outline-danger' @endphp
         @endif
 
 
