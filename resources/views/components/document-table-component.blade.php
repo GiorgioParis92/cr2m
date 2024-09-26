@@ -32,7 +32,7 @@
                 @endif
                 @if (!empty($data) && !isset($doc['signature_request_id']))
                     @php $color='danger' @endphp
-                    @php $text='Non signé' @endphp
+                    @php $text="\n".'Non signé' @endphp
                 @endif
 
             @endif
