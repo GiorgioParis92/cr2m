@@ -16,21 +16,20 @@
         @endif
     @endif
 
- 
+
 
 
     @if (!empty($data) && isset($doc['signature_request_id']))
-    @if(isset($doc['signature_status']))
-        @if ($doc['signature_status'] == 'finish')
-            @php $color='success' @endphp
+        @if (isset($doc['signature_status']))
+            @if ($doc['signature_status'] == 'finish')
+                @php $color='success' @endphp
+            @endif
+            @if ($doc['signature_status'] == 'ongoing')
+                @php $color='warning' @endphp
+            @endif
         @endif
-        @if ($doc['signature_status'] == 'ongoing')
-            @php $color='warning' @endphp
-        @endif
-        @else
+    @else
         @php $color='danger' @endphp
-
-        @endif
     @endif
 
     <div class="btn btn-{{ $color }} btn-view @if (isset($doc['meta_value']) && !empty($doc['meta_value'])) pdfModal @endif"
