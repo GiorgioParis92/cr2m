@@ -139,18 +139,26 @@ class DossierLivewire extends Component
         $dossierId = $this->dossier->id; // Assuming $this->dossier_id is available in the controller
 
 
-        $results = DB::table('forms_config')
-        ->leftJoin('forms_data', 'forms_config.name', '=', 'forms_data.meta_key')
-        ->join('forms', 'forms.id', '=', 'forms_config.form_id') // Join with the forms table
-        ->join('etapes', 'etapes.id', '=', 'forms.etape_id') // Join with the forms table
-        ->whereIn('forms_config.type', ['generate', 'fillable', 'upload'])
-        ->where(function($query) {
-            $query->where('forms_data.dossier_id', $this->dossier->id);
-        })
-        ->orderBy('etapes.order_column') // Order the results by forms.etape_number
-        ->get()
+       $this->get_docs();
 
-        ->toArray();
+    }
+    public function test()
+    {
+        dd('ok');
+    }
+    public function get_docs()
+    {
+        $results = DB::table('forms_config')
+    ->leftJoin('forms_data', function($join) {
+        $join->on('forms_config.name', '=', 'forms_data.meta_key')
+             ->where('forms_data.dossier_id', $this->dossier->id);
+    })
+    ->join('forms', 'forms.id', '=', 'forms_config.form_id') // Join with the forms table
+    ->join('etapes', 'etapes.id', '=', 'forms.etape_id') // Join with the etapes table
+    ->whereIn('forms_config.type', ['generate', 'fillable', 'upload'])
+    ->orderBy('etapes.order_column') // Order the results by etapes.order_column
+    ->get()
+    ->toArray();
         $this->docs=[];
 
         foreach ($results as $result) {
@@ -173,13 +181,7 @@ class DossierLivewire extends Component
         
             $this->docs[] = $doc; // Add the modified array to docs
         }
-
     }
-    public function test()
-    {
-        dd('ok');
-    }
-
     public function refresh()
     {
         $this->time = now()->format('H:i:s');
@@ -324,45 +326,7 @@ class DossierLivewire extends Component
         $this->reinitializeFormsConfigs(false);
         // $this->emit('initializeDropzones', ['forms_configs' => $this->forms_configs]);
    
-        $results = DB::table('forms_config')
-        ->leftJoin('forms_data', 'forms_config.name', '=', 'forms_data.meta_key')
-        ->join('forms', 'forms.id', '=', 'forms_config.form_id') // Join with the forms table
-        ->join('etapes', 'etapes.id', '=', 'forms.etape_id') // Join with the forms table
-        ->whereIn('forms_config.type', ['generate', 'fillable', 'upload'])
-        ->where(function($query) {
-            $query->where('forms_data.dossier_id', $this->dossier->id);
-        })
-        ->orderBy('etapes.order_column') // Order the results by forms.etape_number
-        ->get()
-
-        ->toArray();
-        $this->docs=[];
-
-        foreach ($results as $result) {
-            $options = json_decode($result->options, true); // Decode as associative array
-            $doc = get_object_vars($result); // Convert the object to an array
-            $doc['options'] = $options; // Add the options array
-        
-            // Check if 'signable' exists in options and is true
-            if (isset($options['signable']) && $options['signable'] === "true") {
-                // Perform your additional DB request here
-                // Example:
-                $additionalData = DB::table('forms_data')
-                                    ->where('dossier_id', $this->dossier->id)
-                                    ->where('form_id', $result->form_id)
-                                    ->get();
-        
-                // You can then add this additional data to the doc if needed
-                $doc['additional_data'] = $additionalData;
-
-                foreach($doc['additional_data'] as $data) {
-                    $doc[$data->meta_key]=$data->meta_value;
-                }
-
-            }
-        
-            $this->docs[] = $doc; // Add the modified array to docs
-        }
+        $this->get_docs();
 
     }
 

@@ -1,7 +1,7 @@
 @props(['docs'])
 @foreach ($docs as $doc)
 
-    @if ($doc['required'] == 1 )
+    @if ($doc['required'] == 1 || ($doc['required'] == 0 && isset($doc['meta_value']) && !empty($doc['meta_value'])))
 
         @php $data=[] @endphp
         @php $text='' @endphp
