@@ -31,14 +31,14 @@
                     @endif
                 @endif
                 @if (!empty($data) && !isset($doc['signature_request_id']))
-                    @php $color='danger' @endphp
+                    @php $color='primary' @endphp
                     @php $text="\n".'<br/>Non signé' @endphp
                 @endif
 
             @endif
         @endif
 
-        <div class="btn btn-{{ $color }} btn-view @if (isset($doc['meta_value']) && !empty($doc['meta_value'])) pdfModal @endif"
+        <div class="btn-sm btn btn-{{ $color }} btn-view @if (isset($doc['meta_value']) && !empty($doc['meta_value'])) pdfModal @endif"
             @if (isset($doc['meta_value']) && !empty($doc['meta_value'])) data-toggle="modal" data-img-src="{{ asset('storage/' . $doc['meta_value']) }}?time=1727288485"
         data-name="Fiche navette" @endif>
             <i class="fas fa-eye"></i> {!! $doc['title']. ' '.$text !!}
