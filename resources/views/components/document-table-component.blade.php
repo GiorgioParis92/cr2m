@@ -25,7 +25,7 @@
                         @endif
                         @if ($doc['signature_status'] == 'ongoing')
                             @php $color='warning' @endphp
-                            @php $text='En attente de signature' @endphp
+                            @php $text='<br/>En attente de signature' @endphp
 
                         @endif
                     @endif
