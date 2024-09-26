@@ -141,12 +141,13 @@ class DossierLivewire extends Component
 
         $results = DB::table('forms_config')
         ->leftJoin('forms_data', 'forms_config.name', '=', 'forms_data.meta_key')
+        ->join('forms', 'forms.id', '=', 'forms_config.form_id') // Join with the forms table
         ->whereIn('forms_config.type', ['generate', 'fillable', 'upload'])
         ->where(function($query) {
             $query->where('forms_data.dossier_id', $this->dossier->id);
-                //   ->orWhereNull('forms_data.dossier_id'); // To handle cases where there's no match
         })
-        
+        ->where('forms_config.required',1)
+        ->orderBy('forms.etape_number') // Order the results by forms.etape_number
         ->get()
         ->toArray();
         $this->docs=[];
@@ -329,6 +330,7 @@ class DossierLivewire extends Component
         ->where(function($query) {
             $query->where('forms_data.dossier_id', $this->dossier->id);
         })
+        ->where('forms_config.required',1)
         ->orderBy('forms.etape_number') // Order the results by forms.etape_number
         ->get()
         ->toArray();
