@@ -41,7 +41,7 @@
         <div class="btn-sm btn btn-{{ $color }} btn-view @if (isset($doc['meta_value']) && !empty($doc['meta_value'])) pdfModal @endif"
             @if (isset($doc['meta_value']) && !empty($doc['meta_value'])) data-toggle="modal" data-img-src="{{ asset('storage/' . $doc['meta_value']) }}?time=1727288485"
         data-name="Fiche navette" @endif>
-            <i class="fas fa-eye"></i> {!! $doc['title']. ' '.$text !!}
+            <i class="fas fa-eye">{{$doc['order_column']}}</i> {!! $doc['title']. ' '.$text !!}
         </div>
     @endif
 @endforeach
