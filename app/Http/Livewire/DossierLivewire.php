@@ -142,11 +142,12 @@ class DossierLivewire extends Component
         $results = DB::table('forms_config')
         ->leftJoin('forms_data', 'forms_config.name', '=', 'forms_data.meta_key')
         ->join('forms', 'forms.id', '=', 'forms_config.form_id') // Join with the forms table
+        ->join('etapes', 'etapes.id', '=', 'forms_config.etape_id') // Join with the forms table
         ->whereIn('forms_config.type', ['generate', 'fillable', 'upload'])
         ->where(function($query) {
             $query->where('forms_data.dossier_id', $this->dossier->id);
         })
-        ->orderBy('forms.etape_number') // Order the results by forms.etape_number
+        ->orderBy('etapes.order_column') // Order the results by forms.etape_number
         ->get()
 
         ->toArray();
@@ -326,12 +327,14 @@ class DossierLivewire extends Component
         $results = DB::table('forms_config')
         ->leftJoin('forms_data', 'forms_config.name', '=', 'forms_data.meta_key')
         ->join('forms', 'forms.id', '=', 'forms_config.form_id') // Join with the forms table
+        ->join('etapes', 'etapes.id', '=', 'forms_config.etape_id') // Join with the forms table
         ->whereIn('forms_config.type', ['generate', 'fillable', 'upload'])
         ->where(function($query) {
             $query->where('forms_data.dossier_id', $this->dossier->id);
         })
-        ->orderBy('forms.etape_number') // Order the results by forms.etape_number
+        ->orderBy('etapes.order_column') // Order the results by forms.etape_number
         ->get()
+
         ->toArray();
         $this->docs=[];
 
