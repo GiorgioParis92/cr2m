@@ -9,7 +9,7 @@
         @if (isset($doc['meta_value']) && $doc['meta_value'] != null)
             @php $color ='success' @endphp
         @else
-            @php $color ='danger' @endphp
+            @php $color ='btn-outline-danger' @endphp
         @endif
 
 
@@ -31,7 +31,7 @@
                     @endif
                 @endif
                 @if (!empty($data) && !isset($doc['signature_request_id']))
-                    @php $color=' btn-outline-danger' @endphp
+                    @php $color='danger' @endphp
                     @php $text="\n".'<br/>Non signé' @endphp
                 @endif
 
