@@ -7,22 +7,45 @@ use Illuminate\Support\Facades\Storage;
 
 class Fillable extends AbstractFormData
 {
-    public function render(bool $is_error)
+
+    public $optionsArray;
+
+    public function __construct($config, $name, $form_id, $dossier_id)
     {
+        parent::__construct($config, $name, $form_id, $dossier_id);
         $jsonString = str_replace(["\n", ' ', "\r"], '', $this->config->options);
-        $optionsArray = json_decode($jsonString, true);
-        if (!is_array($optionsArray)) {
-            $optionsArray = [];
+        $this->optionsArray = json_decode($jsonString, true);
+        if (!is_array($this->optionsArray)) {
+            $this->optionsArray = [];
+        }
+        if (isset($this->optionsArray['link'])) {
+            $this->form_id = $this->optionsArray['link']['form_id'];
+           
+            $form_config=DB::table('forms_config')->where('form_id',$this->form_id)
+            ->where('id',$this->optionsArray['link']['id'])
+            ->first();
+
+         
+            
+            $jsonString = str_replace(["\n", ' ', "\r"], '', $form_config->options);
+            $this->optionsArray = json_decode($jsonString, true);
+
         }
 
+    }
 
-        if (isset($optionsArray['on_generation'])) {
-            $generation = $optionsArray['on_generation'];
+
+    public function render(bool $is_error)
+    {
+  
+
+        if (isset($this->optionsArray['on_generation'])) {
+            $generation = $this->optionsArray['on_generation'];
         } else {
             $generation = null;
         }
 
-        if (isset($optionsArray['signable']) && $optionsArray['signable'] == 'true' ) {
+        if (isset($this->optionsArray['signable']) && $this->optionsArray['signable'] == 'true' ) {
             $check_signature = DB::table('forms_data')->where('form_id', $this->form_id)->where('dossier_id', $this->dossier_id)->where('meta_key', 'signature_request_id')->first();
             $check_status = DB::table('forms_data')->where('form_id', $this->form_id)->where('dossier_id', $this->dossier_id)->where('meta_key', 'signature_status')->first();
             $check_document = DB::table('forms_data')->where('form_id', $this->form_id)->where('dossier_id', $this->dossier_id)->where('meta_key', 'document_id')->first();
@@ -98,7 +121,7 @@ class Fillable extends AbstractFormData
 
         $data .= '</div>';
 
-        if (isset($optionsArray['signable']) && $optionsArray['signable'] == 'true' && $this->value) {
+        if (isset($this->optionsArray['signable']) && $this->optionsArray['signable'] == 'true' && $this->value) {
 
 
             if ((isset($check_status) && $check_status->meta_value != 'finish') || !isset($check_status)) {
@@ -108,8 +131,8 @@ class Fillable extends AbstractFormData
                    data-dossier_id="' . $this->dossier->folder . '"';
                     $data .= "data-generation='" . $generation . "'";
                     $data .= "data-form_id='" . $this->form_id . "'";
-                    $data .= "data-fields='" . json_encode($optionsArray['fields']) . "'";
-                    $data .= 'data-template="' . $optionsArray['template'] . '"
+                    $data .= "data-fields='" . json_encode($this->optionsArray['fields']) . "'";
+                    $data .= 'data-template="' . $this->optionsArray['template'] . '"
 
                 data-name="' . $this->name . '">
                 <i class="fas fa-eye"></i> Signer le document
@@ -123,11 +146,11 @@ class Fillable extends AbstractFormData
                     $data .= "data-signature_request_id='" . $check_signature->meta_value . "'";
                     $data .= "data-document_id='" . $check_document->meta_value . "'";
 
-                    $data .= 'data-template="' . $optionsArray['template'] . '"
+                    $data .= 'data-template="' . $this->optionsArray['template'] . '"
                 data-name="' . $this->config->title . '">
                 <i class="fas fa-eye"></i> Télécharger le document signé
             </button> ';
-                    $data .= '<div id="message_' . $optionsArray['template'] . '">';
+                    $data .= '<div id="message_' . $this->optionsArray['template'] . '">';
 
                     if ($check_status) {
                         if ($check_status->meta_value == 'ongoing') {
@@ -144,7 +167,7 @@ class Fillable extends AbstractFormData
                 }
                 $data .= '</div>';
             } else {
-                $data .= '<div id="message_' . $optionsArray['template'] . '">';
+                $data .= '<div id="message_' . $this->optionsArray['template'] . '">';
                 $data .= 'Document signé';
                 $data .= '</div>';
             }
