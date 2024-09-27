@@ -155,7 +155,7 @@ class DossierLivewire extends Component
     })
     ->join('forms', 'forms.id', '=', 'forms_config.form_id') // Join with the forms table
     ->join('etapes', 'etapes.id', '=', 'forms.etape_id') // Join with the etapes table
-    ->whereIn('forms_config.type', ['generate', 'fillable', 'upload'])
+    ->whereIn('forms_config.type', ['generate', 'fillable', 'upload','generateConfig'])
     ->orderBy('etapes.order_column') // Order the results by etapes.order_column
     ->get()
     ->toArray();
