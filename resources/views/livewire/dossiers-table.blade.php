@@ -287,7 +287,10 @@
             columnDefs: columnDefs,
             rowData: @json($dossiers),
             domLayout: 'autoHeight',
-
+            defaultExcelExportParams: {
+        allColumns: true,
+        // You can also specify process callbacks if needed
+    },
             defaultColDef: {
                 flex: 1,
              

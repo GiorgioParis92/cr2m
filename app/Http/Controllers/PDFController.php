@@ -248,7 +248,33 @@ class PDFController extends Controller
                     } else {
                         $pdf->SetFontSpacing(0);
                     }
+                    if (isset($fill_data_config["img"])) {
+                        if (isset($fill_data_config['signature'])) {
+                            $dossier = DB::table('dossiers' )
+                            ->where('folder', $dossierId)
+                            ->first();
+                        
+                        $client = DB::table('clients')
+                            ->where('id', $dossier->mar)
+                            ->first();
 
+                          $signature_client=$client->signature ?? '';
+                        
+                        $signaturePath = storage_path('app/public/' . $signature_client);
+                   
+                        if (file_exists($signaturePath)) {
+                            // Set default position and size if not provided
+
+                            $x = isset($fill_data_config["x"]) ? $fill_data_config["x"] : 10;
+                            $y = isset($fill_data_config["y"]) ? $fill_data_config["y"] : 10;
+                            $width = isset($fill_data_config["width"]) ? $fill_data_config["width"] : 50;
+                            $height = isset($fill_data_config["height"]) ? $fill_data_config["height"] : 30;
+                
+                            // Insert the image into the PDF
+                            $pdf->Image($signaturePath, $x, $y, $width);
+                        }
+                    }
+                    }
 
 
                     $pdf->SetXY($x_pos, $y_pos);

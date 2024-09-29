@@ -203,7 +203,7 @@
         <p>
             Entre les soussignés,<br />
             Mme ou M.: {{ $dossier->beneficiaire->nom }} {{ $dossier->beneficiaire->prenom }}<br />
-            Demeurant: {{ $dossier->beneficiaire->adresse }} {{ $dossier->beneficiaire->cp }}
+            Demeurant: {{ $dossier->beneficiaire->numero_voie }}{{ $dossier->beneficiaire->adresse }} {{ $dossier->beneficiaire->cp }}
             {{ $dossier->beneficiaire->ville }}<br />
             Agissant pour son compte propre :<br />
             Ci-après nommé <b>« Le bénéficiaire »</b><br />
@@ -975,8 +975,8 @@
             <tr>
                 <td style="border:none;width:50%">
                     <p><b>Le bénéficiaire</b></p>
-                    <p>Signature précédé de la mention manuscrite <br/><i>"Bon pour accord et exécution du devis» </i>
-                    </p>
+                    {{-- <p>Signature précédé de la mention manuscrite <br/><i>"Bon pour accord et exécution du devis» </i>
+                    </p> --}}
                 </td>
 
 
