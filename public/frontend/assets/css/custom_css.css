@@ -902,6 +902,43 @@
      .form-register .steps li:last-child a .title .step-icon::after {
          content: none
      }
+
+
+
+     .ag-center-cols-container {
+        max-width: 100%;
+        text-align: center;
+    }
+    .ag-row {
+        height: auto !important;
+        width: 100% !important;
+        line-height: 0px !important;
+        display: block;
+        transform: none !important;
+        max-width: 100% !important;
+        min-width: 100% !important;
+        position: relative!important;
+        border: 1px solid;
+        padding-bottom: 29px;
+        border-radius: 14px;
+        margin-bottom: 19px;
+    }
+    .ag-ltr .ag-cell {
+        border-right-width: 1px;
+        display: block;
+        width: 100% !important;
+        position: relative;
+        left: 0px !important;
+    }
+    .ag-side-buttons {
+        display: none;
+    }
+
+    .ag-root {
+     
+        max-width: 90%;
+        margin: auto;
+    }
  }
 
  @media screen and (max-width: 767px) {

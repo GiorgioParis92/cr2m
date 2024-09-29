@@ -569,6 +569,12 @@
                     $(this).select2();
                 }
             });
+            $('.no_select2').each(function() {
+                $(this).select2('destroy'); // Destroy previous Select2 instance
+
+            });
+
+
             $('.datepicker').datepicker({
                 language: 'fr',
                 dateFormat: 'dd/mm/yy', // See format options on parseDate
