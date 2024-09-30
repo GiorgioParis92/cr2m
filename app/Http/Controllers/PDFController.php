@@ -355,6 +355,7 @@ class PDFController extends Controller
         // dump($timeAfterDossier);
         foreach($configs as $config_id)
         {
+        $form = DB::table('forms')->where('id', $config_id)->first();
         $config = DB::table('forms_config')->where('form_id', $config_id)->orderBy('ordering')->get();
         $timeAfterConfig = microtime(true) - $startTime;
             $count++;
@@ -375,7 +376,7 @@ class PDFController extends Controller
         ->first();
      
             $content.='<table style="margin:auto;width:90%;border-collapse: collapse;margin-top:20px">
-            <tr><td class="s1 form_title" style="font-size:18px">'.$config->title.'</td></tr>
+            <tr><td class="s1 form_title" style="font-size:18px">'.$form->title.'</td></tr>
         </table>';
 
 
