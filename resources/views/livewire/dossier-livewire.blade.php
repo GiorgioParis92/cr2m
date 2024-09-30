@@ -7,6 +7,7 @@
                 <div class="card-body pb-0 clearfix">
                     <div class="d-lg-flex">
                         <div>
+                            <div class="btn btn-primary" id="copyButton" data-folder="{{$dossier->folder}}">Réf dossier : {{$dossier->folder}} (cliquez pour copier la référence)</div>
 
                             <h5 class="mb-0">
                                 <b>{{ $dossier['beneficiaire']['nom'] }}
@@ -582,12 +583,35 @@
         initializeDeleteButtons();
     });
     document.addEventListener('DOMContentLoaded', function() {
+        $('#copyButton').on('click', function() {
+                // The data to be copied to the clipboard
+                const data = $(this).data('folder');
+                $(this).removeClass('btn-primary')
+                $(this).addClass('btn-success')
+                // Create a temporary textarea element to hold the text
+                const $temp = $('<textarea>');
+                $('body').append($temp);
+                $temp.val(data).select();
 
+                // Copy the text to the clipboard
+                try {
+                    document.execCommand('copy');
+                    
+                } catch (err) {
+                    alert('Failed to copy data to clipboard:', err);
+                }
+
+                // Remove the temporary element
+                $temp.remove();
+            });
         Livewire.on('pageLoaded', (data) => {
             console.log('pageloaded')
             var configs = data.forms_configs;
             console.log(data)
             initializeDropzones(configs);
+
+
+  
         })
 
         Livewire.on('setTab', (data) => {
