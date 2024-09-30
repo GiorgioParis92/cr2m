@@ -348,9 +348,9 @@ class PDFController extends Controller
         $htmlContent='';
         $configs=explode(',',$request->config_id);
 
-        if(auth()->user()->id==1) {
+       
             dd($configs);
-        }
+        
 
         // dump($timeAfterDossier);
         foreach($configs as $config_id)
