@@ -286,10 +286,10 @@
 
 
             {
-                field: "last_rdv.date_rdv",
+                field: "last_rdv",
                 headerName: "RDV",
                 sortable: true,
-                filter: 'agSetColumnFilter',
+                filter: 'agDateColumnFilter',
                 enableRowGroup: true,
                 autoHeight: true,
                 cellStyle: {

@@ -199,7 +199,7 @@ class DossiersTable extends Component
                 'statut' => $dossier->status->status_desc ?? '',
                 'statut_style' => $dossier->status->status_desc ?? '',
                 'rdv' => $dossier->get_rdv ?? [],
-                'last_rdv' => optional($dossier->get_rdv->last())->date ?? null,
+                'last_rdv' => optional($dossier->get_rdv->last())->date_rdv ?? null,
 
             ];
         });
