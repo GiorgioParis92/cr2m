@@ -192,7 +192,7 @@ class DossiersTable extends Component
                 'texte_menage' => texte_menage($dossier->beneficiaire->menage_mpr),
                 'accompagnateur' => $dossier->mar_client->client_title ?? '',
                 'accompagnateur_img' => $dossier->mar_client->main_logo ?? '',
-                'mandataire' => $dossier->mandataire_financier_client->client_title ?? '',
+                'mandataire' => ( $dossier->mandataire_financier>0 ? $dossier->mandataire_financier_client->client_title : ''),
                 'mandataire_img' => $dossier->mandataire_financier_client->main_logo ?? '',
                 'installateur' => $dossier->installateur_client->client_title ?? '',
                 'installateur_img' => $dossier->installateur_client->main_logo ?? '',
