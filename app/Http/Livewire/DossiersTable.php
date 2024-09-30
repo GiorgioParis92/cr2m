@@ -65,7 +65,7 @@ class DossiersTable extends Component
         $user = auth()->user();
         $client = Client::where('id', $user->client_id)->first();
 
-        $dossiersQuery = Dossier::with(['beneficiaire', 'fiche', 'etape', 'status', 'mar']);
+        $dossiersQuery = Dossier::with(['beneficiaire', 'fiche', 'etape', 'status', 'mar','get_rdv']);
 
         // Apply client-specific filtering
         $userClientId = auth()->user()->client_id;
@@ -165,6 +165,7 @@ class DossiersTable extends Component
                     ->orWhereIn('installateur', $has_child);
             });
         }
+        $dossiersQuery->limit(10);
         // Fetch the filtered results
         $dossiers = $dossiersQuery->get()->map(function ($dossier) {
             return [
@@ -194,6 +195,7 @@ class DossiersTable extends Component
                 'installateur_img' => $dossier->installateur_client->main_logo ?? '',
                 'statut' => $dossier->status->status_desc ?? '',
                 'statut_style' => $dossier->status->status_desc ?? '',
+                'rdv' => $dossier->get_rdv ?? [],
             ];
         });
 

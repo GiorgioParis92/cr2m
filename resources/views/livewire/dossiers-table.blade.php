@@ -279,6 +279,21 @@
                 },
                 cellRenderer: render_cell_installateur,
             },
+
+
+            {
+                field: "rdv",
+                headerName: "RDV",
+                sortable: true,
+                filter: 'agSetColumnFilter',
+                enableRowGroup: true,
+                autoHeight: true,
+                cellStyle: {
+                    textAlign: 'center'
+                },
+                cellRenderer: render_rdv,
+            },
+
         ];
 
         // Define gridOptions in the global scope
@@ -544,4 +559,41 @@
         const imageHtml = imageUrl ? `<img class="logo_table" src="${imageUrl}" alt="Installateur Logo" />` : '';
         return `<div>${imageHtml}${data.installateur}</div>`;
     }
+    function render_rdv(params) {
+    const data = params.data;
+    if (!data || !data.rdv) {
+        return '';
+    }
+    console.log(data)
+    var rdvInfo = '';
+                        data.rdv.forEach(rdv => {
+                            console.log(rdv)
+                            const date = new Date(rdv.date_rdv);
+
+                            const dateOptions = {
+                                day: 'numeric',
+                                month: 'long',
+                                year: 'numeric'
+                            };
+                            const timeOptions = {
+                                hour: '2-digit',
+                                minute: '2-digit'
+                            };
+
+                            const formattedDate = date.toLocaleDateString('fr-FR', dateOptions);
+                            const formattedTime = date.toLocaleTimeString('fr-FR', timeOptions);
+                            const formattedDateTime = `${formattedDate} à ${formattedTime}`;
+
+                            rdvInfo += '<a href="'+data.dossier_url +
+                                '"><div class="show_rdv btn btn-' + (rdv.status ? rdv.status
+                                    .rdv_style : '') + '">RDV MAR' + rdv.type_rdv + ' du ' +
+                                formattedDateTime + ' Statut : ' + (rdv.status ? rdv.status
+                                    .rdv_desc : '') + '</div></a><br/>';
+                        });
+
+
+  
+
+    return rdvInfo;
+}
 </script>
