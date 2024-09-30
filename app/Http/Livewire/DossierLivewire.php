@@ -38,6 +38,13 @@ class DossierLivewire extends Component
     {
         $this->time = now()->format('H:i:s');
 
+
+        $dossiers=Dossier::where('id','>',0)->get();
+        foreach($dossiers as $dossier) {
+            $docs=getDocumentStatuses($dossier->id,$dossier->etape_number);
+
+        }
+
         // Fetch dossier with related data
         $this->dossier = Dossier::where('id', $id)
             ->with('beneficiaire', 'fiche', 'etape', 'status')
