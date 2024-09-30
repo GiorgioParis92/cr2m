@@ -344,6 +344,7 @@ class FileUploadService
             );
             if($update) {
                 $docs=getDocumentStatuses($dossier->id,$dossier->etape_number);
+            dd($docs);
             }
             return $directory . '/' . $pdfFileName;
         }
