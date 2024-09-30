@@ -361,9 +361,13 @@
             },
             onFirstDataRendered: function(params) {
                 params.api.sizeColumnsToFit();
+                params.columnApi.autoSizeAllColumns();
+
             },
             onGridSizeChanged: function(params) {
                 params.api.sizeColumnsToFit();
+                params.columnApi.autoSizeAllColumns();
+
             },
             sideBar: {
                 toolPanels: [{
