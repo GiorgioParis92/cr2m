@@ -358,7 +358,7 @@ class PDFController extends Controller
         $config = DB::table('forms_config')->where('form_id', $config_id)->orderBy('ordering')->get();
         $timeAfterConfig = microtime(true) - $startTime;
             $count++;
-            dd($config);
+           
         // dump($timeAfterConfig);
 
         $title = $request->title;
