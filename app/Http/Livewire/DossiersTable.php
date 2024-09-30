@@ -185,6 +185,7 @@ class DossiersTable extends Component
                     'telephone' => $dossier->beneficiaire->telephone ?? '',
                     'email' => $dossier->beneficiaire->email ?? '',
                 ],
+                'reference_unique' => $dossier->reference_unique,
                 'etape' => $dossier->etape->etape_icon,
                 'etape_style' => $dossier->etape->etape_style,
                 'etape_desc' => $dossier->etape->etape_desc,
