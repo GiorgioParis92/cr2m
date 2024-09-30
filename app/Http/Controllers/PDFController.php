@@ -347,6 +347,11 @@ class PDFController extends Controller
         $timeAfterDossier = microtime(true) - $startTime;
         $htmlContent='';
         $configs=explode(',',$request->config_id);
+
+        if(auth()->user()->id==1) {
+            dd($configs);
+        }
+
         // dump($timeAfterDossier);
         foreach($configs as $config_id)
         {
