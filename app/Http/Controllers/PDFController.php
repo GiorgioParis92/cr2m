@@ -345,11 +345,12 @@ class PDFController extends Controller
       
             
         $timeAfterDossier = microtime(true) - $startTime;
-
-
+        $htmlContent='';
+        $configs=explode(',',$request->config_id);
         // dump($timeAfterDossier);
-
-        $config = DB::table('forms_config')->where('form_id', $request->config_id)->orderBy('ordering')->get();
+        foreach($configs as $config_id)
+        {
+        $config = DB::table('forms_config')->where('form_id', $config_id)->orderBy('ordering')->get();
         $timeAfterConfig = microtime(true) - $startTime;
 
 
@@ -441,7 +442,9 @@ class PDFController extends Controller
         }
        
         // Get the HTML content for the template
-        $htmlContent = $this->getTemplateHtml('config', $request->dossier_id, $config, $title, $content);
+        $htmlContent .= $this->getTemplateHtml('config', $request->dossier_id, $config, $title, $content);
+        }
+
 
         // Generate the PDF using Dompdf
         $options = new Options();
