@@ -377,7 +377,7 @@ class PDFController extends Controller
         ->first();
      
             $content.='<table style="margin:auto;width:90%;border-collapse: collapse;margin-top:20px">
-            <tr><td class="s1 form_title" style="font-size:18px">'.$form->form_title.'</td></tr>
+            <tr><td class="s1 form_title" style="font-size:18px">'.($form->form_title ?? '').'</td></tr>
         </table>';
 
 
