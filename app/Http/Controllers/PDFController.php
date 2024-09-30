@@ -457,9 +457,9 @@ class PDFController extends Controller
         }
        
         // Get the HTML content for the template
-        $htmlContent .= $this->getTemplateHtml('config', $request->dossier_id, $config, $title, $content);
         }
 
+        $htmlContent .= $this->getTemplateHtml('config', $request->dossier_id, $config, $title, $content);
 
         // Generate the PDF using Dompdf
         $options = new Options();
