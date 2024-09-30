@@ -401,8 +401,8 @@
 
         <p>
             Le Bénéficiaire<br />
-            Signature précédé de la mention manuscrite<br />
-            <i>"Bon pour accord et exécution du devis »</i>
+            {{-- Signature précédé de la mention manuscrite<br />
+            <i>"Bon pour accord et exécution du devis »</i> --}}
         </p>
 
     </div>

@@ -162,6 +162,8 @@
                 sortable: true,
                 filter: 'agDateColumnFilter',
                 enableRowGroup: true,
+                sort: 'desc', // or 'desc' for descending order
+
                 valueFormatter: (params) => {
                     return params.value ? new Date(params.value).toLocaleDateString('fr-FR') : '';
                 },
