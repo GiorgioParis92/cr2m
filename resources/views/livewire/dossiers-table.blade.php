@@ -97,7 +97,9 @@
     </div>
 
 
-
+    <div class="row">
+        <h4><span id="count_total">0</span> Résultats</h4>
+    </div>
     <!-- AgGrid Container with wire:ignore -->
     <div id="myGrid" class="ag-theme-alpine" style="height: 80vh; width: 100%;" wire:ignore></div>
 
@@ -331,12 +333,12 @@
             rowData: @json($dossiers),
             domLayout: 'autoHeight',
             defaultExcelExportParams: {
-        allColumns: true,
-        // You can also specify process callbacks if needed
-    },
+                allColumns: true,
+                // You can also specify process callbacks if needed
+            },
             defaultColDef: {
                 flex: 1,
-             
+
                 resizable: true,
                 sortable: true,
                 filter: true,
@@ -345,7 +347,7 @@
             animateRows: true,
             enableRangeSelection: true,
             pagination: true,
-            paginationPageSize: 100,
+            paginationPageSize: 50,
             overlayLoadingTemplate: '<div class="ag-overlay-loading-center" style="padding: 10px;"><i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><br/>Chargement des données...</div>',
 
             // Custom no rows overlay
@@ -366,17 +368,25 @@
             onGridReady: (params) => {
                 gridApi = params.api;
                 isGridInitialized = true;
-                console.log('Grid API initialized:', gridApi);
+                console.log('Grid API initialized:', params);
+                var totalRows = params.api.getDisplayedRowCount();
+
+                $('#count_total').html(totalRows);
             },
             onFirstDataRendered: function(params) {
                 params.api.sizeColumnsToFit();
-                params.columnApi.autoSizeAllColumns();
+                var totalRows = params.api.getDisplayedRowCount();
+                $('#count_total').html(totalRows);
 
             },
             onGridSizeChanged: function(params) {
                 params.api.sizeColumnsToFit();
-                params.columnApi.autoSizeAllColumns();
-
+                $('#count_total').html(totalRows);
+            },
+            onModelUpdated: function(params) {
+                // Get the number of displayed rows after any model update (filtering, sorting, etc.)
+                var totalRows = params.api.getDisplayedRowCount();
+                $('#count_total').html(totalRows);
             },
             sideBar: {
                 toolPanels: [{
@@ -431,6 +441,9 @@
                 gridApi.applyTransaction({
                     add: newData
                 });
+
+                $('#count_total').html(newData.length)
+
             } else {
                 console.warn('Grid API not initialized yet. Reinitializing grid.');
                 initializeGrid(gridOptions);
@@ -591,41 +604,42 @@
         const imageHtml = imageUrl ? `<img class="logo_table" src="${imageUrl}" alt="Installateur Logo" />` : '';
         return `<div>${imageHtml}${data.installateur}</div>`;
     }
+
     function render_rdv(params) {
-    const data = params.data;
-    if (!data || !data.rdv) {
-        return '';
+        const data = params.data;
+        if (!data || !data.rdv) {
+            return '';
+        }
+        console.log(data.last_rdv)
+        var rdvInfo = '';
+        data.rdv.forEach(rdv => {
+            console.log(rdv)
+            const date = new Date(rdv.date_rdv);
+
+            const dateOptions = {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric'
+            };
+            const timeOptions = {
+                hour: '2-digit',
+                minute: '2-digit'
+            };
+
+            const formattedDate = date.toLocaleDateString('fr-FR', dateOptions);
+            const formattedTime = date.toLocaleTimeString('fr-FR', timeOptions);
+            const formattedDateTime = `${formattedDate} à ${formattedTime}`;
+
+            rdvInfo += '<a href="' + data.dossier_url +
+                '"><div class="show_rdv btn btn-' + (rdv.status ? rdv.status
+                    .rdv_style : '') + '">RDV MAR' + rdv.type_rdv + ' du ' +
+                formattedDateTime + ' Statut : ' + (rdv.status ? rdv.status
+                    .rdv_desc : '') + '</div></a><br/>';
+        });
+
+
+
+
+        return rdvInfo;
     }
-    console.log(data.last_rdv)
-    var rdvInfo = '';
-                        data.rdv.forEach(rdv => {
-                            console.log(rdv)
-                            const date = new Date(rdv.date_rdv);
-
-                            const dateOptions = {
-                                day: 'numeric',
-                                month: 'long',
-                                year: 'numeric'
-                            };
-                            const timeOptions = {
-                                hour: '2-digit',
-                                minute: '2-digit'
-                            };
-
-                            const formattedDate = date.toLocaleDateString('fr-FR', dateOptions);
-                            const formattedTime = date.toLocaleTimeString('fr-FR', timeOptions);
-                            const formattedDateTime = `${formattedDate} à ${formattedTime}`;
-
-                            rdvInfo += '<a href="'+data.dossier_url +
-                                '"><div class="show_rdv btn btn-' + (rdv.status ? rdv.status
-                                    .rdv_style : '') + '">RDV MAR' + rdv.type_rdv + ' du ' +
-                                formattedDateTime + ' Statut : ' + (rdv.status ? rdv.status
-                                    .rdv_desc : '') + '</div></a><br/>';
-                        });
-
-
-  
-
-    return rdvInfo;
-}
 </script>
