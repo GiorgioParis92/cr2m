@@ -201,7 +201,9 @@ class FileUploadService
                         'updated_at' => now()
                     ]
                 );
-
+                if($update) {
+                    $docs=getDocumentStatuses($dossier->id,$dossier->etape_number);
+                }
 
             } else {
                 $json_value = [];
@@ -218,6 +220,9 @@ class FileUploadService
                         'updated_at' => now()
                     ]
                 );
+                if($update) {
+                    $docs=getDocumentStatuses($dossier->id,$dossier->etape_number);
+                }
             }
         } else {
 
@@ -234,6 +239,9 @@ class FileUploadService
                     'updated_at' => now()
                 ]
             );
+            if($update) {
+                $docs=getDocumentStatuses($dossier->id,$dossier->etape_number);
+            }
 
         }
 
@@ -334,7 +342,9 @@ class FileUploadService
                     'updated_at' => now()
                 ]
             );
-
+            if($update) {
+                $docs=getDocumentStatuses($dossier->id,$dossier->etape_number);
+            }
             return $directory . '/' . $pdfFileName;
         }
 
@@ -434,6 +444,10 @@ class FileUploadService
                     ->delete();
             }
         }
+        $dossier = Dossier::where('id', $request->dossier_id)->first();
+
+            $docs=getDocumentStatuses($dossier->id,$dossier->etape_number);
+        
         unlink(storage_path('app/public/' . $request->link));
 
 
