@@ -47,16 +47,16 @@
                     </a>
                 </li>
                 @endif
-                <li class="nav-item dropdown">
-                    <a class="nav-link  dropdown-toggle" href="{{ route('dossiers.index') }}" data-bs-toggle="dropdown">
-                      <i class="fa fa-folder-open"></i>  Dossiers </a>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="{{ route('dossiers.index') }}"><i class="fa fa-list"></i>  Liste complete des
-                                dossiers</a></li>
 
-                    </ul>
+                @if(auth()->user()->type_id!=4)
+         
+                <li class="nav-item ">
+                    <a class="nav-link" href="{{ route('dossiers.index') }}">
+                        <span class="sidenav-normal"><i class="fa fa-calendar"></i>  Dossiers </span>
+                    </a>
                 </li>
-
+                
+                @endif
                 <li class="nav-item ">
                     <a class="nav-link" href="{{ route('planning') }}">
                         <span class="sidenav-normal"><i class="fa fa-calendar"></i>  Planning </span>
