@@ -348,7 +348,7 @@ class PDFController extends Controller
         $htmlContent='';
         $content = '';
         $configs=explode(',',$request->config_id);
-
+        $count=;
        
         
 
@@ -357,7 +357,7 @@ class PDFController extends Controller
         {
         $config = DB::table('forms_config')->where('form_id', $config_id)->orderBy('ordering')->get();
         $timeAfterConfig = microtime(true) - $startTime;
-
+            $count++;
 
         // dump($timeAfterConfig);
 
@@ -374,6 +374,14 @@ class PDFController extends Controller
         ->orderBy('created_at', 'desc')
         ->first();
      
+            $content.='<table style="margin:auto;width:90%;border-collapse: collapse;margin-top:20px">
+            <tr><td class="s1 form_title" style="font-size:18px">'.$config->title.'</td></tr>
+        </table>';
+
+
+        if($i==1) {
+
+        
         $content.='<div><table style="margin:auto;width:90%;border-collapse: collapse;margin-top:20px"><tr>';
         $content.='<td class="s2 form_title" style="width:100%;border:1px solid #ccc;border-collapse: collapse;padding-left:12px;text-align:center">';
         $content.='<div>Coordonnées bénéficiaire</div></td></tr><tr>';
@@ -382,7 +390,7 @@ class PDFController extends Controller
         $content.='<h6 class="mb-0"><b>Tél : '.$dossier_data['beneficiaire']['telephone'].'</b> -Email : '.$dossier_data['beneficiaire']['email'].'<br></h6>';
         $content.='<div class="btn bg-primary bg-Très modestes">JAUNE</div><div class="">Technicien RDV MAR 1 :'.($lastRdv ? $lastRdv->user->name : '').'</div></div></td></tr></table>';
         $content.='</div>';
-
+         }
         foreach ($config as $element) {
             if (empty($element) || empty($element->type)) {
                 $content .= '<p>Error: Configuration element is missing.</p>';
