@@ -165,7 +165,7 @@ class DossiersTable extends Component
                     ->orWhereIn('installateur', $has_child);
             });
         }
-        $dossiersQuery->limit(10);
+        // $dossiersQuery->limit(10);
         // Fetch the filtered results
         $dossiers = $dossiersQuery->get()->map(function ($dossier) {
             return [
