@@ -184,6 +184,15 @@
                 },
             },
             {
+                field: "reference_unique",
+                headerName: "N° de dossier",
+                sortable: true,
+                filter: 'agSetColumnFilter',
+                enableRowGroup: true,
+                autoHeight: true,
+
+            },
+            {
                 field: "beneficiaire.nom",
                 headerName: "Bénéficiaire",
                 sortable: true,
