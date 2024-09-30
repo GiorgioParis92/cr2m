@@ -1,4 +1,5 @@
 @props(['docs'])
+
 @foreach ($docs as $doc)
 
     @if ($doc['required'] == 1 || ($doc['required'] == 0 && isset($doc['meta_value']) && !empty($doc['meta_value'])))

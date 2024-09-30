@@ -1,5 +1,8 @@
 <div wire:poll>
 
+    {{$doc_status['missingDocs']['count']}} Manquants
+
+
     <div class="row">
 
         <div class="col-12">

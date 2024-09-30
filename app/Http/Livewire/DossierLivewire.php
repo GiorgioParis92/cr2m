@@ -189,6 +189,9 @@ class DossierLivewire extends Component
         
             $this->docs[] = $doc; // Add the modified array to docs
         }
+
+
+        $this->doc_status=getDocumentStatuses($this->dossier->id,$this->last_etape_order);
     }
     public function refresh()
     {

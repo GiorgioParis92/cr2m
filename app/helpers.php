@@ -519,3 +519,114 @@ function convertToArray($data)
     }
     return $data;
 }
+
+function getDocumentStatuses($dossier_id, $last_etape_order = 1)
+{
+    // Initialize arrays to hold documents in each category
+    $missingDocs = [];
+    $waitingForSignatureDocs = [];
+    $signedDocs = [];
+
+    // Retrieve documents and necessary data using an optimized query
+    $results = DB::table('forms_config')
+        ->leftJoin('forms_data as forms_data_meta', function ($join) use ($dossier_id) {
+            $join->on('forms_config.name', '=', 'forms_data_meta.meta_key')
+                ->where('forms_data_meta.dossier_id', $dossier_id);
+        })
+        ->leftJoin('forms_data as forms_data_signature_request_id', function ($join) use ($dossier_id) {
+            $join->on('forms_data_signature_request_id.form_id', '=', 'forms_config.form_id')
+                ->where('forms_data_signature_request_id.dossier_id', $dossier_id)
+                ->where('forms_data_signature_request_id.meta_key', '=', 'signature_request_id');
+        })
+        ->leftJoin('forms_data as forms_data_signature_status', function ($join) use ($dossier_id) {
+            $join->on('forms_data_signature_status.form_id', '=', 'forms_config.form_id')
+                ->where('forms_data_signature_status.dossier_id', $dossier_id)
+                ->where('forms_data_signature_status.meta_key', '=', 'signature_status');
+        })
+        ->join('forms', 'forms.id', '=', 'forms_config.form_id')
+        ->join('etapes', 'etapes.id', '=', 'forms.etape_id')
+        ->whereIn('forms_config.type', ['generate', 'fillable', 'upload', 'generateConfig'])
+        ->whereIn('forms_config.id', function ($query) {
+            $query->select(DB::raw('MIN(id)'))
+                ->from('forms_config')
+                ->groupBy('name');
+        })
+        ->orderBy('etapes.order_column')
+        ->select([
+            'forms_config.id',
+            'forms_config.name',
+            'forms_config.required',
+            'forms_config.type',
+            'forms_config.options',
+            'forms_config.title',
+            'forms_data_meta.meta_value as meta_value',
+            'forms_data_signature_request_id.meta_value as signature_request_id',
+            'forms_data_signature_status.meta_value as signature_status',
+            'forms.id as form_id',
+            'etapes.order_column',
+        ])
+        ->get();
+
+    // Process each document to determine its status
+    foreach ($results as $result) {
+        $options = json_decode($result->options, true);
+        $doc = get_object_vars($result);
+        $doc['options'] = $options;
+        $doc['last_etape_order'] = $last_etape_order;
+
+        // Check if the document should be processed
+        if ($doc['required'] == 1 || ($doc['required'] == 0 && !empty($doc['meta_value']))) {
+            if (!empty($doc['meta_value'])) {
+                if (isset($doc['options']['signable']) && $doc['options']['signable'] === 'true') {
+                    // Check the signature status
+                    if (!empty($doc['signature_request_id'])) {
+                        if (!empty($doc['signature_status'])) {
+                            if ($doc['signature_status'] == 'finish') {
+                                // Document is signed
+                                $signedDocs[] = $doc;
+                            } elseif ($doc['signature_status'] == 'ongoing') {
+                                // Document is waiting for signature
+                                $waitingForSignatureDocs[] = $doc;
+                            } else {
+                                // Document is missing or not generated
+                                $missingDocs[] = $doc;
+                            }
+                        } else {
+                            // Signature status is not set, consider as missing
+                            $missingDocs[] = $doc;
+                        }
+                    } else {
+                        // Signature request ID is not set, consider as missing
+                        $missingDocs[] = $doc;
+                    }
+                } else {
+                    // Document is not signable but is considered signed
+                    $signedDocs[] = $doc;
+                }
+            } else {
+                // Document is missing or not generated
+                $missingDocs[] = $doc;
+            }
+        }
+    }
+
+    // Prepare the result with counts and document lists
+    $resultData = [
+        'missingDocs' => [
+            'count' => count($missingDocs),
+            'docs' => $missingDocs,
+        ],
+        'waitingForSignatureDocs' => [
+            'count' => count($waitingForSignatureDocs),
+            'docs' => $waitingForSignatureDocs,
+        ],
+        'signedDocs' => [
+            'count' => count($signedDocs),
+            'docs' => $signedDocs,
+        ],
+    ];
+
+    return $resultData;
+}
+
+
