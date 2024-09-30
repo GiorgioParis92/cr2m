@@ -55,7 +55,7 @@
                         <span class="sidenav-normal"><i class="fa fa-calendar"></i>  Dossiers </span>
                     </a>
                 </li>
-                
+
                 @endif
                 <li class="nav-item ">
                     <a class="nav-link" href="{{ route('planning') }}">
@@ -63,13 +63,14 @@
                     </a>
                 </li>
                 @if (auth()->user() && auth()->user()->client_id == 0)
-
+                    @if(auth()->user()->type_id!=4)
                 <li class="nav-item ">
                     <a class="nav-link" href="{{ route('rdvs') }}">
                         <span class="sidenav-normal"><i class="fa fa-calendar"></i>  Gestion des rdvs </span>
                     </a>
                 </li>
 
+                    @endif
                 @endif
 
                 <li class="nav-item ">
