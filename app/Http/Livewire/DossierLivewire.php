@@ -27,6 +27,7 @@ class DossierLivewire extends Component
     public $global_data = [];
     public $tab;
     public $last_etape;
+    public $last_etape_order;
     public $score_info;
     public $formData = [];
     public $validators = [];
@@ -77,6 +78,7 @@ class DossierLivewire extends Component
            
             if (is_user_allowed($etape->etape_name) == true && (($etape->order_column) ) <= $this->dossier->etape->order_column) {
                 $last_etape = ($etape->id);
+                $this->last_etape_order=$etape->order_column;
             }
         }
        
@@ -149,23 +151,29 @@ class DossierLivewire extends Component
     public function get_docs()
     {
         $results = DB::table('forms_config')
-    ->leftJoin('forms_data', function($join) {
-        $join->on('forms_config.name', '=', 'forms_data.meta_key')
-             ->where('forms_data.dossier_id', $this->dossier->id);
-    })
-    ->join('forms', 'forms.id', '=', 'forms_config.form_id') // Join with the forms table
-    ->join('etapes', 'etapes.id', '=', 'forms.etape_id') // Join with the etapes table
-    ->whereIn('forms_config.type', ['generate', 'fillable', 'upload','generateConfig'])
-    ->orderBy('etapes.order_column') // Order the results by etapes.order_column
-    ->get()
-    ->toArray();
+        ->leftJoin('forms_data', function($join) {
+            $join->on('forms_config.name', '=', 'forms_data.meta_key')
+                 ->where('forms_data.dossier_id', $this->dossier->id);
+        })
+        ->join('forms', 'forms.id', '=', 'forms_config.form_id') // Join with the forms table
+        ->join('etapes', 'etapes.id', '=', 'forms.etape_id') // Join with the etapes table
+        ->whereIn('forms_config.type', ['generate', 'fillable', 'upload', 'generateConfig'])
+        ->whereIn('forms_config.id', function($query) {
+            $query->select(DB::raw('MIN(id)'))
+                  ->from('forms_config')
+                  ->groupBy('name');
+        }) // Subquery to select the first occurrence of each name
+        ->orderBy('etapes.order_column') // Order the results by etapes.order_column
+        ->get()
+        ->toArray();
         $this->docs=[];
 
         foreach ($results as $result) {
             $options = json_decode($result->options, true); // Decode as associative array
             $doc = get_object_vars($result); // Convert the object to an array
             $doc['options'] = $options; // Add the options array
-        
+            $doc['last_etape_order']=$this->last_etape_order ?? 1;
+
             // Check if 'signable' exists in options and is true
             if (isset($options['signable']) && $options['signable'] === "true") {
                 // Perform your additional DB request here
