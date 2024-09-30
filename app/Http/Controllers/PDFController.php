@@ -381,7 +381,7 @@ class PDFController extends Controller
         </table>';
 
 
-        if($i==1) {
+        if($count==1) {
 
         
         $content.='<div><table style="margin:auto;width:90%;border-collapse: collapse;margin-top:20px"><tr>';
