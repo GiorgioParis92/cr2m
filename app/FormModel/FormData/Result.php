@@ -296,7 +296,7 @@ class Result extends AbstractFormData
 
 
 
-    public function render_pdf(bool $is_error)
+    public function render_pdf()
     {
 
 
