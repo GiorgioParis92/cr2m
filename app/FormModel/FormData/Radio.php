@@ -13,10 +13,47 @@ class Radio extends AbstractFormData
 
         $class_prediction = '';
 
+        if(!is_array($this->config->options)) {
+            $jsonString = str_replace(["\n", '', "\r"], '', $this->config->options);
+            $optionsArray = json_decode($jsonString, true);
+        } else {
+            $optionsArray = $this->config->options;
+        }
+
         if (!$this->check_value()) {
             $class_prediction = 'is-invalid';
         }
+        
+        $condition_valid = false;
 
+        if(isset($optionsArray['conditions'])) {
+          
+            foreach ($optionsArray as $key=>$condition_config) {
+                if($key=='conditions') {
+                    if ($this->check_condition($condition_config)) {
+                
+                        $condition_valid = true;
+        
+                        if (isset($condition_config['operation']) && $condition_config['operation'] == 'AND') {
+                            break;
+                        }
+        
+                    } else {
+                        $condition_valid = false; 
+                    }
+                }
+
+    
+            }
+        } else {
+            $condition_valid = true;
+        }
+
+
+  
+        if( $condition_valid == false) {
+            return '';
+        }
         $data = '<div class="form-group col-sm-12 '.($this->config->class ?? "").' group_' . $class_prediction . '">';
         $data .= '<div class="form-group">';
 
@@ -125,4 +162,17 @@ class Radio extends AbstractFormData
     }
         return $data;
     }
+
+    public function check_condition($condition_config)
+    {
+        foreach ($condition_config as $tag => $list_values) {
+            if (!$this->match_value($tag, $list_values)) {
+
+                return false;
+            }
+        }
+    
+        return true;
+    }
+
 }
