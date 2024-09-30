@@ -346,10 +346,10 @@ class PDFController extends Controller
             
         $timeAfterDossier = microtime(true) - $startTime;
         $htmlContent='';
+        $content = '';
         $configs=explode(',',$request->config_id);
 
        
-            dd($configs);
         
 
         // dump($timeAfterDossier);
@@ -362,7 +362,7 @@ class PDFController extends Controller
         // dump($timeAfterConfig);
 
         $title = $request->title;
-        $content = '';
+       
         $title_content = '<div><table style="margin:auto;width:90%;margin-top:20px;border-collapse: collapse;">';
         $title_content_count = 0;
         
