@@ -161,7 +161,7 @@
 
                                                 <small>
                                                     @if ($dossier->etape_number == $e->etape_number)
-                                                        <p>Status: {{ $dossier->status->status_name ?? '' }}</p>
+                                                        <p>Statut: {{ $dossier->status->status_name ?? '' }}</p>
                                                     @endif
                                                 </small>
                                             </span>

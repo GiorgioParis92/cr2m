@@ -68,9 +68,9 @@
 
 
             <div class="mb-2 mb-sm-0 col-12 col-md-3">
-                <label class="mr-sm-2">Installateur</label>
+                <label class="mr-sm-2">Apporteur</label>
                 <select class="no_select2 form-control" data-column="17" wire:model="installateur" id="installateur">
-                    <option value="">Filtrer par installateur</option>
+                    <option value="">Filtrer par apporteur</option>
 
                     @foreach ($installateurs as $installateur)
                         <option value="{{ $installateur->id }}">{{ $installateur->client_title }}</option>
@@ -110,7 +110,10 @@
 <script src="https://unpkg.com/ag-grid-community/dist/ag-grid-community.noStyle.js"></script>
 <script src="https://unpkg.com/ag-grid-enterprise/dist/ag-grid-enterprise.min.js"></script>
 
+<style>
 
+.ag-watermark{display:none!important}
+</style>
 <script>
     // Declare variables in the global scope
     var gridApi;
@@ -347,7 +350,7 @@
             animateRows: true,
             enableRangeSelection: true,
             pagination: true,
-            paginationPageSize: 50,
+            paginationPageSize: 25,
             overlayLoadingTemplate: '<div class="ag-overlay-loading-center" style="padding: 10px;"><i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><br/>Chargement des données...</div>',
 
             // Custom no rows overlay
@@ -381,7 +384,6 @@
             },
             onGridSizeChanged: function(params) {
                 params.api.sizeColumnsToFit();
-                $('#count_total').html(totalRows);
             },
             onModelUpdated: function(params) {
                 // Get the number of displayed rows after any model update (filtering, sorting, etc.)
@@ -409,13 +411,22 @@
                 rowHeight: 170,
             },
             localeText: {
-                // Replace the default text with your custom text
+                groupBy: 'Grouper par cette colonne',
+                pageSize: 'Nombre de lignes par page',
+                page: 'Page',
+                more: 'Plus',
+                to: 'à',
+                of: 'de',
+                next: 'Suivant',
+                last: 'Dernier',
+                first: 'Premier',
+                previous: 'Précédent',
+                loadingOoo: 'Chargement...',
                 rowDragText: 'Déposez les colonnes ici pour grouper les lignes',
                 groupColumns: 'Déposez les colonnes ici pour grouper les lignes',
                 rowGroupColumnsEmptyMessage: 'Déposez les colonnes ici pour grouper les lignes',
-                groupBy: 'Déposez les colonnes ici pour grouper les lignes',
                 // If needed, you can also change other locale texts
-                groupBy: 'Votre texte personnalisé',
+
                 // ... other locale texts ...
             },
         };
