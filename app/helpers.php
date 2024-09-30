@@ -580,38 +580,40 @@ function getDocumentStatuses($dossier_id, $last_etape_order = 1)
         $doc['options'] = $options;
         $doc['last_etape_order'] = $last_etape_order;
         // Check if the document should be processed
-        if ($doc['required'] == 1 || ($doc['required'] == 0 && !empty($doc['meta_value']))) {
-            if (!empty($doc['meta_value'])) {
+        if ($last_etape_order >= $doc['order_column']) {
+            if ($doc['required'] == 1 || ($doc['required'] == 0 && !empty($doc['meta_value']))) {
+                if (!empty($doc['meta_value'])) {
 
-                if (isset($doc['options']['signable']) && $doc['options']['signable'] === 'true') {
-                    // Check the signature status
-                    if (!empty($doc['signature_request_id'])) {
-                        if (!empty($doc['signature_status'])) {
-                            if ($doc['signature_status'] == 'finish') {
-                                // Document is signed
-                                $signedDocs[] = $doc['title'];
-                            } elseif ($doc['signature_status'] == 'ongoing') {
-                                // Document is waiting for signature
-                                $waitingForSignatureDocs[] = $doc['title'];
+                    if (isset($doc['options']['signable']) && $doc['options']['signable'] === 'true') {
+                        // Check the signature status
+                        if (!empty($doc['signature_request_id'])) {
+                            if (!empty($doc['signature_status'])) {
+                                if ($doc['signature_status'] == 'finish') {
+                                    // Document is signed
+                                    $signedDocs[] = $doc['title'];
+                                } elseif ($doc['signature_status'] == 'ongoing') {
+                                    // Document is waiting for signature
+                                    $waitingForSignatureDocs[] = $doc['title'];
+                                } else {
+                                    // Document is missing or not generated
+                                    // $missingDocs[] = $doc['title'];
+                                }
                             } else {
-                                // Document is missing or not generated
-                                // $missingDocs[] = $doc['title'];
+                                // Signature status is not set, consider as missing
+                                $noSignatureRequested[] = $doc['title'];
                             }
                         } else {
-                            // Signature status is not set, consider as missing
+                            // Signature request ID is not set, consider as missing
                             $noSignatureRequested[] = $doc['title'];
                         }
                     } else {
-                        // Signature request ID is not set, consider as missing
-                        $noSignatureRequested[] = $doc['title'];
+                        // Document is not signable but is considered signed
+                        $signedDocs[] = $doc['title'];
                     }
                 } else {
-                    // Document is not signable but is considered signed
-                    $signedDocs[] = $doc['title'];
+                    // Document is missing or not generated
+                    $missingDocs[] = $doc['title'];
                 }
-            } else {
-                // Document is missing or not generated
-                $missingDocs[] = $doc['title'];
             }
         }
     }
