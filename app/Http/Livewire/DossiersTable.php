@@ -165,6 +165,9 @@ class DossiersTable extends Component
                     ->orWhereIn('installateur', $has_child);
             });
         }
+
+
+
         // $dossiersQuery->limit(10);
         // Fetch the filtered results
         $dossiers = $dossiersQuery->get()->map(function ($dossier) {
@@ -196,6 +199,8 @@ class DossiersTable extends Component
                 'statut' => $dossier->status->status_desc ?? '',
                 'statut_style' => $dossier->status->status_desc ?? '',
                 'rdv' => $dossier->get_rdv ?? [],
+                'last_rdv' => optional($dossier->get_rdv->last())->date ?? null,
+
             ];
         });
 
