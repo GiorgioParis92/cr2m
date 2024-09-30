@@ -12,6 +12,8 @@
                 <option value="">Filtrer par type de ménage</option>
                 <option value="bleu">Bleu</option>
                 <option value="jaune">Jaune</option>
+                <option value="violet">Violet</option>
+                <option value="rose">Rose</option>
             </select>
         </div>
 
