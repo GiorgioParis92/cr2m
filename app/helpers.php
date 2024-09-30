@@ -26,21 +26,21 @@ if (!function_exists('is_user_allowed')) {
         if (!$user) {
             return false;
         }
-        if($user->client_id==0) {
+        if ($user->client_id == 0) {
             $defaultPermission = DB::table('default_permission')->where('type_id', $user->type_id)
-            ->where('permission_name', $permission_name)
-            ->where('type_client', 0)
+                ->where('permission_name', $permission_name)
+                ->where('type_client', 0)
 
-            ->first();
+                ->first();
 
 
-        if ($defaultPermission && $defaultPermission->is_active == 0) {
-            return false;
-        }
-        if ($defaultPermission && $defaultPermission->is_active == 1) {
+            if ($defaultPermission && $defaultPermission->is_active == 0) {
+                return false;
+            }
+            if ($defaultPermission && $defaultPermission->is_active == 1) {
+                return true;
+            }
             return true;
-        }
-        return true;
         }
         $userPermission = UserPermission::where('user_id', $user->id)
             ->where('permission_name', $permission_name)
@@ -59,13 +59,13 @@ if (!function_exists('is_user_allowed')) {
 
             // cas spécifique pour un type de user quand client
             $defaultPermission = DB::table('default_permission')
-            ->where('type_id', $user->type_id)
+                ->where('type_id', $user->type_id)
                 ->where('permission_name', $permission_name)
                 ->where('type_client', $user->client->type_client)
 
                 ->first();
 
-           
+
             if ($defaultPermission && $defaultPermission->is_active == 0) {
                 return false;
             }
@@ -83,7 +83,7 @@ if (!function_exists('is_user_allowed')) {
 
                     ->first();
 
-         
+
 
                 if ($defaultPermission && $defaultPermission->is_active == 0) {
                     return false;
@@ -94,8 +94,8 @@ if (!function_exists('is_user_allowed')) {
             }
 
 
-          
-           
+
+
 
 
 
@@ -121,7 +121,8 @@ function generateRandomString($length = 12)
     return $randomString;
 }
 
-function compressImage($filePath, $quality = 20) {
+function compressImage($filePath, $quality = 20)
+{
     $imageInfo = getimagesize($filePath);
     if ($imageInfo['mime'] == 'image/jpeg') {
         $image = imagecreatefromjpeg($filePath);
@@ -526,9 +527,20 @@ function getDocumentStatuses($dossier_id, $last_etape_order = 1)
     $missingDocs = [];
     $waitingForSignatureDocs = [];
     $signedDocs = [];
+    $noSignatureRequested = [];
 
     // Retrieve documents and necessary data using an optimized query
+    // Step 1: Get the minimum forms_config.id per name
+    $formsConfigMinIds = DB::table('forms_config')
+        ->select(DB::raw('MIN(id) as id'))
+        ->whereIn('type', ['generate', 'fillable', 'upload', 'generateConfig'])
+        ->groupBy('name');
+
+    // Step 2: Join the forms_config table with the subquery of minimum ids
     $results = DB::table('forms_config')
+        ->joinSub($formsConfigMinIds, 'fc_min', function ($join) {
+            $join->on('forms_config.id', '=', 'fc_min.id');
+        })
         ->leftJoin('forms_data as forms_data_meta', function ($join) use ($dossier_id) {
             $join->on('forms_config.name', '=', 'forms_data_meta.meta_key')
                 ->where('forms_data_meta.dossier_id', $dossier_id);
@@ -545,12 +557,6 @@ function getDocumentStatuses($dossier_id, $last_etape_order = 1)
         })
         ->join('forms', 'forms.id', '=', 'forms_config.form_id')
         ->join('etapes', 'etapes.id', '=', 'forms.etape_id')
-        ->whereIn('forms_config.type', ['generate', 'fillable', 'upload', 'generateConfig'])
-        ->whereIn('forms_config.id', function ($query) {
-            $query->select(DB::raw('MIN(id)'))
-                ->from('forms_config')
-                ->groupBy('name');
-        })
         ->orderBy('etapes.order_column')
         ->select([
             'forms_config.id',
@@ -573,39 +579,39 @@ function getDocumentStatuses($dossier_id, $last_etape_order = 1)
         $doc = get_object_vars($result);
         $doc['options'] = $options;
         $doc['last_etape_order'] = $last_etape_order;
-
         // Check if the document should be processed
         if ($doc['required'] == 1 || ($doc['required'] == 0 && !empty($doc['meta_value']))) {
             if (!empty($doc['meta_value'])) {
+
                 if (isset($doc['options']['signable']) && $doc['options']['signable'] === 'true') {
                     // Check the signature status
                     if (!empty($doc['signature_request_id'])) {
                         if (!empty($doc['signature_status'])) {
                             if ($doc['signature_status'] == 'finish') {
                                 // Document is signed
-                                $signedDocs[] = $doc;
+                                $signedDocs[] = $doc['title'];
                             } elseif ($doc['signature_status'] == 'ongoing') {
                                 // Document is waiting for signature
-                                $waitingForSignatureDocs[] = $doc;
+                                $waitingForSignatureDocs[] = $doc['title'];
                             } else {
                                 // Document is missing or not generated
-                                $missingDocs[] = $doc;
+                                // $missingDocs[] = $doc['title'];
                             }
                         } else {
                             // Signature status is not set, consider as missing
-                            $missingDocs[] = $doc;
+                            $noSignatureRequested[] = $doc['title'];
                         }
                     } else {
                         // Signature request ID is not set, consider as missing
-                        $missingDocs[] = $doc;
+                        $noSignatureRequested[] = $doc['title'];
                     }
                 } else {
                     // Document is not signable but is considered signed
-                    $signedDocs[] = $doc;
+                    $signedDocs[] = $doc['title'];
                 }
             } else {
                 // Document is missing or not generated
-                $missingDocs[] = $doc;
+                $missingDocs[] = $doc['title'];
             }
         }
     }
@@ -624,8 +630,22 @@ function getDocumentStatuses($dossier_id, $last_etape_order = 1)
             'count' => count($signedDocs),
             'docs' => $signedDocs,
         ],
+        'noSignatureRequested' => [
+            'count' => count($noSignatureRequested),
+            'docs' => $noSignatureRequested,
+        ],
     ];
-
+    $update = DB::table('dossiers_data')->updateOrInsert(
+        [
+            'dossier_id' => '' . $dossier_id . '',
+            'meta_key' => 'docs'
+        ],
+        [
+            'meta_value' => '' . json_encode($resultData) . '',
+            'created_at' => now(),
+            'updated_at' => now()
+        ]
+    );
     return $resultData;
 }
 

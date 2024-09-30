@@ -98,7 +98,10 @@ class PDFController extends Controller
                     'updated_at' => now()
                 ]
             );
-
+            if($update) {
+                $docs=getDocumentStatuses($dossier->id,$dossier->etape_number);
+            }
+            
             $identify='';
 
             // if (isset($validated['identify'])) {
@@ -312,6 +315,7 @@ class PDFController extends Controller
                 'updated_at' => now()
             ]
         );
+        $docs=getDocumentStatuses($dossier->id,$dossier->etape_number);
 
         return response()->json([
             'message' => 'PDF generated and saved successfully',
@@ -515,6 +519,7 @@ class PDFController extends Controller
                 'updated_at' => now()
             ]
         );
+        $docs=getDocumentStatuses($dossier->id,$dossier->etape_number);
 
         return response()->json([
             'message' => 'PDF generated and saved successfully',

@@ -185,6 +185,7 @@ class YouSign extends Controller
               'updated_at' => now()
             ]
           );
+          $docs=getDocumentStatuses($dossier->id,$dossier->etape_number);
 
           return response()->json('ok', 200);
         }

@@ -191,7 +191,6 @@ class DossierLivewire extends Component
         }
 
 
-        $this->doc_status=getDocumentStatuses($this->dossier->id,$this->last_etape_order);
     }
     public function refresh()
     {
