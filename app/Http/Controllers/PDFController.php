@@ -348,7 +348,7 @@ class PDFController extends Controller
         $htmlContent='';
         $content = '';
         $configs=explode(',',$request->config_id);
-        $count=;
+        $count=0;
        
         
 
