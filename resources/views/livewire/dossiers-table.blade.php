@@ -286,7 +286,7 @@
 
 
             {
-                field: "last_rdv",
+                field: "last_rdv.date_rdv",
                 headerName: "RDV",
                 sortable: true,
                 filter: 'agSetColumnFilter',
@@ -296,6 +296,21 @@
                     textAlign: 'center'
                 },
                 cellRenderer: render_rdv,
+                filterParams: {
+                    // Custom comparator to handle date filtering
+                    comparator: (filterDate, cellValue) => {
+                        if (!cellValue) return -1; // No date in cell
+
+                        // Parse the cell value into a Date object
+                        const cellDate = new Date(cellValue);
+
+                        // Compare the cell date with the filter date
+                        if (cellDate < filterDate) return -1;
+                        if (cellDate > filterDate) return 1;
+                        return 0;
+                    },
+                    browserDatePicker: true, // Use browser's date picker for a localized experience
+                },
             },
 
         ];
@@ -568,7 +583,7 @@
     if (!data || !data.rdv) {
         return '';
     }
-    console.log(data)
+    console.log(data.last_rdv)
     var rdvInfo = '';
                         data.rdv.forEach(rdv => {
                             console.log(rdv)
