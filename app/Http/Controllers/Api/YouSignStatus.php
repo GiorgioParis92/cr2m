@@ -135,6 +135,7 @@ class YouSignStatus extends Controller
               'updated_at' => now()
             ]
           );
+          $docs=getDocumentStatuses($dossier->id,$dossier->etape_number);
 
           return response()->json('ongoing', 200);
         }
@@ -156,6 +157,7 @@ class YouSignStatus extends Controller
             ]
           );
 
+          $docs=getDocumentStatuses($dossier->id,$dossier->etape_number);
 
           $url = 'http://192.168.100.40:5010/process_request?service=yousign';
           $data = json_encode([
@@ -293,6 +295,7 @@ class YouSignStatus extends Controller
                     'updated_at' => now()
                   ]
                 );
+                $docs=getDocumentStatuses($dossier->id,$dossier->etape_number);
 
 
     
