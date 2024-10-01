@@ -40,9 +40,8 @@ class PDFController extends Controller
         $title = '';
         // Determine the HTML content to use
         if (isset($validated['template'])) {
-            $htmlContent = $this->getTemplateHtml($validated['template'], $validated['dossier_id'], $config = null, $title,$content=null,$send_data=true);
-        } 
-        else {
+            $htmlContent = $this->getTemplateHtml($validated['template'], $validated['dossier_id'], $config = null, $title, $content = null, $send_data = true);
+        } else {
             $htmlContent = '';
         }
 
@@ -98,16 +97,17 @@ class PDFController extends Controller
                     'updated_at' => now()
                 ]
             );
-            if($update) {
+            if ($update) {
                 if ($dossier && $dossier->etape) {
                     $orderColumn = $dossier->etape->order_column;
                 } else {
                     // Handle the case where $dossier or $dossier->etape is null
                     $orderColumn = null;
                 }
-                  $docs=getDocumentStatuses($dossier->id,$orderColumn);            }
-            
-            $identify='';
+                $docs = getDocumentStatuses($dossier->id, $orderColumn);
+            }
+
+            $identify = '';
 
             // if (isset($validated['identify'])) {
             //     $fullFilePath = Storage::path($filePath); // This will return the absolute path
@@ -130,21 +130,21 @@ class PDFController extends Controller
         }
     }
 
-    private function getTemplateHtml($template, $dossier_id, $config = null, $title = '', $content = null,$send_data=null)
+    private function getTemplateHtml($template, $dossier_id, $config = null, $title = '', $content = null, $send_data = null)
     {
         // Check if the template view exists
         $templatePath = 'templates.' . $template;
 
         $dossier = Dossier::where('folder', $dossier_id)->first();
-        if($send_data) {
+        if ($send_data) {
             $all_data = load_all_dossier_data($dossier);
         } else {
-            $all_data=[];
+            $all_data = [];
         }
-        
+
 
         if (View::exists($templatePath)) {
-            return view($templatePath, ['all_data' => $all_data,'dossier' => $dossier, 'config' => $config, 'title' => $title, 'content' => $content])->render();
+            return view($templatePath, ['all_data' => $all_data, 'dossier' => $dossier, 'config' => $config, 'title' => $title, 'content' => $content])->render();
         } else {
             throw new \Exception('Invalid template specified');
         }
@@ -219,7 +219,35 @@ class PDFController extends Controller
 
                         if ($tag != "" && isset($all_data[$fill_data_config["data_origin"]][$form_id][$tag])) {
                             $current_value = $all_data[$fill_data_config["data_origin"]][$form_id][$tag];
+                            if (isset($fill_data_config["eval"])) {
 
+                                if (isset($fill_data_config["eval"])) {
+                                    try {
+                                        // Replace `$$value$$` in the eval string with the actual value
+                                        if(is_array($fill_data_config["eval"])) {
+
+                                        } else {
+                                            $fill_data_config["eval"][]=$fill_data_config["eval"]; 
+                                        }
+                                        $new_value='';
+                                        foreach($fill_data_config["eval"] as $eval) {
+                                            $queryString = str_replace('$$value$$', $current_value, $eval);
+                                
+                                            // Use eval to execute the query and assign the result
+                                            $evalResult = eval('return ' . $queryString . ';');
+                                            // Check if the result is not empty and assign it to $current_value
+                                            $new_value .= !empty($evalResult) ? $evalResult : null;
+                                            $new_value .=' ';
+                                        }
+                                        $current_value=$new_value;
+
+                                        
+                                    } catch (\Throwable $th) {
+                                        // Catch any errors during eval execution
+                                        $current_value = $th->getMessage();
+                                    }
+                                }
+                            }
                             if (isset($fill_data_config["value_replace"])) {
                                 if ($current_value == $fill_data_config["value_replace"]) {
                                     $current_value = $fill_data_config["replace_by"];
@@ -258,30 +286,30 @@ class PDFController extends Controller
                     }
                     if (isset($fill_data_config["img"])) {
                         if (isset($fill_data_config['signature'])) {
-                            $dossier = DB::table('dossiers' )
-                            ->where('folder', $dossierId)
-                            ->first();
-                        
-                        $client = DB::table('clients')
-                            ->where('id', $dossier->mar)
-                            ->first();
+                            $dossier = DB::table('dossiers')
+                                ->where('folder', $dossierId)
+                                ->first();
 
-                          $signature_client=$client->signature ?? '';
-                        
-                        $signaturePath = storage_path('app/public/' . $signature_client);
-                   
-                        if (file_exists($signaturePath)) {
-                            // Set default position and size if not provided
+                            $client = DB::table('clients')
+                                ->where('id', $dossier->mar)
+                                ->first();
 
-                            $x = isset($fill_data_config["x"]) ? $fill_data_config["x"] : 10;
-                            $y = isset($fill_data_config["y"]) ? $fill_data_config["y"] : 10;
-                            $width = isset($fill_data_config["width"]) ? $fill_data_config["width"] : 50;
-                            $height = isset($fill_data_config["height"]) ? $fill_data_config["height"] : 30;
-                
-                            // Insert the image into the PDF
-                            $pdf->Image($signaturePath, $x, $y, $width);
+                            $signature_client = $client->signature ?? '';
+
+                            $signaturePath = storage_path('app/public/' . $signature_client);
+
+                            if (file_exists($signaturePath)) {
+                                // Set default position and size if not provided
+
+                                $x = isset($fill_data_config["x"]) ? $fill_data_config["x"] : 10;
+                                $y = isset($fill_data_config["y"]) ? $fill_data_config["y"] : 10;
+                                $width = isset($fill_data_config["width"]) ? $fill_data_config["width"] : 50;
+                                $height = isset($fill_data_config["height"]) ? $fill_data_config["height"] : 30;
+
+                                // Insert the image into the PDF
+                                $pdf->Image($signaturePath, $x, $y, $width);
+                            }
                         }
-                    }
                     }
 
 
@@ -326,7 +354,7 @@ class PDFController extends Controller
             // Handle the case where $dossier or $dossier->etape is null
             $orderColumn = null;
         }
-          $docs=getDocumentStatuses($dossier->id,$orderColumn);
+        $docs = getDocumentStatuses($dossier->id, $orderColumn);
         return response()->json([
             'message' => 'PDF generated and saved successfully',
             'file_path' => Storage::url($filePath) // Adjusted this line
@@ -356,122 +384,122 @@ class PDFController extends Controller
         $dossier_data = Dossier::where('id', $dossier->id)
             ->with('beneficiaire', 'fiche', 'etape', 'status')
             ->first();
-      
-            
+
+
         $timeAfterDossier = microtime(true) - $startTime;
-        $htmlContent='';
+        $htmlContent = '';
         $content = '';
-        $configs=explode(',',$request->config_id);
-        $count=0;
-       
-        
+        $configs = explode(',', $request->config_id);
+        $count = 0;
+
+
 
         // dump($timeAfterDossier);
-        foreach($configs as $config_id)
-        {
-        $form = DB::table('forms')->where('id', $config_id)->first();
-      
-        $config = DB::table('forms_config')->where('form_id', $config_id)->orderBy('ordering')->get();
-        $timeAfterConfig = microtime(true) - $startTime;
-            $count++;
-      
-        // dump($timeAfterConfig);
+        foreach ($configs as $config_id) {
+            $form = DB::table('forms')->where('id', $config_id)->first();
 
-        $title = $request->title;
-       
-        $title_content = '<div><table style="margin:auto;width:90%;margin-top:20px;border-collapse: collapse;">';
-        $title_content_count = 0;
-        
-        // $all_data = load_all_dossier_data($dossier);
-        $lastRdv = Rdv::with('user')
-        ->where('dossier_id', $dossier->id)
-        ->where('type_rdv', 1)
-        ->where('status','!=', 2)
-        ->orderBy('created_at', 'desc')
-        ->first();
-     
-            $content.='<table style="margin:auto;width:90%;border-collapse: collapse;margin-top:20px">
-            <tr><td class="s1 form_title" style="font-size:18px">'.($form->form_title ?? '').'</td></tr>
+            $config = DB::table('forms_config')->where('form_id', $config_id)->orderBy('ordering')->get();
+            $timeAfterConfig = microtime(true) - $startTime;
+            $count++;
+
+            // dump($timeAfterConfig);
+
+            $title = $request->title;
+
+            $title_content = '<div><table style="margin:auto;width:90%;margin-top:20px;border-collapse: collapse;">';
+            $title_content_count = 0;
+
+            // $all_data = load_all_dossier_data($dossier);
+            $lastRdv = Rdv::with('user')
+                ->where('dossier_id', $dossier->id)
+                ->where('type_rdv', 1)
+                ->where('status', '!=', 2)
+                ->orderBy('created_at', 'desc')
+                ->first();
+
+            $content .= '<table style="margin:auto;width:90%;border-collapse: collapse;margin-top:20px">
+            <tr><td class="s1 form_title" style="font-size:18px">' . ($form->form_title ?? '') . '</td></tr>
         </table>';
 
 
-        if($count==1) {
+            if ($count == 1) {
 
-        
-        $content.='<div><table style="margin:auto;width:90%;border-collapse: collapse;margin-top:20px"><tr>';
-        $content.='<td class="s2 form_title" style="width:100%;border:1px solid #ccc;border-collapse: collapse;padding-left:12px;text-align:center">';
-        $content.='<div>Coordonnées bénéficiaire</div></td></tr><tr>';
-        $content.='<td style="width:100%;border:1px solid #ccc;border-collapse: collapse;padding-left:12px;padding-bottom:15px;text-align:center"><div>';
-        $content.='<h5 class="mb-0" style="text-align:center"><b>'.$dossier_data['beneficiaire']['nom'].' '.$dossier_data['beneficiaire']['prenom'].'</b><br>'.$dossier_data['beneficiaire']['numero_voie'].' '.($dossier_data['beneficiaire']['adresse'] ?? '').' '.$dossier_data['beneficiaire']['cp'].' '.$dossier_data['beneficiaire']['ville'].'<br> </h5>';
-        $content.='<h6 class="mb-0"><b>Tél : '.$dossier_data['beneficiaire']['telephone'].'</b> -Email : '.$dossier_data['beneficiaire']['email'].'<br></h6>';
-        $content.='<h6 class="mb-0"><b>N° CLAVIS : '.($dossier_data['reference_unique'] ?? '').'</b></h6>';
-        $content.='<div class="btn bg-primary bg-Très modestes">'.$dossier_data['beneficiaire']['menage_mpr'].'</div><div class="">Technicien RDV MAR 1 :'.($lastRdv ? $lastRdv->user->name : '').'</div></div></td></tr></table>';
-        $content.='</div>';
-         }
-        foreach ($config as $element) {
-            if (empty($element) || empty($element->type)) {
-                $content .= '<p>Error: Configuration element is missing.</p>';
-                continue;
+
+                $content .= '<div><table style="margin:auto;width:90%;border-collapse: collapse;margin-top:20px"><tr>';
+                $content .= '<td class="s2 form_title" style="width:100%;border:1px solid #ccc;border-collapse: collapse;padding-left:12px;text-align:center">';
+                $content .= '<div>Coordonnées bénéficiaire</div></td></tr><tr>';
+                $content .= '<td style="width:100%;border:1px solid #ccc;border-collapse: collapse;padding-left:12px;padding-bottom:15px;text-align:center"><div>';
+                $content .= '<h5 class="mb-0" style="text-align:center"><b>' . $dossier_data['beneficiaire']['nom'] . ' ' . $dossier_data['beneficiaire']['prenom'] . '</b><br>' . $dossier_data['beneficiaire']['numero_voie'] . ' ' . ($dossier_data['beneficiaire']['adresse'] ?? '') . ' ' . $dossier_data['beneficiaire']['cp'] . ' ' . $dossier_data['beneficiaire']['ville'] . '<br> </h5>';
+                $content .= '<h6 class="mb-0"><b>Tél : ' . $dossier_data['beneficiaire']['telephone'] . '</b> -Email : ' . $dossier_data['beneficiaire']['email'] . '<br></h6>';
+                $content .= '<h6 class="mb-0"><b>N° CLAVIS : ' . ($dossier_data['reference_unique'] ?? '') . '</b></h6>';
+                $content .= '<div class="btn bg-primary bg-Très modestes">' . $dossier_data['beneficiaire']['menage_mpr'] . '</div><div class="">Technicien RDV MAR 1 :' . ($lastRdv ? $lastRdv->user->name : '') . '</div></div></td></tr></table>';
+                $content .= '</div>';
             }
-
-            $class = 'App\\FormModel\\FormData\\' . ucfirst($element->type);
-            if (!class_exists($class)) {
-                $content .= "Error: Class $class does not exist.";
-                continue;
-            }
-
-            try {
-                if ($element->type == 'title') {
-                    if ($title_content_count > 1) {
-                        $content .= $title_content.'</table></div>';
-                    }
-                    $title_content = '<div><table style="margin:auto;width:90%;border-collapse: collapse;margin-top:20px">';
-                    $title_content_count = 0;
+            foreach ($config as $element) {
+                if (empty($element) || empty($element->type)) {
+                    $content .= '<p>Error: Configuration element is missing.</p>';
+                    continue;
                 }
-           
-          
 
-                $instance = new $class($element, $element->name, $element->form_id, $dossier->id ?? null);
-                $instance->set_dossier($dossier);
-                $instance_result = $instance->render_pdf();
-                
-                // if ($element->type == 'table' && $element->name=='ajout_mur') {
-          
-                //     echo($instance_result);
-                  
-                // }
-                // if ($element->type == 'table' && $element->name=='ajout_piece') {
-          
-                //     echo($instance_result);
-                  
-                // }
+                $class = 'App\\FormModel\\FormData\\' . ucfirst($element->type);
+                if (!class_exists($class)) {
+                    $content .= "Error: Class $class does not exist.";
+                    continue;
+                }
 
-             
+                try {
+                    if ($element->type == 'title') {
+                        if ($title_content_count > 1) {
+                            $content .= $title_content . '</table></div>';
+                        }
+                        $title_content = '<div><table style="margin:auto;width:90%;border-collapse: collapse;margin-top:20px">';
+                        $title_content_count = 0;
+                    }
 
-                if ($instance_result) {
-                    $title_content_count ++;
-                    if($element->type=='title') {
-                        $title_content .= '<tr><td class="s2 form_title" style="width:100%;border:1px solid #ccc;border-collapse: collapse;padding-left:12px">'.$instance_result.'</td></tr>';
 
-                    } else {
-                        if($element->type!='table') {
-                        $title_content .= '<tr><td style="width:100%;border:1px solid #ccc;border-collapse: collapse;padding-left:12px;padding-bottom:15px">'.$instance_result.'</td></tr>';
+
+                    $instance = new $class($element, $element->name, $element->form_id, $dossier->id ?? null);
+                    $instance->set_dossier($dossier);
+                    $instance_result = $instance->render_pdf();
+
+                    // if ($element->type == 'table' && $element->name=='ajout_mur') {
+
+                    //     echo($instance_result);
+
+                    // }
+                    // if ($element->type == 'table' && $element->name=='ajout_piece') {
+
+                    //     echo($instance_result);
+
+                    // }
+
+
+
+                    if ($instance_result) {
+                        $title_content_count++;
+                        if ($element->type == 'title') {
+                            $title_content .= '<tr><td class="s2 form_title" style="width:100%;border:1px solid #ccc;border-collapse: collapse;padding-left:12px">' . $instance_result . '</td></tr>';
+
                         } else {
-                            $title_content.='</table><div>'.$instance_result.'</div></table>';;
+                            if ($element->type != 'table') {
+                                $title_content .= '<tr><td style="width:100%;border:1px solid #ccc;border-collapse: collapse;padding-left:12px;padding-bottom:15px">' . $instance_result . '</td></tr>';
+                            } else {
+                                $title_content .= '</table><div>' . $instance_result . '</div></table>';
+                                ;
+                            }
                         }
                     }
-                }
-            
-            } catch (\Throwable $th) {
-                $title_content .= $element->name . ' Error: ' . $th->getMessage();
-            }
-        }
 
-        if ($title_content_count != 0) {
-            $content .= $title_content;
-        }
-       
-        // Get the HTML content for the template
+                } catch (\Throwable $th) {
+                    $title_content .= $element->name . ' Error: ' . $th->getMessage();
+                }
+            }
+
+            if ($title_content_count != 0) {
+                $content .= $title_content;
+            }
+
+            // Get the HTML content for the template
         }
 
         $htmlContent = $this->getTemplateHtml('config', $request->dossier_id, $config, $title, $content);
@@ -535,7 +563,7 @@ class PDFController extends Controller
             // Handle the case where $dossier or $dossier->etape is null
             $orderColumn = null;
         }
-          $docs=getDocumentStatuses($dossier->id,$orderColumn);
+        $docs = getDocumentStatuses($dossier->id, $orderColumn);
         return response()->json([
             'message' => 'PDF generated and saved successfully',
             'file_path' => Storage::url($filePath) // Adjusted this line
