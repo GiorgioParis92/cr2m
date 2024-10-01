@@ -596,7 +596,7 @@ function getDocumentStatuses($dossier_id, $last_etape_order = 1)
                                     $waitingForSignatureDocs[] = $doc['title'];
                                 } else {
                                     // Document is missing or not generated
-                                    // $missingDocs[] = $doc['title'];
+                                    $missingDocs[] = $doc['title'];
                                 }
                             } else {
                                 // Signature status is not set, consider as missing
