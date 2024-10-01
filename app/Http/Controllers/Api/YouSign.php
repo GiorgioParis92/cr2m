@@ -185,8 +185,13 @@ class YouSign extends Controller
               'updated_at' => now()
             ]
           );
-          $docs=getDocumentStatuses($dossier->id,$dossier->etape_number);
-
+          if ($dossier && $dossier->etape) {
+            $orderColumn = $dossier->etape->order_column;
+        } else {
+            // Handle the case where $dossier or $dossier->etape is null
+            $orderColumn = null;
+        }
+          $docs=getDocumentStatuses($dossier->id,$orderColumn);
           return response()->json('ok', 200);
         }
       }

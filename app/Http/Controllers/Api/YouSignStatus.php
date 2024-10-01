@@ -135,7 +135,13 @@ class YouSignStatus extends Controller
               'updated_at' => now()
             ]
           );
-          $docs=getDocumentStatuses($dossier->id,$dossier->etape_number);
+          if ($dossier && $dossier->etape) {
+            $orderColumn = $dossier->etape->order_column;
+        } else {
+            // Handle the case where $dossier or $dossier->etape is null
+            $orderColumn = null;
+        }
+          $docs=getDocumentStatuses($dossier->id,$orderColumn);
 
           return response()->json('ongoing', 200);
         }
@@ -157,8 +163,13 @@ class YouSignStatus extends Controller
             ]
           );
 
-          $docs=getDocumentStatuses($dossier->id,$dossier->etape_number);
-
+          if ($dossier && $dossier->etape) {
+            $orderColumn = $dossier->etape->order_column;
+        } else {
+            // Handle the case where $dossier or $dossier->etape is null
+            $orderColumn = null;
+        }
+          $docs=getDocumentStatuses($dossier->id,$orderColumn);
           $url = 'http://192.168.100.40:5010/process_request?service=yousign';
           $data = json_encode([
             'request_type' => 'download_document',
@@ -295,8 +306,13 @@ class YouSignStatus extends Controller
                     'updated_at' => now()
                   ]
                 );
-                $docs=getDocumentStatuses($dossier->id,$dossier->etape_number);
-
+                if ($dossier && $dossier->etape) {
+                  $orderColumn = $dossier->etape->order_column;
+              } else {
+                  // Handle the case where $dossier or $dossier->etape is null
+                  $orderColumn = null;
+              }
+                $docs=getDocumentStatuses($dossier->id,$orderColumn);
 
     
 
