@@ -111,7 +111,29 @@
 <script src="https://unpkg.com/ag-grid-enterprise/dist/ag-grid-enterprise.min.js"></script>
 
 <style>
-
+span.badge.badge-danger {
+    background: var(--bs-danger);
+    margin-right:3px;
+}
+span.badge.badge-outline-danger {
+    background: var(--bs-danger);
+    margin-right:3px;
+}
+span.badge.badge-warning {
+    background: var(--bs-warning);
+    margin-right:3px;
+}
+span.badge.badge-success {
+    background: var(--bs-success);
+    margin-right:3px;
+}
+span.badge.badge-outline-danger {
+    background: white;
+    border: var(--bs-danger);
+    border: 1px solid var(--bs-danger);
+    color: var(--bs-danger);
+    margin-right:3px;
+}
 .ag-watermark{display:none!important}
 </style>
 <script>
@@ -325,6 +347,18 @@
                     },
                     browserDatePicker: true, // Use browser's date picker for a localized experience
                 },
+            },
+            {
+                field: "docs", 
+                headerName: "Documents", 
+                sortable: true,
+                filter: 'agSetColumnFilter',
+                enableRowGroup: true,
+                autoHeight: true,
+                cellStyle: {
+                    textAlign: 'center'
+                },
+                cellRenderer: render_cell_docs, 
             },
 
         ];
@@ -653,4 +687,50 @@
 
         return rdvInfo;
     }
+    function render_cell_docs(params) {
+    let data = params.value;
+
+    // If data is a JSON string, parse it
+    if (typeof data === 'string') {
+        try {
+            data = JSON.parse(data);
+        } catch (error) {
+            console.error("Invalid JSON format:", error);
+            return '';
+        }
+    }
+
+    // Check if the data has the expected properties
+    if (!data || (!data.missingDocs && !data.waitingForSignatureDocs && !data.signedDocs && !data.noSignatureRequested)) {
+        return ''; // Return empty if no valid data found
+    }
+
+    // Helper function to create badge with hover tooltip
+    function createBadge(label, count, docs,color) {
+        if (count > 0) {
+            return `<span class="badge badge-${color}" title="${docs.join(', ')}">${count}</span>`;
+        }
+        return '';
+    }
+
+    // Construct the badges
+    let content = '';
+
+    // Missing Docs Badge
+    content += createBadge('Missing Docs', data.missingDocs.count, data.missingDocs.docs,'outline-danger');
+
+    // Waiting for Signature Docs Badge
+    content += createBadge('Waiting for Signature', data.waitingForSignatureDocs.count, data.waitingForSignatureDocs.docs,'warning');
+
+    // Signed Docs Badge
+    content += createBadge('Signed Docs', data.signedDocs.count, data.signedDocs.docs,'success');
+
+    // No Signature Requested Docs Badge
+    content += createBadge('No Signature Requested', data.noSignatureRequested.count, data.noSignatureRequested.docs,'danger');
+
+    // Return the constructed content
+    return content;
+}
+
+
 </script>

@@ -177,6 +177,7 @@ class DossiersTable extends Component
 
         $dossiers = $dossiersQuery->get();
 
+        
         $dossierIds = $dossiers->pluck('id')->toArray();
         $etapeNumbers = $dossiers->pluck('etape_number', 'id')->toArray();
     
@@ -189,7 +190,7 @@ class DossiersTable extends Component
     
             return [
                 'id' => $dossier->id,
-                'docs' => json_encode($dossier->meta_value),
+                'docs' => ($dossier->meta_value),
                 'date_creation' => $dossier->created_at,
                 'dossier_url' => route('dossiers.show', $dossier->folder),
                 'beneficiaire' => [
