@@ -72,7 +72,10 @@ class DossiersTable extends Component
             'status',
             'mar',
             'get_rdv',
-        ]);
+        ])
+        ->join('dossiers_data', 'dossiers.id', '=', 'dossiers_data.dossier_id')
+        ->where('dossiers_data.meta_key', 'docs')
+        ->select('dossiers.*','dossiers_data.meta_value'); // Select only the columns from 'dossiers' to avoid ambiguity;
         // Apply client-specific filtering
         $userClientId = auth()->user()->client_id;
         if ($userClientId > 0) {
@@ -186,6 +189,7 @@ class DossiersTable extends Component
     
             return [
                 'id' => $dossier->id,
+                'docs' => json_encode($dossier->meta_value),
                 'date_creation' => $dossier->created_at,
                 'dossier_url' => route('dossiers.show', $dossier->folder),
                 'beneficiaire' => [
@@ -221,115 +225,12 @@ class DossiersTable extends Component
                 // ],
             ];
         });
-    
+
         // Update the component's dossier data
         $this->dossiers = $dossiers->toArray();
 
     }
-    public function getDocumentStatusesForDossiers(array $dossierIds, array $etapeNumbers)
-    {
-        if (empty($dossierIds)) {
-            return [];
-        }
-    
-        // Fetch document statuses for all dossiers
-        $results = DB::table('forms_config')
-            ->leftJoin('forms_data as forms_data_meta', function ($join) use ($dossierIds) {
-                $join->on('forms_config.name', '=', 'forms_data_meta.meta_key')
-                    ->whereIn('forms_data_meta.dossier_id', $dossierIds);
-            })
-            ->leftJoin('forms_data as forms_data_signature_request_id', function ($join) use ($dossierIds) {
-                $join->on('forms_data_signature_request_id.form_id', '=', 'forms_config.form_id')
-                    ->whereIn('forms_data_signature_request_id.dossier_id', $dossierIds)
-                    ->where('forms_data_signature_request_id.meta_key', '=', 'signature_request_id');
-            })
-            ->leftJoin('forms_data as forms_data_signature_status', function ($join) use ($dossierIds) {
-                $join->on('forms_data_signature_status.form_id', '=', 'forms_config.form_id')
-                    ->whereIn('forms_data_signature_status.dossier_id', $dossierIds)
-                    ->where('forms_data_signature_status.meta_key', '=', 'signature_status');
-            })
-            ->join('forms', 'forms.id', '=', 'forms_config.form_id')
-            ->join('etapes', 'etapes.id', '=', 'forms.etape_id')
-            ->whereIn('forms_config.type', ['generate', 'fillable', 'upload', 'generateConfig'])
-            ->whereIn('forms_config.id', function ($query) {
-                $query->select(DB::raw('MIN(id)'))
-                    ->from('forms_config')
-                    ->groupBy('name');
-            })
-            ->orderBy('etapes.order_column')
-            ->select([
-                'forms_config.id',
-                'forms_config.name',
-                'forms_config.required',
-                'forms_config.type',
-                'forms_config.options',
-                'forms_config.title',
-                'forms_data_meta.meta_value as meta_value',
-                'forms_data_meta.dossier_id',
-                'forms_data_signature_request_id.meta_value as signature_request_id',
-                'forms_data_signature_status.meta_value as signature_status',
-                'forms.id as form_id',
-                'etapes.order_column',
-            ])
-            ->get();
-    
-        // Process the results and group by dossier_id
-        $documentStatuses = [];
-    
-        foreach ($results as $result) {
-            $options = json_decode($result->options, true);
-            $dossierId = $result->dossier_id;
-    
-            // Initialize the dossier entry if not set
-            if (!isset($documentStatuses[$dossierId])) {
-                $documentStatuses[$dossierId] = [
-                    'missingDocs' => ['count' => 0, 'docs' => []],
-                    'waitingForSignatureDocs' => ['count' => 0, 'docs' => []],
-                    'signedDocs' => ['count' => 0, 'docs' => []],
-                ];
-            }
-    
-            $doc = (array) $result;
-            $doc['options'] = $options;
-            $doc['last_etape_order'] = $etapeNumbers[$dossierId] ?? 1;
-    
-            // Determine the status of each document
-            if ($doc['required'] == 1 || (!empty($doc['meta_value']))) {
-                if (!empty($doc['meta_value'])) {
-                    if (isset($options['signable']) && $options['signable'] === 'true') {
-                        if (!empty($doc['signature_request_id'])) {
-                            if (!empty($doc['signature_status'])) {
-                                if ($doc['signature_status'] == 'finish') {
-                                    $documentStatuses[$dossierId]['signedDocs']['count']++;
-                                    $documentStatuses[$dossierId]['signedDocs']['docs'][] = $doc;
-                                } elseif ($doc['signature_status'] == 'ongoing') {
-                                    $documentStatuses[$dossierId]['waitingForSignatureDocs']['count']++;
-                                    $documentStatuses[$dossierId]['waitingForSignatureDocs']['docs'][] = $doc;
-                                } else {
-                                    $documentStatuses[$dossierId]['missingDocs']['count']++;
-                                    $documentStatuses[$dossierId]['missingDocs']['docs'][] = $doc;
-                                }
-                            } else {
-                                $documentStatuses[$dossierId]['missingDocs']['count']++;
-                                $documentStatuses[$dossierId]['missingDocs']['docs'][] = $doc;
-                            }
-                        } else {
-                            $documentStatuses[$dossierId]['missingDocs']['count']++;
-                            $documentStatuses[$dossierId]['missingDocs']['docs'][] = $doc;
-                        }
-                    } else {
-                        $documentStatuses[$dossierId]['signedDocs']['count']++;
-                        $documentStatuses[$dossierId]['signedDocs']['docs'][] = $doc;
-                    }
-                } else {
-                    $documentStatuses[$dossierId]['missingDocs']['count']++;
-                    $documentStatuses[$dossierId]['missingDocs']['docs'][] = $doc;
-                }
-            }
-        }
-    
-        return $documentStatuses;
-    }
+ 
     
 
     public function render()

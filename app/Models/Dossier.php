@@ -80,4 +80,9 @@ class Dossier extends Model
     {
         return Client::find($this->installateur);
     }
+
+    public function dossiersData()
+{
+    return $this->hasMany(DossiersData::class, 'dossier_id');
+}
 }
