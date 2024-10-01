@@ -424,6 +424,8 @@ span.badge.badge-outline-danger {
                 var totalRows = params.api.getDisplayedRowCount();
                 $('#count_total').html(totalRows);
             },
+            onRowClicked: onRowClickedHandler, // Add the row click event handler here
+
             sideBar: {
                 toolPanels: [{
                     id: "columns",
@@ -543,6 +545,18 @@ span.badge.badge-outline-danger {
 
 
     });
+    function onRowClickedHandler(event) {
+    // Get the dossier URL from the clicked row's data
+    const dossierUrl = event.data.dossier_url;
+
+    // Check if the URL exists before attempting to open it
+    if (dossierUrl) {
+        // Open the URL in a new tab
+        window.open(dossierUrl, '_blank');
+    } else {
+        console.warn('No dossier URL found for this row.');
+    }
+}
     // Render cell functions
     function render_cell_beneficiaire(params) {
         const data = params.data;
