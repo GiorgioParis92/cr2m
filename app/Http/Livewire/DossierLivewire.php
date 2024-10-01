@@ -54,10 +54,11 @@ class DossierLivewire extends Component
         // }
 
         // Fetch dossier with related data
+        
         $this->dossier = Dossier::where('id', $id)
             ->with('beneficiaire', 'fiche', 'etape', 'status')
             ->first();
-
+            $this->dossier->mar = $this->dossier->mar_client;
         $current = DB::table('etapes')->where('id', $this->dossier->etape_number)->first();
         $this->dossier->order_column = $current->order_column;
 
@@ -215,7 +216,7 @@ class DossierLivewire extends Component
         $this->dossier = Dossier::where('id', $this->dossier->id)
             ->with('beneficiaire', 'fiche', 'etape', 'status')
             ->first();
-
+           
         $current = DB::table('etapes')->where('id', $this->dossier->etape_number)->first();
         $this->dossier->order_column = $current->order_column;
 
@@ -258,7 +259,7 @@ class DossierLivewire extends Component
         if(!empty($steps)) {
             $this->steps=$steps;
         }
-        
+        $this->dossier->mar = $this->dossier->mar_client;
       
     }
 
@@ -289,7 +290,6 @@ class DossierLivewire extends Component
             ->delete();
         }
         }
-       
      
 
     }
@@ -524,7 +524,7 @@ class DossierLivewire extends Component
                 }
             }
             $dossier = Dossier::where('id', $this->dossier->id)->first();
-
+            $this->dossier->mar = $dossier->mar_client;
             foreach ($dossier->getAttributes() as $key => $value) {
                 $this->global_data[$key] = $value;
 
