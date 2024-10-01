@@ -582,8 +582,7 @@ function getDocumentStatuses($dossier_id, $last_etape_order = 1)
         // Check if the document should be processed
 
         
-            dump($last_etape_order);
-            dump($doc['order_column']);
+
     
 
         if ($last_etape_order >= $doc['order_column']) {
