@@ -580,6 +580,12 @@ function getDocumentStatuses($dossier_id, $last_etape_order = 1)
         $doc['options'] = $options;
         $doc['last_etape_order'] = $last_etape_order;
         // Check if the document should be processed
+
+        if(auth()->user()->id==1) {
+            dump($last_etape_order);
+            dump($doc['order_column']);
+        }
+
         if ($last_etape_order >= $doc['order_column']) {
             if ($doc['required'] == 1 || ($doc['required'] == 0 && !empty($doc['meta_value']))) {
                 if (!empty($doc['meta_value'])) {
