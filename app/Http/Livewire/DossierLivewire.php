@@ -39,11 +39,19 @@ class DossierLivewire extends Component
         $this->time = now()->format('H:i:s');
 
 
-        // $dossiers=Dossier::where('id','>',0)->get();
-        // foreach($dossiers as $dossier) {
-        //     $docs=getDocumentStatuses($dossier->id,$dossier->etape_number);
+        $dossiers=Dossier::where('id','>',0)->get();
+        foreach($dossiers as $dossier) {
 
-        // }
+            if ($dossier && $dossier->etape) {
+                $orderColumn = $dossier->etape->order_column;
+            } else {
+                // Handle the case where $dossier or $dossier->etape is null
+                $orderColumn = null;
+            }
+
+            $docs=getDocumentStatuses($dossier->id,$dossier->etape_number);
+
+        }
 
         // Fetch dossier with related data
         $this->dossier = Dossier::where('id', $id)
