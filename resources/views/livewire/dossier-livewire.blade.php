@@ -40,7 +40,7 @@
                             @if (isset($dossier->mar))
                           
                                 @if (Storage::disk('public')->exists($dossier->mar->main_logo))
-                                    <img class="logo_table" src="{{ asset('storage/' . $dossier->mar->main_logo) }}">
+                                    <img style="max-width: 30%" src="{{ asset('storage/' . $dossier->mar->main_logo) }}">
                                 @endif
                                 {{ $dossier->mar->client_title }}
                             @endif
