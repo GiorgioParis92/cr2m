@@ -50,7 +50,7 @@ class Photo extends AbstractFormData
         $data .= "<script>
             var dropzoneElementId = '#dropzone-" . str_replace('.','-',$this->name) . "';
             var dropzoneElement = document.querySelector(dropzoneElementId);
-            if(dropzoneElement) {
+            if('name of dopzone :'+dropzoneElement) {
             console.log(dropzoneElementId);
             var dropzone = new Dropzone(dropzoneElement, {
                 url: '{$uploadUrl}',
