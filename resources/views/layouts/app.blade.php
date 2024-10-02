@@ -844,6 +844,8 @@
                     success: function(response) {
 
                         if (response.file_path) {
+                            $('#pdfFrame').attr('src', '');
+
                             $('#pdfFrame').attr('src', response.file_path);
                             $('#pdfModal').css('display', 'block');
                         }
@@ -876,6 +878,8 @@
                     },
                     success: function(response) {
                         if (response.file_path) {
+                            $('#pdfFrame').attr('src', '');
+
                             // Display the PDF in an iframe if a file path is returned
                             $('#pdfFrame').attr('src', response.file_path);
                             $('#pdfModal').css('display', 'block');
