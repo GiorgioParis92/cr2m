@@ -48,6 +48,11 @@ class Photo extends AbstractFormData
 
         
         $data .= "<script>
+          if (Dropzone.instances.length > 0) {
+            Dropzone.instances.forEach(instance => instance.destroy());
+        }
+
+        Dropzone.autoDiscover = false;
             var dropzoneElementId = '#dropzone-" . str_replace('.','-',$this->name) . "';
             var dropzoneElement = document.querySelector(dropzoneElementId);
             if('name of dopzone :'+dropzoneElement) {
