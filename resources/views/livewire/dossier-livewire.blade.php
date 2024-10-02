@@ -714,7 +714,7 @@
         Object.values(configs).forEach((formConfig) => {
             if (formConfig.form.type === 'document') {
                 Object.keys(formConfig.formData).forEach((key) => {
-                    console.log(key)
+                    console.log('DROPZONE NAME:'+key)
                     var dropzoneElementId = `#dropzone-${key}`;
                     var dropzoneElement = document.querySelector(dropzoneElementId);
                     console.log('dropzones : ' + dropzoneElement)
