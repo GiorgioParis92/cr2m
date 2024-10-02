@@ -79,7 +79,7 @@ class Table extends AbstractFormData
             $data .='</div>';
             $data .='<div class="col-lg-2">';
             $data .="<label></label>";
-            $data .= '<div class="col-lg-12 col-sm-12 btn btn-danger" wire:click="remove_row(\''.$this->name.'\',' . $this->form_id . ','. (int)$index.')">remove row</div>';
+            $data .= '<div class="col-lg-12 col-sm-12 btn btn-danger" wire:click="remove_row(\''.$this->name.'\',' . $this->form_id . ','. (int)$index.')">Supprimer</div>';
             $data .='</div>';
         }
 

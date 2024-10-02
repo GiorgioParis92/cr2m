@@ -559,6 +559,7 @@
 
     document.addEventListener('livewire:update', function() {
         initializeDeleteButtons();
+        
     });
 
     function initializeDeleteButtons() {

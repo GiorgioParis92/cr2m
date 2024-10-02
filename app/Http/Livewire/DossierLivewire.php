@@ -665,6 +665,7 @@ class DossierLivewire extends Component
             $form_configs = $this->forms_configs[$form_id];
             $form_configs->formData[$table_tag]->add_element();
         }
+        $this->emit('initializeDropzones', ['forms_configs' => $this->forms_configs]);
 
         return '';
     }
@@ -676,6 +677,9 @@ class DossierLivewire extends Component
             $form_configs = $this->forms_configs[$form_id];
             $form_configs->formData[$table_tag]->remove_element($index);
             $this->forms_configs[$form_id]=$form_configs;
+
+            $this->emit('initializeDropzones', ['forms_configs' => $this->forms_configs]);
+
             // $this->global_data[$table_tag] = $form_configs->formData[$table_tag]->remove_element($index);
         }
 
