@@ -48,14 +48,13 @@ class Photo extends AbstractFormData
 
         
         $data .= "<script>
-   
-
         Dropzone.autoDiscover = false;
-            var dropzoneElementId = '#dropzone-" . str_replace('.','-',$this->name) . "';
-            var dropzoneElement = document.querySelector(dropzoneElementId);
-            if(dropzoneElement) {
-
+        var dropzoneElementId = '#dropzone-" . str_replace('.', '-', $this->name) . "';
+        var dropzoneElement = document.querySelector(dropzoneElementId);
+        
+        if (dropzoneElement && !dropzoneElement.dropzone) {
             console.log(dropzoneElementId);
+            
             var dropzone = new Dropzone(dropzoneElement, {
                 url: '{$uploadUrl}',
                 method: 'post',
@@ -63,10 +62,9 @@ class Photo extends AbstractFormData
                     'X-CSRF-TOKEN': '{$csrfToken}'
                 },
                 maxFilesize: 50000,
-
                 paramName: 'file',
                 sending: function(file, xhr, formData) {
-                console.log(file)
+                    console.log(file);
                     formData.append('folder', 'dossiers');
                     formData.append('template', '{$this->name}');
                     formData.append('random_name', 'true');
@@ -75,17 +73,15 @@ class Photo extends AbstractFormData
                     this.on('success', function(file, response) {
                         console.log('Successfully uploaded:', response);
                         initializeDeleteButtons();
-
                     });
                     this.on('error', function(file, response) {
                         console.log('Upload error:', response);
                     });
                 }
             });
-            }
-
-           
-";
+        }
+    </script>";
+    
             $data .="\r\n"."</script>"."\r\n";
         if(!is_array($values)) {
             $values = [$values];  // Transform into array if not already an array
