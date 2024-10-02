@@ -883,8 +883,11 @@
                     if (response.file_path) {
                         $('#pdfFrame').attr('src', '');
 
-                        $('#pdfFrame').attr('src', response.file_path);
-                        $('#pdfModal').css('display', 'block');
+                        var filePathWithTimestamp = response.file_path + '?t=' + new Date().getTime();
+
+        // Display the PDF in an iframe
+        $('#pdfFrame').attr('src', filePathWithTimestamp);
+        $('#pdfModal').css('display', 'block');
                     }
                 },
                 error: function(xhr, status, error) {
@@ -920,9 +923,11 @@
                     if (response.file_path) {
                         $('#pdfFrame').attr('src', '');
 
-                        // Display the PDF in an iframe if a file path is returned
-                        $('#pdfFrame').attr('src', response.file_path);
-                        $('#pdfModal').css('display', 'block');
+                        var filePathWithTimestamp = response.file_path + '?t=' + new Date().getTime();
+
+        // Display the PDF in an iframe
+        $('#pdfFrame').attr('src', filePathWithTimestamp);
+        $('#pdfModal').css('display', 'block');
                     } else {
                         // Handle the response where the PDF content is returned directly
                         var blob = new Blob([response], {
@@ -970,9 +975,11 @@
                     if (response.file_path) {
                         $('#pdfFrame').attr('src', '');
 
-                        // Display the PDF in an iframe if a file path is returned
-                        $('#pdfFrame').attr('src', response.file_path);
-                        $('#pdfModal').css('display', 'block');
+                        var filePathWithTimestamp = response.file_path + '?t=' + new Date().getTime();
+
+// Display the PDF in an iframe
+$('#pdfFrame').attr('src', filePathWithTimestamp);
+$('#pdfModal').css('display', 'block');
                     } else {
                         // Handle the response where the PDF content is returned directly
                         var blob = new Blob([response], {
