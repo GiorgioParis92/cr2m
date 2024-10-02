@@ -84,38 +84,8 @@ class Photo extends AbstractFormData
             });
             }
 
-            function initializeDeleteButtons() {
-                $('.delete_photo').click(function() {
-                    var link = $(this).data('val');
-                    $.ajax({
-                        url: '{$deleteUrl}',
-                        method: 'POST',
-                        headers: {
-                            'X-CSRF-TOKEN': '{$csrfToken}'
-                        },
-                        data: {
-                            link: link,
-                            tag: $(this).data('tag') ?? '',
-                            index: $(this).data('index') ?? '',
-                            dossier_id: $(this).data('dossier_id') ?? '',
-                        },
-                        success: function(response) {
-                            console.log('Successfully deleted:', response);
-                        },
-                        error: function(xhr) {
-                            let errorMessage = 'An error occurred';
-                            if (xhr.responseJSON && xhr.responseJSON.errors) {
-                                errorMessage = Object.values(xhr.responseJSON.errors).join(', ');
-                            }
-                            console.log(errorMessage);
-                        }
-                    });
-                });
-            }
-
-            $(document).ready(function() {
-                initializeDeleteButtons();
-            });";
+           
+";
             $data .="\r\n"."</script>"."\r\n";
         if(!is_array($values)) {
             $values = [$values];  // Transform into array if not already an array
