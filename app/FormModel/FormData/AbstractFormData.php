@@ -16,8 +16,9 @@ class AbstractFormData
     protected $config;
     public $prediction;
     public $updating = false;
+    public $condition_valid = false;
 
-    public function __construct($config, $name, $form_id, $dossier_id, $should_load=true)
+    public function __construct($config, $name, $form_id, $dossier_id, $should_load = true)
     {
         $this->form_id = $form_id;
         $this->dossier_id = $dossier_id;
@@ -25,20 +26,20 @@ class AbstractFormData
         $this->config = (object) $config;
 
         // $this->title=$config->title;
-       
 
-        
+
+
         if ($should_load) {
-        $config = \DB::table('forms_data')
-            ->where('form_id', $form_id)
-            ->where('dossier_id', $dossier_id)
-            ->where('meta_key', $name)
-            ->first();
+            $config = \DB::table('forms_data')
+                ->where('form_id', $form_id)
+                ->where('dossier_id', $dossier_id)
+                ->where('meta_key', $name)
+                ->first();
 
-        $config_dossiers = \DB::table('dossiers_data')
-            ->where('dossier_id', $dossier_id)
-            ->where('meta_key', $name)
-            ->first();
+            $config_dossiers = \DB::table('dossiers_data')
+                ->where('dossier_id', $dossier_id)
+                ->where('meta_key', $name)
+                ->first();
             $this->value = $config->meta_value ?? '';
 
             $this->prediction = $config_dossiers->meta_value ?? '';
@@ -53,6 +54,42 @@ class AbstractFormData
         if ($this->value == '') {
             $this->value = $this->prediction;
         }
+
+        if (!is_array($this->config->options)) {
+            $jsonString = str_replace(["\n", '', "\r"], '', $this->config->options);
+            $optionsArray = json_decode($jsonString, true);
+        } else {
+            $optionsArray = $this->config->options;
+
+        }
+        $optionsArray = convertToArray($optionsArray);
+        $this->optionsArray = $optionsArray;
+
+        $this->condition_valid = false;
+
+        if (isset($optionsArray['conditions'])) {
+
+            foreach ($optionsArray as $key => $condition_config) {
+                if ($key == 'conditions') {
+                    if ($this->check_condition($condition_config)) {
+
+                        $this->condition_valid = true;
+
+                        if (isset($condition_config['operation']) && $condition_config['operation'] == 'AND') {
+                            break;
+                        }
+
+                    } else {
+                        $this->condition_valid = false;
+                    }
+                }
+
+
+            }
+        } else {
+            $this->condition_valid = true;
+        }
+
 
     }
 
@@ -91,21 +128,21 @@ class AbstractFormData
                 'updated_at' => now()
             ]
         );
-        
-        
-        if($this->form_id==3 || $this->form_id==10) {
+
+
+        if ($this->form_id == 3 || $this->form_id == 10) {
             $beneficiaire = DB::table('dossiers')->where('id', $this->dossier_id)->first();
-    
+
             if ($beneficiaire) {
                 $columnExists = DB::getSchemaBuilder()->hasColumn('beneficiaires', $this->name);
-                
+
                 if ($columnExists) {
                     $columnType = $this->getColumnType('beneficiaires', $this->name);
 
                     if ($columnType == 'int' && $value === '') {
                         $value = 0;
                     }
-    
+
                     DB::table('beneficiaires')->where('id', $beneficiaire->beneficiaire_id)->update([
                         $this->name => $value,
                         'updated_at' => now()
@@ -113,14 +150,14 @@ class AbstractFormData
                 }
 
                 $columnExists = DB::getSchemaBuilder()->hasColumn('dossiers', $this->name);
-             
+
                 if ($columnExists) {
                     $columnType = $this->getColumnType('dossiers', $this->name);
-                  
+
                     if ($columnType == 'int' && $value === '') {
                         $value = 0;
                     }
-    
+
                     DB::table('dossiers')->where('id', $this->dossier_id)->update([
                         $this->name => $value,
                         'updated_at' => now()
@@ -137,7 +174,9 @@ class AbstractFormData
 
     public function render(bool $is_error)
     {
-
+        if(!$this->condition_valid) {
+            return false;
+        }
         return '<div></div>';
 
     }
@@ -170,9 +209,9 @@ class AbstractFormData
 
 
     protected function getColumnType($table, $column)
-{
-    $database = env('DB_DATABASE');
-    $columnInfo = DB::select("
+    {
+        $database = env('DB_DATABASE');
+        $columnInfo = DB::select("
         SELECT DATA_TYPE 
         FROM INFORMATION_SCHEMA.COLUMNS 
         WHERE TABLE_SCHEMA = ? 
@@ -180,12 +219,38 @@ class AbstractFormData
         AND COLUMN_NAME = ?
     ", [$database, $table, $column]);
 
-    return $columnInfo[0]->DATA_TYPE ?? null;
-}
+        return $columnInfo[0]->DATA_TYPE ?? null;
+    }
 
-public function render_pdf()
-{
-    return false;  
-}
+    public function render_pdf()
+    {
+        return false;
+    }
+
+
+
+    public function check_condition($condition_config)
+    {
+        foreach ($condition_config as $tag => $list_values) {
+            if (!$this->match_value($tag, $list_values)) {
+
+                return false;
+            }
+        }
+
+        return true;
+    }
+    public function match_value($tag, $list_values)
+    {
+        $value = $this->getOtherValue($tag);
+
+        foreach ($list_values as $list_value) {
+            if ($value == $list_value) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 
 }

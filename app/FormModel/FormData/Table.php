@@ -9,6 +9,7 @@ class Table extends AbstractFormData
 {
 
     public $optionsArray = [];
+    public $condition_valid = [];
     
     public function __construct($config, $name, $form_id, $dossier_id)
     {
@@ -24,14 +25,44 @@ class Table extends AbstractFormData
         }
         $optionsArray = convertToArray($optionsArray);
         $this->optionsArray=$optionsArray;
-       
+
+        $this->condition_valid = false;
+
+        if(isset($optionsArray['conditions'])) {
+          
+            foreach ($optionsArray as $key=>$condition_config) {
+                if($key=='conditions') {
+                    if ($this->check_condition($condition_config)) {
+                
+                        $this->condition_valid = true;
+        
+                        if (isset($condition_config['operation']) && $condition_config['operation'] == 'AND') {
+                            break;
+                        }
+        
+                    } else {
+                        $this->condition_valid = false; 
+                    }
+                }
+
+    
+            }
+        } else {
+            $this->condition_valid = true;
+        }
+
+
+  
+      
 
     }
     public function render(bool $is_error)
     {
         $data = '';
             // dd($this);
-        
+        if( $this->condition_valid == false) {
+            return '';
+        }
         $this->value = $this->decode_if_json($this->value);
 
 
@@ -129,6 +160,11 @@ class Table extends AbstractFormData
         unset($this->value[$index]);
       
         $this->value = array_values($this->value); // Reindex the array
+
+        if(is_array($this->value) && empty($this->value)) {
+            $this->value='';
+        }
+
 
         $this->save_value();
 
@@ -228,6 +264,5 @@ class Table extends AbstractFormData
 
     
     
-    
-
+   
 }
