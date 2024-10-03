@@ -173,7 +173,7 @@ class Table extends AbstractFormData
 
     // Ensure $this->value is an array, even when empty
     if (empty($this->value)) {
-        $this->value = [];
+        $this->value = '';
     }
 
     $this->save_value();
