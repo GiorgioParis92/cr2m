@@ -129,7 +129,7 @@ class AbstractFormData
             ]
         );
 
-
+        if($this->check_value()) {
         if ($this->form_id == 3 || $this->form_id == 10) {
             $beneficiaire = DB::table('dossiers')->where('id', $this->dossier_id)->first();
 
@@ -166,6 +166,7 @@ class AbstractFormData
 
             }
         }
+    }
 
 
         return $this->check_value();
