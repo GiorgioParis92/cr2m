@@ -660,27 +660,28 @@ class DossierLivewire extends Component
 
     public function add_row($table_tag, $form_id)
     {
-
         if (isset($this->forms_configs[$form_id])) {
             $form_configs = $this->forms_configs[$form_id];
             $form_configs->formData[$table_tag]->add_element();
+            
+            // Explicitly update the property
+            $this->forms_configs[$form_id] = $form_configs;
         }
-
+    
         return '';
     }
-
-
+    
     public function remove_row($table_tag, $form_id, $index)
     {
         if (isset($this->forms_configs[$form_id])) {
             $form_configs = $this->forms_configs[$form_id];
             $form_configs->formData[$table_tag]->remove_element($index);
-            $this->forms_configs[$form_id]=$form_configs;
-
-
-            // $this->global_data[$table_tag] = $form_configs->formData[$table_tag]->remove_element($index);
+            
+            // Explicitly update the property
+            $this->forms_configs[$form_id] = $form_configs;
         }
-
+    
         return '';
     }
+    
 }

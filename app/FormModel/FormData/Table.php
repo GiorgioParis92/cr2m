@@ -145,31 +145,43 @@ class Table extends AbstractFormData
     }
     public function add_element()
     {
-
         $element = $this->init_element();
-
+    
+        // Decode $this->value and ensure it's an array
         $this->value = $this->decode_if_json($this->value);
-        $this->value[] = $element;
-        $this->save_value();
-
-    }
-    public function remove_element($index)
-    {
-        $this->value = $this->decode_if_json($this->value);
-
-        unset($this->value[$index]);
-
-        $this->value = array_values($this->value); // Reindex the array
-
-        if (is_array($this->value) && empty($this->value)) {
-            $this->value = '';
+        
+        if (!is_array($this->value)) {
+            $this->value = [];
         }
-
-
+    
+        $this->value[] = $element;
+    
+        // Explicitly reassign $this->value to trigger Livewire update
+        $this->value = array_values($this->value);
+    
         $this->save_value();
-
-        return $this->generate_value();
     }
+    
+    public function remove_element($index)
+{
+    $this->value = $this->decode_if_json($this->value);
+
+    unset($this->value[$index]);
+
+    // Reindex the array and explicitly update the property
+    $this->value = array_values($this->value);
+
+    // Ensure $this->value is an array, even when empty
+    if (empty($this->value)) {
+        $this->value = [];
+    }
+
+    $this->save_value();
+
+    return $this->generate_value();
+}
+
+    
     public function init_value()
     {
         if (is_array($this->value)) {
