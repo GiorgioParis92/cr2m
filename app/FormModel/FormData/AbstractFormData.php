@@ -65,7 +65,7 @@ class AbstractFormData
         $optionsArray = convertToArray($optionsArray);
         $this->optionsArray = $optionsArray;
 
-        $this->condition_valid = false;
+        $this->condition_valid = true;
 
         if (isset($optionsArray['conditions'])) {
 
