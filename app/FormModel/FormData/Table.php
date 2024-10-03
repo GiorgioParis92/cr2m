@@ -10,13 +10,13 @@ class Table extends AbstractFormData
 
     public $optionsArray = [];
     public $condition_valid = [];
-    
+
     public function __construct($config, $name, $form_id, $dossier_id)
     {
         parent::__construct($config, $name, $form_id, $dossier_id);
 
         // $this->value = $this->init_value();
-        if(!is_array($this->config->options)) {
+        if (!is_array($this->config->options)) {
             $jsonString = str_replace(["\n", '', "\r"], '', $this->config->options);
             $optionsArray = json_decode($jsonString, true);
         } else {
@@ -24,51 +24,51 @@ class Table extends AbstractFormData
 
         }
         $optionsArray = convertToArray($optionsArray);
-        $this->optionsArray=$optionsArray;
+        $this->optionsArray = $optionsArray;
 
         $this->condition_valid = false;
 
-        if(isset($optionsArray['conditions'])) {
-          
-            foreach ($optionsArray as $key=>$condition_config) {
-                if($key=='conditions') {
+        if (isset($optionsArray['conditions'])) {
+
+            foreach ($optionsArray as $key => $condition_config) {
+                if ($key == 'conditions') {
                     if ($this->check_condition($condition_config)) {
-                
+
                         $this->condition_valid = true;
-        
+
                         if (isset($condition_config['operation']) && $condition_config['operation'] == 'AND') {
                             break;
                         }
-        
+
                     } else {
-                        $this->condition_valid = false; 
+                        $this->condition_valid = false;
                     }
                 }
 
-    
+
             }
         } else {
             $this->condition_valid = true;
         }
 
 
-  
-      
+
+
 
     }
     public function render(bool $is_error)
     {
         $data = '';
-            // dd($this);
-        if( $this->condition_valid == false) {
+        // dd($this);
+        if ($this->condition_valid == false) {
             return '';
         }
         $this->value = $this->decode_if_json($this->value);
 
-
+        if(isset($this->value) && !empty($this->value)) {
         foreach ($this->value as $index => $element_data) {
-            $data .='<div class="row">';
-            $data .='<div class="col-lg-10 col-sm-12">';
+            $data .= '<div class="row">';
+            $data .= '<div class="col-lg-10 col-sm-12">';
             foreach ($this->optionsArray as $element_config) {
 
                 $baseNamespace = 'App\FormModel\FormData\\';
@@ -82,12 +82,12 @@ class Table extends AbstractFormData
                     // Fallback to AbstractFormData if the class does not exist
                     $element_group[$element_config['name']] = new AbstractFormData((object) $element_config, $div_name, $this->form_id, $this->dossier_id, false);
                 }
-              
+
                 $element_group[$element_config['name']]->set_dossier($this->dossier);
                 if (!isset($element_data[$element_config['name']])) {
                     $baseNamespace = 'App\FormModel\FormData\\';
                     $className = $baseNamespace . ucfirst($element_config['type']);
-        
+
                     if (class_exists($className)) {
                         $reflectionClass = new \ReflectionClass($className);
                         $element_data[$element_config['name']] = $reflectionClass->newInstance((object) $element_config, $element_config['name'], $this->form_id, $this->dossier->id, false);
@@ -96,7 +96,7 @@ class Table extends AbstractFormData
                         $element_data[$element_config['name']] = new AbstractFormData((object) $element_config, $element_config['name'], $this->form_id, $this->dossier->id, false);
                     }
                 }
-                
+
                 if (is_array($element_data[$element_config['name']])) {
                     $element_data[$element_config['name']] = (object) $element_data[$element_config['name']];
                 }
@@ -105,19 +105,19 @@ class Table extends AbstractFormData
                 $data .= $element_group[$element_config['name']]->render(false);
 
             }
-            $data .='</div>';
+            $data .= '</div>';
 
-            $data .='</div>';
-            $data .='<div class="col-lg-2">';
-            $data .="<label></label>";
-            $data .= '<div class="col-lg-12 col-sm-12 btn btn-danger" wire:click="remove_row(\''.$this->name.'\',' . $this->form_id . ','. (int)$index.')">Supprimer</div>';
-            $data .='</div>';
+            $data .= '</div>';
+            $data .= '<div class="col-lg-2">';
+            $data .= "<label></label>";
+            $data .= '<div class="col-lg-12 col-sm-12 btn btn-danger" wire:click="remove_row(\'' . $this->name . '\',' . $this->form_id . ',' . (int) $index . ')">Supprimer</div>';
+            $data .= '</div>';
         }
-
+    }
         // $this->save_value();
 
 
-        $data .= '<div class="btn btn-success" wire:click="add_row(\''.$this->name.'\',' . $this->form_id . ')">'.$this->config->title.'</div>';
+        $data .= '<div class="btn btn-success" wire:click="add_row(\'' . $this->name . '\',' . $this->form_id . ')">' . $this->config->title . '</div>';
 
 
         return $data;
@@ -125,7 +125,7 @@ class Table extends AbstractFormData
 
     public function init_element()
     {
-        
+
         $element_group = [];
 
         foreach ($this->optionsArray as $element_config) {
@@ -158,11 +158,11 @@ class Table extends AbstractFormData
         $this->value = $this->decode_if_json($this->value);
 
         unset($this->value[$index]);
-      
+
         $this->value = array_values($this->value); // Reindex the array
 
-        if(is_array($this->value) && empty($this->value)) {
-            $this->value='';
+        if (is_array($this->value) && empty($this->value)) {
+            $this->value = '';
         }
 
 
@@ -211,10 +211,10 @@ class Table extends AbstractFormData
     }
     public function render_pdf()
     {
-        
+
         $should_render = false;
         $data = '<div><table style="margin:auto;width:90%;margin-top:20px;border-collapse: collapse;">';
-    
+
         // Decode the JSON value if needed
         $this->value = $this->decode_if_json($this->value);
 
@@ -228,7 +228,7 @@ class Table extends AbstractFormData
                 $name = $element_config['name'];
                 $form_id = $this->form_id;
                 $dossier_id = $this->dossier_id ?? null;
-    
+
                 // Instantiate the form element class
                 if (class_exists($class)) {
                     $instance = new $class($configInstance, $name, $form_id, $dossier_id);
@@ -242,17 +242,17 @@ class Table extends AbstractFormData
                 } else {
                     $instance->value = ''; // Or handle default value here
                 }
-                
-       
-                $element_render=$instance->render_pdf();
 
-                if($element_render) {
+
+                $element_render = $instance->render_pdf();
+
+                if ($element_render) {
                     $data .= '<tr><td style="width:100%;border:1px solid #ccc;border-collapse: collapse;padding-left:12px;padding-bottom:15px">';
                     $data .= $element_render;
                     $data .= '</td></tr>';
                 }
 
-       
+
             }
         }
         $data .= '</table></div>';
@@ -260,9 +260,9 @@ class Table extends AbstractFormData
         // return false;
         return $data;
     }
-    
 
-    
-    
-   
+
+
+
+
 }
