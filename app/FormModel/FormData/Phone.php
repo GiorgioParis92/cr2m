@@ -16,5 +16,13 @@ class Phone extends _Regex
 
         return 'Le format ne correspond pas';
     }
+    public function check_value()
+    {
 
+        if ($this->config->required && $this->value == '') {
+            return false;
+        }
+
+        return true;
+    }
 }
