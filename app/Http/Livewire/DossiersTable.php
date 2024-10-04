@@ -113,10 +113,10 @@ class DossiersTable extends Component
         if ($this->clientName) {
 
             $dossiersQuery->whereHas('beneficiaire', function ($query) {
-                $query->where('nom', 'like', '%' . $this->search . '%')
-                ->orWhere('prenom', 'like', '%' . $this->search . '%')
-                ->orWhere('adresse', 'like', '%' . $this->search . '%')
-                ->orWhere('telephone', 'like', '%' . $this->search . '%');
+                $query->where('nom', 'like', '%' . $this->clientName . '%')
+                ->orWhere('prenom', 'like', '%' . $this->clientName . '%')
+                ->orWhere('adresse', 'like', '%' . $this->clientName . '%')
+                ->orWhere('telephone', 'like', '%' . $this->clientName . '%');
             });
         }
 
