@@ -5,7 +5,7 @@ use Exception;
 use Illuminate\Support\Facades\DB;
 use App\Models\Dossier;
 
-class TableNew extends AbstractFormData
+class Table extends AbstractFormData
 {
 
     public $optionsArray = [];
