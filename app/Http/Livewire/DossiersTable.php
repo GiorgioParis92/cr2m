@@ -73,9 +73,11 @@ class DossiersTable extends Component
             'mar',
             'get_rdv',
         ])
-        ->join('dossiers_data', 'dossiers.id', '=', 'dossiers_data.dossier_id')
-        ->where('dossiers_data.meta_key', 'docs')
-        ->select('dossiers.*','dossiers_data.meta_value'); // Select only the columns from 'dossiers' to avoid ambiguity;
+        ->leftJoin('dossiers_data', function ($join) {
+            $join->on('dossiers.id', '=', 'dossiers_data.dossier_id')
+                 ->where('dossiers_data.meta_key', 'docs');
+        })
+        ->select('dossiers.*', 'dossiers_data.meta_value');
         // Apply client-specific filtering
         $userClientId = auth()->user()->client_id;
         if ($userClientId > 0) {
@@ -99,16 +101,7 @@ class DossiersTable extends Component
             }
         }
 
-        // Apply search and filters
-        if ($this->search) {
-            dd($this->search);
-            $dossiersQuery->whereHas('beneficiaire', function ($query) {
-                $query->where('nom', 'like', '%' . $this->search . '%')
-                    ->orWhere('prenom', 'like', '%' . $this->search . '%')
-                    ->orWhere('adresse', 'like', '%' . $this->search . '%')
-                    ->orWhere('telephone', 'like', '%' . $this->search . '%');
-            });
-        }
+  
 
         if ($this->clientName) {
 
