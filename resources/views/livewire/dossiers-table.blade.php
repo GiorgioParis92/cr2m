@@ -2,7 +2,7 @@
     <div class="row form-group">
         <div class="mb-2 mb-sm-0 col-12 col-md-3">
             <label class="mr-sm-2">Client</label>
-            <input type="text" class="form-control" wire:model.change="clientName"
+            <input type="text" class="form-control" wire:model="clientName"
                 placeholder="Filtrer par nom de client">
         </div>
 
