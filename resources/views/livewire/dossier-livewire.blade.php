@@ -71,7 +71,7 @@
                 </div>
             </div>
             <hr>
-
+  
 
             <div class="card form-register">
                 <div class="steps clearfix">
@@ -354,7 +354,20 @@
 </div>
 
 <style>
+.loader {
+    border: 16px solid #f3f3f3;
+    border-radius: 50%;
+    border-top: 16px solid #3498db;
+    width: 120px;
+    height: 120px;
+    animation: spin 2s linear infinite;
+    margin: auto;
+}
 
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
 </style>
 <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.css" rel="stylesheet">
 <!-- jQuery -->
@@ -562,6 +575,7 @@
         
     });
 
+    
     function initializeDeleteButtons() {
         $('.delete_photo').off('click').on('click', function() {
             var link = $(this).data('val');
