@@ -5,7 +5,7 @@ use Exception;
 use Illuminate\Support\Facades\DB;
 use App\Models\Dossier;
 
-class Table extends AbstractFormData
+class TableNew extends AbstractFormData
 {
 
     public $optionsArray = [];
@@ -59,69 +59,54 @@ class Table extends AbstractFormData
     public function render(bool $is_error)
     {
         $data = '';
-        // dd($this);
         if ($this->condition_valid == false) {
             return '';
         }
         $this->value = $this->decode_if_json($this->value);
-
-        if(isset($this->value) && !empty($this->value)) {
-        foreach ($this->value as $index => $element_data) {
-            $data .= '<div class="row">';
-            $data .= '<div class="col-lg-10 col-sm-12">';
-            foreach ($this->optionsArray as $element_config) {
-
-                $baseNamespace = 'App\FormModel\FormData\\';
-                $className = $baseNamespace . ucfirst($element_config['type']);
-                $div_name = $this->name . '.value.' . $index . '.' . $element_config['name'];
-
-                if (class_exists($className)) {
-                    $reflectionClass = new \ReflectionClass($className);
-                    $element_group[$element_config['name']] = $reflectionClass->newInstance((object) $element_config, $div_name, $this->form_id, $this->dossier_id, false);
-                } else {
-                    // Fallback to AbstractFormData if the class does not exist
-                    $element_group[$element_config['name']] = new AbstractFormData((object) $element_config, $div_name, $this->form_id, $this->dossier_id, false);
-                }
-
-                $element_group[$element_config['name']]->set_dossier($this->dossier);
-                if (!isset($element_data[$element_config['name']])) {
+    
+        if (!empty($this->value)) {
+            foreach ($this->value as $index => $element_data) {
+                $data .= '<div class="row">';
+                $data .= '<div class="col-lg-10 col-sm-12">';
+    
+                foreach ($this->optionsArray as $element_config) {
                     $baseNamespace = 'App\FormModel\FormData\\';
                     $className = $baseNamespace . ucfirst($element_config['type']);
-
+                    $div_name = $this->name . '.value.' . $index . '.' . $element_config['name'];
+    
                     if (class_exists($className)) {
                         $reflectionClass = new \ReflectionClass($className);
-                        $element_data[$element_config['name']] = $reflectionClass->newInstance((object) $element_config, $element_config['name'], $this->form_id, $this->dossier->id, false);
+                        $element_instance = $reflectionClass->newInstance((object) $element_config, $div_name, $this->form_id, $this->dossier_id, false);
                     } else {
                         // Fallback to AbstractFormData if the class does not exist
-                        $element_data[$element_config['name']] = new AbstractFormData((object) $element_config, $element_config['name'], $this->form_id, $this->dossier->id, false);
+                        $element_instance = new AbstractFormData((object) $element_config, $div_name, $this->form_id, $this->dossier_id, false);
                     }
+    
+                    $element_instance->set_dossier($this->dossier);
+    
+                    // Set the value from the stored data
+                    $element_value = $element_data[$element_config['name']]['value'] ?? '';
+                    $element_instance->value = $element_value;
+    
+                    $data .= $element_instance->render(false);
                 }
+    
+                $data .= '</div>';
 
-                if (is_array($element_data[$element_config['name']])) {
-                    $element_data[$element_config['name']] = (object) $element_data[$element_config['name']];
-                }
-
-                $element_group[$element_config['name']]->value = $element_data[$element_config['name']]->value;
-                $data .= $element_group[$element_config['name']]->render(false);
-
+                $data .= '</div>';
+                $data .= '<div class="col-lg-2">';
+                $data .= "<label></label>";
+                $data .= '<div class="col-lg-12 col-sm-12 btn btn-danger" wire:click="remove_row(\'' . $this->name . '\',' . $this->form_id . ',' . (int) $index . ')">Supprimer</div>';
+                $data .= '</div>';
             }
-            $data .= '</div>';
-
-            $data .= '</div>';
-            $data .= '<div class="col-lg-2">';
-            $data .= "<label></label>";
-            $data .= '<div class="col-lg-12 col-sm-12 btn btn-danger" wire:click="remove_row(\'' . $this->name . '\',' . $this->form_id . ',' . (int) $index . ')">Supprimer</div>';
-            $data .= '</div>';
         }
-    }
-        // $this->save_value();
-
-
+    
         $data .= '<div class="btn btn-success" wire:click="add_row(\'' . $this->name . '\',' . $this->form_id . ')">' . $this->config->title . '</div>';
-
-
+    
         return $data;
     }
+    
+    
 
     public function init_element()
     {
@@ -145,41 +130,46 @@ class Table extends AbstractFormData
     }
     public function add_element()
     {
-        $element = $this->init_element();
-    
-        // Decode $this->value and ensure it's an array
         $this->value = $this->decode_if_json($this->value);
-        
+
         if (!is_array($this->value)) {
             $this->value = [];
         }
     
-        $this->value[] = $element;
+        $element = $this->init_element();
+        $element_values = [];
     
-        // Explicitly reassign $this->value to trigger Livewire update
+        foreach ($element as $key => $field) {
+            $element_values[$key] = ['value' => $field->value ?? ''];
+        }
+    
+        $this->value[] = $element_values;
+    
+        // Reindex the array
         $this->value = array_values($this->value);
     
         $this->save_value();
     }
     
+    
     public function remove_element($index)
-{
-    $this->value = $this->decode_if_json($this->value);
-
-    unset($this->value[$index]);
-
-    // Reindex the array and explicitly update the property
-    $this->value = array_values($this->value);
-
-    // Ensure $this->value is an array, even when empty
-    if (empty($this->value)) {
-        $this->value = '';
+    {
+        $this->value = $this->decode_if_json($this->value);
+    
+        unset($this->value[$index]);
+    
+        // Reindex the array and explicitly update the property
+        $this->value = array_values($this->value);
+    
+        // Remove the line that sets $this->value to an empty string
+        if (empty($this->value)) {
+            $this->value = '';
+        }
+    
+        $this->save_value();
+    
+        return $this->generate_value();
     }
-
-    $this->save_value();
-
-    return $this->generate_value();
-}
 
     
     public function init_value()
@@ -214,13 +204,13 @@ class Table extends AbstractFormData
         }
         if (is_string($value)) {
             $decoded = json_decode($value, true);
-            // Check if json_decode succeeded
             if (json_last_error() === JSON_ERROR_NONE) {
                 return $decoded;
             }
         }
         return $value;
     }
+    
     public function render_pdf()
     {
 
