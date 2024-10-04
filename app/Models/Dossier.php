@@ -60,7 +60,10 @@ class Dossier extends Model
     {
         return $this->belongsTo(Client::class,'mar', 'id');
     }
-
+    public function mar_client()
+    {
+        return $this->belongsTo(Client::class,'mar', 'id');
+    }
     public function installateur()
     {
         return $this->belongsTo(Client::class,'installateur', 'id');

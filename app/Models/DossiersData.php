@@ -5,9 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class FormConfig extends Model
+class DossiersData extends Model
 {
     use HasFactory;
+    protected $table = 'dossiers_data';
 
-    protected $table = 'forms_config';
 }

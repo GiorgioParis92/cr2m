@@ -26,4 +26,8 @@ class Etape extends Model
     {
         return $this->hasMany(Status::class, 'etape_id');
     }
+    public function forms()
+    {
+        return $this->hasMany(Form::class, 'etape_number');
+    }
 }

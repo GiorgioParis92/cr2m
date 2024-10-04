@@ -20,4 +20,14 @@ class Form extends Model
     ];
 
     public $timestamps = false;
+
+    public function etape()
+    {
+        return $this->belongsTo(Etape::class, 'etape_number');
+    }
+
+    public function formsConfig()
+    {
+        return $this->hasMany(FormConfig::class);
+    }
 }

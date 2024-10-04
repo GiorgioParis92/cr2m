@@ -37,13 +37,13 @@
                                     @endif
                                 </div>
                             @endif
-                            @if (isset($dossier->mar))
+                            {{-- @if (isset($dossier->mar))
                           
                                 @if (Storage::disk('public')->exists($dossier->mar->main_logo))
                                     <img style="max-width: 30%" src="{{ asset('storage/' . $dossier->mar->main_logo) }}">
                                 @endif
                                 {{ $dossier->mar->client_title }}
-                            @endif
+                            @endif --}}
                         </div>
                         <div class="ms-auto my-auto mt-lg-0 mt-4">
                             <div class="ms-auto my-auto">
