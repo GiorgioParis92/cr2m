@@ -661,27 +661,49 @@ class DossierLivewire extends Component
     public function add_row($table_tag, $form_id)
     {
         if (isset($this->forms_configs[$form_id])) {
-            $form_configs = $this->forms_configs[$form_id];
-            $form_configs->formData[$table_tag]->add_element();
-            
-            // Explicitly update the property
-            $this->forms_configs[$form_id] = $form_configs;
-        }
+            $formConfig = $this->forms_configs[$form_id];
     
-        return '';
+            if (isset($formConfig->formData[$table_tag])) {
+                $tableField = $formConfig->formData[$table_tag];
+    
+                // Call the add_element method on the table field
+                $tableField->add_element();
+    
+                // Reassign the value to ensure Livewire detects the change
+                $tableField->value = $tableField->value;
+    
+                // Reassign the entire forms_configs property if necessary
+                $this->forms_configs[$form_id] = $formConfig;
+    
+                // Optionally, reassign the entire forms_configs array
+                $this->forms_configs = $this->forms_configs;
+            }
+        }
     }
+    
     
     public function remove_row($table_tag, $form_id, $index)
     {
         if (isset($this->forms_configs[$form_id])) {
-            $form_configs = $this->forms_configs[$form_id];
-            $form_configs->formData[$table_tag]->remove_element($index);
-            
-            // Explicitly update the property
-            $this->forms_configs[$form_id] = $form_configs;
-        }
+            $formConfig = $this->forms_configs[$form_id];
     
-        return '';
+            if (isset($formConfig->formData[$table_tag])) {
+                $tableField = $formConfig->formData[$table_tag];
+    
+                // Call the remove_element method on the table field
+                $tableField->remove_element($index);
+    
+                // Reassign the value to ensure Livewire detects the change
+                $tableField->value = $tableField->value;
+    
+                // Reassign the entire forms_configs property if necessary
+                $this->forms_configs[$form_id] = $formConfig;
+    
+                // Optionally, reassign the entire forms_configs array
+                $this->forms_configs = $this->forms_configs;
+            }
+        }
     }
+    
     
 }
