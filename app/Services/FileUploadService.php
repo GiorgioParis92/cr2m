@@ -150,13 +150,14 @@ class FileUploadService
         if ($random_name == true) {
 
             $index = '';
+           
             $explode = (explode('.', $request->input('template')));
             if (is_array($explode) && count($explode) > 1) {
                 $array = explode('.', $request->input('template'));
                 $template = $array[0];
                 $index = $array[2];
                 $field = $array[3];
-
+                
             } else {
 
                 $template = $request->input('template');
@@ -178,14 +179,20 @@ class FileUploadService
                 }
                 $updatedJsonString = json_encode($json_value);
                 if ($index != '') {
-                    $json_array = (json_decode($value->meta_value, true));
-
+                    $json_array = json_decode($value->meta_value, true);
+                
+                    // Check if 'value' exists and is an array
+                    if (!isset($json_array[$index][$field]['value']) || !is_array($json_array[$index][$field]['value'])) {
+                        // If 'value' is not set or not an array, initialize it as an array
+                        $currentValue = $json_array[$index][$field]['value'] ?? '';
+                        $json_array[$index][$field]['value'] = $currentValue !== '' ? [$currentValue] : [];
+                    }
+                
+                    // Now safely append the file path
                     $json_array[$index][$field]['value'][] = $filePath;
-
                     $updatedJsonString = json_encode($json_array);
-
-
                 }
+                
 
 
 
