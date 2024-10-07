@@ -351,7 +351,10 @@
         </div>
     </div>
 </div>
-
+<div wire:loading wire:target="add_row,remove_row,display_form" class="loader-overlay">
+    <!-- Your loader content, e.g., a spinner -->
+    <div class="spinner"></div>
+</div>
 <style>
 .loader-overlay {
     position: fixed;
