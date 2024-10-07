@@ -90,6 +90,14 @@ class Photo extends AbstractFormData
         foreach($values as $value) {
         if ($value) {
             $extension = explode('.', $value);
+
+            $value_thumbnail = str_replace('.', '_thumbnail.', $value);
+            $filePath_thumbnail = storage_path('app/public/' . $value_thumbnail);
+        
+            if (file_exists($filePath_thumbnail)) {
+                $value = $value_thumbnail;
+            }
+
             $filePath = storage_path('app/public/' . $value);  // File system path
 
             if(count($extension)>2) {
