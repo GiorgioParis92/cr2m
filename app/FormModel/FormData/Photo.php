@@ -25,29 +25,33 @@ class Photo extends AbstractFormData
         // $wireModel = "formData.{$this->form_id}.{$this->name}";
         // // $data .= $wireModel ?? '';
         // $data .= '<input type="text" wire:model.lazy="' . $wireModel . '">';
+  // Generate the upload URL
+  $uploadUrl = route("upload_file", [
+    "form_id" => $this->form_id,
+    "folder" => "dossiers",
+    "clientId" => $this->dossier->folder,
+    "template" => $this->name,
+    "random_name" => "true",
+    'config' => $this
+]);
+
 
         $csrfToken = csrf_token();
         $data .= "<div class='row'>";
         $data .= "<div class='col-lg-3'>";
 
-        $data .= '<div style="cursor:pointer" class="dropzone photo_button bg-secondary" id="dropzone-' . str_replace('.','-',$this->name) . '">';
+        $data .= '<div style="cursor:pointer" data-upload-url="'.$uploadUrl.'" class="dropzone photo_button bg-secondary" id="dropzone-' . str_replace('.','-',$this->name) . '">';
         $data .= csrf_field(); // This will generate the CSRF token input field
         $data .= '<div style="color:white" class="dz-message"><i class="fas fa-camera"></i> ' . $this->config->title . '</div>';
         $data .= '</div>';
 
-        // Generate the upload URL
-        $uploadUrl = route("upload_file", [
-            "form_id" => $this->form_id,
-            "folder" => "dossiers",
-            "clientId" => $this->dossier->folder,
-            "template" => $this->name,
-            "random_name" => "true",
-            'config' => $this
-        ]);
+      
         $deleteUrl = route("delete_file");
 
         
         $data .= "<script>
+            Dropzone.autoDiscover = false;
+
         var dropzoneElementId = '#dropzone-" . str_replace('.', '-', $this->name) . "';
         var dropzoneElement = document.querySelector(dropzoneElementId);
         

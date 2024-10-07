@@ -68,7 +68,6 @@ class FileUploadService
             $form_id = $request->form_id;
         }
 
-
         $file = $request->file('file');
 
         $allowedExtensions = ['jpeg', 'jpg', 'png', 'gif', 'pdf', 'heic', 'webp'];
@@ -161,6 +160,7 @@ class FileUploadService
             } else {
 
                 $template = $request->input('template');
+                $index='';
             }
 
             $value = DB::table('forms_data')

@@ -324,7 +324,8 @@
                             <div class="">
                                 <h4>{{ $form->form->form_title }}</h4>
 
-                         
+                                <form wire:submit.prevent="submit" wire:poll="refresh">
+                                    @csrf
                                     <input type="hidden" name="form_id" value="{{ $form->form->id }}">
                                     <input type="hidden" name="dossier_id" value="{{ $dossier->id }}">
 
@@ -335,7 +336,7 @@
                                             {{-- <button class="btn btn-secondary" type="submit">Enregistrer</button> --}}
                                         </div>
                                     </div>
-                            
+                                </form>
                             </div>
                         </div>
                     @endif
@@ -676,13 +677,13 @@
             var configs = data.forms_configs;
             initializeDropzones(configs);
             $('.delete_photo').click(function() {
-                console.log($('meta[name="_token"]').attr('content'))
+                
                 var link = $(this).data('val');
                 $.ajax({
                     url: '/delete_file',
                     method: 'POST',
                     headers: {
-                        'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
                     },
                     data: {
                         link: link,
@@ -733,64 +734,63 @@
 
 
     });
-
     function initializeDropzones(configs) {
         console.log(configs)
-        // Destroy existing Dropzone instances
-        if (Dropzone.instances.length > 0) {
-            Dropzone.instances.forEach(instance => instance.destroy());
+    // Destroy existing Dropzone instances
+    if (Dropzone.instances.length > 0) {
+        Dropzone.instances.forEach(instance => instance.destroy());
+    }
+
+    Dropzone.autoDiscover = false;
+
+    // Find all elements with the class "dropzone"
+    const dropzoneElements = document.querySelectorAll('.dropzone');
+
+    dropzoneElements.forEach((dropzoneElement) => {
+        // Extract the unique ID and upload URL from the element
+        const dropzoneId = dropzoneElement.id;
+        const uploadUrl = dropzoneElement.getAttribute('data-upload-url');
+
+        if (!dropzoneElement) {
+            console.warn(`Element with ID ${dropzoneId} not found.`);
+            return;
         }
 
-        Dropzone.autoDiscover = false;
+        if (dropzoneElement.dropzone) {
+            console.warn(`Dropzone already attached to element with ID ${dropzoneId}.`);
+            return;
+        }
+        
+        // Initialize the dropzone with the dynamic upload URL
+        new Dropzone(dropzoneElement, {
+            url: uploadUrl,
+            method: 'post',
+            headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}' // Include CSRF token if using Laravel's CSRF protection
+                },
+            paramName: 'file',
+            sending: function(file, xhr, formData) {
+                formData.append('folder', 'dossiers');
+                formData.append('template', dropzoneId.replace('dropzone-',''));
+            },
+            init: function() {
+                this.on("success", function(file, response) {
+                    console.log(response);
+                    $('#doc-' + dropzoneId).val(response);
+                    $('#doc-' + dropzoneId).blur();
 
-        // Convert object to array and loop through configs
-        Object.values(configs).forEach((formConfig) => {
-            if (formConfig.form.type === 'document') {
-                Object.keys(formConfig.formData).forEach((key) => {
-                    console.log('DROPZONE NAME:'+key)
-                    var dropzoneElementId = `#dropzone-${key}`;
-                    var dropzoneElement = document.querySelector(dropzoneElementId);
-                    console.log('dropzones : ' + dropzoneElement)
-                    if (!dropzoneElement) {
-                        console.warn(`Element ${dropzoneElementId} not found.`);
-                        return;
-                    }
+                    Livewire.emit('fileUploaded', [dropzoneId, response]);
 
-                    if (dropzoneElement.dropzone) {
-                        console.warn(`Dropzone already attached to ${dropzoneElementId}.`);
-                        return;
-                    }
-
-                    new Dropzone(dropzoneElement, {
-                        method: 'post',
-                        headers: {},
-                        paramName: 'file',
-                        sending: function(file, xhr, formData) {
-                            formData.append('folder', 'dossiers');
-                            formData.append('template', key);
-                        },
-                        init: function() {
-                            this.on("success", function(file, response) {
-                                console.log(response)
-                                $('#doc-' + formConfig.form.id + key).val(response)
-                                $('#doc-' + formConfig.form.id + key).blur()
-
-
-                                Livewire.emit('fileUploaded', [formConfig.form.id,
-                                    key, response
-                                ]);
-
-                                console.log('Successfully uploaded:', response);
-                            });
-                            this.on("error", function(file, response) {
-                                console.log('Upload error:', response);
-                            });
-                        }
-                    });
+                    console.log('Successfully uploaded:', response);
+                });
+                this.on("error", function(file, response) {
+                    console.log('Upload error:', response);
                 });
             }
         });
-    }
+    });
+}
+
 
 
 
