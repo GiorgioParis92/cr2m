@@ -293,7 +293,7 @@ class DossierLivewire extends Component
     public function hydrate()
     {
  
-            // $this->reinitializeFormsConfigs(false);
+            $this->reinitializeFormsConfigs(false);
 
             
         $this->get_docs();
