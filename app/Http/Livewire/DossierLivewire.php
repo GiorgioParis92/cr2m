@@ -262,7 +262,7 @@ class DossierLivewire extends Component
     public function handleFileUploaded($request)
     {
 
-        // $this->reinitializeFormsConfigs(false);
+        $this->reinitializeFormsConfigs(false);
 
         // dump($request);
         // dd($this->forms_configs);
