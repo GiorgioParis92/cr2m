@@ -47,39 +47,39 @@ class Photo extends AbstractFormData
         $deleteUrl = route("delete_file");
 
         
-    //     $data .= "<script>
-    //     var dropzoneElementId = '#dropzone-" . str_replace('.', '-', $this->name) . "';
-    //     var dropzoneElement = document.querySelector(dropzoneElementId);
+        $data .= "<script>
+        var dropzoneElementId = '#dropzone-" . str_replace('.', '-', $this->name) . "';
+        var dropzoneElement = document.querySelector(dropzoneElementId);
         
-    //     if (dropzoneElement && !dropzoneElement.dropzone) {
-    //         console.log(dropzoneElementId);
+        if (dropzoneElement && !dropzoneElement.dropzone) {
+            console.log(dropzoneElementId);
             
-    //         var dropzone = new Dropzone(dropzoneElement, {
-    //             url: '{$uploadUrl}',
-    //             method: 'post',
-    //             headers: {
-    //                 'X-CSRF-TOKEN': '{$csrfToken}'
-    //             },
-    //             maxFilesize: 50000,
-    //             paramName: 'file',
-    //             sending: function(file, xhr, formData) {
-    //                 console.log(file);
-    //                 formData.append('folder', 'dossiers');
-    //                 formData.append('template', '{$this->name}');
-    //                 formData.append('random_name', 'true');
-    //             },
-    //             init: function() {
-    //                 this.on('success', function(file, response) {
-    //                     console.log('Successfully uploaded:', response);
-    //                     initializeDeleteButtons();
-    //                 });
-    //                 this.on('error', function(file, response) {
-    //                     console.log('Upload error:', response);
-    //                 });
-    //             }
-    //         });
-    //     }
-    // </script>";
+            var dropzone = new Dropzone(dropzoneElement, {
+                url: '{$uploadUrl}',
+                method: 'post',
+                headers: {
+                    'X-CSRF-TOKEN': '{$csrfToken}'
+                },
+                maxFilesize: 50000,
+                paramName: 'file',
+                sending: function(file, xhr, formData) {
+                    console.log(file);
+                    formData.append('folder', 'dossiers');
+                    formData.append('template', '{$this->name}');
+                    formData.append('random_name', 'true');
+                },
+                init: function() {
+                    this.on('success', function(file, response) {
+                        console.log('Successfully uploaded:', response);
+                        initializeDeleteButtons();
+                    });
+                    this.on('error', function(file, response) {
+                        console.log('Upload error:', response);
+                    });
+                }
+            });
+        }
+    </script>";
     
             $data .="\r\n"."</script>"."\r\n";
         if(!is_array($values)) {
@@ -133,7 +133,7 @@ class Photo extends AbstractFormData
                     $data .= '<i class="fas fa-eye"></i>' . $this->config->title . '</div>';
                 }
             }
-            // $data .= "<script>initializePdfModals()</script>";
+            $data .= "<script>initializePdfModals()</script>";
         }
         }
     } 
