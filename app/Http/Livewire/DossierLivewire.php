@@ -238,7 +238,8 @@ class DossierLivewire extends Component
         $this->etape_display = $etape_display ? $etape_display->toArray() : [];
 
         $this->reinitializeFormsConfigs();
-        $firstKey = array_key_first($this->forms_configs);
+
+        $firstKey = $this->reinitializeFormsConfigs();
         $this->display_form($firstKey);
 
         $this->emit('initializeDropzones', ['forms_configs' => $this->forms_configs]);
@@ -364,10 +365,14 @@ class DossierLivewire extends Component
 
             $this->forms_configs = [];
             $this->formData = [];
-
+            $firstKey=null;
             foreach ($forms as $form) {
                 $handler = new FormConfigHandler($this->dossier, $form);
                 $this->forms_configs[$form->id] = $handler;
+
+                if($firstKey==null && $form->type=='form') {
+                    $firstKey=$form->id;
+                }
 
             }
 
@@ -375,7 +380,7 @@ class DossierLivewire extends Component
 
         $this->get_score_per_etape();
 
-
+        return $firstKey;
        
     }
 

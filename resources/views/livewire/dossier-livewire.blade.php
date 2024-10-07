@@ -1,4 +1,4 @@
-<div wire:poll.1ms>
+<div wire:poll.keep-alive.1ms>
 
     <div wire:loading wire:target="add_row,remove_row,display_form" class="loader-overlay">
         <!-- Your loader content, e.g., a spinner -->
@@ -78,7 +78,7 @@
 
             <div class="card form-register">
                 <div class="steps clearfix">
-                    <div class="" wire:poll>
+                    <div class="" wire:poll.keep-alive.1ms>
                         <input type="hidden" id="current_etape" value="{{ $tab }}">
                         <div class="row etapes_row mt-5 only_responsive">
                             Etape :
@@ -283,7 +283,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="table-responsive" wire:poll>
+                                    <div class="table-responsive" wire:poll.keep-alive.1ms>
 
 
                                         <table class="table align-items-center">
@@ -375,9 +375,12 @@
     border: 8px solid rgba(0, 0, 0, 0.1);
     border-top: 8px solid #3498db;
     border-radius: 50%;
-    width: 60px;
-    height: 60px;
+    width: 80px;
+    height: 80px;
     animation: spin 1s linear infinite;
+    margin: auto;
+    top: 46vh;
+    position: relative;
 }
 
 @keyframes spin {
