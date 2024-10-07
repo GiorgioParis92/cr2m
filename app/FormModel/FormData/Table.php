@@ -100,9 +100,7 @@ class Table extends AbstractFormData
     public function add_element()
     {
         try {
-      
             $this->value = $this->decode_if_json($this->value);
-     
         } catch (\Throwable $th) {
             $this->value = [];
         }
@@ -117,32 +115,21 @@ class Table extends AbstractFormData
             $element_values[$key] = ['value' => $field->value ?? ''];
         }
     
-        $this->value[] = $element_values;
-    
-        // Reindex the array
-        $this->value = array_values($this->value);
+        $uniqueId = uniqid(); // Generate a unique id for the row
+        $this->value[$uniqueId] = $element_values;
     
         $this->save_value();
     }
     
     
-    public function remove_element($index)
+    public function remove_element($uniqueId)
     {
         $this->value = $this->decode_if_json($this->value);
-
-        unset($this->value[$index]);
     
-        // Reindex the array and explicitly update the property
-        $this->value = array_values($this->value);
+        unset($this->value[$uniqueId]);
     
-        // Set $this->value to an empty array instead of an empty string
-        if (empty($this->value)) {
-            $this->value = [];
-        }
-    
+        // Do not reindex the array
         $this->save_value();
-    
-        // return $this->generate_value();
     }
 
     

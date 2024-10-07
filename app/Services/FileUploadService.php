@@ -170,7 +170,7 @@ class FileUploadService
                 ->first();
 
             if ($value) {
-                $json_value = json_decode($value->meta_value);
+                $json_value = json_decode($value->meta_value,true);
                 if ($json_value) {
                     array_push($json_value, $filePath);
                 } else {

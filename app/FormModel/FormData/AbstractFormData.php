@@ -253,5 +253,9 @@ class AbstractFormData
         return false;
     }
 
-
+    public function getConfig()
+    {
+        // Assuming $this->config is an object or array
+        return is_object($this->config) ? (array) $this->config : $this->config;
+    }
 }

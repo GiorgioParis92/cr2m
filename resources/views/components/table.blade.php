@@ -1,12 +1,12 @@
 @if (!empty($value))
-    @foreach ($value as $index => $element_data)
-        <div class="row">
+    @foreach ($value as $uniqueId => $element_data)
+        <div class="row" wire:key="row-{{$uniqueId}}">
             <div class="col-lg-10 col-sm-12">
                 @foreach ($optionsArray as $element_config)
                     @php
                         $baseNamespace = 'App\FormModel\FormData\\';
                         $className = $baseNamespace . ucfirst($element_config['type']);
-                        $div_name = $name . '.value.' . $index . '.' . $element_config['name'];
+                        $div_name = $name . '.value.' . $uniqueId . '.' . $element_config['name'];
 
                         if (class_exists($className)) {
                             $reflectionClass = new \ReflectionClass($className);
@@ -28,7 +28,7 @@
             </div>
             <div class="col-lg-2">
                 <label></label>
-                <div class="col-lg-12 col-sm-12 btn btn-danger" wire:click="remove_row('{{ $name }}', {{ $form_id }}, {{ (int) $index }})">Supprimer</div>
+                <div class="col-lg-12 col-sm-12 btn btn-danger" wire:click="remove_row('{{ $name }}', {{ $form_id }}, '{{ $uniqueId }}')">Supprimer</div>
             </div>
         </div>
     @endforeach
