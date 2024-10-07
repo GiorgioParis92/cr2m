@@ -48,7 +48,6 @@ class Photo extends AbstractFormData
 
         
         $data .= "<script>
-        Dropzone.autoDiscover = false;
         var dropzoneElementId = '#dropzone-" . str_replace('.', '-', $this->name) . "';
         var dropzoneElement = document.querySelector(dropzoneElementId);
         
