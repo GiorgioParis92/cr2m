@@ -368,13 +368,10 @@ class DossierLivewire extends Component
                 $this->forms_configs[$form->id] = $handler;
 
                 foreach ($handler->formData as $key => $field) {
-                    $value = $field->generate_value();
-                    $this->formData[$form->id][$key] = $value;
+                    // $value = $field->generate_value();
+                    // $this->formData[$form->id][$key] = $value;
                     // $this->global_data[$key] = $value;
 
-                    if ($value && $should_save) {
-                        $field->save_value();
-                    }
                 }
             }
 
@@ -439,14 +436,25 @@ class DossierLivewire extends Component
     public function add_row($table_tag, $form_id)
     {
         if (isset($this->forms_configs[$form_id])) {
-            $this->forms_configs[$form_id]->formData[$table_tag]->add_element();
+            $field=$this->forms_configs[$form_id]->formData[$table_tag];
+
+            $field->add_element();
+            $value = $field->generate_value();
+            $this->formData[$form_id][$table_tag] = $value;
+            $this->global_data[$table_tag] = $value;
         }
     }
 
     public function remove_row($table_tag, $form_id, $index)
     {
         if (isset($this->forms_configs[$form_id])) {
-            $this->forms_configs[$form_id]->formData[$table_tag]->remove_element($index);
+            $field=$this->forms_configs[$form_id]->formData[$table_tag];
+            $field->remove_element($index);
+
+            $value = $field->generate_value();
+            $this->formData[$form_id][$table_tag] = $value;
+            $this->global_data[$table_tag] = $value;
+
         }
     }
 }

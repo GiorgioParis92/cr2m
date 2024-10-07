@@ -1,4 +1,4 @@
-<div wire:poll.1s>
+<div >
     <div class="row">
         <div class="col-12">
             <div class="card form-register" wire:ignore>
@@ -51,7 +51,7 @@
             <!-- Etapes Navigation -->
             <div class="card form-register">
                 <div class="steps clearfix">
-                    <div wire:poll>
+                    <div >
                         <input type="hidden" id="current_etape" value="{{ $tab }}">
                         <div class="row etapes_row mt-5 only_responsive">
                             Etape :
