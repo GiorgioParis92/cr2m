@@ -402,8 +402,7 @@
 <script>
     document.addEventListener('DOMContentLoaded', function(event) {
 
-        console.log('DOM fully loaded and parsed');
-        console.log('Livewire component mounted:', event);
+        
         // Your code here
 
 
@@ -648,9 +647,9 @@
                 $temp.remove();
             });
         Livewire.on('pageLoaded', (data) => {
-            console.log('pageloaded')
+         
             var configs = data.forms_configs;
-            console.log(data)
+       
             initializeDropzones(configs);
 
 
@@ -658,7 +657,7 @@
         })
 
         Livewire.on('setTab', (data) => {
-            console.log('settab')
+          
 
 
             const firstKey = Object.keys(data.forms_configs)[0];
@@ -667,7 +666,7 @@
             const firstElement = data.forms_configs[firstKey];
 
             // Log the first element
-            console.log(firstElement.form.etape_number);
+        
             $('#etape').val(firstElement.form.etape_number); // Assuming `etape_number` exists
 
             // Optionally trigger the change event to notify Livewire or any other event handler
@@ -711,7 +710,7 @@
         });
         // Listen for the Livewire event to reinitialize Dropzone
         Livewire.on('initializeDropzones', (data) => {
-            console.log('initializeDropzones');
+       
 
 
 
@@ -735,7 +734,7 @@
 
     });
     function initializeDropzones(configs) {
-        console.log(configs)
+    
     // Destroy existing Dropzone instances
     if (Dropzone.instances.length > 0) {
         Dropzone.instances.forEach(instance => instance.destroy());
@@ -754,12 +753,10 @@
         const form_id = dropzoneElement.getAttribute('data-form_id');
 
         if (!dropzoneElement) {
-            console.warn(`Element with ID ${dropzoneId} not found.`);
             return;
         }
 
         if (dropzoneElement.dropzone) {
-            console.warn(`Dropzone already attached to element with ID ${dropzoneId}.`);
             return;
         }
         
@@ -777,16 +774,15 @@
             },
             init: function() {
                 this.on("success", function(file, response) {
-                    console.log(response);
+                   
                     $('#doc-' + dropzoneId).val(response);
                     $('#doc-' + dropzoneId).blur();
 
                     Livewire.emit('fileUploaded', [form_id,key, response]);
-             
-                    console.log('Successfully uploaded:', response);
+           
                 });
                 this.on("error", function(file, response) {
-                    console.log('Upload error:', response);
+                 
                 });
             }
         });
@@ -870,11 +866,10 @@
                     $('#rdv_lng').val("{!! $dossier['beneficiaire']['lng'] ?? '' !!}");
 
                     if (response && response.length > 0) {
-                        console.log(response)
+                    
                         var rdv = response[0];
                         $.each(rdv, function(key, value) {
-                            console.log(key)
-                            console.log(value)
+                    
                             // Populate form fields
                             $('#rdv_' + key).val(value);
                         });
@@ -1059,7 +1054,7 @@ $('#pdfModal').css('display', 'block');
                         'content') // Include CSRF token if using Laravel's CSRF protection
                 },
                 success: function(response) {
-                    console.log(response)
+               
 
                     if (response == 'ongoing') {
                         $('#message_' + template).html('Le document est en cours de signature');
@@ -1099,7 +1094,7 @@ $('#pdfModal').css('display', 'block');
                         'content') // Include CSRF token if using Laravel's CSRF protection
                 },
                 success: function(response) {
-                    console.log(response)
+                 
                 },
                 error: function(xhr, status, error) {
                     console.error('Error generating PDF:', error);
