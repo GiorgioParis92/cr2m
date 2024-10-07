@@ -435,26 +435,33 @@ class DossierLivewire extends Component
 
     public function add_row($table_tag, $form_id)
     {
+  
         if (isset($this->forms_configs[$form_id])) {
-            $field=$this->forms_configs[$form_id]->formData[$table_tag];
-
+            $field = $this->forms_configs[$form_id]->formData[$table_tag];
+            
+            // Add a new element to the form data
             $field->add_element();
-            $value = $field->generate_value();
-            $this->formData[$form_id][$table_tag] = $value;
-            $this->global_data[$table_tag] = $value;
+    
+            // Update the form data within the Livewire component
+            $this->formData[$form_id][$table_tag] = $field->value;
+            $this->global_data[$table_tag] = $field->value;
+    
+            // Explicitly refresh the component's state to ensure it's updated
+            $this->emitSelf('refreshComponent');
         }
     }
 
     public function remove_row($table_tag, $form_id, $index)
     {
         if (isset($this->forms_configs[$form_id])) {
-            $field=$this->forms_configs[$form_id]->formData[$table_tag];
+            $field = $this->forms_configs[$form_id]->formData[$table_tag];
             $field->remove_element($index);
-
-            $value = $field->generate_value();
-            $this->formData[$form_id][$table_tag] = $value;
-            $this->global_data[$table_tag] = $value;
-
+    
+            $this->formData[$form_id][$table_tag] = $field->value;
+            $this->global_data[$table_tag] = $field->value;
+    
+            // Reassign to trigger reactivity
+            $this->formData = $this->formData;
         }
     }
 }

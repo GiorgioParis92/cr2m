@@ -58,53 +58,21 @@ class Table extends AbstractFormData
     }
     public function render(bool $is_error)
     {
-        $data = '';
         if ($this->condition_valid == false) {
             return '';
         }
-
+    
         $this->value = $this->decode_if_json($this->value);
-   
-        if (!empty($this->value)) {
-            foreach ($this->value as $index => $element_data) {
-                $data .= '<div class="row">';
-                $data .= '<div class="col-lg-10 col-sm-12">';
     
-                foreach ($this->optionsArray as $element_config) {
-                    $baseNamespace = 'App\FormModel\FormData\\';
-                    $className = $baseNamespace . ucfirst($element_config['type']);
-                    $div_name = $this->name . '.value.' . $index . '.' . $element_config['name'];
-    
-                    if (class_exists($className)) {
-                        $reflectionClass = new \ReflectionClass($className);
-                        $element_instance = $reflectionClass->newInstance((object) $element_config, $div_name, $this->form_id, $this->dossier_id, false);
-                    } else {
-                        // Fallback to AbstractFormData if the class does not exist
-                        $element_instance = new AbstractFormData((object) $element_config, $div_name, $this->form_id, $this->dossier_id, false);
-                    }
-    
-                    $element_instance->set_dossier($this->dossier);
-    
-                    // Set the value from the stored data
-                    $element_value = $element_data[$element_config['name']]['value'] ?? '';
-                    $element_instance->value = $element_value;
-    
-                    $data .= $element_instance->render(false);
-                }
-    
-                $data .= '</div>';
-
-                $data .= '</div>';
-                $data .= '<div class="col-lg-2">';
-                $data .= "<label></label>";
-                $data .= '<div class="col-lg-12 col-sm-12 btn btn-danger" wire:click="remove_row(\'' . $this->name . '\',' . $this->form_id . ',' . (int) $index . ')">Supprimer</div>';
-                $data .= '</div>';
-            }
-        }
-    
-        $data .= '<div class="btn btn-success" wire:click="add_row(\'' . $this->name . '\',' . $this->form_id . ')">' . $this->config->title . '</div>';
-    
-        return $data;
+        return view('components.table', [
+            'optionsArray' => $this->optionsArray,
+            'value' => $this->value,
+            'name' => $this->name,
+            'form_id' => $this->form_id,
+            'config' => $this->config,
+            'dossier_id' => $this->dossier_id,
+            'dossier' => $this->dossier, // Make sure you pass any necessary data
+        ])->render();
     }
     
     
@@ -131,8 +99,13 @@ class Table extends AbstractFormData
     }
     public function add_element()
     {
-        $this->value = $this->decode_if_json($this->value);
-
+        try {
+      
+            $this->value = $this->decode_if_json($this->value);
+     
+        } catch (\Throwable $th) {
+            $this->value = [];
+        }
         if (!is_array($this->value)) {
             $this->value = [];
         }
@@ -156,15 +129,15 @@ class Table extends AbstractFormData
     public function remove_element($index)
     {
         $this->value = $this->decode_if_json($this->value);
-    
+
         unset($this->value[$index]);
     
         // Reindex the array and explicitly update the property
         $this->value = array_values($this->value);
     
-        // Remove the line that sets $this->value to an empty string
+        // Set $this->value to an empty array instead of an empty string
         if (empty($this->value)) {
-            $this->value = '';
+            $this->value = [];
         }
     
         $this->save_value();
