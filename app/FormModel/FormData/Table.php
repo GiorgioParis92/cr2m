@@ -62,8 +62,9 @@ class Table extends AbstractFormData
         if ($this->condition_valid == false) {
             return '';
         }
+
         $this->value = $this->decode_if_json($this->value);
-    
+   
         if (!empty($this->value)) {
             foreach ($this->value as $index => $element_data) {
                 $data .= '<div class="row">';
