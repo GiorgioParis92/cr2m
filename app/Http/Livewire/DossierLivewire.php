@@ -124,19 +124,19 @@ class DossierLivewire extends Component
         // Pattern to match simple formData properties
         $simplePattern = '/^formData\.(\d+)\.(\w+)$/';
         // Pattern to match complex formData properties with table
-        $complexPattern = '/^formData\.(\d+)\.(\w+)\.value\.(\d+)\.(\w+)$/';
+        $complexPattern = '/^formData\.(\d+)\.(\w+)\.value\.(\w+)\.(\w+)$/';
 
         if (preg_match($complexPattern, $propertyName, $matches)) {
             $formId = $matches[1]; // Extract formId
             $key = $matches[2]; // Extract tag
-            $tableIndex = (int) $matches[3]; // Extract table index
+            $tableIndex = $matches[3]; // Extract table index
             $cellTag = $matches[4]; // Extract cell tag
 
             $this->forms_configs[$formId]->formData[$key]->updating = true;
 
             if (isset($this->forms_configs[$formId]) && isset($this->forms_configs[$formId]->formData[$key])) {
                 $this->forms_configs[$formId]->formData[$key]->value = $this->forms_configs[$formId]->formData[$key]->init_value();
-                $this->forms_configs[$formId]->formData[$key]->value[(int) $tableIndex][$cellTag]["value"] = $value;
+                $this->forms_configs[$formId]->formData[$key]->value[$tableIndex][$cellTag]["value"] = $value;
 
                 $this->forms_configs[$formId]->formData[$key]->save_value();
 
