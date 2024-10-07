@@ -1,3 +1,8 @@
+
+<div wire:loading wire:target="add_row,remove_row" class="loader-overlay">
+    <!-- Your loader content, e.g., a spinner -->
+    <div class="spinner"></div>
+</div>
 @if (!empty($value))
     @foreach ($value as $uniqueId => $element_data)
         <div class="row" wire:key="row-{{$uniqueId}}">
