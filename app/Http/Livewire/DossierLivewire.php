@@ -18,6 +18,7 @@ class DossierLivewire extends Component
     public $etape_display = [];
     public $etapes = [];
     public $forms_configs = [];
+    protected $forms_configs_saved = [];
     public $global_data = [];
     public $tab;
     public $last_etape;
@@ -291,56 +292,12 @@ class DossierLivewire extends Component
 
     public function hydrate()
     {
-      
-       
+ 
             $this->reinitializeFormsConfigs(false);
-    
+
+            
         $this->get_docs();
      
-    }
-
-    public function updated($propertyName)
-    {
-        if (strpos($propertyName, 'formData.') === 0) {
-            $this->handleFormDataUpdate($propertyName);
-        }
-    }
-
-    private function handleFormDataUpdate($propertyName)
-    {
-        if (preg_match('/^formData\.(\d+)\.(\w+)/', $propertyName, $matches)) {
-            $formId = $matches[1];
-            $key = $matches[2];
-
-            if (isset($this->forms_configs[$formId]->formData[$key])) {
-                $field = $this->forms_configs[$formId]->formData[$key];
-                $field->value = $this->formData[$formId][$key];
-                $field->save_value();
-
-                $form = Form::find($formId);
-                $score = $this->score_info['form_score'][$formId] ?? 0;
-
-                DossiersActivity::updateOrCreate(
-                    [
-                        'dossier_id' => $this->dossier->id,
-                        'form_id' => $formId,
-                        'user_id' => auth()->id()
-                    ],
-                    [
-                        'activity' => "{$form->form_title} rempli à {$score} %",
-                        'score' => $score,
-                        'updated_at' => now()
-                    ]
-                );
-            }
-        }
-
-        foreach ($this->forms_configs as $config) {
-            $config->save();
-            foreach ($config->formData as $tag => $data_form) {
-                $this->global_data[$tag] = $data_form->value;
-            }
-        }
     }
 
     public function display_form($form_id)
@@ -377,7 +334,6 @@ class DossierLivewire extends Component
             }
 
         } 
-
         $this->get_score_per_etape();
 
         return $firstKey;
