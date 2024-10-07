@@ -12,6 +12,7 @@ class FormConfigHandler
     public $form;
     public $dossier;
     public $formData = [];
+    public static $form_instance = [];
 
     public function __construct($dossier, $form)
     {
@@ -29,19 +30,37 @@ class FormConfigHandler
             ->get();
 
         foreach ($formData as $value) {
-            $baseNamespace = 'App\FormModel\FormData\\';
-            $className = $baseNamespace . ucfirst($value->type);
+            $className = $this->getFormDataClassName($value->type);
 
-            if (class_exists($className)) {
-                $reflectionClass = new \ReflectionClass($className);
-                $this->formData[$value->name] = $reflectionClass->newInstance($value, $value->name, $this->form->id, $this->dossier->id);
-            } else {
-                // Fallback to AbstractFormData if the class does not exist
-                $this->formData[$value->name] = new AbstractFormData($value, $value->name, $this->form->id, $this->dossier->id);
-            }
-            $this->formData[$value->name] -> set_dossier($this->dossier);
+            // Instantiate the class without checking class_exists every time
+            $this->formData[$value->name] = new $className(
+                $value,
+                $value->name,
+                $this->form->id,
+                $this->dossier->id
+            );
 
+            $this->formData[$value->name]->set_dossier($this->dossier);
         }
+    }
+
+    private function getFormDataClassName($type)
+    {
+        if (isset(self::$form_instance[$type])) {
+            return self::$form_instance[$type];
+        }
+
+        $baseNamespace = 'App\FormModel\FormData\\';
+        $className = $baseNamespace . ucfirst($type);
+
+        if (class_exists($className)) {
+            self::$form_instance[$type] = $className;
+        } else {
+            // Fallback to AbstractFormData if the class does not exist
+            self::$form_instance[$type] = AbstractFormData::class;
+        }
+
+        return self::$form_instance[$type];
     }
 
     public function render($errors)

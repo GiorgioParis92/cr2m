@@ -1,4 +1,4 @@
-<div wire:poll>
+<div wire:poll.1s>
     <div class="row">
         <div class="col-12">
             <div class="card form-register" wire:ignore>

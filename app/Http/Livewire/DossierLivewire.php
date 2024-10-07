@@ -96,6 +96,8 @@ class DossierLivewire extends Component
         $this->technicien = $technicien ? $technicien->toArray() : [];
 
         $this->get_docs();
+
+    //  $this->reinitializeFormsConfigs($should_save=false);
     }
 
     private function determineLastEtape()
@@ -220,7 +222,7 @@ class DossierLivewire extends Component
         $this->dossier->order_column = $currentEtape ? $currentEtape->order_column : null;
 
         $this->global_data = [];
-        $this->reinitializeFormsConfigs();
+        // $this->reinitializeFormsConfigs();
 
         $this->steps = DB::table('dossiers_data')
             ->where('dossier_id', $this->dossier->id)
@@ -281,15 +283,17 @@ class DossierLivewire extends Component
                 ]
             );
 
-            $this->reinitializeFormsConfigs(true);
+            // $this->reinitializeFormsConfigs(true);
             $this->emit('initializeDropzones', ['forms_configs' => $this->forms_configs]);
         }
     }
 
     public function hydrate()
     {
+      
         $this->reinitializeFormsConfigs(false);
         $this->get_docs();
+     
     }
 
     public function updated($propertyName)
@@ -342,7 +346,7 @@ class DossierLivewire extends Component
         $etape_display = Etape::find($this->tab);
         $this->etape_display = $etape_display ? $etape_display->toArray() : [];
 
-        $this->reinitializeFormsConfigs();
+        // $this->reinitializeFormsConfigs();
     }
 
     public function reinitializeFormsConfigs($should_save = true)
@@ -366,7 +370,7 @@ class DossierLivewire extends Component
                 foreach ($handler->formData as $key => $field) {
                     $value = $field->generate_value();
                     $this->formData[$form->id][$key] = $value;
-                    $this->global_data[$key] = $value;
+                    // $this->global_data[$key] = $value;
 
                     if ($value && $should_save) {
                         $field->save_value();
@@ -374,7 +378,7 @@ class DossierLivewire extends Component
                 }
             }
 
-            $this->global_data = array_merge($this->global_data, $this->dossier->toArray());
+            // $this->global_data = array_merge($this->global_data, $this->dossier->toArray());
         } else {
             $this->forms_configs = [];
             $this->formData = [];
@@ -382,11 +386,11 @@ class DossierLivewire extends Component
 
         $this->get_score_per_etape();
 
-        $this->steps = DB::table('dossiers_data')
-            ->where('dossier_id', $this->dossier->id)
-            ->where('meta_key', 'like', '%step_%')
-            ->pluck('meta_value', 'meta_key')
-            ->toArray();
+        // $this->steps = DB::table('dossiers_data')
+        //     ->where('dossier_id', $this->dossier->id)
+        //     ->where('meta_key', 'like', '%step_%')
+        //     ->pluck('meta_value', 'meta_key')
+        //     ->toArray();
     }
 
     public function render()
