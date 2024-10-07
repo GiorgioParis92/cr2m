@@ -1,4 +1,4 @@
-<div wire:poll>
+<div wire:poll.1ms>
 
     <div wire:loading wire:target="add_row,remove_row,display_form" class="loader-overlay">
         <!-- Your loader content, e.g., a spinner -->
