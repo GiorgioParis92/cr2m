@@ -142,7 +142,7 @@ class Table extends AbstractFormData
     
         $this->save_value();
     
-        return $this->generate_value();
+        // return $this->generate_value();
     }
 
     

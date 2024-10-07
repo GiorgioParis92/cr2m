@@ -73,7 +73,8 @@ class Radio extends AbstractFormData
                 $backgroundColor = '';
                 $data.='<div class="radio_line" style="background:#'.$backgroundColor.' ">';
                 $data .= '<input id="'.$this->name.'_'.$key.'"
-                    wire:model="'.$wireModel.'" 
+                    wire:click="update_value(\''.$wireModel.'\',  '.$element['value'].')"
+
                   
                     value="'.$element['value'].'"
                     name="'.$this->config->name.'"
