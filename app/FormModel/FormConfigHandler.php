@@ -13,12 +13,16 @@ class FormConfigHandler
     public $dossier;
     public $formData = [];
     public static $form_instance = [];
+    public  $form_render ;
+    public  $etape_number ;
 
     public function __construct($dossier, $form)
     {
         $this->dossier = $dossier;
         $this->form = $form;
+
         $this->init();
+
     }
 
     public function init()

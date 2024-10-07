@@ -291,7 +291,9 @@ class DossierLivewire extends Component
     public function hydrate()
     {
       
-        $this->reinitializeFormsConfigs(false);
+       
+            $this->reinitializeFormsConfigs(false);
+    
         $this->get_docs();
      
     }
@@ -367,27 +369,14 @@ class DossierLivewire extends Component
                 $handler = new FormConfigHandler($this->dossier, $form);
                 $this->forms_configs[$form->id] = $handler;
 
-                foreach ($handler->formData as $key => $field) {
-                    // $value = $field->generate_value();
-                    // $this->formData[$form->id][$key] = $value;
-                    // $this->global_data[$key] = $value;
-
-                }
             }
 
-            // $this->global_data = array_merge($this->global_data, $this->dossier->toArray());
-        } else {
-            $this->forms_configs = [];
-            $this->formData = [];
-        }
+        } 
 
         $this->get_score_per_etape();
 
-        // $this->steps = DB::table('dossiers_data')
-        //     ->where('dossier_id', $this->dossier->id)
-        //     ->where('meta_key', 'like', '%step_%')
-        //     ->pluck('meta_value', 'meta_key')
-        //     ->toArray();
+
+       
     }
 
     public function render()
@@ -463,4 +452,9 @@ class DossierLivewire extends Component
             $this->formData = $this->formData;
         }
     }
+
+    private function arrayToObject($array)
+{
+    return json_decode(json_encode($array), false);
+}
 }
