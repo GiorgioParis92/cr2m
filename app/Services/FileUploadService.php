@@ -149,8 +149,9 @@ class FileUploadService
         if ($random_name == true) {
 
             $index = '';
-           
+        
             $explode = (explode('.', $request->input('template')));
+        
             if (is_array($explode) && count($explode) > 1) {
                 $array = explode('.', $request->input('template'));
                 $template = $array[0];

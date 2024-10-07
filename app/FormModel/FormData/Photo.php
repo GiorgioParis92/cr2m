@@ -40,7 +40,7 @@ class Photo extends AbstractFormData
         $data .= "<div class='row'>";
         $data .= "<div class='col-lg-3'>";
 
-        $data .= '<div style="cursor:pointer" data-upload-url="'.$uploadUrl.'" class="dropzone photo_button bg-secondary" id="dropzone-' . str_replace('.','-',$this->name) . '">';
+        $data .= '<div style="cursor:pointer" data-form_id="'.$this->form_id.'" data-upload-url="'.$uploadUrl.'" class="dropzone photo_button bg-secondary" id="dropzone-' . $this->name . '">';
         $data .= csrf_field(); // This will generate the CSRF token input field
         $data .= '<div style="color:white" class="dz-message"><i class="fas fa-camera"></i> ' . $this->config->title . '</div>';
         $data .= '</div>';
@@ -49,41 +49,46 @@ class Photo extends AbstractFormData
         $deleteUrl = route("delete_file");
 
         
-        $data .= "<script>
-            Dropzone.autoDiscover = false;
+    //     $data .= "<script>
+    //         Dropzone.autoDiscover = false;
 
-        var dropzoneElementId = '#dropzone-" . str_replace('.', '-', $this->name) . "';
-        var dropzoneElement = document.querySelector(dropzoneElementId);
+    //     var dropzoneElementId = '#dropzone-" . str_replace('.', '-', $this->name) . "';
+    //     var dropzoneElement = document.querySelector(dropzoneElementId);
         
-        if (dropzoneElement && !dropzoneElement.dropzone) {
-            console.log(dropzoneElementId);
-            
-            var dropzone = new Dropzone(dropzoneElement, {
-                url: '{$uploadUrl}',
-                method: 'post',
-                headers: {
-                    'X-CSRF-TOKEN': '{$csrfToken}'
-                },
-                maxFilesize: 50000,
-                paramName: 'file',
-                sending: function(file, xhr, formData) {
-                    console.log(file);
-                    formData.append('folder', 'dossiers');
-                    formData.append('template', '{$this->name}');
-                    formData.append('random_name', 'true');
-                },
-                init: function() {
-                    this.on('success', function(file, response) {
-                        console.log('Successfully uploaded:', response);
-                        initializeDeleteButtons();
-                    });
-                    this.on('error', function(file, response) {
-                        console.log('Upload error:', response);
-                    });
-                }
-            });
-        }
-    </script>";
+    //     if (dropzoneElement && !dropzoneElement.dropzone) {
+
+    //         console.log(dropzoneElementId);
+    //                 const dropzoneId = dropzoneElement.id;
+    //     const key = dropzoneId.replace('dropzone-','');
+    //     const uploadUrl = dropzoneElement.getAttribute('data-upload-url');
+    //     const form_id = dropzoneElement.getAttribute('data-form_id');
+
+    //         var dropzone = new Dropzone(dropzoneElement, {
+    //             url: '{$uploadUrl}',
+    //             method: 'post',
+    //             headers: {
+    //                 'X-CSRF-TOKEN': '{$csrfToken}'
+    //             },
+    //             maxFilesize: 50000,
+    //             paramName: 'file',
+    //             sending: function(file, xhr, formData) {
+    //                 console.log(file);
+    //                 formData.append('folder', 'dossiers');
+    //                 formData.append('template', '{$this->name}');
+    //                 formData.append('random_name', 'true');
+    //             },
+    //             init: function() {
+    //                 this.on('success', function(file, response) {
+    //                     console.log('Successfully uploaded:', response);
+    //                     initializeDeleteButtons();
+    //                 });
+    //                 this.on('error', function(file, response) {
+    //                     console.log('Upload error:', response);
+    //                 });
+    //             }
+    //         });
+    //     }
+    // </script>";
     
             $data .="\r\n"."</script>"."\r\n";
         if(!is_array($values)) {
@@ -137,7 +142,7 @@ class Photo extends AbstractFormData
                     $data .= '<i class="fas fa-eye"></i>' . $this->config->title . '</div>';
                 }
             }
-            $data .= "<script>initializePdfModals()</script>";
+            // $data .= "<script>initializePdfModals()</script>";
         }
         }
     } 

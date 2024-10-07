@@ -749,7 +749,9 @@
     dropzoneElements.forEach((dropzoneElement) => {
         // Extract the unique ID and upload URL from the element
         const dropzoneId = dropzoneElement.id;
+        const key = dropzoneId.replace('dropzone-','');
         const uploadUrl = dropzoneElement.getAttribute('data-upload-url');
+        const form_id = dropzoneElement.getAttribute('data-form_id');
 
         if (!dropzoneElement) {
             console.warn(`Element with ID ${dropzoneId} not found.`);
@@ -771,7 +773,7 @@
             paramName: 'file',
             sending: function(file, xhr, formData) {
                 formData.append('folder', 'dossiers');
-                formData.append('template', dropzoneId.replace('dropzone-',''));
+                formData.append('template', key);
             },
             init: function() {
                 this.on("success", function(file, response) {
@@ -779,8 +781,8 @@
                     $('#doc-' + dropzoneId).val(response);
                     $('#doc-' + dropzoneId).blur();
 
-                    Livewire.emit('fileUploaded', [dropzoneId, response]);
-
+                    Livewire.emit('fileUploaded', [form_id,key, response]);
+             
                     console.log('Successfully uploaded:', response);
                 });
                 this.on("error", function(file, response) {

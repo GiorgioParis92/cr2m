@@ -262,47 +262,50 @@ class DossierLivewire extends Component
     public function handleFileUploaded($request)
     {
 
-        $this->forms_configs[$request[0]]->formData[$request[1]]->value = $request[2];
-        $this->forms_configs[$request[0]]->formData[$request[1]]->save_value();
+        // $this->reinitializeFormsConfigs(false);
 
-        $this->formData[$request[0]][$request[1]] = $request[2];
-        $this->global_data[$request[1]] = $request[2];
-        $form_id=$request[0];
+        // dump($request);
+        // dd($this->forms_configs);
+        // $this->forms_configs[$request[0]]->formData[$request[1]]->value = $request[2];
+        // $this->forms_configs[$request[0]]->formData[$request[1]]->save_value();
+
+        // $this->formData[$request[0]][$request[1]] = $request[2];
+        // $this->global_data[$request[1]] = $request[2];
+        // $form_id=$request[0];
  
       
-        $form=Form::find($form_id);
+        // $form=Form::find($form_id);
       
         
-        $field_name = $request[1]; // Extracts 'revenu_fiscal'
+        // $field_name = $request[1]; // Extracts 'revenu_fiscal'
 
-        $dossier_id = $this->dossier->id;
-        $user_id = auth()->user()->id;
+        // $dossier_id = $this->dossier->id;
+        // $user_id = auth()->user()->id;
 
         
-        // Try to find an existing record with the same dossier_id, form_id, and user_id
-        $activity = DossiersActivity::where('dossier_id', $dossier_id)
-                                    ->where('form_id', $form_id)
-                                    ->where('user_id', $user_id)
-                                    ->first();
+        // // Try to find an existing record with the same dossier_id, form_id, and user_id
+        // $activity = DossiersActivity::where('dossier_id', $dossier_id)
+        //                             ->where('form_id', $form_id)
+        //                             ->where('user_id', $user_id)
+        //                             ->first();
 
-        if ($activity) {
-            // Update the existing record
-            $activity->activity = "Document chargé ".$form->form_title."";
-            $activity->updated_at = now(); // Update the timestamp
-            $activity->score = 100; // Update the timestamp
-            $activity->save();
-        } else {
-            // Create a new record
-            DossiersActivity::create([
-                'dossier_id' => $dossier_id,
-                'user_id' => $user_id,
-                'form_id' => $form_id,
-                'score' => 100,
-                'activity' => "Document chargé ".$form->form_title."",
-            ]);
-        }
+        // if ($activity) {
+        //     // Update the existing record
+        //     $activity->activity = "Document chargé ".$form->form_title."";
+        //     $activity->updated_at = now(); // Update the timestamp
+        //     $activity->score = 100; // Update the timestamp
+        //     $activity->save();
+        // } else {
+        //     // Create a new record
+        //     DossiersActivity::create([
+        //         'dossier_id' => $dossier_id,
+        //         'user_id' => $user_id,
+        //         'form_id' => $form_id,
+        //         'score' => 100,
+        //         'activity' => "Document chargé ".$form->form_title."",
+        //     ]);
+        // }
 
-        $this->reinitializeFormsConfigs(true);
 
         $this->emit('initializeDropzones', ['forms_configs' => $this->forms_configs]);
 
@@ -416,6 +419,8 @@ class DossierLivewire extends Component
     
             // Reassign to trigger reactivity
             $this->formData = $this->formData;
+            $this->emit('initializeDropzones', ['forms_configs' => $this->forms_configs]);
+
         }
     }
 
