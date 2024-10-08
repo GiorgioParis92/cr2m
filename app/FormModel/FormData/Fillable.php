@@ -154,17 +154,30 @@ class Fillable extends AbstractFormData
 
                     if ($check_status) {
                         if ($check_status->meta_value == 'ongoing') {
-                            $data .= 'Le document est en cours de signature';
+                            $data .= '<div>Le document est en cours de signature</div>';
                         }
 
                         if ($check_status->meta_value == 'done') {
-                            $data .= 'Le document a été signé';
+                            $data .= '<div>Le document a été signé</div>';
                         }
                         if ($check_status->meta_value == 'finish') {
-                            $data .= 'Le document a été signé';
+                            $data .= '<div>Le document a été signé</div>';
                         }
                     }
+                    $data .= '<button type="button" class="btn btn-danger btn-view" wire:click="delete_signature(\''.$this->form_id.'\',\''.$this->name.'\')"
+                    data-toggle="modal" 
+                       data-dossier_id="' . $this->dossier->folder . '"';
+                        $data .= "data-generation='" . $generation . "'";
+                        $data .= "data-form_id='" . $this->form_id . "'";
+                        $data .= "data-signature_request_id='" . $check_signature->meta_value . "'";
+                        $data .= "data-document_id='" . $check_document->meta_value . "'";
+    
+                        $data .= 'data-template="' . $this->optionsArray['template'] . '"
+                    data-name="' . $this->config->title . '">
+                    <i class="fas fa-eye"></i> Annuler la demande de signature
+                </button> ';
                 }
+
                 $data .= '</div>';
             } else {
                 $data .= '<div id="message_' . $this->optionsArray['template'] . '">';

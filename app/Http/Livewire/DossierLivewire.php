@@ -438,7 +438,23 @@ class DossierLivewire extends Component
             $this->formData = $this->formData;
         }
     }
-
+    public function delete_signature($form_id, $tag)
+    {
+        // Use $this->dossier->id instead of $this->dossier_id
+        $result = DB::table('forms_data')
+                    ->where('dossier_id', $this->dossier->id) // Corrected dossier_id reference
+                    ->where('form_id', $form_id)
+                    ->where('meta_key', '!=', $tag) // Assuming you want to delete based on meta_key equal to the tag
+                    ->delete();
+        
+        // Optionally, you can return or handle the result here if needed
+        if ($result) {
+            session()->flash('message', 'Signature deleted successfully.');
+        } else {
+            session()->flash('message', 'Failed to delete signature.');
+        }
+    }
+    
     private function arrayToObject($array)
 {
     return json_decode(json_encode($array), false);
