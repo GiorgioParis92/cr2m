@@ -1077,7 +1077,7 @@ $('#pdfModal').css('display', 'block');
             var generation = $(this).data('generation'); // Get the dossier ID from data attribute
             var fields = $(this).data('fields'); // Get the dossier ID from data attribute
             var name = $(this).data('name'); // Get the dossier ID from data attribute
-
+            alert('ok')
             $.ajax({
                 url: '/api/yousign', // Adjust this URL to your actual API endpoint
                 type: 'POST',
@@ -1094,7 +1094,7 @@ $('#pdfModal').css('display', 'block');
                         'content') // Include CSRF token if using Laravel's CSRF protection
                 },
                 success: function(response) {
-                 
+                 console.log(response)
                 },
                 error: function(xhr, status, error) {
                     console.error('Error generating PDF:', error);
