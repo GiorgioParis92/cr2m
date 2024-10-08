@@ -34,6 +34,7 @@ class DossierLivewire extends Component
     public $financiers = [];
     public $installateurs = [];
     public $technicien = [];
+    public $technicien2 = [];
     public $dossier;
 
     protected $listeners = ['fileUploaded' => 'handleFileUploaded'];
@@ -96,7 +97,14 @@ class DossierLivewire extends Component
             ->first();
 
             $this->technicien = $technicien ? $technicien->toArray() : [];
+            $technicien2 = Rdv::with('user')
+            ->where('dossier_id', $id)
+            ->where('type_rdv', 2)
+            ->where('status', '!=', 2)
+            ->latest()
+            ->first();
 
+            $this->technicien2 = $technicien2 ? $technicien2->toArray() : [];
         $this->get_docs();
         $this->reinitializeFormsConfigs(false);
     }

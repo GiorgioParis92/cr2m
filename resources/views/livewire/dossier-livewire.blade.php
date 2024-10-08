@@ -36,18 +36,27 @@
                                 <div class="">
                                    
                                     @if (isset($technicien) && !empty($technicien))
+                                        <div class="row">
                                         Technicien RDV MAR 1 :
                                         {{ $technicien['user']['name'] ?? '' }}
+                                        </div>
                                     @endif
+                                    @if (isset($technicien2) && !empty($technicien2))
+                                    <div class="row">
+                                    Technicien RDV MAR 2 :
+                                    {{ $technicien2['user']['name'] ?? '' }}
+                                    </div>
+                                @endif
                                 </div>
                             @endif
-
+                            <div class="row">
                             @if (isset($dossier->mar_client))
                                 @if (Storage::disk('public')->exists($dossier->mar_client->main_logo))
-                                    <img style="max-width: 30%" src="{{ asset('storage/' . $dossier->mar_client->main_logo) }}">
+                                    <img style="max-width: 150px" src="{{ asset('storage/' . $dossier->mar_client->main_logo) }}">
                                 @endif
                                 {{ $dossier->mar_client->client_title }}
                             @endif
+                            </div>
                         </div>
                         <div class="ms-auto my-auto mt-lg-0 mt-4">
                             <div class="ms-auto my-auto">
