@@ -34,7 +34,7 @@ class BeneficiaireController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $validated = $request->validate([
-            'reference_unique' => 'required|max:200',
+            'reference_unique' => 'required|max:7',
             'nom' => 'required|max:200',
             'prenom' => 'required|max:200',
             'numero_voie' => 'required|max:250',
