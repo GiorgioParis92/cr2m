@@ -147,7 +147,6 @@ class Db_text extends AbstractFormData
                 $sql_command = str_replace($key, eval ($data), $sql_command);
             }
         }
-print_r($this->condition_valid);
 
 
         $class_prediction = '';
