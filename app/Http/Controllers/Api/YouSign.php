@@ -31,9 +31,9 @@ class YouSign extends Controller
     $dossier = Dossier::where('folder', $request->dossier_id);
     $dossier = $dossier->with('beneficiaire', 'fiche', 'etape', 'status', 'get_rdv')->first();
 
-    if(auth()->user()->id==1) {
-        dd($request);
-      }
+    // if(auth()->user()->id==1) {
+    //     dd($request);
+    //   }
 
     if ($dossier) {
 
