@@ -46,12 +46,13 @@ class Result extends AbstractFormData
             $condition_valid = true;
         }
 
-
+ 
   
         if( $condition_valid == false) {
             return '';
         }
         if (isset($optionsArray['operands'])) {
+       
             foreach ($optionsArray['operands'] as $operand) {
 
                 if ($operand['operand'] == 'x') {
@@ -66,12 +67,14 @@ class Result extends AbstractFormData
                     
                     foreach ($operand['tags'] as $tag) {
                         $tagValue = $this->getOtherValue($tag);
-                   
-
-                        if (is_numeric($tag)) {
-                            $tagValue = (float)$tag;
-                        } else {
-                            $tagValue = 0;
+                  
+                      
+                        if ($tagValue === '' || $tagValue === null) {
+                            if (is_numeric($tag)) {
+                                $tagValue = (float)$tag;
+                            } else {
+                                $tagValue = 0;
+                            }
                         }
                         $total *= $tagValue;
                     }
@@ -199,7 +202,7 @@ class Result extends AbstractFormData
             }
         }
       
-   
+     
         $this->value = number_format((float) $total, 2, '.', '');
         $this->save_value();
         $wireModel = "formData.{$this->form_id}.{$this->name}";
@@ -217,7 +220,7 @@ class Result extends AbstractFormData
         }
 
 
-        $data = '<div '.$hidden.' class="form-group col-sm-12 ' . ($this->config->class ?? "") . '">';
+        $data = '<div wire:poll '.$hidden.' class="form-group col-sm-12 ' . ($this->config->class ?? "") . '">';
 
 
         $data .= '<label style="display:inline-block">' . $this->config->title . '</label>';
@@ -226,7 +229,7 @@ class Result extends AbstractFormData
         // $data .= $this->generate_loading();
 
 
-        $data .= '<input ' . $readonly . ' wire:model.lazy="' . $wireModel . '" class="form-control " type="text" name="' . $this->name . '" ';
+        $data .= '<input   wire:change="update_value(\''.$wireModel.'\',  $this->value)" class="form-control " type="text" name="' . $this->name . '" ';
 
         if ($this->config->required) {
             $data .= ' required ';

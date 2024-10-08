@@ -190,7 +190,7 @@ class AbstractFormData
             ->where('dossier_id', $this->dossier_id)
             ->where('meta_key', $name)
             ->first();
- 
+       
         return $otherValue->meta_value ?? '';
     }
 

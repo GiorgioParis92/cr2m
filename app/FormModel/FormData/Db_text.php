@@ -21,7 +21,36 @@ class Db_text extends AbstractFormData
             }
         }
 
+        $condition_valid = false;
 
+        if(isset($optionsArray['conditions'])) {
+          
+            foreach ($optionsArray as $key=>$condition_config) {
+                if($key=='conditions') {
+                    if ($this->check_condition($condition_config)) {
+                
+                        $condition_valid = true;
+        
+                        if (isset($condition_config['operation']) && $condition_config['operation'] == 'AND') {
+                            break;
+                        }
+        
+                    } else {
+                        $condition_valid = false; 
+                    }
+                }
+
+    
+            }
+        } else {
+            $condition_valid = true;
+        }
+
+ 
+  
+        if( $condition_valid == false) {
+            return '';
+        }
         $class_prediction = '';
 
         if (!$this->check_value()) {
@@ -39,7 +68,7 @@ class Db_text extends AbstractFormData
                 // SI preco ajouter par l'utilisateur
                 if ($result->$fieldLabel >= $this->value) {
                     $this->value = $result->$fieldLabel;
-                    // $this->save_value();
+                    $this->save_value();
                 }
             }
 
@@ -48,7 +77,7 @@ class Db_text extends AbstractFormData
                 $fieldValue = $optionsArray['value'];
                 $fieldLabel = $optionsArray['label'];
                 $this->value = $result->$fieldLabel;
-                // $this->save_value();
+                $this->save_value();
             }
         }
 
@@ -61,7 +90,7 @@ class Db_text extends AbstractFormData
 
         $readonly = '';
         if (isset($optionsArray['readonly'])) {
-            $readonly = (($optionsArray['readonly'] == true) ? 'disabled' : '');
+            $readonly = (($optionsArray['readonly'] == true) ? '' : '');
         }
 
         $wireModel = "formData.{$this->form_id}.{$this->name}";
@@ -75,13 +104,13 @@ class Db_text extends AbstractFormData
             $class_prediction = ' is-invalid';
         }
 
-        $data = '<div class="form-group col-sm-12 ' . ($this->config->class ?? "") . '  group_' . $class_prediction . '">';
+        $data = '<div wire:poll class="form-group col-sm-12 ' . ($this->config->class ?? "") . '  group_' . $class_prediction . '">';
 
         $data .= '<label style="display:inline-block">' . $this->config->title . '</label>';
 
         $data .= $this->generate_loading();
 
-        $data .= '<input type="text" ' . $readonly . ' wire:change="update_value(\'' . $wireModel . '\',  \'' . $this->value . '\')" class="form-control ' . $class_prediction . '" type="text" name="' . $this->name . '" ';
+        $data .= '<input type="text" ' . $readonly . ' wire:change="update_value(\''.$wireModel.'\',  $event.target.value)"  class="form-control ' . $class_prediction . '" type="text" name="' . $this->name . '" ';
 
         if ($this->config->required) {
             $data .= ' required ';
@@ -208,7 +237,7 @@ class Db_text extends AbstractFormData
 
         $data .= $this->generate_loading();
 
-        $data .= '<input ' . $readonly . ' wire:model.lazy="' . $wireModel . '" class="form-control ' . $class_prediction . '" type="text" name="' . $this->name . '" ';
+        $data .= '<input ' . $readonly . ' wire:blur="update_value(\''.$wireModel.'\',  $event.target.value)"  class="form-control ' . $class_prediction . '" type="text" name="' . $this->name . '" ';
 
         if ($this->config->required) {
             $data .= ' required ';
@@ -228,5 +257,17 @@ class Db_text extends AbstractFormData
 
         return $data;
 
+    }
+
+    public function check_condition($condition_config)
+    {
+        foreach ($condition_config as $tag => $list_values) {
+            if (!$this->match_value($tag, $list_values)) {
+
+                return false;
+            }
+        }
+    
+        return true;
     }
 }

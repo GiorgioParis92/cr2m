@@ -121,7 +121,6 @@ class DossierLivewire extends Component
     {
           // Parse the property name
         // Example property names: formData.3.nom, formData.27.ajout_piece#table-0-nom_de_la_piece
-
         // Pattern to match simple formData properties
         $simplePattern = '/^formData\.(\d+)\.(\w+)$/';
         // Pattern to match complex formData properties with table
@@ -146,12 +145,15 @@ class DossierLivewire extends Component
 
 
         } elseif (preg_match($simplePattern, $propertyName, $matches)) {
+           
             $formId = $matches[1]; // Extract formId
             $key = $matches[2]; // Extract key
             $this->forms_configs[$formId]->formData[$key]->updating = true;
             // Ensure the formId and key exist
+
             if (isset($this->forms_configs[$formId]) && isset($this->forms_configs[$formId]->formData[$key])) {
                 $this->forms_configs[$formId]->formData[$key]->value = $value;
+
                 $this->forms_configs[$formId]->formData[$key]->save_value();
             }
         }
