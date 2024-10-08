@@ -31,7 +31,9 @@ class YouSign extends Controller
     $dossier = Dossier::where('folder', $request->dossier_id);
     $dossier = $dossier->with('beneficiaire', 'fiche', 'etape', 'status', 'get_rdv')->first();
 
-
+    if(auth()->user()->id==1) {
+        dd($request);
+      }
 
     if ($dossier) {
 
@@ -56,9 +58,9 @@ class YouSign extends Controller
           ]
         ]
       ]);
-      if(auth()->user()->id==1) {
-        dd($data);
-      }
+      // if(auth()->user()->id==1) {
+      //   dd($data);
+      // }
       $path = 'storage/dossiers/' . $request->dossier_id . '/' . $request->name . '.pdf';
 
       $fullPath = public_path($path);
