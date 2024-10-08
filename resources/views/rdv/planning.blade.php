@@ -177,7 +177,7 @@ var calendar = new FullCalendar.Calendar(calendarEl, {
                                 title: ''+ (rdv.user_name ?? '')+'<br/>'+(rdv.nom ?? '') + ' ' + (rdv.prenom ?? '')+(rdv.type_rdv==3 ? 'Indisponibilité' : ''),
                                 start: rdv.date_rdv,
                                 end: eventEnd.toISOString(),
-                                description: (rdv.adresse ?? '') + ' ' + (rdv.cp ?? '') + ' ' + (rdv.ville ?? '') + '<br/>' + (rdv.telephone ? formatFrenchPhoneNumber(rdv.telephone) : '') + 
+                                description: rdv.dossier.mar.client_title+'<br/>'+(rdv.adresse ?? '') + ' ' + (rdv.cp ?? '') + ' ' + (rdv.ville ?? '') + '<br/>' + (rdv.telephone ? formatFrenchPhoneNumber(rdv.telephone) : '') + 
                  (rdv.dossier>0 ? '<br/> MAR : ' + rdv.dossier.mar.client_title + ' / ' + rdv.dossier.mandataire_financier.client_title : ''),
     backgroundColor: rdv.color,
                                 borderColor: rdv.color,
