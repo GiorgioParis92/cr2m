@@ -1077,7 +1077,7 @@ $('#pdfModal').css('display', 'block');
             var generation = $(this).data('generation'); // Get the dossier ID from data attribute
             var fields = $(this).data('fields'); // Get the dossier ID from data attribute
             var name = $(this).data('name'); // Get the dossier ID from data attribute
-            alert('ok')
+        
             $.ajax({
                 url: '/api/yousign', // Adjust this URL to your actual API endpoint
                 type: 'POST',
