@@ -8,10 +8,7 @@ class Number extends AbstractFormData
 {
     public function render(bool $is_error)
     {
-      
-        if(!$this->condition_valid) {
-            return false;
-        }
+
 
         $wireModel = "formData.{$this->form_id}.{$this->name}";
 
