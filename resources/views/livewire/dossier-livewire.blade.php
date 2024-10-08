@@ -205,7 +205,7 @@
                                 </div>
                             </div>
                             <div class="table-responsive">
-                                <x-document-table-component :docs="$docs" />
+                                <x-document-table-component :docs="$docs" :dossier="$dossier"/>
 
                             </div>
                         </div>

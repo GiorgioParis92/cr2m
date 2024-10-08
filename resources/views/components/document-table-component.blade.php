@@ -53,3 +53,12 @@
         @endif
     @endif
 @endforeach
+
+
+@if (!empty($docs))
+<div class="">
+    <a href="{{ route('download.all.docs', ['dossier_id' => $dossier->id]) }}" class="btn btn-primary mt-3 btn-sm  ">
+        <i class="fa fa-download"></i> Telecharger tous les Documents
+    </a>
+</div>
+@endif

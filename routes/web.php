@@ -107,6 +107,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::put('campagnes/{id}', [CampagneController::class, 'update'])->name('campagnes.update');
     Route::post('/campagnes/upload', [CampagneController::class, 'upload'])->name('campagnes.upload');
     Route::post('/docs/upload/{campagne}', [DocController::class, 'upload'])->name('docs.upload');
+    Route::get('/download-all-docs/{dossier_id}', [DocController::class, 'downloadAllDocs'])->name('download.all.docs');
 
 
     Route::get('clients', [ClientController::class, 'index'])->name('clients.index');
