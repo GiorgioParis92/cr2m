@@ -168,7 +168,7 @@ var calendar = new FullCalendar.Calendar(calendarEl, {
                         var eventEnd = new Date(eventStart.getTime() + 90 * (duration*60) *
                         1000); // Add 1 hour to the start date
                         console.log(eventStart)
-                        console.log(eventEnd)
+                        console.log(rdv)
                         // Check if event is within the current calendar view
                         if (eventStart >= start && eventEnd <= end) {
                             // Create event object for FullCalendar
@@ -177,7 +177,7 @@ var calendar = new FullCalendar.Calendar(calendarEl, {
                                 title: ''+ (rdv.user_name ?? '')+'<br/>'+(rdv.nom ?? '') + ' ' + (rdv.prenom ?? '')+(rdv.type_rdv==3 ? 'Indisponibilité' : ''),
                                 start: rdv.date_rdv,
                                 end: eventEnd.toISOString(),
-                                description: (rdv.dossier.mar.client_title ?? '')+'<br/>'+(rdv.adresse ?? '') + ' ' + (rdv.cp ?? '') + ' ' + (rdv.ville ?? '') + '<br/>' + (rdv.telephone ? formatFrenchPhoneNumber(rdv.telephone) : '') + 
+                                description: (rdv.adresse ?? '') + ' ' + (rdv.cp ?? '') + ' ' + (rdv.ville ?? '') + '<br/>' + (rdv.telephone ? formatFrenchPhoneNumber(rdv.telephone) : '') + 
                  (rdv.dossier>0 ? '<br/> MAR : ' + rdv.dossier.mar.client_title + ' / ' + rdv.dossier.mandataire_financier.client_title : ''),
     backgroundColor: rdv.color,
                                 borderColor: rdv.color,
