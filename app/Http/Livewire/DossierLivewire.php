@@ -42,7 +42,7 @@ class DossierLivewire extends Component
     {
         $this->time = now()->format('H:i:s');
 
-        $this->dossier = Dossier::with('beneficiaire', 'fiche', 'etape', 'status')->find($id);
+        $this->dossier = Dossier::with('beneficiaire', 'fiche', 'etape', 'status','mar_client')->find($id);
 
         if (!$this->dossier) {
             abort(404, 'Dossier not found');
@@ -78,7 +78,7 @@ class DossierLivewire extends Component
         $this->auditeurs = User::where('type_id', 4)->get()->toArray();
         $this->departments = DB::table('departement')->get()->toArray();
         $this->rdv_status = RdvStatus::all()->toArray();
-        $this->mars = Client::where('type_client', 1)->get()->toArray();
+
         $this->financiers = Client::where('type_client', 2)->get()->toArray();
         $this->installateurs = Client::where('type_client', 3)->get()->toArray();
 
@@ -94,10 +94,10 @@ class DossierLivewire extends Component
             ->where('status', '!=', 2)
             ->latest()
             ->first();
-        $this->technicien = $technicien ? $technicien->toArray() : [];
+
+            $this->technicien = $technicien ? $technicien->toArray() : [];
 
         $this->get_docs();
-
         $this->reinitializeFormsConfigs(false);
     }
 
@@ -215,11 +215,11 @@ class DossierLivewire extends Component
     {
         $this->time = now()->format('H:i:s');
 
-        $this->dossier = Dossier::with('beneficiaire', 'fiche', 'etape', 'status')->find($this->dossier->id);
+        // $this->dossier = Dossier::with('beneficiaire', 'fiche', 'etape', 'status','mar_client')->find($this->dossier->id);
 
-        if (!$this->dossier) {
-            abort(404, 'Dossier not found');
-        }
+        // if (!$this->dossier) {
+        //     abort(404, 'Dossier not found');
+        // }
 
         $currentEtape = Etape::find($this->dossier->etape_number);
         $this->dossier->order_column = $currentEtape ? $currentEtape->order_column : null;

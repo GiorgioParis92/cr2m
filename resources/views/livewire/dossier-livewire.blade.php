@@ -34,19 +34,20 @@
                                 {{ strtoupper(texte_menage($dossier['beneficiaire']['menage_mpr'])) }}</div>
                             @if (auth()->user()->client_id == 0)
                                 <div class="">
+                                   
                                     @if (isset($technicien) && !empty($technicien))
                                         Technicien RDV MAR 1 :
-                                        {{ $technicien->user->name ?? '' }}
+                                        {{ $technicien['user']['name'] ?? '' }}
                                     @endif
                                 </div>
                             @endif
-                            {{-- @if (isset($dossier->mar))
-                          
-                                @if (Storage::disk('public')->exists($dossier->mar->main_logo))
-                                    <img style="max-width: 30%" src="{{ asset('storage/' . $dossier->mar->main_logo) }}">
+
+                            @if (isset($dossier->mar_client))
+                                @if (Storage::disk('public')->exists($dossier->mar_client->main_logo))
+                                    <img style="max-width: 30%" src="{{ asset('storage/' . $dossier->mar_client->main_logo) }}">
                                 @endif
-                                {{ $dossier->mar->client_title }}
-                            @endif --}}
+                                {{ $dossier->mar_client->client_title }}
+                            @endif
                         </div>
                         <div class="ms-auto my-auto mt-lg-0 mt-4">
                             <div class="ms-auto my-auto">
