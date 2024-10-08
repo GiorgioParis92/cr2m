@@ -56,7 +56,9 @@ class YouSign extends Controller
           ]
         ]
       ]);
-
+      if(auth()->user()->id==1) {
+        dd($data);
+      }
       $path = 'storage/dossiers/' . $request->dossier_id . '/' . $request->name . '.pdf';
 
       $fullPath = public_path($path);
@@ -85,9 +87,7 @@ class YouSign extends Controller
     ]);
 
     $response = curl_exec($curl);
-    if(auth()->user()->id==1) {
-      dd($response);
-    }
+
     if ($response === false) {
       die('Curl error: ' . curl_error($curl)); // Output cURL error
     }
