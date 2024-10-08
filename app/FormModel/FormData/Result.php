@@ -68,14 +68,11 @@ class Result extends AbstractFormData
                         $tagValue = $this->getOtherValue($tag);
                    
 
-                        if ($tagValue === '' || $tagValue === null) {
-                            if (is_numeric($tag)) {
-                                $tagValue = $tag;
-                            } else {
-                                $tagValue = 0;
-                            }
+                        if (is_numeric($tag)) {
+                            $tagValue = (float)$tag;
+                        } else {
+                            $tagValue = 0;
                         }
-
                         $total *= $tagValue;
                     }
                   

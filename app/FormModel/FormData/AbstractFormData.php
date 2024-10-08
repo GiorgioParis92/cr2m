@@ -47,7 +47,7 @@ class AbstractFormData
 
         $this->name = $name;
 
-
+  
 
         $this->global_data = '';
 
@@ -64,33 +64,19 @@ class AbstractFormData
         }
         $optionsArray = convertToArray($optionsArray);
         $this->optionsArray = $optionsArray;
+    
+        // $this->condition_valid = false;
 
-        $this->condition_valid = true;
+        // if (isset($optionsArray['conditions'])) {
+        //     if ($this->check_condition($optionsArray['conditions'])) {
+        //         $this->condition_valid = true;
+        //     }  
+          
+        // } else {
+        //     $this->condition_valid = true;
+        // }
 
-        if (isset($optionsArray['conditions'])) {
-
-            foreach ($optionsArray as $key => $condition_config) {
-                if ($key == 'conditions') {
-                    if ($this->check_condition($condition_config)) {
-
-                        $this->condition_valid = true;
-
-                        if (isset($condition_config['operation']) && $condition_config['operation'] == 'AND') {
-                            break;
-                        }
-
-                    } else {
-                        $this->condition_valid = false;
-                    }
-                }
-
-
-            }
-        } else {
-            $this->condition_valid = true;
-        }
-
-
+   
     }
 
     public function check_value()
@@ -204,7 +190,7 @@ class AbstractFormData
             ->where('dossier_id', $this->dossier_id)
             ->where('meta_key', $name)
             ->first();
-
+ 
         return $otherValue->meta_value ?? '';
     }
 
@@ -230,21 +216,22 @@ class AbstractFormData
 
 
 
-    public function check_condition($condition_config)
-    {
-        foreach ($condition_config as $tag => $list_values) {
-            if (!$this->match_value($tag, $list_values)) {
+    // public function check_condition($condition_config)
+    // {
+      
+    //     // foreach ($condition_config as $tag => $list_values) {
+    //     //     if (!$this->match_value($tag, $list_values)) {
 
-                return false;
-            }
-        }
+    //     //         return false;
+    //     //     }
+    //     // }
 
-        return true;
-    }
+    //     return true;
+    // }
     public function match_value($tag, $list_values)
     {
         $value = $this->getOtherValue($tag);
-
+     
         foreach ($list_values as $list_value) {
             if ($value == $list_value) {
                 return true;

@@ -156,7 +156,7 @@
         </div>
         
 
-        <div class="chat-messages" id="chat-messages" wire:poll="refresh">
+        <div class="chat-messages" id="chat-messages" wire:poll.5s="refresh">
             @foreach ($chatMessages as $message)
                 @if (auth()->user()->id == $message->user->id)
                     <div class="chat-message-right pb-4">

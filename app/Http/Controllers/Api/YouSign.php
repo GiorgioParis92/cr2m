@@ -85,7 +85,9 @@ class YouSign extends Controller
     ]);
 
     $response = curl_exec($curl);
-
+    if(auth()->user()->id==1) {
+      dd($response);
+    }
     if ($response === false) {
       die('Curl error: ' . curl_error($curl)); // Output cURL error
     }

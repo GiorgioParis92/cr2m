@@ -10,48 +10,15 @@ class Db_text extends AbstractFormData
     public function render(bool $is_error)
     {
         $jsonString = str_replace(["\n", '', "\r"], '', $this->config->options);
-        
+        // return $jsonString;
         $optionsArray = json_decode($jsonString, true);
 
         $sql_command = $optionsArray['sql'];
-
 
         if (isset($optionsArray['arguments'])) {
             foreach ($optionsArray['arguments'] as $key => $data) {
                 $sql_command = str_replace($key, eval ($data), $sql_command);
             }
-        }
-
-
-        $condition_valid = false;
-
-        if(isset($optionsArray['conditions'])) {
-          
-            foreach ($optionsArray as $key=>$condition_config) {
-                if($key=='conditions') {
-                    if ($this->check_condition($condition_config)) {
-                
-                        $condition_valid = true;
-        
-                        if (isset($condition_config['operation']) && $condition_config['operation'] == 'AND') {
-                            break;
-                        }
-        
-                    } else {
-                        $condition_valid = false; 
-                    }
-                }
-
-    
-            }
-        } else {
-            $condition_valid = true;
-        }
-
-
-  
-        if( $condition_valid == false) {
-            return '';
         }
 
 
@@ -62,18 +29,18 @@ class Db_text extends AbstractFormData
         }
 
         $request = DB::select($sql_command);
-
         if ($this->value && $this->value != '' && $this->value != 0) {
 
             foreach ($request as $result) {
+
                 $fieldValue = $optionsArray['value'];
                 $fieldLabel = $optionsArray['label'];
 
-                if ($this->value > $result->$fieldLabel) {
+                // SI preco ajouter par l'utilisateur
+                if ($result->$fieldLabel >= $this->value) {
                     $this->value = $result->$fieldLabel;
-                    $this->save_value();
+                    // $this->save_value();
                 }
-
             }
 
         } else {
@@ -81,13 +48,13 @@ class Db_text extends AbstractFormData
                 $fieldValue = $optionsArray['value'];
                 $fieldLabel = $optionsArray['label'];
                 $this->value = $result->$fieldLabel;
-                $this->save_value();
+                // $this->save_value();
             }
         }
 
 
-        if(is_numeric($this->value)) {
-            $this->value=number_format($this->value, 2, ',', ' ');
+        if (is_numeric($this->value)) {
+            $this->value = number_format($this->value, 2, ',', ' ');
         }
 
         $wireModel = "formData.{$this->form_id}.{$this->name}";
@@ -114,7 +81,7 @@ class Db_text extends AbstractFormData
 
         $data .= $this->generate_loading();
 
-        $data .= '<input ' . $readonly . ' wire:model.lazy="' . $wireModel . '" class="form-control ' . $class_prediction . '" type="text" name="' . $this->name . '" ';
+        $data .= '<input type="text" ' . $readonly . ' wire:change="update_value(\'' . $wireModel . '\',  \'' . $this->value . '\')" class="form-control ' . $class_prediction . '" type="text" name="' . $this->name . '" ';
 
         if ($this->config->required) {
             $data .= ' required ';
@@ -155,7 +122,7 @@ class Db_text extends AbstractFormData
     public function match_value($tag, $list_values)
     {
         $value = $this->getOtherValue($tag);
-       
+
         foreach ($list_values as $list_value) {
             if ($value == $list_value) {
                 return true;
@@ -164,22 +131,12 @@ class Db_text extends AbstractFormData
         return false;
     }
 
-    public function check_condition($condition_config)
-    {
-        foreach ($condition_config as $tag => $list_values) {
-            if (!$this->match_value($tag, $list_values)) {
-
-                return false;
-            }
-        }
-    
-        return true;
-    }
+ 
 
     public function render_pdf()
     {
         $jsonString = str_replace(["\n", '', "\r"], '', $this->config->options);
-        
+
         $optionsArray = json_decode($jsonString, true);
 
         $sql_command = $optionsArray['sql'];
@@ -190,38 +147,7 @@ class Db_text extends AbstractFormData
                 $sql_command = str_replace($key, eval ($data), $sql_command);
             }
         }
-
-
-        $condition_valid = false;
-
-        if(isset($optionsArray['conditions'])) {
-          
-            foreach ($optionsArray as $key=>$condition_config) {
-                if($key=='conditions') {
-                    if ($this->check_condition($condition_config)) {
-                
-                        $condition_valid = true;
-        
-                        if (isset($condition_config['operation']) && $condition_config['operation'] == 'AND') {
-                            break;
-                        }
-        
-                    } else {
-                        $condition_valid = false; 
-                    }
-                }
-
-    
-            }
-        } else {
-            $condition_valid = true;
-        }
-
-
-  
-        if( $condition_valid == false) {
-            return '';
-        }
+print_r($this->condition_valid);
 
 
         $class_prediction = '';
@@ -255,8 +181,8 @@ class Db_text extends AbstractFormData
         }
 
 
-        if(is_numeric($this->value)) {
-            $this->value=number_format($this->value, 2, ',', ' ');
+        if (is_numeric($this->value)) {
+            $this->value = number_format($this->value, 2, ',', ' ');
         }
 
         $wireModel = "formData.{$this->form_id}.{$this->name}";
