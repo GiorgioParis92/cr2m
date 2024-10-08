@@ -168,7 +168,7 @@ var calendar = new FullCalendar.Calendar(calendarEl, {
                         var eventEnd = new Date(eventStart.getTime() + 90 * (duration*60) *
                         1000); // Add 1 hour to the start date
                         console.log(eventStart)
-                        console.log(rdv)
+                        console.log(rdv.dossier.mar)
                         // Check if event is within the current calendar view
                         if (eventStart >= start && eventEnd <= end) {
                             // Create event object for FullCalendar
