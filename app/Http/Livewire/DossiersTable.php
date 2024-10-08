@@ -171,7 +171,7 @@ class DossiersTable extends Component
                     ->orWhereIn('installateur', $has_child);
             });
         }
-
+        $dossiersQuery->limit(100);
         $dossiers = $dossiersQuery->get();
 
         
