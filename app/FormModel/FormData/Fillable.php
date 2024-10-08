@@ -25,11 +25,22 @@ class Fillable extends AbstractFormData
             ->where('id',$this->optionsArray['link']['id'])
             ->first();
 
-         
-            
+            $this->form_id=$form_config->form_id;
+
+            $this->config=$form_config;
+
+            $config = \DB::table('forms_data')
+            ->where('form_id', $this->form_id)
+            ->where('dossier_id', $dossier_id)
+            ->where('meta_key', $name)
+            ->first();
+
+      
+        $this->value = $config->meta_value ?? '';
+
             $jsonString = str_replace(["\n", ' ', "\r"], '', $form_config->options);
             $this->optionsArray = json_decode($jsonString, true);
-
+           
         }
 
     }
