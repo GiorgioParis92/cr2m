@@ -238,10 +238,12 @@ class DossierLivewire extends Component
         $etape_display = Etape::find($tab);
         $this->etape_display = $etape_display ? $etape_display->toArray() : [];
 
-        $this->reinitializeFormsConfigs();
+        // $this->reinitializeFormsConfigs();
 
         $firstKey = $this->reinitializeFormsConfigs();
         $this->display_form($firstKey);
+        // $firstKey = array_key_first($this->forms_configs);
+        // $this->display_form($firstKey);
 
         $this->emit('initializeDropzones', ['forms_configs' => $this->forms_configs]);
         $this->emit('setTab', ['forms_configs' => $this->forms_configs]);
@@ -348,7 +350,7 @@ class DossierLivewire extends Component
                 $handler = new FormConfigHandler($this->dossier, $form);
                 $this->forms_configs[$form->id] = $handler;
 
-                if($firstKey==null && $form->type=='form') {
+                if($firstKey==null && $form->type!='document') {
                     $firstKey=$form->id;
                 }
 

@@ -10,7 +10,6 @@ class Db_table extends AbstractFormData
     public function render(bool $is_error)
     {
 
-
         $jsonString = str_replace(["\n", "\r"], '', $this->config->options);
         $optionsArray = json_decode($jsonString, true);
 
