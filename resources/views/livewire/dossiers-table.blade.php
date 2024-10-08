@@ -607,7 +607,7 @@ span.badge.badge-outline-danger {
             return '';
         }
         return `
-            <a style="max-width:80px" href="${data.dossier_url}">
+            <a style="max-width:80px" target="_blank" href="${data.dossier_url}">
                 <span class="badge badge-primary badge_button">${data.etape}</span>
                 <div style="margin-top: 13px; max-width: 80px; text-wrap: wrap; font-size: 9px; padding: 8px !important; background-size: 0; padding-top: 13px !important; width: 100%; max-width: 100%;" class="btn btn-${data.etape_style}">
                     ${data.etape_desc}
@@ -622,7 +622,7 @@ span.badge.badge-outline-danger {
             return '';
         }
         return `
-                                    <a href="${data.dossier_url}">
+                                    <a target="_blank"  href="${data.dossier_url}">
                                 <div 
                                     class="btn btn- ${data.statut_style}">
 
@@ -689,7 +689,7 @@ span.badge.badge-outline-danger {
             const formattedTime = date.toLocaleTimeString('fr-FR', timeOptions);
             const formattedDateTime = `${formattedDate} à ${formattedTime}`;
 
-            rdvInfo += '<a href="' + data.dossier_url +
+            rdvInfo += '<a target="_blank"  href="' + data.dossier_url +
                 '"><div class="show_rdv btn btn-' + (rdv.status ? rdv.status
                     .rdv_style : '') + '">RDV MAR' + rdv.type_rdv + ' du ' +
                 formattedDateTime + ' Statut : ' + (rdv.status ? rdv.status
