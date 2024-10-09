@@ -62,6 +62,24 @@ class Scrapping extends Controller
         "Subvention":{
           "type":"class",
           "name":"page-heading"
+        },
+        "info_subvention":{
+          "type":"class",
+          "name":"c--app--tag__element"
+        }
+      }
+    },
+    {
+      "element_screenshot":true,
+      "url":"https://monprojet.anah.gouv.fr/dossiers/'.$reference_unique.'/contacts",
+      "data":{
+
+        "Instructeur ANAH DDT":{
+          "type":"class",
+          "name":"contact-details-item",
+          "indexes":[
+            4
+          ]
         }
       }
     }
@@ -140,7 +158,7 @@ class Scrapping extends Controller
       ) {
 
         $resultData = $responseData->result->data->result ?? null;
-     
+
         return response()->json($resultData, 200);
 
 
