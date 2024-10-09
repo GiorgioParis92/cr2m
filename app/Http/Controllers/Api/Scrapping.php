@@ -62,10 +62,6 @@ class Scrapping extends Controller
         "Subvention":{
           "type":"class",
           "name":"page-heading"
-        },
-        "info_subvention":{
-          "type":"class",
-          "name":"c--app--tag__element"
         }
       }
     },
