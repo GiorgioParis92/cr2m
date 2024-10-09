@@ -1,4 +1,3 @@
-data
 @if($responseData)
     @foreach ($responseData as $tag => $data)
         @if (array_key_exists('error', $data))
