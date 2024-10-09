@@ -27,7 +27,7 @@ class Scrapping extends Controller
   {
 
     $url = 'http://192.168.100.40:5010/process_request?service=scrapping';
-    dd($request);
+    dd($url);
     if(isset($request->reference_unique)) {
       $reference_unique=$request->reference_unique;
     } else {
