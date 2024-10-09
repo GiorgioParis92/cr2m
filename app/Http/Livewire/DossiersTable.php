@@ -213,7 +213,7 @@ class DossiersTable extends Component
                 'installateur' => $dossier->installateur_client->client_title ?? '',
                 'installateur_img' => $dossier->installateur_client->main_logo ?? '',
                 'statut' => $dossier->status->status_desc ?? '',
-                'statut_style' => $dossier->status->status_desc ?? '',
+                'statut_style' => $dossier->status->status_style ?? '',
                 'rdv' => $dossier->get_rdv ?? [],
                 'last_rdv' => optional($dossier->get_rdv->last())->date_rdv ?? null,
                 // 'docs' => $documentStatuses[$dossierId] ?? [
@@ -226,6 +226,7 @@ class DossiersTable extends Component
 
         // Update the component's dossier data
         $this->dossiers = $dossiers->toArray();
+       
 
     }
  

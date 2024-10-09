@@ -277,7 +277,7 @@ var calendar = new FullCalendar.Calendar(calendarEl, {
             var dossierFolder = event.extendedProps.dossier_folder; // Access the dossier_id
             console.log(dossierId); // Log the dossier_id
             console.log(dossierFolder); // Log the dossier_id
-            window.location.href = `/dossier/show/${dossierFolder}`; // Redirect to the desired URL
+            window.open(`/dossier/show/${dossierFolder}`, '_blank'); // Redirect to the desired URL in a new tab
         }
     </script>
 @endsection

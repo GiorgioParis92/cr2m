@@ -624,7 +624,7 @@ span.badge.badge-outline-danger {
         return `
                                     <a target="_blank"  href="${data.dossier_url}">
                                 <div 
-                                    class="btn btn- ${data.statut_style}">
+                                    class="btn btn-${data.statut_style}">
 
                                      ${data.statut}
 
