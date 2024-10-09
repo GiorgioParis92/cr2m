@@ -52,31 +52,35 @@ class Scrapping extends Controller
       CURLOPT_POSTFIELDS => [
         'data' => '{
   "pipeline_name":"anah",
-  "login":"france.accompagnateur@gmail.com",
-  "password":"FRenov191!",
+  "login":"'.$request->login.'",
+  "password":"'.$request->password.'",
   "scrapping_config":[
     {
       "element_screenshot":true,
       "url":"https://monprojet.anah.gouv.fr/dossiers/'.$reference_unique.'",
       "data":{
-        "subvention":{
+        "Subvention":{
           "type":"class",
           "name":"page-heading"
+        },
+        "info_subvention":{
+          "type":"class",
+          "name":"c--app--tag__element"
         }
       }
     },
     {
-      "element_screenshot":false,
+      "element_screenshot":true,
       "url":"https://monprojet.anah.gouv.fr/dossiers/'.$reference_unique.'/contacts",
       "data":{
-        "details":{
+        "Détails du bénéficiaire":{
           "type":"class",
           "name":"contact-details-item",
           "indexes":[
             0
           ]
         },
-        "instructeur":{
+        "Instructeur ANAH DDT":{
           "type":"class",
           "name":"contact-details-item",
           "indexes":[

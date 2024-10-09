@@ -39,7 +39,7 @@ class DossierLivewire extends Component
     public $responseData='';
     public $dossier;
 
-    protected $listeners = ['fileUploaded' => 'handleFileUploaded'];
+    protected $listeners = ['fileUploaded' => 'handleFileUploaded','fetchResponseData' => 'fetchResponseData'];
 
     public function mount($id)
     {
@@ -492,8 +492,15 @@ class DossierLivewire extends Component
 
 public function fetchResponseData()
 {
+
+    $mar=Client::where('id',$this->dossier->mar)->first();
+
+    if($mar) {
+        $login=$mar->anah_login;
+        $password=$mar->anah_password;
+    }
+  
     if ($this->dossier->reference_unique) {
-   
         $url = url('/api/scrapping');
         $token = 'qlcb1m8AlZU8dteqvYWFxrehJ2iGlGvUbinQhUNOa3yqjizldp0ARNiCDmsl';
 
@@ -501,17 +508,20 @@ public function fetchResponseData()
             ->withHeaders(['Accept' => 'application/json'])
             ->post($url, [
                 'reference_unique' => $this->dossier->reference_unique,
+                'login' => $login,
+                'password' => $password,
             ]);
-          
+
         if ($response->successful()) {
             $this->responseData = $response->json();
-        
+         
         } else {
             $statusCode = $response->status();
             $errorBody = $response->body();
             $this->responseData = "Error ({$statusCode}): {$errorBody}";
         }
     }
+ 
 }
 
 }
