@@ -158,6 +158,14 @@
                             <input class="form-control datepicker" type="text" id="rdv_french_date_end"
                                 name="date_rdv_end">
                         </div>
+
+                        <div class="form-group" id="duration_group" style="display:none">
+                            <label>Durée</label>
+                            <input class="form-control " type="text" id="rdv_duration"
+                                name="duration">
+                        </div>
+
+
                         <div class="form-group" id="hour_group">
                             <label>Heure</label>
                             <div class="row">
@@ -622,6 +630,7 @@
                     user_id: $('#rdv_user_id').val(),
                     type_rdv: $('#rdv_type_rdv').val(),
                     type_indispo: $('#rdv_type_indispo').val(),
+                    duration: $('#rdv_duration').val(),
                     nom: $('#rdv_nom').val(),
                     prenom: $('#rdv_prenom').val(),
                     adresse: $('#rdv_adresse').val(),

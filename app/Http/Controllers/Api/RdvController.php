@@ -305,7 +305,14 @@ class RdvController extends \App\Http\Controllers\Controller
         
 
         if(isset($request->type_indispo)) {
-            $hour='08';
+
+            if(isset($request['hour'])) {
+                $hour=$request['hour'];
+            } else {
+                $hour='08';
+            }
+
+          
             $minute='00';
             $duration=10;
             $client_id=0;
@@ -332,8 +339,8 @@ class RdvController extends \App\Http\Controllers\Controller
             }
         }
 
-        if(isset($duration) && !empty($duration)) {
-            $updateData['duration'] = $duration;
+        if(isset($request['duration']) && !empty($request['duration'])) {
+            $updateData['duration'] = $request['duration'];
         }
         $updateData['client_id'] = $client_id;
         $updateData['date_rdv']=date('Y-m-d', strtotime(str_replace('/', '-', $date))) . ' ' . $hour . ':' . $minute . ':00';

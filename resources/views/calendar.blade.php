@@ -66,8 +66,8 @@
                 },
                 success: function(response) {
 
-                    $('#hour_group').hide();
                     $('#new_day').show();
+                    $('#duration_group').show();
 
                     // Clear previous data
                     $('#rdv_id').val('0');

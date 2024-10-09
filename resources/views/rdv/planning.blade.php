@@ -161,12 +161,11 @@ var calendar = new FullCalendar.Calendar(calendarEl, {
                         if(rdv.duration) {
                             var duration = rdv.duration;
                         } else {
-                            var duration = 1;
+                            var duration = 1.5;
                         }
 
 
-                        var eventEnd = new Date(eventStart.getTime() + 90 * (duration*60) *
-                        1000); // Add 1 hour to the start date
+                        var eventEnd = new Date(eventStart.getTime() +  (duration*60*60*1000)); // Add 1 hour to the start date
                         console.log(eventStart)
                         // Check if event is within the current calendar view
                         if (eventStart >= start && eventEnd <= end) {
@@ -175,13 +174,14 @@ var calendar = new FullCalendar.Calendar(calendarEl, {
                             console.log(rdv.dossier)
 
                             var event = {
-                                title: ''+ (rdv.user_name ?? '')+'<br/>'+(rdv.nom ?? '') + ' ' + (rdv.prenom ?? '')+(rdv.type_rdv==3 ? 'Indisponibilité' : ''),
+                                title: ''+ (rdv.user_name ?? '')+'<br/>'+(rdv.nom ?? '') + ' ' + (rdv.prenom ?? '')+(rdv.type_rdv==3 ? 'Indisponibilité' : '')+(rdv.type_rdv==4 ? 'Congés' : ''),
                                 start: rdv.date_rdv,
                                 end: eventEnd.toISOString(),
                                 description: (rdv.adresse ?? '') + ' ' + (rdv.cp ?? '') + ' ' + (rdv.ville ?? '') + '<br/>' + (rdv.telephone ? formatFrenchPhoneNumber(rdv.telephone) : '') + 
-                 (rdv.dossier ? '<br/> MAR : ' + rdv.dossier.mar.client_title + ' / ' + (rdv.dossier.mandataire_financier>0  ? ' / '+rdv.dossier.mandataire_financier.client_title : '') : ''),
+                 (rdv.dossier ? '<br/> MAR : ' + rdv.dossier.mar.client_title + ' / ' + (rdv.dossier.mandataire_financier>0  ? ' / '+rdv.dossier.mandataire_financier.client_title : '') : '')+(rdv.observations ? 'Observations '+rdv.observations : ''),
     backgroundColor: rdv.color,
                                 borderColor: rdv.color,
+                                rdv_id: rdv.id,
                                 dossier_id: rdv.dossier_id,
                                 dossier_folder: rdv.dossier_folder
                             };
@@ -273,11 +273,19 @@ var calendar = new FullCalendar.Calendar(calendarEl, {
         // }
 
         function handleEventClick(event) {
+        
+            var rdv_id = event.extendedProps.rdv_id; // Access the dossier_id
             var dossierId = event.extendedProps.dossier_id; // Access the dossier_id
             var dossierFolder = event.extendedProps.dossier_folder; // Access the dossier_id
-            console.log(dossierId); // Log the dossier_id
-            console.log(dossierFolder); // Log the dossier_id
+
+            if(dossierId) {
+         
             window.open(`/dossier/show/${dossierFolder}`, '_blank'); // Redirect to the desired URL in a new tab
+            } else {
+                window.open(`/rdv/show/${rdv_id}`, '_blank'); // Redirect to the desired URL in a new tab
+
+            }
+
         }
     </script>
 @endsection
