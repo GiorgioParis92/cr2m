@@ -5,6 +5,7 @@ namespace App\Http\Livewire;
 use Livewire\Component;
 use Illuminate\Support\Facades\Http;
 use App\Models\Dossier;
+use App\Models\Client;
 
 class ResponseData extends Component
 {
@@ -24,7 +25,12 @@ class ResponseData extends Component
     public function loadResponseData()
     {
         $dossier = Dossier::find($this->dossierId);
+        $mar=Client::where('id',$this->dossier->mar)->first();
 
+        if($mar) {
+            $login=$mar->anah_login;
+            $password=$mar->anah_password;
+        }
         if ($dossier && $dossier->reference_unique) {
             $url = url('/api/scrapping');
             $token = 'qlcb1m8AlZU8dteqvYWFxrehJ2iGlGvUbinQhUNOa3yqjizldp0ARNiCDmsl';
@@ -33,6 +39,8 @@ class ResponseData extends Component
                 ->withHeaders(['Accept' => 'application/json'])
                 ->post($url, [
                     'reference_unique' => $dossier->reference_unique,
+                    'login' => $login,
+                'password' => $password,
                 ]);
 
             if ($response->successful()) {
