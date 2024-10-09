@@ -102,14 +102,20 @@ class Scrapping extends Controller
             "Mandataire"
           ],
           "operator": "and"
-        },
+        }
+      }
+    },
+    {
+      "element_screenshot": false,
+      "url": "https://monprojet.anah.gouv.fr/dossiers/'.$reference_unique.'/messages",
+      "data": {
+      
                 "Messages": {
           "type": "class",
           "name": "messages--list"
      
         }
       }
-    }
   ]
 }',
         'service' => 'scrapping'
