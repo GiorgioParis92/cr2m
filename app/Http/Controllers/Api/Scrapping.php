@@ -27,16 +27,16 @@ class Scrapping extends Controller
   {
 
     $url = 'http://192.168.100.40:5010/process_request?service=scrapping';
-  
-    if(isset($request->reference_unique)) {
-      $reference_unique=$request->reference_unique;
+
+    if (isset($request->reference_unique)) {
+      $reference_unique = $request->reference_unique;
     } else {
 
-        return response()->json('error',401);
-    
+      return response()->json('error', 401);
+
     }
 
-  
+
     // return response()->json($reference_unique, 200);
 
     $curl = curl_init();
@@ -51,71 +51,70 @@ class Scrapping extends Controller
       ],
       CURLOPT_POSTFIELDS => [
         'data' => '{
-  "pipeline_name": "anah",
-  "login": "'.$request->login.'",
-  "password": "'.$request->password.'",
-  "scrapping_config": [
+  "pipeline_name":"anah",
+  "login":"' . $request->login . '",
+  "password":"' . $request->password . '",
+  "scrapping_config":[
     {
-      "element_screenshot": true,
-      "url": "https://monprojet.anah.gouv.fr/dossiers/'.$reference_unique.'",
-      "data": {
-        "Statut du dossier": {
-          "type": "class",
-          "name": "page-heading"
+      "element_screenshot":true,
+      "url":"https://monprojet.anah.gouv.fr/dossiers/' . $reference_unique . '",
+      "data":{
+        "Statut du dossier":{
+          "type":"class",
+          "name":"page-heading"
         },
-         "Infos dossier": {
-          "type": "class",
-          "name": "c--app--tag__element"
+        "Infos dossier":{
+          "type":"class",
+          "name":"c--app--tag__element"
         }
       }
     },
     {
-      "element_screenshot": false,
-      "url": "https://monprojet.anah.gouv.fr/dossiers/'.$reference_unique.'/contacts",
-      "data": {
-      "Nom du bénéficiaire": {
-          "type": "class",
-          "name": "contact-details-name",
-          "indexes": [
+      "element_screenshot":false,
+      "url":"https://monprojet.anah.gouv.fr/dossiers/' . $reference_unique . '/contacts",
+      "data":{
+        "Nom du bénéficiaire":{
+          "type":"class",
+          "name":"contact-details-name",
+          "indexes":[
             0
           ]
         },
-        "details": {
-          "type": "class",
-          "name": "contact-details-item",
-          "indexes": [
+        "details":{
+          "type":"class",
+          "name":"contact-details-item",
+          "indexes":[
             0
           ]
         },
-        "instructeur": {
-          "type": "class",
-          "name": "contact-details-item",
-          "key_words": [
+        "instructeur":{
+          "type":"class",
+          "name":"contact-details-item",
+          "key_words":[
             "Instructeur"
           ],
-          "operator": "and"
+          "operator":"and"
         },
-        "Mandataire": {
-          "type": "class",
-          "name": "contact-details-item",
-          "key_words": [
+        "Mandataire":{
+          "type":"class",
+          "name":"contact-details-item",
+          "key_words":[
             "Mandataire"
           ],
-          "operator": "and"
+          "operator":"and"
         }
       }
     },
     {
-      "element_screenshot": false,
-      "url": "https://monprojet.anah.gouv.fr/dossiers/'.$reference_unique.'/messages",
-      "data": {
-      
-                "Messages": {
-          "type": "class",
-          "name": "messages--list"
-     
+      "element_screenshot":false,
+      "url":"https://monprojet.anah.gouv.fr/dossiers/' . $reference_unique . '/messages",
+      "data":{
+        "Messages":{
+          "type":"class",
+          "name":"messages--list"
         }
       }
+    }
   ]
 }',
         'service' => 'scrapping'
