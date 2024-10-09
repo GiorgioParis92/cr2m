@@ -25,7 +25,7 @@ class ResponseData extends Component
     public function loadResponseData()
     {
         $dossier = Dossier::find($this->dossierId);
-        $mar=Client::where('id',$this->dossier->mar)->first();
+        $mar=Client::where('id',$dossier->mar)->first();
 
         if($mar) {
             $login=$mar->anah_login;
