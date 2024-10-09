@@ -40,6 +40,31 @@
         </div>
     </div>
     <div data-rdv_id="" data-type_rdv="3" class="btn btn-secondary show_conge">Ajouter un congé/indisponibilité </div>
+
+
+    <div class="row" style="margin-bottom:50px">
+        <div class="col-12">
+            <table id="calendar-liste" class="datatable table table-bordered responsive-table table-responsive dataTable no-footer">
+                <thead>
+                    <tr>
+                        <td>Date et heure du rdv</td>
+                        <td>Accompagnateur</td>
+                        <td>Bénéficiaire</td>
+                        <td>Coordonnées</td>
+                        <td>Type de rdv</td>
+                        <td>MAR</td>
+                        <td>Observations</td>
+                        <td>Navigation</td>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+
+
+            </table>
+        </div>
+    </div>
+
     <div class="row">
         <div class="col-12">
             <div id="calendar"></div>

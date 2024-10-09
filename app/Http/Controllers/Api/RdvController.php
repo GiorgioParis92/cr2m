@@ -16,89 +16,116 @@ class RdvController extends \App\Http\Controllers\Controller
 {
     public function index(Request $request): \Illuminate\Http\JsonResponse
     {
-
         $user = auth()->user();
-        $client='';
-        if ($request->client_id && $request->client_id>0) {
-            $client = Client::where('id', $request->client_id)->first();
+        $client = null;
+    
+        // Fetch client if client_id is provided
+        if ($request->filled('client_id') && $request->client_id > 0) {
+            $client = Client::find($request->client_id);
         }
-
-        if ($request->user_id && $request->user_id>0) {
-            $user = User::where('id', $request->user_id)->first();
+    
+        // Fetch user if user_id is provided
+        if ($request->filled('user_id') && $request->user_id > 0) {
+            $user = User::find($request->user_id);
         }
-
+    
+        // Initialize the RDV query
         $rdvs = DB::table('rdv')
             ->leftJoin('users', function ($join) {
                 $join->on('rdv.user_id', '=', 'users.id')
                     ->where('rdv.user_id', '>', 0);
             })
-            ->leftJoin('rdv_status', function ($join) {
-                $join->on('rdv.status', '=', 'rdv_status.id');
-            })
-            ->leftJoin('dossiers', function ($join) {
-                $join->on('rdv.dossier_id', '=', 'dossiers.id');
-            })
-            ->select('rdv.*', DB::raw("COALESCE(users.name, 'non attribué') as user_name"), DB::raw("rdv_status.id as status"), DB::raw("dossiers.folder as dossier_folder"));
-        if (isset($client) && !empty($client)) {
-            if ($client->id > 0 && ($client->type_client == 1)) {
-                // $rdvs = $rdvs->where('dossiers.client_id', $client->id);
-            }
-            if ($client->id > 0 && ($client->type_client == 2)) {
-                $rdvs = $rdvs->where('dossiers.mandataire_financier', $client->id);
-            }
-            if ($client->id > 0 && ($client->type_client == 3)) {
-                $rdvs = $rdvs->where('dossiers.installateur', $client->id);
+            ->leftJoin('rdv_status', 'rdv.status', '=', 'rdv_status.id')
+            ->leftJoin('rdv_type', 'rdv.type_rdv', '=', 'rdv_type.id')
+            ->leftJoin('dossiers', 'rdv.dossier_id', '=', 'dossiers.id')
+            ->select(
+                'rdv.*',
+                DB::raw("COALESCE(users.name, 'non attribué') as user_name"),
+                'rdv_type.title as type_rdv_title',
+                'rdv.status as rdv_status_id',
+                'dossiers.folder as dossier_folder'
+            );
+    
+        // Apply client-specific filters
+        if (!is_null($client)) {
+            if ($client->id > 0) {
+                if ($client->type_client == 1) {
+                    // Uncomment and adjust if needed
+                    // $rdvs = $rdvs->where('dossiers.client_id', $client->id);
+                } elseif ($client->type_client == 2) {
+                    $rdvs = $rdvs->where('dossiers.mandataire_financier', $client->id);
+                } elseif ($client->type_client == 3) {
+                    $rdvs = $rdvs->where('dossiers.installateur', $client->id);
+                }
             }
         }
-
-
-        if (isset($request->user_id) && $request->user_id > 0 && $user->type_id==4) {
+    
+        // Apply user-specific filters
+        if ($request->filled('user_id') && $request->user_id > 0 && $user->type_id == 4) {
             $rdvs = $rdvs->where('rdv.user_id', $request->user_id);
         }
-        if (isset($request->dpt)) {
+    
+        // Filter by department (dpt)
+        if ($request->filled('dpt')) {
             $rdvs = $rdvs->where(DB::raw('substr(rdv.cp, 1, 2)'), $request->dpt);
         }
-        if (isset($request->rdv_id)) {
+    
+        // Filter by specific RDV ID
+        if ($request->filled('rdv_id')) {
             $rdvs = $rdvs->where('rdv.id', $request->rdv_id);
         }
-
-        if (isset($request->start_date) && isset($request->end_date)) {
-            $rdvs = $rdvs->whereDate('rdv.date_rdv', '>=', $request->start_date)
-            ->whereDate('rdv.date_rdv', '<=', $request->end_date);}
-
-        $rdvs = $rdvs->where('status','!=',2);
+    
+        // Include date range filtering using $start and $end
+        if ($request->filled('start') && $request->filled('end')) {
+            $start = Carbon::parse($request->start)->toDateTimeString();
+            $end = Carbon::parse($request->end)->toDateTimeString();
+            $rdvs = $rdvs->whereBetween('rdv.date_rdv', [$start, $end]);
+        }
+    
+        // Exclude RDVs with status 2
+        $rdvs = $rdvs->where('rdv.status', '!=', 2);
+    
+        // Retrieve the RDVs
         $rdvs = $rdvs->get();
-
-        
-        $data = $rdvs->map(function ($rdv) {
+    
+        // Collect unique dossier IDs
+        $dossierIds = $rdvs->pluck('dossier_id')->filter()->unique();
+    
+        // Fetch all dossiers in one query
+        $dossiers = Dossier::whereIn('id', $dossierIds)
+            ->with('beneficiaire', 'fiche', 'etape', 'status', 'mandataire_financier', 'mar')
+            ->get()
+            ->keyBy('id');
+    
+        // Map RDVs with their dossiers and format dates
+        $data = $rdvs->map(function ($rdv) use ($dossiers) {
             $rdv->color = stringToColorCode($rdv->user_name);
-
+    
             if ($rdv->date_rdv) {
-                $rdv->french_date = date('d/m/Y', strtotime($rdv->date_rdv));
-                $rdv->hour = date('H', strtotime($rdv->date_rdv));
-                $rdv->minute = date('i', strtotime($rdv->date_rdv));
+                $dateRdv = Carbon::parse($rdv->date_rdv);
+                $rdv->french_date = $dateRdv->format('d/m/Y');
+                $rdv->hour = $dateRdv->format('H');
+                $rdv->minute = $dateRdv->format('i');
             } else {
                 $rdv->french_date = null;
                 $rdv->hour = null;
                 $rdv->minute = null;
             }
-
+    
+            // Attach the dossier to the RDV
             if ($rdv->dossier_id) {
-             
-                $dossier = Dossier::where('id', $rdv->dossier_id)
-                ->with('beneficiaire', 'fiche', 'etape', 'status','mandataire_financier','mar')
-                ->first();
-                if($dossier) {
-                    $rdv->dossier=$dossier;
+                $dossier = $dossiers->get($rdv->dossier_id);
+                if ($dossier) {
+                    $rdv->dossier = $dossier;
                 }
-                
             }
-
+    
             return $rdv;
         });
-
+    
         return response()->json($data);
     }
+    
 
 
     public function save(Request $request): \Illuminate\Http\JsonResponse
@@ -304,24 +331,7 @@ class RdvController extends \App\Http\Controllers\Controller
         $updateData = [];
         
 
-        if(isset($request->type_indispo)) {
 
-            if(isset($request['hour'])) {
-                $hour=$request['hour'];
-            } else {
-                $hour='08';
-            }
-
-          
-            $minute='00';
-            $duration=10;
-            $client_id=0;
-        } else {
-            $hour=$request->hour;
-            $minute=$request->minute;  
-            $duration=2; 
-            $client_id=$request->client_id; 
-        }
         
       
         foreach ($request->all() as $key => $value) {
@@ -337,6 +347,25 @@ class RdvController extends \App\Http\Controllers\Controller
                 $updateData[$key] = $value;
       
             }
+        }
+
+
+        if(isset($request->type_indispo)) {
+
+            if(isset($request['hour'])) {
+                $hour=$request['hour'];
+            } else {
+                $hour='08';
+            }
+
+          
+            $minute='00';
+            $client_id=0;
+        } else {
+            $hour=$request->hour;
+            $minute=$request->minute;  
+            $duration=2; 
+            $client_id=$request->client_id; 
         }
 
         if(isset($request['duration']) && !empty($request['duration'])) {
