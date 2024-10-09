@@ -31,7 +31,7 @@
                             @endif
                             @php $prefix='<div class="btn btn-'.$color.'">';$suffix='</div>' @endphp 
                             @endif
-                            @if((isset($data['display']) && $data['display']!='false') || !isset($data['display']))
+                            @if((isset($data['initial_data']['display']) && $data['initial_data']['display']!='false') || !isset($data['initial_data']['display']))
                             {!! $prefix.nl2br($element['text']).$suffix !!}
                             @endif
                         </a>
