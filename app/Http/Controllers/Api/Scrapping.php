@@ -70,7 +70,7 @@ class Scrapping extends Controller
       }
     },
     {
-      "element_screenshot":false,
+      "element_screenshot":true,
       "url":"https://monprojet.anah.gouv.fr/dossiers/' . $reference_unique . '/contacts",
       "data":{
         "Nom du bénéficiaire":{
@@ -80,7 +80,7 @@ class Scrapping extends Controller
             0
           ]
         },
-        "details":{
+        "Demandeur":{
           "type":"class",
           "name":"contact-details-item",
           "indexes":[
