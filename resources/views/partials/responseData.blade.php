@@ -31,7 +31,9 @@
                             @endif
                             @php $prefix='<div class="btn btn-'.$color.'">';$suffix='</div>' @endphp 
                             @endif
+                            @if($tag!='Messages')
                             {!! $prefix.nl2br($element['text']).$suffix !!}
+                            @endif
                         </a>
                         @if (!empty($element['screenshot']))
                             <img class="thumbnail_hover" src="data:image/png;base64,{{ $element['screenshot'] }}"
