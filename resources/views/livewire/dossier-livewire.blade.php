@@ -1,6 +1,6 @@
 <div wire:poll>
 
-    <div wire:loading wire:target="add_row,remove_row,display_form" class="loader-overlay">
+    <div wire:loading wire:target="add_row,remove_row,display_form,setTab" class="loader-overlay">
         <!-- Your loader content, e.g., a spinner -->
         <div class="spinner"></div>
     </div>
@@ -81,7 +81,7 @@
                
                     <div class="col-lg-4 col-sm-12">
                         <div class="d-lg-flex">
-        
+       
                             <div class="ms-auto my-auto mt-lg-0 mt-4">
                                 <div class="ms-auto my-auto">
                                     <div class="btn btn-primary">{{ $dossier['fiche']['fiche_name'] }}</div>
@@ -90,7 +90,7 @@
                                             class="btn btn-danger">Supprimer le dossier</a>
                                         <form class="form-control" method="get">
                                             <label>Installateur</label>
-                                            <select wire:ignore class="form-control" name="installateur"
+                                            <select wire:ignore class="no_select2  form-control" name="installateur"
                                                 onchange="this.form.submit()">
                                                 <option value="">Choisir un installateur</option>
                                                 @foreach ($installateurs as $installateur)
