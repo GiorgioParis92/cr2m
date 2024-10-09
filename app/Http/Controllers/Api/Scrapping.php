@@ -90,7 +90,7 @@ class Scrapping extends Controller
     ]);
 
     $response = curl_exec($curl);
-    dd($response);
+
     if ($response === false) {
       die('Curl error: ' . curl_error($curl)); // Output cURL error
     }
@@ -158,7 +158,7 @@ class Scrapping extends Controller
       ) {
 
         $resultData = $responseData->result->data->result ?? null;
-
+        dd($resultData);
         return response()->json($resultData, 200);
 
 
