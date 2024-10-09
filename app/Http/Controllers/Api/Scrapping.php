@@ -94,6 +94,14 @@ class Scrapping extends Controller
             "Instructeur"
           ],
           "operator": "and"
+        },
+        "Mandataire": {
+          "type": "class",
+          "name": "contact-details-item",
+          "key_words": [
+            "Mandataire"
+          ],
+          "operator": "and"
         }
       }
     }
