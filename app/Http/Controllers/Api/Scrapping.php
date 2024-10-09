@@ -158,7 +158,7 @@ class Scrapping extends Controller
       ) {
 
         $resultData = $responseData->result->data->result ?? null;
-        dd($resultData);
+     
         return response()->json($resultData, 200);
 
 
