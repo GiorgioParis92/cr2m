@@ -26,7 +26,7 @@ class ResponseData extends Component
     {
         $dossier = Dossier::find($this->dossierId);
         $mar=Client::where('id',$dossier->mar)->first();
-
+        dd($mar);
         if($mar) {
             $login=$mar->anah_login;
             $password=$mar->anah_password;
