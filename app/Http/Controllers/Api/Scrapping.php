@@ -56,7 +56,7 @@ class Scrapping extends Controller
   "password": "'.$request->password.'",
   "scrapping_config": [
     {
-      "element_screenshot": false,
+      "element_screenshot": true,
       "url": "https://monprojet.anah.gouv.fr/dossiers/'.$reference_unique.'",
       "data": {
         "subvention": {
