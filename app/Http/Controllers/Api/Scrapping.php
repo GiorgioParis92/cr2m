@@ -111,7 +111,7 @@ class Scrapping extends Controller
       "data":{
         "Messages":{
           "type":"class",
-          "name":"messages--list"
+          "name":"_messages--list"
         }
       }
     }
