@@ -105,7 +105,7 @@ class Scrapping extends Controller
         },
                 "Messages": {
           "type": "class",
-          "name": "messages--list",
+          "name": "messages--list"
      
         }
       }
