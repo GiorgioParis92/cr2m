@@ -91,7 +91,7 @@
             <h4 class="border-bottom border-gray pb-2 p-2">Statut ANAH</h4>
 
             <!-- Fetch response data when the component is initialized -->
-            <div wire:ignore wire:init="fetchResponseData"></div>
+            {{-- <div wire:ignore wire:init="fetchResponseData"></div> --}}
     
             <!-- Display the responseData -->
             {{-- <div>
