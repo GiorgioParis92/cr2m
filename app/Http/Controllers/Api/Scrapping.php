@@ -82,10 +82,14 @@ class Scrapping extends Controller
         },
         "Demandeur":{
           "type":"class",
-        "split":{
-        "split_char":"\n",
-        "element_to_keep":{1:"beneficiaire",2:"email",3:"telephone"},
-        },
+          "split":{
+            "split_char":"\n",
+            "element_to_keep":{
+              "1":"beneficiaire",
+              "2":"email",
+              "3":"telephone"
+            }
+          },
           "name":"contact-details-item",
           "indexes":[
             0
