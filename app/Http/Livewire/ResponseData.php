@@ -42,7 +42,7 @@ class ResponseData extends Component
                     'login' => $login,
                 'password' => $password,
                 ]);
-
+                dd($response);
             if ($response->successful()) {
                 $this->responseData = $response->json();
             } else {
