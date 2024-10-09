@@ -106,7 +106,7 @@ class Scrapping extends Controller
       }
     },
     {
-      "element_screenshot":false,
+      "element_screenshot":true,
       "url":"https://monprojet.anah.gouv.fr/dossiers/' . $reference_unique . '/messages",
       "data":{
         "Messages":{
