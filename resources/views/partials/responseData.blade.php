@@ -19,7 +19,7 @@
     @if (!empty($data['elements']) && !$empty)
         <div class="col-12">
             <div>
-                <h6 class="mb-0">{{ $tag }}</h6>
+                <h6 class="mb-0 p_thumbnail">{{ $tag }}</h6>
 
                 @foreach ($data['elements'] as $element)
                     @php $prefix='';$suffix='';$color='primary' @endphp 
