@@ -94,7 +94,7 @@
             <div wire:ignore wire:init="fetchResponseData"></div>
     
             <!-- Display the responseData -->
-            <div>
+            {{-- <div>
                 @if($responseData)
                 @foreach($responseData as $url => $data)
                 <h3>URL: {{ $url }}</h3>
@@ -139,7 +139,7 @@
             </div>
         </div>
 
-        <hr>
+        <hr> --}}
 
 
         <div class="card form-register">
