@@ -22,9 +22,16 @@
                 <h6 class="mb-0">{{ $tag }}</h6>
 
                 @foreach ($data['elements'] as $element)
+                    @php $prefix='';$suffix='';$color='primary' @endphp 
                     <p class="p_thumbnail">
                         <a href="{{ $data['url'] ?? '' }}" target="_blank">
-                            {!! nl2br(e($element['text'])) !!}
+                            @if($tag=='Statut du dossier') 
+                            @if(str_pos('rejet')) 
+                            @php $color='danger' @endphp
+                            @endif
+                            @php $prefix='<div class="btn btn-'.$color.'">';$suffix='</div>' @endphp 
+                            @endif
+                            {!! $prefix.nl2br($element['text']).$suffix !!}
                         </a>
                         @if (!empty($element['screenshot']))
                             <img class="thumbnail_hover" src="data:image/png;base64,{{ $element['screenshot'] }}"
