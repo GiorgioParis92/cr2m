@@ -4,9 +4,11 @@
             <p>Erreur lors du chargement. Veuillez vérifier le numéro CLAVIS et le MAR associé</p>
             @break
         @endif
+        @if(!empty($data['elements']))
         <div class="col-12">
             <div>
                 <h6 class="mb-0">{{ $tag }}</h6>
+                
                 @foreach ($data['elements'] as $element)
                     <p class="p_thumbnail">
                         <a href="{{ $data['url'] ?? '' }}" target="_blank">
@@ -19,6 +21,7 @@
                 @endforeach
             </div>
         </div>
+        @endif
     @endforeach
 @else
     <p>Aucun lien ANAH trouvé avec cette référence et ce MAR</p>
