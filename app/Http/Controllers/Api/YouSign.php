@@ -201,6 +201,7 @@ class YouSign extends Controller
       }
 
 
+      sleep(0.75);
 
 
     }
@@ -209,7 +210,6 @@ class YouSign extends Controller
 
 
     // Sleep for a while before making the next request
-
 
 
 

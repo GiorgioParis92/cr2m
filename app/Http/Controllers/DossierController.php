@@ -164,7 +164,8 @@ class DossierController extends Controller
             DB::table('dossiers_data')->updateOrInsert(
                 [
                     'dossier_id' => $dossier->id,
-                    'meta_key' => 'step_'.$dossier->etape_number
+                    'meta_key' => 'step_'.$dossier->etape_number,
+                    'user_id' => auth()->user()->id ?? 0
                 ],
                 [
                     'meta_value' => now(),

@@ -11,6 +11,7 @@ use App\Http\Controllers\Api\OcrAnalyze;
 use App\Http\Controllers\Api\YouSign;
 use App\Http\Controllers\Api\YouSignStatus;
 use App\Http\Controllers\Api\VRP;
+use App\Http\Controllers\Api\Scrapping;
 
 
 /*
@@ -52,6 +53,10 @@ Route::post('/ocr-analyze', [OcrAnalyze::class, 'index']);
 Route::post('/yousign', [YouSign::class, 'index']);
 Route::post('/yousign-status', [YouSignStatus::class, 'index']);
 Route::get('/yousign-status', [YouSignStatus::class, 'index']);
+
+Route::get('/scrapping', [Scrapping::class, 'index']);
+Route::post('/scrapping', [Scrapping::class, 'index']);
+
 
 Route::get('/stats', [StatsController::class, 'index']);
 Route::post('/stats', [StatsController::class, 'index']);

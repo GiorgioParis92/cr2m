@@ -36,7 +36,9 @@ class SearchController extends Controller
         if ($query) {
             $dossiers = $dossiers->whereHas('beneficiaire', function ($q) use ($query) {
                 $q->where('nom', 'LIKE', "%{$query}%")
-                  ->orWhere('prenom', 'LIKE', "%{$query}%");
+                  ->orWhere('prenom', 'LIKE', "%{$query}%")
+                  ->orWhere('telephone_2', 'LIKE', "%{$query}%")
+                  ->orWhere('telephone', 'LIKE', "%{$query}%");
             });
         }
 

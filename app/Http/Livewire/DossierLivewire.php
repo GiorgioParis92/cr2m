@@ -10,6 +10,7 @@ use App\FormModel\{
     FormConfigHandler, EtapeValidator
 };
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
 
 class DossierLivewire extends Component
 {
@@ -35,6 +36,7 @@ class DossierLivewire extends Component
     public $installateurs = [];
     public $technicien = [];
     public $technicien2 = [];
+    public $responseData='';
     public $dossier;
 
     protected $listeners = ['fileUploaded' => 'handleFileUploaded'];
@@ -83,11 +85,18 @@ class DossierLivewire extends Component
         $this->financiers = Client::where('type_client', 2)->get()->toArray();
         $this->installateurs = Client::where('type_client', 3)->get()->toArray();
 
-        $this->steps = DB::table('dossiers_data')
-            ->where('dossier_id', $id)
-            ->where('meta_key', 'like', '%step_%')
-            ->pluck('meta_value', 'meta_key')
-            ->toArray();
+        $stepData = DB::table('dossiers_data')
+        ->where('dossier_id', $id)
+        ->where('meta_key', 'like', '%step_%')
+        ->get(['meta_key', 'meta_value', 'user_id']);
+    
+    $this->steps = [];
+    foreach ($stepData as $item) {
+        $this->steps[$item->meta_key] = [
+            'meta_value' => $item->meta_value,
+            'user_id' => $item->user_id,
+        ];
+    }
 
         $technicien = Rdv::with('user')
             ->where('dossier_id', $id)
@@ -107,6 +116,10 @@ class DossierLivewire extends Component
             $this->technicien2 = $technicien2 ? $technicien2->toArray() : [];
         $this->get_docs();
         $this->reinitializeFormsConfigs(false);
+
+        $this->responseData = null;
+
+
     }
 
     private function determineLastEtape()
@@ -235,11 +248,18 @@ class DossierLivewire extends Component
         $this->global_data = [];
         // $this->reinitializeFormsConfigs();
 
-        $this->steps = DB::table('dossiers_data')
-            ->where('dossier_id', $this->dossier->id)
-            ->where('meta_key', 'like', '%step_%')
-            ->pluck('meta_value', 'meta_key')
-            ->toArray();
+        $stepData = DB::table('dossiers_data')
+        ->where('dossier_id', $this->dossier->id)
+        ->where('meta_key', 'like', '%step_%')
+        ->get(['meta_key', 'meta_value', 'user_id']);
+    
+    $this->steps = [];
+    foreach ($stepData as $item) {
+        $this->steps[$item->meta_key] = [
+            'meta_value' => $item->meta_value,
+            'user_id' => $item->user_id,
+        ];
+    }
     }
 
     public function setTab($tab)
@@ -469,4 +489,29 @@ class DossierLivewire extends Component
 {
     return json_decode(json_encode($array), false);
 }
+
+public function fetchResponseData()
+{
+    if ($this->dossier->reference_unique) {
+   
+        $url = url('/api/scrapping');
+        $token = 'qlcb1m8AlZU8dteqvYWFxrehJ2iGlGvUbinQhUNOa3yqjizldp0ARNiCDmsl';
+
+        $response = Http::withToken($token)
+            ->withHeaders(['Accept' => 'application/json'])
+            ->post($url, [
+                'reference_unique' => $this->dossier->reference_unique,
+            ]);
+          
+        if ($response->successful()) {
+            $this->responseData = $response->json();
+        
+        } else {
+            $statusCode = $response->status();
+            $errorBody = $response->body();
+            $this->responseData = "Error ({$statusCode}): {$errorBody}";
+        }
+    }
+}
+
 }

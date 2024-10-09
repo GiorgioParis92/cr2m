@@ -65,11 +65,7 @@
 
             editable: true,
             locale: 'fr',
-            headerToolbar: {
-                start: 'title',
-                center: '',
-                end: 'today prev,next timeGrid timeGridWeek dayGridMonth'
-            },
+            headerToolbar: false,
             slotMinTime: "07:00:00",
             slotMaxTime: "21:00:00",
             slotDuration: '00:15:00',
@@ -128,10 +124,34 @@
             eventClick: function(info) {
                 handleEventClick(info.event); // Handle event click
             }
+
+            
         });
 
         calendar.render();
+        document.getElementById('today-button').addEventListener('click', function() {
+        calendar.today();
+    });
 
+    document.getElementById('prev-button').addEventListener('click', function() {
+        calendar.prev();
+    });
+
+    document.getElementById('next-button').addEventListener('click', function() {
+        calendar.next();
+    });
+
+    document.getElementById('day-view-button').addEventListener('click', function() {
+        calendar.changeView('timeGridDay');
+    });
+
+    document.getElementById('week-view-button').addEventListener('click', function() {
+        calendar.changeView('timeGridWeek');
+    });
+
+    document.getElementById('month-view-button').addEventListener('click', function() {
+        calendar.changeView('dayGridMonth');
+    });
         var map;
         var markers = [];
 
@@ -310,7 +330,7 @@
                 // Append the row to the table body
                 $('#calendar-liste tbody').append(rowHtml);
             });
-            $('#calendar-liste').datatable();
+
         }
         // Clear markers from map
         function clearMarkers() {

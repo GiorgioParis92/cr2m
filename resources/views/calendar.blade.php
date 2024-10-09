@@ -40,7 +40,21 @@
         </div>
     </div>
     <div data-rdv_id="" data-type_rdv="3" class="btn btn-secondary show_conge">Ajouter un congé/indisponibilité </div>
-
+    <div id="custom-toolbar">
+        <div class="toolbar-section">
+            <h2 id="calendar-title"></h2>
+        </div>
+        <div class="toolbar-section">
+            <button id="today-button" class="toolbar-button btn btn-primary">Aujourd'hui</button>
+            <button id="prev-button" class="toolbar-button btn btn-primary">Précédent</button>
+            <button id="next-button" class="toolbar-button btn btn-primary">Suivant</button>
+        </div>
+        <div class="toolbar-section">
+            <button id="day-view-button" class="toolbar-button btn btn-primary">Journée</button>
+            <button id="week-view-button" class="toolbar-button btn btn-primary">Semaine</button>
+            <button id="month-view-button" class="toolbar-button btn btn-primary">Mois</button>
+        </div>
+    </div>
 
     <div class="row" style="margin-bottom:50px">
         <div class="col-12">
@@ -70,7 +84,25 @@
             <div id="calendar"></div>
         </div>
     </div>
-   
+   <style>
+    #custom-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.toolbar-section {
+    display: flex;
+    align-items: center;
+}
+
+.toolbar-button {
+    margin-right: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+</style>
     <script>
                 $(document).on('click', '.show_conge', function(event) {
             var rdv_id = $(this).data('rdv_id');

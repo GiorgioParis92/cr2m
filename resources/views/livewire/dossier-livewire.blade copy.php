@@ -157,6 +157,7 @@
 
 
                                                 @if (!empty($steps) && isset($steps['step_' . $e->etape_number]))
+                                                @dump($steps)
                                                     <div class="col text-center">
                                                         <p class="text-xs font-weight-bold mb-0"> <br /></p>
                                                         <p class="text-xs font-weight-bold mb-0"> </p>
@@ -164,6 +165,9 @@
                                                         <h6 class="text-sm mb-0">
                                                             {{ format_date($steps['step_' . $e->etape_number]) ?? '' }}
                                                         </h6>
+                                                        @if($steps['user_id'])
+                                                     {{$steps['user_id']}}
+                                                        @endif
                                                     </div>
                                                 @endif
 

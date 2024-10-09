@@ -15,6 +15,7 @@
         "intervention/image": "2.7",
         "laravel/framework": "^8.75",
         "laravel/passport": "^10.1",
+        "laravel/sanctum": "^2.15",
         "laravel/tinker": "^2.5",
         "laravel/ui": "^3.4",
         "league/flysystem": "1.1.4",
