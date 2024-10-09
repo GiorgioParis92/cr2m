@@ -64,20 +64,6 @@ class Scrapping extends Controller
           "name":"page-heading"
         }
       }
-    },
-    {
-      "element_screenshot":true,
-      "url":"https://monprojet.anah.gouv.fr/dossiers/'.$reference_unique.'/contacts",
-      "data":{
-
-        "Instructeur ANAH DDT":{
-          "type":"class",
-          "name":"contact-details-item",
-          "indexes":[
-            4
-          ]
-        }
-      }
     }
   ]
 }',
