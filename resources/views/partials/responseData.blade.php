@@ -26,7 +26,7 @@
                     <p class="p_thumbnail">
                         <a href="{{ $data['url'] ?? '' }}" target="_blank">
                             @if($tag=='Statut du dossier') 
-                            @if(str_pos($element['text'],'rejet')) 
+                            @if(strpos($element['text'],'rejet')) 
                             @php $color='danger' @endphp
                             @endif
                             @php $prefix='<div class="btn btn-'.$color.'">';$suffix='</div>' @endphp 
