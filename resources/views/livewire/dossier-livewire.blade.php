@@ -71,42 +71,12 @@
                             <h6 class="mb-0">Statut ANAH</h6>
                         </div>
                         <div class="card-body row">
-                            @if ($responseData)
-
-                            @foreach ($responseData as $tag => $data)
-                                {{-- <h4>URL: {{ $tag ?? '' }}</h4> --}}
-                              
-                                @if (array_key_exists('error', $data))
-                                Erreur lors du chargement. Veuillez vérifier le numéro CLAVIS et le MAR associé
-                            
-                                @php break; @endphp
-                                @endif
-           
-                                    <div class=" col-12">
-                                    
-                                        <div class="">
-                                            <h6 class="mb-0">{{$tag}}</h6>
-                                            @foreach ($data['elements'] as $element)
-                                                <p class="p_thumbnail"><a href="{{$data['url'] ?? ''}}" target="_blank" >{!! str_replace("\n",'<br/>',$element['text']) !!}</a>
-                                                    @if (!empty($element['screenshot']))
-                                                    <img class="thumbnail_hover" src="data:image/png;base64,{{ $element['screenshot'] }}"
-                                                        alt="Screenshot" />
-                                                @endif
-                                                </p>
-
-   
-                                            @endforeach
-
-                                        </div>
-                                    </div>
-                              
-                            @endforeach
-                        @else
-                            <p>En cours de chargement des informations auprès de l'ANAH</p>
-
-                        @endif
+                            @livewire('response-data', ['dossierId' => $dossier->id])
                         </div>
                     </div>
+
+                    
+               
                     <div class="col-4">
                         <div class="d-lg-flex">
         
@@ -688,7 +658,7 @@
     });
     document.addEventListener('livewire:load', function() {
         // After Livewire component is fully loaded, trigger the fetch
-        Livewire.emit('fetchResponseData');
+        // Livewire.emit('fetchResponseData');
     });
 
     function initializeDeleteButtons() {

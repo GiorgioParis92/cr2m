@@ -39,7 +39,7 @@ class DossierLivewire extends Component
     public $responseData='';
     public $dossier;
 
-    protected $listeners = ['fileUploaded' => 'handleFileUploaded','fetchResponseData' => 'fetchResponseData'];
+    protected $listeners = ['fileUploaded' => 'handleFileUploaded'];
 
     public function mount($id)
     {
