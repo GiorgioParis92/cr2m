@@ -82,6 +82,7 @@ class Scrapping extends Controller
         },
         "Demandeur":{
           "type":"class",
+       
           "name":"contact-details-item",
           "indexes":[
             0
@@ -111,6 +112,7 @@ class Scrapping extends Controller
       "data":{
         "Messages":{
           "type":"class",
+          "display":"false",
           "name":"_messages--list"
         }
       }
