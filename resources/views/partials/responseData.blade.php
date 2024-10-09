@@ -18,18 +18,12 @@
     @endif
     @if (!empty($data['elements']) && !$empty)
         <div class="col-12">
-            <div>
-                <h6 class="mb-0 p_thumbnail">{{ $tag }}
-
-                    @if (!empty($element['screenshot']))
-                    <img class="thumbnail_hover" src="data:image/png;base64,{{ $element['screenshot'] }}"
-                        alt="Screenshot" />
-                @endif
-                </h6>
+            <div class="p_thumbnail">
+                <h6 class="mb-0 =">{{ $tag }}</h6>
 
                 @foreach ($data['elements'] as $element)
                     @php $prefix='';$suffix='';$color='primary' @endphp 
-                    <p class="p_thumbnail">
+                    <p class="">
                         <a href="{{ $data['url'] ?? '' }}" target="_blank">
                             @if($tag=='Statut du dossier') 
                             @if(strpos($element['text'],'rejet')) 
