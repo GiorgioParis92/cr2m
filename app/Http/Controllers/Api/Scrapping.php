@@ -51,34 +51,38 @@ class Scrapping extends Controller
       ],
       CURLOPT_POSTFIELDS => [
         'data' => '{
-  "pipeline_name":"anah",
-  "login":"'.$request->login.'",
-  "password":"'.$request->password.'",
-  "scrapping_config":[
+  "pipeline_name": "anah",
+  "login": "'.$request->login.'",
+  "password": "'.$request->password.'",
+  "scrapping_config": [
     {
-      "element_screenshot":false,
-      "url":"https://monprojet.anah.gouv.fr/dossiers/'.$reference_unique.'",
-      "data":{
-        "Subvention":{
-          "type":"class",
-          "name":"page-heading"
-        },
-        "info_subvention":{
-          "type":"class",
-          "name":"c--app--tag__element"
+      "element_screenshot": false,
+      "url": "https://monprojet.anah.gouv.fr/dossiers/'.$reference_unique.'",
+      "data": {
+        "subvention": {
+          "type": "class",
+          "name": "page-heading"
         }
       }
     },
     {
-      "element_screenshot":false,
-      "url":"https://monprojet.anah.gouv.fr/dossiers/'.$reference_unique.'/contacts",
-      "data":{
-
-        "Instructeur ANAH DDT":{
-          "type":"class",
-          "name":"contact-details-item",
-          "key_words":"Instructeur"
-        
+      "element_screenshot": false,
+      "url": "https://monprojet.anah.gouv.fr/dossiers/'.$reference_unique.'/contacts",
+      "data": {
+        "details": {
+          "type": "class",
+          "name": "contact-details-item",
+          "indexes": [
+            0
+          ]
+        },
+        "instructeur": {
+          "type": "class",
+          "name": "contact-details-item",
+          "key_words": [
+            "Instructeur"
+          ],
+          "operator": "and"
         }
       }
     }
