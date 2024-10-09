@@ -35,7 +35,7 @@ class Scrapping extends Controller
         return response()->json('error',401);
     
     }
-   
+
   
     // return response()->json($reference_unique, 200);
 
@@ -56,7 +56,7 @@ class Scrapping extends Controller
   "password":"'.$request->password.'",
   "scrapping_config":[
     {
-      "element_screenshot":true,
+      "element_screenshot":false,
       "url":"https://monprojet.anah.gouv.fr/dossiers/'.$reference_unique.'",
       "data":{
         "Subvention":{
@@ -70,16 +70,15 @@ class Scrapping extends Controller
       }
     },
     {
-      "element_screenshot":true,
+      "element_screenshot":false,
       "url":"https://monprojet.anah.gouv.fr/dossiers/'.$reference_unique.'/contacts",
       "data":{
 
         "Instructeur ANAH DDT":{
           "type":"class",
           "name":"contact-details-item",
-          "indexes":[
-            4
-          ]
+          "key_words":"Instructeur"
+        
         }
       }
     }
