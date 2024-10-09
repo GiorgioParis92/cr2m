@@ -59,9 +59,13 @@ class Scrapping extends Controller
       "element_screenshot": true,
       "url": "https://monprojet.anah.gouv.fr/dossiers/'.$reference_unique.'",
       "data": {
-        "subvention": {
+        "Statut du dossier": {
           "type": "class",
           "name": "page-heading"
+        },
+         "Infos dossier": {
+          "type": "class",
+          "name": "c--app--tag__element"
         }
       }
     },
@@ -169,7 +173,7 @@ class Scrapping extends Controller
 
 
 
-      sleep(0.75);
+      sleep(0.5);
 
     }
 
