@@ -102,6 +102,11 @@ class Scrapping extends Controller
             "Mandataire"
           ],
           "operator": "and"
+        },
+                "Messages": {
+          "type": "class",
+          "name": "messages--list",
+     
         }
       }
     }
