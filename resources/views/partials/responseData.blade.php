@@ -13,8 +13,8 @@
                 $concat .= $dossier->beneficiaire->$tag_to_match;
             }
 
-            $concat = str_replace(' ', '', $concat);
-            $value = str_replace(' ', '', $value);
+            $concat = str_replace(' ', '', strtolower($concat));
+            $value = str_replace(' ', '', strtolower($value));
 
             return $concat == $value;
         }
