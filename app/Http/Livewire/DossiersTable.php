@@ -209,6 +209,7 @@ class DossiersTable extends Component
                 'accompagnateur' => $dossier->mar_client->client_title ?? '',
                 'accompagnateur_img' => $dossier->mar_client->main_logo ?? '',
                 'mandataire' => $dossier->mandataire_financier_client->client_title ?? '',
+                'mandataire_id' => $dossier->mandataire_financier_client->id ?? '',
                 'mandataire_img' => $dossier->mandataire_financier_client->main_logo ?? '',
                 'installateur' => $dossier->installateur_client->client_title ?? '',
                 'installateur_img' => $dossier->installateur_client->main_logo ?? '',
