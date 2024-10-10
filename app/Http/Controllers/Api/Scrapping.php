@@ -73,13 +73,7 @@ class Scrapping extends Controller
       "element_screenshot":true,
       "url":"https://monprojet.anah.gouv.fr/dossiers/' . $reference_unique . '/contacts",
       "data":{
-        "Nom du bénéficiaire":{
-          "type":"class",
-          "name":"contact-details-name",
-          "indexes":[
-            0
-          ]
-        },
+       
         "Demandeur":{
           "type":"class",
           "split":{
