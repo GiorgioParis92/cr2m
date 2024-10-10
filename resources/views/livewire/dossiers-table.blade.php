@@ -647,7 +647,7 @@ span.badge.badge-outline-danger {
     function render_cell_mandataire(params) {
         const data = params.data;
         console.log(data.mandataire)
-        if (!data || !data.mandataire || data.mandataire==0) {
+        if (!data || !data.mandataire || data.mandataire==0 || data.mandataire==null || data.mandataire==undefined) {
             return '';
         }
         const imageUrl = data.mandataire_img ? `storage/${data.mandataire_img}` : null;
