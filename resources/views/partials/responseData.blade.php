@@ -42,7 +42,7 @@
                                 foreach($data['initial_data']['split']['element_to_keep'] as $index=>$title) {
                                     $index=(int)$index;
                                     if($index>=0 && $index<count($explode)) {
-                                        $text.='<h6>'.$title.'</h6><p>'.$explode[$index].'</p>';
+                                        $text.='<p>'.$title.' : '.$explode[$index].'</p>';
                                     }
                                 }
                             } else {
