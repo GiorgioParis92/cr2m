@@ -61,6 +61,7 @@ class Scrapping extends Controller
       "data":{
         "Statut du dossier":{
           "type":"class",
+             "display_title":"false",
           "name":"page-heading"
         },
         "Infos dossier":{
@@ -104,6 +105,7 @@ class Scrapping extends Controller
        
         "Demandeur":{
           "type":"class",
+             "display_title":"false",
           "split":{
             "split_char":"\n",
             "element_to_keep":[

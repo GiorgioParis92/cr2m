@@ -14,7 +14,11 @@
             }
 
             $concat = str_replace(' ', '', strtolower($concat));
+            $concat = str_replace(',', '', strtolower($concat));
+            $concat = str_replace('-', '', strtolower($concat));
             $value = str_replace(' ', '', strtolower($value));
+            $value = str_replace(',', '', strtolower($value));
+            $value = str_replace('-', '', strtolower($value));
 
             return $concat == $value;
         }
