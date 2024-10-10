@@ -646,6 +646,7 @@ span.badge.badge-outline-danger {
 
     function render_cell_mandataire(params) {
         const data = params.data;
+        console.log(data.mandataire)
         if (!data || !data.mandataire || data.mandataire==0) {
             return '';
         }
