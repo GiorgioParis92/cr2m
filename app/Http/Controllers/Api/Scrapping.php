@@ -81,7 +81,7 @@ class Scrapping extends Controller
             "element_to_keep":[
       {"index":1,"title":"Bénéficiaire","tag_to_match":["nom","prenom"]},  
       {"index":2,"title":"E-mail","tag_to_match":["email"]},  
-      {"index":3,"title":"<i class="icons icons_phone"></i>Téléphone","tag_to_match":["telephone"]} 
+      {"index":3,"title":"<i class=\'icons icons_phone\'></i>Téléphone","tag_to_match":["telephone"]} 
      
             ]
           },
