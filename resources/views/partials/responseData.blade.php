@@ -2,23 +2,21 @@
 
     @php
         $empty = true;
-        function does_match($dossier,$value, $tags_to_match)
+        function does_match($dossier, $value, $tags_to_match)
         {
-
-            if(empty($tags_to_match)) {
+            if (empty($tags_to_match)) {
                 return true;
             }
 
-            $concat='';
+            $concat = '';
             foreach ($tags_to_match as $tag_to_match) {
-                $concat.=$dossier->beneficiaire->$tag_to_match;
-                
+                $concat .= $dossier->beneficiaire->$tag_to_match;
             }
 
-            $concat=str_replace(' ','',$concat);
-            $value=str_replace(' ','',$value);
+            $concat = str_replace(' ', '', $concat);
+            $value = str_replace(' ', '', $value);
 
-            return $concat==$value;
+            return $concat == $value;
         }
     @endphp
     @foreach ($responseData as $tag => $data)
@@ -43,7 +41,7 @@
                 @if (
                     (isset($data['initial_data']['display_title']) && $data['initial_data']['display_title'] != 'false') ||
                         !isset($data['initial_data']['display_title']))
-                <h6 class="mb-0 =">{{ $tag }}</h6>
+                    <h6 class="mb-0 =">{{ $tag }}</h6>
                 @endif
 
                 @foreach ($data['elements'] as $element)
@@ -52,10 +50,10 @@
                         $suffix = '';
                         $color = 'primary';
                     @endphp
-                                    @if (!empty($element['screenshot']))
-                                    <img class="thumbnail_hover" src="data:image/png;base64,{{ $element['screenshot'] }}"
-                                        alt="Screenshot" />
-                                @endif
+                    @if (!empty($element['screenshot']))
+                        <img class="thumbnail_hover" src="data:image/png;base64,{{ $element['screenshot'] }}"
+                            alt="Screenshot" />
+                    @endif
                     <p class="">
                         <a href="{{ $data['url'] ?? '' }}" target="_blank">
                             @if ($tag == 'Statut du dossier')
@@ -63,9 +61,9 @@
                                     @php $color='danger' @endphp
                                 @endif
                                 @php
-                                    $prefix = '<div class="btn btn-' . $color . '">';
+                                    $prefix = '<div style="color:white" class="btn btn-' . $color . '">';
                                     $suffix = '</div>';
-                                  
+
                                 @endphp
                             @endif
 
@@ -80,34 +78,37 @@
                                             $element['text'],
                                         );
                                         $text = '';
-                                  
+
                                         foreach ($data['initial_data']['split']['element_to_keep'] as $split_element) {
                                             $index = (int) $split_element['index'];
-                                           
-                                            if ($index >= 0 && $index < count($explode)) {
-                                         
-                                                $text .=
-                                                    '<p>' . $split_element['title'] . ' : ' . $explode[$index];
-                                                        if( !does_match($dossier,$explode[$index], $split_element['tags_to_match'])) {
-                                                        $text.= '<span style="color:#fd5c70 !important;margin-left:10px"><i class="fa fa-triangle-exclamation"></i>  Erreur</span>';
 
-                                                }      
-                                                    $text.='</p>';
-                                         
+                                            if ($index >= 0 && $index < count($explode)) {
+                                                $text .= '<p>' . $split_element['title'] . ' : ' . $explode[$index];
+                                                if (
+                                                    !does_match(
+                                                        $dossier,
+                                                        $explode[$index],
+                                                        $split_element['tags_to_match'],
+                                                    )
+                                                ) {
+                                                    $text .=
+                                                        '<span style="color:#fd5c70 !important;margin-left:10px"><i class="fa fa-triangle-exclamation"></i>  Erreur</span>';
+                                                }
+                                                $text .= '</p>';
                                             }
                                         }
                                     } else {
                                         $text = $element['text'];
                                     }
-                                 
+
                                 @endphp
-                                
+
                                 {!! $prefix . nl2br($text) . $suffix !!}
                             @endif
 
 
                         </a>
-  
+
                     </p>
                 @endforeach
             </div>
