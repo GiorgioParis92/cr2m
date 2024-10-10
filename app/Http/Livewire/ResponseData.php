@@ -62,17 +62,14 @@ class ResponseData extends Component
             if (!empty($data['elements'])) {
                 foreach ($data['elements'] as $element) {
                     // Assuming you want to save the status as 'text'
-                    $statusText = $element['text'];
-                    $this->dossier->update([
-                        'status' => $statusText // Update the status in the dossier table
-                    ]);
+          
                         \DB::table('dossiers_data')->updateOrInsert(
                             [
                                 'dossier_id' => $this->dossier->id,
                                 'meta_key' => $tag
                             ],
                             [
-                                'meta_value' => $value ?? '',
+                                'meta_value' => $element['text'] ?? '',
                                 'created_at' => now(),
                                 'updated_at' => now()
                             ]
