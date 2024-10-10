@@ -1,4 +1,5 @@
 <div wire:init="loadResponseData">
+   
     @if($responseData)
         @include('partials.responseData', ['responseData' => $responseData])
     @else

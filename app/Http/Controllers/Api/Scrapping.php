@@ -79,9 +79,9 @@ class Scrapping extends Controller
           "split":{
             "split_char":"\n",
             "element_to_keep":[
-      {"index":1,"title":"<i class=\'fa fa-comments-dollar\'></i>Bénéficiaire","tag_to_match":["nom","prenom"]},  
-      {"index":2,"title":"<i class=\'fa fa-envelope\'></i>E-mail","tag_to_match":["email"]},  
-      {"index":3,"title":"<i class=\'fa fa-phone\'></i>Téléphone","tag_to_match":["telephone"]} 
+      {"index":1,"title":"<i class=\'fa fa-comments-dollar\'></i>Bénéficiaire","tags_to_match":["prenom","nom"]},  
+      {"index":2,"title":"<i class=\'fa fa-envelope\'></i>E-mail","tags_to_match":["email"]},  
+      {"index":3,"title":"<i class=\'fa fa-phone\'></i>Téléphone","tags_to_match":["telephone"]} 
      
             ]
           },
@@ -92,6 +92,7 @@ class Scrapping extends Controller
         },
         "instructeur":{
           "type":"class",
+          "display_title":"false",
           "name":"contact-details-item",
           "key_words":[
             "Instructeur"
@@ -100,7 +101,16 @@ class Scrapping extends Controller
         },
         "Mandataire":{
           "type":"class",
+          "display_title":"false",
           "name":"contact-details-item",
+                  "split":{
+            "split_char":"\n",
+            "element_to_keep":[
+      {"index":1,"title":"<i class=\'fa fa-comments-dollar\'></i>Mandataire","tags_to_match":[]} 
+
+     
+            ]
+          },
           "key_words":[
             "Mandataire"
           ],

@@ -10,11 +10,13 @@ use App\Models\Client;
 class ResponseData extends Component
 {
     public $dossierId;
+    public $dossier;
     public $responseData = null;
 
     public function mount($dossierId)
     {
         $this->dossierId = $dossierId;
+        $this->dossier = Dossier::with('beneficiaire', 'fiche', 'etape', 'status','mar_client')->find($this->dossierId);
     }
 
     public function render()
@@ -24,21 +26,20 @@ class ResponseData extends Component
 
     public function loadResponseData()
     {
-        $dossier = Dossier::find($this->dossierId);
-        $mar=Client::where('id',$dossier->mar)->first();
+        $mar=Client::where('id',$this->dossier->mar)->first();
        
         if($mar) {
             $login=$mar->anah_login;
             $password=$mar->anah_password;
         }
-        if ($dossier && $dossier->reference_unique) {
+        if ($this->dossier && $this->dossier->reference_unique) {
             $url = url('/api/scrapping');
             $token = 'qlcb1m8AlZU8dteqvYWFxrehJ2iGlGvUbinQhUNOa3yqjizldp0ARNiCDmsl';
 
             $response = Http::withToken($token)
                 ->withHeaders(['Accept' => 'application/json'])
                 ->post($url, [
-                    'reference_unique' => $dossier->reference_unique,
+                    'reference_unique' => $this->dossier->reference_unique,
                     'login' => $login,
                 'password' => $password,
                 ]);
