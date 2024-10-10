@@ -61,7 +61,7 @@
                                     @php $color='danger' @endphp
                                 @endif
                                 @php
-                                    $prefix = '<div style="color:white" class="btn btn-' . $color . '">';
+                                    $prefix = '<div style="color:white" class="color-white btn btn-' . $color . '">';
                                     $suffix = '</div>';
 
                                 @endphp
@@ -118,3 +118,10 @@
 @else
 <p>Aucun lien ANAH trouvé avec cette référence et ce MAR</p>
 @endif
+
+<style>
+.color-white, .color-white a {
+    color:white!important
+}
+
+</style>
