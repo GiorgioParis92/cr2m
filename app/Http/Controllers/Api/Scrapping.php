@@ -70,6 +70,34 @@ class Scrapping extends Controller
       }
     },
     {
+  "element_screenshot":true,
+  "url":"https://monprojet.anah.gouv.fr/dossiers/' . $reference_unique . '/mandatory",
+  "data":{
+    "Adresse":{
+      "type":"class",
+                "indexes":[
+            0
+          ],
+      "display_title":"false",
+      "name":"contact-details-item",
+      "split":{
+        "split_char":"\n",
+        "element_to_keep":[
+          {
+            "index":2,
+            "title":"<i class=\'fa fa-comments-dollar\'></i>Adresse",
+            "tags_to_match":[
+              "adresse",
+              "cp",
+              "ville"
+            ]
+          }
+        ]
+      }
+    }
+  }
+},
+    {
       "element_screenshot":true,
       "url":"https://monprojet.anah.gouv.fr/dossiers/' . $reference_unique . '/contacts",
       "data":{
@@ -119,34 +147,7 @@ class Scrapping extends Controller
         }
       }
     },
-{
-  "element_screenshot":true,
-  "url":"https://monprojet.anah.gouv.fr/dossiers/' . $reference_unique . '/mandatory",
-  "data":{
-    "Adresse":{
-      "type":"class",
-                "indexes":[
-            0
-          ],
-      "display_title":"false",
-      "name":"contact-details-item",
-      "split":{
-        "split_char":"\n",
-        "element_to_keep":[
-          {
-            "index":2,
-            "title":"<i class=\'fa fa-comments-dollar\'></i>Adresse",
-            "tags_to_match":[
-              "adresse",
-              "cp",
-              "ville"
-            ]
-          }
-        ]
-      }
-    }
-  }
-},
+
       
     {
       "element_screenshot":true,
