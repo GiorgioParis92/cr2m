@@ -28,11 +28,11 @@
         @endif
     @endforeach
     @if ($empty)
-        <p>Erreur lors du chargement. Veuillez vérifier le numéro CLAVIS et le MAR associé</p>
+        <p>Erreur lors du chargement. Veuillez vérifier le numéro CLAVIS et le MAR associé ou rechargez la page.</p>
     @endif
     @foreach ($responseData as $tag => $data)
         @if (array_key_exists('error', $data))
-            <p>Erreur lors du chargement. Veuillez vérifier le numéro CLAVIS et le MAR associé</p>
+            <p>Erreur lors du chargement. Veuillez vérifier le numéro CLAVIS et le MAR associé ou rechargez la page.</p>
         @break
     @endif
     @if (!empty($data['elements']) && !$empty)
