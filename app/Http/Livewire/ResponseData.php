@@ -46,10 +46,39 @@ class ResponseData extends Component
              
             if ($response->successful()) {
                 $this->responseData = $response->json();
+                $this->checkAndUpdateStatus();  // Call to save the status
+
             } else {
                 $statusCode = $response->status();
                 $errorBody = $response->body();
                 $this->responseData = "Error ({$statusCode}): {$errorBody}";
+            }
+        }
+    }
+
+    public function checkAndUpdateStatus()
+    {
+        foreach ($this->responseData as $tag => $data) {
+            if (!empty($data['elements'])) {
+                foreach ($data['elements'] as $element) {
+                    // Assuming you want to save the status as 'text'
+                    $statusText = $element['text'];
+                    $this->dossier->update([
+                        'status' => $statusText // Update the status in the dossier table
+                    ]);
+                        \DB::table('dossiers_data')->updateOrInsert(
+                            [
+                                'dossier_id' => $this->dossier->id,
+                                'meta_key' => $tag
+                            ],
+                            [
+                                'meta_value' => $value ?? '',
+                                'created_at' => now(),
+                                'updated_at' => now()
+                            ]
+                        );
+                    }
+                
             }
         }
     }
