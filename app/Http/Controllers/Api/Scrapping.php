@@ -79,9 +79,9 @@ class Scrapping extends Controller
           "split":{
             "split_char":"\n",
             "element_to_keep":[
-      {"index":1,"title":"Bénéficiaire","tag_to_match":["nom","prenom"]},  
-      {"index":2,"title":"E-mail","tag_to_match":["email"]},  
-      {"index":3,"title":"<i class=\'icons icons_phone\'></i>Téléphone","tag_to_match":["telephone"]} 
+      {"index":1,"title":"<i class=\'fa fa-comments-dollar\'></i>Bénéficiaire","tag_to_match":["nom","prenom"]},  
+      {"index":2,"title":"<i class=\'fa fa-envelope\'></i>E-mail","tag_to_match":["email"]},  
+      {"index":3,"title":"<i class=\'fa fa-phone\'></i>Téléphone","tag_to_match":["telephone"]} 
      
             ]
           },
