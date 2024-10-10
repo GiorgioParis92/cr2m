@@ -78,11 +78,12 @@ class Scrapping extends Controller
           "type":"class",
           "split":{
             "split_char":"\n",
-            "element_to_keep":{
-              "1":"beneficiaire",
-              "2":"email",
-              "3":"telephone"
-            }
+            "element_to_keep":[
+      {"index":1,"title":"Bénéficiaire","tag_to_match":["nom","prenom"]},  
+      {"index":2,"title":"E-mail","tag_to_match":["email"]},  
+      {"index":3,"title":"<i class="icons icons_phone"></i>Téléphone","tag_to_match":["telephone"]} 
+     
+            ]
           },
           "name":"contact-details-item",
           "indexes":[

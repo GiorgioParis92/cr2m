@@ -39,10 +39,10 @@
                             if(isset($data['initial_data']['split'])) {
                                 $explode=explode($data['initial_data']['split']['split_char'],$element['text']);
                                 $text='';
-                                foreach($data['initial_data']['split']['element_to_keep'] as $index=>$title) {
-                                    $index=(int)$index;
+                                foreach($data['initial_data']['split']['element_to_keep'] as $split_element) {
+                                    $index=(int)$split_element['index'];
                                     if($index>=0 && $index<count($explode)) {
-                                        $text.='<p>'.$title.' : '.$explode[$index].'</p>';
+                                        $text.='<p>'.$split_element['title'].' : '.$explode[$index].'</p>';
                                     }
                                 }
                             } else {
