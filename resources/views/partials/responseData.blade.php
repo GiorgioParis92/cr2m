@@ -31,9 +31,31 @@
                             @endif
                             @php $prefix='<div class="btn btn-'.$color.'">';$suffix='</div>' @endphp 
                             @endif
+
+
                             @if((isset($data['initial_data']['display']) && $data['initial_data']['display']!='false') || !isset($data['initial_data']['display']))
-                            {!! $prefix.nl2br($element['text']).$suffix !!}
+                           
+                            @php 
+                            if(isset($data['initial_data']['split'])) {
+                                $explode=explode($data['initial_data']['split']['split_char'],$element['text']);
+                                $text='';
+                                foreach($data['initial_data']['split']['element_to_keep'] as $index=>$title) {
+                                    $index=(int)$index;
+                                    if($index>=0 && $index<count($explode)) {
+                                        $text.='<h6>'.$title.'</h6><p>'.$explode[$index].'</p>';
+                                    }
+                                }
+                            } else {
+                                $text=$element['text'];
+                            }
+
+                            @endphp
+                            {!! $prefix.nl2br($text).$suffix !!}
+                           
+                           
                             @endif
+
+
                         </a>
                         @if (!empty($element['screenshot']))
                             <img class="thumbnail_hover" src="data:image/png;base64,{{ $element['screenshot'] }}"
