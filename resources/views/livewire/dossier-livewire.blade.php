@@ -5,7 +5,7 @@
         <div class="spinner"></div>
     </div>
 
-    @if(auth()->user()->id==0)
+    
     <div class="row">
         <div class="card form-register">
             <div class="card-body pb-0 clearfix">
@@ -112,7 +112,7 @@
             </div>
         </div>
     </div>
-    @endif
+
     <div class="row">
 
 

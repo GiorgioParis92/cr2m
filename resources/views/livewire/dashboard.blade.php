@@ -5,8 +5,9 @@
     <main class="main-content">
         @if(auth()->user()->client_id==0 || auth()->user()->client_id>0)
         <div class="container-fluid py-4" wire:poll>
+            @if(auth()->user()->id==0)
             @livewire('card-board')
-
+            @endif
             <div class="row mb-5">
                 <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
                     <div class="card">
