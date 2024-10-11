@@ -186,7 +186,7 @@ class Db_text extends AbstractFormData
 
         $request = DB::select($sql_command);
 
-        if ($this->value && $this->value != '' && $this->value != 0) {
+        if ($this->value && $this->value != '') {
 
             foreach ($request as $result) {
                 $fieldValue = $optionsArray['value'];
