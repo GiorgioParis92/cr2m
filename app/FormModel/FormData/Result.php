@@ -52,10 +52,7 @@ class Result extends AbstractFormData
             return '';
         }
         if (isset($optionsArray['operands'])) {
-            if(auth()->user()->id==1){
-                print_r ($optionsArray['operands']);
-                return false;
-            }
+       
            
             foreach ($optionsArray['operands'] as $operand) {
 
