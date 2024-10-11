@@ -239,7 +239,7 @@ class Result extends AbstractFormData
         // $data .= $this->generate_loading();
 
 
-        $data .= '<input   wire:change="update_value(\''.$wireModel.'\',  $this->value)" class="form-control " type="text" name="' . $this->name . '" ';
+        $data .= '<input wire:blur="update_value(\''.$wireModel.'\',  $this->value)"  wire:change="update_value(\''.$wireModel.'\',  $this->value)" class="form-control " type="text" name="' . $this->name . '" ';
 
         if ($this->config->required) {
             $data .= ' required ';
