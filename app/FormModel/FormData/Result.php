@@ -52,7 +52,9 @@ class Result extends AbstractFormData
             return '';
         }
         if (isset($optionsArray['operands'])) {
-       
+            if(auth()->user()->id==1){
+                return ($optionsArray['operands']);
+            }
             foreach ($optionsArray['operands'] as $operand) {
 
                 if ($operand['operand'] == 'x') {
@@ -67,9 +69,7 @@ class Result extends AbstractFormData
                     
                     foreach ($operand['tags'] as $tag) {
                         $tagValue = $this->getOtherValue($tag);
-                        if(auth()->user()->id==1){
-                            return ($tagValue);
-                        }
+                    
                       
                         if ($tagValue === '' || $tagValue === null) {
                             if (is_numeric($tag)) {
