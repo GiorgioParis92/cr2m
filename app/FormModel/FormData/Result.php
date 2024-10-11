@@ -79,7 +79,14 @@ class Result extends AbstractFormData
                                 $tagValue = 0;
                             }
                         }
-                        $total *= $tagValue;
+                        if (!is_numeric($tagValue)) {
+                            $tagValue = 0; // Default to 0 if non-numeric
+                        }
+                
+                        // Debug to check value before multiplication (optional)
+                        // dd($tagValue);
+                
+                        $total *= (float)$tagValue;
                     }
                   
                 }
