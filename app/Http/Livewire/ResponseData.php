@@ -58,6 +58,7 @@ class ResponseData extends Component
 
     public function checkAndUpdateStatus()
     {
+        if($this->responseData) {
         foreach ($this->responseData as $tag => $data) {
             if (!empty($data['elements'])) {
                 foreach ($data['elements'] as $element) {
@@ -78,5 +79,6 @@ class ResponseData extends Component
                 
             }
         }
+    }
     }
 }
