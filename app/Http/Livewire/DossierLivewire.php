@@ -492,36 +492,52 @@ class DossierLivewire extends Component
 
 public function fetchResponseData()
 {
-
-    $mar=Client::where('id',$this->dossier->mar)->first();
-
-    if($mar) {
-        $login=$mar->anah_login;
-        $password=$mar->anah_password;
+    // Fetch the MAR credentials
+    $mar = Client::where('id', $this->dossier->mar)->first();
+    
+    // Set login and password if found
+    if ($mar) {
+        $login = $mar->anah_login;
+        $password = $mar->anah_password;
     }
-  
+
+    // If there's a reference_unique, attempt to call the scrapping API
     if ($this->dossier->reference_unique) {
         $url = url('/api/scrapping');
         $token = 'qlcb1m8AlZU8dteqvYWFxrehJ2iGlGvUbinQhUNOa3yqjizldp0ARNiCDmsl';
 
-        $response = Http::withToken($token)
-            ->withHeaders(['Accept' => 'application/json'])
-            ->post($url, [
-                'reference_unique' => $this->dossier->reference_unique,
-                'login' => $login,
-                'password' => $password,
-            ]);
+        try {
+            // Make API request
+            $response = Http::withToken($token)
+                ->withHeaders(['Accept' => 'application/json'])
+                ->post($url, [
+                    'reference_unique' => $this->dossier->reference_unique,
+                    'login' => $login,
+                    'password' => $password,
+                ]);
 
-        if ($response->successful()) {
-            $this->responseData = $response->json();
-         
-        } else {
-            $statusCode = $response->status();
-            $errorBody = $response->body();
-            $this->responseData = "Error ({$statusCode}): {$errorBody}";
+            // Check if the request was successful
+            if ($response->successful()) {
+                $this->responseData = $response->json();
+            } else {
+                // Log the actual error for debugging
+                \Log::error("Scrapping API Error", [
+                    'status' => $response->status(),
+                    'error' => $response->body()
+                ]);
+
+                // Display a user-friendly message
+                $this->responseData = "There was an issue processing your request. Please try again later.";
+            }
+
+        } catch (\Exception $e) {
+            // Catch any exceptions, log them and return a friendly error message
+            \Log::error("Scrapping API Exception", ['error' => $e->getMessage()]);
+
+            $this->responseData = "An unexpected error occurred. Please try again later.";
         }
     }
- 
 }
+
 
 }

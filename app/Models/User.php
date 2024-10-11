@@ -64,4 +64,9 @@ class User extends Authenticatable
             $user->api_token = Str::random(60);
         });
     }
+    
+public function cards()
+{
+    return $this->belongsToMany(Card::class, 'card_user');
+}
 }
