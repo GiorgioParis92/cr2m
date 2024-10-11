@@ -72,6 +72,10 @@ class Result extends AbstractFormData
                         if ($tagValue === '' || $tagValue === null) {
                             if (is_numeric($tag)) {
                                 $tagValue = (float)$tag;
+
+                                if(auth()->user()->id==1){
+                                    dd($tagValue);
+                                }
                             } else {
                                 $tagValue = 0;
                             }
