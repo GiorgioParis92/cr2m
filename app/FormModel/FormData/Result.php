@@ -67,15 +67,15 @@ class Result extends AbstractFormData
                     
                     foreach ($operand['tags'] as $tag) {
                         $tagValue = $this->getOtherValue($tag);
-                  
+                        if(auth()->user()->id==1){
+                            return ($tagValue);
+                        }
                       
                         if ($tagValue === '' || $tagValue === null) {
                             if (is_numeric($tag)) {
                                 $tagValue = (float)$tag;
 
-                                if(auth()->user()->id==1){
-                                    dd($tagValue);
-                                }
+                            
                             } else {
                                 $tagValue = 0;
                             }
