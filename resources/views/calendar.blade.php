@@ -24,6 +24,16 @@
                     @endforeach
                 </select>
             </div>
+            <div class="form-group col-lg-6">
+                <select class="form-control" id="type_rdv" onchange="handleSelectionChange(this)">
+                    <option value="">Type de rdv</option>
+                        <option value="1">RDV MAR 1</option>
+                        <option value="2">RDV MAR 2</option>
+                        <option value="3">Congés</option>
+                        <option value="4">Indisponibilité</option>
+                  
+                </select>
+            </div>
             @endif
         @endif
         <div class="form-group col-lg-6">
