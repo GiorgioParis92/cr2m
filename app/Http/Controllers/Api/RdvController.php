@@ -69,7 +69,9 @@ class RdvController extends \App\Http\Controllers\Controller
         if ($request->filled('dpt')) {
             $rdvs = $rdvs->where(DB::raw('substr(rdv.cp, 1, 2)'), $request->dpt);
         }
-    
+        if ($request->filled('type_rdv') && $request->type_rdv > 0) {
+            $rdvs = $rdvs->where('rdv.type_rdv', $request->type_rdv);
+        }
         // Filter by specific RDV ID
         if ($request->filled('rdv_id')) {
             $rdvs = $rdvs->where('rdv.id', $request->rdv_id);

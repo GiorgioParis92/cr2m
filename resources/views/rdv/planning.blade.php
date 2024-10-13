@@ -184,6 +184,7 @@
                 data: {
                     user_id: $('#form_config_user_id').val(),
                     dpt: $('#dpt').val(),
+                    type_rdv: $('#type_rdv').val(),
                     client_id: {{ auth()->user()->client_id ?? 0 }},
                     start: start.toISOString(),
                     end: end.toISOString(),
