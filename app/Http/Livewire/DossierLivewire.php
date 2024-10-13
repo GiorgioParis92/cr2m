@@ -126,18 +126,14 @@ class DossierLivewire extends Component
     {
         $this->last_etape = 1;
         foreach ($this->etapes as $etape) {
-            if ($this->isUserAllowed($etape['etape_name']) && $etape['order_column'] <= $this->dossier->etape->order_column) {
+            if (is_user_allowed($etape['etape_name']) && $etape['order_column'] <= $this->dossier->etape->order_column) {
                 $this->last_etape = $etape['id'];
                 $this->last_etape_order = $etape['order_column'];
             }
         }
     }
 
-    private function isUserAllowed($etapeName)
-    {
-        // Implement your user permission logic here
-        return true;
-    }
+
     public function update_value($propertyName, $value)
     {
           // Parse the property name
@@ -267,6 +263,7 @@ class DossierLivewire extends Component
         $this->tab = $tab;
         $etape_display = Etape::find($tab);
         $this->etape_display = $etape_display ? $etape_display->toArray() : [];
+
 
         // $this->reinitializeFormsConfigs();
 

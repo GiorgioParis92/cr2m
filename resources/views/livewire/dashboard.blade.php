@@ -1,11 +1,11 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-<div wire:poll="refresh">
+<div wire>
 
     <main class="main-content">
         @if(auth()->user()->client_id==0 || auth()->user()->client_id>0)
         <div class="container-fluid py-4" wire:poll>
-            @if(auth()->user()->id==0)
+            @if(auth()->user()->id==1)
             @livewire('card-board')
             @endif
             <div class="row mb-5">

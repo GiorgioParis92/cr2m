@@ -107,10 +107,15 @@
                                 </div>
                             </div>
                         </div>
+                        @livewire('card-board',['id'=>$dossier->id])
                     </div>
                 </div>
+
+           
             </div>
         </div>
+     
+      
     </div>
 
     <div class="row">
@@ -400,8 +405,79 @@
         </div>
     </div>
 </div>
-
+<livewire:add-card-modal :dossier_id="$dossier->id"/>
 <style>
+      .board {
+        display: block;
+        padding: 20px;
+        overflow-x: auto;
+        height: auto;
+        width:100%
+    }
+
+    .column {
+        /* background-color: #ebecf0; */
+    border-radius: 3px;
+  
+    margin-right: 1%;
+    padding: 10px;
+    flex-shrink: 0;
+    min-height: 40vh;
+    max-height: 40vh;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    }
+
+    .column-header {
+        font-weight: bold;
+        padding-bottom: 10px;
+    }
+
+    .ticket {
+        background-color: white;
+        border-radius: 3px;
+        padding: 10px;
+        margin-bottom: 10px;
+        cursor: move;
+        box-shadow: 0 1px 0 rgba(9, 30, 66, .25);
+    }
+
+    .add-column,
+    .add-ticket {
+        background-color: rgba(9, 30, 66, .04);
+        color: #172b4d;
+        border: none;
+        padding: 10px;
+        border-radius: 3px;
+        cursor: pointer;
+        width: 100%;
+        text-align: left;
+    }
+
+    .add-column:hover,
+    .add-ticket:hover {
+        background-color: rgba(9, 30, 66, .08);
+    }
+
+    #new-column {
+        width: 272px;
+        margin-right: 10px;
+    }
+    
+.column {
+
+  
+  /* Hide scrollbar for IE, Edge and Firefox */
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+.column::-webkit-scrollbar {
+  display: none;
+}
+.col-xl-4.col-sm-4.mb-xl-0.mb-4.column {
+    max-width: 32%;
+}
     .loader-overlay {
         position: fixed;
         top: 0;

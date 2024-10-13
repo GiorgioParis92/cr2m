@@ -413,6 +413,8 @@
             </div>
         </div>
     </div>
+
+
     {{-- @include('frontend.fixed-plugin') --}}
     <!-- Core JS Files -->
     {{-- <script src="{{ asset('frontend/assets/js/core/popper.min.js') }}"></script> --}}
@@ -433,6 +435,14 @@
 
     @yield('scripts')
     <script>
+            document.addEventListener('DOMContentLoaded', function () {
+        window.addEventListener('show-add-card-modal', event => {
+            $('#addCardModal').modal('show');
+        });
+        window.addEventListener('hide-add-card-modal', event => {
+            $('#addCardModal').modal('hide');
+        });
+    });
         document.addEventListener("DOMContentLoaded", function() {
 
 

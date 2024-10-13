@@ -9,7 +9,7 @@ class Card extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['title', 'user_id'];
+    protected $fillable = ['title', 'user_id','dossier_id'];
 
     public function user()
     {
@@ -19,5 +19,14 @@ class Card extends Model
     public function users()
 {
     return $this->belongsToMany(User::class, 'card_user'); // Assuming the pivot table is named card_user
+}
+
+public function dossier()
+{
+    return $this->belongsTo(Dossier::class, 'dossier_id');
+}
+public function archivedByUser()
+{
+    return $this->belongsTo(User::class, 'archived_by');
 }
 }
