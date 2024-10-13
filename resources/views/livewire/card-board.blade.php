@@ -120,7 +120,7 @@
         /* background-color: #ebecf0; */
     border-radius: 3px;
   
-    margin-right: 1%;
+  
     padding: 10px;
     flex-shrink: 0;
     min-height: 40vh;

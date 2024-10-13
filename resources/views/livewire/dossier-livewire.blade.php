@@ -107,7 +107,9 @@
                                 </div>
                             </div>
                         </div>
+                        @if(auth()->user()->id==1)
                         @livewire('card-board',['id'=>$dossier->id])
+                        @endif
                     </div>
                 </div>
 
