@@ -65,6 +65,22 @@ class DossiersController extends \App\Http\Controllers\Controller
 
         }
 
+        if ($request->type_rdv ) {
+            if ($request->type_rdv == -1) {
+                // Get all dossiers that don't have any rdv
+                $dossiers = $dossiers->whereDoesntHave('get_rdv');
+            } else {
+                // Get dossiers where rdv type_rdv matches the request type_rdv
+                $dossiers = $dossiers->whereHas('get_rdv', function ($query) use ($request) {
+                    $query->where('type_rdv', $request->type_rdv)
+                   
+                    ;
+                });
+                
+            }
+
+        }
+
         if ($request->start ) {
             $start = date('Y-m-d 00:00:00',strtotime(str_replace('/','-',$request->start)));
                 // Get dossiers where rdv status matches the request status

@@ -82,7 +82,19 @@
 
                 </select>
             </div>
-
+            <div class="form-group col-lg-6">
+                <div class="mb-2 mb-sm-0 col-12 col-md-3">
+                    <label class="mr-sm-2">type de rdv</label>
+                <select class="form-control select-filter" id="type_rdv" name="type_rdv">
+                    <option value="">Type de rdv</option>
+                        <option value="1">RDV MAR 1</option>
+                        <option value="2">RDV MAR 2</option>
+                        <option value="3">Congés</option>
+                        <option value="4">Indisponibilité</option>
+                  
+                </select>
+            </div>
+        </div>
         </div>
 
         <table id="dossiersTable" class="table table-bordered responsive-table table-responsive">
