@@ -88,6 +88,7 @@ class Scrapping extends Controller
             "index":2,
             "title":"<i class=\'fa fa-comments-dollar\'></i>Adresse",
             "tags_to_match":[
+              "numero_voie",
               "adresse",
               "cp",
               "ville"
