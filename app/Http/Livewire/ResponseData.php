@@ -56,6 +56,8 @@ class ResponseData extends Component
         }
     }
 
+
+    
     public function checkAndUpdateStatus()
     {
         if($this->responseData) {

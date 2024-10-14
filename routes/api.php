@@ -12,6 +12,7 @@ use App\Http\Controllers\Api\YouSign;
 use App\Http\Controllers\Api\YouSignStatus;
 use App\Http\Controllers\Api\VRP;
 use App\Http\Controllers\Api\Scrapping;
+use App\Http\Controllers\Api\ScrappingAll;
 
 
 /*
@@ -57,6 +58,8 @@ Route::get('/yousign-status', [YouSignStatus::class, 'index']);
 Route::get('/scrapping', [Scrapping::class, 'index']);
 Route::post('/scrapping', [Scrapping::class, 'index']);
 
+Route::get('/scrapping_all', [ScrappingAll::class, 'index']);
+Route::post('/scrapping_all', [ScrappingAll::class, 'index']);
 
 Route::get('/stats', [StatsController::class, 'index']);
 Route::post('/stats', [StatsController::class, 'index']);
