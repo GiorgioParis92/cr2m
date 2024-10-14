@@ -4,14 +4,18 @@
     <div class="row">
 
         <div class="col-lg-4">
-            <h3 class="border-bottom border-gray pb-2">{{ $etape->etape_desc }}</h3>
+            <h3 class="border-bottom border-gray pb-2">{{ $etape->etape_desc }}</h3> 
         </div>
+      
         @if ($etape->etape_number == $dossier->etape_number && $dossier->status->status_name != "Refusé")
-           
+       
         @if(isset(auth()->user()->client->type_client) && auth()->user()->client->type_client!=3)
+        @if(is_user_allowed('validate_'.$etape->etape_name))
         <div class="col-lg-6">
+            
                 <a class="btn btn-primary" href="{{ route('dossiers.next_step', $dossier->id) }}">Valider l'étape</a>
             </div>
+       @endif
        @endif
        
             @endif

@@ -20,10 +20,10 @@
         <!-- Type ID (User) Dropdown -->
         <div class="form-group">
             <label>User Type:</label>
-            <select name="type_id" class="form-control" required>
+            <select name="type_id" class="form-control" >
                 <option value="">Select User Type</option>
                 @foreach($users as $user)
-                    <option value="{{ $user->id }}">{{ $user->name }}</option>
+                    <option value="{{ $user->id }}">{{ $user->type_desc }}</option>
                 @endforeach
             </select>
         </div>
@@ -34,7 +34,7 @@
             <select name="type_client" class="form-control">
                 <option value="">Select Client Type</option>
                 @foreach($clients as $client)
-                    <option value="{{ $client->id }}">{{ $client->name }}</option>
+                    <option value="{{ $client->id }}">{{ $client->type_desc }}</option>
                 @endforeach
             </select>
         </div>

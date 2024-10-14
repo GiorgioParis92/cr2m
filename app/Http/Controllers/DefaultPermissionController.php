@@ -34,8 +34,8 @@ class DefaultPermissionController extends Controller
 
     public function create()
     {
-        $users = User::all();
-        $clients = Client::all();
+        $users = UserType::all();
+        $clients = ClientType::all();
     
         return view('permissions.create', compact('users', 'clients'));
     }
@@ -44,9 +44,18 @@ class DefaultPermissionController extends Controller
     public function store(Request $request)
     {
 
-        
+        $data = $request->all();
+
+        // Loop through each data element
+        foreach ($data as $key => $value) {
+            // If the value is null, set it to 0
+            if (is_null($value)) {
+                $data[$key] = 0;
+            }
+        }
+      
     
-        DefaultPermission::create($request->all());
+        DefaultPermission::create($data);
     
         return redirect()->route('permissions.index')
             ->with('success', 'Permission created successfully.');
