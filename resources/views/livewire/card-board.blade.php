@@ -1,15 +1,15 @@
 <div wire:poll="loadCards">
-    <button class="btn btn-success" wire:click="openAddCardModal(0, {{ $dossier_id ?? null }})">Add Card</button>
+    <button class="btn btn-success" wire:click="openAddCardModal(0, {{ $dossier_id ?? null }})">Ajouter une notification</button>
 
     <div class="row mb-5">
         @foreach ($columns as $columnIndex => $column)
-        <div class="col-xl-4 col-sm-4 mb-xl-0 mb-4 column" data-column_id="{{ $column['index'] }}" wire:key="column-{{ $columnIndex }}">
+        <div class="col-xl-12 col-sm-12 mb-xl-0 mb-4 column" data-column_id="{{ $column['index'] }}" wire:key="column-{{ $columnIndex }}">
             <div class="card">
                 <div class="card-body p-3">
                     <div class="row">
                         <div class="col-8">
                             <div class="numbers">
-                                <p class="text-sm mb-0 text-capitalize font-weight-bold">{{ $column['name'] }}</p>
+                                <p class="text-sm mb-0 text-capitalize font-weight-bold">{{ $column['name'] }}@if(count($column['tickets'])>0)<span class="badge badge-danger bg-danger">{{count($column['tickets'])}}</span>@endif</p>
                                 @foreach ($column['tickets'] as $ticket)
                                 <div class="ticket" draggable="true" data-id="{{ $ticket['id'] }}" wire:key="ticket-{{ $ticket['id'] }}">
                                     <h5>{{ $ticket['title'] }}</h5>
@@ -101,7 +101,7 @@
             </div>
             <div class="modal-footer">
                 <button id="addCardWithDetails" type="button" class="btn btn-primary"
-                    wire:click="addCardWithDetails">Add Card</button>
+                    wire:click="addCardWithDetails">Ajouter une notification</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             </div>
         </div>
@@ -123,8 +123,8 @@
   
     padding: 10px;
     flex-shrink: 0;
-    min-height: 40vh;
-    max-height: 40vh;
+
+    max-height: 280px;
     overflow-x: hidden;
     overflow-y: scroll;
     }

@@ -114,6 +114,12 @@ class DossierController extends Controller
         if(!isset($dossier)) {
             abort(404);
         }
+        $client_id=auth()->user()->client_id;
+        if($client_id>0 &&
+        $client_id!=$dossier->mar &&  $client_id!=$dossier->client_id &&  $client_id!=$dossier->mandataire_financier &&  $client_id!=$dossier->installateur 
+        ) {
+            abort(403);
+        }
 
         $auditeurs=User::where('type_id',4)->get();
         $rdv_status=RdvStatus::all();

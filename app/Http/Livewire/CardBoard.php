@@ -16,6 +16,7 @@ class CardBoard extends Component
     public $assignedUsers = []; // For multiple user selection
     protected $listeners = ['moveCard' => 'moveCard', 'openAddCardModal' => 'openAddCardModal', 'addCardWithDetails' => 'addCardWithDetails', 'cardAdded' => 'loadCards','saveCard'=>'saveCard'];
 
+    public $type_users_selected = [];
     public function mount($id=null)
     {
         // Fetch existing cards from the database and structure them
@@ -180,6 +181,23 @@ class CardBoard extends Component
 }
 
     
+public function saveCard($assignedUsers, $type_users_selected)
+{
+    // Assign the values to the component's properties
+    $this->assignedUsers = $assignedUsers;
+    $this->type_users_selected = $type_users_selected;
+
+    // Validation logic here...
+
+    // Create the card
+  
+
+    // Close the modal and reset fields
+    $this->dispatchBrowserEvent('hide-add-card-modal');
+    $this->reset(['newCardName', 'assignedUsers', 'type_users_selected']);
+
+    // Emit events for UI updates
+}
     
 public function openAddCardModal($columnIndex = null, $dossierId = null)
 {

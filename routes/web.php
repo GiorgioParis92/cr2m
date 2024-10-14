@@ -23,6 +23,7 @@ use App\Http\Controllers\RdvController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\EtapesController;
 use App\Http\Controllers\Messagerie;
+use App\Http\Controllers\DefaultPermissionController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Livewire\Chat;
@@ -158,6 +159,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('delete_file', [FileUploadService::class, 'deleteImage'])->name('delete_file');
     Route::get('etapes-controller', [EtapesController::class, 'show'])->name('etapes-controller');
     Route::get('edit-etape/{id}', [EtapesController::class, 'edit'])->name('edit-etape');
+
+    Route::resource('permissions', DefaultPermissionController::class)->middleware('auth');
 
 
     // routes/web.php
