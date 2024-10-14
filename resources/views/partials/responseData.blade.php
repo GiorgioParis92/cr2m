@@ -21,8 +21,7 @@
             $value = str_replace(',', '', strtolower($value));
             $value = str_replace('-', '', strtolower($value));
 
-            dump($value);
-            dump($concat);
+  
 
             return $concat == $value;
         }
