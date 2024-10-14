@@ -73,7 +73,7 @@
                             <h6 class="mb-0">Statut ANAH</h6>
                         </div>
                         <div class="card-body row">
-                            {{-- @livewire('response-data', ['dossierId' => $dossier->id]) --}}
+                            @livewire('response-data', ['dossierId' => $dossier->id])
                         </div>
                         @endif
                     </div>
