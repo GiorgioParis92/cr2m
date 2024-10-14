@@ -73,7 +73,7 @@
                             <h6 class="mb-0">Statut ANAH</h6>
                         </div>
                         <div class="card-body row">
-                            @livewire('response-data', ['dossierId' => $dossier->id])
+                            {{-- @livewire('response-data', ['dossierId' => $dossier->id]) --}}
                         </div>
                         @endif
                     </div>
@@ -424,8 +424,7 @@
     margin-right: 1%;
     padding: 10px;
     flex-shrink: 0;
-    min-height: 40vh;
-    max-height: 40vh;
+    max-height: 280px;
     overflow-x: hidden;
     overflow-y: scroll;
     }
