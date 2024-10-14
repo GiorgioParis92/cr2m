@@ -13,6 +13,7 @@ use App\Http\Controllers\Api\YouSignStatus;
 use App\Http\Controllers\Api\VRP;
 use App\Http\Controllers\Api\Scrapping;
 use App\Http\Controllers\Api\ScrappingAll;
+use App\Http\Controllers\Api\LoginController;
 
 
 /*
@@ -25,6 +26,7 @@ use App\Http\Controllers\Api\ScrappingAll;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+Route::post('/login', [LoginController::class, 'login']);
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
