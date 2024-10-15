@@ -3,7 +3,7 @@
 @section('content')
     <div class="container">
         <h1>Permissions</h1>
-        <table class="datatable table table-bordered responsive-table table-responsive dataTable no-footer"
+        <table class=" table table-bordered responsive-table table-responsive  no-footer"
             style="max-width: 100%">
             @csrf
             @php $client_array=[0=>'Ad.',1=>'Mar',3=>"Ins."] @endphp
