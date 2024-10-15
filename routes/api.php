@@ -22,6 +22,12 @@ use App\Http\Controllers\Api\FormController;
 use App\Http\Controllers\Api\FormsConfigController;
 // routes/api.php
 use App\Http\Controllers\Api\FormsDataController;
+use App\Http\Controllers\Api\RdvControllerPhone;
+use App\Http\Controllers\Api\RdvStatusController;
+use App\Http\Controllers\Api\RdvTypeController;
+use App\Http\Controllers\Api\UpdatePermission;
+
+
 
 
 
@@ -135,4 +141,26 @@ Route::get('/forms_data/{id}', [FormsDataController::class, 'show']);
 Route::post('/forms_data', [FormsDataController::class, 'store']);
 Route::put('/forms_data/{id}', [FormsDataController::class, 'update']);
 Route::delete('/forms_data/{id}', [FormsDataController::class, 'destroy']);
+
+Route::get('/rdv', [RdvControllerPhone::class, 'index']);
+Route::get('/rdv/{id}', [RdvControllerPhone::class, 'show']);
+Route::post('/rdv', [RdvControllerPhone::class, 'store']);
+Route::put('/rdv/{id}', [RdvControllerPhone::class, 'update']);
+Route::delete('/rdv/{id}', [RdvControllerPhone::class, 'destroy']);
+
+
+Route::get('/rdv_status', [RdvStatusController::class, 'index']);
+Route::get('/rdv_status/{id}', [RdvStatusController::class, 'show']);
+Route::post('/rdv_status', [RdvStatusController::class, 'store']);
+Route::put('/rdv_status/{id}', [RdvStatusController::class, 'update']);
+Route::delete('/rdv_status/{id}', [RdvStatusController::class, 'destroy']);
+
+Route::get('/rdv_type', [RdvTypeController::class, 'index']);
+Route::get('/rdv_type/{id}', [RdvTypeController::class, 'show']);
+Route::post('/rdv_type', [RdvTypeController::class, 'store']);
+Route::put('/rdv_type/{id}', [RdvTypeController::class, 'update']);
+Route::delete('/rdv_type/{id}', [RdvTypeController::class, 'destroy']);
+
+Route::post('/update_permission', [UpdatePermission::class, 'index']);
+
 });

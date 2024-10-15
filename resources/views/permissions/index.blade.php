@@ -3,89 +3,90 @@
 @section('content')
     <div class="container">
         <h1>Permissions</h1>
-        @dump($permissions)
-        <table class="table table-bordered">
-            @php $client_array=[0=>'Admin',1=>'Mar',3=>"Apporteur"] @endphp
-
-            <tr>
-                <th>Type d'utilisateur</th>
-                @foreach ($etapes as $etape)
-                    <th colspan="{{count($client_array)}}">{{ $etape->etape_desc }}</th>
-                @endforeach
-            </tr>
-            <tr>
-                <td>Type de client</td>
-
-                @foreach ($etapes as $etape)
-                    @foreach ($client_array as $key=>$client)
-                        <th>{{ $client }}</th>
-                    @endforeach
-                @endforeach
-            </tr>
-            @foreach ($user_types as $type)
-                @if ($type->id > 1)
-                    <tr>
-                        <td>{{ $type->type_desc }}</td>
-                        @foreach ($etapes as $etape)
-                            <td>
-
-                              
-                            </td>
-                        @endforeach
-                    </tr>
-                @endif
-            @endforeach
-
-        </table>
-
-
-        <form action="{{ route('permissions.index') }}" method="GET" class="form-inline mb-3">
-            <input type="text" name="permission_name" class="form-control mr-2" placeholder="Permission Name"
-                value="{{ request('permission_name') }}">
-            <input type="number" name="type_id" class="form-control mr-2" placeholder="Type ID"
-                value="{{ request('type_id') }}">
-            <input type="number" name="type_client" class="form-control mr-2" placeholder="Type Client"
-                value="{{ request('type_client') }}">
-            <button type="submit" class="btn btn-primary">Filter</button>
-        </form>
-
-        <a href="{{ route('permissions.create') }}" class="btn btn-success mb-3">Create Permission</a>
-
-        @if ($message = Session::get('success'))
-            <div class="alert alert-success">
-                {{ $message }}
-            </div>
-        @endif
-
-        <table class="table table-bordered">
-            <tr>
-                <th>ID</th>
-                <th>Permission Name</th>
-                <th>Type ID</th>
-                <th>Type Client</th>
-                <th>Is Active</th>
-                <th>Actions</th>
-            </tr>
-            @foreach ($permissions as $permission)
+        <table class="datatable table table-bordered responsive-table table-responsive dataTable no-footer"
+            style="max-width: 100%">
+            @csrf
+            @php $client_array=[0=>'Ad.',1=>'Mar',3=>"Ins."] @endphp
+            <thead>
                 <tr>
-                    <td>{{ $permission->id }}</td>
-                    <td>{{ $permission->permission_name }}</td>
-                    <td>{{ $permission->userType->type_desc ?? '' }}</td>
-                    <td>{{ $permission->clientType->type_desc }}</td>
-                    <td>{{ $permission->is_active ? 'Yes' : 'No' }}</td>
-                    <td>
-                        <a href="{{ route('permissions.show', $permission->id) }}" class="btn btn-info btn-sm">Show</a>
-                        <a href="{{ route('permissions.edit', $permission->id) }}" class="btn btn-primary btn-sm">Edit</a>
-                        <form action="{{ route('permissions.destroy', $permission->id) }}" method="POST"
-                            style="display:inline-block;">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-danger btn-sm"
-                                onclick="return confirm('Are you sure you want to delete this permission?')">Delete</button>
-                        </form>
-                    </td>
+                    <th>Type d'utilisateur</th>
+                    @foreach ($etapes as $etape)
+                        <th style="text-align:center;max-width: 5%;" colspan="{{ count($client_array) }}">
+                            <div style="    text-wrap: wrap;">{{ $etape->etape_desc }}</div>
+                        </th>
+                    @endforeach
                 </tr>
-            @endforeach
+                <tr>
+                    <td>Type de client</td>
+
+                    @foreach ($etapes as $etape)
+                        @foreach ($client_array as $key => $client)
+                            <th>{{ $client }}</th>
+                        @endforeach
+                    @endforeach
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($user_types as $type)
+                    @if ($type->id > 1)
+                        <tr>
+                            <td>{{ $type->type_desc }}</td>
+                            @foreach ($etapes as $etape)
+                                @foreach ($client_array as $key => $client)
+                                    <td style="text-align:center">
+
+                                        @if (
+                                            (isset($permission_array[$etape->etape_name][$type->id][$key]) &&
+                                                $permission_array[$etape->etape_name][$type->id][$key] == 1) ||
+                                                !isset($permission_array[$etape->etape_name][$type->id][$key]))
+                                            <i data-new_value="0" onclick="update_permission(this, '{{ $etape->etape_name }}', '{{ $type->id }}', '{{ $key }}', $(this).attr('data-new_value'))" class="fa fa-circle-check text-success"></i>
+
+                                        @endif
+                                        @if (isset($permission_array[$etape->etape_name][$type->id][$key]) &&
+                                                $permission_array[$etape->etape_name][$type->id][$key] == 0)
+                                            <i data-new_value="1" onclick="update_permission(this, '{{ $etape->etape_name }}', '{{ $type->id }}', '{{ $key }}', $(this).attr('data-new_value'))" class="fa fa-circle-xmark text-danger"></i>
+
+                                        @endif
+                                    </td>
+                                @endforeach
+                            @endforeach
+                        </tr>
+                    @endif
+                @endforeach
+            </tbody>
         </table>
-    </div>
+
+
 @endsection
+
+    <script>
+    function update_permission(element, name, type_user, type_client, value) {
+        var token = '{{ auth()->user()->api_token }}';
+
+        $.ajax({
+            url: '/api/update_permission', // Adjust this URL to your actual API endpoint
+            type: 'POST',
+            data: {
+                name: name,
+                type_user: type_user,
+                type_client: type_client,
+                value: value
+            },
+            headers: {
+                "Authorization": "Bearer " + token
+            },
+            success: function(response) {
+                if ($(element).hasClass('text-danger')) {
+                    $(element).removeClass('text-danger fa-circle-xmark')
+                              .addClass('text-success fa-circle-check')
+                              .attr('data-new_value', '1');
+                } else if ($(element).hasClass('text-success')) {
+                    $(element).removeClass('text-success fa-circle-check')
+                              .addClass('text-danger fa-circle-xmark')
+                              .attr('data-new_value', '0');
+                }
+            }
+        });
+    }
+
+</script>

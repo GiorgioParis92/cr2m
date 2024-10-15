@@ -6,6 +6,8 @@ use Illuminate\Support\Facades\Http;
 use App\Models\Dossier;
 use App\Models\Client;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 class ScrappingAll extends Controller
 {
 

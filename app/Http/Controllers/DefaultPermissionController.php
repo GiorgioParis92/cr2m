@@ -35,7 +35,7 @@ class DefaultPermissionController extends Controller
             $permission_array[$permission->permission_name][$permission->type_id][$permission->type_client]=$permission->is_active;
         }
 
-        return view('permissions.index', compact('permissions','etapes','user_types'));
+        return view('permissions.index', compact('permissions','etapes','user_types','permission_array'));
     }
     
 
