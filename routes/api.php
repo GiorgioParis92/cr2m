@@ -2,7 +2,6 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\BeneficiaireController;
 use App\Http\Controllers\PDFController;
 use App\Http\Controllers\Api\RdvController;
 use App\Http\Controllers\Api\DossiersController;
@@ -14,6 +13,20 @@ use App\Http\Controllers\Api\VRP;
 use App\Http\Controllers\Api\Scrapping;
 use App\Http\Controllers\Api\ScrappingAll;
 use App\Http\Controllers\Api\LoginController;
+use App\Http\Controllers\Api\BeneficiaireController;
+use App\Http\Controllers\Api\DossiersDataController;
+use App\Http\Controllers\Api\Dossiers;
+use App\Http\Controllers\Api\EtapesController;
+use App\Http\Controllers\Api\FicheController;
+use App\Http\Controllers\Api\FormController;
+use App\Http\Controllers\Api\FormsConfigController;
+// routes/api.php
+use App\Http\Controllers\Api\FormsDataController;
+
+
+
+
+
 
 
 /*
@@ -71,7 +84,55 @@ Route::middleware('auth:api')->group(function () {
     Route::get('/dossiers', [DossiersController::class, 'index']);
     Route::post('/dossiers', [DossiersController::class, 'index']);
 
+    Route::get('/beneficiaires', [BeneficiaireController::class, 'index']);
+    Route::get('/beneficiaires/{id}', [BeneficiaireController::class, 'show']);
+    Route::post('/beneficiaires', [BeneficiaireController::class, 'store']);
+    Route::put('/beneficiaires/{id}', [BeneficiaireController::class, 'update']);
+    Route::delete('/beneficiaires/{id}', [BeneficiaireController::class, 'destroy']);
+
+    Route::get('/dossiers_data', [DossiersDataController::class, 'index']);
+    Route::get('/dossiers_data/{id}', [DossiersDataController::class, 'show']);
+    Route::post('/dossiers_data', [DossiersDataController::class, 'store']);
+    Route::put('/dossiers_data/{id}', [DossiersDataController::class, 'update']);
+    Route::delete('/dossiers_data/{id}', [DossiersDataController::class, 'destroy']);
 
 
-    // Add other RdvController routes here as needed
+    Route::get('/dossiers', [Dossiers::class, 'index']);
+    Route::get('/dossiers/{id}', [Dossiers::class, 'show']);
+    Route::post('/dossiers', [Dossiers::class, 'store']);
+    Route::put('/dossiers/{id}', [Dossiers::class, 'update']);
+    Route::delete('/dossiers/{id}', [Dossiers::class, 'destroy']);
+
+    Route::get('/etapes', [EtapesController::class, 'index']);
+    Route::get('/etapes/{id}', [EtapesController::class, 'show']);
+    Route::post('/etapes', [EtapesController::class, 'store']);
+    Route::put('/etapes/{id}', [EtapesController::class, 'update']);
+    Route::delete('/etapes/{id}', [EtapesController::class, 'destroy']);
+
+
+    Route::get('/fiches', [FicheController::class, 'index']);
+Route::get('/fiches/{id}', [FicheController::class, 'show']);
+Route::post('/fiches', [FicheController::class, 'store']);
+Route::put('/fiches/{id}', [FicheController::class, 'update']);
+Route::delete('/fiches/{id}', [FicheController::class, 'destroy']);
+
+Route::get('/forms', [FormController::class, 'index']);
+Route::get('/forms/{id}', [FormController::class, 'show']);
+Route::post('/forms', [FormController::class, 'store']);
+Route::put('/forms/{id}', [FormController::class, 'update']);
+Route::delete('/forms/{id}', [FormController::class, 'destroy']);
+
+
+
+Route::get('/forms_config', [FormsConfigController::class, 'index']);
+Route::get('/forms_config/{id}', [FormsConfigController::class, 'show']);
+Route::post('/forms_config', [FormsConfigController::class, 'store']);
+Route::put('/forms_config/{id}', [FormsConfigController::class, 'update']);
+Route::delete('/forms_config/{id}', [FormsConfigController::class, 'destroy']);
+
+Route::get('/forms_data', [FormsDataController::class, 'index']);
+Route::get('/forms_data/{id}', [FormsDataController::class, 'show']);
+Route::post('/forms_data', [FormsDataController::class, 'store']);
+Route::put('/forms_data/{id}', [FormsDataController::class, 'update']);
+Route::delete('/forms_data/{id}', [FormsDataController::class, 'destroy']);
 });

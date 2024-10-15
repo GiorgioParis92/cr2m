@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\UserType;
 use App\Models\Client;
+use App\Models\Etape;
 use App\Models\ClientType;
 
 class DefaultPermissionController extends Controller
@@ -14,6 +15,8 @@ class DefaultPermissionController extends Controller
     public function index(Request $request)
     {
         $permissions = DefaultPermission::with(['userType', 'clientType']);
+        $etapes = Etape::all();
+        $user_types = UserType::all();
   
         // Filter based on request parameters
         if ($request->filled('permission_name')) {
@@ -28,7 +31,11 @@ class DefaultPermissionController extends Controller
     
         $permissions = $permissions->orderBy('permission_name')->get();
 
-        return view('permissions.index', compact('permissions'));
+        foreach($permissions as $permission) {
+            $permission_array[$permission->permission_name][$permission->type_id][$permission->type_client]=$permission->is_active;
+        }
+
+        return view('permissions.index', compact('permissions','etapes','user_types'));
     }
     
 
