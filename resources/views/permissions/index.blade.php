@@ -39,13 +39,19 @@
                                             (isset($permission_array[$etape->etape_name][$type->id][$key]) &&
                                                 $permission_array[$etape->etape_name][$type->id][$key] == 1) ||
                                                 !isset($permission_array[$etape->etape_name][$type->id][$key]))
-                                            <i data-new_value="0" onclick="update_permission(this, '{{ $etape->etape_name }}', '{{ $type->id }}', '{{ $key }}', $(this).attr('data-new_value'))" class="fa fa-circle-check text-success"></i>
-
+<i data-name="{{ $etape->etape_name }}"
+    data-type_user="{{ $type->id }}"
+    data-type_client="{{ $key }}"
+    onclick="update_permission(this)"
+    class="fa fa-circle-check text-success"></i>
                                         @endif
                                         @if (isset($permission_array[$etape->etape_name][$type->id][$key]) &&
                                                 $permission_array[$etape->etape_name][$type->id][$key] == 0)
-                                            <i data-new_value="1" onclick="update_permission(this, '{{ $etape->etape_name }}', '{{ $type->id }}', '{{ $key }}', $(this).attr('data-new_value'))" class="fa fa-circle-xmark text-danger"></i>
-
+<i data-name="{{ $etape->etape_name }}"
+    data-type_user="{{ $type->id }}"
+    data-type_client="{{ $key }}"
+    onclick="update_permission(this)"
+    class="fa fa-circle-xmark text-danger"></i>
                                         @endif
                                     </td>
                                 @endforeach
@@ -58,9 +64,15 @@
 
 
 @endsection
+<script>
+    function update_permission(element) {
+        var name = $(element).data('name');
+        var type_user = $(element).data('type_user');
+        var type_client = $(element).data('type_client');
 
-    <script>
-    function update_permission(element, name, type_user, type_client, value) {
+        // Determine the new value based on the current class
+        var value = $(element).hasClass('text-success') ? '0' : '1';
+
         var token = '{{ auth()->user()->api_token }}';
 
         $.ajax({
@@ -76,17 +88,16 @@
                 "Authorization": "Bearer " + token
             },
             success: function(response) {
+                // Toggle classes
                 if ($(element).hasClass('text-danger')) {
                     $(element).removeClass('text-danger fa-circle-xmark')
-                              .addClass('text-success fa-circle-check')
-                              .attr('data-new_value', '1');
+                              .addClass('text-success fa-circle-check');
                 } else if ($(element).hasClass('text-success')) {
                     $(element).removeClass('text-success fa-circle-check')
-                              .addClass('text-danger fa-circle-xmark')
-                              .attr('data-new_value', '0');
+                              .addClass('text-danger fa-circle-xmark');
                 }
             }
         });
     }
-
 </script>
+
