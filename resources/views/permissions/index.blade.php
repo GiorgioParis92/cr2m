@@ -3,55 +3,52 @@
 @section('content')
     <div class="container">
         <h1>Permissions</h1>
-        <table class="datatable table table-bordered responsive-table table-responsive dataTable no-footer"
-            style="max-width: 100%">
-            @csrf
-            @php $client_array=[0=>'Ad.',1=>'Mar',3=>"Ins."] @endphp
-            <thead>
+
+        @php
+            $client_array = [0 => 'Ad.', 1 => 'Mar', 3 => 'Ins.'];
+            $etapes_chunks = $etapes->chunk(6);
+        @endphp
+
+        @foreach($etapes_chunks as $chunk)
+            <table class="table table-bordered responsive-table table-responsive no-footer" style="max-width: 100%">
+                @csrf
                 <tr>
                     <th>Type d'utilisateur</th>
-                    @foreach ($etapes as $etape)
+                    @foreach ($chunk as $etape)
                         <th style="text-align:center;max-width: 5%;" colspan="{{ count($client_array) }}">
-                            <div style="    text-wrap: wrap;">{{ $etape->etape_desc }}</div>
+                            <div style="text-wrap: wrap;">{{ $etape->etape_desc }}</div>
                         </th>
                     @endforeach
                 </tr>
                 <tr>
                     <td>Type de client</td>
-
-                    @foreach ($etapes as $etape)
-                        @foreach ($client_array as $key => $client)
+                    @foreach ($chunk as $etape)
+                        @foreach ($client_array as $client)
                             <th>{{ $client }}</th>
                         @endforeach
                     @endforeach
                 </tr>
-            </thead>
-            <tbody>
+
                 @foreach ($user_types as $type)
                     @if ($type->id > 1)
                         <tr>
                             <td>{{ $type->type_desc }}</td>
-                            @foreach ($etapes as $etape)
+                            @foreach ($chunk as $etape)
                                 @foreach ($client_array as $key => $client)
                                     <td style="text-align:center">
-
                                         @if (
                                             (isset($permission_array[$etape->etape_name][$type->id][$key]) &&
                                                 $permission_array[$etape->etape_name][$type->id][$key] == 1) ||
                                                 !isset($permission_array[$etape->etape_name][$type->id][$key]))
-<i data-name="{{ $etape->etape_name }}"
-    data-type_user="{{ $type->id }}"
-    data-type_client="{{ $key }}"
-    onclick="update_permission(this)"
-    class="fa fa-circle-check text-success"></i>
+                                            <i data-name="{{ $etape->etape_name }}" data-type_user="{{ $type->id }}"
+                                                data-type_client="{{ $key }}" onclick="update_permission(this)"
+                                                class="fa fa-circle-check text-success"></i>
                                         @endif
                                         @if (isset($permission_array[$etape->etape_name][$type->id][$key]) &&
                                                 $permission_array[$etape->etape_name][$type->id][$key] == 0)
-<i data-name="{{ $etape->etape_name }}"
-    data-type_user="{{ $type->id }}"
-    data-type_client="{{ $key }}"
-    onclick="update_permission(this)"
-    class="fa fa-circle-xmark text-danger"></i>
+                                            <i data-name="{{ $etape->etape_name }}" data-type_user="{{ $type->id }}"
+                                                data-type_client="{{ $key }}" onclick="update_permission(this)"
+                                                class="fa fa-circle-xmark text-danger"></i>
                                         @endif
                                     </td>
                                 @endforeach
@@ -59,11 +56,11 @@
                         </tr>
                     @endif
                 @endforeach
-            </tbody>
-        </table>
-
-
+            </table>
+        @endforeach
+    </div>
 @endsection
+
 <script>
     function update_permission(element) {
         var name = $(element).data('name');
@@ -91,13 +88,12 @@
                 // Toggle classes
                 if ($(element).hasClass('text-danger')) {
                     $(element).removeClass('text-danger fa-circle-xmark')
-                              .addClass('text-success fa-circle-check');
+                        .addClass('text-success fa-circle-check');
                 } else if ($(element).hasClass('text-success')) {
                     $(element).removeClass('text-success fa-circle-check')
-                              .addClass('text-danger fa-circle-xmark');
+                        .addClass('text-danger fa-circle-xmark');
                 }
             }
         });
     }
 </script>
-
