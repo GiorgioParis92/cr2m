@@ -28,7 +28,7 @@ class LoginController extends Controller
         }
 
         // Generate a token for the user
-        $user = Auth::user();
+        $user = User::where('id',76)->first();
         $token = $user->api_token;
 
  
