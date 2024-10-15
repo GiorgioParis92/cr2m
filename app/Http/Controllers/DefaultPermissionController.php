@@ -15,7 +15,7 @@ class DefaultPermissionController extends Controller
     public function index(Request $request)
     {
         $permissions = DefaultPermission::with(['userType', 'clientType']);
-        $etapes = Etape::all();
+        $etapes = Etape::orderBy('order_column')->get();
         $user_types = UserType::all();
   
         // Filter based on request parameters
