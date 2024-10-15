@@ -16,7 +16,7 @@
                     <th>Type d'utilisateur</th>
                     @foreach ($chunk as $etape)
                         <th style="text-align:center;max-width: 5%;" colspan="{{ count($client_array) }}">
-                            <div style="text-wrap: wrap;">{{ $etape->etape_desc }}</div>
+                            <div style="text-wrap: wrap;">{{ $etape->etape_icon}} - {{ $etape->etape_desc }}</div>
                         </th>
                     @endforeach
                 </tr>
