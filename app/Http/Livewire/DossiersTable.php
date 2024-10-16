@@ -168,9 +168,9 @@ class DossiersTable extends Component
             $dossiersQuery->where('mar', $this->accompagnateur);
         }
 
-        if ($this->installateur) {
-            $dossiersQuery->where('installateur', $this->installateur);
-        }
+        // if ($this->installateur) {
+        //     $dossiersQuery->where('installateur', $this->installateur);
+        // }
 
         if ($this->mandataire) {
             $dossiersQuery->where('mandataire_financier', $this->mandataire);
