@@ -85,11 +85,10 @@ Route::post('/scrapping_all', [ScrappingAll::class, 'index']);
 
 Route::get('/stats', [StatsController::class, 'index']);
 Route::post('/stats', [StatsController::class, 'index']);
-
 Route::middleware('auth:api')->group(function () {
 
-    Route::get('/dossiers', [DossiersController::class, 'index']);
-    Route::post('/dossiers', [DossiersController::class, 'index']);
+    Route::get('/dossiers-rdv', [DossiersController::class, 'index']);
+    Route::post('/dossiers-rdv', [DossiersController::class, 'index']);
 
     Route::get('/beneficiaires', [BeneficiaireController::class, 'index']);
     Route::get('/beneficiaires/{id}', [BeneficiaireController::class, 'show']);

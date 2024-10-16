@@ -294,7 +294,7 @@
 
                 console.log(data);
                 $.ajax({
-                    url: 'api/dossiers', // Make sure to update the route as per your configuration
+                    url: 'api/dossiers-rdv', // Make sure to update the route as per your configuration
                     method: 'POST',
                     headers: {
                         'Authorization': 'Bearer ' + apiToken
