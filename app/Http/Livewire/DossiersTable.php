@@ -168,9 +168,9 @@ class DossiersTable extends Component
             $dossiersQuery->where('mar', $this->accompagnateur);
         }
 
-        // if ($this->installateur) {
-        //     $dossiersQuery->where('installateur', $this->installateur);
-        // }
+        if ($this->installateur) {
+            $dossiersQuery->where('installateur', $this->installateur);
+        }
 
         if ($this->mandataire) {
             $dossiersQuery->where('mandataire_financier', $this->mandataire);
@@ -184,7 +184,9 @@ class DossiersTable extends Component
 
         // Execute the query and process results
         $dossiers = $dossiersQuery->get();
-
+        if(auth()->user()->client_id==46) {
+            dd($dossiers);
+        }
         // Map the dossiers data
         $dossiers = $dossiers->map(function ($dossier) {
             return [
