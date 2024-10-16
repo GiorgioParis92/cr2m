@@ -291,7 +291,7 @@ span.badge.badge-outline-danger {
             enableRowGroup: true,
             autoHeight: true,
             valueGetter: function(params) {
-                return params.data.statut_anah ? params.data.statut_anah : '';
+                return params.data.statut_anah ? params.data.statut_anah.replace('Dossier : ', '') : '';
             }
         },
         @endif
