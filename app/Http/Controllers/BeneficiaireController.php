@@ -53,6 +53,7 @@ class BeneficiaireController extends Controller
             'lat' => '',
             'lng' => '',
         ]);
+        dd($validated);
         $validated['lat'] = 0;
         $validated['lng'] = 0;
         $new_lat = 0;
