@@ -56,15 +56,16 @@
                     </a>
                     <ul class="dropdown-menu">
                         <li>
-                            <a class="dropdown-item" href="{{ route('dossiers.index',['etape'=>'2,15']) }}">
-                              <i class="fa-solid fa-users-line"></i>   Dossiers à planifier en RDV
-                            </a>
-                        </li>
-                        <li>
                             <a class="dropdown-item" href="{{ route('dossiers.index',['etape'=>'1']) }}">
                               <i class="fa-solid fa-users-line"></i>   Dossiers à vérifier (pré-plannif)
                             </a>
                         </li>
+                        <li>
+                            <a class="dropdown-item" href="{{ route('dossiers.index',['etape'=>'2,15']) }}">
+                              <i class="fa-solid fa-users-line"></i>   Dossiers à planifier en RDV
+                            </a>
+                        </li>
+
                         <li>
                             <a class="dropdown-item" href="{{ route('dossiers.index',['etape'=>'8']) }}">
                               <i class="fa-solid fa-users-line"></i>   Dossiers en phase d'audit
