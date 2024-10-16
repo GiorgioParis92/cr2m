@@ -69,9 +69,7 @@ class DossiersTable extends Component
             $this->loadDossiers();
         }
 
-        if(auth()->user()->client_id==46) {
-            dd($this->dossiers);
-        }
+
     }
 
     public function updated($propertyName)
@@ -95,7 +93,9 @@ class DossiersTable extends Component
 
         $user = auth()->user();
         $client = Client::find($user->client_id);
-
+        if(auth()->user()->client_id==46) {
+            dd($client);
+        }
         $dossiersQuery = Dossier::with([
             'beneficiaire',
             'fiche',
