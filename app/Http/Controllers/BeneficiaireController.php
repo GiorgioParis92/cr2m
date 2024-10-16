@@ -53,7 +53,6 @@ class BeneficiaireController extends Controller
             'lat' => '',
             'lng' => '',
         ]);
-        dd($validated);
         $validated['lat'] = 0;
         $validated['lng'] = 0;
         $new_lat = 0;
@@ -142,7 +141,7 @@ class BeneficiaireController extends Controller
     
         // Create the beneficiaire
         $beneficiaire = Beneficiaire::create($validated);
-   
+   dd($beneficiaire);
         // Create the dossier if fiche_id is provided
         if ($request->has('fiche_id')) {
          
