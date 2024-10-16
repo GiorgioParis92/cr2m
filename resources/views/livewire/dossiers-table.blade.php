@@ -19,7 +19,7 @@
 
         <div class="mb-2 mb-sm-0 col-12 col-md-3">
             <label class="mr-sm-2">Étape</label>
-            <select class="no_select2 form-control" wire:model="etape" id="etape">
+            <select  class="no_select2 form-control" wire:model="etape" id="etape">
                 <option value="">Filtrer par étape</option>
                 @foreach ($etapes as $etape)
                     <option value="{{ $etape->id }}">{{ $etape->etape_icon }} - {{ $etape->etape_desc }}
@@ -365,6 +365,8 @@ span.badge.badge-outline-danger {
 
         // Define gridOptions in the global scope
         gridOptions = {
+            rowData: [], // Start with empty data
+
             enableAdvancedFilter: false,
             columnDefs: columnDefs,
             rowData: @json($dossiers),
@@ -388,7 +390,7 @@ span.badge.badge-outline-danger {
             overlayLoadingTemplate: '<div class="ag-overlay-loading-center" style="padding: 10px;"><i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><br/>Chargement des données...</div>',
 
             // Custom no rows overlay
-            overlayNoRowsTemplate: '<div class="ag-overlay-no-rows-center" style="padding: 10px;">Aucune donnée disponible.</div>',
+            overlayNoRowsTemplate: '<div class="ag-overlay-no-rows-center" style="padding: 10px;">Appliquez au moins 1 filtre</div>',
 
             groupDisplayType: 'groupRows', // Display groups as rows
             autoGroupColumnDef: {

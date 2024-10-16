@@ -6,22 +6,18 @@ use Livewire\Component;
 use App\Models\Dossier;
 use App\Models\Client;
 use App\Models\ClientLinks;
-use App\Models\Beneficiaire;
 use App\Models\Fiche;
-
 use App\Models\Etape;
 use App\Models\Status;
-use App\Models\RdvStatus;
-use App\Models\User;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
+
 class DossiersTable extends Component
 {
     public $time;
     public $search = '';
     public $dossiers = [];
 
-    // Add public properties for filters
+    // Public properties for filters
     public $clientName = '';
     public $precarite = '';
     public $etape = '';
@@ -31,24 +27,47 @@ class DossiersTable extends Component
     public $statut = '';
     public $dpt = '';
 
+    // Pagination properties
+    public $perPage = 50;
+    public $page = 1;
+
+    // Synchronize properties with query string
+    protected $queryString = [
+        'clientName' => ['except' => ''],
+        'precarite' => ['except' => ''],
+        'etape' => ['except' => ''],
+        'mandataire' => ['except' => ''],
+        'installateur' => ['except' => ''],
+        'accompagnateur' => ['except' => ''],
+        'statut' => ['except' => ''],
+        'dpt' => ['except' => ''],
+    ];
+
     public function mount()
     {
         $this->time = now()->format('H:i:s');
-        $this->loadDossiers();
 
-        // Load other data for select options
-        $this->etapes = Etape::orderBy('order_column')->get();
-        $this->mars = Client::where('type_client', 1)->get();
-        $this->financiers = Client::where('type_client', 2)->get();
-        $this->installateurs = Client::where('type_client', 3)->get();
+        // Load data for select options
+        $this->etapes = Etape::orderBy('order_column')->get(['id', 'etape_name', 'etape_desc', 'etape_icon', 'etape_style']);
+        $this->mars = Client::where('type_client', 1)->get(['id', 'client_title', 'main_logo']);
+        $this->financiers = Client::where('type_client', 2)->get(['id', 'client_title', 'main_logo']);
+        $this->installateurs = Client::where('type_client', 3)->get(['id', 'client_title', 'main_logo']);
         $this->fiches = Fiche::all();
 
         $this->departments = DB::table('departement')->get()->map(function ($department) {
             return (array) $department;
         })->toArray();
+
         $this->status = Status::select(DB::raw('MIN(id) as id'), 'status_desc')
             ->groupBy('status_desc')
             ->get();
+
+        // Check if any filters are set via query string
+        $filtersApplied = $this->clientName || $this->precarite || $this->etape || $this->mandataire || $this->installateur || $this->accompagnateur || $this->statut || $this->dpt || (auth()->user()->client_id > 0);
+
+        if ($filtersApplied) {
+            $this->loadDossiers();
+        }
     }
 
     public function updated($propertyName)
@@ -57,14 +76,22 @@ class DossiersTable extends Component
         $this->loadDossiers();
 
         $this->emit('dossierDataUpdated', $this->dossiers);
-
     }
 
     public function loadDossiers()
     {
+        // Check if any filters are applied or if the user is a client
+        $filtersApplied = $this->clientName || $this->precarite || ($this->etape) || $this->mandataire || $this->installateur || $this->accompagnateur || $this->statut || $this->dpt || (auth()->user()->client_id > 0);
+
+        if (!$filtersApplied) {
+            // No filters applied and user is not a client, don't query the database
+            $this->dossiers = [];
+            return;
+        }
+
         $user = auth()->user();
         $client = Client::find($user->client_id);
-    
+
         $dossiersQuery = Dossier::with([
             'beneficiaire',
             'fiche',
@@ -78,9 +105,10 @@ class DossiersTable extends Component
                  ->where('dossiers_data.meta_key', 'docs');
         })
         ->select('dossiers.*', 'dossiers_data.meta_value');
+
         // Apply client-specific filtering
         $userClientId = auth()->user()->client_id;
-        if ($userClientId > 0) {
+        if ($userClientId > 0 && $client) {
             switch ($client->type_client) {
                 case 1:
                     $dossiersQuery->where('client_id', $userClientId);
@@ -101,15 +129,13 @@ class DossiersTable extends Component
             }
         }
 
-  
-
+        // Apply other filters
         if ($this->clientName) {
-
             $dossiersQuery->whereHas('beneficiaire', function ($query) {
                 $query->where('nom', 'like', '%' . $this->clientName . '%')
-                ->orWhere('prenom', 'like', '%' . $this->clientName . '%')
-                ->orWhere('adresse', 'like', '%' . $this->clientName . '%')
-                ->orWhere('telephone', 'like', '%' . $this->clientName . '%');
+                    ->orWhere('prenom', 'like', '%' . $this->clientName . '%')
+                    ->orWhere('adresse', 'like', '%' . $this->clientName . '%')
+                    ->orWhere('telephone', 'like', '%' . $this->clientName . '%');
             });
         }
 
@@ -118,73 +144,44 @@ class DossiersTable extends Component
                 $query->where('menage_mpr', $this->precarite);
             });
         }
+
         if ($this->statut) {
             $dossiersQuery->whereHas('status', function ($query) {
                 $query->where('status_desc', $this->statut);
             });
         }
+
         if ($this->etape) {
-
-            $dossiersQuery->whereHas('etape', function ($query) {
-                $query->where('etape_number', $this->etape);
+            $etapeArray = explode(',', $this->etape);
+        
+            $dossiersQuery->whereHas('etape', function ($query) use ($etapeArray) {
+                $query->whereIn('etape_number', $etapeArray);
             });
         }
+
         if ($this->accompagnateur) {
-
             $dossiersQuery->where('mar', $this->accompagnateur);
-            ;
         }
+
         if ($this->installateur) {
-
             $dossiersQuery->where('installateur', $this->installateur);
-            ;
         }
+
         if ($this->mandataire) {
-
             $dossiersQuery->where('mandataire_financier', $this->mandataire);
-            ;
         }
+
         if ($this->dpt) {
-
             $dossiersQuery->whereHas('beneficiaire', function ($query) {
-                $query->where('cp', 'like', '' . $this->dpt . '%');
+                $query->where('cp', 'like', $this->dpt . '%');
             });
         }
 
-
-
-        if (auth()->user()->client_id > 0 && ($client->type_client == 1)) {
-            $dossiersQuery->where('client_id', auth()->user()->client_id);
-        }
-        if (auth()->user()->client_id > 0 && ($client->type_client == 2)) {
-            $dossiersQuery->where('mandataire_financier', auth()->user()->client_id);
-        }
-        if (auth()->user()->client_id > 0 && ($client->type_client == 3)) {
-            $dossiersQuery->where('installateur', auth()->user()->client_id);
-        }
-
-        if (auth()->user()->client_id > 0 && ($client->type_client == 4)) {
-            $has_child = ClientLinks::where('client_parent', $client->id)->pluck('client_id')->toArray();
-
-            $dossiersQuery->where(function ($query) use ($has_child) {
-                $query->where('installateur', auth()->user()->client_id)
-                    ->orWhereIn('installateur', $has_child);
-            });
-        }
-        // $dossiersQuery->limit(100);
+        // Execute the query and process results
         $dossiers = $dossiersQuery->get();
 
-        
-        $dossierIds = $dossiers->pluck('id')->toArray();
-        $etapeNumbers = $dossiers->pluck('etape_number', 'id')->toArray();
-    
-        // Fetch document statuses for all dossiers
-        // $documentStatuses = $this->getDocumentStatusesForDossiers($dossierIds, $etapeNumbers);
-    
-        // Map the document statuses back to the dossiers
-        $dossiers = $dossiers->map(function ($dossier)  {
-            $dossierId = $dossier->id;
-    
+        // Map the dossiers data
+        $dossiers = $dossiers->map(function ($dossier) {
             return [
                 'id' => $dossier->id,
                 'docs' => ($dossier->meta_value),
@@ -217,21 +214,12 @@ class DossiersTable extends Component
                 'statut_style' => $dossier->status->status_style ?? '',
                 'rdv' => $dossier->get_rdv ?? [],
                 'last_rdv' => optional($dossier->get_rdv->last())->date_rdv ?? null,
-                // 'docs' => $documentStatuses[$dossierId] ?? [
-                //     'missingDocs' => ['count' => 0, 'docs' => []],
-                //     'waitingForSignatureDocs' => ['count' => 0, 'docs' => []],
-                //     'signedDocs' => ['count' => 0, 'docs' => []],
-                // ],
             ];
         });
 
         // Update the component's dossier data
         $this->dossiers = $dossiers->toArray();
-       
-
     }
- 
-    
 
     public function render()
     {
