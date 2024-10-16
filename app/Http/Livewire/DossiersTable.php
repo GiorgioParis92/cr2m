@@ -68,6 +68,10 @@ class DossiersTable extends Component
         if ($filtersApplied) {
             $this->loadDossiers();
         }
+
+        if(auth()->user()->client_id==46) {
+            dd($this->dossiers);
+        }
     }
 
     public function updated($propertyName)
@@ -184,9 +188,7 @@ class DossiersTable extends Component
 
         // Execute the query and process results
         $dossiers = $dossiersQuery->get();
-        if(auth()->user()->client_id==46) {
-            dd($dossiers);
-        }
+
         // Map the dossiers data
         $dossiers = $dossiers->map(function ($dossier) {
             return [
