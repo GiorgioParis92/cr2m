@@ -207,7 +207,7 @@
         style="margin-top:20px;margin-left:350px;border:1px solid #ccc;border-radius:5px;width:280px;padding:12px">
         <p>
             <b>{{ $dossier->beneficiaire->nom }} {{ $dossier->beneficiaire->prenom }}</b><br />
-            {{ $dossier->beneficiaire->adresse }} <br />
+            {{ $dossier->beneficiaire->numero_voie }} {{ $dossier->beneficiaire->adresse }} <br />
             {{ $dossier->beneficiaire->cp }} {{ $dossier->beneficiaire->ville }}<br />
             Tél. : {{ $dossier->beneficiaire->telephone }} @if (!empty($dossier->beneficiaire->telephone_2))
                 / {{ $dossier->beneficiaire->telephone_2 }}
