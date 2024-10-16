@@ -46,7 +46,11 @@ class DossiersTable extends Component
     public function mount()
     {
         $this->time = now()->format('H:i:s');
-
+        $user = auth()->user();
+        $client = Client::find($user->client_id);
+        if(auth()->user()->client_id==46) {
+            dd($client);
+        }
         // Load data for select options
         $this->etapes = Etape::orderBy('order_column')->get(['id', 'etape_name', 'etape_desc', 'etape_icon', 'etape_style']);
         $this->mars = Client::where('type_client', 1)->get(['id', 'client_title', 'main_logo']);
@@ -93,9 +97,7 @@ class DossiersTable extends Component
 
         $user = auth()->user();
         $client = Client::find($user->client_id);
-        if(auth()->user()->client_id==46) {
-            dd($client);
-        }
+    
         $dossiersQuery = Dossier::with([
             'beneficiaire',
             'fiche',
