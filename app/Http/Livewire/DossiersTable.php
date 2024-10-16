@@ -99,6 +99,7 @@ class DossiersTable extends Component
             'status',
             'mar',
             'get_rdv',
+          
         ])
         ->leftJoin('dossiers_data', function ($join) {
             $join->on('dossiers.id', '=', 'dossiers_data.dossier_id')
@@ -135,6 +136,7 @@ class DossiersTable extends Component
                 $query->where('nom', 'like', '%' . $this->clientName . '%')
                     ->orWhere('prenom', 'like', '%' . $this->clientName . '%')
                     ->orWhere('adresse', 'like', '%' . $this->clientName . '%')
+                    ->orWhere('reference_unique', 'like', '%' . $this->clientName . '%')
                     ->orWhere('telephone', 'like', '%' . $this->clientName . '%');
             });
         }
@@ -217,11 +219,13 @@ class DossiersTable extends Component
                 'statut_style' => $dossier->status->status_style ?? '',
                 'rdv' => $dossier->get_rdv ?? [],
                 'last_rdv' => optional($dossier->get_rdv->last())->date_rdv ?? null,
+                'statut_anah' => $dossier->dossiersDataByMetaKey('Statut du dossier')->pluck('meta_value')->first() ?? '',
             ];
         });
 
         // Update the component's dossier data
         $this->dossiers = $dossiers->toArray();
+
     }
 
     public function render()

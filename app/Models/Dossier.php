@@ -88,4 +88,10 @@ class Dossier extends Model
 {
     return $this->hasMany(DossiersData::class, 'dossier_id');
 }
+
+public function dossiersDataByMetaKey($metaKey)
+{
+    return $this->hasMany(DossiersData::class, 'dossier_id')
+                ->where('meta_key', $metaKey);
+}
 }

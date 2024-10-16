@@ -282,6 +282,19 @@ span.badge.badge-outline-danger {
                 cellRenderer: render_cell_status,
 
             },
+            @if(auth()->user()->client_id==0)
+        {
+            field: "statut_anah",
+            headerName: "Statut Anah",
+            sortable: true,
+            filter: 'agSetColumnFilter',
+            enableRowGroup: true,
+            autoHeight: true,
+            valueGetter: function(params) {
+                return params.data.statut_anah ? params.data.statut_anah : '';
+            }
+        },
+        @endif
             {
                 field: "accompagnateur",
                 headerName: "Accompagnateur",
@@ -360,6 +373,7 @@ span.badge.badge-outline-danger {
                 },
                 cellRenderer: render_cell_docs, 
             },
+
 
         ];
 
