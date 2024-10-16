@@ -26,6 +26,7 @@ use App\Http\Controllers\Api\RdvControllerPhone;
 use App\Http\Controllers\Api\RdvStatusController;
 use App\Http\Controllers\Api\RdvTypeController;
 use App\Http\Controllers\Api\UpdatePermission;
+use App\Http\Controllers\Api\ClientController;
 
 
 
@@ -160,6 +161,13 @@ Route::get('/rdv_type/{id}', [RdvTypeController::class, 'show']);
 Route::post('/rdv_type', [RdvTypeController::class, 'store']);
 Route::put('/rdv_type/{id}', [RdvTypeController::class, 'update']);
 Route::delete('/rdv_type/{id}', [RdvTypeController::class, 'destroy']);
+
+
+Route::get('/clients', [ClientController::class, 'index']);
+Route::get('/clients/{id}', [ClientController::class, 'show']);
+Route::post('/clients', [ClientController::class, 'store']);
+Route::put('/clients/{id}', [ClientController::class, 'update']);
+Route::delete('/clients/{id}', [ClientController::class, 'destroy']);
 
 Route::post('/update_permission', [UpdatePermission::class, 'index']);
 
