@@ -423,7 +423,8 @@ span.badge.badge-outline-danger {
                 isGridInitialized = true;
                 console.log('Grid API initialized:', params);
                 var totalRows = params.api.getDisplayedRowCount();
-
+                const allColumnIds = params.columnApi.getAllColumns().map(col => col.getColId());
+                params.columnApi.autoSizeColumns(allColumnIds);
                 $('#count_total').html(totalRows);
             },
             onFirstDataRendered: function(params) {
@@ -434,6 +435,8 @@ span.badge.badge-outline-danger {
             },
             onGridSizeChanged: function(params) {
                 params.api.sizeColumnsToFit();
+                const allColumnIds = params.columnApi.getAllColumns().map(col => col.getColId());
+                params.columnApi.autoSizeColumns(allColumnIds);
             },
             onModelUpdated: function(params) {
                 // Get the number of displayed rows after any model update (filtering, sorting, etc.)
@@ -513,7 +516,10 @@ span.badge.badge-outline-danger {
             }
         });
     });
-
+    function onGridSizeChanged(params) {
+        const allColumnIds = params.columnApi.getAllColumns().map(col => col.getColId());
+        params.columnApi.autoSizeColumns(allColumnIds);
+    }
     //     document.addEventListener('livewire:update', function() {
     //     if (isGridInitialized && gridApi) {
     //         console.log('gridApi methods:', Object.keys(gridApi));
