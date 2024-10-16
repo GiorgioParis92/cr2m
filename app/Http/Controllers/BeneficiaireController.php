@@ -34,7 +34,7 @@ class BeneficiaireController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $validated = $request->validate([
-            'reference_unique' => 'required|max:7',
+            'reference_unique' => '',
             'nom' => 'required|max:200',
             'prenom' => 'required|max:200',
             'numero_voie' => 'required|max:250',
@@ -43,7 +43,7 @@ class BeneficiaireController extends Controller
             'ville' => 'required|max:200',
             'telephone' => 'required|max:20',
             'telephone_2' => 'nullable|max:20',
-            'email' => 'required|email|max:200',
+            'email' => '',
             'menage_mpr' => '',
             'chauffage' => '',
             'occupation' => '',
@@ -160,7 +160,7 @@ class BeneficiaireController extends Controller
                 'lat' => $validated['lat'] ?? 0,
                 'lng' => $validated['lng'] ?? 0,
             ]);
-            dd($dossier);
+         
             foreach($validated as $key=>$value) {
                 \DB::table('dossiers_data')->updateOrInsert(
                     [
