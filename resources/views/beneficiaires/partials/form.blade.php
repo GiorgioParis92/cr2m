@@ -3,52 +3,82 @@
     <label for="reference_unique">Référence unique</label>
     <input type="text" class="form-control" id="reference_unique" name="reference_unique"
         value="{{ old('reference_unique', $beneficiaire->reference_unique ?? '') }}" required>
+        @error('reference_unique')
+        <div class="invalid-feedback">{{ $message }}</div>
+    @enderror
 </div>
 
 <div class="form-group col-sm-12 col-lg-6">
     <label for="nom">Nom</label>
     <input type="text" class="form-control" id="nom" name="nom"
         value="{{ old('nom', $beneficiaire->nom ?? '') }}" required>
+        @error('nom')
+        <div class="invalid-feedback">{{ $message }}</div>
+    @enderror
 </div>
 <div class="form-group col-sm-12 col-lg-6">
     <label for="prenom">Prénom</label>
     <input type="text" class="form-control" id="prenom" name="prenom"
         value="{{ old('prenom', $beneficiaire->prenom ?? '') }}" required>
+        @error('prenom')
+        <div class="invalid-feedback">{{ $message }}</div>
+    @enderror
 </div>
 <div class="form-group col-sm-12 col-lg-3">
     <label for="numero_voie">Numéro de la voie</label>
     <input type="text" class="form-control" id="numero_voie" name="numero_voie"
         value="{{ old('numero_voie', $beneficiaire->numero_voie ?? '') }}" required>
+        @error('numero_voie')
+        <div class="invalid-feedback">{{ $message }}</div>
+    @enderror
 </div>
 <div class="form-group col-sm-12 col-lg-9">
     <label for="adresse">Adresse</label>
     <input type="text" class="form-control" id="adresse" name="adresse"
         value="{{ old('adresse', $beneficiaire->adresse ?? '') }}" required>
+        @error('adresse')
+        <div class="invalid-feedback">{{ $message }}</div>
+    @enderror
 </div>
 <div class="form-group col-sm-12 col-lg-6">
     <label for="cp">Code Postal </label>
     <input type="text" class="form-control" id="cp" name="cp"
         value="{{ old('cp', $beneficiaire->cp ?? '') }}" required>
+        @error('cp')
+        <div class="invalid-feedback">{{ $message }}</div>
+    @enderror
 </div>
 <div class="form-group col-sm-12 col-lg-6">
     <label for="ville">Ville</label>
     <input type="text" class="form-control" id="ville" name="ville"
         value="{{ old('ville', $beneficiaire->ville ?? '') }}" required>
+        @error('ville')
+        <div class="invalid-feedback">{{ $message }}</div>
+    @enderror
 </div>
 <div class="form-group col-sm-12 col-lg-4">
     <label for="telephone">Téléphone</label>
     <input type="text" class="form-control" id="telephone" name="telephone"
         value="{{ old('telephone', $beneficiaire->telephone ?? '') }}" required>
+        @error('telephone')
+        <div class="invalid-feedback">{{ $message }}</div>
+    @enderror
 </div>
 <div class="form-group col-sm-12 col-lg-4">
     <label for="telephone_2">Téléphone 2</label>
     <input type="text" class="form-control" id="telephone_2" name="telephone_2"
         value="{{ old('telephone_2', $beneficiaire->telephone_2 ?? '') }}">
+        @error('telephone_2')
+        <div class="invalid-feedback">{{ $message }}</div>
+    @enderror
 </div>
 <div class="form-group col-sm-12 col-lg-4">
     <label for="email">Email</label>
     <input type="email" class="form-control" id="email" name="email"
         value="{{ old('email', $beneficiaire->email ?? '') }}" required>
+        @error('email')
+        <div class="invalid-feedback">{{ $message }}</div>
+    @enderror
 </div>
 <div class="form-group col-sm-12 col-lg-4">
     <label for="menage_mpr">Menage MPR</label>
@@ -64,6 +94,9 @@
         <option value="rose" {{ old('menage_mpr', $beneficiaire->menage_mpr ?? '') == 'rose' ? 'selected' : '' }}>
             Rose</option>
     </select>
+    @error('menage_mpr')
+    <div class="invalid-feedback">{{ $message }}</div>
+@enderror
 </div>
 <div class="form-group col-sm-12 col-lg-4">
     <label for="chauffage">Type de chauffage</label>
@@ -81,6 +114,9 @@
             {{ old('chauffage', $beneficiaire->chauffage ?? '') == 'electricite' ? 'selected' : '' }}>Electricite
         </option>
     </select>
+    @error('chauffage')
+    <div class="invalid-feedback">{{ $message }}</div>
+@enderror
 </div>
 <div class="form-group col-sm-12 col-lg-4">
     <label for="occupation">Occupation</label>
@@ -97,6 +133,9 @@
         {{ old('occupation', $beneficiaire->occupation ?? '') == 'sci' ? 'selected' : '' }}>SCI
     </option>
     </select>
+    @error('occupation')
+    <div class="invalid-feedback">{{ $message }}</div>
+@enderror
 </div>
 
 @if ($isCreate)
@@ -109,6 +148,9 @@
                 <option @if($count==1) selected @endif value="{{ $fiche->id }}">{{ $fiche->fiche_name }}</option>
             @endforeach
         </select>
+        @error('fiche_id')
+        <div class="invalid-feedback">{{ $message }}</div>
+    @enderror
     </div>
     @if(isset($user->client) && $user->client->id>0 && $user->client->type_client == 1)
 
@@ -123,6 +165,9 @@
                 <option value="{{ $financier->id }}">{{ $financier->client_title }}</option>
             @endforeach
         </select>
+        @error('mar')
+        <div class="invalid-feedback">{{ $message }}</div>
+    @enderror
     </div>
     @endif
     <div class="form-group">
@@ -133,6 +178,9 @@
                 <option value="{{ $administratif->id }}">{{ $administratif->client_title }}</option>
             @endforeach
         </select>
+        @error('mandataire_financier')
+        <div class="invalid-feedback">{{ $message }}</div>
+    @enderror
     </div>
 
     @if (($user->client && $user->client->type_client == 3))
@@ -148,6 +196,9 @@
                 @endforeach
             </select>
         </div>
+        @error('installateur')
+        <div class="invalid-feedback">{{ $message }}</div>
+    @enderror
     @endif
 
 @endif
