@@ -74,7 +74,7 @@ class Scrapping extends Controller
   "element_screenshot":true,
   "url":"https://monprojet.anah.gouv.fr/dossiers/' . $reference_unique . '/mandatory",
   "data":{
-    "Adresse":{
+    "Adresse Anah":{
       "type":"class",
                 "indexes":[
             0
