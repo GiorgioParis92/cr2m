@@ -63,8 +63,8 @@ class DossiersTable extends Component
             ->get();
 
         // Check if any filters are set via query string
-        $filtersApplied = $this->clientName || $this->precarite || $this->etape || $this->mandataire || $this->installateur || $this->accompagnateur || $this->statut || $this->dpt || (auth()->user()->client_id > 0);
-
+        $filtersApplied = $this->clientName || $this->precarite || ($this->etape || $this->etape==0) || $this->mandataire || $this->installateur || $this->accompagnateur || $this->statut || $this->dpt || (auth()->user()->client_id > 0);
+    
         if ($filtersApplied) {
             $this->loadDossiers();
         }
@@ -81,8 +81,8 @@ class DossiersTable extends Component
     public function loadDossiers()
     {
         // Check if any filters are applied or if the user is a client
-        $filtersApplied = $this->clientName || $this->precarite || ($this->etape) || $this->mandataire || $this->installateur || $this->accompagnateur || $this->statut || $this->dpt || (auth()->user()->client_id > 0);
-
+        $filtersApplied = $this->clientName || $this->precarite || ($this->etape || $this->etape==0) || $this->mandataire || $this->installateur || $this->accompagnateur || $this->statut || $this->dpt || (auth()->user()->client_id > 0);
+       
         if (!$filtersApplied) {
             // No filters applied and user is not a client, don't query the database
             $this->dossiers = [];
@@ -150,13 +150,16 @@ class DossiersTable extends Component
                 $query->where('status_desc', $this->statut);
             });
         }
-
-        if ($this->etape) {
+      
+        if ($this->etape && $this->etape!=0) {
             $etapeArray = explode(',', $this->etape);
-        
-            $dossiersQuery->whereHas('etape', function ($query) use ($etapeArray) {
-                $query->whereIn('etape_number', $etapeArray);
-            });
+            
+           
+                $dossiersQuery->whereHas('etape', function ($query) use ($etapeArray) {
+                    $query->whereIn('etape_number', $etapeArray);
+                });
+            
+
         }
 
         if ($this->accompagnateur) {

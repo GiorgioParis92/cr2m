@@ -71,7 +71,11 @@
                               <i class="fa-solid fa-users-line"></i>   Dossiers en phase d'audit
                             </a>
                         </li>
-
+                        <li>
+                            <a class="dropdown-item" href="{{ route('dossiers.index',['etape'=>'0']) }}">
+                              <i class="fa-solid fa-users-line"></i>   Tous les dossiers
+                            </a>
+                        </li>
                     </ul>
                 </li>
 
