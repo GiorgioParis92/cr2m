@@ -88,7 +88,10 @@ class Dossier extends Model
 {
     return $this->hasMany(DossiersData::class, 'dossier_id');
 }
-
+public function formsData()
+{
+    return $this->hasMany(FormData::class, 'dossier_id');
+}
 public function dossiersDataByMetaKey($metaKey)
 {
     return $this->hasMany(DossiersData::class, 'dossier_id')

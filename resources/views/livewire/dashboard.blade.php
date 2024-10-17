@@ -116,6 +116,9 @@
                     </div>
                 </div>
             </div>
+
+            @livewire('dashboard-devis')
+
             @endif
          
 

@@ -8,4 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class FormData extends Model
 {
     use HasFactory;
+
+    protected $table = 'forms_data';
+
 }
