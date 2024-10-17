@@ -18,7 +18,7 @@ class DashboardDevis extends Component
                 $query->where('meta_key', 'audit')
                       ->where('meta_value', '!=', '');
             })
-            ->orWhereDoesntHave('formsData', function ($query) {
+            ->orWhereHas('formsData', function ($query) {
                 $query->where('meta_key', 'audit');
             });
         })
@@ -28,7 +28,7 @@ class DashboardDevis extends Component
                 $query->where('meta_key', 'devis')
                       ->where('meta_value', '=', '');
             })
-            ->orWhereHas('formsData', function ($query) {
+            ->orWhereDoesntHave('formsData', function ($query) {
                 $query->where('meta_key', 'devis');
             });
         });

@@ -21,7 +21,7 @@
 
                                                             <div class="ms-4">
                                                                 <h6 class="text-sm mb-0">
-                                                                    {{$dossier->installateur}}
+                                                                 
                                                                     {{ $dossier->beneficiaire->nom }}
                                                                     {{ $dossier->beneficiaire->prenom }}</h6>
                                                                 <p class="text-xs font-weight-bold mb-0">
@@ -35,7 +35,7 @@
                                                         <div class="text-center">
                                                             <span>
                                                                 <a target="_blank"
-                                                                    href="{{ route('dossiers.show', $dossier->id) }}">
+                                                                    href="{{ route('dossiers.show', $dossier->folder) }}">
                                                                     <span
                                                                         class="badge badge-primary badge_button">{{ $dossier->etape->etape_icon }}</span>
                                                                     <div style="margin-top: 13px; max-width: 80px; text-wrap: wrap; font-size: 9px; padding: 8px !important; background-size: 0; padding-top: 13px !important; width: 100%; max-width: 100%;"
@@ -50,7 +50,7 @@
                                                         <div class="text-center">
                                                             <span>
                                                                 <a target="_blank"
-                                                                    href="{{ route('dossiers.show', $dossier->id) }}">
+                                                                    href="{{ route('dossiers.show', $dossier->folder) }}">
                                                                     <div class="btn btn-{{ $dossier->status->status_style }}">
 
                                                                         {{ $dossier->status->status_desc }}
@@ -63,7 +63,7 @@
                                                     </td>
                                                     <td class="align-middle text-sm">
                                                         <div class="col text-center">
-                                                            <a href="{{ route('dossiers.show', $dossier->id) }}"
+                                                            <a href="{{ route('dossiers.show', $dossier->folder) }}"
                                                                 target="_blank" class=" btn btn-sm btn-primary"><i
                                                                     class="fa fa-eye"></i></a>
                                                         </div>
