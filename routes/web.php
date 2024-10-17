@@ -160,7 +160,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('etapes-controller', [EtapesController::class, 'show'])->name('etapes-controller');
     Route::get('edit-etape/{id}', [EtapesController::class, 'edit'])->name('edit-etape');
 
-    Route::get('permissions', DefaultPermissionController::class)->name('permissions');
+    // Route::get('permissions', DefaultPermissionController::class)->name('permissions');
 
 
     // routes/web.php
