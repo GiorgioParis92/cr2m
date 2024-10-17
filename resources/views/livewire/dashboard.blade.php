@@ -133,7 +133,7 @@
                 </div>
                 @endif
                 @if(is_user_allowed('see_dashboard-audit'))
-                <div class="row mt-4 mb-10">
+                <div class="row mt-4">
                     @livewire('dashboard-audit')
 
                     @livewire('dashboard-devis')
@@ -816,7 +816,7 @@
         </div>
 
         @if (auth()->user()->client_id == 0)
-            <div class="row mb-5">
+            <div class="row mb-5 mt-4">
                 <div class="col-sm-12">
                     <div class="card h-100">
                         <div class="card-header pb-0 p-3">
