@@ -1,6 +1,6 @@
 
-<div wire:poll="refresh" class="col-xl-6 col-sm-6 mb-xl-0 mb-4">
-    <div class="card">
+<div wire:poll="refresh" class="col-xl-3 col-sm-12 mb-xl-0 mb-4">
+    <div class="card mb-4">
         <div class="card-body p-3">
             <div class="row">
                 <div class="">
@@ -14,12 +14,12 @@
                             </div>
                         </div>
                         <div class="table-responsive no-overflow">
-                            <table class="table align-items-center ">
+                            <table class="table ">
                                 <tbody>
                                     @foreach ($liste as $dossier)
                                         <tr>
-                                            <td class="w-30">
-                                                <div class="d-flex px-2 py-1 align-items-center">
+                                            <td >
+                                                <div class="">
 
                                                     <div class="ms-4">
                                                         <h6 class="text-sm mb-0">
@@ -35,7 +35,7 @@
                                             </td>
                                             <td>
                                                 <div class="text-center">
-                                                    <div>
+                                                    <div style="position: relative !important;left: -50px;">
                                                         <a target="_blank"
                                                             href="{{ route('dossiers.show', $dossier->folder) }}">
                                                             <span  class="badge badge-primary badge_button">{{ $dossier->etape->etape_icon }}</span>
@@ -62,13 +62,7 @@
                                                     </span>
                                                 </div>
                                             </td>
-                                            <td class="align-middle text-sm">
-                                                <div class="col text-center">
-                                                    <a href="{{ route('dossiers.show', $dossier->folder) }}"
-                                                        target="_blank" class=" btn btn-sm btn-primary"><i
-                                                            class="fa fa-eye"></i></a>
-                                                </div>
-                                            </td>
+                                        
                                         </tr>
                                     @endforeach
                                 </tbody>

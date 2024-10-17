@@ -119,25 +119,26 @@
                         </div>
                     </div>
                 </div>
-                @if(is_user_allowed('see_dashboard-refus'))
                 <div class="row mt-4">
+                @if(is_user_allowed('see_dashboard-refus'))
+                
                     @livewire('dashboard-refus')
    
-                </div>
+              
                 @endif
                 @if(is_user_allowed('see_dashboard-plannif'))
-                <div class="row mt-4">
+          
                     @livewire('dashboard-pre-plannif')
                     @livewire('dashboard-plannif')
    
-                </div>
+       
                 @endif
                 @if(is_user_allowed('see_dashboard-audit'))
-                <div class="row mt-4">
+
                     @livewire('dashboard-audit')
 
                     @livewire('dashboard-devis')
-                </div>
+           
                 @endif
         @endif
 

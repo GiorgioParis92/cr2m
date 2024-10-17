@@ -1,6 +1,6 @@
 
-        <div wire:poll="refresh" class="col-xl-6 col-sm-6 mb-xl-0 mb-4">
-            <div class="card">
+        <div wire:poll="refresh" class="col-xl-3 col-sm-12 mb-xl-0 mb-4">
+            <div class="card mb-4">
                 <div class="card-body p-3">
                     <div class="row">
                         <div class="">
@@ -39,17 +39,16 @@
                                                     </td>
                                                     <td>
                                                         <div class="text-center">
-                                                            <span>
+                                                            <div style="position: relative !important;left: -50px;">
                                                                 <a target="_blank"
                                                                     href="{{ route('dossiers.show', $dossier->folder) }}">
-                                                                    <span
-                                                                        class="badge badge-primary badge_button">{{ $dossier->etape->etape_icon }}</span>
+                                                                    <span  class="badge badge-primary badge_button">{{ $dossier->etape->etape_icon }}</span>
                                                                     <div style="margin-top: 13px; max-width: 80px; text-wrap: wrap; font-size: 9px; padding: 8px !important; background-size: 0; padding-top: 13px !important; width: 100%; max-width: 100%;"
                                                                         class="btn btn-success">
                                                                         {{ $dossier->etape->etape_desc }}
                                                                     </div>
                                                                 </a>
-                                                            </span>
+                                                            </div>
                                                         </div>
                                                     </td>
                                                     <td>
@@ -67,13 +66,7 @@
                                                             </span>
                                                         </div>
                                                     </td>
-                                                    <td class="align-middle text-sm">
-                                                        <div class="col text-center">
-                                                            <a href="{{ route('dossiers.show', $dossier->folder) }}"
-                                                                target="_blank" class=" btn btn-sm btn-primary"><i
-                                                                    class="fa fa-eye"></i></a>
-                                                        </div>
-                                                    </td>
+                                                  
                                                 </tr>
                                             @endforeach
                                         </tbody>
