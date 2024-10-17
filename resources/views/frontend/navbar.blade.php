@@ -122,9 +122,9 @@
                                 </a>
                             </li>
                             <li>
-                                {{-- <a class="dropdown-item" href="{{ route('permissions') }}">
+                                <a class="dropdown-item" href="{{ route('permissions') }}">
                                   <i class="fa-solid fa-users-line"></i>   Permissions
-                                </a> --}}
+                                </a>
                             </li>
                         </ul>
                     </li>
