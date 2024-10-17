@@ -128,11 +128,13 @@
                     @livewire('dashboard-plannif')
    
                 </div>
+                @if(is_user_allowed('see_dashboard-audit'))
                 <div class="row mt-4 mb-10">
                     @livewire('dashboard-audit')
 
                     @livewire('dashboard-devis')
                 </div>
+                @endif
         @endif
 
 
