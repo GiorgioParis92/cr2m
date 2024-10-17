@@ -121,7 +121,11 @@
                                   <i class="fa-solid fa-users-line"></i>   Partenaires
                                 </a>
                             </li>
-
+                            <li>
+                                <a class="dropdown-item" href="{{ route('permissions') }}">
+                                  <i class="fa-solid fa-users-line"></i>   Permissions
+                                </a>
+                            </li>
                         </ul>
                     </li>
 
