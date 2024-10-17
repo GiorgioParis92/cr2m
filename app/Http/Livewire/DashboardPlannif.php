@@ -31,7 +31,7 @@ class DashboardPlannif extends Component
                 'etape:id,etape_icon,etape_desc',
                 'status:id,status_style,status_desc',
             ])
-            ->where('etape_number', 1);
+            ->where('etape_number', 2);
 
     
         if ($user->client_id > 0 && $user->client->type_client == 3) {
