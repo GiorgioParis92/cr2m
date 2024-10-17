@@ -188,6 +188,8 @@ class DossierLivewire extends Component
                 }
             }
         }
+
+        change_status($key, $value,$this->dossier->id);
     }
     public function get_docs()
     {

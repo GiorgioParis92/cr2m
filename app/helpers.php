@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\User;
+use App\Models\Dossier;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
@@ -654,6 +655,17 @@ function getDocumentStatuses($dossier_id, $last_etape_order = 1)
         ]
     );
     return $resultData;
+}
+
+if (!function_exists('change_status')) {
+    function change_status($key, $value, $dossier_id)
+    {
+  
+    if($key=='status_id' && $value==15) {
+        Dossier::where('id', $dossier_id)->update(['etape_number' => 1, 'status_id' => $value]);
+    } 
+
+    }
 }
 
 
