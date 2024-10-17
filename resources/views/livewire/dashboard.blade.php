@@ -120,6 +120,10 @@
                     </div>
                 </div>
                 <div class="row mt-4">
+                    @livewire('dashboard-refus')
+   
+                </div>
+                <div class="row mt-4">
                     @livewire('dashboard-pre-plannif')
                     @livewire('dashboard-plannif')
    

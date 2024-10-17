@@ -13,6 +13,8 @@ class DashboardDevis extends Component
     {
         $dossiers = Dossier::with('beneficiaire', 'dossiersData', 'formsData', 'etape', 'status')
         ->where('etape_number', 12)
+        ->where('status_id','!=',15)
+       
         ->where(function ($query) {
             $query->whereHas('formsData', function ($query) {
                 $query->where('meta_key', 'audit')

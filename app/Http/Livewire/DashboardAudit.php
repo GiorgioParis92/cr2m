@@ -32,6 +32,8 @@ class DashboardAudit extends Component
                 'status:id,status_style,status_desc',
             ])
             ->where('etape_number', 8)
+            ->where('status_id','!=',15)
+            
             ->where(function ($query) {
                 $query->whereDoesntHave('formsData', function ($query) {
                     $query->where('meta_key', 'audit');

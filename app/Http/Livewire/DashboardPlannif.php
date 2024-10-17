@@ -31,6 +31,7 @@ class DashboardPlannif extends Component
                 'etape:id,etape_icon,etape_desc',
                 'status:id,status_style,status_desc',
             ])
+            ->where('status_id','!=',15)
             ->where('etape_number', 2);
 
     

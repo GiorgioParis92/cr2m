@@ -5,7 +5,7 @@ namespace App\Http\Livewire;
 use Livewire\Component;
 use App\Models\User;
 use App\Models\Dossier;
-class DashboardPrePlannif extends Component
+class DashboardRefus extends Component
 {
 
     public $liste;
@@ -31,8 +31,8 @@ class DashboardPrePlannif extends Component
                 'etape:id,etape_icon,etape_desc',
                 'status:id,status_style,status_desc',
             ])
-            ->where('status_id','!=',15)
-            ->where('etape_number', 1);
+            ->where('status_id','=',15);
+            
 
     
         if ($user->client_id > 0 && $user->client->type_client == 3) {
@@ -46,6 +46,6 @@ class DashboardPrePlannif extends Component
     
     public function render()
     {
-        return view('livewire.dashboard-pre-plannif');
+        return view('livewire.dashboard-refus');
     }
 }
