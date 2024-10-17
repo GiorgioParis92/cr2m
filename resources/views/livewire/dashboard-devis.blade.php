@@ -1,6 +1,5 @@
-<div wire:poll>
-    <div class="row mb-5">
-        <div class="col-xl-6 col-sm-6 mb-xl-0 mb-4">
+
+        <div wire:poll="refresh" class="col-xl-6 col-sm-6 mb-xl-0 mb-4">
             <div class="card">
                 <div class="card-body p-3">
                     <div class="row">
@@ -12,13 +11,13 @@
                                             @if(auth()->user()->client_id>0 && auth()->user()->client->type_client==3)
                                             Devis à déposer
                                             @else
-                                            En attente des devis installateurs
+                                            En attente des devis installateurs  ({{count($liste)}})
                                             @endif
 
                                         </h6>
                                     </div>
                                 </div>
-                                <div class="table-responsive">
+                                <div class="table-responsive no-overflow">
                                     <table class="table align-items-center ">
                                         <tbody>
                                             @foreach ($liste as $dossier)
@@ -87,5 +86,3 @@
             </div>
         </div>
 
-    </div>
-</div>
