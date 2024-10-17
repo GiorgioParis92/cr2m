@@ -8,7 +8,14 @@
                             <div class=" ">
                                 <div class="card-header pb-0 p-3">
                                     <div class="d-flex justify-content-between">
-                                        <h6 class="mb-2">Devis à déposer</h6>
+                                        <h6 class="mb-2">
+                                            @if(auth()->user()->client_id>0 && auth()->user()->client->type_client==3)
+                                            Devis à déposer
+                                            @else
+                                            En attente des devis installateurs
+                                            @endif
+
+                                        </h6>
                                     </div>
                                 </div>
                                 <div class="table-responsive">
