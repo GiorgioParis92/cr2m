@@ -354,10 +354,10 @@ if (!function_exists('load_all_dossier_data')) {
 
 
         $beneficiaire = DB::table('beneficiaires')->where('id', $dossier->beneficiaire_id)->first();
-
+        $results["beneficiaire_data"][0] = [];
         if ($beneficiaire) {
             foreach ($beneficiaire as $key => $value) {
-                $results["beneficiaire_data"][$key] = $value;
+                $results["beneficiaire_data"][0][$key] = $value;
             }
         }
 
