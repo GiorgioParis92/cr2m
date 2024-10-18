@@ -27,6 +27,7 @@ use App\Http\Controllers\Api\RdvStatusController;
 use App\Http\Controllers\Api\RdvTypeController;
 use App\Http\Controllers\Api\UpdatePermission;
 use App\Http\Controllers\Api\ClientController;
+use App\Http\Controllers\Api\TablesController;
 
 
 
@@ -169,5 +170,7 @@ Route::put('/clients/{id}', [ClientController::class, 'update']);
 Route::delete('/clients/{id}', [ClientController::class, 'destroy']);
 
 Route::post('/update_permission', [UpdatePermission::class, 'index']);
+
+Route::get('/tables', [TablesController::class, 'index']);
 
 });
