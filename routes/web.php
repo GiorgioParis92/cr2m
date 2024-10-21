@@ -50,7 +50,7 @@ use App\Http\Livewire\Chat;
 //     return view('url-change-notification');
 // });
 
-
+dump(request()->getHost());
 if (request()->getHost() === 'crm-atlas.fr' || env('APP_ENV') === 'local') {
    
     Route::any('/login', function () {
