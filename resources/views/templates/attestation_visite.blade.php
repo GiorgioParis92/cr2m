@@ -197,13 +197,13 @@
     </div>
 
     <h1 class="text-center">Attestation de 1ère visite</h1>
-@dd($dossier)
+
     <div class="my-4">
         <p>Madame,Monsieur,</p>
         <p>
             À la suite de notre visite du 
-            @if(isset($dossier['date_1ere_visite']))
-            {{ date('d/m/Y', strtotime(str_replace('/','-',$dossier['date_1ere_visite']))) }}
+            @if(isset($all_data['dossiers_data']['date_1ere_visite']))
+            {{ date('d/m/Y', strtotime(str_replace('/','-',$all_data['dossiers_data']['date_1ere_visite']))) }}
             @else 
             {{ date('d/m/Y', strtotime('now')) }}
             @endif

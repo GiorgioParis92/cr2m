@@ -967,7 +967,12 @@
     <div class="my-4">
 
         <p><b>Contrat pour la réalisation d'une mission de Mon Accompagnateur Rénov'</b></p>
-        <p> Fait, en deux exemplaires originaux le {{date('d/m/Y',strtotime('now'))}}, à {{ $dossier->beneficiaire->ville }}</p>
+        <p> Fait, en deux exemplaires originaux le             
+            @if(isset($all_data['dossiers_data']['date_1ere_visite']))
+            {{ date('d/m/Y', strtotime(str_replace('/','-',$all_data['dossiers_data']['date_1ere_visite']))) }}
+            @else 
+            {{ date('d/m/Y', strtotime('now')) }}
+            @endif, à {{ $dossier->beneficiaire->ville }}</p>
     </div>
     <div>
 
