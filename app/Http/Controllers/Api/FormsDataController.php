@@ -4,7 +4,7 @@
 namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
-use App\Models\FormData;
+use App\Models\FormsData;
 use Illuminate\Support\Facades\Validator;
 
 class FormsDataController extends \App\Http\Controllers\Controller
@@ -12,7 +12,7 @@ class FormsDataController extends \App\Http\Controllers\Controller
     // Fetch all forms data with dynamic filtering
     public function index(Request $request)
     {
-        $query = FormData::query();
+        $query = FormsData::query();
 
         // Apply filters dynamically based on request
         foreach ($request->all() as $field => $value) {
@@ -32,7 +32,7 @@ class FormsDataController extends \App\Http\Controllers\Controller
     // Fetch specific form data by ID
     public function show($id)
     {
-        $formData = FormData::findOrFail($id);
+        $formData = FormsData::findOrFail($id);
         return response()->json($formData);
     }
 
@@ -50,14 +50,14 @@ class FormsDataController extends \App\Http\Controllers\Controller
             return response()->json(['error' => $validator->errors()], 422);
         }
 
-        $formData = FormData::create($request->all());
+        $formData = FormsData::create($request->all());
         return response()->json($formData, 201);
     }
 
     // Update a form data entry
     public function update(Request $request, $id)
     {
-        $formData = FormData::findOrFail($id);
+        $formData = FormsData::findOrFail($id);
 
         $validator = Validator::make($request->all(), [
             'dossier_id' => 'required|integer',
@@ -77,7 +77,7 @@ class FormsDataController extends \App\Http\Controllers\Controller
     // Delete a form data entry
     public function destroy($id)
     {
-        $formData = FormData::findOrFail($id);
+        $formData = FormsData::findOrFail($id);
         $formData->delete();
         return response()->json(null, 204);
     }

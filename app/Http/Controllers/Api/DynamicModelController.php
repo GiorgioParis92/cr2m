@@ -12,8 +12,8 @@ class DynamicModelController extends \App\Http\Controllers\Controller
     // Resolve the model name dynamically
     protected function getModelInstance($modelName)
     {
+  
         $modelClass = 'App\\Models\\' . Str::studly($modelName);
-        
         if (!class_exists($modelClass)) {
             throw new ModelNotFoundException("Model $modelName not found.");
         }

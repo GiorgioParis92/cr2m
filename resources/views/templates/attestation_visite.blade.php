@@ -201,7 +201,13 @@
     <div class="my-4">
         <p>Madame,Monsieur,</p>
         <p>
-            À la suite de notre visite du {{ date('d/m/Y', strtotime('now')) }} à votre domicile, nous résumons les
+            À la suite de notre visite du 
+            @if(isset($dossier['date_1ere_visite']))
+            {{ date('d/m/Y', strtotime(str_replace('/','-',$dossier['date_1ere_visite']))) }}
+            @else 
+            {{ date('d/m/Y', strtotime('now')) }}
+            @endif
+            à votre domicile, nous résumons les
             principaux points sur lesquels nous avons échangé
         </p>
 
