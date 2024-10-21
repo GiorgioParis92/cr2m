@@ -83,7 +83,7 @@ class PDFController extends Controller
                 return response()->json(['error' => 'Failed to save file'], 500);
             }
 
-            $dossier = Dossier::where('folder', $dossierId)->first();
+            $dossier = Dossier::with('mar')->where('folder', $dossierId)->first();
 
             $update = DB::table('forms_data')->updateOrInsert(
                 [
@@ -135,7 +135,8 @@ class PDFController extends Controller
         // Check if the template view exists
         $templatePath = 'templates.' . $template;
 
-        $dossier = Dossier::with('dossiersData')->where('folder', $dossier_id)->first();
+        $dossier = Dossier::with('dossiersData','mar_client')->where('folder', $dossier_id)->first();
+      
         if ($send_data) {
             $all_data = load_all_dossier_data($dossier);
         } else {
