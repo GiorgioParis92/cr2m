@@ -189,7 +189,6 @@ class PDFController extends Controller
             $all_data = load_all_dossier_data($dossier);
 
         }
-
         $pdf = new Fpdi();
         $pageCount = $pdf->setSourceFile(public_path($optionsArray["template"] . '.pdf'));
 
@@ -268,7 +267,10 @@ class PDFController extends Controller
                                 }
                             }
                         }
+                        if (isset($fill_data_config["format_date"])) {
 
+                            $current_value = date($fill_data_config["format_date"], strtotime(str_replace('/','-',$current_value)));
+                        }
                         if (isset($fill_data_config["date_now"])) {
 
                             $current_value = date($fill_data_config["date_now"], strtotime("now"));

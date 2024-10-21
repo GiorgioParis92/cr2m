@@ -344,12 +344,10 @@ if (!function_exists('load_all_dossier_data')) {
 
 
         $datas = DB::table('dossiers_data')->where('dossier_id', $dossier->id)->get();
-
+        $results["dossiers_data"][0] = [];
         foreach ($datas as $data) {
-            if (!isset($results["dossiers_data"])) {
-                $results["dossiers_data"] = [];
-            }
-            $results["dossiers_data"][$data->meta_key] = $data->meta_value;
+       
+            $results["dossiers_data"][0][$data->meta_key] = $data->meta_value;
         }
 
 
