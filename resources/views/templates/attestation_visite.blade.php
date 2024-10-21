@@ -278,8 +278,8 @@
     </div>
     <div class="my-4">
         <p>Nous restons à votre écoute tout au long de notre accompagnement, si vous souhaitez plus de précisions. </p>
-        <p>Nom du bénéficiaire : {{ $all_data['beneficiaire_data']['nom'] }} </p>
-        <p>Prénom du bénéficiaire : {{ $all_data['beneficiaire_data']['prenom'] }} </p>
+        <p>Nom du bénéficiaire : {{ $dossier['beneficiaire']['nom'] }} </p>
+        <p>Prénom du bénéficiaire : {{ $dossier['beneficiaire']['prenom'] }} </p>
     </div>
 
 
