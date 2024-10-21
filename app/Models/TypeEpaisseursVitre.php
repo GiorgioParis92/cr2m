@@ -5,10 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class TypeCompositionMurs extends Model
+class TypeEpaisseursVitre extends Model
 {
     use HasFactory;
 
-    protected $table = 'type_compositions_murs';
+    protected $table = 'type_epaisseurs_vitre';
 
 }
