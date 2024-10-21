@@ -162,9 +162,20 @@ class Generate extends AbstractFormData
                     <i class="fas fa-eye"></i> Annuler la demande de signature
                 </button> ';
 
+
+               
+
+
                 }
 
+                $data .= '<br/><button type="button" class="btn btn-primary btn-view" wire:click="mark_signed(\''.$this->form_id.'\',\''.$this->name.'\')"
+                data-toggle="modal" 
+                   data-dossier_id="' . $this->dossier->folder . '"';
+                    $data .= "data-form_id='" . $this->form_id . "'";
 
+                    $data .= 'data-name="' . $this->config->title . '">
+                <i class="fas fa-eye"></i> Marquer comme signé (signature manuelle)
+            </button> ';
 
                 $data.='</div>';
                 } else {

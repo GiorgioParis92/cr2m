@@ -484,6 +484,52 @@ class DossierLivewire extends Component
         }
     }
     
+
+    public function mark_signed($form_id, $tag)
+    {
+   
+        
+        $update = DB::table('forms_data')->updateOrInsert(
+            [
+                'dossier_id' => '' . $this->dossier->id . '',
+                'form_id' => '' . $form_id . '',
+                'meta_key' => 'signature_request_id'
+            ],
+            [
+                'meta_value' => 'finish',
+                'created_at' => now(),
+                'updated_at' => now()
+            ]
+        );
+        $update = DB::table('forms_data')->updateOrInsert(
+            [
+                'dossier_id' => '' . $this->dossier->id . '',
+                'form_id' => '' . $form_id . '',
+
+                'meta_key' => 'signature_status'
+            ],
+            [
+                'meta_value' => 'finish',
+                'created_at' => now(),
+                'updated_at' => now()
+            ]
+        );
+        $update = DB::table('forms_data')->updateOrInsert(
+            [
+                'dossier_id' => '' . $this->dossier->id . '',
+                'form_id' => '' . $form_id . '',
+
+                'meta_key' => 'document_id'
+            ],
+            [
+                'meta_value' => 'finish',
+                'created_at' => now(),
+                'updated_at' => now()
+            ]
+        );
+    }
+
+
     private function arrayToObject($array)
 {
     return json_decode(json_encode($array), false);

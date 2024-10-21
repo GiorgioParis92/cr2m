@@ -1,4 +1,6 @@
-@if (request()->getHost() === 'crm-atlas.fr' || env('APP_ENV') === 'local') 
+@if (request()->getHost() === 'crm-atlas.fr' 
+// || env('APP_ENV') === 'local'
+) 
 
 
 <!-- resources/views/url-change-notification.blade.php -->

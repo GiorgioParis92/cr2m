@@ -188,7 +188,16 @@ class Fillable extends AbstractFormData
                     <i class="fas fa-eye"></i> Annuler la demande de signature
                 </button> ';
                 }
+                if(auth()->user()->type_id!=4) {
+                    $data .= '<br/><button type="button" class="btn btn-primary btn-view" wire:click="mark_signed(\'' . $this->form_id . '\',\'' . $this->name . '\')"
+                    data-toggle="modal" 
+                    data-dossier_id="' . $this->dossier->folder . '"';
+                    $data .= "data-form_id='" . $this->form_id . "'";
 
+                    $data .= 'data-name="' . $this->config->title . '">
+                    <i class="fas fa-eye"></i> Marquer comme signé (signature manuelle)
+                    </button> ';
+                }
                 $data .= '</div>';
             } else {
                 $data .= '<div id="message_' . $this->optionsArray['template'] . '">';
