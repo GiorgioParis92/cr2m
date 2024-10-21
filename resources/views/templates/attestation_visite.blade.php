@@ -197,7 +197,7 @@
     </div>
 
     <h1 class="text-center">Attestation de 1ère visite</h1>
-
+@dd($dossier)
     <div class="my-4">
         <p>Madame,Monsieur,</p>
         <p>

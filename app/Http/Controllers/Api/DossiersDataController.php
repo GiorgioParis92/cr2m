@@ -30,7 +30,7 @@ class DossiersDataController extends \App\Http\Controllers\Controller
     // Fetch specific dossier data by ID
     public function show($id)
     {
-        $dossierData = DossierData::findOrFail($id);
+        $dossierData = DossiersData::findOrFail($id);
         return response()->json($dossierData);
     }
 

@@ -14,6 +14,7 @@ class DynamicModelController extends \App\Http\Controllers\Controller
     {
   
         $modelClass = 'App\\Models\\' . Str::studly($modelName);
+       
         if (!class_exists($modelClass)) {
             throw new ModelNotFoundException("Model $modelName not found.");
         }
@@ -28,14 +29,14 @@ class DynamicModelController extends \App\Http\Controllers\Controller
         
         $model = $this->getModelInstance($modelName);
         $query = $model::query();
-
+        
         // Apply filters dynamically based on request
         foreach ($request->all() as $field => $value) {
-            if ($model->isFillable($field)) {
+          
                 $query->where($field, $value);
-            }
+            
         }
-
+        
         // Apply pagination or return all results
         if ($request->has('paginate')) {
             return response()->json($query->paginate($request->input('paginate')));
@@ -48,7 +49,10 @@ class DynamicModelController extends \App\Http\Controllers\Controller
     public function show($modelName, $id)
     {
         $model = $this->getModelInstance($modelName);
+       
+       
         $record = $model::findOrFail($id);
+        
         return response()->json($record);
     }
 
@@ -57,13 +61,7 @@ class DynamicModelController extends \App\Http\Controllers\Controller
     {
         $model = $this->getModelInstance($modelName);
 
-        $validator = Validator::make($request->all(), [
-            'title' => 'required|string|max:100', // Customize validation as needed
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json(['error' => $validator->errors()], 422);
-        }
+  
 
         $record = $model::create($request->all());
         return response()->json($record, 201);
@@ -75,13 +73,6 @@ class DynamicModelController extends \App\Http\Controllers\Controller
         $model = $this->getModelInstance($modelName);
         $record = $model::findOrFail($id);
 
-        $validator = Validator::make($request->all(), [
-            'title' => 'required|string|max:100', // Customize validation as needed
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json(['error' => $validator->errors()], 422);
-        }
 
         $record->update($request->all());
         return response()->json($record);
