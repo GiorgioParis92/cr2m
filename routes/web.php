@@ -43,8 +43,24 @@ use App\Http\Livewire\Chat;
 
 // Password reset routes
 
-Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
-Route::post('login', [LoginController::class, 'login']);
+// Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
+// Route::post('login', [LoginController::class, 'login']);
+
+// Route::get('/login', function () {
+//     return view('url-change-notification');
+// });
+
+
+if (request()->getHost() === 'crm-atlas.fr' || env('APP_ENV') === 'local') {
+   
+    Route::any('/login', function () {
+        return view('url-notification');
+    });
+} else {
+    // Define the normal login route or other routes for other URLs
+    Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
+    Route::post('login', [LoginController::class, 'login']);
+}
 
 Route::middleware('auth')->group(function () {
     Route::get('/', 'App\Http\Controllers\DashboardController@index')->name('dashboard');
