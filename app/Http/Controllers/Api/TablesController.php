@@ -63,7 +63,7 @@ class TablesController extends \App\Http\Controllers\Controller
                 }
             }
 
-            $structure[$tableName] = $columns;
+            $structure[] = ["table_name"=>$tableName,"data"=>$columns];
         }
 
         return ($structure);
