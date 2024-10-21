@@ -223,9 +223,9 @@
     <div class="my-4" style="margin-top:10px;margin-left:350px;width:380px;">
 
         <p>
-            <b>Devis n° {{ $all_data['dossiers_data']['numero_devis'] ?  $all_data['dossiers_data']['numero_devis'] : ''}}
+            <b>Devis n° {{ $all_data['dossiers_data'][0]['numero_devis'] ?  $all_data['dossiers_data'][0]['numero_devis'] : ''}}
             </b><br />
-            Date : {{ $all_data['dossiers_data']['date_devis_mar'] ?  date('d/m/Y',strtotime($all_data['dossiers_data']['date_devis_mar'])) : ''}}
+            Date : {{ $all_data['dossiers_data'][0]['date_devis_mar'] ?  date('d/m/Y',strtotime($all_data['dossiers_data'][0]['date_devis_mar'])) : ''}}
 
 
         </p>
@@ -447,9 +447,9 @@
     <div class="my-4" style="margin-top:10px;margin-left:350px;width:380px;">
 
         <p>
-            <b>Devis n° {{ $all_data['dossiers_data']['numero_devis'] ?  $all_data['dossiers_data']['numero_devis'] : ''}}
+            <b>Devis n° {{ $all_data['dossiers_data'][0]['numero_devis'] ?  $all_data['dossiers_data'][0]['numero_devis'] : ''}}
             </b><br />
-            Date : {{ $all_data['dossiers_data']['date_devis_mar'] ?  date('d/m/Y',strtotime($all_data['dossiers_data']['date_devis_mar'])) : ''}}
+            Date : {{ $all_data['dossiers_data'][0]['date_devis_mar'] ?  date('d/m/Y',strtotime($all_data['dossiers_data'][0]['date_devis_mar'])) : ''}}
 
 
         </p>
