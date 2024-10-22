@@ -1102,7 +1102,7 @@
                     const etapeId = etapeIds[index];
                     console.log(index)
                     console.log(etapeId)
-                    window.open(`/dossier?etape=${index}`, '_blank');
+                    // window.open(`/dossier?etape=${index}`, '_blank');
                 }
             }
         }
