@@ -42,7 +42,7 @@ class Stats extends Component
         // Load audit delays
         $auditQuery = Dossier::select(
             DB::raw('DATE(dossiers.created_at) as creation_date'),
-            DB::raw('AVG(TIMESTAMPDIFF(DAY, dossiers.created_at, forms_data.created_at)) as average_delay')
+            DB::raw('AVG(TIMESTAMPDIFF(DAY, dossiers.created_at, IFNULL(forms_data.created_at, CURDATE()))) as average_delay')
         )
         ->join('forms_data', function ($join) {
             $join->on('dossiers.id', '=', 'forms_data.dossier_id')
