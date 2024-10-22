@@ -55,12 +55,16 @@ class Stats extends Component
             'etape:id,etape_icon,etape_desc',
             'status:id,status_style,status_desc',
         ])
-        ->where('etape_number', 8)
-        ->where('status_id', '!=', 15);
-        
-        if ($this->selectedClient) {
-            $auditQuery->where('dossiers.installateur', $this->selectedClient);
-        }
+        ->where('status_id', '!=', 15)
+        ->where('etape_number', '>=', function ($query) {
+            $query->selectRaw('MIN(order_column)')
+                  ->from('etapes')
+                  ->where('etape_name', '>=', 'audit');
+        });
+
+if ($this->selectedClient) {
+    $auditQuery->where('dossiers.installateur', $this->selectedClient);
+}
         
         $this->auditDelays = $auditQuery->groupBy('creation_date')
             ->orderBy('creation_date')
