@@ -122,20 +122,30 @@
                 <div class="row mt-4">
                     <div class="col-xl-8 col-sm-12">
                         <div class="row">
-                    @if (is_user_allowed('see_dashboard-refus'))
-                        @livewire('dashboard-refus')
-                    @endif
-                    @if (is_user_allowed('see_dashboard-plannif'))
-                        @livewire('dashboard-pre-plannif')
-                        @livewire('dashboard-plannif')
-                    @endif
-                    @if (is_user_allowed('see_dashboard-audit'))
-                        @livewire('dashboard-audit')
+                            @if (is_user_allowed('see_dashboard-refus'))
+                                <div class="col-xl-4 col-sm-12 mb-xl-0 mb-4">
+                                    @livewire('dashboard-refus')
+                                </div>
+                            @endif
+                            @if (is_user_allowed('see_dashboard-plannif'))
+                                <div class="col-xl-4 col-sm-12 mb-xl-0 mb-4">
+                                    @livewire('dashboard-pre-plannif')
+                                </div>
+                                <div class="col-xl-4 col-sm-12 mb-xl-0 mb-4">
+                                    @livewire('dashboard-plannif')
+                                </div>
+                            @endif
+                            @if (is_user_allowed('see_dashboard-audit'))
+                                <div class="col-xl-4 col-sm-12 mb-xl-0 mb-4">
+                                    @livewire('dashboard-audit')
+                                </div>
+                                <div class="col-xl-4 col-sm-12 mb-xl-0 mb-4">
 
-                        @livewire('dashboard-devis')
-                    @endif
+                                    @livewire('dashboard-devis')
+                                </div>
+                            @endif
+                        </div>
                     </div>
-                </div>
                     <div class="col-xl-4 col-sm-12">
                         <div class="col-xl-12 col-sm-12 mb-xl-0 mb-4">
                             <div class="card">
@@ -1052,64 +1062,63 @@
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-   document.addEventListener('livewire:load', function() {
-    const donutData = @json($donutData);
+    document.addEventListener('livewire:load', function() {
+        const donutData = @json($donutData);
 
-    const labels = donutData.map(item => `${item.etape_icon} - ${item.etape_desc} (${item.dossier_count})`);
-    const data = donutData.map(item => item.dossier_count);
-    const etapeIds = donutData.map(item => item.id); // Assuming `etape_id` is part of your data
-    console.log(etapeIds)
-    
-    const gradientColors = [
-        'rgba(255, 99, 132, 0.7)',   // Red
-        'rgba(54, 162, 235, 0.7)',   // Blue
-        'rgba(255, 206, 86, 0.7)',   // Yellow
-        'rgba(75, 192, 192, 0.7)',   // Teal
-        'rgba(153, 102, 255, 0.7)',  // Purple
-        'rgba(255, 159, 64, 0.7)',   // Orange
-        'rgba(100, 255, 218, 0.7)',  // Aqua
-        'rgba(231, 233, 237, 0.7)',  // Light Gray
-        'rgba(255, 99, 71, 0.7)',    // Tomato
-        'rgba(60, 179, 113, 0.7)',   // Medium Sea Green
-        'rgba(106, 90, 205, 0.7)',   // Slate Blue
-        'rgba(240, 128, 128, 0.7)',  // Light Coral
-        'rgba(244, 164, 96, 0.7)',   // Sandy Brown
-        'rgba(32, 178, 170, 0.7)',   // Light Sea Green
-        'rgba(218, 112, 214, 0.7)'   // Orchid
-    ];
+        const labels = donutData.map(item => `${item.etape_icon} - ${item.etape_desc} (${item.dossier_count})`);
+        const data = donutData.map(item => item.dossier_count);
+        const etapeIds = donutData.map(item => item.id); // Assuming `etape_id` is part of your data
+        console.log(etapeIds)
 
-    const ctx = document.getElementById('dossierDonutChart').getContext('2d');
-    const dossierDonutChart = new Chart(ctx, {
-        type: 'doughnut',
-        data: {
-            labels: labels,
-            datasets: [{
-                data: data,
-                backgroundColor: gradientColors,
-                borderColor: gradientColors.map(color => color.replace('0.7', '1')),
-                borderWidth: 1
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: {
-                    position: 'top',
-                }
+        const gradientColors = [
+            'rgba(255, 99, 132, 0.7)', // Red
+            'rgba(54, 162, 235, 0.7)', // Blue
+            'rgba(255, 206, 86, 0.7)', // Yellow
+            'rgba(75, 192, 192, 0.7)', // Teal
+            'rgba(153, 102, 255, 0.7)', // Purple
+            'rgba(255, 159, 64, 0.7)', // Orange
+            'rgba(100, 255, 218, 0.7)', // Aqua
+            'rgba(231, 233, 237, 0.7)', // Light Gray
+            'rgba(255, 99, 71, 0.7)', // Tomato
+            'rgba(60, 179, 113, 0.7)', // Medium Sea Green
+            'rgba(106, 90, 205, 0.7)', // Slate Blue
+            'rgba(240, 128, 128, 0.7)', // Light Coral
+            'rgba(244, 164, 96, 0.7)', // Sandy Brown
+            'rgba(32, 178, 170, 0.7)', // Light Sea Green
+            'rgba(218, 112, 214, 0.7)' // Orchid
+        ];
+
+        const ctx = document.getElementById('dossierDonutChart').getContext('2d');
+        const dossierDonutChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: labels,
+                datasets: [{
+                    data: data,
+                    backgroundColor: gradientColors,
+                    borderColor: gradientColors.map(color => color.replace('0.7', '1')),
+                    borderWidth: 1
+                }]
             },
-            onClick: function (event, elements) {
-                console.log(event)
-                console.log(elements)
-                if (elements.length > 0) {
-                    const index = elements[0].index;
-                    const etapeId = etapeIds[index];
-                    console.log(index)
-                    console.log(etapeId)
-                    window.open(`/dossier?etape=${etapeId}`, '_blank');
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    }
+                },
+                onClick: function(event, elements) {
+                    console.log(event)
+                    console.log(elements)
+                    if (elements.length > 0) {
+                        const index = elements[0].index;
+                        const etapeId = etapeIds[index];
+                        console.log(index)
+                        console.log(etapeId)
+                        window.open(`/dossier?etape=${etapeId}`, '_blank');
+                    }
                 }
             }
-        }
+        });
     });
-});
-
 </script>

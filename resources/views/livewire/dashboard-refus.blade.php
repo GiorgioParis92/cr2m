@@ -1,6 +1,5 @@
 
-<div wire:poll="refresh" class="col-xl-3 col-sm-12 mb-xl-0 mb-4">
-    <div class="card mb-4">
+    <div wire:poll="refresh" class="card mb-4">
         <div class="card-body p-3">
             <div class="row">
                 <div class="">
@@ -73,5 +72,4 @@
             </div>
         </div>
     </div>
-</div>
 
