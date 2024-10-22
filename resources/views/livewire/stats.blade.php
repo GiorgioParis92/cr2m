@@ -1,15 +1,29 @@
 
 <div>
-    <div class="row">
-        <div class="col-xl-4 col-sm-12 mb-xl-0 mb-4">
-            <div class="mb-3">
-                <label for="clientFilter">Filter by Client:</label>
-                <select wire:model="selectedClient" id="clientFilter" class="form-control no_select2">
-                    <option value="">All Clients</option>
-                    @foreach ($clients as $client)
-                        <option value="{{ $client->id }}">{{ $client->client_title }}</option>
-                    @endforeach
-                </select>
+    <div>
+        <div class="row">
+            <div class="col-xl-4 col-sm-12 mb-xl-0 mb-4">
+                <div class="mb-3">
+                    <label for="clientFilter">Filter by Client:</label>
+                    <select wire:model="selectedClient" id="clientFilter" class="form-control no_select2">
+                        <option value="">All Clients</option>
+                        @foreach ($clients as $client)
+                            <option value="{{ $client->id }}">{{ $client->client_title }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+            <div class="col-xl-4 col-sm-12 mb-xl-0 mb-4">
+                <div class="mb-3">
+                    <label for="startDate">Start Date:</label>
+                    <input type="date" wire:model="startDate" id="startDate" class="form-control">
+                </div>
+            </div>
+            <div class="col-xl-4 col-sm-12 mb-xl-0 mb-4">
+                <div class="mb-3">
+                    <label for="endDate">End Date:</label>
+                    <input type="date" wire:model="endDate" id="endDate" class="form-control">
+                </div>
             </div>
         </div>
     </div>
