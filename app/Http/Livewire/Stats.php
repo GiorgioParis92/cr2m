@@ -53,7 +53,6 @@ class Stats extends Component
             'etape:id,etape_icon,etape_desc',
             'status:id,status_style,status_desc',
         ])
-        ->where('etape_number', 8)
         ->where('status_id', '!=', 15);
         
         if ($this->selectedClient) {
