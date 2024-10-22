@@ -37,6 +37,8 @@ class Stats extends Component
 
     $this->averageDelays = $query->groupBy('creation_date')
         ->orderBy('creation_date')
+        ->havingRaw('COUNT(dossiers.id) > 0')
+
         ->get();
 
         // Load audit delays
@@ -61,6 +63,8 @@ class Stats extends Component
         
         $this->auditDelays = $auditQuery->groupBy('creation_date')
             ->orderBy('creation_date')
+            ->havingRaw('COUNT(dossiers.id) > 0')
+
             ->get();
         
     }
