@@ -14,9 +14,12 @@ use Carbon\Carbon;
 class Dashboard extends Component
 {
 
+    public $donutData = [];
 
     public function mount()
     {
+        $this->donutData = $this->getDonutData();
+
         $this->refresh();
     }
     public function refresh()
@@ -76,23 +79,32 @@ class Dashboard extends Component
         $stats['rdvsLastWeek'] = $rdvsLastWeek->rdv_count ?? 0;
 
         $dossiersForMonth = DB::table('dossiers')
-            ->whereBetween('created_at', [$currentMonthStart, $currentMonthEnd])
-            ->count();
+            ->whereBetween('created_at', [$currentMonthStart, $currentMonthEnd]);
+            
+            $dossiersForMonth = $this->filter_dossiers($dossiersForMonth);
+
+            $dossiersForMonth=$dossiersForMonth->count();
         $stats['dossiersForMonth'] = $dossiersForMonth ?? 0;
 
         $dossiersLastMonth = DB::table('dossiers')
-            ->whereBetween('created_at', [$lastMonthStart, $lastMonthEnd])
-            ->count();
+            ->whereBetween('created_at', [$lastMonthStart, $lastMonthEnd]);
+            $dossiersLastMonth = $this->filter_dossiers($dossiersLastMonth);
+
+            $dossiersLastMonth=$dossiersLastMonth->count();
         $stats['dossiersLastMonth'] = $dossiersLastMonth ?? 0;
 
         $dossiersForWeek = DB::table('dossiers')
-            ->whereBetween('created_at', [$currentWeekStart, $currentWeekEnd])
-            ->count();
+            ->whereBetween('created_at', [$currentWeekStart, $currentWeekEnd]);
+            $dossiersForWeek = $this->filter_dossiers($dossiersForWeek);
+
+            $dossiersForWeek=$dossiersForWeek->count(); 
         $stats['dossiersForWeek'] = $dossiersForWeek ?? 0;
 
         $dossiersLastWeek = DB::table('dossiers')
-            ->whereBetween('created_at', [$lastWeekStart, $lastWeekEnd])
-            ->count();
+            ->whereBetween('created_at', [$lastWeekStart, $lastWeekEnd]);
+            $dossiersLastWeek = $this->filter_dossiers($dossiersLastWeek);
+
+            $dossiersLastWeek=$dossiersLastWeek->count(); 
         $stats['dossiersLastWeek'] = $dossiersLastWeek ?? 0;
         $this->stats = $stats;
 
@@ -190,7 +202,23 @@ class Dashboard extends Component
             });
         }
 
-
+        
         return $dossiers;
     }
+
+
+    // Assuming this is in your Livewire component or controller
+public function getDonutData()
+{
+    $data = DB::table('etapes')
+        ->leftJoin('dossiers', 'dossiers.etape_number', '=', 'etapes.id')
+        ->select('etapes.etape_name','etapes.etape_desc','etapes.etape_icon', 'etapes.order_column', DB::raw('COUNT(dossiers.id) as dossier_count'))
+        ->groupBy('etapes.id', 'etapes.etape_name', 'etapes.order_column')
+        ->orderBy('etapes.order_column');
+        $data=$this->filter_dossiers($data);
+        $data =$data->get();
+
+    return $data;
+}
+
 }

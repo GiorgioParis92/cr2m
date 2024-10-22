@@ -223,7 +223,7 @@ if (!function_exists('percent_difference')) {
         }
 
         $value = ($value1 - $value2) / $value2 * 100;
-        $value = $value . '%';
+        $value = number_format($value,2) . '%';
         return $value;
     }
 }

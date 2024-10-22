@@ -37,30 +37,50 @@ class StatsController extends \App\Http\Controllers\Controller
 
 
         $rdvsForMonth = DB::table('rdv')
-            ->select(DB::raw('COUNT(*) as rdv_count'))
-            ->whereBetween('date_rdv', [$currentMonthStart, $currentMonthEnd])
-            ->groupBy('dossier_id')
-            ->first();
+        ->join('dossiers', 'rdv.dossier_id', '=', 'dossiers.id')
+        ->select(DB::raw('COUNT(*) as rdv_count'))
+        ->whereBetween('date_rdv', [$currentMonthStart, $currentMonthEnd])
+        ->when(auth()->user()->client_id > 0, function ($query) {
+            return $query->where('dossiers.installateur', auth()->user()->client_id);
+        })
+        ->groupBy('rdv.dossier_id')
+        ->first();
         $stats['rdvsForMonth'] = $rdvsForMonth->rdv_count ?? 0;
 
 
 
 
-        $rdvsForWeek = DB::table('rdv')
+   
+
+            $rdvsForWeek = DB::table('rdv')
+            ->join('dossiers', 'rdv.dossier_id', '=', 'dossiers.id')
             ->select(DB::raw('COUNT(*) as rdv_count'))
             ->whereBetween('date_rdv', [$currentWeekStart, $currentWeekEnd])
-            ->groupBy('dossier_id')
+            ->when(auth()->user()->client_id > 0, function ($query) {
+                return $query->where('dossiers.installateur', auth()->user()->client_id);
+            })
+            ->groupBy('rdv.dossier_id')
             ->first();
+
         $stats['rdvsForWeek'] = $rdvsForWeek->rdv_count ?? 0;
 
 
         $dossiersForMonth = DB::table('dossiers')
-        ->whereBetween('created_at', [$currentMonthStart, $currentMonthEnd])
-        ->count();
+        ->whereBetween('created_at', [$currentMonthStart, $currentMonthEnd]);
+        if(auth()->user()->client_id>0) {
+            $dossiersForMonth =$dossiersForMonth->where('installateur', auth()->user()->client_id) ;
+        }
+      
+        $dossiersForMonth =$dossiersForMonth->count();
+
+
         $stats['dossiersForMonth'] = $dossiersForMonth ?? 0;
 
         $dossiersForWeek = DB::table('dossiers')
         ->whereBetween('created_at', [$currentWeekStart, $currentWeekEnd])
+        ->when(auth()->user()->client_id > 0, function ($query) {
+            return $query->where('installateur', auth()->user()->client_id);
+        })
         ->count();
         $stats['dossiersForWeek'] = $dossiersForWeek ?? 0;
 
