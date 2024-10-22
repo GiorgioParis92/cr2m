@@ -77,7 +77,8 @@
             var averageLabels = averageDelays.map(function(item) {
                 var date = new Date(item.creation_date);
                 var day = date.getDate();
-                return (day === 1 || day === 15) ? date.toLocaleDateString('fr-FR') : '';
+                // return (day === 1 || day === 15) ? date.toLocaleDateString('fr-FR') : '';
+                return date.toLocaleDateString('fr-FR');
             });
 
             var averageData = averageDelays.map(function(item) {
