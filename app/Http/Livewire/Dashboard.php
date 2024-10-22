@@ -210,14 +210,19 @@ class Dashboard extends Component
     // Assuming this is in your Livewire component or controller
 public function getDonutData()
 {
-    // $data = DB::table('etapes')
-    //     ->leftJoin('dossiers', 'dossiers.etape_number', '=', 'etapes.id')
-    //     ->select('etapes.etape_name','etapes.etape_desc','etapes.etape_icon', 'etapes.order_column', DB::raw('COUNT(dossiers.id) as dossier_count'))
-    //     ->groupBy('etapes.id', 'etapes.etape_name', 'etapes.order_column')
-    //     ->orderBy('etapes.order_column');
-    //     $data=$this->filter_dossiers($data);
-    //     $data =$data->get();
-    $data=[];
+    if(auth()->user()->id==1) {
+    $data = DB::table('etapes')
+        ->leftJoin('dossiers', 'dossiers.etape_number', '=', 'etapes.id')
+        ->select('etapes.etape_name','etapes.etape_desc','etapes.etape_icon', 'etapes.order_column', DB::raw('COUNT(dossiers.id) as dossier_count'))
+        ->groupBy('etapes.id', 'etapes.etape_name', 'etapes.order_column')
+        ->orderBy('etapes.order_column');
+        $data=$this->filter_dossiers($data);
+        $data =$data->get();
+    } else {
+        $data=[];
+    }
+
+    
     return $data;
 }
 
