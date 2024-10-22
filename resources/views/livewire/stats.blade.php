@@ -88,7 +88,8 @@
             var auditLabels = auditDelays.map(function(item) {
                 var date = new Date(item.creation_date);
                 var day = date.getDate();
-                return (day === 1 || day === 15) ? date.toLocaleDateString('fr-FR') : '';
+          // return (day === 1 || day === 15) ? date.toLocaleDateString('fr-FR') : '';
+          return date.toLocaleDateString('fr-FR');
             });
 
             var auditData = auditDelays.map(function(item) {
