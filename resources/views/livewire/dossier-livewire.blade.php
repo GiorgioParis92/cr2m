@@ -206,7 +206,7 @@
                                             <span class="step-text">
                                                 {{ strtoupper_extended($e['etape_desc']) }}
 
-
+                                           
                                                 @if (!empty($steps) && isset($steps['step_' . $e['etape_number']]))
                                                     <div class="col text-center">
                                                         <p class="text-xs font-weight-bold mb-0"> <br /></p>
