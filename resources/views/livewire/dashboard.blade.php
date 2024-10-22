@@ -1057,7 +1057,9 @@
 
     const labels = donutData.map(item => `${item.etape_icon} - ${item.etape_desc} (${item.dossier_count})`);
     const data = donutData.map(item => item.dossier_count);
-    const etapeIds = donutData.map(item => item.etape_id); // Assuming `etape_id` is part of your data
+    const etapeIds = donutData.map(item => item.id); // Assuming `etape_id` is part of your data
+    console.log(etapeIds)
+    
     const gradientColors = [
         'rgba(255, 99, 132, 0.7)',   // Red
         'rgba(54, 162, 235, 0.7)',   // Blue
@@ -1096,13 +1098,14 @@
                 }
             },
             onClick: function (event, elements) {
+                console.log(event)
                 console.log(elements)
                 if (elements.length > 0) {
                     const index = elements[0].index;
                     const etapeId = etapeIds[index];
                     console.log(index)
                     console.log(etapeId)
-                    // window.open(`/dossier?etape=${index}`, '_blank');
+                    window.open(`/dossier?etape=${etapeId}`, '_blank');
                 }
             }
         }
