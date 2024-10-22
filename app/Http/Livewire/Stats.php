@@ -100,11 +100,15 @@ class Stats extends Component
     public function updatedStartDate()
     {
         $this->loadStatistics();
+        $this->dispatchBrowserEvent('refresh-chart', ['averageDelays' => $this->averageDelays, 'auditDelays' => $this->auditDelays]);
+
     }
 
     public function updatedEndDate()
     {
         $this->loadStatistics();
+        $this->dispatchBrowserEvent('refresh-chart', ['averageDelays' => $this->averageDelays, 'auditDelays' => $this->auditDelays]);
+
     }
 
     public function render()
