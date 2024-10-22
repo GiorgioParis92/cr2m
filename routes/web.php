@@ -194,7 +194,9 @@ Route::get('/messagerie', [App\Http\Controllers\Messagerie::class, 'index'])->na
 
 Route::get('/search', [App\Http\Controllers\SearchController::class, 'search'])->name('search');
 
-
+Route::get('/stats', function () {
+    return view('stats');
+})->name('stats');
 });
 
 // Include auth routes like login, register, password reset, etc.
