@@ -25,7 +25,7 @@ class Stats extends Component
     {
         $query = DB::table('dossiers')
         ->join('dossiers_data', 'dossiers.id', '=', 'dossiers_data.dossier_id')
-        ->where('dossiers_data.meta_key', 'step_1')
+        ->where('dossiers_data.meta_key', 'step_2')
         ->select(
             DB::raw('DATE(dossiers.created_at) as creation_date'),
             DB::raw('AVG(TIMESTAMPDIFF(DAY, dossiers.created_at, dossiers_data.meta_value)) as average_delay')
