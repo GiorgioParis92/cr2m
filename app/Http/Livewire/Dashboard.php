@@ -41,6 +41,7 @@ class Dashboard extends Component
 
         $rdvsForMonth = DB::table('rdv')
             ->select(DB::raw('COUNT(*) as rdv_count'))
+            ->where('type_rdv','<=',2)
             ->whereBetween('date_rdv', [$currentMonthStart, $currentMonthEnd])
             ->join('dossiers', 'rdv.dossier_id', '=', 'dossiers.id');
 
@@ -50,6 +51,7 @@ class Dashboard extends Component
 
         $rdvsLastMonth = DB::table('rdv')
             ->select(DB::raw('COUNT(*) as rdv_count'))
+            ->where('type_rdv','<=',2)
             ->whereBetween('date_rdv', [$lastMonthStart, $lastMonthEnd])
             ->join('dossiers', 'rdv.dossier_id', '=', 'dossiers.id');
 
@@ -60,6 +62,7 @@ class Dashboard extends Component
 
         $rdvsForWeek = DB::table('rdv')
             ->select(DB::raw('COUNT(*) as rdv_count'))
+            ->where('type_rdv','<=',2)
             ->whereBetween('date_rdv', [$currentWeekStart, $currentWeekEnd])
             
             ->join('dossiers', 'rdv.dossier_id', '=', 'dossiers.id');
@@ -71,6 +74,7 @@ class Dashboard extends Component
 
         $rdvsLastWeek = DB::table('rdv')
             ->select(DB::raw('COUNT(*) as rdv_count'))
+            ->where('type_rdv','<=',2)
             ->whereBetween('date_rdv', [$lastWeekStart, $lastWeekEnd])
             ->join('dossiers', 'rdv.dossier_id', '=', 'dossiers.id');
 
