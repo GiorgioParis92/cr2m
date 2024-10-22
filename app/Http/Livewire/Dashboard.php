@@ -210,7 +210,7 @@ class Dashboard extends Component
     // Assuming this is in your Livewire component or controller
 public function getDonutData()
 {
-    if(auth()->user()->id==1) {
+ 
 
 
         $data = DB::table('etapes')
@@ -222,9 +222,6 @@ public function getDonutData()
         $data =$data->get();
     
 
-    } else {
-        $data=[];
-    }
 
     
     return $data;
