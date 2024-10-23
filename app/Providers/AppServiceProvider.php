@@ -52,6 +52,12 @@ class AppServiceProvider extends ServiceProvider
             View::share('permissions', $permissions);
         }
 
+        View::composer('*', function ($view) {
+            if (Auth::check() && Auth::user()->id == 1) {
+                $clients = Client::all();
+                $view->with('clients', $clients);
+            }
+        });
         view()->composer('app', AuditeursComposer::class);
 
     }

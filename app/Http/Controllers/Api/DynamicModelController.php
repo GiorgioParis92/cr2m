@@ -90,17 +90,21 @@ class DynamicModelController extends \App\Http\Controllers\Controller
 
 public function updateOrInsert(Request $request, $modelName)
 {
+
     // Validate if the necessary fields are present
     $this->validate($request, [
-        'conditions' => 'required|array',
-        'update_data' => 'required|array',
+        'conditions' => 'required|string',
+        'update_data' => 'required|string',
     ]);
 
     // Retrieve conditions and update data from the request
-    $conditions = $request->input('conditions'); // Array of conditions for the 'where' clause
-    $updateData = $request->input('update_data'); // Array of columns and their new values
+    $conditions = json_decode($request->input('conditions'),true); // Array of conditions for the 'where' clause
+    $updateData = json_decode($request->input('update_data'),true); // Array of columns and their new values
 
-
+    $updateData['updated_at'] = now();
+    if (!isset($updateData['created_at'])) {
+        $updateData['created_at'] = now();
+    }
 
     // Perform updateOrInsert operation on the specified table
     try {
@@ -108,7 +112,7 @@ public function updateOrInsert(Request $request, $modelName)
 
         $update = $model->updateOrInsert($conditions, $updateData);
 
-        return response()->json(['message' => 'Operation successful', 'updated' => $update], 200);
+        return response()->json(['message' => 'Operation successful'], 200);
     } catch (\Exception $e) {
         return response()->json(['error' => $e->getMessage()], 500);
     }

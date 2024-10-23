@@ -225,4 +225,22 @@ class UserController extends Controller
         // Return a success message
         return redirect()->route('users.index')->with('success', 'Password updated successfully.');
     }
+
+    public function changeClient(Request $request)
+{
+    if (auth()->user()->id !== 1) {
+        return response()->json(['success' => false, 'message' => 'Unauthorized'], 403);
+    }
+
+    $request->validate([
+        'client_id' => 'required|exists:clients,id',
+    ]);
+
+    $user = auth()->user();
+    $user->client_id = $request->client_id;
+    $user->save();
+
+    return response()->json(['success' => true, 'message' => 'Client changed successfully']);
+}
+
 }

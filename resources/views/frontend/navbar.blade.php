@@ -161,16 +161,31 @@
 
 
       <ul class="navbar-nav  justify-content-end">
-          <li class="nav-item d-flex align-items-center">
-              <a class="nav-link text-body font-weight-bold px-0">
-
-                  <span class="d-sm-inline "> <span class="btn btn-tertiary"><i
-                              class="fa fa-user me-sm-1"></i>{{ auth()->user()->name }}
-                          ({{ auth()->user()->type->type_desc ?? '' }})</span> <span
-                          class="btn btn-secondary">{{ strtoupper(auth()->user()->client->client_title ?? '') }}</span></span>
-              </a>
-          </li>
-
+        <li class="nav-item d-flex align-items-center">
+            <a class="nav-link text-body font-weight-bold px-0">
+                <span class="d-sm-inline">
+                    <span class="btn btn-tertiary">
+                        <i class="fa fa-user me-sm-1"></i>{{ auth()->user()->name }}
+                        ({{ auth()->user()->type->type_desc ?? '' }})
+                    </span>
+                    <span class="btn btn-secondary">
+                        {{ strtoupper(auth()->user()->client->client_title ?? '') }}
+                    </span>
+                </span>
+            </a>
+        
+            @if(auth()->user()->id == 1)
+                <select id="clientDropdown" name="client_id" class="form-control mt-2" style="width: 200px;">
+                    <option value="">Se connecter comme</option>
+                    @foreach($clients as $client)
+                        <option @if(auth()->user()->client_id == $client->id) selected @endif value="{{ $client->id }}">
+                            {{ $client->client_title }}
+                        </option>
+                    @endforeach
+                </select>
+            @endif
+        </li>
+        
 
 
           <li class="nav-item px-3 d-flex align-items-center d-none">
@@ -187,3 +202,35 @@
       </ul>
     </div> <!-- container-fluid.// -->
 </nav>
+<script>
+    $(document).ready(function() {
+        // Initialize Select2
+        $('#clientDropdown').select2();
+
+        // Listen for the change event on Select2
+        $('#clientDropdown').on('change', function() {
+            var clientId = $(this).val(); // Get the selected value
+
+            fetch('/change-client', {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ client_id: clientId })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Reload the current page on success
+                    location.reload();
+                } else {
+                    alert('Failed to change client');
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    });
+</script>
+
+

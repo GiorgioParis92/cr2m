@@ -197,6 +197,9 @@ Route::get('/search', [App\Http\Controllers\SearchController::class, 'search'])-
 Route::get('/stats', function () {
     return view('stats');
 })->name('stats');
+
+Route::post('/change-client', [UserController::class, 'changeClient'])->middleware('auth');
+
 });
 
 // Include auth routes like login, register, password reset, etc.
