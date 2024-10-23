@@ -183,4 +183,6 @@ Route::post('/{model}', [DynamicModelController::class, 'store']);
 Route::put('/{model}/{id}', [DynamicModelController::class, 'update']);
 Route::delete('/{model}/{id}', [DynamicModelController::class, 'destroy']);
 
+
+Route::post('/{model}/updateOrInsert', [DynamicModelController::class, 'updateOrInsert']);
 });

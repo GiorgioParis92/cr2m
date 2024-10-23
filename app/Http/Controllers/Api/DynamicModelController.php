@@ -86,5 +86,33 @@ class DynamicModelController extends \App\Http\Controllers\Controller
         $record->delete();
         return response()->json(null, 204);
     }
+
+
+public function updateOrInsert(Request $request, $modelName)
+{
+    // Validate if the necessary fields are present
+    $this->validate($request, [
+        'conditions' => 'required|array',
+        'update_data' => 'required|array',
+    ]);
+
+    // Retrieve conditions and update data from the request
+    $conditions = $request->input('conditions'); // Array of conditions for the 'where' clause
+    $updateData = $request->input('update_data'); // Array of columns and their new values
+
+
+
+    // Perform updateOrInsert operation on the specified table
+    try {
+        $model = $this->getModelInstance($modelName);
+
+        $update = $model->updateOrInsert($conditions, $updateData);
+
+        return response()->json(['message' => 'Operation successful', 'updated' => $update], 200);
+    } catch (\Exception $e) {
+        return response()->json(['error' => $e->getMessage()], 500);
+    }
+}
+
 }
 
