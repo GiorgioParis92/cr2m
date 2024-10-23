@@ -177,16 +177,7 @@ class Generate extends AbstractFormData
                 <i class="fas fa-eye"></i> Marquer comme signé (signature manuelle)
             </button> ';
                 }
-                if(auth()->user()->id==1) {
-            $data .= '<br/><button type="button" class="btn btn-danger btn-view" wire:click="delete_doc(\''.$this->form_id.'\',\''.$this->name.'\')"
-            data-toggle="modal" 
-               data-dossier_id="' . $this->dossier->folder . '"';
-                $data .= "data-form_id='" . $this->form_id . "'";
 
-                $data .= 'data-name="' . $this->config->title . '">
-            <i class="fas fa-eye"></i> Marquer comme signé (signature manuelle)
-        </button> ';
-                }
 
                 $data.='</div>';
                 } else {
@@ -194,7 +185,16 @@ class Generate extends AbstractFormData
                     $data.='Document signé';
                     $data.='</div>';
                 }
-             
+                if(auth()->user()->id==1) {
+                    $data .= '<br/><button type="button" class="btn btn-danger btn-view" wire:click="delete_doc(\''.$this->form_id.'\',\''.$this->name.'\')"
+                    data-toggle="modal" 
+                       data-dossier_id="' . $this->dossier->folder . '"';
+                        $data .= "data-form_id='" . $this->form_id . "'";
+        
+                        $data .= 'data-name="' . $this->config->title . '">
+                    <i class="fas fa-eye"></i> Marquer comme signé (signature manuelle)
+                </button> ';
+                        }
     
             
       

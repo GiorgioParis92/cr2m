@@ -528,7 +528,19 @@ class DossierLivewire extends Component
             ]
         );
     }
-
+    public function delete_doc($form_id, $tag)
+    {
+   
+        
+        $update = DB::table('forms_data')->delete(
+            [
+                'dossier_id' => '' . $this->dossier->id . '',
+                'form_id' => '' . $form_id . '',
+            ],
+       
+        );
+       
+    }
 
     private function arrayToObject($array)
 {
