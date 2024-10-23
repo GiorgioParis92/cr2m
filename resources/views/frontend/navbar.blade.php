@@ -175,6 +175,7 @@
             </a>
         
             @if(auth()->user()->id == 1)
+            <div>
                 <select id="clientDropdown" name="client_id" class="form-control mt-2" style="width: 200px;">
                     <option value="">Se connecter comme</option>
                     @foreach($clients as $client)
@@ -183,6 +184,7 @@
                         </option>
                     @endforeach
                 </select>
+            </div>
             @endif
         </li>
         

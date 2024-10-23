@@ -14,59 +14,53 @@
                             </div>
                         </div>
                         <div class="table-responsive no-overflow">
-                            <table class="table ">
-                                <tbody>
-                                    @foreach ($liste as $dossier)
-                                        <tr>
-                                            <td >
-                                                <div class="">
-
-                                                    <div class="ms-4">
-                                                        <h6 class="text-sm mb-0">
-                                                         
-                                                            {{ $dossier->beneficiaire->nom }}
-                                                            {{ $dossier->beneficiaire->prenom }}</h6>
-                                                        <p class="text-xs font-weight-bold mb-0">
-                                                            {{ $dossier->beneficiaire->numero_voie }}
-                                                            {{ $dossier->beneficiaire->adresse }}<br />{{ $dossier->beneficiaire->cp }}
-                                                            {{ $dossier->beneficiaire->ville }}</p>
-                                                    </div>
+                            @foreach ($liste as $dossier)
+                                <div class="row">
+                                    <div class="col-4">
+    
+                                        <div class="ms-4">
+                                            <h6 class="text-sm mb-0">
+    
+                                                <a target="_blank" href="{{ route('dossiers.show', $dossier->folder) }}">
+                                                    {{ $dossier->beneficiaire->nom }}
+    
+                                                    {{ $dossier->beneficiaire->prenom }}
+                                                </a>
+                                            </h6>
+                                            <p class="text-xs font-weight-bold mb-0">
+                                                {{ $dossier->beneficiaire->numero_voie }}
+                                                {{ $dossier->beneficiaire->adresse }}<br />{{ $dossier->beneficiaire->cp }}
+                                                {{ $dossier->beneficiaire->ville }}</p>
+                                        </div>
+                                    </div>
+                                    <div class="text-center col-4">
+                                        <div style="">
+                                            <a target="_blank" href="{{ route('dossiers.show', $dossier->folder) }}">
+                                                <div style="" class="btn btn-success">
+                                                    <span
+                                                        class="badge badge-primary">{{ $dossier->etape->etape_icon }}</span>
+    
+                                                    {{ $dossier->etape->etape_desc }}
                                                 </div>
-                                            </td>
-                                            <td>
-                                                <div class="text-center">
-                                                    <div style="position: relative !important;left: -50px;">
-                                                        <a target="_blank"
-                                                            href="{{ route('dossiers.show', $dossier->folder) }}">
-                                                            <span  class="badge badge-primary badge_button">{{ $dossier->etape->etape_icon }}</span>
-                                                            <div style="margin-top: 13px; max-width: 80px; text-wrap: wrap; font-size: 9px; padding: 8px !important; background-size: 0; padding-top: 13px !important; width: 100%; max-width: 100%;"
-                                                                class="btn btn-success">
-                                                                {{ $dossier->etape->etape_desc }}
-                                                            </div>
-                                                        </a>
-                                                    </div>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="text-center col-4">
+                                        <span>
+                                            <a target="_blank" href="{{ route('dossiers.show', $dossier->folder) }}">
+                                                <div class="btn btn-{{ $dossier->status->status_style }}">
+    
+                                                    {{ $dossier->status->status_desc }}
+    
                                                 </div>
-                                            </td>
-                                            <td>
-                                                <div class="text-center">
-                                                    <span>
-                                                        <a target="_blank"
-                                                            href="{{ route('dossiers.show', $dossier->folder) }}">
-                                                            <div class="btn btn-{{ $dossier->status->status_style }}">
-
-                                                                {{ $dossier->status->status_desc }}
-
-                                                            </div>
-                                                        </a>
-
-                                                    </span>
-                                                </div>
-                                            </td>
-                                        
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
+                                            </a>
+    
+                                        </span>
+                                    </div>
+                                </div>
+                                <hr>
+                            @endforeach
+    
                         </div>
                     </div>
                 </div>
