@@ -530,7 +530,7 @@ class DossierLivewire extends Component
     }
     public function delete_doc($form_id, $tag)
     {
-   
+   dd($this->dossier->id);
         
         $update = DB::table('forms_data')->delete(
             [

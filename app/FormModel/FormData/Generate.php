@@ -192,7 +192,7 @@ class Generate extends AbstractFormData
                         $data .= "data-form_id='" . $this->form_id . "'";
         
                         $data .= 'data-name="' . $this->config->title . '">
-                    <i class="fas fa-eye"></i> Marquer comme signé (signature manuelle)
+                    <i class="fas fa-eye"></i> supprimer
                 </button> ';
                         }
     
