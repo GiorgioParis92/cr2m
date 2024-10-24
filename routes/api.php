@@ -30,6 +30,7 @@ use App\Http\Controllers\Api\ClientController;
 use App\Http\Controllers\Api\TablesController;
 
 use App\Http\Controllers\Api\DynamicModelController;
+use App\Http\Controllers\Api\UploadFile;
 
 
 
@@ -172,6 +173,7 @@ Route::middleware('auth:api')->group(function () {
 // Route::put('/clients/{id}', [ClientController::class, 'update']);
 // Route::delete('/clients/{id}', [ClientController::class, 'destroy']);
 
+Route::post('/upload_file', [UploadFile::class, 'index']);
 Route::post('/update_permission', [UpdatePermission::class, 'index']);
 
 Route::get('/tables', [TablesController::class, 'index']);
