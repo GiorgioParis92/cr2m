@@ -401,6 +401,11 @@
 
         <p>
             Le Bénéficiaire<br />
+            @if(isset(json_decode($all_data['form_data'][13]['signature_beneficiaire'])[0]) && file_exists(storage_path('app/public/' . json_decode($all_data['form_data'][13]['signature_beneficiaire'])[0])))
+
+                    <img style="max-width:150px;margin-top:10px" src="{{ asset('storage/' . json_decode($all_data['form_data'][13]['signature_beneficiaire'])[0]) }}" alt="Logo">
+        
+                    @endif
             {{-- Signature précédé de la mention manuscrite<br />
             <i>"Bon pour accord et exécution du devis »</i> --}}
         </p>

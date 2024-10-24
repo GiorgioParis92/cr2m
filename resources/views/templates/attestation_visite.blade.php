@@ -294,7 +294,11 @@
             <td style="border:none;width:50%;vertical-align:top">
                 <p><b>Le bénéficiaire</b></p>
                 {{-- <p>Signature précédé de la mention manuscrite <br /><i>Adresse complète du bénéficiaire </i> --}}
-                
+                    @if(isset(json_decode($all_data['form_data'][13]['signature_beneficiaire'])[0]) && file_exists(storage_path('app/public/' . json_decode($all_data['form_data'][13]['signature_beneficiaire'])[0])))
+
+                    <img style="max-width:150px;margin-top:-10px" src="{{ asset('storage/' . json_decode($all_data['form_data'][13]['signature_beneficiaire'])[0]) }}" alt="Logo">
+        
+                    @endif
             </td>
 
 

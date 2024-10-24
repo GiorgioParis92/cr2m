@@ -337,7 +337,10 @@ if (!function_exists('load_all_dossier_data')) {
                 if (!isset($results["form_data"][$data->form_id])) {
                     $results["form_data"][$data->form_id] = [];
                 }
-                $results["form_data"][$data->form_id][$data->meta_key] = $data->meta_value;
+                if(!empty($data->meta_value)) {
+                    $results["form_data"][$data->form_id][$data->meta_key] = $data->meta_value;
+
+                }
             }
         }
 
