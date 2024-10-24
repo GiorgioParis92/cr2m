@@ -42,6 +42,7 @@ class Photo extends AbstractFormData
 
 
         $csrfToken = csrf_token();
+        $data .= auth()->user()->type_id;
         $data .= "<div class='row'>";
         $data .= "<div class='col-lg-3'>";
 
