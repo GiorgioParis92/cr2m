@@ -10,6 +10,11 @@ class Photo extends AbstractFormData
     public function render(bool $is_error)
     {
       
+
+        if(!is_user_allowed($this->name)) {
+            return '';
+        }
+
         $json_value=decode_if_json($this->value);
        
         // $json_value=json_decode($this->value);
