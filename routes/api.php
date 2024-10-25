@@ -174,6 +174,7 @@ Route::middleware('auth:api')->group(function () {
 // Route::delete('/clients/{id}', [ClientController::class, 'destroy']);
 
 Route::post('/upload_file', [UploadFile::class, 'index']);
+Route::post('/delete_file', [UploadFile::class, 'deleteFile']);
 Route::post('/update_permission', [UpdatePermission::class, 'index']);
 
 Route::get('/tables', [TablesController::class, 'index']);

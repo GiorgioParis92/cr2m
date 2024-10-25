@@ -80,4 +80,40 @@ class UploadFile extends \App\Http\Controllers\Controller
             'file_path' => $directory . '/' . $fileName
         ], 200);
     }
+
+    public function deleteFile(Request $request)
+{
+    // Check if dossier_id and name are present in the request
+    if (!isset($request->dossier_id)) {
+        return response()->json('dossier_id required', 200);
+    }
+
+    if (!isset($request->name)) {
+        return response()->json('name required', 200);
+    }
+
+    // Fetch the folder associated with the dossier_id
+    $dossier = Dossier::where('id', $request->dossier_id)->first();
+    $folder = $dossier->folder ?? 'default';
+
+    // File path to be deleted
+    $directory = "dossiers/{$folder}";
+    $fileName = $request->name;
+    $filePath = $directory . '/' . $fileName;
+    // Check if the file exists
+    if (!Storage::disk('public')->exists($filePath)) {
+        return response()->json('File not found', 404);
+    }
+
+    // Attempt to delete the file
+    try {
+        Storage::disk('public')->delete($filePath);
+        return response()->json('File deleted successfully', 200);
+    } catch (\Exception $e) {
+        // Log the error if the deletion fails
+        error_log("File deletion error: " . $e->getMessage());
+        return response()->json(['error' => 'Failed to delete file'], 500);
+    }
+}
+
 }
