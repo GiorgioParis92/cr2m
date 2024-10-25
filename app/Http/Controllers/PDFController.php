@@ -317,7 +317,7 @@ class PDFController extends Controller
                         if (isset($fill_data_config['signature_beneficiaire'])) {
                        
                                 
-                            $current_value = json_decode($all_data[$fill_data_config["data_origin"]][$form_id][$tag])[0];
+                            $current_value = json_decode($all_data[$fill_data_config["data_origin"]][$form_id][$tag])[0] ?? '';
                             $value='';
                            
                             $signature_client = $current_value ?? '';
