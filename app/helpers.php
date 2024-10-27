@@ -11,7 +11,27 @@ use Illuminate\Support\Facades\DB;
 
 
 
+if (!function_exists('is_user_forbidden')) {
+     function is_user_forbidden($permission_name)
+    {
+   
+        $user = Auth::user();
 
+   
+        $permission = DB::table('forbidden_actions_type_users')
+        ->where('type_user', $user->type_id)
+        ->where('permission_name', $permission_name)
+        ->first();
+        // if($permission) {
+        //     print_r($permission);
+        // }
+        
+        if ($permission && $permission->is_active == 0) {
+            return true;
+        }
+        return false;
+    }
+}
 
 if (!function_exists('is_user_allowed')) {
     /**

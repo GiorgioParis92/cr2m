@@ -152,7 +152,10 @@
                                         if ($isAllowed && $isActive) {
                                             $i++;
                                         }
-
+                                        if (is_user_forbidden($e['etape_name']) == true) {
+                                        $isAllowed = false;
+                                        $isCurrent = false;
+                                    }
                                     @endphp
                                     @if ($isAllowed == true && $isActive == true)
                                         <option @if ($e['id'] == $tab) selected @endif
@@ -190,7 +193,10 @@
                                     } else {
                                         $isAllowed = true;
                                     }
-
+                                    if (is_user_forbidden($e['etape_name']) == true) {
+                                        $isAllowed = false;
+                                        $isCurrent = false;
+                                    }
                                 @endphp
 
                                 <div @if ($isActive && $isAllowed) wire:click="setTab({{ $e['etape_number'] }})" @endif
