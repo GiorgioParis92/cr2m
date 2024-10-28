@@ -51,9 +51,9 @@ if (!function_exists('is_user_allowed')) {
         $userPermission = UserPermission::where('user_id', $user->id)
         ->where('permission_name', $permission_name)
         ->first();
-        if (!$userPermission) {
-            return false;
-        }
+        // if (!$userPermission) {
+        //     return false;
+        // }
     if ($userPermission && $userPermission->is_active == 1) {
         return true;
     }
