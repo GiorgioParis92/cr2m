@@ -47,6 +47,21 @@ if (!function_exists('is_user_allowed')) {
         if (!$user) {
             return false;
         }
+
+        $userPermission = UserPermission::where('user_id', $user->id)
+        ->where('permission_name', $permission_name)
+        ->first();
+        if (!$userPermission) {
+            return false;
+        }
+    if ($userPermission && $userPermission->is_active == 1) {
+        return true;
+    }
+    if ($userPermission && $userPermission->is_active == 0) {
+        return false;
+    }
+
+
         if ($user->client_id == 0) {
             $defaultPermission = DB::table('default_permission')->where('type_id', $user->type_id)
                 ->where('permission_name', $permission_name)
@@ -63,14 +78,7 @@ if (!function_exists('is_user_allowed')) {
             }
             return true;
         }
-        $userPermission = UserPermission::where('user_id', $user->id)
-            ->where('permission_name', $permission_name)
-            ->first();
-
-        if ($userPermission && $userPermission->is_active == 1) {
-            return true;
-        }
-
+     
 
         if ($userPermission) {
             if ($userPermission->is_active == 0) {
