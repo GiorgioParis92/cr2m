@@ -1573,3 +1573,11 @@ left: 49vh;
 body.loading {
     overflow: hidden;
 }
+
+
+    .multiline-input {
+        min-height: 100px;
+        white-space: pre-wrap; /* Preserves whitespace and line breaks */
+        overflow-y: auto;
+        resize: none;
+    }
