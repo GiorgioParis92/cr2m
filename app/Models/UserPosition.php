@@ -15,5 +15,8 @@ class UserPosition extends Model
         'lng'
     ];
     protected $table = 'user_position';
-
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id','id');
+    }
 }
