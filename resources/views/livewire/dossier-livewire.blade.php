@@ -86,9 +86,9 @@
                             <div class="ms-auto my-auto mt-lg-0 mt-4">
                                 <div class="ms-auto my-auto">
                                     <div class="btn btn-primary">{{ $dossier['fiche']['fiche_name'] }}</div>
-                                    @if (auth()->user()->client_id == 0)
+                                    @if (auth()->user()->client_id == 0 || (auth()->user()->client_id !=3 && auth()->user()->type_id!=7 && auth()->user()->type_id!=4))
                                         <a href="{{ route('dossiers.delete', ['id' => $dossier->id]) }}"
-                                            class="btn btn-danger">Supprimer le dossier</a>
+                                            class="btn btn-danger">Annuler le dossier</a>
                                         <form class="form-control" method="get">
                                             <label>Installateur</label>
                                             <select wire:ignore class="no_select2  form-control" name="installateur"
