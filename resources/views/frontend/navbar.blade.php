@@ -73,11 +73,11 @@
                         </li>
 
                         <li>
-                            <a class="dropdown-item" href="{{ route('dossiers.index',['etape'=>'12']) }}">
-                              <i class="fa-solid fa-users-line"></i>   Dossiers en proposition
+                            <a class="dropdown-item" href="{{ route('dossiers.index',['etape'=>'21']) }}">
+                              <i class="fa-solid fa-users-line"></i>   Dossiers en contrôle téléphonique 
                             </a>
                         </li>
-
+                     
                         <li>
                             <a class="dropdown-item" href="{{ route('dossiers.index',['etape'=>'0']) }}">
                               <i class="fa-solid fa-users-line"></i>   Tous les dossiers
