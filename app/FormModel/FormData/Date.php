@@ -37,7 +37,7 @@ class Date extends AbstractFormData
 
         $data .= '<label>'.$this->config->title.'</label>';
 
-        $data .= '<input wire:model="'.$wireModel.'"  class="form-control datepicker ' . $class_prediction.' ';
+        $data .= '<input wire:blur="update_value(\''.$wireModel.'\',  $event.target.value)"  class="form-control datepicker ' . $class_prediction.' ';
         if($is_error) {
             $data .=' error is-invalid';
         }
