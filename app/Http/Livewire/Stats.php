@@ -67,6 +67,8 @@ class Stats extends Component
                      ->where('forms_data.meta_key', '=', 'audit');
             })
             ->where('status_id', '!=', 15)
+            ->where('annulation','!=',1)
+
             ->where('etape_number', '>=', function ($query) {
                 $query->selectRaw('MIN(order_column)')
                       ->from('etapes')
@@ -107,6 +109,8 @@ class Stats extends Component
                      ->where('forms_data.meta_key', '=', 'audit');
             })
             ->where('status_id', '!=', 15)
+            ->where('annulation','!=',1)
+
             ->where('etape_number', '>=', function ($query) {
                 $query->selectRaw('MIN(order_column)')
                       ->from('etapes')

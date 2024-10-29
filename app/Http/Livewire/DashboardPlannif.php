@@ -32,6 +32,8 @@ class DashboardPlannif extends Component
                 'status:id,status_style,status_desc',
             ])
             ->where('status_id','!=',15)
+            ->where('annulation','!=',1)
+
             ->where('etape_number', 2);
 
     

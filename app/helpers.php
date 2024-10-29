@@ -692,8 +692,11 @@ if (!function_exists('change_status')) {
   
     if($key=='status_id' && $value==15) {
         Dossier::where('id', $dossier_id)->update(['etape_number' => 1, 'status_id' => $value]);
+        Dossier::where('id', $dossier_id)->update(['annulation' => 1, 'status_id' => $value]);
     } 
-
+    if($key=='status_id' && $value==37) {
+        Dossier::where('id', $dossier_id)->update(['annulation' => 1, 'status_id' => $value]);
+    } 
     }
 }
 
