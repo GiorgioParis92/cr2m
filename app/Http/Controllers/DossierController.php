@@ -193,11 +193,12 @@ class DossierController extends Controller
     public function delete($id)
     {
 
-        $dossier = Dossier::where('id', $id)
-            ->with('beneficiaire', 'fiche', 'etape', 'status')
-            ->delete();
+        // $dossier = Dossier::where('id', $id)
+        //     ->with('beneficiaire', 'fiche', 'etape', 'status')
+        //     ->delete();
        
-        
+        Dossier::where('id', $id)->update(['annulation' => 1, 'status_id' => '37']);
+
 
           
         return redirect()->route('dossiers.index');
