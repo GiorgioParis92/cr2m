@@ -18,6 +18,7 @@ class DossiersTable extends Component
     public $dossiers = [];
 
     // Public properties for filters
+    public $annulation = false;
     public $clientName = '';
     public $precarite = '';
     public $etape = '';
@@ -142,7 +143,15 @@ class DossiersTable extends Component
                     ->orWhere('telephone', 'like', '%' . $this->clientName . '%');
             });
         }
+        if (!$this->annulation) {
+            $dossiersQuery->where(function($q) {
+                $q->whereNull('annulation')
+                  ->orWhere('annulation', 0);
+            });
+        } else {
+            $dossiersQuery->where('annulation', 1);
 
+        }
         if ($this->precarite) {
             $dossiersQuery->whereHas('beneficiaire', function ($query) {
                 $query->where('menage_mpr', $this->precarite);

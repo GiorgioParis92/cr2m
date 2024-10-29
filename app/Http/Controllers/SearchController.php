@@ -13,51 +13,50 @@ class SearchController extends Controller
 {
     public function search(Request $request)
     {
-        $query = $request->input('query');
-
+        $searchTerm = $request->input('query');
         $user = auth()->user();
         $client = Client::where('id', $user->client_id)->first();
-        // Example of searching in different models
-
-
-        $dossiers = Dossier::where('id', '>', 0);
-        if (auth()->user()->client_id > 0) {
-            $client = auth()->user()->client; // Assuming you have a client relationship
+    
+        $dossiers = Dossier::where('id', '>', 0)
+            ->where(function($q) {
+                $q->whereNull('annulation')
+                  ->orWhere('annulation', 0);
+            });
+    
+        if ($user->client_id > 0) {
             if ($client->type_client == 1) {
-                $dossiers = $dossiers->where('mar', auth()->user()->client_id)
-                ;
+                $dossiers->where('mar', $user->client_id);
             } elseif ($client->type_client == 2) {
-                $dossiers = $dossiers->where('mandataire_financier', auth()->user()->client_id);
+                $dossiers->where('mandataire_financier', $user->client_id);
             } elseif ($client->type_client == 3) {
-                $dossiers = $dossiers->where('installateur', auth()->user()->client_id);
+                $dossiers->where('installateur', $user->client_id);
             }
         }
-
-        if ($query) {
-            $dossiers = $dossiers->whereHas('beneficiaire', function ($q) use ($query) {
-                $q->where('nom', 'LIKE', "%{$query}%")
-                  ->orWhere('prenom', 'LIKE', "%{$query}%")
-                  ->orWhere('telephone_2', 'LIKE', "%{$query}%")
-                  ->orWhere('telephone', 'LIKE', "%{$query}%");
+    
+        if ($searchTerm) {
+            $dossiers->whereHas('beneficiaire', function ($q) use ($searchTerm) {
+                $q->where('nom', 'LIKE', "%{$searchTerm}%")
+                  ->orWhere('prenom', 'LIKE', "%{$searchTerm}%")
+                  ->orWhere('telephone_2', 'LIKE', "%{$searchTerm}%")
+                  ->orWhere('telephone', 'LIKE', "%{$searchTerm}%");
             });
         }
-        // $dossiers=$dossiers->where('annulation','!=',1);
+    
         $dossiers = $dossiers->with('beneficiaire', 'fiche', 'etape', 'status')->get();
-
-
+    
         $dossiers->each(function ($dossier) {
             $dossier->url = route('dossiers.show', $dossier->folder);
         });
-
-
+    
         $results = [
             'dossiers' => $dossiers,
         ];
-
+    
         if ($request->ajax()) {
             return response()->json($results);
         }
-
+    
         return view('search.results', compact('results'));
     }
+    
 }

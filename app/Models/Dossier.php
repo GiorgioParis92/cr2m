@@ -16,6 +16,7 @@ class Dossier extends Model
         'fiche_id',
         'etape_id',
         'status_id',
+        'annulation',
         'mar',
         'mandataire_financier',
         'installateur',
