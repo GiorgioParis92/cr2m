@@ -41,7 +41,7 @@ class SearchController extends Controller
                   ->orWhere('telephone', 'LIKE', "%{$query}%");
             });
         }
-        $dossiers=$dossiers->where('annulation','!=',1);
+        // $dossiers=$dossiers->where('annulation','!=',1);
         $dossiers = $dossiers->with('beneficiaire', 'fiche', 'etape', 'status')->get();
 
 
