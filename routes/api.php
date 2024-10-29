@@ -90,7 +90,11 @@ Route::post('/scrapping_all', [ScrappingAll::class, 'index']);
 
 Route::get('/stats', [StatsController::class, 'index']);
 Route::post('/stats', [StatsController::class, 'index']);
+Route::post('/charts/{chartId}', [StatsController::class, 'getChartData']);
+
 Route::middleware('auth:api')->group(function () {
+
+
 
     Route::get('/dossiers-rdv', [DossiersController::class, 'index']);
     Route::post('/dossiers-rdv', [DossiersController::class, 'index']);

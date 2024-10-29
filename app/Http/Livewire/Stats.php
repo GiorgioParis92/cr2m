@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use App\Models\Dossier;
 use App\Models\Clients;
+use Illuminate\Http\Request;
 
 class Stats extends Component
 {
@@ -156,4 +157,9 @@ class Stats extends Component
     {
         return view('livewire.stats');
     }
+
+
+
+
+
 }

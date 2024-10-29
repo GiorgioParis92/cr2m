@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\Dossier;
 use App\Models\Client;
 use App\Models\User;
+use App\Models\ChartConfig;
 use Carbon\Carbon;
 
 use Illuminate\Support\Facades\Schema; // Import Schema for checking columns
@@ -87,4 +88,75 @@ class StatsController extends \App\Http\Controllers\Controller
 
         return response()->json($stats);
     }
+
+    public function getChartData($id, Request $request)
+    {
+        $chartConfig = ChartConfig::findOrFail($id);
+        $parameters = array_merge($chartConfig->parameters ?? [], $request->all());
+    
+        // Build each part of the SQL manually
+        $selectColumns = implode(', ', json_decode($chartConfig->select_columns, true));
+        $joins = $this->buildJoins(json_decode($chartConfig->join_tables, true));
+        $conditions = $this->buildConditions(json_decode($chartConfig->conditions, true), $parameters);
+    
+        // Only add WHERE clause if conditions are not empty
+        $whereClause = $conditions ? "WHERE {$conditions}" : "";
+    
+        // Assemble the final SQL query
+        $sql = "SELECT {$selectColumns} FROM dossiers as d {$joins} {$whereClause}";
+    
+        // Execute the query as a raw statement
+        $data = DB::select(DB::raw($sql));
+    
+        return response()->json([
+            'chartType' => $chartConfig->chart_type,
+            'data' => $data,
+        ]);
+    }
+    
+    
+    // Helper to build JOIN clauses
+    protected function buildJoins($joins)
+    {
+        $joinSql = '';
+        foreach ($joins as $join) {
+            $joinSql .= " LEFT JOIN {$join['table']} ON {$join['on']} ";
+        }
+        return $joinSql;
+    }
+    
+    // Helper to build WHERE conditions and subqueries
+    protected function buildConditions($conditions, $parameters)
+    {
+        $whereSql = '';
+        $isFirstCondition = true;
+        foreach ($conditions as $condition) {
+            // Add 'AND' or 'OR' between conditions, but skip for the first condition
+            if (!$isFirstCondition) {
+                $whereSql .= " {$condition['clause']} ";
+            }
+    
+            // Add the subquery without repeating 'EXISTS'
+            if (isset($condition['subquery'])) {
+                // Ensure that 'EXISTS' is only added once
+                $whereSql .= " ({$condition['subquery']})";
+            } else {
+                $whereSql .= $condition['condition'];
+            }
+    
+            $isFirstCondition = false;
+        }
+    
+        // Replace placeholders in conditions with actual parameters
+        foreach ($parameters as $key => $value) {
+            $whereSql = str_replace(":{$key}", "'{$value}'", $whereSql);
+        }
+    
+        return $whereSql;
+    }
+             
+        
+    
+    
+    
 }
