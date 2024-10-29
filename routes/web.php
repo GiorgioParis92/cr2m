@@ -23,6 +23,7 @@ use App\Http\Controllers\RdvController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\EtapesController;
 use App\Http\Controllers\Messagerie;
+use App\Http\Controllers\MapController;
 use App\Http\Controllers\DefaultPermissionController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\ResetPasswordController;
@@ -187,6 +188,7 @@ Route::get('/rdvs', [App\Http\Controllers\RdvController::class, 'rdvs'])->name('
 
 
 
+Route::get('/map', [App\Http\Controllers\MapController::class, 'index']);
 Route::get('/calendar', [App\Http\Controllers\CalendarController::class, 'index']);
 Route::get('/events', [App\Http\Controllers\EventController::class, 'getEvents']);
 Route::get('/messagerie', [App\Http\Controllers\Messagerie::class, 'index'])->name('messagerie');
