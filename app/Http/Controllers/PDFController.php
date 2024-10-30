@@ -138,6 +138,7 @@ class PDFController extends Controller
             return response()->json([
                 'message' => 'PDF generated and saved successfully',
                 'file_path' => Storage::url($filePath), // Adjusted this line
+                'path' => $filePath, // Adjusted this line
                 'identify' => json_decode($identify) ?? '' // Adjusted this line
             ], 200);
         } else {
@@ -608,7 +609,8 @@ class PDFController extends Controller
         $docs = getDocumentStatuses($dossier->id, $orderColumn);
         return response()->json([
             'message' => 'PDF generated and saved successfully',
-            'file_path' => Storage::url($filePath) // Adjusted this line
+            'file_path' => Storage::url($filePath), // Adjusted this line
+            'path' =>  $filePath // Adjusted this line
         ], 200);
     }
 
