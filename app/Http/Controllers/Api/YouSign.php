@@ -53,7 +53,7 @@ class YouSign extends Controller
           'signer_info' => [
             'first_name' => $dossier->beneficiaire->prenom ?? '',
             'last_name' => $dossier->beneficiaire->nom ?? '',
-            'email' => $dossier->beneficiaire->email ?? '',
+            'email' => $dossier->beneficiaire->email ? str_replace(' ','',$dossier->beneficiaire->email) :  '',
             'phone_number' => formatFrenchPhoneNumber($dossier->beneficiaire->telephone) ?? ''
           ]
         ]

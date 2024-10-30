@@ -25,6 +25,10 @@ class PDFController extends Controller
 {
     public function generatePDF(Request $request)
     {
+
+
+
+
         // Validate the incoming request data
         $validated = $request->validate([
             'template' => 'nullable|string',
@@ -33,10 +37,24 @@ class PDFController extends Controller
             'generation' => 'nullable',
             'identify' => 'nullable',
         ]);
-        if (isset($validated['generation'])) {
+
+
+        if(isset($request->form_id)) {
+
+            $form_config=DB::table('forms_config')
+            ->where('form_id',$request->form_id)
+            ->where('name',$request->name)
+            ->first();
+
+            $config=json_decode($form_config->options);
+            $validated['generation']=$config->on_generation ?? [];
+            $request->template=$config->template ?? [];
+            $validated['template']=$config->template ?? [];
+
+        }
+        if (isset($validated['generation']) && !empty($validated['generation'])) {
             eval ($validated['generation']);
         }
-
         $title = '';
         // Determine the HTML content to use
         if (isset($validated['template'])) {
