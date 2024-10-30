@@ -138,7 +138,7 @@ class PDFController extends Controller
             return response()->json([
                 'message' => 'PDF generated and saved successfully',
                 'file_path' => Storage::url($filePath), // Adjusted this line
-                'path' => $filePath, // Adjusted this line
+                'path' => $directPath, // Adjusted this line
                 'identify' => json_decode($identify) ?? '' // Adjusted this line
             ], 200);
         } else {
@@ -363,6 +363,7 @@ class PDFController extends Controller
         }
 
         $folderPath = "public/dossiers/{$validated['dossier_id']}";
+        $folderPath2 = "dossiers/{$validated['dossier_id']}";
 
         if (!Storage::exists($folderPath)) {
             Storage::makeDirectory($folderPath);
@@ -370,6 +371,7 @@ class PDFController extends Controller
 
         $fileName = $request->name . ".pdf";
         $filePath = "{$folderPath}/{$fileName}";
+        $path = "{$folderPath2}/{$fileName}";
 
         $directPath = "{$directPath}/{$fileName}";
 
@@ -400,7 +402,8 @@ class PDFController extends Controller
         $docs = getDocumentStatuses($dossier->id, $orderColumn);
         return response()->json([
             'message' => 'PDF generated and saved successfully',
-            'file_path' => Storage::url($filePath) // Adjusted this line
+            'file_path' => Storage::url($filePath), // Adjusted this line
+            'path' => $path // Adjusted this line
         ], 200);
     }
 
