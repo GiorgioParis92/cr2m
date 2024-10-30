@@ -689,9 +689,9 @@ function getDocumentStatuses($dossier_id, $last_etape_order = 1)
 if (!function_exists('change_status')) {
     function change_status($key, $value, $dossier_id)
     {
-  
-        // Dossier::where('id', $dossier_id)->update([ 'status_id' => $value]);
-
+        if($key=='status_id') {
+        Dossier::where('id', $dossier_id)->update([ 'status_id' => $value]);
+        }
     if($key=='status_id' && $value==15) {
         Dossier::where('id', $dossier_id)->update(['etape_number' => 1, 'status_id' => $value]);
         Dossier::where('id', $dossier_id)->update(['annulation' => 1, 'status_id' => $value]);
