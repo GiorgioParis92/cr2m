@@ -110,7 +110,10 @@ class DossierController extends Controller
             $dossier->installateur = $request->installateur;
             $dossier->save();
         }
-
+        if(isset($request->etape)) {
+            $dossier->etape_number = $request->etape;
+            $dossier->save();
+        }
         if(!isset($dossier)) {
             abort(404);
         }
@@ -188,7 +191,21 @@ class DossierController extends Controller
 
     }
 
+    public function set_step($id,$step)
+    {
 
+        $dossier = Dossier::where('id', $id)
+            ->with('beneficiaire', 'fiche', 'etape', 'status')
+            ->first();
+       
+        
+            Dossier::where('id', $id)->update(['etape_number' => $step]);
+        
+
+          
+        return redirect()->route('dossiers.show', ['id' => $dossier->folder]);
+
+    }
 
     public function delete($id)
     {

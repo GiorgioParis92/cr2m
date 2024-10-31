@@ -5,7 +5,7 @@
         <div class="spinner"></div>
     </div>
 
-    
+
     <div class="row">
         <div class="card form-register">
             <div class="card-body pb-0 clearfix">
@@ -55,7 +55,7 @@
                                     @endif
                                 </div>
                             @endif
-                            <div >
+                            <div>
                                 @if (isset($dossier->mar_client))
                                     @if (Storage::disk('public')->exists($dossier->mar_client->main_logo))
                                         <img style="max-width: 150px"
@@ -68,25 +68,26 @@
 
                     </div>
                     <div class="col-lg-4 col-sm-12">
-                        @if(auth()->user()->client_id==0 && auth()->user()->type_id!=4)
-                        <div class="card-header pb-0 p-3">
-                            <h6 class="mb-0">Statut ANAH</h6>
-                        </div>
-                        <div class="card-body row">
-                            @livewire('response-data', ['dossierId' => $dossier->id])
-                        </div>
+                        @if (auth()->user()->client_id == 0 && auth()->user()->type_id != 4)
+                            <div class="card-header pb-0 p-3">
+                                <h6 class="mb-0">Statut ANAH</h6>
+                            </div>
+                            <div class="card-body row">
+                                @livewire('response-data', ['dossierId' => $dossier->id])
+                            </div>
                         @endif
                     </div>
 
-                    
-               
+
+
                     <div class="col-lg-4 col-sm-12">
                         <div class="d-lg-flex">
-       
+
                             <div class="ms-auto my-auto mt-lg-0 mt-4">
                                 <div class="ms-auto my-auto">
                                     <div class="btn btn-primary">{{ $dossier['fiche']['fiche_name'] }}</div>
-                                    @if (auth()->user()->client_id == 0 || (auth()->user()->client_id !=3 && auth()->user()->type_id!=7 && auth()->user()->type_id!=4))
+                                    @if (auth()->user()->client_id == 0 ||
+                                            (auth()->user()->client_id != 3 && auth()->user()->type_id != 7 && auth()->user()->type_id != 4))
                                         <a href="{{ route('dossiers.delete', ['id' => $dossier->id]) }}"
                                             class="btn btn-danger">Annuler le dossier</a>
                                         <form class="form-control" method="get">
@@ -102,22 +103,36 @@
                                                 @endforeach
                                             </select>
                                         </form>
-    
+                                        <form class="form-control" method="get">
+
+                                            <label>Changer l'étape en cours</label>
+                                            <select onchange="this.form.submit()" class="form-control" name="etape" >
+                                                <option>Choisir une étape</option>
+                                                @foreach ($etapes as $index => $e)
+                                                   
+                                                  @if($e['order_column']<=$dossier['etape']['order_column'])
+                                                        <option @if ($e['id'] == $tab) selected @endif   value="{{ $e['etape_number'] }}">{{ $e['etape_icon'] }} -
+                                                            {{ strtoupper_extended($e['etape_desc']) }}</option>
+                                                 @endif
+                                                @endforeach
+                                            </select>
+                                        </form>
+
                                     @endif
                                 </div>
                             </div>
                         </div>
-                        @if(auth()->user()->id==1)
-                        @livewire('card-board',['id'=>$dossier->id])
+                        @if (auth()->user()->id == 1)
+                            @livewire('card-board', ['id' => $dossier->id])
                         @endif
                     </div>
                 </div>
 
-           
+
             </div>
         </div>
-     
-      
+
+
     </div>
 
     <div class="row">
@@ -153,9 +168,9 @@
                                             $i++;
                                         }
                                         if (is_user_forbidden($e['etape_name']) == true) {
-                                        $isAllowed = false;
-                                        $isCurrent = false;
-                                    }
+                                            $isAllowed = false;
+                                            $isCurrent = false;
+                                        }
                                     @endphp
                                     @if ($isAllowed == true && $isActive == true)
                                         <option @if ($e['id'] == $tab) selected @endif
@@ -197,6 +212,11 @@
                                         $isAllowed = false;
                                         $isCurrent = false;
                                     }
+                                    if (is_user_allowed('financier') == true && $e['order_column'] >=100) {
+                                        $isAllowed = true;
+                                        $isActive = true;
+
+                                    }
                                 @endphp
 
                                 <div @if ($isActive && $isAllowed) wire:click="setTab({{ $e['etape_number'] }})" @endif
@@ -212,7 +232,7 @@
                                             <span class="step-text">
                                                 {{ strtoupper_extended($e['etape_desc']) }}
 
-                                           
+
                                                 @if (!empty($steps) && isset($steps['step_' . $e['etape_number']]))
                                                     <div class="col text-center">
                                                         <p class="text-xs font-weight-bold mb-0"> <br /></p>
@@ -240,6 +260,7 @@
                                     </a>
                                 </div>
                             @endforeach
+                           
                         </div>
                     </div>
 
@@ -265,13 +286,13 @@
                             <div class="col-lg-12">
                                 <h3 class="border-bottom border-gray pb-2 p-2">{{ $etape_display['etape_desc'] }}
                                     @if ($tab == $dossier->etape_number)
-                                    {{-- @if(is_user_allowed('validate_'.$etape_display['etape_name'])) --}}
+                                        {{-- @if (is_user_allowed('validate_' . $etape_display['etape_name'])) --}}
                                         <div class="col-lg-6">
                                             <a class="btn btn-primary"
                                                 href="{{ route('dossiers.next_step', $dossier->id) }}">Valider
                                                 l'étape</a>
                                         </div>
-                                    {{-- @endif --}}
+                                        {{-- @endif --}}
                                     @endif
                                     <div class="progress">
                                         <div class="progress-bar" role="progressbar"
@@ -349,13 +370,9 @@
                                         <table class="table align-items-center">
                                             <tbody>
                                                 @foreach ($forms_configs as $index => $form_handler)
-                                               
                                                     @if ($form_handler->form->etape_number == $tab && $form_handler->form->type == 'document')
-                                                        
-                                                            
-                                                            {!! $form_handler->render([]) !!} <!-- Render without error array -->
-                                                        @endif
-                                                       
+                                                        {!! $form_handler->render([]) !!} <!-- Render without error array -->
+                                                    @endif
                                                 @endforeach
                                             </tbody>
                                         </table>
@@ -419,26 +436,26 @@
         </div>
     </div>
 </div>
-<livewire:add-card-modal :dossier_id="$dossier->id"/>
+<livewire:add-card-modal :dossier_id="$dossier->id" />
 <style>
-      .board {
+    .board {
         display: block;
         padding: 20px;
         overflow-x: auto;
         height: auto;
-        width:100%
+        width: 100%
     }
 
     .column {
         /* background-color: #ebecf0; */
-    border-radius: 3px;
-  
-    margin-right: 1%;
-    padding: 10px;
-    flex-shrink: 0;
-    max-height: 280px;
-    overflow-x: hidden;
-    overflow-y: scroll;
+        border-radius: 3px;
+
+        margin-right: 1%;
+        padding: 10px;
+        flex-shrink: 0;
+        max-height: 280px;
+        overflow-x: hidden;
+        overflow-y: scroll;
     }
 
     .column-header {
@@ -476,21 +493,25 @@
         width: 272px;
         margin-right: 10px;
     }
-    
-.column {
 
-  
-  /* Hide scrollbar for IE, Edge and Firefox */
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
-}
+    .column {
 
-.column::-webkit-scrollbar {
-  display: none;
-}
-.col-xl-4.col-sm-4.mb-xl-0.mb-4.column {
-    max-width: 32%;
-}
+
+        /* Hide scrollbar for IE, Edge and Firefox */
+        -ms-overflow-style: none;
+        /* IE and Edge */
+        scrollbar-width: none;
+        /* Firefox */
+    }
+
+    .column::-webkit-scrollbar {
+        display: none;
+    }
+
+    .col-xl-4.col-sm-4.mb-xl-0.mb-4.column {
+        max-width: 32%;
+    }
+
     .loader-overlay {
         position: fixed;
         top: 0;
@@ -529,19 +550,21 @@
     }
 
     .thumbnail_hover {
-        display:none;
+        display: none;
         position: absolute;
         pointer-events: none;
         border-radius: 10px;
-    border: 1px solid #ccc;
-    box-shadow: 8px 7px 9px;
-    z-index: 9999999999;
+        border: 1px solid #ccc;
+        box-shadow: 8px 7px 9px;
+        z-index: 9999999999;
     }
+
     .p_thumbnail:hover {
-        cursor:pointer;
+        cursor: pointer;
     }
+
     .p_thumbnail:hover .thumbnail_hover {
-        display:block;
+        display: block;
     }
 </style>
 <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.css" rel="stylesheet">

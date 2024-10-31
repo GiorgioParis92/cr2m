@@ -92,71 +92,73 @@ class StatsController extends \App\Http\Controllers\Controller
     public function getChartData($id, Request $request)
     {
         $chartConfig = ChartConfig::findOrFail($id);
-        $parameters = array_merge($chartConfig->parameters ?? [], $request->all());
     
-        // Build each part of the SQL manually
-        $selectColumns = implode(', ', json_decode($chartConfig->select_columns, true));
-        $joins = $this->buildJoins(json_decode($chartConfig->join_tables, true));
-        $conditions = $this->buildConditions(json_decode($chartConfig->conditions, true), $parameters);
+        $allowedModels = config('allowed_models');
     
-        // Only add WHERE clause if conditions are not empty
-        $whereClause = $conditions ? "WHERE {$conditions}" : "";
-    
-        // Assemble the final SQL query
-        $sql = "SELECT {$selectColumns} FROM dossiers as d {$joins} {$whereClause}";
-    
-        // Execute the query as a raw statement
-        $data = DB::select(DB::raw($sql));
-    
-        return response()->json([
-            'chartType' => $chartConfig->chart_type,
-            'data' => $data,
-        ]);
-    }
-    
-    
-    // Helper to build JOIN clauses
-    protected function buildJoins($joins)
-    {
-        $joinSql = '';
-        foreach ($joins as $join) {
-            $joinSql .= " LEFT JOIN {$join['table']} ON {$join['on']} ";
+        if (!isset($allowedModels[$chartConfig->model])) {
+            abort(403, 'Unauthorized model');
         }
-        return $joinSql;
-    }
     
-    // Helper to build WHERE conditions and subqueries
-    protected function buildConditions($conditions, $parameters)
-    {
-        $whereSql = '';
-        $isFirstCondition = true;
-        foreach ($conditions as $condition) {
-            // Add 'AND' or 'OR' between conditions, but skip for the first condition
-            if (!$isFirstCondition) {
-                $whereSql .= " {$condition['clause']} ";
+        $modelConfig = $allowedModels[$chartConfig->model];
+        $modelClass = $modelConfig['model'];
+        $query = $modelClass::query();
+    
+        // Apply Select Fields
+        $selectFields = $chartConfig->parameters['select'] ?? $modelConfig['fields'];
+        $query->select($selectFields);
+    
+        // Apply Relations
+        if (!empty($chartConfig->parameters['with'])) {
+            $relations = array_intersect($chartConfig->parameters['with'], array_keys($modelConfig['relations']));
+            $query->with($relations);
+        }
+    
+        // Apply Where Conditions
+        if (!empty($chartConfig->parameters['where'])) {
+            foreach ($chartConfig->parameters['where'] as $condition) {
+                $query->where(
+                    $condition['column'],
+                    $condition['operator'],
+                    $condition['value']
+                );
             }
+        }
     
-            // Add the subquery without repeating 'EXISTS'
-            if (isset($condition['subquery'])) {
-                // Ensure that 'EXISTS' is only added once
-                $whereSql .= " ({$condition['subquery']})";
-            } else {
-                $whereSql .= $condition['condition'];
+        // Apply Additional Conditions (e.g., whereHas)
+        if (!empty($chartConfig->parameters['additional'])) {
+            foreach ($chartConfig->parameters['additional'] as $additional) {
+                if ($additional['type'] === 'whereHas') {
+                    $relation = $additional['relation'];
+                    if (in_array($relation, array_keys($modelConfig['relations']))) {
+                        $query->whereHas($relation, function ($q) use ($additional, $modelConfig) {
+                            foreach ($additional['conditions'] as $condition) {
+                                if (in_array($condition['column'], $modelConfig['relations'][$relation])) {
+                                    $q->where(
+                                        $condition['column'],
+                                        $condition['operator'],
+                                        $condition['value']
+                                    );
+                                }
+                            }
+                        });
+                    }
+                }
+                // Add other condition types as needed
             }
-    
-            $isFirstCondition = false;
         }
     
-        // Replace placeholders in conditions with actual parameters
-        foreach ($parameters as $key => $value) {
-            $whereSql = str_replace(":{$key}", "'{$value}'", $whereSql);
+        // Apply Auth-based Conditions
+        if (Auth::check() && Auth::user()->client_id > 0) {
+            $query->where('installateur', Auth::user()->client_id);
         }
     
-        return $whereSql;
+        $data = $query->get();
+    
+        // Format data for the chart
+        return response()->json($data);
     }
-             
-        
     
+   
     
     
 }

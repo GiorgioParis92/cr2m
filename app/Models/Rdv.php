@@ -19,7 +19,10 @@ class Rdv extends Model
     {
         return $this->belongsTo(User::class, 'user_id');
     }
-
+    public function dossiers()
+    {
+        return $this->has(Dossier::class, 'dossier_id');
+    }
 }
 
 
