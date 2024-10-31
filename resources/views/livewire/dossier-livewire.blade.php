@@ -287,12 +287,13 @@
                                 <h3 class="border-bottom border-gray pb-2 p-2">{{ $etape_display['etape_desc'] }}
                                     @if ($tab == $dossier->etape_number)
                                         {{-- @if (is_user_allowed('validate_' . $etape_display['etape_name'])) --}}
+                                       @if(auth()->user()->client->type_client!=3)
                                         <div class="col-lg-6">
                                             <a class="btn btn-primary"
                                                 href="{{ route('dossiers.next_step', $dossier->id) }}">Valider
                                                 l'étape</a>
                                         </div>
-                                        {{-- @endif --}}
+                                        @endif
                                     @endif
                                     <div class="progress">
                                         <div class="progress-bar" role="progressbar"
