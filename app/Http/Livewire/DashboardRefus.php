@@ -31,7 +31,7 @@ class DashboardRefus extends Component
                 'etape:id,etape_icon,etape_desc',
                 'status:id,status_style,status_desc',
             ])
-            ->where('annulation','!=',1)
+            ->where('annulation','<>',1)
 
             ->where('status_id','=',15);
             
