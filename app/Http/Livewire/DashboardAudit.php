@@ -51,7 +51,7 @@ class DashboardAudit extends Component
         
         // Use cursor or lazy collection
         $this->liste = $dossiersQuery->get();
-        dd($this->liste);
+        // dd($this->liste);
     }
     
     
