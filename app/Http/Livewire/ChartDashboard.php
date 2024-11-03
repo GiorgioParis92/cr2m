@@ -89,7 +89,7 @@ class ChartDashboard extends Component
     
             // Execute the modified SQL query
             $result = DB::select(DB::raw($modifiedSql));
-    
+
             return $result;
         } catch (\Exception $e) {
             // Handle any SQL errors gracefully

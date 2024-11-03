@@ -25,7 +25,7 @@
         @foreach ($charts as $chart)
       
             @if ($chart['type'] === 'count')
-            @dump($chart)
+            {{-- @dump($chart) --}}
                 <!-- Display count card -->
                 <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
                     <div class="card">
@@ -36,9 +36,10 @@
                                         <p class="text-sm mb-0 text-capitalize font-weight-bold">{{ $chart['title'] }}</p>
                                         <h5 class="font-weight-bolder mb-0">
                                             {{ $chart['data'][0]->count ?? 0 }}
-                                            <span class="text-danger text-sm font-weight-bolder">
-                                                <!-- Placeholder for dynamic percentage or metric -->
-                                                -87.50%
+                                           
+                                            <span
+                                            class="text-{{ percent_difference($chart['data'][0]->count, $chart['data'][0]->count_last) >= 0 ? 'success' : 'danger' }} text-sm font-weight-bolder">
+                                            {{ percent_difference($chart['data'][0]->count, $chart['data'][0]->count_last) }}
                                             </span>
                                         </h5>
                                     </div>
@@ -52,17 +53,85 @@
                         </div>
                     </div>
                 </div>
-            @else
-                <!-- Display chart canvas for non-count types -->
-                <div class="col-xl-4 col-sm-12 mb-4">
-                    <div class="card">
-                        <div class="card-body">
-                            <h6 class="mb-2">{{ $chart['title'] }}</h6>
-                            <canvas id="chart_{{ $chart['id'] }}"></canvas>
+            @endif
+
+            @if($chart['type'] === 'list')
+                @dd($chart)
+            
+            <div wire:poll="refresh" class="card mb-4">
+                <div class="card-body p-3">
+                    <div class="row">
+                        <div class="">
+                            <div class=" ">
+                                <div class="card-header pb-0 p-3">
+                                    <div class="d-flex justify-content-between">
+                                        <h6 class="mb-2">
+                                            @if(auth()->user()->client_id>0 && auth()->user()->client->type_client==3)
+                                            Devis à déposer
+                                            @else
+                                            En attente des devis installateurs  ({{count($liste)}})
+                                            @endif
+
+                                        </h6>
+                                    </div>
+                                </div>
+                                <div class="table-responsive no-overflow">
+                                    @foreach ($liste as $dossier)
+                                        <div class="row">
+                                            <div class="col-4">
+            
+                                                <div class="ms-4">
+                                                    <h6 class="text-sm mb-0">
+            
+                                                        <a target="_blank" href="{{ route('dossiers.show', $dossier->folder) }}">
+                                                            {{ $dossier->beneficiaire->nom }}
+            
+                                                            {{ $dossier->beneficiaire->prenom }}
+                                                        </a>
+                                                    </h6>
+                                                    <p class="text-xs font-weight-bold mb-0">
+                                                        {{ $dossier->beneficiaire->numero_voie }}
+                                                        {{ $dossier->beneficiaire->adresse }}<br />{{ $dossier->beneficiaire->cp }}
+                                                        {{ $dossier->beneficiaire->ville }}</p>
+                                                </div>
+                                            </div>
+                                            <div class="text-center col-4">
+                                                <div style="">
+                                                    <a target="_blank" href="{{ route('dossiers.show', $dossier->folder) }}">
+                                                        <div style="" class="btn btn-success">
+                                                            <span
+                                                                class="badge badge-primary">{{ $dossier->etape->etape_icon }}</span>
+            
+                                                            {{ $dossier->etape->etape_desc }}
+                                                        </div>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                            <div class="text-center col-4">
+                                                <span>
+                                                    <a target="_blank" href="{{ route('dossiers.show', $dossier->folder) }}">
+                                                        <div class="btn btn-{{ $dossier->status->status_style ?? '' }}">
+            
+                                                            {{ $dossier->status->status_desc ?? '' }}
+        
+                                                        </div>
+                                                    </a>
+            
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <hr>
+                                    @endforeach
+            
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
+            </div>
+
             @endif
+
         @endforeach
     </div>
 
