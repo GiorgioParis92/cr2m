@@ -56,7 +56,7 @@
             @endif
 
             @if($chart['type'] === 'list' && auth()->user()->id==1)
-            @dd($chart)
+          
             <div wire:poll="refresh" class="card mb-4">
                 <div class="card-body p-3">
                     <div class="row">
@@ -68,14 +68,14 @@
                                             @if(auth()->user()->client_id>0 && auth()->user()->client->type_client==3)
                                             Devis à déposer
                                             @else
-                                            En attente des devis installateurs  ({{count($liste)}})
+                                            En attente des devis installateurs  ({{count($chart['data'])}})
                                             @endif
 
                                         </h6>
                                     </div>
                                 </div>
                                 <div class="table-responsive no-overflow">
-                                    @foreach ($liste as $dossier)
+                                    @foreach ($chart['data'] as $dossier)
                                         <div class="row">
                                             <div class="col-4">
             
