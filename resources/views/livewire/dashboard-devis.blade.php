@@ -54,7 +54,7 @@
                                                         <div class="btn btn-{{ $dossier->status->status_style ?? '' }}">
             
                                                             {{ $dossier->status->status_desc }}
-            
+        
                                                         </div>
                                                     </a>
             
