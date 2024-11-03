@@ -76,6 +76,7 @@
                                 </div>
                                 <div class="table-responsive no-overflow">
                                     @foreach ($chart['data'] as $dossier)
+                                    @dd($dossier)
                                         <div class="row">
                                             <div class="col-4">
             
