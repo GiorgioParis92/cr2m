@@ -22,6 +22,7 @@
     </div>
 
     <div class="row">
+        @dd($charts)
         @foreach ($charts as $chart)
       
             @if ($chart['type'] === 'count')
@@ -56,7 +57,6 @@
             @endif
 
             @if($chart['type'] === 'list')
-                @dd($chart)
             
             <div wire:poll="refresh" class="card mb-4">
                 <div class="card-body p-3">
