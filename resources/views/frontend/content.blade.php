@@ -1,2 +1,2 @@
 @livewire('dashboard')
-@livewire('chart-dashboard')
+{{-- @livewire('chart-dashboard') --}}
