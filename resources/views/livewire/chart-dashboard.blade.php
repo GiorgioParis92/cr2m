@@ -55,8 +55,8 @@
                 </div>
             @endif
 
-            @if($chart['type'] === 'list')
-            @dump($chart)
+            @if($chart['type'] === 'list' && auth()->user()->id==1)
+            @dd($chart)
             <div wire:poll="refresh" class="card mb-4">
                 <div class="card-body p-3">
                     <div class="row">
