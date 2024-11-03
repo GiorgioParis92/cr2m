@@ -83,36 +83,36 @@
                                                 <div class="ms-4">
                                                     <h6 class="text-sm mb-0">
             
-                                                        <a target="_blank" href="{{ route('dossiers.show', $dossier['folder']) }}">
-                                                            {{ $dossier['nom'] }}
+                                                        <a target="_blank" href="{{ route('dossiers.show', $dossier->folder) }}">
+                                                            {{ $dossier->nom }}
             
-                                                            {{ $dossier['prenom'] }}
+                                                            {{ $dossier->prenom }}
                                                         </a>
                                                     </h6>
                                                     <p class="text-xs font-weight-bold mb-0">
-                                                        {{ $dossier['numero_voie'] }}
-                                                        {{ $dossier['adresse'] }}<br />{{ $dossier['cp'] }}
-                                                        {{ $dossier['ville'] }}</p>
+                                                        {{ $dossier->numero_voie }}
+                                                        {{ $dossier->adresse }}<br />{{ $dossier->cp }}
+                                                        {{ $dossier->ville }}</p>
                                                 </div>
                                             </div>
                                             <div class="text-center col-4">
                                                 <div style="">
-                                                    <a target="_blank" href="{{ route('dossiers.show', $dossier['folder']) }}">
+                                                    <a target="_blank" href="{{ route('dossiers.show', $dossier->folder) }}">
                                                         <div style="" class="btn btn-success">
                                                             <span
-                                                                class="badge badge-primary">{{ $dossier['etape_icon'] }}</span>
+                                                                class="badge badge-primary">{{ $dossier->etape_icon }}</span>
             
-                                                            {{ $dossier['etape_desc'] }}
+                                                            {{ $dossier->etape_desc }}
                                                         </div>
                                                     </a>
                                                 </div>
                                             </div>
                                             <div class="text-center col-4">
                                                 <span>
-                                                    <a target="_blank" href="{{ route('dossiers.show', $dossier['folder']) }}">
-                                                        <div class="btn btn-{{ $dossier['status_style'] ?? '' }}">
+                                                    <a target="_blank" href="{{ route('dossiers.show', $dossier->folder) }}">
+                                                        <div class="btn btn-{{ $dossier->status_style ?? '' }}">
             
-                                                            {{ $dossier['status_desc'] ?? '' }}
+                                                            {{ $dossier->status_desc ?? '' }}
         
                                                         </div>
                                                     </a>
