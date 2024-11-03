@@ -33,7 +33,7 @@ class DashboardAudit extends Component
             ])
             ->where('etape_number', 8)
             ->where('status_id','!=',15)
-            ->where('annulation','!=',1)
+            // ->where('annulation','!=',1)
             
             ->where(function ($query) {
                 $query->whereDoesntHave('formsData', function ($query) {
@@ -48,9 +48,10 @@ class DashboardAudit extends Component
         if ($user->client_id > 0 && $user->client->type_client == 3) {
             $dossiersQuery->where('installateur', $user->client_id);
         }
-    
+        
         // Use cursor or lazy collection
         $this->liste = $dossiersQuery->get();
+        dd($this->liste);
     }
     
     
