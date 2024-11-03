@@ -23,14 +23,46 @@
 
     <div class="row">
         @foreach ($charts as $chart)
-            <div class="col-xl-4 col-sm-12 mb-4">
-                <div class="card">
-                    <div class="card-body">
-                        <h6 class="mb-2">{{ $chart['title'] }}</h6>
-                        <canvas id="chart_{{ $chart['id'] }}"></canvas>
+      
+            @if ($chart['type'] === 'count')
+
+            <!-- Display count card -->
+                <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+                    <div class="card">
+                        <div class="card-body p-3">
+                            <div class="row">
+                                <div class="col-8">
+                                    <div class="numbers">
+                                        <p class="text-sm mb-0 text-capitalize font-weight-bold">{{ $chart['title'] }}</p>
+                                        <h5 class="font-weight-bolder mb-0">
+                                            {{ $chart['data'][0]->count ?? 0 }}
+                                            <span class="text-danger text-sm font-weight-bolder">
+                                                <!-- Placeholder for dynamic percentage or metric -->
+                                                -87.50%
+                                            </span>
+                                        </h5>
+                                    </div>
+                                </div>
+                                <div class="col-4 text-end">
+                                    <div class="icon icon-shape bg-gradient-primary shadow text-center border-radius-md">
+                                        <i class="ni ni-money-coins text-lg opacity-10" aria-hidden="true"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
+            @else
+                <!-- Display chart canvas for non-count types -->
+                <div class="col-xl-4 col-sm-12 mb-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h6 class="mb-2">{{ $chart['title'] }}</h6>
+                            <canvas id="chart_{{ $chart['id'] }}"></canvas>
+                        </div>
+                    </div>
+                </div>
+            @endif
         @endforeach
     </div>
 
@@ -55,61 +87,52 @@
             chartInstances = {};
 
             chartsData.forEach(chart => {
-                const chartData = chart.data;
-                console.log(chartData)
-                const labels = chartData.map(item => {
-                    const date = new Date(item.creation_date);
-                    return date.toLocaleDateString('fr-FR');
-                });
+                if (chart.type !== 'count') {
+                    const chartData = chart.data;
+                    const labels = chartData.map(item => {
+                        const date = new Date(item.creation_date);
+                        return date.toLocaleDateString('fr-FR');
+                    });
 
-                const data = chartData.map(item => parseFloat(item.average_delay).toFixed(2));
+                    const data = chartData.map(item => parseFloat(item.average_delay).toFixed(2));
 
-                const ctx = document.getElementById('chart_' + chart.id).getContext('2d');
-                chartInstances[chart.id] = new Chart(ctx, {
-                    type: chart.type,
-                    data: {
-                        labels: labels,
-                        datasets: [{
-                            label: chart.title,
-                            data: data,
-                            borderColor: 'rgba(75, 192, 192, 1)',
-                            borderWidth: 2,
-                            fill: false
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        scales: {
-                            x: {
-                                display: true,
-                                title: {
+                    const ctx = document.getElementById('chart_' + chart.id).getContext('2d');
+                    chartInstances[chart.id] = new Chart(ctx, {
+                        type: chart.type,
+                        data: {
+                            labels: labels,
+                            datasets: [{
+                                label: chart.title,
+                                data: data,
+                                borderColor: 'rgba(75, 192, 192, 1)',
+                                borderWidth: 2,
+                                fill: false
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            scales: {
+                                x: {
                                     display: true,
-                                    text: 'Date de création'
-                                }
-                            },
-                            y: {
-                                display: true,
-                                title: {
-                                    display: true,
-                                    text: 'Délai moyen en jours'
+                                    title: {
+                                        display: true,
+                                        text: 'Date de création'
+                                    }
                                 },
-                                beginAtZero: true
+                                y: {
+                                    display: true,
+                                    title: {
+                                        display: true,
+                                        text: 'Délai moyen en jours'
+                                    },
+                                    beginAtZero: true
+                                }
                             }
                         }
-                    }
-                });
+                    });
+                }
             });
         }
     </script>
     @endpush
-</div>
-<div>
-    <h5>Debugging Chart Configuration:</h5>
-    <ul>
-        @foreach ($charts as $chart)
-            <li>Chart ID: {{ $chart['id'] }} - Title: {{ $chart['title'] }} - Type: {{ $chart['type'] }}</li>
-
-            @php print_r($chart) @endphp
-        @endforeach
-    </ul>
 </div>
