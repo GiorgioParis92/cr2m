@@ -23,12 +23,20 @@ class ChartDashboard extends Component
         $this->clients = Client::all();
 
         // Initialize charts
+        // $this->updateCharts();
+    }
+    public function updatedSelectedClient()
+    {
         $this->updateCharts();
     }
-
-    public function updated($propertyName)
+    
+    public function updatedStartDate()
     {
-        // Update charts whenever a filter changes
+        $this->updateCharts();
+    }
+    
+    public function updatedEndDate()
+    {
         $this->updateCharts();
     }
 
@@ -42,60 +50,57 @@ class ChartDashboard extends Component
                 'data'  => $this->fetchChartData($chart)
             ];
         })->toArray();
+        
     }
 
 
 
     private function fetchChartData($chart)
     {
-        // Fetch the raw SQL query from the chart configuration
         $rawSql = $chart->request_sql;
         $user = auth()->user();
         $clientType = $user->client->type_client ?? null;
         $clientId = $user->client_id;
         $hasChildClients = [];
     
-        // If the client type is 4, get child clients if needed
         if ($clientType == 4) {
             $hasChildClients = ClientLinks::where('client_parent', $clientId)->pluck('client_id')->toArray();
         }
     
         try {
-            // Use raw SQL if no dynamic filtering is required
-            if (!$clientType) {
-                return DB::select(DB::raw($rawSql));
-            }
+            $bindings = [];
     
-            // Modify the raw SQL query by appending dynamic filtering based on client type
+            // Build additional conditions
             $additionalConditions = '';
     
             if ($clientType == 1) {
-                $additionalConditions = " AND (dossiers.client_id = $clientId OR dossiers.mar = $clientId)";
+                $additionalConditions = " AND (dossiers.client_id = ? OR dossiers.mar = ?)";
+                $bindings[] = $clientId;
+                $bindings[] = $clientId;
             } elseif ($clientType == 2) {
-                $additionalConditions = " AND dossiers.mandataire_financier = $clientId";
+                $additionalConditions = " AND dossiers.mandataire_financier = ?";
+                $bindings[] = $clientId;
             } elseif ($clientType == 3) {
-                $additionalConditions = " AND dossiers.installateur = $clientId";
+                $additionalConditions = " AND dossiers.installateur = ?";
+                $bindings[] = $clientId;
             } elseif ($clientType == 4) {
-                $childClients = implode(',', $hasChildClients);
-                $additionalConditions = " AND (dossiers.installateur = $clientId";
-                if (!empty($childClients)) {
-                    $additionalConditions .= " OR dossiers.installateur IN ($childClients)";
-                }
-                $additionalConditions .= ")";
+                $childClients = implode(',', array_fill(0, count($hasChildClients), '?'));
+                $bindings = array_merge($bindings, [$clientId], $hasChildClients);
+                $additionalConditions = " AND (dossiers.installateur = ? OR dossiers.installateur IN ($childClients))";
             }
     
             // Append the conditions to the raw SQL query
             $modifiedSql = $rawSql . $additionalConditions;
     
-            // Execute the modified SQL query
-            $result = DB::select(DB::raw($modifiedSql));
-
+            // Execute the modified SQL query with bindings
+            $result = DB::select(DB::raw($modifiedSql), $bindings);
+    
             return $result;
         } catch (\Exception $e) {
-            // Handle any SQL errors gracefully
             return ['error' => 'Failed to execute query: ' . $e->getMessage()];
         }
     }
+    
     
     
     

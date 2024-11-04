@@ -196,12 +196,12 @@ class YouSign extends Controller
             $orderColumn = null;
         }
           $docs=getDocumentStatuses($dossier->id,$orderColumn);
-          return response()->json('ok', 200);
+          return response()->json($resultData, 200);
         }
       }
 
 
-      sleep(0.75);
+      sleep(0.15);
 
 
     }
