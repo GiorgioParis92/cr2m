@@ -28,13 +28,29 @@ class YouSign extends Controller
 
     $url = 'http://192.168.100.40:5010/process_request?service=yousign';
 
-    $dossier = Dossier::where('folder', $request->dossier_id);
+    if(isset($request->id)) {
+      $dossier = Dossier::where('id', $request->id);
+    } else {
+      $dossier = Dossier::where('folder', $request->dossier_id);
+    }
+
+   
     $dossier = $dossier->with('beneficiaire', 'fiche', 'etape', 'status', 'get_rdv')->first();
 
     // if(auth()->user()->id==1) {
     //     dd($request);
     //   }
 
+    if(isset($request->form_id)) {
+      $config=DB::table('forms_config')->where('form_id',$request->form_id)->where('name',$request->name)->first();
+
+      $options=json_decode($config->options);
+
+      if(isset($options->fields)) {
+        $request->fields=$options->fields;
+      }
+
+    }
     if ($dossier) {
 
 
@@ -58,10 +74,10 @@ class YouSign extends Controller
           ]
         ]
       ]);
-      // if(auth()->user()->id==1) {
-      //   dd($data);
-      // }
-      $path = 'storage/dossiers/' . $request->dossier_id . '/' . $request->name . '.pdf';
+
+   
+      
+      $path = 'storage/dossiers/' . $dossier->folder . '/' . $request->name . '.pdf';
 
       $fullPath = public_path($path);
     }
@@ -156,7 +172,7 @@ class YouSign extends Controller
           $responseData->status === 'error'
         )
       ) {
-      
+        dd($responseData);
         $resultData = $responseData->result->data->result ?? null;
 
         if ($resultData->signature_request_id) {

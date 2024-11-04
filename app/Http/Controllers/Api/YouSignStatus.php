@@ -106,8 +106,11 @@ class YouSignStatus extends Controller
 
       // Close cURL session
       curl_close($ch);
-      $dossier = Dossier::where('folder', $request->dossier_id)->first();
-
+      if(isset($request->id)) {
+        $dossier = Dossier::where('id', $request->id)->first();
+      } else {
+        $dossier = Dossier::where('folder', $request->dossier_id)->first();
+      }
       // Process response
       $responseData = json_decode($response);
 
@@ -265,7 +268,7 @@ class YouSignStatus extends Controller
               )
             ) {
 
-          
+         
               $url = $responseData->result->data->url_info->url;
               $token = $responseData->result->data->url_info->token; // Replace YOUR_BEARER_TOKEN with your actual token
              
