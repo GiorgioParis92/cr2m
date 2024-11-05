@@ -38,6 +38,12 @@ class PDFController extends Controller
             'identify' => 'nullable',
         ]);
 
+        if(is_numeric($validated['dossier_id'])) {
+            $dossier = Dossier::with('mar')->where('id', $validated['dossier_id'])->first();
+        } else {
+            $dossier = Dossier::with('mar')->where('folder', $validated['dossier_id'])->first();
+
+        }
 
         if(isset($request->form_id)) {
 
@@ -58,7 +64,7 @@ class PDFController extends Controller
         $title = '';
         // Determine the HTML content to use
         if (isset($validated['template'])) {
-            $htmlContent = $this->getTemplateHtml($validated['template'], $validated['dossier_id'], $config = null, $title, $content = null, $send_data = true);
+            $htmlContent = $this->getTemplateHtml($validated['template'], $dossier->id, $config = null, $title, $content = null, $send_data = true);
         } else {
             $htmlContent = '';
         }
@@ -82,9 +88,9 @@ class PDFController extends Controller
 
         // Check if dossier_id is provided
         if (isset($validated['dossier_id'])) {
-            $dossierId = $validated['dossier_id'];
-            $folderPath = "public/dossiers/{$dossierId}";
-            $directPath = "dossiers/{$dossierId}";
+            $dossierId = $dossier->id;
+            $folderPath = "public/dossiers/{$dossier->folder}";
+            $directPath = "dossiers/{$dossier->folder}";
 
             // Create the folder if it does not exist
             if (!Storage::exists($folderPath)) {
@@ -101,7 +107,8 @@ class PDFController extends Controller
                 return response()->json(['error' => 'Failed to save file'], 500);
             }
 
-            $dossier = Dossier::with('mar')->where('folder', $dossierId)->first();
+
+            
 
             $update = DB::table('forms_data')->updateOrInsert(
                 [
@@ -178,7 +185,14 @@ class PDFController extends Controller
             'dossier_id' => 'nullable',
         ]);
 
-        $dossierId = $validated['dossier_id'];
+        if(is_numeric($validated['dossier_id'])) {
+            $dossier = Dossier::with('mar')->where('id', $validated['dossier_id'])->first();
+        } else {
+            $dossier = Dossier::with('mar')->where('folder', $validated['dossier_id'])->first();
+
+        }
+
+        $dossierId = $dossier->id;
         $folderPath = "public/dossiers/{$dossierId}";
         $directPath = "dossiers/{$dossierId}";
 
@@ -198,7 +212,7 @@ class PDFController extends Controller
             if (!is_array($optionsArray)) {
                 $optionsArray = [];
             }
-            $dossier = Dossier::where('id', $validated['dossier_id'])->first();
+            // $dossier = Dossier::where('id', $validated['dossier_id'])->first();
 
             if (is_numeric($validated['dossier_id'])) {
                 $dossier = Dossier::where('id', $validated['dossier_id'])->first();
@@ -362,8 +376,8 @@ class PDFController extends Controller
             }
         }
 
-        $folderPath = "public/dossiers/{$validated['dossier_id']}";
-        $folderPath2 = "dossiers/{$validated['dossier_id']}";
+        $folderPath = "public/dossiers/{$dossier->folder}";
+        $folderPath2 = "dossiers/{$dossier->folder}";
 
         if (!Storage::exists($folderPath)) {
             Storage::makeDirectory($folderPath);
@@ -378,7 +392,7 @@ class PDFController extends Controller
 
         $pdfContent = $pdf->output('', 'S'); // 'S' returns the PDF as a string
         Storage::put($filePath, $pdfContent);
-        $dossier = Dossier::where('folder', $dossierId)->first();
+        // $dossier = Dossier::where('folder', $dossierId)->first();
 
 
         $update = DB::table('forms_data')->updateOrInsert(
