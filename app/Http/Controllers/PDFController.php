@@ -232,7 +232,6 @@ class PDFController extends Controller
             $all_data = load_all_dossier_data($dossier);
 
         }
-        dd($all_data);
         $pdf = new Fpdi();
         $pageCount = $pdf->setSourceFile(public_path($optionsArray["template"] . '.pdf'));
 
