@@ -200,11 +200,10 @@ class PDFController extends Controller
             $dossier = Dossier::with('mar')->where('folder', $validated['dossier_id'])->first();
 
         }
-        dd($dossier);
 
         $dossierId = $dossier->id;
-        $folderPath = "public/dossiers/{$dossierId}";
-        $directPath = "dossiers/{$dossierId}";
+        $folderPath = "public/dossiers/{$dossier->folder}";
+        $directPath = "dossiers/{$dossier->folder}";
 
         if (!Storage::exists($folderPath)) {
             Storage::makeDirectory($folderPath);
