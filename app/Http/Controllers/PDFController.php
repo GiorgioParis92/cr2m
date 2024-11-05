@@ -415,7 +415,7 @@ class PDFController extends Controller
                 'updated_at' => now()
             ]
         );
-      
+      dd($dossier->etape);
         if ($dossier && isset($dossier->etape)) {
             $orderColumn = $dossier->etape->order_column;
         } else {
