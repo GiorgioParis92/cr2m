@@ -403,7 +403,6 @@ class PDFController extends Controller
         Storage::put($filePath, $pdfContent);
         $dossier = Dossier::where('folder', $dossier->folder)->first();
 
-        dd($dossier);
         $update = DB::table('forms_data')->updateOrInsert(
             [
                 'dossier_id' => '' . $dossier->id . '',
