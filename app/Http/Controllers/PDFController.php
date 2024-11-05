@@ -200,7 +200,7 @@ class PDFController extends Controller
             $dossier = Dossier::with('mar')->where('folder', $validated['dossier_id'])->first();
 
         }
-dd($dossier);
+
         $dossierId = $dossier->id;
         $folderPath = "public/dossiers/{$dossier->folder}";
         $directPath = "dossiers/{$dossier->folder}";
@@ -232,6 +232,7 @@ dd($dossier);
             $all_data = load_all_dossier_data($dossier);
 
         }
+        dd($all_data);
         $pdf = new Fpdi();
         $pageCount = $pdf->setSourceFile(public_path($optionsArray["template"] . '.pdf'));
 
