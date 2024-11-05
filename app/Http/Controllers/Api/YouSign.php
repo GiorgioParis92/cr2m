@@ -67,17 +67,15 @@ class YouSign extends Controller
           'signature_level' => 'electronic_signature',
           'fields' => json_decode(json_encode($request->fields), true),
           'signer_info' => [
-            'first_name' => $dossier->beneficiaire->prenom ?? '',
-            'last_name' => $dossier->beneficiaire->nom ?? '',
-            'email' => $dossier->beneficiaire->email ? str_replace(' ','',$dossier->beneficiaire->email) :  '',
-            'phone_number' => formatFrenchPhoneNumber($dossier->beneficiaire->telephone) ?? ''
+            'first_name' => trim($dossier->beneficiaire->prenom ?? ''),
+            'last_name' => trim($dossier->beneficiaire->nom ?? ''),
+            'email' => trim($dossier->beneficiaire->email ? str_replace(' ','',$dossier->beneficiaire->email) :  ''),
+            'phone_number' => trim(formatFrenchPhoneNumber($dossier->beneficiaire->telephone) ?? '')
           ]
         ]
       ]);
 
-      if(isset($request->test) && $request->test==1) {
-        dd($data);
-      }
+    
     
       
       $path = 'storage/dossiers/' . $dossier->folder . '/' . $request->name . '.pdf';
