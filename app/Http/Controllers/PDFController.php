@@ -332,9 +332,9 @@ class PDFController extends Controller
                     if (isset($fill_data_config["img"])) {
                         if (isset($fill_data_config['signature'])) {
                             $dossier = DB::table('dossiers')
-                                ->where('folder', $dossierId)
+                                ->where('folder', $dossier->folder)
                                 ->first();
-
+                            dd($dossier->mar);
                             $client = DB::table('clients')
                                 ->where('id', $dossier->mar)
                                 ->first();
