@@ -417,7 +417,7 @@ class PDFController extends Controller
             ]
         );
       
-        if ($dossier && $dossier->etape) {
+        if ($dossier && isset($dossier->etape)) {
             $orderColumn = $dossier->etape->order_column;
         } else {
             // Handle the case where $dossier or $dossier->etape is null
