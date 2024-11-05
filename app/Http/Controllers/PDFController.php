@@ -195,9 +195,9 @@ class PDFController extends Controller
         ]);
 
         if(is_numeric($validated['dossier_id'])) {
-            $dossier = Dossier::with('mar')->where('id', $validated['dossier_id'])->first();
+            $dossier = Dossier::with('mar','etape')->where('id', $validated['dossier_id'])->first();
         } else {
-            $dossier = Dossier::with('mar')->where('folder', $validated['dossier_id'])->first();
+            $dossier = Dossier::with('mar','etape')->where('folder', $validated['dossier_id'])->first();
 
         }
 
