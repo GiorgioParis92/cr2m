@@ -81,6 +81,11 @@ class YouSign extends Controller
       $path = 'storage/dossiers/' . $dossier->folder . '/' . $request->name . '.pdf';
 
       $fullPath = public_path($path);
+
+      if(isset($request->test) && $request->test==1) {
+        dd($fullPath);
+      }
+
     }
 
     // Check if the file exists
@@ -106,9 +111,7 @@ class YouSign extends Controller
     ]);
 
     $response = curl_exec($curl);
-    if(isset($request->test) && $request->test==1) {
-      dd($response);
-    }
+
     if ($response === false) {
       die('Curl error: ' . curl_error($curl)); // Output cURL error
     }
