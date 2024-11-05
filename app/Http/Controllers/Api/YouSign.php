@@ -75,7 +75,9 @@ class YouSign extends Controller
         ]
       ]);
 
-
+      if(isset($request->test) && $request->test==1) {
+        dd($data);
+      }
     
       
       $path = 'storage/dossiers/' . $dossier->folder . '/' . $request->name . '.pdf';
