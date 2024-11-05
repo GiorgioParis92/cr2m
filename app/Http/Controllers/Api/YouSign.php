@@ -82,9 +82,7 @@ class YouSign extends Controller
 
       $fullPath = public_path($path);
 
-      if(isset($request->test) && $request->test==1) {
-        dd($fullPath);
-      }
+  
 
     }
 
@@ -178,7 +176,9 @@ class YouSign extends Controller
           $responseData->status === 'error'
         )
       ) {
-      
+        if(isset($request->test) && $request->test==1) {
+          dd($responseData);
+        }
         $resultData = $responseData->result->data->result ?? null;
 
         if ($resultData->signature_request_id) {
