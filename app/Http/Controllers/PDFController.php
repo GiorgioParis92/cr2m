@@ -334,7 +334,7 @@ class PDFController extends Controller
                             $dossier = DB::table('dossiers')
                                 ->where('folder', $dossier->folder)
                                 ->first();
-                            dd($dossier->mar);
+                         
                             $client = DB::table('clients')
                                 ->where('id', $dossier->mar)
                                 ->first();
