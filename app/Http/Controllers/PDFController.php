@@ -161,8 +161,16 @@ class PDFController extends Controller
         // Check if the template view exists
         $templatePath = 'templates.' . $template;
 
-        $dossier = Dossier::with('dossiersData','mar_client')->where('folder', $dossier_id)->first();
+        // $dossier = Dossier::with('dossiersData','mar_client')->where('folder', $dossier_id)->first();
       
+        if(is_numeric($dossier_id)) {
+            $dossier = Dossier::with('dossiersData','mar_client')->where('id', $dossier_id)->first();
+        } else {
+            $dossier = Dossier::with('dossiersData','mar_client')->where('folder', $dossier_id)->first();
+
+        }
+
+
         if ($send_data) {
             $all_data = load_all_dossier_data($dossier);
         } else {
