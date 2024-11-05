@@ -401,7 +401,6 @@ class PDFController extends Controller
 
         $pdfContent = $pdf->output('', 'S'); // 'S' returns the PDF as a string
         Storage::put($filePath, $pdfContent);
-        // $dossier = Dossier::where('folder', $dossierId)->first();
 
 
         $update = DB::table('forms_data')->updateOrInsert(
@@ -416,7 +415,7 @@ class PDFController extends Controller
                 'updated_at' => now()
             ]
         );
-      
+      dd($dossier);
         if ($dossier && isset($dossier->etape)) {
             $orderColumn = $dossier->etape->order_column;
         } else {
