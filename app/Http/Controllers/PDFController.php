@@ -92,6 +92,8 @@ class PDFController extends Controller
             $folderPath = "public/dossiers/{$dossier->folder}";
             $directPath = "dossiers/{$dossier->folder}";
 
+            dd($folderPath);
+
             // Create the folder if it does not exist
             if (!Storage::exists($folderPath)) {
                 Storage::makeDirectory($folderPath);
