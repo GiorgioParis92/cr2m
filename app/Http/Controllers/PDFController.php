@@ -232,7 +232,6 @@ class PDFController extends Controller
             $all_data = load_all_dossier_data($dossier);
 
         }
-        dd($dossier);
         $pdf = new Fpdi();
         $pageCount = $pdf->setSourceFile(public_path($optionsArray["template"] . '.pdf'));
 
@@ -402,8 +401,9 @@ class PDFController extends Controller
 
         $pdfContent = $pdf->output('', 'S'); // 'S' returns the PDF as a string
         Storage::put($filePath, $pdfContent);
+        $dossier = Dossier::where('folder', $dossier->folder)->first();
 
-
+        dd($dossier);
         $update = DB::table('forms_data')->updateOrInsert(
             [
                 'dossier_id' => '' . $dossier->id . '',
@@ -416,7 +416,7 @@ class PDFController extends Controller
                 'updated_at' => now()
             ]
         );
-      dd($dossier);
+      
         if ($dossier && isset($dossier->etape)) {
             $orderColumn = $dossier->etape->order_column;
         } else {
