@@ -38,24 +38,24 @@ class PDFController extends Controller
             'identify' => 'nullable',
         ]);
 
-        if(is_numeric($validated['dossier_id'])) {
+        if (is_numeric($validated['dossier_id'])) {
             $dossier = Dossier::with('mar')->where('id', $validated['dossier_id'])->first();
         } else {
             $dossier = Dossier::with('mar')->where('folder', $validated['dossier_id'])->first();
 
         }
 
-        if(isset($request->form_id)) {
+        if (isset($request->form_id)) {
 
-            $form_config=DB::table('forms_config')
-            ->where('form_id',$request->form_id)
-            ->where('name',$request->name)
-            ->first();
+            $form_config = DB::table('forms_config')
+                ->where('form_id', $request->form_id)
+                ->where('name', $request->name)
+                ->first();
 
-            $config=json_decode($form_config->options);
-            $validated['generation']=$config->on_generation ?? [];
-            $request->template=$config->template ?? [];
-            $validated['template']=$config->template ?? [];
+            $config = json_decode($form_config->options);
+            $validated['generation'] = $config->on_generation ?? [];
+            $request->template = $config->template ?? [];
+            $validated['template'] = $config->template ?? [];
 
         }
         if (isset($validated['generation']) && !empty($validated['generation'])) {
@@ -68,7 +68,7 @@ class PDFController extends Controller
         } else {
             $htmlContent = '';
         }
-
+        // dd($htmlContent);
         // Generate the PDF using Html2Pdf
         $html2pdf = new Html2Pdf();
 
@@ -109,7 +109,7 @@ class PDFController extends Controller
             }
 
 
-            
+
 
             $update = DB::table('forms_data')->updateOrInsert(
                 [
@@ -163,23 +163,49 @@ class PDFController extends Controller
         $templatePath = 'templates.' . $template;
 
         // $dossier = Dossier::with('dossiersData','mar_client')->where('folder', $dossier_id)->first();
-      
-        if(is_numeric($dossier_id)) {
-            $dossier = Dossier::with('dossiersData','mar_client')->where('id', $dossier_id)->first();
+
+        if (is_numeric($dossier_id)) {
+            $dossier = Dossier::with('dossiersData', 'mar_client')->where('id', $dossier_id)->first();
         } else {
-            $dossier = Dossier::with('dossiersData','mar_client')->where('folder', $dossier_id)->first();
+            $dossier = Dossier::with('dossiersData', 'mar_client')->where('folder', $dossier_id)->first();
 
         }
 
 
         if ($send_data) {
             $all_data = load_all_dossier_data($dossier);
+            if (is_array($all_data)) {
+            foreach ($all_data as $key => $data) {
+             
+                if (is_array($data)) {
+                   
+                    foreach ($data as $k => $v) {
+                    
+                        if (is_array($v)) {
+                            foreach ($v as $kk=>$valeur) {
+                         
+                              $all_data[$kk]= $valeur;
+                                if (is_array($valeur)) {
+                                    foreach ($valeur as $c => $vv) {
+                                        array_push($all_data, [$c => $vv]);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+
+
+            }
         } else {
             $all_data = [];
         }
 
 
         if (View::exists($templatePath)) {
+
             return view($templatePath, ['all_data' => $all_data, 'dossier' => $dossier, 'config' => $config, 'title' => $title, 'content' => $content])->render();
         } else {
             throw new \Exception('Invalid template specified');
@@ -194,10 +220,10 @@ class PDFController extends Controller
             'dossier_id' => 'nullable',
         ]);
 
-        if(is_numeric($validated['dossier_id'])) {
-            $dossier = Dossier::with('mar','etape')->where('id', $validated['dossier_id'])->first();
+        if (is_numeric($validated['dossier_id'])) {
+            $dossier = Dossier::with('mar', 'etape')->where('id', $validated['dossier_id'])->first();
         } else {
-            $dossier = Dossier::with('mar','etape')->where('folder', $validated['dossier_id'])->first();
+            $dossier = Dossier::with('mar', 'etape')->where('folder', $validated['dossier_id'])->first();
 
         }
 
@@ -266,24 +292,24 @@ class PDFController extends Controller
                                 if (isset($fill_data_config["eval"])) {
                                     try {
                                         // Replace `$$value$$` in the eval string with the actual value
-                                        if(is_array($fill_data_config["eval"])) {
+                                        if (is_array($fill_data_config["eval"])) {
 
                                         } else {
-                                            $fill_data_config["eval"][]=$fill_data_config["eval"]; 
+                                            $fill_data_config["eval"][] = $fill_data_config["eval"];
                                         }
-                                        $new_value='';
-                                        foreach($fill_data_config["eval"] as $eval) {
+                                        $new_value = '';
+                                        foreach ($fill_data_config["eval"] as $eval) {
                                             $queryString = str_replace('$$value$$', $current_value, $eval);
-                                
+
                                             // Use eval to execute the query and assign the result
-                                            $evalResult = eval('return ' . $queryString . ';');
+                                            $evalResult = eval ('return ' . $queryString . ';');
                                             // Check if the result is not empty and assign it to $current_value
                                             $new_value .= !empty($evalResult) ? $evalResult : null;
-                                            $new_value .=' ';
+                                            $new_value .= ' ';
                                         }
-                                        $current_value=$new_value;
+                                        $current_value = $new_value;
 
-                                        
+
                                     } catch (\Throwable $th) {
                                         // Catch any errors during eval execution
                                         $current_value = $th->getMessage();
@@ -312,7 +338,7 @@ class PDFController extends Controller
                         }
                         if (isset($fill_data_config["format_date"])) {
 
-                            $current_value = date($fill_data_config["format_date"], strtotime(str_replace('/','-',$current_value)));
+                            $current_value = date($fill_data_config["format_date"], strtotime(str_replace('/', '-', $current_value)));
                         }
                         if (isset($fill_data_config["date_now"])) {
 
@@ -334,7 +360,7 @@ class PDFController extends Controller
                             $dossier = DB::table('dossiers')
                                 ->where('folder', $dossier->folder)
                                 ->first();
-                         
+
                             $client = DB::table('clients')
                                 ->where('id', $dossier->mar)
                                 ->first();
@@ -357,11 +383,11 @@ class PDFController extends Controller
                         }
 
                         if (isset($fill_data_config['signature_beneficiaire'])) {
-                       
-                                
+
+
                             $current_value = json_decode($all_data[$fill_data_config["data_origin"]][$form_id][$tag])[0] ?? '';
-                            $value='';
-                           
+                            $value = '';
+
                             $signature_client = $current_value ?? '';
                             $signaturePath = storage_path('app/public/' . $signature_client);
                             if (file_exists($signaturePath)) {
@@ -415,8 +441,8 @@ class PDFController extends Controller
                 'updated_at' => now()
             ]
         );
-    
-        
+
+
         if ($dossier && $dossier->etape) {
             $orderColumn = $dossier->etape->order_column;
         } else {
@@ -437,14 +463,14 @@ class PDFController extends Controller
 
         $dossierId = $request->dossier_id;
 
-        if(isset($request->id)) {
+        if (isset($request->id)) {
             $dossierId = $request->id;
         }
 
-        if(is_numeric($dossierId)) {
-            $dossier = Dossier::with('mar','etape')->where('id', $dossierId)->first();
+        if (is_numeric($dossierId)) {
+            $dossier = Dossier::with('mar', 'etape')->where('id', $dossierId)->first();
         } else {
-            $dossier = Dossier::with('mar','etape')->where('folder', $dossierId)->first();
+            $dossier = Dossier::with('mar', 'etape')->where('folder', $dossierId)->first();
 
         }
 
@@ -476,22 +502,22 @@ class PDFController extends Controller
         $template_name = $request->template;
 
 
-        if(isset($request->form_id)) {
+        if (isset($request->form_id)) {
             $config = \DB::table('forms_config')
-            ->where('form_id', $request->form_id)
-            ->where('name', $request->template ?? $request->name)
-            ->first();
+                ->where('form_id', $request->form_id)
+                ->where('name', $request->template ?? $request->name)
+                ->first();
 
-        $jsonString = str_replace(["\n", '', "\r"], '', $config->options);
-        $optionsArray = json_decode($jsonString, true);
-        if (!is_array($optionsArray)) {
-            $optionsArray = [];
+            $jsonString = str_replace(["\n", '', "\r"], '', $config->options);
+            $optionsArray = json_decode($jsonString, true);
+            if (!is_array($optionsArray)) {
+                $optionsArray = [];
+            }
+
+            $configs = explode(',', $optionsArray['config_id']);
+            $template_name = $optionsArray['template'];
+
         }
-     
-        $configs = explode(',', $optionsArray['config_id']);
-        $template_name = $optionsArray['template'];
-
-        } 
 
         // dump($timeAfterDossier);
         foreach ($configs as $config_id) {
@@ -666,7 +692,7 @@ class PDFController extends Controller
         return response()->json([
             'message' => 'PDF generated and saved successfully',
             'file_path' => Storage::url($filePath), // Adjusted this line
-            'path' =>  $directPath // Adjusted this line
+            'path' => $directPath // Adjusted this line
         ], 200);
     }
 
