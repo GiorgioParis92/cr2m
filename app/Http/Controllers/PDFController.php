@@ -436,8 +436,20 @@ class PDFController extends Controller
     {
 
         $dossierId = $request->dossier_id;
-        $folderPath = "public/dossiers/{$dossierId}";
-        $directPath = "dossiers/{$dossierId}";
+
+        if(isset($request->id)) {
+            $dossierId = $request->id;
+        }
+
+        if(is_numeric($dossierId)) {
+            $dossier = Dossier::with('mar','etape')->where('id', $dossierId)->first();
+        } else {
+            $dossier = Dossier::with('mar','etape')->where('folder', $dossierId)->first();
+
+        }
+
+        $folderPath = "public/dossiers/{$dossier->folder}";
+        $directPath = "dossiers/{$dossier->folder}";
 
         // Create the folder if it does not exist
         if (!Storage::exists($folderPath)) {
@@ -446,7 +458,7 @@ class PDFController extends Controller
 
 
         // Fetch the dossier based on the provided dossier_id
-        $dossier = Dossier::where('folder', $request->dossier_id)->first();
+        $dossier = Dossier::where('folder', $dossier->folder)->first();
         $startTime = microtime(true);
         // Load all the dossier data (assuming load_all_dossier_data is a custom helper function)
 
@@ -463,6 +475,22 @@ class PDFController extends Controller
         $count = 0;
 
 
+        if(isset($request->form_id)) {
+            $config = \DB::table('forms_config')
+            ->where('form_id', $request->form_id)
+            ->where('name', $request->name)
+            ->first();
+
+        $jsonString = str_replace(["\n", '', "\r"], '', $config->options);
+        $optionsArray = json_decode($jsonString, true);
+        if (!is_array($optionsArray)) {
+            $optionsArray = [];
+        }
+     
+        $configs = explode(',', $optionsArray['config_id']);
+
+        } 
+        
 
         // dump($timeAfterDossier);
         foreach ($configs as $config_id) {
