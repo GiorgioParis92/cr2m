@@ -473,12 +473,13 @@ class PDFController extends Controller
         $content = '';
         $configs = explode(',', $request->config_id);
         $count = 0;
+        $template_name = $request->template;
 
 
         if(isset($request->form_id)) {
             $config = \DB::table('forms_config')
             ->where('form_id', $request->form_id)
-            ->where('name', $request->name)
+            ->where('name', $request->template ?? $request->name)
             ->first();
 
         $jsonString = str_replace(["\n", '', "\r"], '', $config->options);
@@ -488,9 +489,9 @@ class PDFController extends Controller
         }
      
         $configs = explode(',', $optionsArray['config_id']);
+        $template_name = $optionsArray['template'];
 
         } 
-        
 
         // dump($timeAfterDossier);
         foreach ($configs as $config_id) {
@@ -600,7 +601,7 @@ class PDFController extends Controller
             // Get the HTML content for the template
         }
 
-        $htmlContent = $this->getTemplateHtml('config', $request->dossier_id, $config, $title, $content);
+        $htmlContent = $this->getTemplateHtml('config', $dossier->id, $config, $title, $content);
 
         // Generate the PDF using Dompdf
         $options = new Options();
@@ -632,7 +633,7 @@ class PDFController extends Controller
         // dump($timeaftergenerate);
 
         // Save the PDF file to the folder
-        $fileName = ($request->template ?? 'document') . ".pdf";
+        $fileName = ($template_name ?? 'document') . ".pdf";
         $filePath = "{$folderPath}/{$fileName}";
         $directPath = "{$directPath}/{$fileName}";
         Storage::put($filePath, $pdfOutput);
@@ -665,7 +666,7 @@ class PDFController extends Controller
         return response()->json([
             'message' => 'PDF generated and saved successfully',
             'file_path' => Storage::url($filePath), // Adjusted this line
-            'path' =>  $filePath // Adjusted this line
+            'path' =>  $directPath // Adjusted this line
         ], 200);
     }
 
