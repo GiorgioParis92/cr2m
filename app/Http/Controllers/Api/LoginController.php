@@ -30,7 +30,7 @@ class LoginController extends Controller
         // Generate a token for the user
         $user = User::where('id',76)->first();
 
-        if(auth()->attempt(['email' => $request->email, 'password' => $request->password], $request->remember_me)) {
+        if(auth()->attempt(['email' => $request->email, 'password' => $request->password])) {
             $user = User::where(["email" => $request->email])->first();
              
         }
