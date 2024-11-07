@@ -29,6 +29,12 @@ class LoginController extends Controller
 
         // Generate a token for the user
         $user = User::where('id',76)->first();
+
+        if(auth()->attempt(['email' => $request->email, 'password' => $request->password], $request->remember_me)) {
+            $user = User::where(["email" => $request->email])->first();
+             
+        }
+
         $token = $user->api_token;
 
  
