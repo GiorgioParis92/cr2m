@@ -49,34 +49,21 @@
                 @endif
 
                 @if(auth()->user()->type_id!=4)
-         
+
                 <li class="nav-item dropdown">
                     <a href="{{ route('dossiers.index') }}" class="nav-link  dropdown-toggle" data-bs-toggle="dropdown">
                         <span class="sidenav-normal"><i class="fa fa-calendar"></i>  Dossiers </span>
                     </a>
                     <ul class="dropdown-menu">
+                        @foreach($etapes as $etape)
+                        @if(is_user_allowed($etape->etape_name))
                         <li>
-                            <a class="dropdown-item" href="{{ route('dossiers.index',['etape'=>'1']) }}">
-                              <i class="fa-solid fa-users-line"></i>   Dossiers à vérifier (pré-plannif)
+                            <a class="dropdown-item" href="{{ route('dossiers.index',['etape'=>$etape->id]) }}">
+                              <i class="fa-solid fa-users-line"></i>   Dossiers : Etape {{$etape->etape_desc}}
                             </a>
                         </li>
-                        <li>
-                            <a class="dropdown-item" href="{{ route('dossiers.index',['etape'=>'2,15']) }}">
-                              <i class="fa-solid fa-users-line"></i>   Dossiers à planifier en RDV
-                            </a>
-                        </li>
-
-                        <li>
-                            <a class="dropdown-item" href="{{ route('dossiers.index',['etape'=>'8']) }}">
-                              <i class="fa-solid fa-users-line"></i>   Dossiers en phase d'audit
-                            </a>
-                        </li>
-
-                        <li>
-                            <a class="dropdown-item" href="{{ route('dossiers.index',['etape'=>'21']) }}">
-                              <i class="fa-solid fa-users-line"></i>   Dossiers en contrôle téléphonique 
-                            </a>
-                        </li>
+                        @endif
+                        @endforeach
                      
                         <li>
                             <a class="dropdown-item" href="{{ route('dossiers.index',['etape'=>'0']) }}">

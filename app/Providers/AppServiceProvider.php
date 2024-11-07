@@ -12,6 +12,7 @@ use App\Models\UserPermission;
 use App\Models\Permission;
 use Illuminate\Support\Facades\Auth;
 use App\Http\ViewComposers\AuditeursComposer;
+use App\Models\Etapes;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -52,6 +53,9 @@ class AppServiceProvider extends ServiceProvider
             View::share('permissions', $permissions);
         }
 
+        $etapes = Etapes::orderBy('order_column')->get();
+        View::share('etapes', $etapes);
+    
         View::composer('*', function ($view) {
             if (Auth::check() && Auth::user()->id == 1) {
                 $clients = Client::all();
