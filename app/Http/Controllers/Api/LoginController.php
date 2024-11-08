@@ -35,7 +35,7 @@ class LoginController extends Controller
              
         }
 
-        $token = $user->api_token;
+        // $token = $user->api_token;
 
  
         return response()->json($user        , 200);

@@ -202,6 +202,7 @@ class DossiersTable extends Component
                 'id' => $dossier->id,
                 'docs' => ($dossier->meta_value),
                 'date_creation' => $dossier->created_at,
+                'date_update' => $dossier->updated_at,
                 'dossier_url' => route('dossiers.show', $dossier->folder),
                 'beneficiaire' => [
                     'nom' => $dossier->beneficiaire->nom ?? '',

@@ -131,6 +131,13 @@ class PDFController extends Controller
                     $orderColumn = null;
                 }
                 $docs = getDocumentStatuses($dossier->id, $orderColumn);
+
+
+                Dossier::where('id', $dossier->id)->update([
+                
+                    'updated_at' => now(),
+                ]);
+
             }
 
             $identify = '';
@@ -441,7 +448,10 @@ class PDFController extends Controller
                 'updated_at' => now()
             ]
         );
-
+        Dossier::where('id', $dossier->id)->update([
+                
+            'updated_at' => now(),
+        ]);
 
         if ($dossier && $dossier->etape) {
             $orderColumn = $dossier->etape->order_column;
@@ -682,6 +692,10 @@ class PDFController extends Controller
                 'updated_at' => now()
             ]
         );
+        Dossier::where('id', $dossier->id)->update([
+                
+            'updated_at' => now(),
+        ]);
         if ($dossier && $dossier->etape) {
             $orderColumn = $dossier->etape->order_column;
         } else {

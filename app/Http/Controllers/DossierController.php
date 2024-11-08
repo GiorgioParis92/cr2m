@@ -183,7 +183,11 @@ class DossierController extends Controller
                 ]
             );
        
-            Dossier::where('id', $id)->update(['etape_number' => $next_etape]);
+            Dossier::where('id', $id)->update([
+                'etape_number' => $next_etape,
+                'updated_at' => now(),
+            ]);
+        
         }
 
           

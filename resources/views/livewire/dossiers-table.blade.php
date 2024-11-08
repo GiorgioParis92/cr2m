@@ -183,7 +183,35 @@ span.badge.badge-outline-danger {
             let value = $(this).val();
             @this.set('dpt', value);
         });
-        const columnDefs = [{
+        const columnDefs = [
+            {
+                field: "date_update",
+                headerName: "Date de mise à jour",
+                sortable: true,
+                filter: 'agDateColumnFilter',
+                enableRowGroup: true,
+                sort: 'desc', // or 'desc' for descending order
+
+                valueFormatter: (params) => {
+                    return params.value ? new Date(params.value).toLocaleDateString('fr-FR') : '';
+                },
+                filterParams: {
+                    // Custom comparator to handle date filtering
+                    comparator: (filterDate, cellValue) => {
+                        if (!cellValue) return -1; // No date in cell
+
+                        // Parse the cell value into a Date object
+                        const cellDate = new Date(cellValue);
+
+                        // Compare the cell date with the filter date
+                        if (cellDate < filterDate) return -1;
+                        if (cellDate > filterDate) return 1;
+                        return 0;
+                    },
+                    browserDatePicker: true, // Use browser's date picker for a localized experience
+                },
+            },
+        {
                 field: "date_creation",
                 headerName: "Date de création",
                 sortable: true,
