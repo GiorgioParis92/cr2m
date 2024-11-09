@@ -189,7 +189,6 @@
                   <i class="fa fa-cog fixed-plugin-button-nav cursor-pointer"></i>
               </a>
           </li>
-          <div id="enable-notifications" >Enable Notifications</div>
 
           <li class="nav-item d-flex align-items-center">
               <a href="{{ route('logout') }}" class="nav-link text-body font-weight-bold px-0" style="    margin-left: 12px;">
