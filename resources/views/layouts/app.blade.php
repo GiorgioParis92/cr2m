@@ -12,70 +12,70 @@
     <script src="{{ mix('js/app.js') }}"></script>
 
     <script>
- if ('serviceWorker' in navigator && 'Notification' in window) {
+  if ('serviceWorker' in navigator && 'Notification' in window) {
     navigator.serviceWorker.register('/service-worker.js', { scope: '/' })
         .then(function (registration) {
             console.log('Service Worker Registered with scope:', registration.scope);
+
+            // Wait for the Service Worker to become active
             return navigator.serviceWorker.ready;
         })
         .then(function (registration) {
             console.log('Service Worker Ready');
 
-            // Show the enable notifications button
-            const enableNotificationsButton = document.getElementById('enable-notifications');
-            enableNotificationsButton.style.display = 'block';
+            // Request notification permission
+            return Notification.requestPermission();
+        })
+        .then(function (permission) {
+            if (permission === 'granted') {
+                console.log('Notification permission granted.');
 
-            enableNotificationsButton.addEventListener('click', function () {
-                // Disable the button to prevent multiple clicks
-                enableNotificationsButton.disabled = true;
-
-                // Request notification permission
-                Notification.requestPermission().then(function (permission) {
-                    if (permission === 'granted') {
-                        console.log('Notification permission granted.');
-                        // Proceed to subscribe the user
-                        subscribeUserToPush();
-                    } else {
-                        console.warn('Notification permission denied');
-                        enableNotificationsButton.disabled = false; // Re-enable the button
-                    }
-                });
-            });
+                // Proceed to subscribe the user
+                subscribeUserToPush();
+            } else {
+                console.warn('Notification permission denied');
+                // Optionally inform the user about the importance of notifications
+            }
         })
         .catch(function (error) {
-            console.error('Service Worker registration failed:', error);
+            console.error('Service Worker registration or subscription failed:', error);
         });
 }
 
 function subscribeUserToPush() {
     navigator.serviceWorker.ready.then(function (registration) {
         const applicationServerKey = urlBase64ToUint8Array('BFbUWF-kOLUzkZ1JAlHVhOlJMjSNBbUk4ZNDDWdsrjPrCAY3k4H-nFUm39QBFjTZsV9F--ONGybs6wuXhOJpdDU');
-        registration.pushManager.subscribe({
-            userVisibleOnly: true,
-            applicationServerKey: applicationServerKey
-        })
-        .then(function (subscription) {
-            console.log('User is subscribed:', subscription);
+        registration.pushManager.getSubscription()
+            .then(function (subscription) {
+                if (subscription) {
+                    console.log('User is already subscribed:', subscription);
+                    return subscription;
+                }
 
-            // Send subscription to the server
-            return axios.post('/save-subscription', subscription.toJSON());
-        })
-        .then(function () {
-            console.log('Subscription sent to server.');
-        })
-        .catch(function (error) {
-            console.error('Failed to subscribe the user:', error);
-        });
+                return registration.pushManager.subscribe({
+                    userVisibleOnly: true,
+                    applicationServerKey: applicationServerKey
+                });
+            })
+            .then(function (subscription) {
+                console.log('User is subscribed:', subscription);
+
+                // Send subscription to the server
+                return axios.post('/save-subscription', subscription.toJSON());
+            })
+            .catch(function (error) {
+                console.error('Failed to subscribe the user:', error);
+            });
     });
 }
 
 // Utility function to convert VAPID key
 function urlBase64ToUint8Array(base64String) {
-    const padding = '='.repeat((4 - (base64String.length % 4)) % 4);
+    const padding = '='.repeat((4 - base64String.length % 4) % 4);
     const base64 = (base64String + padding)
         .replace(/-/g, '+')
         .replace(/_/g, '/');
-    const rawData = atob(base64);
+    const rawData = window.atob(base64);
     return Uint8Array.from([...rawData].map(char => char.charCodeAt(0)));
 }
 
