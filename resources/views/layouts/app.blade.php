@@ -10,34 +10,77 @@
         GENIUS MARKET
     </title>
     <script src="{{ mix('js/app.js') }}"></script>
+    <script src="/js/push-notifications.js"></script>
+
     <script>
         
-if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/service-worker.js')
+        if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/service-worker.js', { scope: '/' })
         .then(function (registration) {
-            console.log('Service Worker Registered', registration);
+            console.log('Service Worker Registered with scope:', registration.scope);
 
-            registration.pushManager.getSubscription().then(function (subscription) {
-                if (subscription === null) {
-                    // Subscribe the user
-                    registration.pushManager.subscribe({
-                        userVisibleOnly: true,
-                        applicationServerKey: '{{ env('VAPID_PUBLIC_KEY') }}'
-                    }).then(function (subscription) {
-                        // Send subscription to the server
-                        axios.post('/api/save-subscription', subscription.toJSON());
-                    }).catch(function (err) {
-                        console.error('Subscription error:', err);
-                    });
-                } else {
-                    console.log('Already subscribed:', subscription);
-                }
-            });
+            // Wait for the Service Worker to become active
+            return navigator.serviceWorker.ready;
+        })
+        .then(function (registration) {
+            console.log('Service Worker Ready', registration);
+
+            // Request notification permission
+            return Notification.requestPermission();
+        })
+        .then(function (permission) {
+            if (permission !== 'granted') {
+                throw new Error('Permission not granted for Notification');
+            }
+
+            // Proceed to subscribe the user
+            subscribeUserToPush();
         })
         .catch(function (err) {
-            console.error('Service Worker registration failed:', err);
+            console.error('Service Worker registration or subscription failed:', err);
         });
+} else {
+    console.log('no service')
 }
+
+function subscribeUserToPush() {
+    navigator.serviceWorker.ready.then(function (registration) {
+        const applicationServerKey = urlBase64ToUint8Array('YOUR_VAPID_PUBLIC_KEY');
+        registration.pushManager.getSubscription().then(function (subscription) {
+            if (subscription) {
+                console.log('Already subscribed:', subscription);
+                return subscription;
+            }
+
+            return registration.pushManager.subscribe({
+                userVisibleOnly: true,
+                applicationServerKey: applicationServerKey
+            });
+        }).then(function (subscription) {
+            console.log('User is subscribed:', subscription);
+
+            // Send subscription to the server
+            axios.post('/api/save-subscription', subscription.toJSON());
+        }).catch(function (err) {
+            console.error('Failed to subscribe the user:', err);
+        });
+    });
+}
+
+// Utility function to convert VAPID key
+function urlBase64ToUint8Array(base64String) {
+    const padding = '='.repeat((4 - (base64String.length % 4)) % 4);
+    const base64 = (base64String + padding)
+        .replace(/-/g, '+')
+        .replace(/_/g, '/');
+    const rawData = atob(base64);
+    const outputArray = new Uint8Array(rawData.length);
+    for (let i = 0; i < rawData.length; ++i) {
+        outputArray[i] = rawData.charCodeAt(i);
+    }
+    return outputArray;
+}
+
 </script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
