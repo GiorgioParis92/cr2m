@@ -19,9 +19,10 @@ class WebPushNotification extends Notification
     {
         return (new WebPushMessage)
             ->title('Test Notification')
-            ->body('This is a test notification.')
-            ->icon('/path/to/icon.png') // Ensure the icon path is correct
-            ->action('View App', 'notification_action')
-            ->data(['url' => 'https://your-app-url.com']);
+            ->body('This is a test notification from the server.')
+            ->data([
+                'url' => 'https://your-app-url.com',
+                // Add any other data as needed
+            ]);
     }
 }

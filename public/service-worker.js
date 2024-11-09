@@ -8,21 +8,29 @@ self.addEventListener('push', function(event) {
             console.log('Parsed JSON data:', data);
         } catch (e) {
             console.error('Error parsing JSON:', e);
-            // If JSON parsing fails, use text data
+            // Fallback to text data if JSON parsing fails
             data = {
                 title: 'Notification',
                 body: event.data.text()
             };
-            console.log('Text data:', data.body);
         }
     }
 
+    const options = {
+        body: data.body,
+        icon: data.icon || '/default-icon.png',
+        data: data.url || '/',
+        actions: data.actions || []
+    };
+
     event.waitUntil(
-        self.registration.showNotification(data.title, {
-            body: data.body,
-            icon: data.icon || '/default-icon.png',
-            data: data.data || '/',
-            actions: data.actions || []
-        })
+        self.registration.showNotification(data.title, options)
+    );
+});
+
+self.addEventListener('notificationclick', function(event) {
+    event.notification.close();
+    event.waitUntil(
+        clients.openWindow(event.notification.data)
     );
 });

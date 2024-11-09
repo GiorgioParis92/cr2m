@@ -198,6 +198,9 @@
 
       </ul>
     </div> <!-- container-fluid.// -->
+
+    <button id="enable-notifications">Enable Notifications</button>
+
 </nav>
 <script>
     $(document).ready(function() {
