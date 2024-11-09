@@ -34,61 +34,7 @@
         </div>
     </div>
 
-    <div class="row mb-5">
-        @foreach ($columns as $columnIndex => $column)
-        <div class="col-xl-12 col-sm-12 mb-xl-0 mb-4 column" data-column_id="{{ $column['index'] }}" wire:key="column-{{ $columnIndex }}">
-            <div class="card">
-                <div class="card-body p-3">
-                    <div class="row">
-                        <div class="col-8">
-                            <div class="numbers">
-                                <p class="text-sm mb-0 text-capitalize font-weight-bold">{{ $column['name'] }}@if(count($column['tickets'])>0)<span class="badge badge-danger bg-danger">{{count($column['tickets'])}}</span>@endif</p>
-                                @foreach ($column['tickets'] as $ticket)
-                                <div class="ticket" draggable="true" data-id="{{ $ticket['id'] }}" wire:key="ticket-{{ $ticket['id'] }}">
-                                    <h5>{{ $ticket['title'] }}</h5>
-                            
-                                    @if (isset($ticket['dossier']) && $display_dossier)
-                                        <a href="{{ route('dossiers.show', ['id' => $ticket['dossier']['folder']]) }}" target="_blank">
-                                            <div class="btn btn-primary">Dossier : {{ $ticket['dossier']['beneficiaire']['nom'] }} {{ $ticket['dossier']['beneficiaire']['prenom'] }}</div>
-                                        </a>
-                                    @endif
-                            
-                                    <!-- Display who assigned the card -->
-                                    <div><b>Créé par :</b> {{ $ticket['assigned_by'] }}</div>
-                            
-                                    <!-- Display all users assigned to the card -->
-                                    @if (count($ticket['assigned_to']) > 0)
-                                    <div><b>Destiné à :</b> 
-                                            {{ implode(', ', $ticket['assigned_to']) }}
-                                       
-                                    </div>
-                                    @endif
-                                    @if (!empty($ticket['archived_by']))
-                                    <div><b>Déplacé par :</b> 
-                                            {{ $ticket['archived_by'] }} le {{date('d/m/Y à H:i',strtotime($ticket['updated_at']))}}
-                                       
-                                    </div>
-                                    @endif
-                                    @if($ticket['status']!=0)
-                                    <button wire:click="moveCard({{ $ticket['id'] }}, 0)" class="btn btn-sm btn-warning float-right">Fait</button>
-                                    @endif
-                                </div>
-                            @endforeach
-                            
-                            </div>
-                        </div>
-                        <div class="col-4 text-end">
-                            <div
-                                class="icon icon-shape bg-gradient-primary shadow text-center border-radius-md">
-                                <i class="ni ni-money-coins text-lg opacity-10" aria-hidden="true"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        @endforeach
-    </div>
+
 
 </div>
 
