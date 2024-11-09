@@ -1,5 +1,6 @@
 self.addEventListener('push', function(event) {
     console.log('Push event received:', event);
+    console.log('Service Worker (Version 1.0.1) is running.');
 
     let data = { title: 'Default Title', body: 'Default body' };
     if (event.data) {
@@ -34,3 +35,13 @@ self.addEventListener('notificationclick', function(event) {
         clients.openWindow(event.notification.data)
     );
 });
+
+self.addEventListener('install', function(event) {
+    self.skipWaiting();
+});
+self.addEventListener('activate', function(event) {
+    event.waitUntil(
+        self.clients.claim()
+    );
+});
+
