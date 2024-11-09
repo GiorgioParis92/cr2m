@@ -4,7 +4,7 @@
 
         Push.create("Hello Giorgio!", {
             body: "Welcome to the Dashboard.",
-            timeout: 5000,
+            timeout: 500,
             icon: iconPath
         });
 
