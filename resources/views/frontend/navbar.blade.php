@@ -189,6 +189,8 @@
                   <i class="fa fa-cog fixed-plugin-button-nav cursor-pointer"></i>
               </a>
           </li>
+          <button id="enable-notifications" style="display: none;">Enable Notifications</button>
+
           <li class="nav-item d-flex align-items-center">
               <a href="{{ route('logout') }}" class="nav-link text-body font-weight-bold px-0" style="    margin-left: 12px;">
                   <div class="d-sm-inline d-none logout ml-2"><i class="fa-solid fa-right-from-bracket btn btn-success p-2"></i></div>
