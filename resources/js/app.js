@@ -20,7 +20,7 @@ if ('serviceWorker' in navigator) {
                         applicationServerKey: 'BFbUWF-kOLUzkZ1JAlHVhOlJMjSNBbUk4ZNDDWdsrjPrCAY3k4H-nFUm39QBFjTZsV9F--ONGybs6wuXhOJpdDU'
                     }).then(function (subscription) {
                         // Send subscription to the server
-                        axios.post('/api/save-subscription', subscription.toJSON());
+                        axios.post('/save-subscription', subscription.toJSON());
                     }).catch(function (err) {
                         console.error('Subscription error:', err);
                     });
