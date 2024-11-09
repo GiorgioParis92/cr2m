@@ -58,7 +58,7 @@ function subscribeUserToPush() {
             console.log('User is subscribed:', subscription);
 
             // Send subscription to the server
-            return axios.post('/api/save-subscription', subscription.toJSON());
+            return axios.post('/save-subscription', subscription.toJSON());
         })
         .then(function () {
             console.log('Subscription sent to server.');
