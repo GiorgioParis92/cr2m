@@ -54,7 +54,7 @@
     </script>
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.print.min.js">
     </script>
-    <script>
+  
    <script>
         const iconPath = '{{ asset('logo.PNG') }}'
 
