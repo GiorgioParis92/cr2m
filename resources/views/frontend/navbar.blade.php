@@ -199,7 +199,7 @@
       </ul>
     </div> <!-- container-fluid.// -->
 
-    <button id="enable-notifications">Enable Notifications</button>
+    <button id="enable-notifications" style="display: none;">Enable Notifications</button>
 
 </nav>
 <script>

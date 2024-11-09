@@ -4,32 +4,79 @@ import { Calendar } from '@fullcalendar/core';
 import interactionPlugin from '@fullcalendar/interaction';
 import dayGridPlugin from '@fullcalendar/daygrid';
 
+document.addEventListener('DOMContentLoaded', function () {
+    if ('serviceWorker' in navigator && 'Notification' in window) {
+        navigator.serviceWorker.register('/service-worker.js', { scope: '/' })
+            .then(function (registration) {
+                console.log('Service Worker Registered with scope:', registration.scope);
+                return navigator.serviceWorker.ready;
+            })
+            .then(function (registration) {
+                console.log('Service Worker Ready');
 
-// In your app.js or a separate JS file
+                const enableNotificationsButton = document.getElementById('enable-notifications');
+                enableNotificationsButton.style.display = 'block';
 
-if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/service-worker.js')
-        .then(function (registration) {
-            console.log('Service Worker Registered', registration);
+                enableNotificationsButton.addEventListener('click', function () {
+                    enableNotificationsButton.disabled = true;
 
-            registration.pushManager.getSubscription().then(function (subscription) {
-                if (subscription === null) {
-                    // Subscribe the user
-                    registration.pushManager.subscribe({
-                        userVisibleOnly: true,
-                        applicationServerKey: 'BFbUWF-kOLUzkZ1JAlHVhOlJMjSNBbUk4ZNDDWdsrjPrCAY3k4H-nFUm39QBFjTZsV9F--ONGybs6wuXhOJpdDU'
-                    }).then(function (subscription) {
-                        // Send subscription to the server
-                        axios.post('/save-subscription', subscription.toJSON());
-                    }).catch(function (err) {
-                        console.error('Subscription error:', err);
+                    Notification.requestPermission().then(function (permission) {
+                        if (permission === 'granted') {
+                            console.log('Notification permission granted.');
+                            subscribeUserToPush();
+                        } else {
+                            console.warn('Notification permission denied');
+                            enableNotificationsButton.disabled = false;
+                        }
                     });
-                } else {
-                    console.log('Already subscribed:', subscription);
-                }
+                });
+            })
+            .catch(function (error) {
+                console.error('Service Worker registration failed:', error);
             });
-        })
-        .catch(function (err) {
-            console.error('Service Worker registration failed:', err);
-        });
+    }
+});
+
+function subscribeUserToPush() {
+    navigator.serviceWorker.ready.then(function (registration) {
+        const applicationServerKey = urlBase64ToUint8Array('YOUR_VAPID_PUBLIC_KEY');
+        registration.pushManager.getSubscription()
+            .then(function (subscription) {
+                if (subscription) {
+                    console.log('User is already subscribed:', subscription);
+                    return subscription;
+                }
+
+                return registration.pushManager.subscribe({
+                    userVisibleOnly: true,
+                    applicationServerKey: applicationServerKey
+                });
+            })
+            .then(function (subscription) {
+                console.log('User is subscribed:', subscription);
+
+                // Send subscription to the server
+                const subscriptionData = subscription.toJSON();
+                subscriptionData.content_encoding = (PushManager.supportedContentEncodings || ['aesgcm'])[0];
+
+                return axios.post('/api/save-subscription', subscriptionData);
+            })
+            .then(function () {
+                console.log('Subscription sent to server.');
+            })
+            .catch(function (error) {
+                console.error('Failed to subscribe the user:', error);
+            });
+    });
 }
+
+// Utility function to convert VAPID key
+function urlBase64ToUint8Array(base64String) {
+    const padding = '='.repeat((4 - base64String.length % 4) % 4);
+    const base64 = (base64String + padding)
+        .replace(/-/g, '+')
+        .replace(/_/g, '/');
+    const rawData = atob(base64);
+    return Uint8Array.from([...rawData].map((char) => char.charCodeAt(0)));
+}
+
