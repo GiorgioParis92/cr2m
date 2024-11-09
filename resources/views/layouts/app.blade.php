@@ -10,11 +10,9 @@
         GENIUS MARKET
     </title>
     <script src="{{ mix('js/app.js') }}"></script>
-    <script src="/js/push-notifications.js"></script>
 
     <script>
-        
-        if ('serviceWorker' in navigator) {
+  if ('serviceWorker' in navigator && 'Notification' in window) {
     navigator.serviceWorker.register('/service-worker.js', { scope: '/' })
         .then(function (registration) {
             console.log('Service Worker Registered with scope:', registration.scope);
@@ -23,63 +21,64 @@
             return navigator.serviceWorker.ready;
         })
         .then(function (registration) {
-            console.log('Service Worker Ready', registration);
+            console.log('Service Worker Ready');
 
             // Request notification permission
             return Notification.requestPermission();
         })
         .then(function (permission) {
-            if (permission !== 'granted') {
-                throw new Error('Permission not granted for Notification');
-            }
+            if (permission === 'granted') {
+                console.log('Notification permission granted.');
 
-            // Proceed to subscribe the user
-            subscribeUserToPush();
+                // Proceed to subscribe the user
+                subscribeUserToPush();
+            } else {
+                console.warn('Notification permission denied');
+                // Optionally inform the user about the importance of notifications
+            }
         })
-        .catch(function (err) {
-            console.error('Service Worker registration or subscription failed:', err);
+        .catch(function (error) {
+            console.error('Service Worker registration or subscription failed:', error);
         });
-} else {
-    console.log('no service')
 }
 
 function subscribeUserToPush() {
     navigator.serviceWorker.ready.then(function (registration) {
         const applicationServerKey = urlBase64ToUint8Array('BFbUWF-kOLUzkZ1JAlHVhOlJMjSNBbUk4ZNDDWdsrjPrCAY3k4H-nFUm39QBFjTZsV9F--ONGybs6wuXhOJpdDU');
-        registration.pushManager.getSubscription().then(function (subscription) {
-            if (subscription) {
-                console.log('Already subscribed:', subscription);
-                return subscription;
-            }
+        registration.pushManager.getSubscription()
+            .then(function (subscription) {
+                if (subscription) {
+                    console.log('User is already subscribed:', subscription);
+                    return subscription;
+                }
 
-            return registration.pushManager.subscribe({
-                userVisibleOnly: true,
-                applicationServerKey: applicationServerKey
+                return registration.pushManager.subscribe({
+                    userVisibleOnly: true,
+                    applicationServerKey: applicationServerKey
+                });
+            })
+            .then(function (subscription) {
+                console.log('User is subscribed:', subscription);
+
+                // Send subscription to the server
+                return axios.post('/api/save-subscription', subscription.toJSON());
+            })
+            .catch(function (error) {
+                console.error('Failed to subscribe the user:', error);
             });
-        }).then(function (subscription) {
-            console.log('User is subscribed:', subscription);
-
-            // Send subscription to the server
-            axios.post('/api/save-subscription', subscription.toJSON());
-        }).catch(function (err) {
-            console.error('Failed to subscribe the user:', err);
-        });
     });
 }
 
 // Utility function to convert VAPID key
 function urlBase64ToUint8Array(base64String) {
-    const padding = '='.repeat((4 - (base64String.length % 4)) % 4);
+    const padding = '='.repeat((4 - base64String.length % 4) % 4);
     const base64 = (base64String + padding)
         .replace(/-/g, '+')
         .replace(/_/g, '/');
-    const rawData = atob(base64);
-    const outputArray = new Uint8Array(rawData.length);
-    for (let i = 0; i < rawData.length; ++i) {
-        outputArray[i] = rawData.charCodeAt(i);
-    }
-    return outputArray;
+    const rawData = window.atob(base64);
+    return Uint8Array.from([...rawData].map(char => char.charCodeAt(0)));
 }
+
 
 </script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
