@@ -18,9 +18,7 @@ class DashboardController extends Controller
     {
         $user = Auth::user();
         $user->notify(new WebPushNotification());
-        if($user->id==1) {
-            dump($user->notify(new WebPushNotification()));
-        }
+    
         return view('dashboard', compact('user')); // Ensure you have a view named 'dashboard2.blade.php'
 
     }
