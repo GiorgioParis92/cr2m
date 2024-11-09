@@ -1,9 +1,21 @@
-
-
 self.addEventListener('push', function(event) {
     console.log('Push event received:', event);
-    const data = event.data.json();
-    console.log('Push data:', data);
+
+    let data = { title: 'Default Title', body: 'Default body' };
+    if (event.data) {
+        try {
+            data = event.data.json();
+            console.log('Parsed JSON data:', data);
+        } catch (e) {
+            console.error('Error parsing JSON:', e);
+            // If JSON parsing fails, use text data
+            data = {
+                title: 'Notification',
+                body: event.data.text()
+            };
+            console.log('Text data:', data.body);
+        }
+    }
 
     event.waitUntil(
         self.registration.showNotification(data.title, {
@@ -12,12 +24,5 @@ self.addEventListener('push', function(event) {
             data: data.data || '/',
             actions: data.actions || []
         })
-    );
-});
-
-self.addEventListener('notificationclick', function(event) {
-    event.notification.close();
-    event.waitUntil(
-        clients.openWindow(event.notification.data)
     );
 });
