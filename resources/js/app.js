@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 function subscribeUserToPush() {
     navigator.serviceWorker.ready.then(function (registration) {
-        const applicationServerKey = urlBase64ToUint8Array('YOUR_VAPID_PUBLIC_KEY');
+        const applicationServerKey = urlBase64ToUint8Array('BFbUWF-kOLUzkZ1JAlHVhOlJMjSNBbUk4ZNDDWdsrjPrCAY3k4H-nFUm39QBFjTZsV9F--ONGybs6wuXhOJpdDU');
         registration.pushManager.getSubscription()
             .then(function (subscription) {
                 if (subscription) {
