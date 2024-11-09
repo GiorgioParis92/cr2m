@@ -56,19 +56,12 @@
     </script>
       <script src="{{ asset('assets/js/push.min.js') }}"></script>
 
-   <script>
-        const iconPath = '{{ asset('logo.PNG') }}'
-
-        Push.create("Hello Shailesh!", {
-            body: "Welcome to the Dashboard.",
-            timeout: 5000,
-            icon: iconPath
-        });
-    </script>
+  
         </script>
     {{-- <script  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCzcaFvxwi1XLyRHmPRnlKO4zcJXPOT5gM&loading=async&callback=initMap"></script> --}}
     @livewireStyles
     @include('partials.css_variables')
+    @livewire('notifications')
 </head>
 
 <body class="g-sidenav-show bg-gray-100">
