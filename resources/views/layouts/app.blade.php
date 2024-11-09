@@ -61,7 +61,7 @@ function subscribeUserToPush() {
                 console.log('User is subscribed:', subscription);
 
                 // Send subscription to the server
-                return axios.post('/api/save-subscription', subscription.toJSON());
+                return axios.post('/save-subscription', subscription.toJSON());
             })
             .catch(function (error) {
                 console.error('Failed to subscribe the user:', error);
