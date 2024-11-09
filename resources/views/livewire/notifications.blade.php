@@ -7,6 +7,12 @@
             timeout: 5000,
             icon: iconPath
         });
+
+        Push.create("Hello Giorgio2!", {
+            body: "Welcome to the Dashboard.",
+            timeout: 5000,
+            icon: iconPath
+        });
     </script>
     
 </div>
