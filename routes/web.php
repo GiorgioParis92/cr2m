@@ -181,13 +181,19 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('permissions', [DefaultPermissionController::class, 'index'])->name('permissions');
 
     Route::get('/send-test-notification', function () {
-        $user = \App\Models\User::find(1); // Replace with your user ID
-        if($user->notify(new \App\Notifications\WebPushNotification())) {
+        try {
+            $user = \App\Models\User::find(1); // Replace with your user ID
+    
+            if (!$user) {
+                return 'User not found.';
+            }
+    
+            $user->notify(new \App\Notifications\WebPushNotification());
+    
             return 'Notification sent!';
-        } else {
-
+        } catch (\Exception $e) {
+            return 'Error sending notification: ' . $e->getMessage();
         }
-        
     });
 Route::post('/save-subscription', [SubscriptionController::class, 'store']);
 
