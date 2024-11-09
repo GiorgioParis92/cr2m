@@ -31,6 +31,7 @@ use App\Http\Controllers\Api\TablesController;
 
 use App\Http\Controllers\Api\DynamicModelController;
 use App\Http\Controllers\Api\UploadFile;
+use App\Http\Controllers\Api\SubscriptionController;
 
 
 
@@ -94,6 +95,7 @@ Route::post('/charts/{chartId}', [StatsController::class, 'getChartData']);
 
 Route::middleware('auth:api')->group(function () {
 
+    Route::post('/save-subscription', [SubscriptionController::class, 'store']);
 
 
     Route::get('/dossiers-rdv', [DossiersController::class, 'index']);

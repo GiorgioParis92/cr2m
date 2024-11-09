@@ -1,5 +1,38 @@
+
 <div wire:poll="loadCards">
+ 
     <button class="btn btn-success" wire:click="openAddCardModal(0, {{ $dossier_id ?? null }})">Ajouter une notification</button>
+
+
+    <div class="container-fluid py-4">
+        <div class="row">
+
+            @foreach ($columns as $columnIndex => $column)
+            <div class="col-12 col-md-4 mb-3 column"  data-column_id="{{ $column['index'] }}" wire:key="column-{{ $columnIndex }}">
+                <div class="kanban-column">
+                    <div class="column-header">{{ $column['name'] }}@if(count($column['tickets'])>0)<span class="badge badge-danger bg-danger">{{count($column['tickets'])}}</span>@endif</div>
+                    @foreach ($column['tickets'] as $ticket)
+                    <div  class="task-card ticket" draggable="true" data-id="{{ $ticket['id'] }}" wire:key="ticket-{{ $ticket['id'] }}">
+                        {{ $ticket['title'] }}
+                        @if (isset($ticket['dossier']) && $display_dossier)
+                        <a href="{{ route('dossiers.show', ['id' => $ticket['dossier']['folder']]) }}" target="_blank">
+                            <div class="btn btn-primary">Dossier : {{ $ticket['dossier']['beneficiaire']['nom'] }} {{ $ticket['dossier']['beneficiaire']['prenom'] }}</div>
+                        </a>
+                    @endif
+                    </div>
+                    @endforeach
+                    
+                </div>
+            </div>
+
+            @endforeach
+
+    
+
+    
+  
+        </div>
+    </div>
 
     <div class="row mb-5">
         @foreach ($columns as $columnIndex => $column)
@@ -124,9 +157,9 @@
     padding: 10px;
     flex-shrink: 0;
 
-    max-height: 280px;
-    overflow-x: hidden;
-    overflow-y: scroll;
+    /* max-height: 280px; */
+    /* overflow-x: hidden; */
+    /* overflow-y: scroll; */
     }
 
     .column-header {
@@ -176,6 +209,69 @@
 .column::-webkit-scrollbar {
   display: none;
 }
+</style>
+
+
+<style>
+    .kanban-column {
+        background-color: #ebecf0;
+        border-radius: 3px;
+        padding: 8px;
+        min-height: 80vh;
+    }
+    
+    .task-card {
+        background: white;
+        border-radius: 3px;
+        padding: 10px;
+        margin-bottom: 8px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+        cursor: pointer;
+        transition: transform 0.2s;
+    }
+    
+    .task-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+    
+    .add-card {
+        color: #5e6c84;
+        cursor: pointer;
+        padding: 10px;
+        border-radius: 3px;
+    }
+    
+    .add-card:hover {
+        background-color: rgba(9,30,66,0.08);
+        color: #172b4d;
+    }
+    
+    .column-header {
+        font-weight: bold;
+        margin-bottom: 12px;
+        font-size: 1.1em;
+    }
+    
+    .modal-card-details {
+        background: #f4f5f7;
+        border-radius: 5px;
+        padding: 15px;
+        margin-top: 10px;
+    }
+    
+    .card-description {
+        background: white;
+        padding: 10px;
+        border-radius: 3px;
+        margin-top: 10px;
+    }
+    
+    .card-metadata {
+        color: #5e6c84;
+        font-size: 0.9em;
+        margin-top: 10px;
+    }
 </style>
 <script>
     document.addEventListener('livewire:load', function() {

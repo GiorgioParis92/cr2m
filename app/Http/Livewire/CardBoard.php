@@ -134,6 +134,8 @@ class CardBoard extends Component
         if(isset($this->dossier_id)) {
             $this->display_dossier=false;
         }
+
+
     }
     
     
@@ -167,7 +169,6 @@ class CardBoard extends Component
     ]);
 
     // Log for debugging
-    dump(debug('New card created', ['card' => $card, 'assignedUsers' => $this->assignedUsers]));
 
     // Attach the selected users to the card
     $card->users()->attach($this->assignedUsers);
@@ -187,12 +188,6 @@ public function saveCard($assignedUsers, $type_users_selected)
     $this->assignedUsers = $assignedUsers;
     $this->type_users_selected = $type_users_selected;
 
-    // Validation logic here...
-
-    // Create the card
-  
-
-    // Close the modal and reset fields
     $this->dispatchBrowserEvent('hide-add-card-modal');
     $this->reset(['newCardName', 'assignedUsers', 'type_users_selected']);
 

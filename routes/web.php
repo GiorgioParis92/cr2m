@@ -179,6 +179,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('permissions', [DefaultPermissionController::class, 'index'])->name('permissions');
 
+    Route::get('/send-test-notification', function () {
+        $user = \App\Models\User::find(1); // Replace with your user ID
+        if($user->notify(new \App\Notifications\WebPushNotification())) {
+            return 'Notification sent!';
+        }
+        
+    });
 
     // routes/web.php
 Route::get('/planning', [App\Http\Controllers\RdvController::class, 'index'])->name('planning');

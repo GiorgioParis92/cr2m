@@ -11,6 +11,7 @@ use App\Models\Client;
 use App\Models\ClientLinks;
 use App\Models\User;
 use Carbon\Carbon;
+
 class Dashboard extends Component
 {
 
@@ -18,6 +19,9 @@ class Dashboard extends Component
 
     public function mount()
     {
+
+        // dd(config('webpush'));
+
         $this->donutData = $this->getDonutData();
 
         $this->refresh();
@@ -160,6 +164,7 @@ class Dashboard extends Component
     }
     public function render()
     {
+
         return view('livewire.dashboard');
     }
 

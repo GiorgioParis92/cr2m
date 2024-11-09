@@ -13,7 +13,8 @@ use App\Models\Permission;
 use Illuminate\Support\Facades\Auth;
 use App\Http\ViewComposers\AuditeursComposer;
 use App\Models\Etapes;
-
+use Illuminate\Notifications\ChannelManager;
+use NotificationChannels\WebPush\WebPushChannel;
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -33,6 +34,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        $this->app->make(ChannelManager::class)->extend('webpush', function ($app) {
+            return $app->make(WebPushChannel::class);
+        });
+
+
         Schema::defaultStringLength(191);
         Blade::component('form', FormComponent::class);
 

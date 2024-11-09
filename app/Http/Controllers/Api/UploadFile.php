@@ -9,9 +9,18 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
 use App\Models\Dossier;
 use Intervention\Image\Facades\Image; // Use Intervention Image
+use App\Services\CardCreationService;
 
 class UploadFile extends \App\Http\Controllers\Controller
 {
+
+    protected $cardService;
+
+    public function __construct(CardCreationService $cardService)
+    {
+        $this->cardService = $cardService;
+    }
+    
     // Fetch all beneficiaires with dynamic filtering
     public function index(Request $request)
     {
@@ -76,6 +85,10 @@ class UploadFile extends \App\Http\Controllers\Controller
             return response()->json(['error' => 'Failed to create thumbnail'], 500);
         }
         }
+
+
+        $this->cardService->checkAndCreateCard($propertyName, $value, $this->dossier->id, auth()->user()->id);
+
         return response()->json([
             'file_path' => $directory . '/' . $fileName
         ], 200);

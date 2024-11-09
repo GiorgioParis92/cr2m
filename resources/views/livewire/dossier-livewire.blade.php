@@ -454,7 +454,7 @@
         margin-right: 1%;
         padding: 10px;
         flex-shrink: 0;
-        max-height: 280px;
+        /* max-height: 280px; */
         overflow-x: hidden;
         overflow-y: scroll;
     }

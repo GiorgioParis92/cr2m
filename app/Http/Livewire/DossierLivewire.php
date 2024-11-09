@@ -4,13 +4,14 @@ namespace App\Http\Livewire;
 
 use Livewire\Component;
 use App\Models\{
-    Dossier, Etape, DossiersActivity, User, Form, Rdv, RdvStatus, Client
+    Dossier, Etape, DossiersActivity, User, Form, Rdv, RdvStatus, Client, Card
 };
 use App\FormModel\{
     FormConfigHandler, EtapeValidator
 };
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
+use App\Services\CardCreationService;
 
 class DossierLivewire extends Component
 {
@@ -41,6 +42,7 @@ class DossierLivewire extends Component
 
     protected $listeners = ['fileUploaded' => 'handleFileUploaded'];
 
+    
     public function mount($id)
     {
         $this->time = now()->format('H:i:s');
@@ -193,6 +195,15 @@ class DossierLivewire extends Component
         }
 
         change_status($key, $value,$this->dossier->id);
+
+        $card=app(CardCreationService::class)->checkAndCreateCard(
+            $key,
+            $value,
+            $this->dossier,
+            auth()->user()->id
+        );
+   
+
     }
     public function get_docs()
     {
@@ -597,6 +608,93 @@ public function fetchResponseData()
         }
     }
 }
+
+
+
+private function checkAndCreateCard($key, $value)
+{
+    foreach ($this->cardCreationRules as $rule) {
+        // Check if the rule's key matches the update
+        if ($rule['key'] === $key) {
+            // Handle check_not_null cases
+            if (isset($rule['check_not_null']) && $rule['check_not_null']) {
+                // Skip if the value is null or an empty string
+                if ($value === null || $value === '') {
+                    continue;
+                }
+            } 
+            // Handle specific value cases
+            elseif (isset($rule['value']) && $rule['value'] !== $value) {
+                continue; // Skip if the value does not match
+            }
+
+            $title = $rule['title'];
+            $assignedUsers = $this->getAssignedUsers($rule);
+
+            // Create the card if a title and assigned users are defined
+            if ($title && !empty($assignedUsers)) {
+                $card = Card::create([
+                    'title' => $title,
+                    'dossier_id' => $this->dossier->id,
+                    'user_id' => auth()->user()->id,
+                    'status' => 1,
+                ]);
+
+                $card->users()->attach($assignedUsers);
+                $this->emit('cardAdded');
+            }
+
+            // Stop the loop once a rule is matched
+            break;
+        }
+    }
+}
+
+
+private function getAssignedUsers($rule)
+{
+    if (isset($rule['assigned_users'])) {
+        // Return assigned users directly if specified in the rule
+        return $rule['assigned_users'];
+    } elseif (isset($rule['user_type'])) {
+        // Fetch users based on user type if specified
+        return User::where('type_id', $rule['user_type'])->pluck('id')->toArray();
+    } elseif (!empty($rule['custom_user_logic'])) {
+        // Define any additional custom logic for assigned users here
+        return $this->customUserLogic();
+    }
+
+    return [];
+}
+
+private function customUserLogic()
+{
+    // Define any custom logic for selecting users here
+    // Example: Select users dynamically based on certain conditions
+    return User::where('type_id', 4)->pluck('id')->toArray();
+}
+
+protected $cardCreationRules = [
+    [
+        'key' => 'specific_field_1',
+        'value' => 'trigger_value_1',
+        'title' => 'Title for Card 1',
+        'assigned_users' => [1, 2, 3],
+    ],
+    [
+        'key' => 'cp',
+        'check_not_null' => true,  // Only check that value is not null or empty
+        'title' => 'Code postal mis à jour',
+        'user_type' => 4,
+    ],
+    [
+        'key' => 'specific_field_3',
+        'value' => 'trigger_value_3',
+        'title' => 'Title for Card 3',
+        'custom_user_logic' => true,
+    ],
+    // Add more rules as needed
+];
 
 
 }

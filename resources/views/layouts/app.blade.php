@@ -10,6 +10,35 @@
         GENIUS MARKET
     </title>
     <script src="{{ mix('js/app.js') }}"></script>
+    <script>
+        
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/service-worker.js')
+        .then(function (registration) {
+            console.log('Service Worker Registered', registration);
+
+            registration.pushManager.getSubscription().then(function (subscription) {
+                if (subscription === null) {
+                    // Subscribe the user
+                    registration.pushManager.subscribe({
+                        userVisibleOnly: true,
+                        applicationServerKey: '{{ env('VAPID_PUBLIC_KEY') }}'
+                    }).then(function (subscription) {
+                        // Send subscription to the server
+                        axios.post('/api/save-subscription', subscription.toJSON());
+                    }).catch(function (err) {
+                        console.error('Subscription error:', err);
+                    });
+                } else {
+                    console.log('Already subscribed:', subscription);
+                }
+            });
+        })
+        .catch(function (err) {
+            console.error('Service Worker registration failed:', err);
+        });
+}
+</script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />

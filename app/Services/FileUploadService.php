@@ -477,7 +477,7 @@ class FileUploadService
         // Use the file path directly
         $data = array(
             'service' => 'document_detection',
-            'token' => '6b22c62c-924a-4aac-9eab-9faafe55e394',
+            'token' => 'd4a44a75-42b7-4ad9-adb4-1792de177384',
             'model' => 'atlas',
             'file' => new \CURLFile($file), // Use \CURLFile to send file via cURL
         );
