@@ -54,6 +54,17 @@
     </script>
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.print.min.js">
     </script>
+    <script>
+   <script>
+        const iconPath = '{{ asset('logo.PNG') }}'
+
+        Push.create("Hello Shailesh!", {
+            body: "Welcome to the Dashboard.",
+            timeout: 5000,
+            icon: iconPath
+        });
+    </script>
+        </script>
     {{-- <script  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCzcaFvxwi1XLyRHmPRnlKO4zcJXPOT5gM&loading=async&callback=initMap"></script> --}}
     @livewireStyles
     @include('partials.css_variables')
