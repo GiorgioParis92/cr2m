@@ -95,7 +95,6 @@ Route::post('/charts/{chartId}', [StatsController::class, 'getChartData']);
 
 Route::middleware('auth:api')->group(function () {
 
-    Route::post('/save-subscription', [SubscriptionController::class, 'store']);
 
 
     Route::get('/dossiers-rdv', [DossiersController::class, 'index']);

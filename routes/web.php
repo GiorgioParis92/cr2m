@@ -28,6 +28,7 @@ use App\Http\Controllers\DefaultPermissionController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Livewire\Chat;
+use App\Http\Controllers\SubscriptionController;
 
 
 /*
@@ -183,9 +184,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
         $user = \App\Models\User::find(1); // Replace with your user ID
         if($user->notify(new \App\Notifications\WebPushNotification())) {
             return 'Notification sent!';
+        } else {
+
         }
         
     });
+Route::post('/save-subscription', [SubscriptionController::class, 'store']);
 
     // routes/web.php
 Route::get('/planning', [App\Http\Controllers\RdvController::class, 'index'])->name('planning');
