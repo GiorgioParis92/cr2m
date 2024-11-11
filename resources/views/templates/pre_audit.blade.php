@@ -126,34 +126,36 @@
         <h3>Scénario {{$i}}</h3>
         <table>
             <tr>
-                <th><strong>Etiquette énergétique finale Scénario {{$i}}</strong></th>
-                <td>{{$all_data['classe_energetique_finale_'.$i] ?? ''}} kW</td>
+                <th><strong>Etiquette énergétique finale</strong></th>
+                <td>{{$all_data['classe_energetique_finale_'.$i] ?? ''}}</td>
             </tr>
             <tr>
-                <th><strong>Nombre de sauts Scénario {{$i}}</strong></th>
-                <td>{{$all_data['saut_classe_prevu_'.$i] ?? ''}} kW</td>
+                <th><strong>Nombre de sauts</strong></th>
+                <td>{{$all_data['saut_classe_prevu_'.$i] ?? ''}}</td>
             </tr>
             <tr>
-                <th><strong>CEF final Scénario {{$i}}</strong></th>
-                <td>{{$all_data['cef_final_'.$i] ?? ''}} kW</td>
+                <th><strong>CEF final (kWh/m².an)</strong></th>
+                <td>{{$all_data['cef_final_'.$i] ?? ''}}</td>
             </tr>
       
             <tr>
-                <th><strong>CEP final Scénario {{$i}}</strong></th>
+                <th><strong>CEP final (kWh/m².an)</strong></th>
                 <td>{{$all_data['cep_final_'.$i] ?? ''}} kW</td>
             </tr>
             <tr>
-                <th><strong>GES final Scénario {{$i}}</strong></th>
+                <th><strong>GES final (kgéqCO2/m².an)</strong></th>
                 <td>{{$all_data['ges_final_'.$i] ?? ''}} kW</td>
             </tr>
             <tr>
-                <th><strong>Déperdition Scénario {{$i}}</strong></th>
+                <th><strong>Déperdition (kW)</strong></th>
                 <td>{{$all_data['deperdition_'.$i] ?? ''}} kW</td>
             </tr>
             <tr>
-                <th><strong>Gain Énergétique Scénario {{$i}}</strong></th>
+                <th><strong>Gain Énergétique</strong></th>
                 <td>{{$all_data['gain_energetique'.$i] ?? ''}}%</td>
             </tr>
+        </table>
+        <table style="margin-top:20px">
             <tr>
                 <th style="text-align:center;width:{{$width/2}}px;" colspan="2"><strong>Travaux</strong></th>
             </tr>
