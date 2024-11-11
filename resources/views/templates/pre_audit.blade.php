@@ -105,7 +105,7 @@
         <h3>État Actuel</h3>
         <table width="100%">
             <tr>
-                <td style="width:{{$width/2}}px;min-width:{{$width/2}}px;"><strong>Étiquette Énergétique Initiale</strong></td>
+                <td style="width:{{$width/2}}px;min-width:{{$width/2}}px;"><strong>{{$width/2}}Étiquette Énergétique Initiale</strong></td>
                 <td style="width:{{$width/2}}px;min-width:{{$width/2}}px;">{{$all_data['classe_energetique_initiale'] ?? ''}}</td>
             </tr>
             <tr>
