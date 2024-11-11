@@ -1,7 +1,8 @@
+@dd($all_data)
 <page backtop="25mm" backleft="10mm" backright="10mm" backbottom="10mm">
     @includeIf('pdf.header')
     @includeIf('pdf.footer')
-    @dd($all_data)
+
     <style>
         body {
             font-family: Arial, sans-serif;
