@@ -131,20 +131,9 @@
                 <td style="width:{{$width/2}}px;min-width:{{$width/2}}px;">{{$all_data['classe_energetique_finale_'.$i] ?? ''}}</td>
             </tr>
 
-            @php
-            $travaux=['combles','iti','ite']
-            @endphp
+         
 
-            @foreach($travaux as $value)
-            @if(isset($all_data['display_'.$value.'_s'.$i]) && $all_data['display_'.$value.'_s'.$i]==1)
-            <tr>
-                <th><strong>{{$all_data[$value.'_title_s'.$i]}}</strong></th>
-                <td>{{$all_data['saut_classe_prevu_'.$i] ?? ''}}</td>
-            </tr>
-            @endif
-            @endforeach
 
-{{-- 
             <tr>
                 <th><strong>Nombre de sauts</strong></th>
                 <td>{{$all_data['saut_classe_prevu_'.$i] ?? ''}}</td>
@@ -169,32 +158,24 @@
             <tr>
                 <th><strong>Gain Énergétique</strong></th>
                 <td>{{$all_data['gain_energetique'.$i] ?? ''}}%</td>
-            </tr> --}}
+            </tr>
         </table>
         <table style="margin-top:20px">
             <tr>
                 <th style="text-align:center;width:{{$width/2}}px;" colspan="2"><strong>Travaux</strong></th>
             </tr>
+            @php
+            $travaux=['combles','iti','ite']
+            @endphp
+
+            @foreach($travaux as $value)
+            @if(isset($all_data['display_'.$value.'_s'.$i]) && $all_data['display_'.$value.'_s'.$i]==1)
             <tr>
-                <td>Isolation des murs par l'extérieur</td>
-                <td>R ≥ 4,4, 138 m²</td>
+                <th><strong>{{$all_data[$value.'_title_s'.$i]}}</strong></th>
+                <td>{{$all_data['saut_classe_prevu_'.$i] ?? ''}}</td>
             </tr>
-            <tr>
-                <td>Isolation des combles perdus</td>
-                <td>R ≥ 7, 42 m²</td>
-            </tr>
-            <tr>
-                <td>VMC Simple Flux à Caisson Basse Consommation Hygro B</td>
-                <td>Puissance A.P ≤ 22 WThC, 1 unité(s)</td>
-            </tr>
-            <tr>
-                <td>Chauffe-eau thermodynamique</td>
-                <td>Cop ≥ 2,8, 200 L</td>
-            </tr>
-            <tr>
-                <td>PAC Air/Air</td>
-                <td>SCOP ≥ 4, P ≥ 14 kW, 1 unité(s)</td>
-            </tr>
+            @endif
+            @endforeach
         </table>
         @endfor
        
