@@ -171,11 +171,11 @@
             @foreach($travaux as $value)
             @if(isset($all_data['display_'.$value.'_s'.$i]) && $all_data['display_'.$value.'_s'.$i]==1)
             <tr>
-                <th style="width:{{$width/5}}px;"><strong>{{$all_data[$value.'_title_s'.$i]}}</strong></th>
-                <td style="width:{{$width/5}}px;"></td>
-                <td style="width:{{$width/5}}px;"></td>
-                <td style="width:{{$width/5}}px;"></td>
-                <td style="width:{{$width/5}}px;"></td>
+                <th style="width:20%"><strong>{{$all_data[$value.'_title_s'.$i]}}</strong></th>
+                <td style="width:20%"></td>
+                <td style="width:20%"></td>
+                <td style="width:20%"></td>
+                <td style="width:20%"></td>
             </tr>
             @endif
             @endforeach
