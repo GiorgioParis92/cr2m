@@ -81,23 +81,23 @@
         <h3>Informations du Client</h3>
         <table width="100%">
             <tr>
-                <td style="width:{{$width*33/100}}px;"><strong>Nom</strong></td>
+                <th style="width:{{$width*33/100}}px;"><strong>Nom</strong></th>
                 <td style="width:{{$width*80/100}}px;">{{$all_data['nom'] ?? ''}} {{$all_data['prenom'] ?? ''}}</td>
             </tr>
             <tr>
-                <td><strong>Adresse</strong></td>
+                <th><strong>Adresse</strong></th>
                 <td>{{$all_data['numero_voie'] ?? ''}} {{$all_data['adresse'] ?? ''}}, {{$all_data['cp'] ?? ''}} {{$all_data['ville'] ?? ''}}</td>
             </tr>
             <tr>
-                <td><strong>Surface Habitable</strong></td>
+                <th><strong>Surface Habitable</strong></th>
                 <td>{{$all_data['shab'] ?? ''}} m²</td>
             </tr>
             <tr>
-                <td><strong>Compteur</strong></td>
+                <th><strong>Compteur</strong></th>
                 <td>{{$all_data['type_compteur_electricite'] ?? ''}}</td>
             </tr>
             <tr>
-                <td><strong>Type de Chauffage</strong></td>
+                <th><strong>Type de Chauffage</strong></th>
                 <td>{{$all_data['chauffage'] ?? ''}}</td>
             </tr>
         </table>
@@ -113,11 +113,11 @@
                 <td>{{$all_data['cef_initial'] ?? ''}} kWh/m².an</td>
             </tr>
             <tr>
-                <td><strong>CEP Initial</strong></td>
+                <th><strong>CEP Initial</strong></th>
                 <td>{{$all_data['cep_initial'] ?? ''}} kWh/m².an</td>
             </tr>
             <tr>
-                <td><strong>GES Initial</strong></td>
+                <th><strong>GES Initial</strong></th>
                 <td>{{$all_data['ges_initial'] ?? ''}} kgéqCO2/m².an</td>
             </tr>
         </table>
@@ -126,15 +126,15 @@
         <h3>Scénario {{$i}}</h3>
         <table>
             <tr>
-                <td><strong>Déperdition Scénario {{$i}}</strong></td>
+                <th><strong>Déperdition Scénario {{$i}}</strong></th>
                 <td>{{$all_data['deperdition_'.$i] ?? ''}} kW</td>
             </tr>
             <tr>
-                <td><strong>Gain Énergétique Scénario {{$i}}</strong></td>
+                <th><strong>Gain Énergétique Scénario {{$i}}</strong></th>
                 <td>{{$all_data['gain_energetique'.$i] ?? ''}}%</td>
             </tr>
             <tr>
-                <td colspan="2"><strong>Travaux</strong></td>
+                <th style="text-align:center;width:{{$width/2}}px;" colspan="2"><strong>Travaux</strong></th>
             </tr>
             <tr>
                 <td>Isolation des murs par l'extérieur</td>
