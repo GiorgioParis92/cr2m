@@ -126,8 +126,8 @@
         <h3>Scénario {{$i}}</h3>
         <table>
             <tr>
-                <th><strong>Etiquette énergétique finale</strong></th>
-                <td>{{$all_data['classe_energetique_finale_'.$i] ?? ''}}</td>
+                <th style="width:{{$width/2}}px;min-width:{{$width/2}}px;"><strong>Etiquette énergétique finale</strong></th>
+                <td style="width:{{$width/2}}px;min-width:{{$width/2}}px;">{{$all_data['classe_energetique_finale_'.$i] ?? ''}}</td>
             </tr>
             <tr>
                 <th><strong>Nombre de sauts</strong></th>
