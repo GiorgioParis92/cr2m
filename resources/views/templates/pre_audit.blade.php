@@ -110,27 +110,28 @@
             </tr>
             <tr>
                 <td><strong>CEF Initial</strong></td>
-                <td>336 kWh/m².an</td>
+                <td>{{$all_data['cef_initial'] ?? ''}} kWh/m².an</td>
             </tr>
             <tr>
                 <td><strong>CEP Initial</strong></td>
-                <td>722 kWh/m².an</td>
+                <td>{{$all_data['cep_initial'] ?? ''}} kWh/m².an</td>
             </tr>
             <tr>
                 <td><strong>GES Initial</strong></td>
-                <td>- kgéqCO2/m².an</td>
+                <td>{{$all_data['ges_initial'] ?? ''}} kgéqCO2/m².an</td>
             </tr>
         </table>
 
-        <h3>Scénario 1</h3>
+        @for($i=1;$i<=2,$i++)
+        <h3>Scénario {{$i}}</h3>
         <table>
             <tr>
-                <td><strong>Déperdition SC1</strong></td>
-                <td>55 kW</td>
+                <td><strong>Déperdition Scénario {{$i}}</strong></td>
+                <td>{{$all_data['deperdition_'.$i] ?? ''}} kW</td>
             </tr>
             <tr>
-                <td><strong>Gain Énergétique SC1</strong></td>
-                <td>85%</td>
+                <td><strong>Gain Énergétique Scénario {{$i}}</strong></td>
+                <td>{{$all_data['gain_energetique'.$i] ?? ''}}%</td>
             </tr>
             <tr>
                 <td colspan="2"><strong>Travaux</strong></td>
@@ -156,45 +157,9 @@
                 <td>SCOP ≥ 4, P ≥ 14 kW, 1 unité(s)</td>
             </tr>
         </table>
-
-        <h3>Scénario 3</h3>
-        <table>
-            <tr>
-                <td><strong>Étiquette Énergétique Finale</strong></td>
-                <td>B</td>
-            </tr>
-            <tr>
-                <td><strong>Déperdition SC3</strong></td>
-                <td>9,96 kW</td>
-            </tr>
-            <tr>
-                <td><strong>Gain Énergétique SC3</strong></td>
-                <td>85%</td>
-            </tr>
-            <tr>
-                <td colspan="2"><strong>Travaux</strong></td>
-            </tr>
-            <tr>
-                <td>Isolation des murs par l'extérieur</td>
-                <td>R ≥ 4,4, 138 m²</td>
-            </tr>
-            <tr>
-                <td>Isolation des combles perdus</td>
-                <td>R ≥ 7, 42 m²</td>
-            </tr>
-            <tr>
-                <td>Chauffe-eau thermodynamique</td>
-                <td>Cop ≥ 2,8, 200 L</td>
-            </tr>
-            <tr>
-                <td>PAC Air/Air</td>
-                <td>SCOP ≥ 4, P ≥ 14 kW, 1 unité(s)</td>
-            </tr>
-            <tr>
-                <td>Poêle à granulés</td>
-                <td>ETAS ≥ 79%, P ≥ 8 kW, 1 unité(s)</td>
-            </tr>
-        </table>
+        @endfor
+       
+      
 
         <table>
             <tr>
