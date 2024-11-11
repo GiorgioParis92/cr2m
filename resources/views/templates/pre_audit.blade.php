@@ -54,7 +54,7 @@
             margin: auto;
         }
     </style>
-   
+    @php $width=520 @endphp
     <div class="container">
         <h1>Demande de Devis</h1>
         <h2>JACQUET JEAN CLAUDE</h2>
@@ -62,10 +62,10 @@
         <table width="100%">
             <thead>
                 <tr>
-                    <th style="width:130px;">Logiciel Utilisé</th>
-                    <th style="width:130px;">Version</th>
-                    <th style="width:130px;">Date de version</th>
-                    <th style="width:130px;">Moteur de calcul</th>
+                    <th style="width:{{$width/4}}px;">Logiciel Utilisé</th>
+                    <th style="width:{{$width/4}}px;">Version</th>
+                    <th style="width:{{$width/4}}px;">Date de version</th>
+                    <th style="width:{{$width/4}}px;">Moteur de calcul</th>
                 </tr>
             </thead>
             <tbody>
@@ -81,8 +81,8 @@
         <h3>Informations du Client</h3>
         <table>
             <tr>
-                <td><strong>Nom</strong></td>
-                <td>{{$all_data['nom'] ?? ''}} {{$all_data['prenom'] ?? ''}}</td>
+                <td style="width:{{$width*33/100}}px;"><strong>Nom</strong></td>
+                <td style="width:{{$width*67/100}}px;">{{$all_data['nom'] ?? ''}} {{$all_data['prenom'] ?? ''}}</td>
             </tr>
             <tr>
                 <td><strong>Adresse</strong></td>
