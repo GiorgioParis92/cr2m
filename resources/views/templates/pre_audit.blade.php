@@ -62,10 +62,10 @@
         <table width="100%">
             <thead>
                 <tr>
-                    <th style="width:150px;">Logiciel Utilisé</th>
-                    <th style="width:150px;">Version</th>
-                    <th style="width:150px;">Date de version</th>
-                    <th style="width:150px;">Moteur de calcul</th>
+                    <th style="width:125px;">Logiciel Utilisé</th>
+                    <th style="width:125px;">Version</th>
+                    <th style="width:125px;">Date de version</th>
+                    <th style="width:125px;">Moteur de calcul</th>
                 </tr>
             </thead>
             <tbody>
