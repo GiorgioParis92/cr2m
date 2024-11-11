@@ -105,11 +105,11 @@
         <h3>État Actuel</h3>
         <table width="100%">
             <tr>
-                <td style="width:{{$width/2}}px;min-width:{{$width/2}}px;"><strong style="width:{{$width/2}}px;min-width:{{$width/2}}px;">Étiquette Énergétique Initiale</strong></td>
+                <th style="width:{{$width/2}}px;min-width:{{$width/2}}px;"><strong >Étiquette Énergétique Initiale</strong></th>
                 <td style="width:{{$width/2}}px;min-width:{{$width/2}}px;">{{$all_data['classe_energetique_initiale'] ?? ''}}</td>
             </tr>
             <tr>
-                <td><strong>CEF Initial</strong></td>
+                <th><strong>CEF Initial</strong></th>
                 <td>{{$all_data['cef_initial'] ?? ''}} kWh/m².an</td>
             </tr>
             <tr>
