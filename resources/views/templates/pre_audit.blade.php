@@ -162,7 +162,7 @@
         </table>
         <table style="margin-top:20px">
             <tr>
-                <th colspan="5" style="text-align:center;width:{{$width/2}}px;" colspan="2"><strong>Travaux</strong></th>
+                <th colspan="5" style="text-align:center;width:{{$width/2}}px;" ><strong>Travaux</strong></th>
             </tr>
             @php
             $travaux=['combles','iti','ite','vmc','vmc_double','terrasse','sous_sols','pac_air_air','pac_air_eau','ballon','ballon_solaire','fenetre_1','fenetre_2','poele','porte_fenetre1','porte_fenetre_2','rampants','solaire']
@@ -171,7 +171,7 @@
             @foreach($travaux as $value)
             @if(isset($all_data['display_'.$value.'_s'.$i]) && $all_data['display_'.$value.'_s'.$i]==1)
             <tr>
-                <td style="width:20%"><strong>{{$all_data[$value.'_title_s'.$i]}}</strong></td>
+                <th style="width:20%"><strong>{{$all_data[$value.'_title_s'.$i]}}</strong></th>
                 <td style="width:20%"></td>
                 <td style="width:20%"></td>
                 <td style="width:20%"></td>
