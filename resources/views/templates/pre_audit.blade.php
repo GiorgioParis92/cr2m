@@ -179,8 +179,24 @@
             @if(isset($all_data['display_'.$value.'_s'.$i]) && $all_data['display_'.$value.'_s'.$i]==1)
             <tr>
                 <th style="width:20%"><strong>{{$all_data[$value.'_title_s'.$i]}}</strong></th>
-                <td style="width:20%"></td>
-                <td style="width:20%"></td>
+                <td style="width:20%">
+                    @if($value=='combles' || $value=='ite' || $value=='iti' || $value=='rampants' || $value=='sous_sols' || $value=='sous_sols' || $value=='terrasse')
+                    R [m².K/W] ≥
+                    @endif
+                    @if($value=='pac_air_eau' || $value=='pac_air_air' || $value=='ballon' || $value=='ballon_solaire' )
+                    Cop (7°C/55°C) ≥
+                    @endif
+                    
+                </td>
+                <td style="width:20%">
+                    @if($value=='combles' || $value=='ite' || $value=='iti' || $value=='rampants' || $value=='sous_sols' || $value=='sous_sols' || $value=='terrasse')
+                    {{$all_data['r_minimum_'.$value.'_s'.$i]}}
+                    @endif
+                    @if($value=='pac_air_eau' || $value=='pac_air_air' || $value=='ballon' || $value=='ballon_solaire' )
+                    {{$all_data['volume'.$value.'_s'.$i]}}
+                    @endif
+
+                </td>
                 <td style="width:20%"></td>
                 <td style="width:20%"></td>
             </tr>
