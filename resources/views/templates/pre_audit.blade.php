@@ -54,7 +54,7 @@
             margin: auto;
         }
     </style>
-    @php $width=600 @endphp
+    @php $width=520 @endphp
     <div class="container">
         <h1>Demande de Devis</h1>
         <h2>JACQUET JEAN CLAUDE</h2>
@@ -105,7 +105,7 @@
         <h3>État Actuel</h3>
         <table width="100%">
             <tr>
-                <td style="width:{{$width/2}}px;min-width:{{$width/2}}px;"><strong>{{$width/2}}Étiquette Énergétique Initiale</strong></td>
+                <td style="width:{{$width/2}}px;min-width:{{$width/2}}px;"><strong style="width:{{$width/2}}px;min-width:{{$width/2}}px;">Étiquette Énergétique Initiale</strong></td>
                 <td style="width:{{$width/2}}px;min-width:{{$width/2}}px;">{{$all_data['classe_energetique_initiale'] ?? ''}}</td>
             </tr>
             <tr>
