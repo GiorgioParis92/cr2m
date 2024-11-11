@@ -1,4 +1,4 @@
-@dd($all_data)
+{{-- @dd($all_data) --}}
 <page backtop="25mm" backleft="10mm" backright="10mm" backbottom="10mm">
     @includeIf('pdf.header')
     @includeIf('pdf.footer')
