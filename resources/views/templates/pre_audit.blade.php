@@ -82,7 +82,7 @@
         <table>
             <tr>
                 <td style="width:{{$width*33/100}}px;"><strong>Nom</strong></td>
-                <td style="width:{{$width*67/100}}px;">{{$all_data['nom'] ?? ''}} {{$all_data['prenom'] ?? ''}}</td>
+                <td style="width:{{$width*80/100}}px;">{{$all_data['nom'] ?? ''}} {{$all_data['prenom'] ?? ''}}</td>
             </tr>
             <tr>
                 <td><strong>Adresse</strong></td>
