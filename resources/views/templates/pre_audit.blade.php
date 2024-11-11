@@ -126,6 +126,27 @@
         <h3>Scénario {{$i}}</h3>
         <table>
             <tr>
+                <th><strong>Etiquette énergétique finale Scénario {{$i}}</strong></th>
+                <td>{{$all_data['classe_energetique_finale_'.$i] ?? ''}} kW</td>
+            </tr>
+            <tr>
+                <th><strong>Nombre de sauts Scénario {{$i}}</strong></th>
+                <td>{{$all_data['saut_classe_prevu_'.$i] ?? ''}} kW</td>
+            </tr>
+            <tr>
+                <th><strong>CEF final Scénario {{$i}}</strong></th>
+                <td>{{$all_data['cef_final_'.$i] ?? ''}} kW</td>
+            </tr>
+      
+            <tr>
+                <th><strong>CEP final Scénario {{$i}}</strong></th>
+                <td>{{$all_data['cep_final_'.$i] ?? ''}} kW</td>
+            </tr>
+            <tr>
+                <th><strong>GES final Scénario {{$i}}</strong></th>
+                <td>{{$all_data['ges_final_'.$i] ?? ''}} kW</td>
+            </tr>
+            <tr>
                 <th><strong>Déperdition Scénario {{$i}}</strong></th>
                 <td>{{$all_data['deperdition_'.$i] ?? ''}} kW</td>
             </tr>
