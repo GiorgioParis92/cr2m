@@ -193,5 +193,16 @@ class Db_select extends AbstractFormData
         return $data;
     }
 
+    public function check_condition($condition_config)
+    {
+        foreach ($condition_config as $tag => $list_values) {
+            if (!$this->match_value($tag, $list_values)) {
+
+                return false;
+            }
+        }
+    
+        return true;
+    }
 
 }
