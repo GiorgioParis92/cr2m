@@ -164,6 +164,13 @@
             <tr>
                 <th colspan="5" style="text-align:center;width:{{$width/2}}px;" ><strong>Travaux</strong></th>
             </tr>
+            <tr>
+                <th style="width:20%"></th>
+                <th style="width:20%">Caractéristiques</th>
+                <th style="width:20%">Valeur de consigne</th>
+                <th style="width:20%">Mesure/Quantité</th>
+                <th style="width:20%">Unité</th>
+            </tr>
             @php
             $travaux=['combles','iti','ite','vmc','vmc_double','terrasse','sous_sols','pac_air_air','pac_air_eau','ballon','ballon_solaire','fenetre_1','fenetre_2','poele','porte_fenetre1','porte_fenetre_2','rampants','solaire']
             @endphp
