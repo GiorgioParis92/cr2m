@@ -54,7 +54,7 @@
             margin: auto;
         }
     </style>
-    @php $width=520 @endphp
+    @php $width=600 @endphp
     <div class="container">
         <h1>Demande de Devis</h1>
         <h2>JACQUET JEAN CLAUDE</h2>
