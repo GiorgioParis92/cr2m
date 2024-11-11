@@ -136,7 +136,7 @@
             @endphp
 
             @foreach($travaux as $value)
-            @if(isset($all_data['display_'.$value.'_'.$i]) && $all_data['display_'.$value.'_'.$i]==1)
+            @if(isset($all_data['display_'.$value.'_s'.$i]) && $all_data['display_'.$value.'_s'.$i]==1)
             <tr>
                 <th><strong>{{$all_data[$value.'_title_s'.$i]}}</strong></th>
                 <td>{{$all_data['saut_classe_prevu_'.$i] ?? ''}}</td>
@@ -144,7 +144,7 @@
             @endif
             @endforeach
 
-
+{{-- 
             <tr>
                 <th><strong>Nombre de sauts</strong></th>
                 <td>{{$all_data['saut_classe_prevu_'.$i] ?? ''}}</td>
@@ -169,7 +169,7 @@
             <tr>
                 <th><strong>Gain Énergétique</strong></th>
                 <td>{{$all_data['gain_energetique'.$i] ?? ''}}%</td>
-            </tr>
+            </tr> --}}
         </table>
         <table style="margin-top:20px">
             <tr>
