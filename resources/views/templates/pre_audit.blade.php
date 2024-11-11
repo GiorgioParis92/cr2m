@@ -165,7 +165,7 @@
                 <th style="text-align:center;width:{{$width/2}}px;" colspan="2"><strong>Travaux</strong></th>
             </tr>
             @php
-            $travaux=['combles','iti','ite','vmc','vmc_double','terrasse','sous_sols','air_air','air_eau','ballon','ballon_solaire',,'fenetre_1','fenetre_2','poele','porte_fenetre1','porte_fenetre_2','rampants','solaire']
+            $travaux=['combles','iti','ite','vmc','vmc_double','terrasse','sous_sols','air_air','air_eau','ballon','ballon_solaire','fenetre_1','fenetre_2','poele','porte_fenetre1','porte_fenetre_2','rampants','solaire']
             @endphp
 
             @foreach($travaux as $value)
