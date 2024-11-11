@@ -79,7 +79,7 @@
         </table>
 
         <h3>Informations du Client</h3>
-        <table>
+        <table width="100%">
             <tr>
                 <td style="width:{{$width*33/100}}px;"><strong>Nom</strong></td>
                 <td style="width:{{$width*80/100}}px;">{{$all_data['nom'] ?? ''}} {{$all_data['prenom'] ?? ''}}</td>
@@ -103,10 +103,10 @@
         </table>
 
         <h3>État Actuel</h3>
-        <table>
+        <table width="100%">
             <tr>
-                <td style="width:{{$width*50/100}}px;"><strong>Étiquette Énergétique Initiale</strong></td>
-                <td style="width:{{$width*50/100}}px;">{{$all_data['classe_energetique_initiale'] ?? ''}}</td>
+                <td style="width:{{$width/2}}px;"><strong>Étiquette Énergétique Initiale</strong></td>
+                <td style="width:{{$width/2}}px;">{{$all_data['classe_energetique_initiale'] ?? ''}}</td>
             </tr>
             <tr>
                 <td><strong>CEF Initial</strong></td>
