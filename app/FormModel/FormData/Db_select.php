@@ -29,6 +29,38 @@ class Db_select extends AbstractFormData
             $class_prediction = ' is-invalid';
         }
 
+
+        $condition_valid = false;
+
+        if(isset($optionsArray['conditions'])) {
+          
+            foreach ($optionsArray as $key=>$condition_config) {
+                if($key=='conditions') {
+                    if ($this->check_condition($condition_config)) {
+                
+                        $condition_valid = true;
+        
+                        if (isset($condition_config['operation']) && $condition_config['operation'] == 'AND') {
+                            break;
+                        }
+        
+                    } else {
+                        $condition_valid = false; 
+                    }
+                }
+
+    
+            }
+        } else {
+            $condition_valid = true;
+        }
+
+ 
+  
+        if( $condition_valid == false) {
+            return '';
+        }
+
         $wireModel = "formData.{$this->form_id}.{$this->name}";
 
         $request = DB::select($sql_command);
