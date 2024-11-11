@@ -166,10 +166,10 @@
             </tr>
             <tr>
                 <th style="width:20%"></th>
-                <th style="width:20%">Caractéristiques</th>
-                <th style="width:20%">Valeur de consigne</th>
-                <th style="width:20%">Mesure/Quantité</th>
-                <th style="width:20%">Unité</th>
+                <th style="width:20%;text-align:center;vertical-algn:middle">Caractéristiques</th>
+                <th style="width:20%;text-align:center;vertical-algn:middle">Valeur de consigne</th>
+                <th style="width:20%;text-align:center;vertical-algn:middle">Mesure/Quantité</th>
+                <th style="width:20%;text-align:center;vertical-algn:middle">Unité</th>
             </tr>
             @php
             $travaux=['combles','iti','ite','vmc','vmc_double','terrasse','sous_sols','pac_air_air','pac_air_eau','ballon','ballon_solaire','fenetre_1','fenetre_2','poele','porte_fenetre1','porte_fenetre_2','rampants','solaire']
