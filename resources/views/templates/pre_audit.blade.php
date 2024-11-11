@@ -190,10 +190,10 @@
                 </td>
                 <td style="width:20%">
                     @if($value=='combles' || $value=='ite' || $value=='iti' || $value=='rampants' || $value=='sous_sols' || $value=='sous_sols' || $value=='terrasse')
-                    {{$all_data['r_minimum_'.$value.'_s'.$i]}}
+                    {{$all_data['r_minimum_'.$value.'_s'.$i] ?? ''}}
                     @endif
                     @if($value=='pac_air_eau' || $value=='pac_air_air' || $value=='ballon' || $value=='ballon_solaire' )
-                    {{$all_data['volume'.$value.'_s'.$i]}}
+                    {{$all_data['volume'.$value.'_s'.$i] ?? ''}}
                     @endif
 
                 </td>
