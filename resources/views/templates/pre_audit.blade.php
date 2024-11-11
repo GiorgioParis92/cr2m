@@ -172,7 +172,7 @@
             @if(isset($all_data['display_'.$value.'_s'.$i]) && $all_data['display_'.$value.'_s'.$i]==1)
             <tr>
                 <th><strong>{{$all_data[$value.'_title_s'.$i]}}</strong></th>
-                <td>{{$all_data['saut_classe_prevu_'.$i] ?? ''}}</td>
+                <td></td>
             </tr>
             @endif
             @endforeach
