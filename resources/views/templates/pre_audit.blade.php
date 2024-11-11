@@ -122,7 +122,7 @@
             </tr>
         </table>
 
-        @for($i=1;$i<=2,$i++)
+        @for ($i=1;$i<=2;$i++)
         <h3>Scénario {{$i}}</h3>
         <table>
             <tr>
