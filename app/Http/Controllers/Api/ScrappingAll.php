@@ -8,6 +8,7 @@ use App\Models\Client;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 class ScrappingAll extends Controller
 {
 
@@ -17,8 +18,11 @@ class ScrappingAll extends Controller
     {
         set_time_limit(30000);  // Set maximum execution time to 300 seconds
 
-        $dossiers=Dossier::with('beneficiaire', 'fiche', 'etape', 'status','mar_client')->get();
-        foreach($dossiers as $dossier) {
+      
+
+        $dossiers = Dossier::with('beneficiaire', 'fiche', 'etape', 'status', 'mar_client')
+            ->where('updated_at', '<', Carbon::now()->subDay())
+            ->get();        foreach($dossiers as $dossier) {
             $mar=Client::where('id',$dossier->mar)->first();
        
             if($mar) {
@@ -41,7 +45,10 @@ class ScrappingAll extends Controller
                     $responseData = $response->json();
 
                     $this->checkAndUpdateStatus($responseData,$dossier);  // Call to save the status
-
+                    Dossier::where('id', $dossier->id)->update([
+                
+                        'updated_at' => now(),
+                    ]);
                 } else {
                     $statusCode = $response->status();
                     $errorBody = $response->body();
