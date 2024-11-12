@@ -71,6 +71,7 @@ class Radio extends AbstractFormData
                 $isChecked = $this->value == $element['value'] ? 'checked' : '';
                 $backgroundColor = $element['color'] ?? ($colors[$key-1] ?? '3498DB');
                 $backgroundColor = '';
+                $data.=$element['value'];
                 $data.='<div class="radio_line" style="background:#'.$backgroundColor.' ">';
                 $data .= '<input id="'.$this->name.'_'.$key.'"
                     wire:click="update_value(\''.$wireModel.'\',  '.$element['value'].')"
