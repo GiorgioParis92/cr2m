@@ -198,7 +198,7 @@
 
                 </td>
                 <td style="width:20%;text-align:center;vertical-align:middle">
-                    {{$value.'_qte_s'.$i}}
+               
                     {{$all_data[$value.'_qte_s'.$i] ?? ''}}
              
 
