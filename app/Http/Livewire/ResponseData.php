@@ -64,19 +64,37 @@ class ResponseData extends Component
         foreach ($this->responseData as $tag => $data) {
             if (!empty($data['elements'])) {
                 foreach ($data['elements'] as $element) {
-                    // Assuming you want to save the status as 'text'
-          
-                        // \DB::table('dossiers_data')->updateOrInsert(
-                        //     [
-                        //         'dossier_id' => $this->dossier->id,
-                        //         'meta_key' => $tag
-                        //     ],
-                        //     [
-                        //         'meta_value' => $element['text'] ?? '',
-                        //         'created_at' => now(),
-                        //         'updated_at' => now()
-                        //     ]
-                        // );
+                    \DB::table('dossiers_data')->updateOrInsert(
+                        [
+                            'dossier_id' => $this->dossier->id,
+                            'meta_key' => $tag
+                        ],
+                        [
+                            'meta_value' => $value ?? '',
+                            'created_at' => now(),
+                            'updated_at' => now()
+                        ]
+                    );
+                    $value=$element['text'];
+
+                    if (strpos($value, 'accordée') !== false) {
+                        preg_match('/\d+/', str_replace(' ', '', $value), $matches);
+                        $value = isset($matches[0]) ? $matches[0] : null;
+                        $tag;
+                        \DB::table('dossiers_data')->updateOrInsert(
+                            [
+                                'dossier_id' => $this->dossier->id,
+                                'meta_key' => $tag
+                            ],
+                            [
+                                'meta_value' => $value ?? '',
+                                'created_at' => now(),
+                                'updated_at' => now()
+                            ]
+                        );
+                    }
+
+                       
                     }
                 
             }
