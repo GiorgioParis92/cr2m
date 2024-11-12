@@ -166,10 +166,10 @@
             </tr>
             <tr>
                 <th style="width:20%"></th>
-                <th style="width:20%;text-align:center;vertical-algn:middle">Caractéristiques</th>
-                <th style="width:20%;text-align:center;vertical-algn:middle">Valeur de consigne</th>
-                <th style="width:20%;text-align:center;vertical-algn:middle">Mesure/Quantité</th>
-                <th style="width:20%;text-align:center;vertical-algn:middle">Unité</th>
+                <th style="width:20%;text-align:center;vertical-align:middle">Caractéristiques</th>
+                <th style="width:20%;text-align:center;vertical-align:middle">Valeur de consigne</th>
+                <th style="width:20%;text-align:center;vertical-align:middle">Mesure/Quantité</th>
+                <th style="width:20%;text-align:center;vertical-align:middle">Unité</th>
             </tr>
             @php
             $travaux=['combles','iti','ite','vmc','vmc_double','terrasse','sous_sols','pac_air_air','pac_air_eau','ballon','ballon_solaire','fenetre_1','fenetre_2','poele','porte_fenetre1','porte_fenetre_2','rampants','solaire']
@@ -178,8 +178,8 @@
             @foreach($travaux as $value)
             @if(isset($all_data['display_'.$value.'_s'.$i]) && $all_data['display_'.$value.'_s'.$i]==1)
             <tr>
-                <th style="width:20%"><strong>{{$all_data[$value.'_title_s'.$i]}}</strong></th>
-                <td style="width:20%">
+                <th style="width:20%;text-align:center;vertical-align:middle"><strong>{{$all_data[$value.'_title_s'.$i]}}</strong></th>
+                <td style="width:20%;text-align:center;vertical-align:middle">
                     @if($value=='combles' || $value=='ite' || $value=='iti' || $value=='rampants' || $value=='sous_sols' || $value=='sous_sols' || $value=='terrasse')
                     R [m².K/W] 
                     @endif
@@ -188,7 +188,7 @@
                     @endif
                     
                 </td>
-                <td style="width:20%">
+                <td style="width:20%;text-align:center;vertical-align:middle">
                     @if($value=='combles' || $value=='ite' || $value=='iti' || $value=='rampants' || $value=='sous_sols' || $value=='sous_sols' || $value=='terrasse')
                     {{$all_data['r_minimum_'.$value.'_s'.$i] ?? ''}}
                     @endif
@@ -197,13 +197,13 @@
                     @endif
 
                 </td>
-                <td style="width:20%">
+                <td style="width:20%;text-align:center;vertical-align:middle">
                     {{$value.'_qte_s'.$i}}
                     {{$all_data[$value.'_qte_s'.$i] ?? ''}}
              
 
                 </td>
-                <td style="width:20%"></td>
+                <td style="width:20%;text-align:center;vertical-align:middle"></td>
             </tr>
             @endif
             @endforeach
