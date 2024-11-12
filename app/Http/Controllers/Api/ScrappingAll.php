@@ -45,7 +45,7 @@ class ScrappingAll extends Controller
                     ]);
                 if ($response->successful()) {
                     $responseData = $response->json();
-                    dd($responseData);
+                   
                     $this->checkAndUpdateStatus($responseData, $dossier);  // Call to save the status
                     Dossier::where('id', $dossier->id)->update([
                         'updated' => 1,
@@ -58,7 +58,7 @@ class ScrappingAll extends Controller
                     $errorBody = $response->body();
                     $responseData = "Error ({$statusCode}): {$errorBody}";
                 }
-                sleep(1);
+                sleep(5);
             }
         }
     
