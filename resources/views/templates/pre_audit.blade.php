@@ -181,10 +181,10 @@
                 <th style="width:20%"><strong>{{$all_data[$value.'_title_s'.$i]}}</strong></th>
                 <td style="width:20%">
                     @if($value=='combles' || $value=='ite' || $value=='iti' || $value=='rampants' || $value=='sous_sols' || $value=='sous_sols' || $value=='terrasse')
-                    R [m².K/W] ≥
+                    R [m².K/W] >=
                     @endif
                     @if($value=='pac_air_eau' || $value=='pac_air_air' || $value=='ballon' || $value=='ballon_solaire' )
-                    Cop (7°C/55°C) ≥
+                    Cop (7°C/55°C) >=
                     @endif
                     
                 </td>
@@ -197,7 +197,12 @@
                     @endif
 
                 </td>
-                <td style="width:20%"></td>
+                <td style="width:20%">
+
+                    {{$all_data[$value.'_qte_s'.$i] ?? ''}}
+             
+
+                </td>
                 <td style="width:20%"></td>
             </tr>
             @endif
