@@ -74,7 +74,7 @@ class Radio extends AbstractFormData
                 $data.=$element['value'];
                 $data.='<div class="radio_line" style="background:#'.$backgroundColor.' ">';
                 $data .= '<input id="'.$this->name.'_'.$key.'"
-                    wire:click="update_value(\''.$wireModel.'\',  '.$element['value'].')"
+                    wire:click="update_value(\''.$wireModel.'\',  \''.$element['value'].'\')"
 
                   
                     value="'.$element['value'].'"
