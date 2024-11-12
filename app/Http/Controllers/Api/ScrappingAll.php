@@ -21,7 +21,10 @@ class ScrappingAll extends Controller
       
 
         $dossiers = Dossier::with('beneficiaire', 'fiche', 'etape', 'status', 'mar_client')
-            ->get();        foreach($dossiers as $dossier) {
+            ->where('updated','!=',1)    
+        ->get();       
+            
+            foreach($dossiers as $dossier) {
             $mar=Client::where('id',$dossier->mar)->first();
        
             if($mar) {
@@ -44,10 +47,10 @@ class ScrappingAll extends Controller
                     $responseData = $response->json();
 
                     $this->checkAndUpdateStatus($responseData,$dossier);  // Call to save the status
-                    // Dossier::where('id', $dossier->id)->update([
+                    Dossier::where('id', $dossier->id)->update([
                 
-                    //     'updated_at' => now(),
-                    // ]);
+                        'updated' => 1,
+                    ]);
                 } else {
                     $statusCode = $response->status();
                     $errorBody = $response->body();
