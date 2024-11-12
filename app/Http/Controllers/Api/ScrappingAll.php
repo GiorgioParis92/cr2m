@@ -75,6 +75,27 @@ class ScrappingAll extends Controller
                                 'updated_at' => now()
                             ]
                         );
+
+
+                        $value=$element['text'];
+
+                        if (strpos($value, 'accordée') !== false) {
+                            preg_match('/\d+/', str_replace(' ', '', $value), $matches);
+                            $value = isset($matches[0]) ? $matches[0] : null;
+                            $tag;
+                            \DB::table('dossiers_data')->updateOrInsert(
+                                [
+                                    'dossier_id' => $dossier->id,
+                                    'meta_key' => 'subvention'
+                                ],
+                                [
+                                    'meta_value' => $value ?? '',
+                                    'created_at' => now(),
+                                    'updated_at' => now()
+                                ]
+                            );
+                        }
+
                     }
                 
             }
