@@ -56,7 +56,7 @@ class ScrappingAll extends Controller
                     $errorBody = $response->body();
                     $responseData = "Error ({$statusCode}): {$errorBody}";
                 }
-                sleep(5);
+                sleep(1);
 
             }
         }
