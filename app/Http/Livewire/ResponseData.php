@@ -81,17 +81,19 @@ class ResponseData extends Component
                         preg_match('/\d+/', str_replace(' ', '', $value), $matches);
                         $value = isset($matches[0]) ? $matches[0] : null;
                         $tag;
-                        \DB::table('dossiers_data')->updateOrInsert(
-                            [
-                                'dossier_id' => $this->dossier->id,
-                                'meta_key' => 'subvention'
-                            ],
-                            [
-                                'meta_value' => $value ?? '',
-                                'created_at' => now(),
-                                'updated_at' => now()
-                            ]
-                        );
+                        if($value>0) {
+                            \DB::table('dossiers_data')->updateOrInsert(
+                                [
+                                    'dossier_id' => $this->dossier->id,
+                                    'meta_key' => 'subvention'
+                                ],
+                                [
+                                    'meta_value' => $value ?? '',
+                                    'created_at' => now(),
+                                    'updated_at' => now()
+                                ]
+                            );
+                        }
                     }
 
                        
