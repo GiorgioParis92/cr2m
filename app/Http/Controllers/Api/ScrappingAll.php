@@ -17,16 +17,16 @@ class ScrappingAll extends Controller
     public function index()
     {
         set_time_limit(30000);  // Set maximum execution time to 300 seconds
-
-      
-
+    
+        $updatedDossierIds = []; // Initialize the array
+    
         $dossiers = Dossier::with('beneficiaire', 'fiche', 'etape', 'status', 'mar_client')
             ->where('updated','!=',1)    
-        ->get();       
+            ->get();       
             
-            foreach($dossiers as $dossier) {
+        foreach($dossiers as $dossier) {
             $mar=Client::where('id',$dossier->mar)->first();
-       
+        
             if($mar) {
                 $login=$mar->anah_login;
                 $password=$mar->anah_password;
@@ -41,27 +41,35 @@ class ScrappingAll extends Controller
                     ->post($url, [
                         'reference_unique' => $dossier->reference_unique,
                         'login' => $login,
-                    'password' => $password,
+                        'password' => $password,
                     ]);
                 if ($response->successful()) {
                     $responseData = $response->json();
-
-                    $this->checkAndUpdateStatus($responseData,$dossier);  // Call to save the status
+    
+                    $this->checkAndUpdateStatus($responseData, $dossier);  // Call to save the status
                     Dossier::where('id', $dossier->id)->update([
-                
                         'updated' => 1,
                     ]);
+    
+                    // Add the dossier ID to the array
+                    $updatedDossierIds[] = $dossier->id;
                 } else {
                     $statusCode = $response->status();
                     $errorBody = $response->body();
                     $responseData = "Error ({$statusCode}): {$errorBody}";
                 }
                 sleep(1);
-
             }
         }
-       
+    
+        // Return the response
+        if (!empty($updatedDossierIds)) {
+            return response()->json(['dossier_ids' => $updatedDossierIds]);
+        } else {
+            return response()->json(['message' => 'No dossiers were updated.']);
+        }
     }
+    
 
 
     
