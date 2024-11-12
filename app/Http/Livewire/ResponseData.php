@@ -93,6 +93,18 @@ class ResponseData extends Component
                                     'updated_at' => now()
                                 ]
                             );
+                            \DB::table('dossiers_data')->updateOrInsert(
+                                [
+                                    'dossier_id' => $this->dossier->id,
+                                    'meta_key' => 'Statut du dossier'
+                                ],
+                                [
+                                    'meta_value' => 'Subvention accordée' ?? '',
+                                    'created_at' => now(),
+                                    'updated_at' => now()
+                                ]
+                            );
+
                         }
                     }
 
