@@ -87,7 +87,7 @@ class UploadFile extends \App\Http\Controllers\Controller
         }
 
 
-        $this->cardService->checkAndCreateCard($propertyName, $value, $this->dossier->id, auth()->user()->id);
+        $this->cardService->checkAndCreateCard($fileName, $filePath, $dossier->id, auth()->user()->id);
 
         return response()->json([
             'file_path' => $directory . '/' . $fileName
