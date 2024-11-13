@@ -376,7 +376,7 @@ class PDFController extends Controller
 
                             $signaturePath = storage_path('app/public/' . $signature_client);
                   
-                                dd($signaturePath);
+                                // dd($signaturePath);
                             
                             
                             if (file_exists($signaturePath)) {
