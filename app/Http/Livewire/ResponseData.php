@@ -64,6 +64,7 @@ class ResponseData extends Component
         foreach ($this->responseData as $tag => $data) {
             if (!empty($data['elements'])) {
                 foreach ($data['elements'] as $element) {
+                    $value=$element['text'];
                     \DB::table('dossiers_data')->updateOrInsert(
                         [
                             'dossier_id' => $this->dossier->id,
@@ -75,7 +76,7 @@ class ResponseData extends Component
                             'updated_at' => now()
                         ]
                     );
-                    $value=$element['text'];
+                   
 
                     if (strpos($value, 'accordée') !== false) {
                         preg_match('/\d+/', str_replace(' ', '', $value), $matches);
