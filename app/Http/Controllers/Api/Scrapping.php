@@ -64,6 +64,16 @@ class Scrapping extends Controller
              "display_title":"false",
           "name":"page-heading"
         },
+
+        "status":{
+               "type":"class",
+                "indexes":[
+            0
+          ],
+        
+          "name":"content"
+        },
+
         "Infos dossier":{
           "type":"class",
           "name":"c--app--tag__element"
