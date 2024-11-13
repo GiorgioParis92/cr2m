@@ -231,7 +231,7 @@ class DossiersTable extends Component
                 'statut_style' => $dossier->status->status_style ?? '',
                 'rdv' => $dossier->get_rdv ?? [],
                 'last_rdv' => optional($dossier->get_rdv->last())->date_rdv ?? null,
-                'statut_anah' => $dossier->dossiersDataByMetaKey('Statut du dossier')->pluck('meta_value')->first() ?? '',
+                'statut_anah' => $dossier->dossiersDataByMetaKey('status')->pluck('meta_value')->first() ?? '',
             ];
         });
 
