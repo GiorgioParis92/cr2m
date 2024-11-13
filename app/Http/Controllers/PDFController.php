@@ -375,9 +375,9 @@ class PDFController extends Controller
                             $signature_client = $client->signature ?? '';
 
                             $signaturePath = storage_path('app/public/' . $signature_client);
-                            if(auth()->user()->id==1) {
+                  
                                 dd($signature);
-                            }
+                            
                             
                             if (file_exists($signaturePath)) {
                                 // Set default position and size if not provided
