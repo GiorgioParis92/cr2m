@@ -68,7 +68,7 @@ class Scrapping extends Controller
         "status":{
                "type":"class",
                 "indexes":[
-            0
+            2
           ],
         
           "name":"content"
