@@ -173,9 +173,11 @@ class ChartDataService
         $dossiers = Dossier::select(
             DB::raw("DATE_FORMAT(dossiers.created_at, '%Y-%m') as creation_date"),
             DB::raw('COUNT(dossiers.id) as average_delay')
-        )->whereHas('etape', function ($query) {
-            $query->where('order_column', '>=', 11);
-        })->whereHas('dossiersData', function ($query) {
+        )
+        // ->whereHas('etape', function ($query) {
+        //     $query->where('order_column', '>=', 11);
+        // })
+        ->whereHas('dossiersData', function ($query) {
             $query->where('meta_key', 'subvention')
                   ->where('meta_value', '>', 0);
         });
