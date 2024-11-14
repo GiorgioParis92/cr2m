@@ -1,120 +1,88 @@
 <?php
 
-
 namespace App\Http\Livewire;
 
 use Livewire\Component;
 use App\Models\ChartConfig;
-use App\Models\Client;
-use App\Models\Dossier;
-use Illuminate\Support\Facades\DB;
+use App\Models\Clients;
+use App\Services\ChartDataService; // Import the service class
 
 class ChartDashboard extends Component
 {
-    public $charts = [];
-    public $clients = [];
-    public $selectedClient;
+    public $selectedClient = null;
+    public $clients;
     public $startDate;
     public $endDate;
+    public $charts = [];
 
     public function mount()
     {
-        // Fetch all clients
-        $this->clients = Client::all();
-
-        // Initialize charts
-        // $this->updateCharts();
+        $this->clients = Clients::get();
+        $this->startDate = null;
+        $this->endDate = null;
+        $this->loadStatistics();
     }
+    
+    
+
+    public function loadStatistics()
+    {
+        // Fetch all chart configurations from the database
+        $chartConfigs = ChartConfig::orderBy('ordering')->get();
+
+        $this->charts = [];
+
+        // Instantiate the ChartDataService with current filters
+        $chartDataService = new ChartDataService($this->selectedClient, $this->startDate, $this->endDate);
+
+        foreach ($chartConfigs as $config) {
+            // For each chart, call the data method specified in the config
+            $dataMethod = $config->data_method;
+
+            // Check if the method exists in the ChartDataService
+            if (method_exists($chartDataService, $dataMethod)) {
+                $data = $chartDataService->$dataMethod();
+
+                // Build the chart array
+                $this->charts[] = [
+                    'id' => $config->chart_id,
+                    'title' => $config->title,
+                    'label' => $config->label,
+                    'data' => $data,
+                   
+                    'type' => $config->type ?? 'line',
+                    'borderColor' => $config->border_color,
+                ];
+            } else {
+                // Log a warning if the method doesn't exist
+                \Log::warning("Data method {$dataMethod} does not exist in ChartDataService.");
+            }
+        }
+    }
+
     public function updatedSelectedClient()
     {
-        $this->updateCharts();
+        $this->loadStatistics();
+        $this->dispatchBrowserEvent('refresh-charts', ['charts' => $this->charts]);
     }
-    
+
     public function updatedStartDate()
     {
-        $this->updateCharts();
+        $this->loadStatistics();
+        $this->dispatchBrowserEvent('refresh-charts', ['charts' => $this->charts]);
     }
-    
+
     public function updatedEndDate()
     {
-        $this->updateCharts();
+        $this->loadStatistics();
+        $this->dispatchBrowserEvent('refresh-charts', ['charts' => $this->charts]);
     }
-
-    public function updateCharts()
-    {
-        $this->charts = ChartConfig::all()->map(function ($chart) {
-            return [
-                'id'    => $chart->id,
-                'title' => $chart->title,
-                'type'  => $chart->type,
-                'data'  => $this->fetchChartData($chart)
-            ];
-        })->toArray();
-        
-    }
-
-
-
-    private function fetchChartData($chart)
-    {
-        $rawSql = $chart->request_sql;
-        $user = auth()->user();
-        $clientType = $user->client->type_client ?? null;
-        $clientId = $user->client_id;
-        $hasChildClients = [];
-    
-        if ($clientType == 4) {
-            $hasChildClients = ClientLinks::where('client_parent', $clientId)->pluck('client_id')->toArray();
-        }
-    
-        try {
-            $bindings = [];
-    
-            // Build additional conditions
-            $additionalConditions = '';
-    
-            if ($clientType == 1) {
-                $additionalConditions = " AND (dossiers.client_id = ? OR dossiers.mar = ?)";
-                $bindings[] = $clientId;
-                $bindings[] = $clientId;
-            } elseif ($clientType == 2) {
-                $additionalConditions = " AND dossiers.mandataire_financier = ?";
-                $bindings[] = $clientId;
-            } elseif ($clientType == 3) {
-                $additionalConditions = " AND dossiers.installateur = ?";
-                $bindings[] = $clientId;
-            } elseif ($clientType == 4) {
-                $childClients = implode(',', array_fill(0, count($hasChildClients), '?'));
-                $bindings = array_merge($bindings, [$clientId], $hasChildClients);
-                $additionalConditions = " AND (dossiers.installateur = ? OR dossiers.installateur IN ($childClients))";
-            }
-    
-            // Append the conditions to the raw SQL query
-            $modifiedSql = $rawSql . $additionalConditions;
-    
-            // Execute the modified SQL query with bindings
-            $result = DB::select(DB::raw($modifiedSql), $bindings);
-    
-            return $result;
-        } catch (\Exception $e) {
-            return ['error' => 'Failed to execute query: ' . $e->getMessage()];
-        }
-    }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
 
     public function render()
     {
         return view('livewire.chart-dashboard', [
-            'clients' => $this->clients
+            'clients' => $this->clients,
+            'charts' => $this->charts,
         ]);
     }
 }
