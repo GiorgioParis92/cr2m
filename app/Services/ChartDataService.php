@@ -134,7 +134,8 @@ class ChartDataService
     
         // Do not apply filters
         // $query = $this->applyFilters($query);
-    
+        $query = $this->applyFilters($query);
+
         $results = $query->groupBy('creation_date')
             ->orderBy('creation_date')
             ->get();
@@ -159,6 +160,11 @@ class ChartDataService
         )->whereHas('etape', function($query) {
             $query->where('order_column', '<', 11);
         });
+
+        $dossiers = $this->applyFilters($dossiers);
+
+
+
         $dossiers = $dossiers->groupBy('creation_date')
         ->orderBy('creation_date')
         ->get();
@@ -181,7 +187,8 @@ class ChartDataService
             $query->where('meta_key', 'subvention')
                   ->where('meta_value', '>', 0);
         });
-    
+        $dossiers = $this->applyFilters($dossiers);
+
         $dossiers = $dossiers->groupBy('creation_date')
                              ->orderBy('creation_date')
                              ->get();
