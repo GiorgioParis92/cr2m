@@ -159,6 +159,7 @@ class Stats extends Component
 
     public function render()
     {
+        // return view('livewire.stats');
         return view('livewire.stats');
     }
 

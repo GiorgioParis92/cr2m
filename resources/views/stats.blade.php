@@ -3,7 +3,7 @@
 
 @section('content')
     <div class="container">
-        <h1>Statistics Page</h1>
+        <h1>Statistics Page1</h1>
         @livewire('chart-dashboard')
     </div>
 @endsection
