@@ -17,12 +17,12 @@ class WebPushNotification extends Notification
 
     public function toWebPush($notifiable, $notification)
     {
-        return (new WebPushMessage)
-            ->title('Test Notification')
-            ->body('This is a test notification from the server.')
-            ->data([
-                'url' => 'https://your-app-url.com',
-                // Add any other data as needed
-            ]);
+        // return (new WebPushMessage)
+        //     ->title('Test Notification')
+        //     ->body('This is a test notification from the server.')
+        //     ->data([
+        //         'url' => 'https://your-app-url.com',
+        //         // Add any other data as needed
+        //     ]);
     }
 }
