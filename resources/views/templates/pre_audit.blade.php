@@ -58,7 +58,7 @@
     @php $width=520 @endphp
     <div class="container">
         <h1>Demande de Devis</h1>
-        <h2>JACQUET JEAN CLAUDE</h2>
+        <h2>{{$all_data['nom'] ?? ''}} {{$all_data['prenom'] ?? ''}}</h2>
 
         <table width="100%">
             <thead>
@@ -192,10 +192,15 @@
                     @if($value=='combles' || $value=='ite' || $value=='iti' || $value=='rampants' || $value=='sous_sols' || $value=='sous_sols' || $value=='terrasse')
                     {{$all_data['r_minimum_'.$value.'_s'.$i] ?? ''}}
                     @endif
-                    @if($value=='pac_air_eau' || $value=='pac_air_air' || $value=='ballon' || $value=='ballon_solaire' )
+                    @if($value=='pac_air_eau' || $value=='pac_air_air'  )
+                    {{$all_data[$value.'_cop_s'.$i] ?? ''}}
+                    @endif
+                    @if($value=='pac_air_air'  )
+                    <br/>{{$all_data[$value.'_splits_s'.$i] ?? ''}}
+                    @endif
+                    @if($value=='ballon' || $value=='ballon_solaire' )
                     {{$all_data['volume'.$value.'_s'.$i] ?? ''}}
                     @endif
-
                 </td>
                 <td style="width:20%;text-align:center;vertical-align:middle">
                
