@@ -172,7 +172,29 @@
                 <th style="width:20%;text-align:center;vertical-align:middle">Unité</th>
             </tr>
             @php
-            $travaux=['combles','iti','ite','vmc','vmc_double','terrasse','sous_sols','pac_air_air','pac_air_eau','ballon','ballon_solaire','fenetre_1','fenetre_2','poele','porte_fenetre1','porte_fenetre_2','rampants','solaire','3k','4k','6k']
+            $travaux=[
+                'combles',
+            'iti',
+            'ite',
+            'vmc',
+            'vmc_double',
+            'terrasse',
+            'sous_sols',
+            'pac_air_air',
+            'pac_air_eau',
+            'ballon',
+            'ballon_solaire',
+            'fenetre_1',
+            'fenetre_2',
+            'poele',
+            'porte_fenetre_1',
+            'porte_fenetre_2',
+            'rampants',
+            'solaire',
+            '3k',
+            '4k',
+            '6k'
+            ]
             @endphp
 
             @foreach($travaux as $value)
@@ -212,7 +234,7 @@
                     @if($value=='combles' || $value=='ite' || $value=='iti' || $value=='rampants' || $value=='sous_sols' || $value=='sous_sols' || $value=='terrasse')
                     m²
                     @endif
-                    @if($value=='pac_air_eau' || $value=='pac_air_air' || $value=='3k' || $value=='4k' || $value=='6k'  )
+                    @if($value=='poele' || $value=='pac_air_eau' || $value=='pac_air_air' || $value=='3k' || $value=='4k' || $value=='6k' || $value=='fenetre_1' || $value=='fenetre_2' || $value=='porte_fenetre_1' || $value=='porte_fenetre_2'  )
                     unités
                     @endif
                 
