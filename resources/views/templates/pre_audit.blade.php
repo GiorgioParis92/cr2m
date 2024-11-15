@@ -145,11 +145,11 @@
       
             <tr>
                 <th><strong>CEP final (kWh/m².an)</strong></th>
-                <td>{{$all_data['cep_final_'.$i] ?? ''}} kW</td>
+                <td>{{$all_data['cep_final_'.$i] ?? ''}}</td>
             </tr>
             <tr>
                 <th><strong>GES final (kgéqCO2/m².an)</strong></th>
-                <td>{{$all_data['ges_final_'.$i] ?? ''}} kW</td>
+                <td>{{$all_data['ges_final_'.$i] ?? ''}}</td>
             </tr>
             <tr>
                 <th><strong>Déperdition (kW)</strong></th>
@@ -157,7 +157,7 @@
             </tr>
             <tr>
                 <th><strong>Gain Énergétique</strong></th>
-                <td>{{$all_data['gain_energetique'.$i] ?? ''}}%</td>
+                <td>{{$all_data['gain_energetique_'.$i] ?? ''}}%</td>
             </tr>
         </table>
         <table style="margin-top:20px">
@@ -214,7 +214,7 @@
                     @if($value=='combles' || $value=='ite' || $value=='iti' || $value=='rampants' || $value=='sous_sols' || $value=='sous_sols' || $value=='terrasse')
                     {{$all_data['r_minimum_'.$value.'_s'.$i] ?? ''}}
                     @endif
-                    @if($value=='pac_air_eau' || $value=='pac_air_air'  )
+                    @if($value=='pac_air_eau' || $value=='pac_air_air' || $value=='ballon' || $value=='ballon_solaire' )
                     {{$all_data[$value.'_cop_s'.$i] ?? ''}}
                     @endif
                 
