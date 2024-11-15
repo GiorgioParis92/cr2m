@@ -17,7 +17,7 @@ class DashboardController extends Controller
     public function index()
     {
         $user = Auth::user();
-        $user->notify(new WebPushNotification());
+        // $user->notify(new WebPushNotification());
     
         return view('dashboard', compact('user')); // Ensure you have a view named 'dashboard2.blade.php'
 
