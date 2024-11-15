@@ -226,7 +226,7 @@
                     @endif
                     {{$all_data[$value.'_qte_s'.$i] ?? ''}}
                     @if($value=='pac_air_air'  )
-                    <br/>{{$all_data[$value.'_splits_s'.$i].' splits' ?? ''}}
+                    <br/>{{$all_data[$value.'_splits_s'.$i] ? $all_data[$value.'_splits_s'.$i].' splits' : ''}}
                     @endif
 
                 </td>
