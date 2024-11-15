@@ -212,7 +212,7 @@
                     @if($value=='combles' || $value=='ite' || $value=='iti' || $value=='rampants' || $value=='sous_sols' || $value=='sous_sols' || $value=='terrasse')
                     m²
                     @endif
-                    @if($value=='pac_air_eau' || $value=='pac_air_air'  )
+                    @if($value=='pac_air_eau' || $value=='pac_air_air' || $value=='3k' || $value=='4k' || $value=='6k'  )
                     unités
                     @endif
                 
