@@ -77,6 +77,7 @@ class GenerateConfig extends AbstractFormData
 
 
         if ($this->value) {
+            $data.=$this->value;
             $extension = explode('.', $this->value);
 
 
