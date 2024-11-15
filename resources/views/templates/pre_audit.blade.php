@@ -208,7 +208,19 @@
                     @endif
 
                 </td>
-                <td style="width:20%;text-align:center;vertical-align:middle"></td>
+                <td style="width:20%;text-align:center;vertical-align:middle">
+                    @if($value=='combles' || $value=='ite' || $value=='iti' || $value=='rampants' || $value=='sous_sols' || $value=='sous_sols' || $value=='terrasse')
+                    m²
+                    @endif
+                    @if($value=='pac_air_eau' || $value=='pac_air_air'  )
+                    unités
+                    @endif
+                
+                    @if($value=='ballon' || $value=='ballon_solaire' )
+                    L
+                    @endif
+
+                </td>
             </tr>
             @endif
             @endforeach
