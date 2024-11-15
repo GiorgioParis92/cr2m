@@ -172,7 +172,7 @@
                 <th style="width:20%;text-align:center;vertical-align:middle">Unité</th>
             </tr>
             @php
-            $travaux=['combles','iti','ite','vmc','vmc_double','terrasse','sous_sols','pac_air_air','pac_air_eau','ballon','ballon_solaire','fenetre_1','fenetre_2','poele','porte_fenetre1','porte_fenetre_2','rampants','solaire']
+            $travaux=['combles','iti','ite','vmc','vmc_double','terrasse','sous_sols','pac_air_air','pac_air_eau','ballon','ballon_solaire','fenetre_1','fenetre_2','poele','porte_fenetre1','porte_fenetre_2','rampants','solaire','3k','4k','6k']
             @endphp
 
             @foreach($travaux as $value)
