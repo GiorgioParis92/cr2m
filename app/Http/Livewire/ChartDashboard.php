@@ -18,8 +18,7 @@ class ChartDashboard extends Component
     public function mount()
     {
         $this->clients = Clients::get();
-        $this->startDate = null;
-        $this->endDate = null;
+     
         $this->loadStatistics();
     }
     
@@ -60,6 +59,17 @@ class ChartDashboard extends Component
         }
     }
 
+    public function dateUpdated($inputId, $selectedDate)
+    {
+        if ($inputId === 'startDate') {
+            $this->startDate = $selectedDate;
+        } elseif ($inputId === 'endDate') {
+            $this->endDate = $selectedDate;
+        }
+
+        $this->loadStatistics();
+        $this->dispatchBrowserEvent('refresh-charts', ['charts' => $this->charts]);
+    }
     public function updatedSelectedClient()
     {
         $this->loadStatistics();
@@ -68,6 +78,7 @@ class ChartDashboard extends Component
 
     public function updatedStartDate()
     {
+        
         $this->loadStatistics();
         $this->dispatchBrowserEvent('refresh-charts', ['charts' => $this->charts]);
     }
@@ -77,7 +88,7 @@ class ChartDashboard extends Component
         $this->loadStatistics();
         $this->dispatchBrowserEvent('refresh-charts', ['charts' => $this->charts]);
     }
-
+  
     public function render()
     {
         return view('livewire.chart-dashboard', [

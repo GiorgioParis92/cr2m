@@ -15,7 +15,7 @@ class ChartDataService
     public function __construct($selectedClient = null, $startDate = null, $endDate = null)
     {
         $this->selectedClient = $selectedClient;
-        $this->startDate = $startDate;
+        $this->startDate = date('Y-m-d 00:00:00',strtotime(str_replace('/','-',$startDate)));
         $this->endDate = $endDate;
     }
 

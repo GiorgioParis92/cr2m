@@ -2,7 +2,7 @@
     <div class="row">
         <div class="col-xl-4 col-sm-12 mb-xl-0 mb-4">
             <div class="mb-3">
-                <label for="clientFilter">Filter by Client:</label>
+                <label for="clientFilter">Filtrer par client</label>
                 <select wire:model="selectedClient" id="clientFilter" class="form-control no_select2">
                     <option value="">All Clients</option>
                     @foreach ($clients as $client)
@@ -11,6 +11,15 @@
                 </select>
             </div>
         </div>
+
+        <div class="col-xl-4 col-sm-12 mb-xl-0 mb-4">
+            <div class="mb-3">
+                <label for="clientFilter">Date de début</label>
+                <input type="text"  id="startDate" wire:model="startDate"  class="form-control datepicker">
+                 
+            </div>
+        </div>
+        {{$startDate ?? ''}}
     </div>
 
     <div class="row">
@@ -43,7 +52,30 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
+        
+
+    function initializeDatepickers() {
+        // Initialize all datepickers and attach event listeners
+        $('#startDate').datepicker({
+            format: 'yyyy/mm/dd',
+            autoclose: true
+        }).on('change', function (e) {
+            // Emit the updated value to Livewire
+            var inputId = $(this).attr('id');
+            var selectedDate = $(this).val();
+            Livewire.emit('dateUpdated', inputId, selectedDate);
+        });
+    }
+
+
+    document.addEventListener('livewire:update', function () {
+        initializeDatepickers(); // Reinitialize datepickers after DOM update
+    });
+
+
+
     document.addEventListener('livewire:load', function () {
+        initializeDatepickers();
         var charts = {};
 
         function initializeCharts(chartsData) {
@@ -103,7 +135,7 @@
 
         window.addEventListener('refresh-charts', function (event) {
             var chartsData = event.detail.charts;
-
+        
             chartsData.forEach(function(chartData) {
                 var chart = charts[chartData.id];
                 if (chart) {
