@@ -117,7 +117,7 @@ class ChartDataService
         }
 
 
-        $query=$query->where('dossiers.created_at','>=','2024-09-01 00:00:00');
+        // $query=$query->where('dossiers.created_at','>=','2024-09-01 00:00:00');
 
         return $query;
     }
