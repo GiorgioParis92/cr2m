@@ -225,7 +225,7 @@
                     {{$all_data['volume'.$value.'_s'.$i] ?? ''}}
                     @endif
                     {{$all_data[$value.'_qte_s'.$i] ?? ''}}
-                    @if($value=='pac_air_air'  )
+                    @if($value=='pac_air_air'  && isset($all_data[$value.'_splits_s'.$i]))
                     <br/>{{$all_data[$value.'_splits_s'.$i] ? $all_data[$value.'_splits_s'.$i].' splits' : ''}}
                     @endif
 
