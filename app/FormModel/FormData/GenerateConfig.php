@@ -58,6 +58,7 @@ class GenerateConfig extends AbstractFormData
         $data .= "data-generation='" . $generation . "'";
         $data .= "data-title='" . $this->config->title . "'";
         $data .= "data-form_id='" . $this->form_id . "'";
+        $data .= "data-name='" . $this->name . "'";
         if(isset($optionsArray['config_id'])) {
             $data .= "data-config_id='".$optionsArray['config_id']."'";
         }
