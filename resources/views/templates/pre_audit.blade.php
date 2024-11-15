@@ -195,9 +195,7 @@
                     @if($value=='pac_air_eau' || $value=='pac_air_air'  )
                     {{$all_data[$value.'_cop_s'.$i] ?? ''}}
                     @endif
-                    @if($value=='pac_air_air'  )
-                    <br/>{{$all_data[$value.'_splits_s'.$i] ?? ''}}
-                    @endif
+                
                     @if($value=='ballon' || $value=='ballon_solaire' )
                     {{$all_data['volume'.$value.'_s'.$i] ?? ''}}
                     @endif
@@ -205,10 +203,24 @@
                 <td style="width:20%;text-align:center;vertical-align:middle">
                
                     {{$all_data[$value.'_qte_s'.$i] ?? ''}}
-             
+                    @if($value=='pac_air_air'  )
+                    <br/>{{$all_data[$value.'_splits_s'.$i].' splits' ?? ''}}
+                    @endif
 
                 </td>
-                <td style="width:20%;text-align:center;vertical-align:middle"></td>
+                <td style="width:20%;text-align:center;vertical-align:middle">
+                    @if($value=='combles' || $value=='ite' || $value=='iti' || $value=='rampants' || $value=='sous_sols' || $value=='sous_sols' || $value=='terrasse')
+                    m²
+                    @endif
+                    @if($value=='pac_air_eau' || $value=='pac_air_air'  )
+                    unités
+                    @endif
+                
+                    @if($value=='ballon' || $value=='ballon_solaire' )
+                    L
+                    @endif
+
+                </td>
             </tr>
             @endif
             @endforeach
