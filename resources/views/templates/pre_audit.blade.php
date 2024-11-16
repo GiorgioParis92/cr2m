@@ -221,7 +221,8 @@
                     R [m².K/W] 
                     @endif
                     @if($value=='pac_air_eau' || $value=='pac_air_air' || $value=='ballon' || $value=='ballon_solaire' )
-                    Cop (7°C/55°C) <br/>
+                    Cop (7°C/55°C) :  {{$all_data[$value.'_cop_s'.$i] ?? ''}}<br/>
+                    Puissance :  {{$all_data[$value.'_puissance_s'.$i] ?? ''}}<br/>
                     @endif
                     @if($value=='3k' || $value=='4k' || $value=='6k' )
                     kWC
@@ -232,17 +233,17 @@
                     {{$all_data['r_minimum_'.$value.'_s'.$i] ?? ''}}
                     @endif
                     @if($value=='pac_air_eau' || $value=='pac_air_air' || $value=='ballon' || $value=='ballon_solaire' )
-                    {{$all_data[$value.'_cop_s'.$i] ?? ''}}<br/>
-                    {{$all_data[$value.'_puissance_s'.$i] ?? ''}}<br/>
+                   
+                   
                     @endif
                 
                     @if($value=='ballon' || $value=='ballon_solaire' )
                     {{$all_data['volume'.$value.'_s'.$i] ?? ''}}
                     @endif
-                    {{$all_data[$value.'_qte_s'.$i] ?? ''}}
+              
                    
                     @if($value=='pac_air_air'  && isset($all_data[$value.'_splits_s'.$i]))
-                    <br/>{{$all_data[$value.'_splits_s'.$i] ? $all_data[$value.'_splits_s'.$i].' splits' : ''}}
+                    {{$all_data[$value.'_splits_s'.$i] ? $all_data[$value.'_splits_s'.$i].' splits' : ''}}
                     @endif
                     @if($value=='3k' || $value=='4k' || $value=='6k' )
                     @if($value=='3k') 3 @endif
