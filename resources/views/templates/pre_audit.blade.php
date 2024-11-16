@@ -187,6 +187,7 @@
             'fenetre_1',
             'fenetre_2',
             'poele',
+            'porte',
             'porte_fenetre_1',
             'porte_fenetre_2',
             'rampants',
@@ -234,7 +235,7 @@
                     @if($value=='combles' || $value=='ite' || $value=='iti' || $value=='rampants' || $value=='sous_sols' || $value=='sous_sols' || $value=='terrasse')
                     m²
                     @endif
-                    @if($value=='vmc' || $value=='vmc_double' || $value=='poele' || $value=='pac_air_eau' || $value=='pac_air_air' || $value=='3k' || $value=='4k' || $value=='6k' || $value=='fenetre_1' || $value=='fenetre_2' || $value=='porte_fenetre_1' || $value=='porte_fenetre_2'  )
+                    @if($value=='vmc' || $value=='vmc_double' || $value=='poele' || $value=='pac_air_eau' || $value=='pac_air_air' || $value=='3k' || $value=='4k' || $value=='6k' || $value=='fenetre_1' || $value=='fenetre_2' || $value=='porte_fenetre_1' || $value=='porte_fenetre_2' || $value=='porte'  )
                     unités
                     @endif
                 
