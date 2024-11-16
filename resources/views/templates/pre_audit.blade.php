@@ -227,7 +227,7 @@
                 
                     @if($value=='poele'  )
                     Puissance :  {{$all_data[$value.'_puissance_s'.$i] ?? ''}}<br/>
-                    Puissance :  {{$all_data[$value.'_rendement_s'.$i] ?? ''}}<br/>
+                    Rendement :  {{$all_data[$value.'_rendement_s'.$i] ?? ''}}<br/>
                     @endif
 
                     @if($value=='combles' || $value=='ite' || $value=='iti' || $value=='rampants' || $value=='sous_sols' || $value=='sous_sols' || $value=='terrasse')
@@ -236,7 +236,8 @@
                   
                 
                     @if($value=='ballon' || $value=='ballon_solaire' )
-                    <br/>{{$all_data['volume'.$value.'_s'.$i] ?? ''}} L
+                    <br/>{{$all_data['volume'. $value.'_s'.$i] ?? ''}} L
+                    <br/>Volume : {{$all_data[$value.'_volume_s'.$i] ?? ''}} L
                     @endif
               
                    
