@@ -41,13 +41,18 @@ class ChartDashboard extends Component
             // Check if the method exists in the ChartDataService
             if (method_exists($chartDataService, $dataMethod)) {
                 $data = $chartDataService->$dataMethod();
-
+                $total=0;
+              
+                foreach($data as $item) {
+                   $total=$total+$item->total;
+                }
                 // Build the chart array
                 $this->charts[] = [
                     'id' => $config->chart_id,
                     'title' => $config->title,
                     'label' => $config->label,
                     'data' => $data,
+                    'total' => $total,
                    
                     'type' => $config->type ?? 'line',
                     'borderColor' => $config->border_color,

@@ -26,7 +26,9 @@ class ChartDataService
             ->where('dossiers_data.meta_key', 'step_2')
             ->select(
                 DB::raw('DATE(dossiers.created_at) as creation_date'),
-                DB::raw('AVG(TIMESTAMPDIFF(DAY, dossiers.created_at, dossiers_data.meta_value)) as average_delay')
+                DB::raw('AVG(TIMESTAMPDIFF(DAY, dossiers.created_at, dossiers_data.meta_value)) as average_delay'),
+                DB::raw('COUNT(dossiers.id) as total') // Add total as COUNT of dossiers
+
             );
 
         // Apply filters
@@ -42,7 +44,9 @@ class ChartDataService
     {
         $query = Dossier::select(
                 DB::raw('DATE(dossiers.created_at) as creation_date'),
-                DB::raw('AVG(TIMESTAMPDIFF(DAY, dossiers.created_at, IFNULL(forms_data.created_at, CURDATE()))) as average_delay')
+                DB::raw('AVG(TIMESTAMPDIFF(DAY, dossiers.created_at, IFNULL(forms_data.created_at, CURDATE()))) as average_delay'),
+                DB::raw('COUNT(dossiers.id) as total') // Add total as COUNT of dossiers
+
             )
             ->join('forms_data', function ($join) {
                 $join->on('dossiers.id', '=', 'forms_data.dossier_id')
@@ -68,7 +72,9 @@ class ChartDataService
     {
         $query = Dossier::select(
             DB::raw('DATE(dossiers.created_at) as creation_date'),
-            DB::raw('AVG(TIMESTAMPDIFF(DAY, dossiers_data.created_at, IFNULL(forms_data.created_at, CURDATE()))) as average_delay')
+            DB::raw('AVG(TIMESTAMPDIFF(DAY, dossiers_data.created_at, IFNULL(forms_data.created_at, CURDATE()))) as average_delay'),
+            DB::raw('COUNT(dossiers.id) as total') // Add total as COUNT of dossiers
+
         )
         ->join('dossiers_data', function ($join) {
             $join->on('dossiers.id', '=', 'dossiers_data.dossier_id')
@@ -128,7 +134,9 @@ class ChartDataService
     {
         $query = Dossier::select(
             DB::raw("DATE_FORMAT(rdv.date_rdv, '%Y-%m') as creation_date"),
-            DB::raw('COUNT(rdv.id) as average_delay')
+            DB::raw('COUNT(rdv.id) as average_delay'),
+            DB::raw('COUNT(rdv.id) as total') // Add total as COUNT of dossiers
+
         )
         ->join('rdv', 'dossiers.id', '=', 'rdv.dossier_id');
     
@@ -156,7 +164,9 @@ class ChartDataService
         // Retrieve dossiers where associated etape's order_column <= 8
         $dossiers = Dossier::select(
             DB::raw("DATE_FORMAT(dossiers.created_at, '%Y-%m') as creation_date"),
-            DB::raw('COUNT(dossiers.id) as average_delay')
+            DB::raw('COUNT(dossiers.id) as average_delay'),
+            DB::raw('COUNT(dossiers.id) as total') // Add total as COUNT of dossiers
+
         )->whereHas('etape', function($query) {
             $query->where('order_column', '<', 11);
         });
@@ -176,22 +186,21 @@ class ChartDataService
     public function apres_octroi()
     {
         // Retrieve dossiers where associated etape's order_column >= 11 and dossiers_data has meta_key = 'subvention' with meta_value > 0
-        $dossiers = Dossier::select(
+        $dossiers = Dossier::join('dossiers_data', function ($join) {
+            $join->on('dossiers.id', '=', 'dossiers_data.dossier_id')
+                 ->where('dossiers_data.meta_key', '=', 'subvention');
+        })
+        ->select(
             DB::raw("DATE_FORMAT(dossiers.created_at, '%Y-%m') as creation_date"),
-            DB::raw('COUNT(dossiers.id) as average_delay')
-        )
-        // ->whereHas('etape', function ($query) {
-        //     $query->where('order_column', '>=', 11);
-        // })
-        ->whereHas('dossiersData', function ($query) {
-            $query->where('meta_key', 'subvention')
-                  ->where('meta_value', '>', 0);
-        });
-        $dossiers = $this->applyFilters($dossiers);
-
-        $dossiers = $dossiers->groupBy('creation_date')
-                             ->orderBy('creation_date')
-                             ->get();
+            DB::raw('COUNT(dossiers.id) as average_delay'), // Count the dossiers
+            DB::raw('SUM(dossiers_data.meta_value) as total') // Sum the meta_value
+        );
+    
+    $dossiers = $this->applyFilters($dossiers);
+    
+    $dossiers = $dossiers->groupBy('creation_date')
+                         ->orderBy('creation_date')
+                         ->get();
     
         // Optionally, you can return additional information or statistics
         return $dossiers;
