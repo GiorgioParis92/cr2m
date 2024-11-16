@@ -166,10 +166,9 @@
             </tr>
             <tr>
                 <th style="width:20%"></th>
+                <th style="width:20%;text-align:center;vertical-align:middle">Quantité</th>
                 <th style="width:20%;text-align:center;vertical-align:middle">Caractéristiques</th>
-                <th style="width:20%;text-align:center;vertical-align:middle">Valeur de consigne</th>
-                <th style="width:20%;text-align:center;vertical-align:middle">Mesure/Quantité</th>
-                <th style="width:20%;text-align:center;vertical-align:middle">Unité</th>
+          
             </tr>
             @php
             $travaux=[
@@ -184,12 +183,9 @@
             'pac_air_eau',
             'ballon',
             'ballon_solaire',
-            'fenetre_1',
-            'fenetre_2',
+        
             'poele',
-            'porte',
-            'porte_fenetre_1',
-            'porte_fenetre_2',
+          
             'rampants',
             'solaire',
             '3k',
@@ -203,35 +199,8 @@
             <tr>
                 <th style="width:20%;text-align:center;vertical-align:middle"><strong>{{$all_data[$value.'_title_s'.$i]}}</strong></th>
                 <td style="width:20%;text-align:center;vertical-align:middle">
-                    @if($value=='combles' || $value=='ite' || $value=='iti' || $value=='rampants' || $value=='sous_sols' || $value=='sous_sols' || $value=='terrasse')
-                    R [m².K/W] 
-                    @endif
-                    @if($value=='pac_air_eau' || $value=='pac_air_air' || $value=='ballon' || $value=='ballon_solaire' )
-                    Cop (7°C/55°C) 
-                    @endif
-                    
-                </td>
-                <td style="width:20%;text-align:center;vertical-align:middle">
-                    @if($value=='combles' || $value=='ite' || $value=='iti' || $value=='rampants' || $value=='sous_sols' || $value=='sous_sols' || $value=='terrasse')
-                    {{$all_data['r_minimum_'.$value.'_s'.$i] ?? ''}}
-                    @endif
-                    @if($value=='pac_air_eau' || $value=='pac_air_air' || $value=='ballon' || $value=='ballon_solaire' )
-                    {{$all_data[$value.'_cop_s'.$i] ?? ''}}
-                    @endif
-                
-                
-                </td>
-                <td style="width:20%;text-align:center;vertical-align:middle">
-                    @if($value=='ballon' || $value=='ballon_solaire' )
-                    {{$all_data['volume'.$value.'_s'.$i] ?? ''}}
-                    @endif
-                    {{$all_data[$value.'_qte_s'.$i] ?? ''}}
-                    @if($value=='pac_air_air'  && isset($all_data[$value.'_splits_s'.$i]))
-                    <br/>{{$all_data[$value.'_splits_s'.$i] ? $all_data[$value.'_splits_s'.$i].' splits' : ''}}
-                    @endif
 
-                </td>
-                <td style="width:20%;text-align:center;vertical-align:middle">
+                    {{$all_data[$value.'_qte_s'.$i] ?? ''}} 
                     @if($value=='combles' || $value=='ite' || $value=='iti' || $value=='rampants' || $value=='sous_sols' || $value=='sous_sols' || $value=='terrasse')
                     m²
                     @endif
@@ -243,29 +212,54 @@
                     L
                     @endif
 
+
+         
                 </td>
+                <td style="width:20%;text-align:center;vertical-align:middle">
+
+                    @if($value=='combles' || $value=='ite' || $value=='iti' || $value=='rampants' || $value=='sous_sols' || $value=='sous_sols' || $value=='terrasse')
+                    R [m².K/W] 
+                    @endif
+                    @if($value=='pac_air_eau' || $value=='pac_air_air' || $value=='ballon' || $value=='ballon_solaire' )
+                    Cop (7°C/55°C) <br/>
+                    @endif
+                    @if($value=='3k' || $value=='4k' || $value=='6k' )
+                    kWC
+                    @endif
+
+
+                    @if($value=='combles' || $value=='ite' || $value=='iti' || $value=='rampants' || $value=='sous_sols' || $value=='sous_sols' || $value=='terrasse')
+                    {{$all_data['r_minimum_'.$value.'_s'.$i] ?? ''}}
+                    @endif
+                    @if($value=='pac_air_eau' || $value=='pac_air_air' || $value=='ballon' || $value=='ballon_solaire' )
+                    {{$all_data[$value.'_cop_s'.$i] ?? ''}}<br/>
+                    {{$all_data[$value.'_puissance_s'.$i] ?? ''}}<br/>
+                    @endif
+                
+                    @if($value=='ballon' || $value=='ballon_solaire' )
+                    {{$all_data['volume'.$value.'_s'.$i] ?? ''}}
+                    @endif
+                    {{$all_data[$value.'_qte_s'.$i] ?? ''}}
+                   
+                    @if($value=='pac_air_air'  && isset($all_data[$value.'_splits_s'.$i]))
+                    <br/>{{$all_data[$value.'_splits_s'.$i] ? $all_data[$value.'_splits_s'.$i].' splits' : ''}}
+                    @endif
+                    @if($value=='3k' || $value=='4k' || $value=='6k' )
+                    @if($value=='3k') 3 @endif
+                    @if($value=='4k') 4.5 @endif
+                    @if($value=='6k') 6 @endif
+                    @endif
+
+                
+                </td>
+              
             </tr>
             @endif
             @endforeach
         </table>
         @endfor
        
-      
 
-        <table>
-            <tr>
-                <td><strong>Date d'Audit</strong></td>
-                <td>16/10/2024</td>
-            </tr>
-            <tr>
-                <td><strong>Numéro d'Audit</strong></td>
-                <td>00000</td>
-            </tr>
-            <tr>
-                <td><strong>Moteur de Calcul</strong></td>
-                <td>3CL</td>
-            </tr>
-        </table>
 
         <p class="text-center" style="margin-top: 20px; color: #555;">MERCI POUR VOTRE RETOUR !</p>
     </div>

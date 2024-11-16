@@ -1,7 +1,7 @@
 <div>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const iconPath = '{{ asset('logo.PNG') }}';
+            // const iconPath = '{{ asset('logo.PNG') }}';
 
             // Request permission if not already granted
             if (Push.Permission.has()) {

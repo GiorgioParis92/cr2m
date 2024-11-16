@@ -19,7 +19,7 @@
                  
             </div>
         </div>
-        {{$startDate ?? ''}}
+      
     </div>
 
     <div class="row">
@@ -81,7 +81,7 @@
         function initializeCharts(chartsData) {
             chartsData.forEach(function(chartData) {
                 var ctx = document.getElementById(chartData.id).getContext('2d');
-
+                console.log(chartData)
                 // Format date labels and data points
                 var labels = chartData.data.map(function(item) {
                     var date = new Date(item.creation_date);
@@ -98,7 +98,7 @@
                     data: {
                         labels: labels,
                         datasets: [{
-                            label: chartData.label,
+                            label: 'TOTAL : '+chartData.total,
                             data: dataPoints,
                             borderColor: chartData.borderColor,
                             borderWidth: 2,
@@ -137,11 +137,14 @@
             var chartsData = event.detail.charts;
         
             chartsData.forEach(function(chartData) {
+               
                 var chart = charts[chartData.id];
+                var total=0;
                 if (chart) {
                     // Update chart data
                     var labels = chartData.data.map(function(item) {
                         var date = new Date(item.creation_date);
+                        console.log(item)
                         var day = date.getDate();
                         return  date.toLocaleDateString('fr-FR');
                     });
@@ -149,9 +152,9 @@
                     var dataPoints = chartData.data.map(function(item) {
                         return parseFloat(item.average_delay).toFixed(2);
                     });
-
                     chart.data.labels = labels;
                     chart.data.datasets[0].data = dataPoints;
+                  
                     chart.update();
                 } else {
                     // Initialize chart if it doesn't exist
