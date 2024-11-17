@@ -106,14 +106,14 @@
                                         <form class="form-control" method="get">
 
                                             <label>Changer l'étape en cours</label>
-                                            <select onchange="this.form.submit()" class="form-control" name="etape" >
+                                            <select onchange="this.form.submit()" class="form-control" name="etape">
                                                 <option>Choisir une étape</option>
                                                 @foreach ($etapes as $index => $e)
-                                                   
-                                                  @if($e['order_column']<=$dossier['etape']['order_column'])
-                                                        <option @if ($e['id'] == $tab) selected @endif   value="{{ $e['etape_number'] }}">{{ $e['etape_icon'] }} -
+                                                    @if ($e['order_column'] <= $dossier['etape']['order_column'])
+                                                        <option @if ($e['id'] == $tab) selected @endif
+                                                            value="{{ $e['etape_number'] }}">{{ $e['etape_icon'] }} -
                                                             {{ strtoupper_extended($e['etape_desc']) }}</option>
-                                                 @endif
+                                                    @endif
                                                 @endforeach
                                             </select>
                                         </form>
@@ -180,6 +180,23 @@
                                 @endforeach
                             </select>
                         </div>
+
+                        {{-- <div class="bs-stepper-header" role="tablist">
+                            @foreach ($etapes as $index => $e)
+                                <div class="step active" data-target="#test-nl-1">
+                                    <span class="bs-stepper-circle">
+                                        <span class="" aria-hidden="true">{{ $e['etape_icon'] }}</span>
+                                        <span class="bs-stepper-label">Various information</span>
+
+                                    </span>
+
+                                </div>
+                                <div class="bs-stepper-line"></div>
+                            @endforeach
+
+
+                        </div> --}}
+
                         <div class="row etapes_row mt-5 not_responsive">
                             @foreach ($etapes as $index => $e)
                                 @php
@@ -212,10 +229,9 @@
                                         $isAllowed = false;
                                         $isCurrent = false;
                                     }
-                                    if (is_user_allowed('financier') == true && $e['order_column'] >=100) {
+                                    if (is_user_allowed('financier') == true && $e['order_column'] >= 100) {
                                         $isAllowed = true;
                                         $isActive = true;
-
                                     }
                                 @endphp
 
@@ -260,7 +276,7 @@
                                     </a>
                                 </div>
                             @endforeach
-                           
+
                         </div>
                     </div>
 
@@ -287,12 +303,12 @@
                                 <h3 class="border-bottom border-gray pb-2 p-2">{{ $etape_display['etape_desc'] }}
                                     @if ($tab == $dossier->etape_number)
                                         {{-- @if (is_user_allowed('validate_' . $etape_display['etape_name'])) --}}
-                                       @if(auth()->user()->client->type_client!=3)
-                                        <div class="col-lg-6">
-                                            <a class="btn btn-primary"
-                                                href="{{ route('dossiers.next_step', $dossier->id) }}">Valider
-                                                l'étape</a>
-                                        </div>
+                                        @if (auth()->user()->client->type_client != 3)
+                                            <div class="col-lg-6">
+                                                <a class="btn btn-primary"
+                                                    href="{{ route('dossiers.next_step', $dossier->id) }}">Valider
+                                                    l'étape</a>
+                                            </div>
                                         @endif
                                     @endif
                                     <div class="progress">
