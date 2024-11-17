@@ -44,6 +44,7 @@ class ChartDashboard extends Component
                 $total=0;
               
                 foreach($data as $item) {
+                    dump($item);
                    $total=$total+$item->total;
                 }
                 // Build the chart array
