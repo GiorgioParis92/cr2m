@@ -193,7 +193,7 @@ class ChartDataService
         ->select(
             DB::raw("DATE_FORMAT(dossiers.created_at, '%Y-%m') as creation_date"),
             DB::raw('COUNT(dossiers.id) as average_delay'), // Count the dossiers
-            DB::raw("CONCAT(FORMAT(SUM(dossiers_data.meta_value), 2), ',00 €') as total") // Formatted total
+            DB::raw("SUM(dossiers_data.meta_value) as total") // Formatted total
         );
     
     $dossiers = $this->applyFilters($dossiers);
