@@ -1092,16 +1092,18 @@ $('#pdfModal').css('display', 'block');
         }
 
 
-        function sendApiRequest(button) {
+function sendApiRequest(button) {
     // Retrieve data from the button's data attributes
     const formData = new FormData();
     const dataAttributes = button.dataset;
-
+            console.log(dataAttributes)
     // Append all data attributes to the FormData object
     for (let key in dataAttributes) {
-        formData.append(key.replace(/_/g, '-'), dataAttributes[key]);
+        console.log(key)
+        console.log(dataAttributes[key])
+        formData.append(key, dataAttributes[key]);
     }
-   
+    console.log(formData)
     // Append files to FormData
     const fileInputs = document.querySelectorAll('input[type="file"][name="file[]"]');
     fileInputs.forEach(input => {
