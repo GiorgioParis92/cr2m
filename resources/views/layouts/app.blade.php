@@ -1118,9 +1118,7 @@ $('#pdfModal').css('display', 'block');
         data: formData,
         processData: false,
         contentType: false,
-        xhrFields: {
-            withCredentials: true  // Include cookies in the request
-        },
+      
         success: function(response) {
             console.log(response);
         },
