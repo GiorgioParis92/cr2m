@@ -16,8 +16,8 @@ class Button extends AbstractFormData
       
         $data .= '<div>';
         $data .= '<button type="button" class="btn btn-primary" onclick="sendApiRequest(this)"'
-            . ' data-login="giorgio"'
-            . ' data-password="Dafa2021"'
+            . ' data-login="jordan@energia-eqc.com"'
+            . ' data-password="Jordanenergia2024*"'
             . ' data-type_demande="reno_ampleur"'
             . ' data-raison_sociale="test"'
             . ' data-siren="123456789"'
