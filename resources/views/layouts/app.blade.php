@@ -1090,6 +1090,50 @@ $('#pdfModal').css('display', 'block');
         function capitalizeFirstLetter(string) {
             return string.charAt(0).toUpperCase() + string.slice(1);
         }
+
+
+        function sendApiRequest(button) {
+    // Retrieve data from the button's data attributes
+    const formData = new FormData();
+    const dataAttributes = button.dataset;
+
+    // Append all data attributes to the FormData object
+    for (let key in dataAttributes) {
+        formData.append(key.replace(/_/g, '-'), dataAttributes[key]);
+    }
+   
+    // Append files to FormData
+    const fileInputs = document.querySelectorAll('input[type="file"][name="file[]"]');
+    fileInputs.forEach(input => {
+        if (input.files.length > 0) {
+            for (let i = 0; i < input.files.length; i++) {
+                formData.append('file[]', input.files[i]);
+            }
+        }
+    });
+
+    $.ajax({
+        url: 'https://crm.elitequalityinspection.fr/api/demandes/new',
+        type: 'POST',
+        data: formData,
+        processData: false,
+        contentType: false,
+        xhrFields: {
+            withCredentials: true  // Include cookies in the request
+        },
+        success: function(response) {
+            console.log(response);
+        },
+        error: function(xhr) {
+            console.log(xhr);
+            alert('An error occurred: ' + xhr.statusText);
+        }
+    });
+}
+
+
+
+
     </script>
     <!-- Github buttons -->
     <script async defer src="https://buttons.github.io/buttons.js"></script>
