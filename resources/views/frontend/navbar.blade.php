@@ -96,7 +96,15 @@
                   </a>
               </li>
 
-              @if (auth()->user()->type_id == 1)
+                @if (auth()->user()->type_id == 1)
+
+                <li class="nav-item">
+                    <a class="nav-link  " href="{{ route('stats') }}">
+
+                        <span class="nav-link-text ms-1"><i class="fa fa-users"></i>  Statistiques</span>
+                    </a>
+                </li>
+
                     <li class="nav-item">
                         <a class="nav-link  " href="{{ route('users.index') }}">
 
