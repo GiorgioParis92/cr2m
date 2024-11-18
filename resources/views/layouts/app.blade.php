@@ -1131,8 +1131,8 @@ function sendApiRequest(button) {
         url: '../../api/dossiers_data/updateOrInsert',
         type: 'POST',
         headers: {
-                            'Authorization': 'Bearer ' + token
-                        },
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
         data: {
         "conditions": {
             "meta_key": "demande_inspection",
