@@ -1132,7 +1132,7 @@ function sendApiRequest(button) {
         data: {
         "conditions": {
             "meta_key": "demande_inspection",
-            "dossier_id": "{{$dossier->id}}"
+            "dossier_id": "{{$dossier->id ?? ''}}"
         },
         "update_data": {
             "meta_value": response.demande_id
