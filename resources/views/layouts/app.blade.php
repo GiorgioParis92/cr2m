@@ -1127,7 +1127,7 @@ function sendApiRequest(button) {
             console.log(response);
 
         $.ajax({
-        url: 'api/dossiers_data/updateOrInsert',
+        url: '../../api/dossiers_data/updateOrInsert',
         type: 'POST',
         data: {
         "conditions": {
