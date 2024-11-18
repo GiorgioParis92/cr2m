@@ -232,6 +232,7 @@ class DossiersTable extends Component
                 'rdv' => $dossier->get_rdv ?? [],
                 'last_rdv' => optional($dossier->get_rdv->last())->date_rdv ?? null,
                 'statut_anah' => $dossier->dossiersDataByMetaKey('status')->pluck('meta_value')->first() ?? '',
+                'subvention' => $dossier->dossiersDataByMetaKey('subvention')->pluck('meta_value')->first() ?? '',
             ];
         });
 

@@ -97,12 +97,12 @@
                     type: chartData.type, // Use the type from your chart data
                     data: {
                         labels: labels,
+                       
                         datasets: [{
-                            label: 'TOTAL : '+chartData.total,
+                            label: 'T',
                             data: dataPoints,
                             borderColor: chartData.borderColor,
-                            borderWidth: 2,
-                            fill: false
+                          
                         }]
                     },
                     options: {
@@ -112,14 +112,14 @@
                                 display: true,
                                 title: {
                                     display: true,
-                                    text: 'Creation Date'
+                                    text: chartData.total
                                 }
                             },
                             y: {
                                 display: true,
                                 title: {
                                     display: true,
-                                    text: chartData.label
+                                    text: 'TOTAL : '+chartData.total
                                 },
                                 beginAtZero: true
                             }
