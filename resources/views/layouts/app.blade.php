@@ -1118,7 +1118,9 @@ $('#pdfModal').css('display', 'block');
         data: formData,
         processData: false,
         contentType: false,
-      
+        headers: {
+        'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI3IiwianRpIjoiZDlhNDcwYWMzMGJlYTRjYzk3N2JiY2Y4MDNmMGZlODhiYzVkZjEzZWVkNzY1NjYzMjhjZjEwN2RjY2EwMDc4NjNmOTM5NzNkMWIzMGJkYmUiLCJpYXQiOjE3MzE5Mzc3MTkuNTk0MTQsIm5iZiI6MTczMTkzNzcxOS41OTQxNDIsImV4cCI6MTc2MzQ3MzcxOS41OTAwMTksInN1YiI6IjEiLCJzY29wZXMiOltdfQ.kNQzzdJypKAPTFT5vDTrcS7ltOiMwAgrCKpI91LhsNBjqrgoxAB56O5KBwB-T7SQZKboH7-O5Y-wsNKfAKg7C-95su-JkYvFI5SHMYZuv3TTw4GeDQm0F-qf_g5ydvINhthQu0x4Uv11gV_jTG8DTmKUuBsiC2htih0vXOJBiV0MopcWyIUfshP3BeSp-sgOG05b_ojWGrBvAy20mHk8ZgJzWovakOn4Ki2I-040vl2yiRiWqKV3vUCeVoKGmj6npCxcZCQZUE-5pd7j_FTZdZiVEPiwsZiDSpzGBCpkiD6WHKf_fojt_c850PmMjT2MsdOiv2EqR5vnIvsoPBnsjMnbA4KSvJrZADQRA1cqKl3Igp0TmBivwO9VC3PiGUjwG2bBbBwO-j5XKodW7NRPSRCBGOfwJLD_mQR_TYgjBRrSKIkzZOWqa8henrade2FH60-_G5BQmUwycj43pMd1ws7qtXUOE-xiIAVV_-bN8jthsAzMW8TLCwy4Z7ClkpaPBp0dqoxNOCw7dnxuKzcEdjP386hirryfSFlXN424sRvgP8t-Pl-MgvNKZZWWRMU6qAXU-4l6moLrz5RJNCQIKLmeyS4ObSkiB1OW21yZgPk_5kw_thGkM9B0SwaIeE_8S7BUW47TbOsgn0gPwvzj6zKjVu8mAT6Cjl9nl3vd_-0'  // Add the Bearer token here
+    },
         success: function(response) {
             console.log(response);
         },
