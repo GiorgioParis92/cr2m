@@ -29,6 +29,7 @@ use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Livewire\Chat;
 use App\Http\Controllers\SubscriptionController;
+use App\Http\Controllers\ApiRequestController;
 
 
 /*
@@ -210,6 +211,7 @@ Route::get('/calendar', [App\Http\Controllers\CalendarController::class, 'index'
 Route::get('/events', [App\Http\Controllers\EventController::class, 'getEvents']);
 Route::get('/messagerie', [App\Http\Controllers\Messagerie::class, 'index'])->name('messagerie');
 
+Route::post('/send-api-request', [ApiRequestController::class, 'sendApiRequest'])->name('send.api.request');
 
 Route::get('/search', [App\Http\Controllers\SearchController::class, 'search'])->name('search');
 
