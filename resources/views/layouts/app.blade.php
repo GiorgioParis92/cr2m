@@ -1129,6 +1129,9 @@ function sendApiRequest(button) {
         $.ajax({
         url: '../../api/dossiers_data/updateOrInsert',
         type: 'POST',
+        headers: {
+                            'Authorization': 'Bearer ' + token
+                        },
         data: {
         "conditions": {
             "meta_key": "demande_inspection",
