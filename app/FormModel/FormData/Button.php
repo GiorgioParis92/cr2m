@@ -9,31 +9,77 @@ class Button extends AbstractFormData
 {
     public function render(bool $is_error)
     {
-      
 
-        $data='';
+        if (!is_array($this->config->options)) {
+            $jsonString = str_replace(["\n", '', "\r"], '', $this->config->options);
+            $optionsArray = json_decode($jsonString, true);
+        } else {
+            $optionsArray = $this->config->options;
+        }
+        if (!is_array($optionsArray)) {
+            $optionsArray = [];
+        }
+        $dossier = Dossier::find($this->dossier_id);
+        $all_data = load_all_dossier_data($dossier);
 
-      
+        foreach ($all_data as $data_key => $data_value) {
+            foreach ($data_value as $k => $v) {
+                foreach ($v as $a => $b) {
+                    if (!empty($b)) {
+                        $array[$a] = $b;
+                    }
+
+                }
+            }
+        }
+
+
+
+        $data = '';
+
         $data .= '<div>';
-        $data .= '<button type="button" class="btn btn-primary" onclick="sendApiRequest(this)"'
-            . ' data-login="jordan@energia-eqc.com"'
-            . ' data-password="Jordanenergia2024*"'
-            . ' data-type_demande="reno_ampleur"'
-            . ' data-raison_sociale="test"'
-            . ' data-siren="123456789"'
-            . ' data-proprietaire_name="BOGICEVIC"'
-            . ' data-proprietaire_adresse="18 RUE DU PONT NOYELLES"'
-            . ' data-proprietaire_cp="94160"'
-            . ' data-proprietaire_ville="SAINT-MANDE"'
-            . ' data-contact_intervention="BOGICEVIC"'
-            . ' data-tel_contact_intervention="0651980838"'
-            . ' data-entreprise_travaux="."' // Note: Ensure this doesn't break the HTML
-            . ' data-beneficiaire_name="BOGICEVIC">'
-            . $this->config->title
-            . '</button>';
+        $data .= '<div  class="btn btn-primary" onclick="sendApiRequest(this)" ';
+
+        foreach ($optionsArray['fields'] as $k => $v) {
+            $val = '';
+            if (!empty($v)) {
+
+                if (is_array($v)) {
+                   
+                    foreach($v as $cle=>$valeur) {
+                        $val .= $array[$valeur].' ';
+                    }
+
+
+                } else {
+                    if (!empty($array[$v])) {
+                        $val = $array[$v];
+                    } else {
+                        $val = $v;
+                    }
+                }
+
+
+
+            } else {
+                $val = $array[$k] ?? '';
+            }
+
+
+            $data .= 'data-';
+            $data .= $k;
+            $data .= '="';
+            $data .= $val;
+            $data .= '"';
+        }
+
+
+        $data .= '>';
+        $data .= $this->config->title;
         $data .= '</div>';
-        
-        
+        $data .= '</div>';
+
+
 
         return $data;
 
