@@ -1125,6 +1125,30 @@ function sendApiRequest(button) {
     },
         success: function(response) {
             console.log(response);
+
+        $.ajax({
+        url: 'api/dossiers_data/updateOrInsert',
+        type: 'POST',
+        data: {
+        "conditions": {
+            "meta_key": "demande_inspection",
+            "dossier_id": "{{$dossier->id}}"
+        },
+        "update_data": {
+            "meta_value": response.demande_id
+        }
+    },
+      
+       
+        success: function(response) {
+            console.log(response);
+        },
+        error: function(xhr) {
+            console.log(xhr);
+            alert('An error occurred: ' + xhr.statusText);
+        }
+    });
+
         },
         error: function(xhr) {
             console.log(xhr);
