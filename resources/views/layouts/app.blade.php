@@ -1125,6 +1125,7 @@ function sendApiRequest(button) {
     },
         success: function(response) {
             console.log(response);
+            var token = $('meta[name="api-token"]').attr('content');
 
         $.ajax({
         url: '../../api/dossiers_data/updateOrInsert',
