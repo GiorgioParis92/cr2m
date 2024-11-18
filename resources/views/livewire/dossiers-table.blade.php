@@ -318,9 +318,9 @@ span.badge.badge-outline-danger {
             filter: 'agSetColumnFilter',
             enableRowGroup: true,
             autoHeight: true,
-            valueGetter: function(params) {
-                return params.data.statut_anah ? params.data.statut_anah.replace('Dossier : ', '') : '';
-            }
+            cellRenderer: statut_anah,
+
+          
         },
         @endif
             {
@@ -671,13 +671,53 @@ span.badge.badge-outline-danger {
         if (!data) {
             return '';
         }
+
+        if(data.subvention!='' && data.subvention!=undefined) {
+            var subvention = 'Subvention : '+data.subvention+' €'
+        } else {
+            var subvention ='';
+        }
+
         return `
                                     <a target="_blank"  href="${data.dossier_url}">
                                 <div 
                                     class="btn btn-${data.statut_style}">
 
                                      ${data.statut}
+                                    
+                                </div>
+                             
+                            </a>
+    
+        `;
+    }
 
+
+
+    function statut_anah(params) {
+        const data = params.data;
+        if (!data) {
+            return '';
+        }
+
+        if(data.subvention!='' && data.subvention!=undefined) {
+            var subvention = 'Subvention : '+data.subvention+' €'
+        } else {
+            var subvention ='';
+        }
+
+        return `
+                                    <a target="_blank"  href="${data.dossier_url}">
+                                <div 
+                                    class="btn btn-primary">
+
+                                     ${data.statut_anah.replace('Dossier : ', '')}
+                                    
+                                </div>
+                               <div >
+
+                                     ${subvention}
+                                    
                                 </div>
                             </a>
     
