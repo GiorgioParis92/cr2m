@@ -6,6 +6,7 @@ use Livewire\Component;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Models\Dossier;
+use App\Models\Etape;
 use App\Models\DossiersActivity;
 use App\Models\Client;
 use App\Models\ClientLinks;
