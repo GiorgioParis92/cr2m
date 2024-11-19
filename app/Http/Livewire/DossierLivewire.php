@@ -182,16 +182,16 @@ class DossierLivewire extends Component
         // dd($this->global_data);
         foreach ($this->forms_configs as $formId => $config) {
 
-            // $config->save();
+            $config->save();
 
-            // foreach ($config->formData as $tag => $data_form) {
-            //     if (!isset($this->global_data[$tag])) {
-            //         $this->global_data[$tag] = '';
-            //     }
-            //     if ($this->global_data[$tag] != $data_form->value) {
-            //         $this->global_data[$tag] = $data_form->value;
-            //     }
-            // }
+            foreach ($config->formData as $tag => $data_form) {
+                if (!isset($this->global_data[$tag])) {
+                    $this->global_data[$tag] = '';
+                }
+                if ($this->global_data[$tag] != $data_form->value) {
+                    $this->global_data[$tag] = $data_form->value;
+                }
+            }
         }
 
         change_status($key, $value,$this->dossier->id);
