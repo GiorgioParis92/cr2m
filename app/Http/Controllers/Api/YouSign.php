@@ -42,7 +42,10 @@ class YouSign extends Controller
     //   }
 
     if(isset($request->form_id)) {
-      $config=DB::table('forms_config')->where('form_id',$request->form_id)->where('name',$request->name)->first();
+   $config = FormConfig::where('form_id', $request->form_id)
+    ->where('name', $request->name)
+    ->first();
+
 
       $options=json_decode($config->options);
 
@@ -184,31 +187,33 @@ class YouSign extends Controller
           $documentId = $resultData->document_id ?? '';
 
 
-          $update = DB::table('forms_data')->updateOrInsert(
-            [
-              'dossier_id' => '' . $dossier->id . '',
-              'form_id' => '' . $request->form_id . '',
-              'meta_key' => 'signature_request_id'
-            ],
-            [
-              'meta_value' => $signatureRequestId,
-              'created_at' => now(),
-              'updated_at' => now()
-            ]
-          );
+      $update = FormData::updateOrCreate(
+    [
+        'dossier_id' => (string) $dossier->id,
+        'form_id' => (string) $request->form_id,
+        'meta_key' => 'signature_request_id',
+    ],
+    [
+        'meta_value' => $signatureRequestId,
+        'created_at' => now(),
+        'updated_at' => now(),
+    ]
+);
 
-          $update = DB::table('forms_data')->updateOrInsert(
-            [
-              'dossier_id' => '' . $dossier->id . '',
-              'form_id' => '' . $request->form_id . '',
-              'meta_key' => 'document_id'
-            ],
-            [
-              'meta_value' => $documentId,
-              'created_at' => now(),
-              'updated_at' => now()
-            ]
-          );
+
+      $update = FormData::updateOrCreate(
+    [
+        'dossier_id' => (string) $dossier->id,
+        'form_id' => (string) $request->form_id,
+        'meta_key' => 'document_id',
+    ],
+    [
+        'meta_value' => $documentId,
+        'created_at' => now(),
+        'updated_at' => now(),
+    ]
+);
+
           if ($dossier && $dossier->etape) {
             $orderColumn = $dossier->etape->order_column;
         } else {

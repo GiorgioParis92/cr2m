@@ -7,6 +7,7 @@ use App\Models\Client;
 use App\Models\Fiche;
 use App\Models\User;
 use App\Models\Dossier;
+use App\Models\DossiersData;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Http; 
@@ -162,17 +163,20 @@ class BeneficiaireController extends Controller
             ]);
          
             foreach($validated as $key=>$value) {
-                \DB::table('dossiers_data')->updateOrInsert(
+             
+
+
+                DossiersData::updateOrCreate(
                     [
                         'dossier_id' => $dossier->id,
                         'meta_key' => $key
                     ],
                     [
                         'meta_value' => $value ?? '',
-                        'created_at' => now(),
                         'updated_at' => now()
                     ]
                 );
+
             }
 
             // Ensure dossier is created before redirecting
