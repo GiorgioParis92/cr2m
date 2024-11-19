@@ -1,4 +1,4 @@
-<div wire:poll>
+<div >
 
     <div wire:loading wire:target="add_row,remove_row,display_form,setTab" class="loader-overlay">
         <!-- Your loader content, e.g., a spinner -->
@@ -142,7 +142,7 @@
 
             <div class="card form-register">
                 <div class="steps clearfix">
-                    <div class="" wire:poll>
+                    <div class="" >
                         <input type="hidden" id="current_etape" value="{{ $tab }}">
                         <div class="row etapes_row mt-5 only_responsive">
                             Etape :
@@ -381,7 +381,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="table-responsive" wire:poll>
+                                    <div class="table-responsive" >
 
 
                                         <table class="table align-items-center">
@@ -422,7 +422,7 @@
                             <div class="">
                                 <h4>{{ $form->form->form_title }}</h4>
 
-                                <form wire:submit.prevent="submit" wire:poll="refresh">
+                                <form wire:submit.prevent="submit" >
                                     @csrf
                                     <input type="hidden" name="form_id" value="{{ $form->form->id }}">
                                     <input type="hidden" name="dossier_id" value="{{ $dossier->id }}">
