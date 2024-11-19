@@ -35,7 +35,7 @@ class Button extends AbstractFormData
 
 
 
-        $data = $this->value;
+        $data = '';
         if(!$this->value) {
         $data .= '<div>';
         $data .= '<div  class="btn btn-primary" onclick="sendApiRequest(this)" ';
