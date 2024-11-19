@@ -185,7 +185,11 @@
             'ballon_solaire',
         
             'poele',
-          
+            'fenetre_1',
+            'fenetre_2',
+            'porte_fenetre_1',
+            'porte_fenetre_2',
+            'porte',
             'rampants',
             'solaire',
             '3k',
