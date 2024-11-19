@@ -49,10 +49,10 @@ class Title extends AbstractFormData
         }
        
         $data= '<div class="row"><div class="col-12 form_title"><h6>'.$this->config->title.'</h6></div></div>';
-        // if(!$this->value) {
-        //     $this->value=$this->config->title;
-        //     // $this->save_value();
-        // }
+         if(!$this->value) {
+             $this->value=$this->config->title;
+             // $this->save_value();
+         }
 
         return $data;
     }
