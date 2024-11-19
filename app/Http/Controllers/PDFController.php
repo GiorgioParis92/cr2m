@@ -12,6 +12,7 @@ use App\Models\Beneficiaire;
 use App\Models\Client;
 use App\Models\Fiche;
 use App\Models\FormsData;
+use App\Models\FormConfig;
 use App\Models\Rdv;
 use App\Models\Dossier;
 use Illuminate\Support\Facades\DB;
