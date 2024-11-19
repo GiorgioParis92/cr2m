@@ -4,6 +4,7 @@ namespace App\FormModel\FormData;
 
 use Illuminate\Support\Facades\DB;
 use App\Models\Dossier;
+use App\Models\FormsData;
 use Illuminate\Support\Facades\Schema;
 
 class AbstractFormData
@@ -104,7 +105,19 @@ class AbstractFormData
 
 
 
-        DB::table('forms_data')->updateOrInsert(
+        // DB::table('forms_data')->updateOrInsert(
+        //     [
+        //         'dossier_id' => $this->dossier_id,
+        //         'form_id' => $this->form_id,
+        //         'meta_key' => $this->name
+        //     ],
+        //     [
+        //         'meta_value' => $value ?? null,
+        //         'created_at' => now(),
+        //         'updated_at' => now()
+        //     ]
+        // );
+        $update = FormsData::updateOrCreate(
             [
                 'dossier_id' => $this->dossier_id,
                 'form_id' => $this->form_id,
@@ -112,11 +125,8 @@ class AbstractFormData
             ],
             [
                 'meta_value' => $value ?? null,
-                'created_at' => now(),
-                'updated_at' => now()
             ]
         );
-
 
         // $maxRetries = 5; // Number of retries
         // $attempts = 0;
