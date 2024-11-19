@@ -102,18 +102,23 @@ class AbstractFormData
     {
         $value = $this->generate_value();
 
-        DB::table('forms_data')->updateOrInsert(
-            [
-                'dossier_id' => $this->dossier_id,
-                'form_id' => $this->form_id,
-                'meta_key' => $this->name
-            ],
-            [
-                'meta_value' => $value ?? null,
-                'created_at' => now(),
-                'updated_at' => now()
-            ]
-        );
+        DB::statement('SET TRANSACTION ISOLATION LEVEL READ COMMITTED');
+        DB::transaction(function () {
+            DB::table('forms_data')->updateOrInsert(
+                [
+                    'dossier_id' => $this->dossier_id,
+                    'form_id' => $this->form_id,
+                    'meta_key' => $this->name
+                ],
+                [
+                    'meta_value' => $value ?? null,
+                    'created_at' => now(),
+                    'updated_at' => now()
+                ]
+            );
+        });
+
+
 
         if($this->check_value()) {
         if ($this->form_id == 3 || $this->form_id == 10) {
