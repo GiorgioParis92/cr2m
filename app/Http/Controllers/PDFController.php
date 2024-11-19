@@ -49,7 +49,7 @@ class PDFController extends Controller
 
         if (isset($request->form_id)) {
 
-      $formConfig = FormConfig::where('form_id', $request->form_id)
+      $form_config = FormConfig::where('form_id', $request->form_id)
     ->where('name', $request->name)
     ->first();
 
