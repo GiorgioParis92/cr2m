@@ -68,6 +68,8 @@
 </head>
 
 <body class="g-sidenav-show bg-gray-100">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
     {{-- @include('frontend.sidebar')  --}}
     <main class="main-content position-relative  h-100 border-radius-lg">
         @include('frontend.navbar')
@@ -1090,21 +1092,35 @@ $('#pdfModal').css('display', 'block');
         function capitalizeFirstLetter(string) {
             return string.charAt(0).toUpperCase() + string.slice(1);
         }
+  // Function to check if a file URL exists (using a HEAD request)
+  function checkFileExists(fileUrl) {
+    return new Promise((resolve) => {
+        $.ajax({
+            url: fileUrl,
+            type: 'HEAD', // We only check for existence
+            success: function() {
+                resolve(true);  // File exists
+            },
+            error: function() {
+                resolve(false); // File does not exist
+            }
+        });
+    });
+}
 
 
+// Function to send API request
 function sendApiRequest(button) {
-    // Retrieve data from the button's data attributes
     const formData = new FormData();
     const dataAttributes = button.dataset;
-            console.log(dataAttributes)
+    const form_id = dataAttributes.formId;
+
     // Append all data attributes to the FormData object
     for (let key in dataAttributes) {
-        console.log(key)
-        console.log(dataAttributes[key])
         formData.append(key, dataAttributes[key]);
     }
-    console.log(formData)
-    // Append files to FormData
+
+    // Append files from file inputs to the FormData
     const fileInputs = document.querySelectorAll('input[type="file"][name="file[]"]');
     fileInputs.forEach(input => {
         if (input.files.length > 0) {
@@ -1113,7 +1129,43 @@ function sendApiRequest(button) {
             }
         }
     });
+    console.log(dataAttributes)
+    // Handle file URLs from the 'dataFiles' attribute
+    if (dataAttributes.files) {
+        const dataFiles = dataAttributes.files.split(';').filter(url => url.trim()); // Split by ';' and remove empty strings
+        let fileExistPromises = dataFiles.map(fileUrl => {
+            // Construct the full URL to the file in public storage (adjust if needed)
+            const fileFullUrl = `/storage/${fileUrl.trim()}`;
+            console.log(fileFullUrl)
+            return checkFileExists(fileFullUrl).then(exists => {
+                if (exists) {
+                    console.log('File exists:', fileFullUrl);
+                    // Example: You can download and append the file to formData if needed
+                    formData.append('file[]', fileFullUrl);
+                } else {
+                    console.log('File does not exist:', fileFullUrl);
+                }
+            });
+        });
+        console.log(fileExistPromises)
+        // After all files have been checked, send the API request
+        Promise.all(fileExistPromises).then(() => {
+            sendRequestToApi(formData, form_id);
+        });
+    } else {
+        // If no 'dataFiles' attribute exists, send the request directly
+        sendRequestToApi(formData, form_id);
+    }
+}
 
+// Function to send API request
+function sendRequestToApi(formData, form_id) {
+
+
+    console.log(formData)
+    console.log(form_id)
+    return false;
+    // Now, send the final request once the checks are complete
     $.ajax({
         url: 'https://crm.elitequalityinspection.fr/api/demandes/new',
         type: 'POST',
@@ -1121,38 +1173,37 @@ function sendApiRequest(button) {
         processData: false,
         contentType: false,
         headers: {
-        'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI3IiwianRpIjoiZDlhNDcwYWMzMGJlYTRjYzk3N2JiY2Y4MDNmMGZlODhiYzVkZjEzZWVkNzY1NjYzMjhjZjEwN2RjY2EwMDc4NjNmOTM5NzNkMWIzMGJkYmUiLCJpYXQiOjE3MzE5Mzc3MTkuNTk0MTQsIm5iZiI6MTczMTkzNzcxOS41OTQxNDIsImV4cCI6MTc2MzQ3MzcxOS41OTAwMTksInN1YiI6IjEiLCJzY29wZXMiOltdfQ.kNQzzdJypKAPTFT5vDTrcS7ltOiMwAgrCKpI91LhsNBjqrgoxAB56O5KBwB-T7SQZKboH7-O5Y-wsNKfAKg7C-95su-JkYvFI5SHMYZuv3TTw4GeDQm0F-qf_g5ydvINhthQu0x4Uv11gV_jTG8DTmKUuBsiC2htih0vXOJBiV0MopcWyIUfshP3BeSp-sgOG05b_ojWGrBvAy20mHk8ZgJzWovakOn4Ki2I-040vl2yiRiWqKV3vUCeVoKGmj6npCxcZCQZUE-5pd7j_FTZdZiVEPiwsZiDSpzGBCpkiD6WHKf_fojt_c850PmMjT2MsdOiv2EqR5vnIvsoPBnsjMnbA4KSvJrZADQRA1cqKl3Igp0TmBivwO9VC3PiGUjwG2bBbBwO-j5XKodW7NRPSRCBGOfwJLD_mQR_TYgjBRrSKIkzZOWqa8henrade2FH60-_G5BQmUwycj43pMd1ws7qtXUOE-xiIAVV_-bN8jthsAzMW8TLCwy4Z7ClkpaPBp0dqoxNOCw7dnxuKzcEdjP386hirryfSFlXN424sRvgP8t-Pl-MgvNKZZWWRMU6qAXU-4l6moLrz5RJNCQIKLmeyS4ObSkiB1OW21yZgPk_5kw_thGkM9B0SwaIeE_8S7BUW47TbOsgn0gPwvzj6zKjVu8mAT6Cjl9nl3vd_-0'  // Add the Bearer token here
-    },
+            'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI3IiwianRpIjoiZDlhNDcwYWMzMGJlYTRjYzk3N2JiY2Y4MDNmMGZlODhiYzVkZjEzZWVkNzY1NjYzMjhjZjEwN2RjY2EwMDc4NjNmOTM5NzNkMWIzMGJkYmUiLCJpYXQiOjE3MzE5Mzc3MTkuNTk0MTQsIm5iZiI6MTczMTkzNzcxOS41OTQxNDIsImV4cCI6MTc2MzQ3MzcxOS41OTAwMTksInN1YiI6IjEiLCJzY29wZXMiOltdfQ.kNQzzdJypKAPTFT5vDTrcS7ltOiMwAgrCKpI91LhsNBjqrgoxAB56O5KBwB-T7SQZKboH7-O5Y-wsNKfAKg7C-95su-JkYvFI5SHMYZuv3TTw4GeDQm0F-qf_g5ydvINhthQu0x4Uv11gV_jTG8DTmKUuBsiC2htih0vXOJBiV0MopcWyIUfshP3BeSp-sgOG05b_ojWGrBvAy20mHk8ZgJzWovakOn4Ki2I-040vl2yiRiWqKV3vUCeVoKGmj6npCxcZCQZUE-5pd7j_FTZdZiVEPiwsZiDSpzGBCpkiD6WHKf_fojt_c850PmMjT2MsdOiv2EqR5vnIvsoPBnsjMnbA4KSvJrZADQRA1cqKl3Igp0TmBivwO9VC3PiGUjwG2bBbBwO-j5XKodW7NRPSRCBGOfwJLD_mQR_TYgjBRrSKIkzZOWqa8henrade2FH60-_G5BQmUwycj43pMd1ws7qtXUOE-xiIAVV_-bN8jthsAzMW8TLCwy4Z7ClkpaPBp0dqoxNOCw7dnxuKzcEdjP386hirryfSFlXN424sRvgP8t-Pl-MgvNKZZWWRMU6qAXU-4l6moLrz5RJNCQIKLmeyS4ObSkiB1OW21yZgPk_5kw_thGkM9B0SwaIeE_8S7BUW47TbOsgn0gPwvzj6zKjVu8mAT6Cjl9nl3vd_-0'
+        },
         success: function(response) {
-            console.log(response);
-            var token = $('meta[name="api-token"]').attr('content');
+            console.log(response.demande_id);
+            var token = $('meta[name="csrf-token"]').attr('content');
 
-        $.ajax({
-        url: '../../api/dossiers_data/updateOrInsert',
-        type: 'POST',
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        },
-        data: {
-        "conditions": {
-            "meta_key": "demande_inspection",
-            "dossier_id": "{{$dossier->id ?? ''}}"
-        },
-        "update_data": {
-            "meta_value": response.demande_id
-        }
+            // Perform the second request after the first one completes successfully
+            $.ajax({
+                url: '../../api/forms_data/updateOrInsert',
+                type: 'POST',
+                headers: {
+                    'Authorization': 'Bearer {{auth()->user()->api_token ?? ''}}'
+                },
+                data: {
+        "conditions": JSON.stringify({
+            'meta_key': 'demande_inspection',
+            'dossier_id': '{{$dossier->id ?? ''}}',
+            'form_id' : form_id
+        }),
+        "update_data": JSON.stringify({
+            'meta_value': response.demande_id
+        })
     },
-      
-       
-        success: function(response) {
-            console.log(response);
-        },
-        error: function(xhr) {
-            console.log(xhr);
-            alert('An error occurred: ' + xhr.statusText);
-        }
-    });
-
+                success: function(response) {
+                    console.log(response);
+                },
+                error: function(xhr) {
+                    console.log(xhr);
+                    alert('An error occurred: ' + xhr.statusText);
+                }
+            });
         },
         error: function(xhr) {
             console.log(xhr);
