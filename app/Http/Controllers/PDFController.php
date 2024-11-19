@@ -469,7 +469,7 @@ class PDFController extends Controller
             [
                 'dossier_id' => $dossier->id,
                 'form_id'    => $request->form_id,
-                'meta_key'   => $request->template
+                'meta_key'   => $request->name
             ],
             [
                 'meta_value' => $directPath
