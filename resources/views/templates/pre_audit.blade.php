@@ -247,7 +247,9 @@
                     @endif
 
               
-                   
+                    @if(  $value=='fenetre_1' || $value=='fenetre_2' || $value=='porte_fenetre_1' || $value=='porte_fenetre_2' || $value=='porte'  )
+                    Surface :  {{$all_data[$value.'_surface_s'.$i] ?? ''}}<br/>
+                    @endif
                
                     @if($value=='3k' || $value=='4k' || $value=='6k' )
                     @if($value=='3k') 3 @endif
