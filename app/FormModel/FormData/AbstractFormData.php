@@ -103,7 +103,8 @@ class AbstractFormData
         $value = $this->generate_value();
 
 
-        
+        DB::transaction(function () use ($this) {
+
         DB::table('forms_data')->updateOrInsert(
             [
                 'dossier_id' => $this->dossier_id,
@@ -116,6 +117,7 @@ class AbstractFormData
                 'updated_at' => now()
             ]
         );
+        }, 5); // The second parameter specifies the number of attempts
 
 
         // $maxRetries = 5; // Number of retries
