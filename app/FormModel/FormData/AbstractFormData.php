@@ -5,6 +5,7 @@ namespace App\FormModel\FormData;
 use Illuminate\Support\Facades\DB;
 use App\Models\Dossier;
 use App\Models\FormsData;
+use App\Models\DossiersData;
 use Illuminate\Support\Facades\Schema;
 
 class AbstractFormData
@@ -31,16 +32,14 @@ class AbstractFormData
 
 
         if ($should_load) {
-            $config = \DB::table('forms_data')
-                ->where('form_id', $form_id)
-                ->where('dossier_id', $dossier_id)
-                ->where('meta_key', $name)
-                ->first();
+            $config = FormsData::where('form_id', $form_id)
+            ->where('dossier_id', $dossier_id)
+            ->where('meta_key', $name)
+            ->first();
 
-            $config_dossiers = \DB::table('dossiers_data')
-                ->where('dossier_id', $dossier_id)
-                ->where('meta_key', $name)
-                ->first();
+            $config_dossiers = DossiersData::where('dossier_id', $dossier_id)
+            ->where('meta_key', $name)
+            ->first();
             $this->value = $config->meta_value ?? '';
 
             $this->prediction = $config_dossiers->meta_value ?? '';
@@ -171,7 +170,7 @@ class AbstractFormData
 
         if($this->check_value()) {
         if ($this->form_id == 3 || $this->form_id == 10) {
-            $beneficiaire = DB::table('dossiers')->where('id', $this->dossier_id)->first();
+            $beneficiaire = Dossier::find($this->dossier_id);
 
             if ($beneficiaire) {
                 $columnExists = DB::getSchemaBuilder()->hasColumn('beneficiaires', $this->name);
