@@ -48,10 +48,10 @@ class PDFController extends Controller
 
         if (isset($request->form_id)) {
 
-            $form_config = DB::table('forms_config')
-                ->where('form_id', $request->form_id)
-                ->where('name', $request->name)
-                ->first();
+      $formConfig = FormConfig::where('form_id', $request->form_id)
+    ->where('name', $request->name)
+    ->first();
+
 
             $config = json_decode($form_config->options);
             $validated['generation'] = $config->on_generation ?? [];
@@ -112,18 +112,6 @@ class PDFController extends Controller
 
 
 
-            // $update = DB::table('forms_data')->updateOrInsert(
-            //     [
-            //         'dossier_id' => '' . $dossier->id . '',
-            //         'form_id' => '' . $request->form_id . '',
-            //         'meta_key' => '' . $request->name . ''
-            //     ],
-            //     [
-            //         'meta_value' => '' . $directPath . '',
-            //         'created_at' => now(),
-            //         'updated_at' => now()
-            //     ]
-            // );
 
             $update = FormsData::updateOrCreate(
                 [
@@ -256,11 +244,11 @@ class PDFController extends Controller
         }
 
         if (isset($validated['dossier_id'])) {
-            $config = \DB::table('forms_config')
-                ->where('form_id', $request->form_id)
-                ->where('name', $request->name)
-                ->where('type', 'fillable')
-                ->first();
+           $config = FormConfig::where('form_id', $request->form_id)
+    ->where('name', $request->name)
+    ->where('type', 'fillable')
+    ->first();
+
 
             $jsonString = str_replace(["\n", '', "\r"], '', $config->options);
             $optionsArray = json_decode($jsonString, true);
@@ -377,13 +365,11 @@ class PDFController extends Controller
                     }
                     if (isset($fill_data_config["img"])) {
                         if (isset($fill_data_config['signature'])) {
-                            $dossier = DB::table('dossiers')
-                                ->where('folder', $dossier->folder)
-                                ->first();
+                          $dossier = Dossier::where('folder', $dossier->folder)->first();
 
-                            $client = DB::table('clients')
-                                ->where('id', $dossier->mar)
-                                ->first();
+
+                       $client = Client::where('id', $dossier->mar)->first();
+
 
                             $signature_client = $client->signature ?? '';
 
@@ -452,18 +438,7 @@ class PDFController extends Controller
         Storage::put($filePath, $pdfContent);
         $dossier = Dossier::where('folder', $dossier->folder)->first();
 
-        // $update = DB::table('forms_data')->updateOrInsert(
-        //     [
-        //         'dossier_id' => '' . $dossier->id . '',
-        //         'form_id' => '' . $request->form_id . '',
-        //         'meta_key' => '' . $request->name . ''
-        //     ],
-        //     [
-        //         'meta_value' => '' . $directPath . '',
-        //         'created_at' => now(),
-        //         'updated_at' => now()
-        //     ]
-        // );
+      
 
         $update = FormsData::updateOrCreate(
             [
@@ -541,10 +516,10 @@ class PDFController extends Controller
 
 
         if (isset($request->form_id)) {
-            $config = \DB::table('forms_config')
-                ->where('form_id', $request->form_id)
-                ->where('name', $request->template ?? $request->name)
-                ->first();
+       $config = FormConfig::where('form_id', $request->form_id)
+    ->where('name', $request->template ?? $request->name)
+    ->first();
+
 
             $jsonString = str_replace(["\n", '', "\r"], '', $config->options);
             $optionsArray = json_decode($jsonString, true);
@@ -559,9 +534,11 @@ class PDFController extends Controller
 
         // dump($timeAfterDossier);
         foreach ($configs as $config_id) {
-            $form = DB::table('forms')->where('id', $config_id)->first();
+$form = Form::where('id', $config_id)->first();
 
-            $config = DB::table('forms_config')->where('form_id', $config_id)->orderBy('ordering')->get();
+$config = FormConfig::where('form_id', $config_id)
+    ->orderBy('ordering')
+    ->get();
             $timeAfterConfig = microtime(true) - $startTime;
             $count++;
 
@@ -705,21 +682,7 @@ class PDFController extends Controller
         $timeafterstore = microtime(true) - $startTime;
 
 
-        // dump($timeafterstore);
-
-
-        // $update = DB::table('forms_data')->updateOrInsert(
-        //     [
-        //         'dossier_id' => '' . $dossier->id . '',
-        //         'form_id' => '' . $request->form_id . '',
-        //         'meta_key' => '' . $request->template . ''
-        //     ],
-        //     [
-        //         'meta_value' => '' . $directPath . '',
-        //         'created_at' => now(),
-        //         'updated_at' => now()
-        //     ]
-        // );
+     
 
         $update = FormsData::updateOrCreate(
             [

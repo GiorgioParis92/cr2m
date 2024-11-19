@@ -126,18 +126,18 @@ class YouSignStatus extends Controller
      
         if ($responseData->result->data->document->status == 'ongoing') {
 
-          $update = DB::table('forms_data')->updateOrInsert(
-            [
-              'dossier_id' => '' . $dossier->id . '',
-              'form_id' => '' . $request->form_id . '',
-              'meta_key' => 'signature_status'
-            ],
-            [
-              'meta_value' => 'ongoing',
-              'created_at' => now(),
-              'updated_at' => now()
-            ]
-          );
+ $update = FormData::updateOrCreate(
+    [
+        'dossier_id' => (string) $dossier->id,
+        'form_id' => (string) $request->form_id,
+        'meta_key' => 'signature_status',
+    ],
+    [
+        'meta_value' => 'ongoing',
+        'updated_at' => now(),
+    ]
+);
+
           if ($dossier && $dossier->etape) {
             $orderColumn = $dossier->etape->order_column;
         } else {
@@ -153,18 +153,18 @@ class YouSignStatus extends Controller
 
         if ($responseData->result->data->document->status == 'done') {
 
-          $update = DB::table('forms_data')->updateOrInsert(
-            [
-              'dossier_id' => '' . $dossier->id . '',
-              'form_id' => '' . $request->form_id . '',
-              'meta_key' => 'signature_status'
-            ],
-            [
-              'meta_value' => 'done',
-              'created_at' => now(),
-              'updated_at' => now()
-            ]
-          );
+     $update = FormData::updateOrCreate(
+    [
+        'dossier_id' => (string) $dossier->id,
+        'form_id' => (string) $request->form_id,
+        'meta_key' => 'signature_status',
+    ],
+    [
+        'meta_value' => 'done',
+        'updated_at' => now(),
+    ]
+);
+
 
           if ($dossier && $dossier->etape) {
             $orderColumn = $dossier->etape->order_column;
@@ -297,18 +297,18 @@ class YouSignStatus extends Controller
               } else {
                 file_put_contents($outputFile, $response);
 
-                $update = DB::table('forms_data')->updateOrInsert(
-                  [
-                    'dossier_id' => '' . $dossier->id . '',
-                    'form_id' => '' . $request->form_id . '',
-                    'meta_key' => 'signature_status'
-                  ],
-                  [
-                    'meta_value' => 'finish',
-                    'created_at' => now(),
-                    'updated_at' => now()
-                  ]
-                );
+           $update = FormData::updateOrCreate(
+    [
+        'dossier_id' => (string) $dossier->id,
+        'form_id' => (string) $request->form_id,
+        'meta_key' => 'signature_status',
+    ],
+    [
+        'meta_value' => 'finish',
+        'updated_at' => now(),
+    ]
+);
+
                 if ($dossier && $dossier->etape) {
                   $orderColumn = $dossier->etape->order_column;
               } else {
@@ -345,18 +345,19 @@ class YouSignStatus extends Controller
         }
 
 
-        $update = DB::table('forms_data')->updateOrInsert(
-          [
-            'dossier_id' => '' . $dossier->id . '',
-            'form_id' => '' . $request->form_id . '',
-            'meta_key' => '' . $request->template . ''
-          ],
-          [
-            'meta_value' => '' . $directPath . '',
-            'created_at' => now(),
-            'updated_at' => now()
-          ]
-        );
+  $update = FormData::updateOrCreate(
+    [
+        'dossier_id' => (string) $dossier->id,
+        'form_id' => (string) $request->form_id,
+        'meta_key' => (string) $request->template,
+    ],
+    [
+        'meta_value' => (string) $directPath,
+        'created_at' => now(),
+        'updated_at' => now(),
+    ]
+);
+
 
 
 

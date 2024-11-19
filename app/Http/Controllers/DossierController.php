@@ -7,6 +7,9 @@ use App\Models\Client;
 use App\Models\Fiche;
 use App\Models\Dossier;
 use App\Models\ClientLinks;
+use App\Models\Departement;
+use App\Models\Status;
+use App\Models\DossiersData;
 use App\Models\Etape;
 use App\Models\Status;
 use App\Models\RdvStatus;
@@ -71,12 +74,14 @@ class DossierController extends Controller
         $installateurs = Client::where('type_client', 3)->get();
         $fiches = Fiche::all();
 
-        $departments = DB::table('departement')->get()->map(function($department) {
-            return (array) $department; // Convert stdClass to array
-        })->toArray();
-        $status = Status::select(DB::raw('MIN(id) as id'), 'status_desc')
-            ->groupBy('status_desc')
-            ->get();
+  $departments = Departement::all()->map(function ($department) {
+    return $department->toArray();
+})->toArray();
+
+// Fetch status with grouped status descriptions and minimum ID
+$status = Status::selectRaw('MIN(id) as id, status_desc')
+    ->groupBy('status_desc')
+    ->get();
 
         return view('dossiers.index_new', compact('dossiers', 'etapes', 'status', 'mars', 'financiers', 'fiches', 'installateurs','departments'));
     }
@@ -162,26 +167,27 @@ class DossierController extends Controller
             ->with('beneficiaire', 'fiche', 'etape', 'status')
             ->first();
        
-            $current=DB::table('etapes')->where('id', $dossier->etape_number)->first();
+$current = Etape::where('id', $dossier->etape_number)->first();
         
             $current_plus=(($current->order_column)+1);
            
 
-        $next=DB::table('etapes')->where('order_column', ($current->order_column+1))->first();
+$next = Etape::where('order_column', $current->order_column + 1)->first();
         if($next) {
             $next_etape = $next->id;
-            DB::table('dossiers_data')->updateOrInsert(
-                [
-                    'dossier_id' => $dossier->id,
-                    'meta_key' => 'step_'.$dossier->etape_number,
-                    'user_id' => auth()->user()->id ?? 0
-                ],
-                [
-                    'meta_value' => now(),
-                    'created_at' => now(),
-                    'updated_at' => now()
-                ]
-            );
+        DossierData::updateOrCreate(
+    [
+        'dossier_id' => $dossier->id,
+        'meta_key' => 'step_' . $dossier->etape_number,
+        'user_id' => auth()->user()->id ?? 0,
+    ],
+    [
+        'meta_value' => now(),
+        'created_at' => now(),
+        'updated_at' => now(),
+    ]
+);
+
        
             Dossier::where('id', $id)->update([
                 'etape_number' => $next_etape,

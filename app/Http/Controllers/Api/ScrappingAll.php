@@ -81,17 +81,18 @@ class ScrappingAll extends Controller
                 foreach ($data['elements'] as $element) {
                     // Assuming you want to save the status as 'text'
           
-                        \DB::table('dossiers_data')->updateOrInsert(
-                            [
-                                'dossier_id' => $dossier->id,
-                                'meta_key' => $tag
-                            ],
-                            [
-                                'meta_value' => $element['text'] ?? '',
-                                'created_at' => now(),
-                                'updated_at' => now()
-                            ]
-                        );
+        DossierData::updateOrCreate(
+    [
+        'dossier_id' => $dossier->id,
+        'meta_key' => $tag,
+    ],
+    [
+        'meta_value' => $element['text'] ?? '',
+        'created_at' => now(),
+        'updated_at' => now(),
+    ]
+);
+
 
 
                         $value=$element['text'];
@@ -101,29 +102,29 @@ class ScrappingAll extends Controller
                             $value = isset($matches[0]) ? $matches[0] : null;
                             $tag;
                             if($value>0) {
-                                \DB::table('dossiers_data')->updateOrInsert(
-                                    [
-                                        'dossier_id' => $dossier->id,
-                                        'meta_key' => 'subvention'
-                                    ],
-                                    [
-                                        'meta_value' => $value ?? '',
-                                        'created_at' => now(),
-                                        'updated_at' => now()
-                                    ]
-                                );
+                       DossierData::updateOrCreate(
+    [
+        'dossier_id' => $dossier->id,
+        'meta_key' => 'subvention',
+    ],
+    [
+        'meta_value' => $value ?? '',
+        'updated_at' => now(),
+    ]
+);
 
-                                \DB::table('dossiers_data')->updateOrInsert(
-                                    [
-                                        'dossier_id' => $dossier->id,
-                                        'meta_key' => 'Statut du dossier'
-                                    ],
-                                    [
-                                        'meta_value' => 'Subvention accordée' ?? '',
-                                        'created_at' => now(),
-                                        'updated_at' => now()
-                                    ]
-                                );
+
+                          DossierData::updateOrCreate(
+    [
+        'dossier_id' => $dossier->id,
+        'meta_key' => 'Statut du dossier',
+    ],
+    [
+        'meta_value' => 'Subvention accordée',
+        'updated_at' => now(),
+    ]
+);
+
 
                             }
                  
