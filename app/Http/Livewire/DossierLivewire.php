@@ -4,7 +4,7 @@ namespace App\Http\Livewire;
 
 use Livewire\Component;
 use App\Models\{
-    Dossier, Etape, DossiersActivity, User, Form, Rdv, RdvStatus, Client, Card
+    Dossier, Etape, DossiersActivity, User, Form, Rdv, RdvStatus, Client, Card, DossiersData, FormsData
 };
 use App\FormModel\{
     FormConfigHandler, EtapeValidator
@@ -87,10 +87,10 @@ class DossierLivewire extends Component
         $this->financiers = Client::where('type_client', 2)->get()->toArray();
         $this->installateurs = Client::where('type_client', 3)->get()->toArray();
 
-        $stepData = DB::table('dossiers_data')
-        ->where('dossier_id', $id)
-        ->where('meta_key', 'like', '%step_%')
-        ->get(['meta_key', 'meta_value', 'user_id']);
+$stepData = DossiersData::where('dossier_id', $id)
+    ->where('meta_key', 'like', '%step_%')
+    ->get();
+
     
     $this->steps = [];
     foreach ($stepData as $item) {
@@ -232,11 +232,11 @@ class DossierLivewire extends Component
             $doc['last_etape_order'] = $this->last_etape_order ?? 1;
     
             if (isset($options['signable']) && $options['signable'] === "true") {
-                $doc['additional_data'] = DB::table('forms_data')
-                    ->where('dossier_id', $this->dossier->id)
-                    ->where('form_id', $result->form_id)
-                    ->get()
-                    ->toArray();
+               $doc['additional_data'] = FormData::where('dossier_id', $this->dossier->id)
+    ->where('form_id', $result->form_id)
+    ->get()
+    ->toArray();
+
             }
     
             $this->docs[] = $doc;
