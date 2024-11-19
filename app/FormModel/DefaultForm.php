@@ -4,6 +4,7 @@ namespace App\FormModel;
 
 use Illuminate\Support\Facades\DB;
 use App\Models\Dossier;
+use App\Models\FormsData;
 
 class DefaultForm
 {
@@ -118,7 +119,9 @@ class DefaultForm
 
         foreach ($data as $key=>$value) {
             if ($key && $key!='_token' && $key!='form_id') {
-                \DB::table('forms_data')->updateOrInsert(
+
+
+                $update = FormsData::updateOrCreate(
                     [
                         'dossier_id' => $dossierId,
                         'form_id' => $formId,
@@ -126,10 +129,21 @@ class DefaultForm
                     ],
                     [
                         'meta_value' => $value ?? null,
-                        'created_at' => now(),
-                        'updated_at' => now()
                     ]
                 );
+
+                // \DB::table('forms_data')->updateOrInsert(
+                //     [
+                //         'dossier_id' => $dossierId,
+                //         'form_id' => $formId,
+                //         'meta_key' => $key
+                //     ],
+                //     [
+                //         'meta_value' => $value ?? null,
+                //         'created_at' => now(),
+                //         'updated_at' => now()
+                //     ]
+                // );
             }
 
         }
