@@ -1114,7 +1114,7 @@ function sendApiRequest(button) {
     const formData = new FormData();
     const dataAttributes = button.dataset;
     var form_id = dataAttributes.form_id;
-    alert(form_id)
+    
     // Append all data attributes to the FormData object
     for (let key in dataAttributes) {
         formData.append(key, dataAttributes[key]);
