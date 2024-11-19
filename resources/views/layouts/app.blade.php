@@ -1113,8 +1113,8 @@ $('#pdfModal').css('display', 'block');
 function sendApiRequest(button) {
     const formData = new FormData();
     const dataAttributes = button.dataset;
-    const form_id = dataAttributes.formId;
-
+    var form_id = dataAttributes.form_id;
+    alert(form_id)
     // Append all data attributes to the FormData object
     for (let key in dataAttributes) {
         formData.append(key, dataAttributes[key]);
@@ -1161,10 +1161,8 @@ function sendApiRequest(button) {
 // Function to send API request
 function sendRequestToApi(formData, form_id) {
 
-
-    console.log(formData)
     console.log(form_id)
-    return false;
+
     // Now, send the final request once the checks are complete
     $.ajax({
         url: 'https://crm.elitequalityinspection.fr/api/demandes/new',
