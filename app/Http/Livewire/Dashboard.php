@@ -222,13 +222,30 @@ public function getDonutData()
  
 
 
-        $data = DB::table('etapes')
-        ->leftJoin('dossiers', 'dossiers.etape_number', '=', 'etapes.id')
-        ->select('etapes.id', 'etapes.etape_name', 'etapes.etape_desc', 'etapes.etape_icon', 'etapes.order_column', DB::raw('COUNT(dossiers.id) as dossier_count'))
-        ->groupBy('etapes.id', 'etapes.etape_name', 'etapes.etape_desc', 'etapes.etape_icon', 'etapes.order_column')
-        ->orderBy('etapes.order_column');
-        $data=$this->filter_dossiers($data);
-        $data =$data->get();
+ $data = Etape::leftJoin('dossiers', 'dossiers.etape_number', '=', 'etapes.id')
+    ->select(
+        'etapes.id',
+        'etapes.etape_name',
+        'etapes.etape_desc',
+        'etapes.etape_icon',
+        'etapes.order_column',
+        DB::raw('COUNT(dossiers.id) as dossier_count')
+    )
+    ->groupBy(
+        'etapes.id',
+        'etapes.etape_name',
+        'etapes.etape_desc',
+        'etapes.etape_icon',
+        'etapes.order_column'
+    )
+    ->orderBy('etapes.order_column');
+
+// Apply any additional filtering using the `filter_dossiers` method
+$data = $this->filter_dossiers($data);
+
+// Get the final result
+$data = $data->get();
+
     
 
 
