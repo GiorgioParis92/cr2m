@@ -11,6 +11,7 @@ use setasign\Fpdi\PdfReader;  // Import PdfReader if needed
 use App\Models\Beneficiaire;
 use App\Models\Client;
 use App\Models\Fiche;
+use App\Models\FormsData;
 use App\Models\Rdv;
 use App\Models\Dossier;
 use Illuminate\Support\Facades\DB;
@@ -111,18 +112,30 @@ class PDFController extends Controller
 
 
 
-            $update = DB::table('forms_data')->updateOrInsert(
+            // $update = DB::table('forms_data')->updateOrInsert(
+            //     [
+            //         'dossier_id' => '' . $dossier->id . '',
+            //         'form_id' => '' . $request->form_id . '',
+            //         'meta_key' => '' . $request->name . ''
+            //     ],
+            //     [
+            //         'meta_value' => '' . $directPath . '',
+            //         'created_at' => now(),
+            //         'updated_at' => now()
+            //     ]
+            // );
+
+            $update = FormsData::updateOrCreate(
                 [
-                    'dossier_id' => '' . $dossier->id . '',
-                    'form_id' => '' . $request->form_id . '',
-                    'meta_key' => '' . $request->name . ''
+                    'dossier_id' => $dossier->id,
+                    'form_id'    => $request->form_id,
+                    'meta_key'   => $request->template
                 ],
                 [
-                    'meta_value' => '' . $directPath . '',
-                    'created_at' => now(),
-                    'updated_at' => now()
+                    'meta_value' => $directPath
                 ]
             );
+
             if ($update) {
                 if ($dossier && $dossier->etape) {
                     $orderColumn = $dossier->etape->order_column;
@@ -439,18 +452,30 @@ class PDFController extends Controller
         Storage::put($filePath, $pdfContent);
         $dossier = Dossier::where('folder', $dossier->folder)->first();
 
-        $update = DB::table('forms_data')->updateOrInsert(
+        // $update = DB::table('forms_data')->updateOrInsert(
+        //     [
+        //         'dossier_id' => '' . $dossier->id . '',
+        //         'form_id' => '' . $request->form_id . '',
+        //         'meta_key' => '' . $request->name . ''
+        //     ],
+        //     [
+        //         'meta_value' => '' . $directPath . '',
+        //         'created_at' => now(),
+        //         'updated_at' => now()
+        //     ]
+        // );
+
+        $update = FormsData::updateOrCreate(
             [
-                'dossier_id' => '' . $dossier->id . '',
-                'form_id' => '' . $request->form_id . '',
-                'meta_key' => '' . $request->name . ''
+                'dossier_id' => $dossier->id,
+                'form_id'    => $request->form_id,
+                'meta_key'   => $request->template
             ],
             [
-                'meta_value' => '' . $directPath . '',
-                'created_at' => now(),
-                'updated_at' => now()
+                'meta_value' => $directPath
             ]
         );
+
         Dossier::where('id', $dossier->id)->update([
                 
             'updated_at' => now(),
@@ -683,18 +708,31 @@ class PDFController extends Controller
         // dump($timeafterstore);
 
 
-        $update = DB::table('forms_data')->updateOrInsert(
+        // $update = DB::table('forms_data')->updateOrInsert(
+        //     [
+        //         'dossier_id' => '' . $dossier->id . '',
+        //         'form_id' => '' . $request->form_id . '',
+        //         'meta_key' => '' . $request->template . ''
+        //     ],
+        //     [
+        //         'meta_value' => '' . $directPath . '',
+        //         'created_at' => now(),
+        //         'updated_at' => now()
+        //     ]
+        // );
+
+        $update = FormsData::updateOrCreate(
             [
-                'dossier_id' => '' . $dossier->id . '',
-                'form_id' => '' . $request->form_id . '',
-                'meta_key' => '' . $request->template . ''
+                'dossier_id' => $dossier->id,
+                'form_id'    => $request->form_id,
+                'meta_key'   => $request->template
             ],
             [
-                'meta_value' => '' . $directPath . '',
-                'created_at' => now(),
-                'updated_at' => now()
+                'meta_value' => $directPath
             ]
         );
+
+
         Dossier::where('id', $dossier->id)->update([
                 
             'updated_at' => now(),
