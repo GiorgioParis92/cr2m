@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\Dossier;
 use App\FormModel\FormData\AbstractFormData;
 use Illuminate\Http\Request;
+use App\Models\FormConfig;
 
 class FormConfigHandler
 {
@@ -28,10 +29,9 @@ class FormConfigHandler
     public function init()
     {
         // Retrieve form data
-        $formData = DB::table('forms_config')
-            ->where('form_id', $this->form->id)
-            ->orderBy('ordering')
-            ->get();
+        $formData = FormConfig::where('form_id', $this->form->id)
+        ->orderBy('ordering')
+        ->get();
 
         foreach ($formData as $value) {
             $className = $this->getFormDataClassName($value->type);
