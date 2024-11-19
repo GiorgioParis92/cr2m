@@ -232,7 +232,7 @@ $stepData = DossiersData::where('dossier_id', $id)
             $doc['last_etape_order'] = $this->last_etape_order ?? 1;
     
             if (isset($options['signable']) && $options['signable'] === "true") {
-               $doc['additional_data'] = FormData::where('dossier_id', $this->dossier->id)
+               $doc['additional_data'] = FormsData::where('dossier_id', $this->dossier->id)
     ->where('form_id', $result->form_id)
     ->get()
     ->toArray();
