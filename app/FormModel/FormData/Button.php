@@ -35,8 +35,8 @@ class Button extends AbstractFormData
 
 
 
-        $data = '';
-
+        $data = $this->value;
+        if(!$this->value) {
         $data .= '<div>';
         $data .= '<div  class="btn btn-primary" onclick="sendApiRequest(this)" ';
 
@@ -73,12 +73,40 @@ class Button extends AbstractFormData
             $data .= '"';
         }
 
+        if(isset($optionsArray['files'])) {
+            $data_files='';
+            foreach($optionsArray['files'] as $files) {
+                if(isset($array[$files])) {
+                    $data_files.=($array[$files] ?? '').';';
+                }
+               
+            }
+            $data .= 'data-';
+            $data .= 'files';
+            $data .= '="';
+            $data .= $data_files;
+            $data .= '"';
+        }
+
+
+        $data .= 'data-';
+        $data .= 'form_id';
+        $data .= '="';
+        $data .= $this->form_id;
+        $data .= '"';
 
         $data .= '>';
         $data .= $this->config->title;
         $data .= '</div>';
         $data .= '</div>';
-
+        } else {
+            $data .= '<div>';
+            $data .= '<a class="btn btn-success " target="_blank" href="https://crm.elitequalityinspection.fr/demandes/'.$this->value.'">Voir la demande d\'inspection sur ELITE';
+      
+            
+            $data .= '</a>';
+            $data .= '</div>';
+        }
 
 
         return $data;
