@@ -101,21 +101,45 @@ class AbstractFormData
     public function save_value()
     {
         $value = $this->generate_value();
-
-
         
-        DB::table('forms_data')->updateOrInsert(
-            [
-                'dossier_id' => $this->dossier_id,
-                'form_id' => $this->form_id,
-                'meta_key' => $this->name
-            ],
-            [
-                'meta_value' => $value ?? null,
-                'created_at' => now(),
-                'updated_at' => now()
-            ]
-        );
+        $maxRetries = 5; // Number of retries
+        $attempts = 0;
+    
+        while ($attempts < $maxRetries) {
+            try {    
+                DB::table('forms_data')->updateOrInsert(
+                    [
+                        'dossier_id' => $this->dossier_id,
+                        'form_id' => $this->form_id,
+                        'meta_key' => $this->name
+                    ],
+                    [
+                        'meta_value' => $value ?? null,
+                        'created_at' => now(),
+                        'updated_at' => now()
+                    ]
+                );
+    
+                // If no exception occurs, break out of the loop
+                return;
+            } catch (\Illuminate\Database\QueryException $e) {
+                $attempts++;
+    
+                // Check if the error is a deadlock issue
+                if ($e->getCode() == '40001' || str_contains($e->getMessage(), '1213 Deadlock')) {
+                    if ($attempts < $maxRetries) {
+                        // Wait for a short duration before retrying
+                        usleep(100000); // 100 milliseconds
+                    } else {
+                        // Re-throw the exception if max retries reached
+                        throw $e;
+                    }
+                } else {
+                    // Re-throw other exceptions
+                    throw $e;
+                }
+            }
+        }
 
         if($this->check_value()) {
         if ($this->form_id == 3 || $this->form_id == 10) {
