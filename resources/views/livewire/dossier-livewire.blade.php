@@ -302,7 +302,7 @@
                             <div class="col-lg-12">
                                 <h3 class="border-bottom border-gray pb-2 p-2">{{ $etape_display['etape_desc'] }}
                                     @if ($tab == $dossier->etape_number)
-                                        @if (is_user_allowed('validate_' . $etape_display['etape_name']) || auth()->user()->typr_id==1)
+                                        @if (is_user_allowed('validate_' . $etape_display['etape_name']) || auth()->user()->type_id==1)
                                         @if (auth()->user()->client->type_client != 3)
                                             <div class="col-lg-6">
                                                 <a class="btn btn-primary"
