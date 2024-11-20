@@ -175,7 +175,7 @@ $current = Etape::where('id', $dossier->etape_number)->first();
 $next = Etape::where('order_column', $current->order_column + 1)->first();
         if($next) {
             $next_etape = $next->id;
-        DossierData::updateOrCreate(
+        DossiersData::updateOrCreate(
     [
         'dossier_id' => $dossier->id,
         'meta_key' => 'step_' . $dossier->etape_number,
