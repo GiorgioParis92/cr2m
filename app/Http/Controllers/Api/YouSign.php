@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\Process\Process;
 use App\Models\Dossier;
+use App\Models\FormConfig;
 use App\Models\Users;
 use Illuminate\Http\RedirectResponse;
 use App\Models\Tags;
