@@ -11,6 +11,7 @@ use setasign\Fpdi\PdfReader;  // Import PdfReader if needed
 use App\Models\Beneficiaire;
 use App\Models\Client;
 use App\Models\Fiche;
+use App\Models\Form;
 use App\Models\FormsData;
 use App\Models\FormConfig;
 use App\Models\Rdv;
