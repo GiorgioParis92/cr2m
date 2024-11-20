@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Symfony\Component\Process\Process;
 use App\Models\Dossier;
 use App\Models\FormConfig;
+use App\Models\FormsData;
 use App\Models\Users;
 use Illuminate\Http\RedirectResponse;
 use App\Models\Tags;
@@ -188,7 +189,7 @@ class YouSign extends Controller
           $documentId = $resultData->document_id ?? '';
 
 
-      $update = FormData::updateOrCreate(
+      $update = FormsData::updateOrCreate(
     [
         'dossier_id' => (string) $dossier->id,
         'form_id' => (string) $request->form_id,
@@ -202,7 +203,7 @@ class YouSign extends Controller
 );
 
 
-      $update = FormData::updateOrCreate(
+      $update = FormsData::updateOrCreate(
     [
         'dossier_id' => (string) $dossier->id,
         'form_id' => (string) $request->form_id,
