@@ -16,6 +16,8 @@ use App\Models\RequiredDocs;
 use phpseclib3\Net\SSH2;
 use phpseclib3\Net\SFTP;
 use Illuminate\Support\Facades\Storage;
+use App\Models\FormConfig;
+use App\Models\FormsData;
 
 class YouSignStatus extends Controller
 {
@@ -126,7 +128,7 @@ class YouSignStatus extends Controller
      
         if ($responseData->result->data->document->status == 'ongoing') {
 
- $update = FormData::updateOrCreate(
+ $update = FormsData::updateOrCreate(
     [
         'dossier_id' => (string) $dossier->id,
         'form_id' => (string) $request->form_id,
@@ -153,7 +155,7 @@ class YouSignStatus extends Controller
 
         if ($responseData->result->data->document->status == 'done') {
 
-     $update = FormData::updateOrCreate(
+     $update = FormsData::updateOrCreate(
     [
         'dossier_id' => (string) $dossier->id,
         'form_id' => (string) $request->form_id,
@@ -297,7 +299,7 @@ class YouSignStatus extends Controller
               } else {
                 file_put_contents($outputFile, $response);
 
-           $update = FormData::updateOrCreate(
+           $update = FormsData::updateOrCreate(
     [
         'dossier_id' => (string) $dossier->id,
         'form_id' => (string) $request->form_id,
@@ -345,7 +347,7 @@ class YouSignStatus extends Controller
         }
 
 
-  $update = FormData::updateOrCreate(
+  $update = FormsData::updateOrCreate(
     [
         'dossier_id' => (string) $dossier->id,
         'form_id' => (string) $request->form_id,
