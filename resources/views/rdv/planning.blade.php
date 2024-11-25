@@ -202,7 +202,7 @@
                             var duration = 1.5;
                         }
 
-
+                        console.log(rdv)
                         var eventEnd = new Date(eventStart.getTime() + (duration * 60 * 60 *
                             1000)); // Add 1 hour to the start date
 
@@ -211,7 +211,7 @@
 
 
                             var event = {
-                                title: '111' + (rdv.user_name ?? '') + '<br/>' + (rdv.nom ?? '') +
+                                title: '' + (rdv.user_name ?? '') + '<br/>' + (rdv.nom ?? '') +
                                     ' ' + (rdv.prenom ?? '') + (rdv.type_rdv == 3 ?
                                         'Indisponibilité' : '') + (rdv.type_rdv == 4 ? 'Congés' :
                                         ''),
