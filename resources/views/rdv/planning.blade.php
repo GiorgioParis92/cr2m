@@ -202,6 +202,11 @@
                             var duration = 1.5;
                         }
 
+
+                        if(rdv.type_rdv==2) {
+                            var duration = 0.5;
+                        }
+
                         console.log(rdv)
                         var eventEnd = new Date(eventStart.getTime() + (duration * 60 * 60 *
                             1000)); // Add 1 hour to the start date
