@@ -12,9 +12,8 @@ class DynamicModelController extends \App\Http\Controllers\Controller
     // Resolve the model name dynamically
     protected function getModelInstance($modelName)
     {
-  
         $modelClass = 'App\\Models\\' . Str::studly($modelName);
-       
+
         if (!class_exists($modelClass)) {
             throw new ModelNotFoundException("Model $modelName not found.");
         }
@@ -22,27 +21,45 @@ class DynamicModelController extends \App\Http\Controllers\Controller
         return new $modelClass;
     }
 
-    // Fetch all records with dynamic filtering
-    public function index(Request $request, $modelName)
+    // Fetch all records with relations
+    public function index($modelName)
     {
-
-        
         $model = $this->getModelInstance($modelName);
-        $query = $model::query();
-        
-        // Apply filters dynamically based on request
-        foreach ($request->all() as $field => $value) {
-          
-                $query->where($field, $value);
-            
-        }
-        
-        // Apply pagination or return all results
-        if ($request->has('paginate')) {
-            return response()->json($query->paginate($request->input('paginate')));
+
+        // Get the relationships defined in the model
+        $relations = $this->getModelRelations($model);
+
+        // Fetch records with the relations
+        $records = $model::with($relations)->get();
+
+        return view("index", compact('records', 'modelName'));
+    }
+
+    // Helper method to get relations from a model
+    protected function getModelRelations($model)
+    {
+        $relations = [];
+   
+        // Use Reflection to get the methods defined in the model
+        $methods = (new \ReflectionClass($model))->getMethods(\ReflectionMethod::IS_PUBLIC);
+
+        foreach ($methods as $method) {
+            // Skip inherited methods
+            if ($method->class !== get_class($model)) {
+                continue;
+            }
+
+            // Ensure the method returns a relationship
+            $returnType = $method->getReturnType();
+            if (!$returnType || !is_a($returnType->getName(), 'Illuminate\Database\Eloquent\Relations\Relation', true)) {
+                continue;
+            }
+
+            // Add the method name (relation) to the list
+            $relations[] = $method->name;
         }
 
-        return response()->json($query->get());
+        return $relations;
     }
 
     // Fetch specific record by ID
