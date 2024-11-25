@@ -220,7 +220,7 @@
                                 description: (rdv.adresse ?? '') + ' ' + (rdv
                                         .cp ?? '') + ' ' + (rdv
                                         .ville ?? '') + '<br/>' + (rdv.telephone ?
-                                        formatFrenchPhoneNumber(rdv.telephone) : '') + (rdv.type_rdv) +
+                                        formatFrenchPhoneNumber(rdv.telephone) : '') + (rdv.type_rdv<3 ? '<br/>RDV MAR '+rdv.type_rdv : '') +
                                     (rdv.dossier != null ? '<br/> MAR : ' + (rdv.dossier.mar > 0 ?
                                         rdv.dossier.mar.client_title : '') + ' / ' + (rdv
                                         .dossier.mandataire_financier > 0 ? ' / ' + rdv.dossier
