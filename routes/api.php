@@ -113,11 +113,11 @@ Route::middleware('auth:api')->group(function () {
 //     Route::delete('/dossiers_data/{id}', [DossiersDataController::class, 'destroy']);
 
 
-//     Route::get('/dossiers', [Dossiers::class, 'index']);
-//     Route::get('/dossiers/{id}', [Dossiers::class, 'show']);
-//     Route::post('/dossiers', [Dossiers::class, 'store']);
-//     Route::put('/dossiers/{id}', [Dossiers::class, 'update']);
-//     Route::delete('/dossiers/{id}', [Dossiers::class, 'destroy']);
+    Route::get('/dossiers', [Dossiers::class, 'index']);
+    Route::get('/dossiers/{id}', [Dossiers::class, 'show']);
+    Route::post('/dossiers', [Dossiers::class, 'store']);
+    Route::put('/dossiers/{id}', [Dossiers::class, 'update']);
+    Route::delete('/dossiers/{id}', [Dossiers::class, 'destroy']);
 
 //     Route::get('/etapes', [EtapesController::class, 'index']);
 //     Route::get('/etapes/{id}', [EtapesController::class, 'show']);
