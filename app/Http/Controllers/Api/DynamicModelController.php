@@ -22,18 +22,26 @@ class DynamicModelController extends \App\Http\Controllers\Controller
     }
 
     // Fetch all records with relations
-    public function index($modelName)
+    public function index(Request $request, $modelName)
     {
         $model = $this->getModelInstance($modelName);
+           $query = $model::query();
+        
+        // Apply filters dynamically based on request
+        foreach ($request->all() as $field => $value) {
+          
+                $query->where($field, $value);
+            
+        }
+        
+        // Apply pagination or return all results
+        if ($request->has('paginate')) {
+            return response()->json($query->paginate($request->input('paginate')));
+        }
 
-        // Get the relationships defined in the model
-        $relations = $this->getModelRelations($model);
-
-        // Fetch records with the relations
-        $records = $model::with($relations)->get();
-
-        return view("index", compact('records', 'modelName'));
-    }
+        return response()->json($query->get());
+    
+}
 
     // Helper method to get relations from a model
     protected function getModelRelations($model)
