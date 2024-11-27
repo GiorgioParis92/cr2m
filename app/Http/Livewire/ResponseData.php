@@ -62,7 +62,7 @@ class ResponseData extends Component
     {
         if($this->responseData) {
         foreach ($this->responseData as $tag => $data) {
-            if (!empty($data['elements'])) {
+            if (isset($data['elements']) && !empty($data['elements'])) {
                 foreach ($data['elements'] as $element) {
                     $value=$element['text'];
                     \DB::table('dossiers_data')->updateOrInsert(

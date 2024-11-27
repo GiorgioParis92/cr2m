@@ -59,7 +59,7 @@
     <div class="container">
         <h1>Demande de Devis</h1>
         <h2>{{$all_data['nom'] ?? ''}} {{$all_data['prenom'] ?? ''}}</h2>
-
+        <h2>Date de visite : {{$all_data['date_1ere_visite'] ?? ''}}</h2>
         <table width="100%">
             <thead>
                 <tr>
