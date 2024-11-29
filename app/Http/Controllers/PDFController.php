@@ -50,9 +50,9 @@ class PDFController extends Controller
 
         if (isset($request->form_id)) {
 
-      $form_config = FormConfig::where('form_id', $request->form_id)
-    ->where('name', $request->name)
-    ->first();
+            $form_config = FormConfig::where('form_id', $request->form_id)
+                ->where('name', $request->name)
+                ->first();
 
 
             $config = json_decode($form_config->options);
@@ -118,8 +118,8 @@ class PDFController extends Controller
             $update = FormsData::updateOrCreate(
                 [
                     'dossier_id' => $dossier->id,
-                    'form_id'    => $request->form_id,
-                    'meta_key'   => $request->template
+                    'form_id' => $request->form_id,
+                    'meta_key' => $request->template
                 ],
                 [
                     'meta_value' => $directPath
@@ -137,7 +137,7 @@ class PDFController extends Controller
 
 
                 Dossier::where('id', $dossier->id)->update([
-                
+
                     'updated_at' => now(),
                 ]);
 
@@ -185,26 +185,26 @@ class PDFController extends Controller
         if ($send_data) {
             $all_data = load_all_dossier_data($dossier);
             if (is_array($all_data)) {
-            foreach ($all_data as $key => $data) {
-             
-                if (is_array($data)) {
-                   
-                    foreach ($data as $k => $v) {
-                    
-                        if (is_array($v)) {
-                            foreach ($v as $kk=>$valeur) {
-                         
-                              $all_data[$kk]= $valeur;
-                                if (is_array($valeur)) {
-                                    foreach ($valeur as $c => $vv) {
-                                        array_push($all_data, [$c => $vv]);
+                foreach ($all_data as $key => $data) {
+
+                    if (is_array($data)) {
+
+                        foreach ($data as $k => $v) {
+
+                            if (is_array($v)) {
+                                foreach ($v as $kk => $valeur) {
+
+                                    $all_data[$kk] = $valeur;
+                                    if (is_array($valeur)) {
+                                        foreach ($valeur as $c => $vv) {
+                                            array_push($all_data, [$c => $vv]);
+                                        }
                                     }
                                 }
                             }
                         }
                     }
                 }
-            }
 
 
 
@@ -223,54 +223,39 @@ class PDFController extends Controller
     }
     public function fillPdf(Request $request)
     {
-
-
-
+        // Validate the request
         $validated = $request->validate([
             'dossier_id' => 'nullable',
         ]);
 
-        if (is_numeric($validated['dossier_id'])) {
-            $dossier = Dossier::with('mar', 'etape')->where('id', $validated['dossier_id'])->first();
-        } else {
-            $dossier = Dossier::with('mar', 'etape')->where('folder', $validated['dossier_id'])->first();
-
+        // Retrieve the dossier
+        $dossier = $this->getDossier($validated['dossier_id']);
+        if (!$dossier) {
+            return response()->json(['message' => 'Dossier not found'], 404);
         }
 
-        $dossierId = $dossier->id;
+        // Set up folder paths
         $folderPath = "public/dossiers/{$dossier->folder}";
         $directPath = "dossiers/{$dossier->folder}";
+        $this->ensureDirectoryExists($folderPath);
 
-        if (!Storage::exists($folderPath)) {
-            Storage::makeDirectory($folderPath);
-        }
-
+        // Process form configuration if dossier_id is provided
         if (isset($validated['dossier_id'])) {
-           $config = FormConfig::where('form_id', $request->form_id)
-    ->where('name', $request->name)
-    ->where('type', 'fillable')
-    ->first();
-
-
-            $jsonString = str_replace(["\n", '', "\r"], '', $config->options);
-            $optionsArray = json_decode($jsonString, true);
-            if (!is_array($optionsArray)) {
-                $optionsArray = [];
-            }
-            // $dossier = Dossier::where('id', $validated['dossier_id'])->first();
-
-            if (is_numeric($validated['dossier_id'])) {
-                $dossier = Dossier::where('id', $validated['dossier_id'])->first();
-            } else {
-                $dossier = Dossier::where('folder', $validated['dossier_id'])->first();
+            $config = $this->getFormConfig($request->form_id, $request->name);
+            if (!$config) {
+                return response()->json(['message' => 'FormConfig not found'], 404);
             }
 
-            $all_data = load_all_dossier_data($dossier);
-
+            $optionsArray = $this->parseConfigOptions($config->options);
+            $allData = $this->loadAllDossierData($dossier);
         }
-        $pdf = new Fpdi();
-        $pageCount = $pdf->setSourceFile(public_path($optionsArray["template"] . '.pdf'));
 
+        // Initialize PDF
+        $pdf = new Fpdi();
+        $templatePath = public_path($optionsArray['template'] . '.pdf');
+        $pageCount = $pdf->setSourceFile($templatePath);
+
+        // Process each page of the PDF
         for ($pageNo = 1; $pageNo <= $pageCount; $pageNo++) {
             $pdf->AddPage();
             $templateId = $pdf->importPage($pageNo);
@@ -280,197 +265,339 @@ class PDFController extends Controller
             $pdf->SetAutoPageBreak(false);
             $pdf->SetFont('Helvetica');
 
-            if (isset($optionsArray["config"][$pageNo])) {
-                foreach ($optionsArray["config"][$pageNo] as $fill_data_config) {
-
-                    $font = isset($fill_data_config["font"]) ? $fill_data_config["font"] : 'Helvetica';
-                    $pdf->SetFont($font);
-
-
-                    $font_size = isset($fill_data_config["font-size"]) ? $fill_data_config["font-size"] : 12;
-                    $pdf->SetFontSize($font_size);
-
-                    $value = "";
-                    $form_id = $fill_data_config["form_id"];
-                    foreach ($fill_data_config["tags"] as $tag) {
-                        $current_value = '';
-
-                        if ($tag != "" && isset($all_data[$fill_data_config["data_origin"]][$form_id][$tag])) {
-                            $current_value = $all_data[$fill_data_config["data_origin"]][$form_id][$tag];
-                            if (isset($fill_data_config["eval"])) {
-
-                                if (isset($fill_data_config["eval"])) {
-                                    try {
-                                        // Replace `$$value$$` in the eval string with the actual value
-                                        if (is_array($fill_data_config["eval"])) {
-
-                                        } else {
-                                            $fill_data_config["eval"][] = $fill_data_config["eval"];
-                                        }
-                                        $new_value = '';
-                                        foreach ($fill_data_config["eval"] as $eval) {
-                                            $queryString = str_replace('$$value$$', $current_value, $eval);
-
-                                            // Use eval to execute the query and assign the result
-                                            $evalResult = eval ('return ' . $queryString . ';');
-                                            // Check if the result is not empty and assign it to $current_value
-                                            $new_value .= !empty($evalResult) ? $evalResult : null;
-                                            $new_value .= ' ';
-                                        }
-                                        $current_value = $new_value;
-
-
-                                    } catch (\Throwable $th) {
-                                        // Catch any errors during eval execution
-                                        $current_value = $th->getMessage();
-                                    }
-                                }
-                            }
-                            if (isset($fill_data_config["value_replace"])) {
-                                if ($current_value == $fill_data_config["value_replace"]) {
-                                    $current_value = $fill_data_config["replace_by"];
-                                } else {
-                                    if (isset($fill_data_config["replace_if_not"])) {
-                                        $current_value = $fill_data_config["replace_if_not"];
-                                    }
-                                }
-                            }
-
-                            if (isset($fill_data_config["value_equal"])) {
-                                if ($current_value == $fill_data_config["value_equal"]) {
-                                    $current_value = $fill_data_config["replace_by"];
-                                } else {
-                                    if (isset($fill_data_config["replace_if_not"])) {
-                                        $current_value = $fill_data_config["replace_if_not"];
-                                    }
-                                }
-                            }
-                        }
-                        if (isset($fill_data_config["format_date"])) {
-
-                            $current_value = date($fill_data_config["format_date"], strtotime(str_replace('/', '-', $current_value)));
-                        }
-                        if (isset($fill_data_config["date_now"])) {
-
-                            $current_value = date($fill_data_config["date_now"], strtotime("now"));
-                        }
-
-                        $value .= ' ' . $current_value;
-                    }
-                    $x_pos = $fill_data_config["position"][0];
-                    $y_pos = $fill_data_config["position"][1];
-
-                    if (isset($fill_data_config["letter-spacing"])) {
-                        $pdf->SetFontSpacing($fill_data_config["letter-spacing"]);
-                    } else {
-                        $pdf->SetFontSpacing(0);
-                    }
-                    if (isset($fill_data_config["img"])) {
-                        if (isset($fill_data_config['signature'])) {
-                          $dossier = Dossier::where('folder', $dossier->folder)->first();
-
-
-                       $client = Client::where('id', $dossier->mar)->first();
-
-
-                            $signature_client = $client->signature ?? '';
-
-                            $signaturePath = storage_path('app/public/' . $signature_client);
-                  
-                                // dd($signaturePath);
-                            
-                            
-                            if (file_exists($signaturePath)) {
-                                // Set default position and size if not provided
-
-                                $x = isset($fill_data_config["x"]) ? $fill_data_config["x"] : 10;
-                                $y = isset($fill_data_config["y"]) ? $fill_data_config["y"] : 10;
-                                $width = isset($fill_data_config["width"]) ? $fill_data_config["width"] : 50;
-                                $height = isset($fill_data_config["height"]) ? $fill_data_config["height"] : 30;
-
-                                // Insert the image into the PDF
-                                $pdf->Image($signaturePath, $x, $y, $width);
-                            }
-                        }
-
-                        if (isset($fill_data_config['signature_beneficiaire'])) {
-
-
-                            $current_value = json_decode($all_data[$fill_data_config["data_origin"]][$form_id][$tag])[0] ?? '';
-                            $value = '';
-
-                            $signature_client = $current_value ?? '';
-                            $signaturePath = storage_path('app/public/' . $signature_client);
-                            if (file_exists($signaturePath)) {
-
-                                // Set default position and size if not provided
-                                $x = isset($fill_data_config["x"]) ? $fill_data_config["x"] : 10;
-                                $y = isset($fill_data_config["y"]) ? $fill_data_config["y"] : 10;
-                                $width = isset($fill_data_config["width"]) ? $fill_data_config["width"] : 50;
-                                $height = isset($fill_data_config["height"]) ? $fill_data_config["height"] : 30;
-                                // Insert the image into the PDF
-                                $pdf->Image($signaturePath, $x, $y, $width);
-                            }
-                        }
-
-                    }
-
-
-                    $pdf->SetXY($x_pos, $y_pos);
-                    $pdf->Write(0, $value);
+            if (isset($optionsArray['config'][$pageNo])) {
+                foreach ($optionsArray['config'][$pageNo] as $fillDataConfig) {
+                    $this->processFillDataConfig($pdf, $fillDataConfig, $allData, $dossier);
                 }
             }
         }
 
-        $folderPath = "public/dossiers/{$dossier->folder}";
-        $folderPath2 = "dossiers/{$dossier->folder}";
+        // Save the PDF
+        $fileName = "{$request->name}.pdf";
+        $filePath = "{$folderPath}/{$fileName}";
+        $this->ensureDirectoryExists($folderPath);
 
+        $pdfContent = $pdf->output('', 'S');
+        Storage::put($filePath, $pdfContent);
+
+        // Update forms data and dossier timestamp
+        $this->updateFormsData($dossier->id, $request->form_id, $request->name, "{$directPath}/{$fileName}");
+        $this->updateDossierTimestamp($dossier->id);
+
+        // Get document statuses
+        $orderColumn = $dossier->etape->order_column ?? null;
+        $docs = getDocumentStatuses($dossier->id, $orderColumn);
+
+        return response()->json([
+            'message' => 'PDF generated and saved successfully',
+            'file_path' => Storage::url($filePath),
+            'path' => "{$directPath}/{$fileName}",
+        ], 200);
+    }
+
+    /**
+     * Retrieve the dossier based on dossier_id.
+     */
+    private function getDossier($dossierId)
+    {
+        if (is_numeric($dossierId)) {
+            return Dossier::with('mar', 'etape')->find($dossierId);
+        }
+
+        return Dossier::with('mar', 'etape')->where('folder', $dossierId)->first();
+    }
+
+    /**
+     * Ensure the directory exists.
+     */
+    private function ensureDirectoryExists(string $folderPath): void
+    {
         if (!Storage::exists($folderPath)) {
             Storage::makeDirectory($folderPath);
         }
+    }
 
-        $fileName = $request->name . ".pdf";
-        $filePath = "{$folderPath}/{$fileName}";
-        $path = "{$folderPath2}/{$fileName}";
+    /**
+     * Retrieve the form configuration.
+     */
+    private function getFormConfig($formId, $name)
+    {
+        return FormConfig::where([
+            ['form_id', '=', $formId],
+            ['name', '=', $name],
+            ['type', '=', 'fillable'],
+        ])->first();
+    }
 
-        $directPath = "{$directPath}/{$fileName}";
+    /**
+     * Parse the configuration options.
+     */
+    private function parseConfigOptions($options)
+    {
+        $jsonString = str_replace(["\n", '', "\r"], '', $options);
+        $optionsArray = json_decode($jsonString, true);
 
+        return is_array($optionsArray) ? $optionsArray : [];
+    }
 
-        $pdfContent = $pdf->output('', 'S'); // 'S' returns the PDF as a string
-        Storage::put($filePath, $pdfContent);
-        $dossier = Dossier::where('folder', $dossier->folder)->first();
+    /**
+     * Load all dossier data.
+     */
+    private function loadAllDossierData($dossier)
+    {
+        return load_all_dossier_data($dossier);
+    }
 
-      
+    /**
+     * Process the fill data configuration for the PDF.
+     */
+    private function processFillDataConfig($pdf, $fillDataConfig, $allData, $dossier)
+    {
+        // Set font properties
+        $font = $fillDataConfig['font'] ?? 'Helvetica';
+        $fontSize = $fillDataConfig['font-size'] ?? 12;
+        $pdf->SetFont($font);
+        $pdf->SetFontSize($fontSize);
+        $pdf->SetFontSpacing($fillDataConfig['letter-spacing'] ?? 0);
 
-        $update = FormsData::updateOrCreate(
+        $value = '';
+        $formId = $fillDataConfig['form_id'];
+
+        foreach ($fillDataConfig['tags'] as $tag) {
+            $currentValue = $this->getCurrentValue($fillDataConfig, $allData, $formId, $tag);
+            $value .= ' ' . $currentValue;
+        }
+
+        $xPos = $fillDataConfig['position'][0];
+        $yPos = $fillDataConfig['position'][1];
+
+        // Handle images
+        if (isset($fillDataConfig['img'])) {
+            $this->processImage($pdf, $fillDataConfig, $dossier, $allData, $formId, $tag);
+        }
+        // Handle tables
+        elseif (isset($fillDataConfig['table'])) {
+            $this->processTable($pdf, $fillDataConfig, $allData, $formId, $tag);
+        }
+        // Write text
+        else {
+            $pdf->SetXY($xPos, $yPos);
+            $pdf->Write(0, $value);
+        }
+    }
+
+    /**
+     * Retrieve the current value for a given tag.
+     */
+    private function getCurrentValue($fillDataConfig, $allData, $formId, $tag)
+    {
+        $currentValue = '';
+
+        if ($tag !== '' && isset($allData[$fillDataConfig['data_origin']][$formId][$tag])) {
+            $currentValue = $allData[$fillDataConfig['data_origin']][$formId][$tag];
+            $currentValue = $this->applyEvaluations($fillDataConfig, $currentValue);
+            $currentValue = $this->applyOperations($fillDataConfig, $currentValue);
+            $currentValue = $this->applyReplacements($fillDataConfig, $currentValue);
+        }
+
+        return $currentValue;
+    }
+
+    /**
+     * Apply evaluations to the current value.
+     */
+    private function applyEvaluations($fillDataConfig, $currentValue)
+    {
+        if (!isset($fillDataConfig['eval'])) {
+            return $currentValue;
+        }
+
+        try {
+            $evaluations = is_array($fillDataConfig['eval']) ? $fillDataConfig['eval'] : [$fillDataConfig['eval']];
+            $newValue = '';
+
+            foreach ($evaluations as $eval) {
+                $queryString = str_replace('$$value$$', $currentValue, $eval);
+                $evalResult = eval ('return ' . $queryString . ';');
+                $newValue .= !empty($evalResult) ? $evalResult : '';
+                $newValue .= ' ';
+            }
+
+            return $newValue;
+        } catch (\Throwable $th) {
+            return $th->getMessage();
+        }
+    }
+
+    /**
+     * Apply mathematical operations to the current value.
+     */
+    private function applyOperations($fillDataConfig, $currentValue)
+    {
+        if (!isset($fillDataConfig['operation'])) {
+            return $currentValue;
+        }
+
+        $operation = $fillDataConfig['operation'];
+
+        return $this->handleOperation($currentValue, $operation['type'], $operation['value']);
+
+    }
+
+    private function handleOperation($value, $operationType, $value2)
+    {
+        $value = ((float) $value);
+        if ($operationType === '*') {
+            $value *= $value2;
+
+        }
+        $value = number_format($value, 2, ',', ' ');
+
+        return $value;
+    }
+
+    /**
+     * Apply replacements to the current value.
+     */
+    private function applyReplacements($fillDataConfig, $currentValue)
+    {
+        if (isset($fillDataConfig['value_replace'])) {
+            if ($currentValue == $fillDataConfig['value_replace']) {
+                $currentValue = $fillDataConfig['replace_by'];
+            } elseif (isset($fillDataConfig['replace_if_not'])) {
+                $currentValue = $fillDataConfig['replace_if_not'];
+            }
+        }
+
+        if (isset($fillDataConfig['value_equal'])) {
+            if ($currentValue == $fillDataConfig['value_equal']) {
+                $currentValue = $fillDataConfig['replace_by'];
+            } elseif (isset($fillDataConfig['replace_if_not'])) {
+                $currentValue = $fillDataConfig['replace_if_not'];
+            }
+        }
+
+        if (isset($fillDataConfig['format_date'])) {
+            $currentValue = date($fillDataConfig['format_date'], strtotime(str_replace('/', '-', $currentValue)));
+        }
+
+        if (isset($fillDataConfig['date_now'])) {
+            $currentValue = date($fillDataConfig['date_now']);
+
+        }
+
+        return $currentValue;
+    }
+
+    /**
+     * Process image insertion.
+     */
+    private function processImage($pdf, $fillDataConfig, $dossier, $allData, $formId, $tag)
+    {
+        if (isset($fillDataConfig['signature'])) {
+            // $this->insertClientSignature($pdf, $fillDataConfig, $dossier);
+            $this->insertBeneficiarySignature($pdf, $fillDataConfig, $allData, $formId, $tag);
+        } elseif (isset($fillDataConfig['signature_client'])) {
+            $this->insertClientSignature($pdf, $fillDataConfig, $dossier);
+        }
+    }
+
+    /**
+     * Insert client signature into the PDF.
+     */
+    private function insertClientSignature($pdf, $fillDataConfig, $dossier)
+    {
+        $client = Client::find(id: $dossier->mar);
+        $signaturePath = storage_path('app/public/' . ($client->signature ?? ''));
+
+        if (file_exists($signaturePath)) {
+            $x = $fillDataConfig['x'] ?? 10;
+            $y = $fillDataConfig['y'] ?? 10;
+            $width = $fillDataConfig['width'] ?? 50;
+
+            $pdf->Image($signaturePath, $x, $y, $width);
+        }
+    }
+
+    /**
+     * Insert beneficiary signature into the PDF.
+     */
+    private function insertBeneficiarySignature($pdf, $fillDataConfig, $allData, $formId, $tag)
+    {
+        $signatureData = json_decode($allData[$fillDataConfig['data_origin']][$formId][$tag])[0] ?? '';
+        $signaturePath = storage_path('app/public/' . $signatureData);
+
+        if (file_exists($signaturePath)) {
+            $x = $fillDataConfig['x'] ?? 10;
+            $y = $fillDataConfig['y'] ?? 10;
+            $width = $fillDataConfig['width'] ?? 50;
+
+            $pdf->Image($signaturePath, $x, $y, $width);
+        }
+    }
+
+    /**
+     * Process table data insertion.
+     */
+    private function processTable($pdf, $fillDataConfig, $allData, $formId, $tag)
+    {
+        $tableData = json_decode($allData[$fillDataConfig['data_origin']][$formId][$tag]);
+        $x = $fillDataConfig['position'][0];
+        $y = $fillDataConfig['position'][1];
+        $increment = $fillDataConfig['table']['increment'];
+        $range = $fillDataConfig['table']['range'];
+        $newY = $y;
+        $i = 1;
+    
+        foreach ($tableData as $row) {
+            foreach ($row as $k => $v) {
+                if ($k === $fillDataConfig['table']['sub_tag'] && $i >= $range[0] && $i <= $range[1]) {
+    
+                    $value = $v->value;
+                    if (isset($fillDataConfig['table']['operation'])) {
+                        $value = $this->handleOperation($value, $fillDataConfig['table']['operation']['type'], $fillDataConfig['table']['operation']['value']);
+                    }
+             
+                    // Write text with MultiCell for left alignment
+                    $pdf->SetXY($x, $newY);
+                    $pdf->MultiCell(0, $increment, $value, 0, 'L'); // Left-aligned text
+    
+                    // Adjust vertical position based on number of lines
+                    $newY += $increment ;
+                }
+            }
+            $i++;
+        }
+    }
+    
+    
+    
+
+    /**
+     * Update or create FormsData record.
+     */
+    private function updateFormsData($dossierId, $formId, $metaKey, $metaValue)
+    {
+        FormsData::updateOrCreate(
             [
-                'dossier_id' => $dossier->id,
-                'form_id'    => $request->form_id,
-                'meta_key'   => $request->name
+                'dossier_id' => $dossierId,
+                'form_id' => $formId,
+                'meta_key' => $metaKey,
             ],
             [
-                'meta_value' => $directPath
+                'meta_value' => $metaValue,
             ]
         );
-
-        Dossier::where('id', $dossier->id)->update([
-                
-            'updated_at' => now(),
-        ]);
-
-        if ($dossier && $dossier->etape) {
-            $orderColumn = $dossier->etape->order_column;
-        } else {
-            // Handle the case where $dossier or $dossier->etape is null
-            $orderColumn = null;
-        }
-        $docs = getDocumentStatuses($dossier->id, $orderColumn);
-        return response()->json([
-            'message' => 'PDF generated and saved successfully',
-            'file_path' => Storage::url($filePath), // Adjusted this line
-            'path' => $path // Adjusted this line
-        ], 200);
     }
+
+    /**
+     * Update the dossier's timestamp.
+     */
+    private function updateDossierTimestamp($dossierId)
+    {
+        Dossier::where('id', $dossierId)->update(['updated_at' => now()]);
+    }
+
 
 
     public function generateConfig(Request $request)
@@ -518,9 +645,9 @@ class PDFController extends Controller
 
 
         if (isset($request->form_id)) {
-       $config = FormConfig::where('form_id', $request->form_id)
-    ->where('name', $request->template ?? $request->name)
-    ->first();
+            $config = FormConfig::where('form_id', $request->form_id)
+                ->where('name', $request->template ?? $request->name)
+                ->first();
 
 
             $jsonString = str_replace(["\n", '', "\r"], '', $config->options);
@@ -536,11 +663,11 @@ class PDFController extends Controller
 
         // dump($timeAfterDossier);
         foreach ($configs as $config_id) {
-$form = Form::where('id', $config_id)->first();
+            $form = Form::where('id', $config_id)->first();
 
-$config = FormConfig::where('form_id', $config_id)
-    ->orderBy('ordering')
-    ->get();
+            $config = FormConfig::where('form_id', $config_id)
+                ->orderBy('ordering')
+                ->get();
             $timeAfterConfig = microtime(true) - $startTime;
             $count++;
 
@@ -684,13 +811,13 @@ $config = FormConfig::where('form_id', $config_id)
         $timeafterstore = microtime(true) - $startTime;
 
 
-     
+
 
         $update = FormsData::updateOrCreate(
             [
                 'dossier_id' => $dossier->id,
-                'form_id'    => $request->form_id,
-                'meta_key'   => $request->template
+                'form_id' => $request->form_id,
+                'meta_key' => $request->template
             ],
             [
                 'meta_value' => $directPath
@@ -699,7 +826,7 @@ $config = FormConfig::where('form_id', $config_id)
 
 
         Dossier::where('id', $dossier->id)->update([
-                
+
             'updated_at' => now(),
         ]);
         if ($dossier && $dossier->etape) {
