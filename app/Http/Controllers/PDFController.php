@@ -541,33 +541,36 @@ class PDFController extends Controller
      */
     private function processTable($pdf, $fillDataConfig, $allData, $formId, $tag)
     {
-        $tableData = json_decode($allData[$fillDataConfig['data_origin']][$formId][$tag]);
-        $x = $fillDataConfig['position'][0];
-        $y = $fillDataConfig['position'][1];
-        $increment = $fillDataConfig['table']['increment'];
-        $range = $fillDataConfig['table']['range'];
-        $newY = $y;
-        $i = 1;
-    
-        foreach ($tableData as $row) {
-            foreach ($row as $k => $v) {
-                if ($k === $fillDataConfig['table']['sub_tag'] && $i >= $range[0] && $i <= $range[1]) {
-    
-                    $value = $v->value;
-                    if (isset($fillDataConfig['table']['operation'])) {
-                        $value = $this->handleOperation($value, $fillDataConfig['table']['operation']['type'], $fillDataConfig['table']['operation']['value']);
+        if(isset($allData[$fillDataConfig['data_origin']][$formId][$tag])) {
+            $tableData = json_decode($allData[$fillDataConfig['data_origin']][$formId][$tag]);
+            $x = $fillDataConfig['position'][0];
+            $y = $fillDataConfig['position'][1];
+            $increment = $fillDataConfig['table']['increment'];
+            $range = $fillDataConfig['table']['range'];
+            $newY = $y;
+            $i = 1;
+        
+            foreach ($tableData as $row) {
+                foreach ($row as $k => $v) {
+                    if ($k === $fillDataConfig['table']['sub_tag'] && $i >= $range[0] && $i <= $range[1]) {
+        
+                        $value = $v->value;
+                        if (isset($fillDataConfig['table']['operation'])) {
+                            $value = $this->handleOperation($value, $fillDataConfig['table']['operation']['type'], $fillDataConfig['table']['operation']['value']);
+                        }
+                 
+                        // Write text with MultiCell for left alignment
+                        $pdf->SetXY($x, $newY);
+                        $pdf->MultiCell(0, $increment, $value, 0, 'L'); // Left-aligned text
+        
+                        // Adjust vertical position based on number of lines
+                        $newY += $increment ;
                     }
-             
-                    // Write text with MultiCell for left alignment
-                    $pdf->SetXY($x, $newY);
-                    $pdf->MultiCell(0, $increment, $value, 0, 'L'); // Left-aligned text
-    
-                    // Adjust vertical position based on number of lines
-                    $newY += $increment ;
                 }
+                $i++;
             }
-            $i++;
         }
+
     }
     
     
