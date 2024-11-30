@@ -547,6 +547,7 @@ class PDFController extends Controller
             $y = $fillDataConfig['position'][1];
             $increment = $fillDataConfig['table']['increment'];
             $range = $fillDataConfig['table']['range'];
+            $maxwidth = $fillDataConfig['table']['max-width'] ?? 120;
             $newY = $y;
             $i = 1;
         
@@ -561,7 +562,7 @@ class PDFController extends Controller
                  
                         // Write text with MultiCell for left alignment
                         $pdf->SetXY($x, $newY);
-                        $pdf->MultiCell(0, $increment, $value, 0, 'L'); // Left-aligned text
+                        $pdf->MultiCell($maxwidth, $increment, $value, 0, 'L'); // Left-aligned text
         
                         // Adjust vertical position based on number of lines
                         $newY += $increment ;
