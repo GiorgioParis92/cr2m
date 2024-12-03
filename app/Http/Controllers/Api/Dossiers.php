@@ -13,7 +13,7 @@ class Dossiers extends \App\Http\Controllers\Controller
     public function index(Request $request)
     {
                 $query = Dossier::query();
-        
+
         // Apply filters dynamically based on request
         foreach ($request->all() as $field => $value) {
             if (in_array($field, ['folder', 'beneficiaire_id', 'reference_unique', 'client_id', 'fiche_id', 'etape_number', 'etape_id', 'status_id', 'mar', 'mandataire_financier', 'installateur', 'lat', 'lng'])) {

@@ -25,23 +25,66 @@ class DynamicModelController extends \App\Http\Controllers\Controller
     public function index(Request $request, $modelName)
     {
         $model = $this->getModelInstance($modelName);
-           $query = $model::query();
-        
+        $query = $model::query();
+    
+        // Get all relationships of the model
+        $relations = $this->getAllRelations($model);
+    
+        // Eager load all relationships if any
+        if (!empty($relations)) {
+            $query->with($relations);
+        }
+    
         // Apply filters dynamically based on request
         foreach ($request->all() as $field => $value) {
-          
-                $query->where($field, $value);
-            
+            $query->where($field, $value);
         }
-        
+    
         // Apply pagination or return all results
         if ($request->has('paginate')) {
             return response()->json($query->paginate($request->input('paginate')));
         }
-
-        return response()->json($query->get());
     
-}
+        return response()->json($query->get());
+    }
+    
+    /**
+     * Get all relationship methods of a model.
+     *
+     * @param  \Illuminate\Database\Eloquent\Model  $model
+     * @return array
+     */
+    private function getAllRelations($model)
+    {
+        $relations = [];
+        $reflection = new \ReflectionClass($model);
+    
+        foreach ($reflection->getMethods(\ReflectionMethod::IS_PUBLIC) as $method) {
+            // Skip methods not declared in this class
+            if ($method->class != get_class($model)) {
+                continue;
+            }
+    
+            // Skip methods with parameters
+            if ($method->getNumberOfParameters() > 0) {
+                continue;
+            }
+    
+            try {
+                // Invoke the method to check if it returns a Relation instance
+                $returnValue = $method->invoke($model);
+                if ($returnValue instanceof \Illuminate\Database\Eloquent\Relations\Relation) {
+                    $relations[] = $method->getName();
+                }
+            } catch (\Throwable $e) {
+                // Ignore methods that cannot be invoked
+            }
+        }
+    
+        return $relations;
+    }
+    
+    
 
     // Helper method to get relations from a model
     protected function getModelRelations($model)
