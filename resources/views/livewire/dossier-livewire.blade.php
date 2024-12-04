@@ -198,7 +198,90 @@
                         </div> --}}
 
                         <div class="row etapes_row mt-5 not_responsive">
+
+                          
+        
+
                             @foreach ($etapes as $index => $e)
+
+
+                            @if($e['order_column']<0 && is_user_allowed($e['etape_name']))
+                            @php
+                                $isActive = false;
+                                $isCurrent = false;
+                                $isTab = false;
+                                if ($e['order_column'] <= $dossier['etape']['order_column']) {
+                                    $isActive = true;
+                                }
+                                if (
+                                    $e['order_column'] == $dossier['etape']['order_column'] &&
+                                    is_user_allowed($e['etape_name']) == true
+                                ) {
+                                    $isCurrent = true;
+                                }
+
+                                // if (($e->etape_number == $etape_display['id'] || $e->etape_number == $etape_display) && is_user_allowed($e->etape_name)==true) {
+                                //     $isTab = true;
+                                // }
+
+                                if ($e['id'] == $last_etape) {
+                                    $isTab = true;
+                                }
+                                if (is_user_allowed($e['etape_name']) == false) {
+                                    $isAllowed = false;
+                                } else {
+                                    $isAllowed = true;
+                                }
+                                if (is_user_forbidden($e['etape_name']) == true) {
+                                    $isAllowed = false;
+                                    $isCurrent = false;
+                                }
+                      
+                            @endphp
+
+                            <div @if ($isActive && $isAllowed) wire:click="setTab({{ $e['etape_number'] }})" @endif
+                                aria-disabled="false"
+                                class="@if ($isActive && $isAllowed) settab @endif  col-lg-1  {{ $isActive && $isAllowed ? 'active' : '' }} {{ $isCurrent ? 'current' : '' }} {{ $isTab ? 'isTab' : '' }}"
+                                aria-selected="true">
+                                <a id="form-total-t-0" aria-controls="form-total-p-0">
+                                    <div class="inter_line"></div>
+                                    <span class="current-info audible nav-link"></span>
+                                    <div class="title">
+                                        <span
+                                            class="step-icon {{ $isActive && $isAllowed ? 'bg-success' : 'bg-tertiary' }}">{{ $e['etape_icon'] ?? '' }}</span>
+                                        <span class="step-text">
+                                            {{ strtoupper_extended($e['etape_desc']) }}
+
+
+                                            @if (!empty($steps) && isset($steps['step_' . $e['etape_number']]))
+                                                <div class="col text-center">
+                                                    <p class="text-xs font-weight-bold mb-0"> <br /></p>
+                                                    <p class="text-xs font-weight-bold mb-0"> </p>
+                                                    <p class="text-xs font-weight-bold mb-0">Etape validée le :
+                                                    </p>
+                                                    <h6 class="text-sm mb-0">
+                                                        {{ format_date($steps['step_' . $e['etape_number']]['meta_value']) ?? '' }}
+                                                    </h6>
+                                                    @if (!empty($steps['step_' . $e['etape_number']]['user_id']))
+                                                        {{ $steps['step_' . $e['etape_number']]['user_id'] }}
+                                                    @endif
+                                                </div>
+                                            @endif
+
+
+                                            <small>
+                                                @if ($dossier->etape_number == $e['etape_number'])
+                                                    <p>Statut: {{ $dossier->status->status_name ?? '' }}</p>
+                                                @endif
+                                            </small>
+                                        </span>
+
+                                    </div>
+                                </a>
+                            </div>
+                            @endif
+
+                                @if($e['order_column']>0)
                                 @php
                                     $isActive = false;
                                     $isCurrent = false;
@@ -275,6 +358,7 @@
                                         </div>
                                     </a>
                                 </div>
+                                @endif
                             @endforeach
 
                         </div>
