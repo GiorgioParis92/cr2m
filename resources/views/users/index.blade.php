@@ -14,6 +14,7 @@
                 <table class="table datatable table-bordered responsive-table">
                     <thead>
                         <tr>
+                            <th>ID</th>
                             <th>Nom</th>
                             <th>Type d'utilisateur</th>
                             <th>Email</th>
@@ -26,6 +27,10 @@
                     <tbody>
                         @foreach ($users as $user)
                             <tr>
+                                <td data-label="">
+                      
+                                    <a href="{{ route('users.edit', $user->id) }}">{{ $user->id }}</a>
+                                 </td>
                                 <td data-label="">
                       
                                    <a href="{{ route('users.edit', $user->id) }}">{{ $user->name }}</a>
