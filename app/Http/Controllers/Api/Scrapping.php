@@ -257,7 +257,7 @@ class Scrapping extends Controller
 
 
 
-      sleep(0.5);
+      sleep(4);
 
     }
 

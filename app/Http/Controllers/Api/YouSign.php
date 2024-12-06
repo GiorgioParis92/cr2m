@@ -228,7 +228,7 @@ class YouSign extends Controller
       }
 
 
-      sleep(0.15);
+      sleep(4);
 
 
     }
