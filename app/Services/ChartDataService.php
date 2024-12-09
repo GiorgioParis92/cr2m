@@ -217,9 +217,8 @@ class ChartDataService
         ->select(
             DB::raw("forms_data.meta_value AS creation_date"),
             DB::raw("COUNT(DISTINCT dossiers.id) AS total_dossiers")
-        )
-        ->groupBy('creation_date')
-        ->orderBy('creation_date');
+        );
+
    
     
     $dossiers = $this->applyFilters($dossiers);
