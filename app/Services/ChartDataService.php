@@ -206,5 +206,28 @@ class ChartDataService
         return $dossiers;
     }
     
-
+    public function date_octroi()
+    {
+        // Retrieve dossiers where associated etape's order_column >= 11 and dossiers_data has meta_key = 'subvention' with meta_value > 0
+        $dossiers = Dossier::join('forms_data', function ($join) {
+            $join->on('dossiers.id', '=', 'forms_data.dossier_id')
+                 ->where('forms_data.meta_key', '=', 'date_octroi');
+        })
+        ->select(
+            DB::raw("forms_data.meta_value AS creation_date"),
+            DB::raw("COUNT(DISTINCT dossiers.id) AS total_dossiers")
+        )
+        ->groupBy('creation_date')
+        ->orderBy('creation_date')
+        ->get();
+    
+    $dossiers = $this->applyFilters($dossiers);
+    
+    $dossiers = $dossiers->groupBy('creation_date')
+                         ->orderBy('creation_date')
+                         ->get();
+    
+        // Optionally, you can return additional information or statistics
+        return $dossiers;
+    }
 }
