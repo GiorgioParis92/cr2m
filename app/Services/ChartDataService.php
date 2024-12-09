@@ -216,7 +216,7 @@ class ChartDataService
         })
         ->select(
             DB::raw("forms_data.meta_value AS creation_date"),
-            DB::raw("COUNT(DISTINCT dossiers.id) AS total_dossiers")
+            DB::raw("COUNT(DISTINCT dossiers.id) AS total")
         );
 
    
