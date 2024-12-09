@@ -209,26 +209,47 @@ class ChartDataService
     public function date_octroi()
     {
         // Retrieve dossiers where associated etape's order_column >= 11 and dossiers_data has meta_key = 'subvention' with meta_value > 0
-        $dossiers = Dossier::join('forms_data', function ($join) {
-            $join->on('dossiers.id', '=', 'forms_data.dossier_id')
-                 ->where('forms_data.meta_key', '=', 'date_octroi')
-                 ->where('forms_data.meta_value', '!=', '');
-        })
-        ->select(
-            DB::raw("forms_data.meta_value AS creation_date"),
-            DB::raw("COUNT(DISTINCT dossiers.id) AS average_delay"),
-            DB::raw("COUNT(DISTINCT dossiers.id) AS total")
-        );
+    // Retrieve your data as you currently do.
+$dossiers = Dossier::join('forms_data', function ($join) {
+    $join->on('dossiers.id', '=', 'forms_data.dossier_id')
+         ->where('forms_data.meta_key', '=', 'date_octroi')
+         ->where('forms_data.meta_value', '!=', '');
+})
+->select(
+    DB::raw("DATE_FORMAT(forms_data.meta_value, '%Y-%m') AS creation_date"),
+    DB::raw("COUNT(DISTINCT dossiers.id) AS average_delay"),
+    DB::raw("COUNT(DISTINCT dossiers.id) AS total")
+);
 
-   
-    
-    $dossiers = $this->applyFilters($dossiers);
-    
-    $dossiers = $dossiers->groupBy('creation_date')
-                         ->orderBy('creation_date')
-                         ->get();
-    
-        // Optionally, you can return additional information or statistics
-        return $dossiers;
+// Apply any existing filters
+$dossiers = $this->applyFilters($dossiers);
+
+// Group and get the data
+$dossiers = $dossiers->groupBy('creation_date')
+                 ->orderBy('creation_date')
+                 ->get()
+                 ->keyBy('creation_date'); // Key by creation_date for easy lookup
+
+// Assume you want all months of a given year, e.g., the current year
+$year = date('Y');
+$allMonths = [];
+for ($m = 1; $m <= 12; $m++) {
+$monthStr = sprintf('%04d-%02d', $year, $m);
+if (!$dossiers->has($monthStr)) {
+    // Add a zero entry if missing
+    $allMonths[] = [
+        'creation_date' => $monthStr,
+        'average_delay' => 0,
+        'total' => 0
+    ];
+} else {
+    // Use existing data
+    $allMonths[] = $dossiers->get($monthStr);
+}
+}
+
+// Now $allMonths contains entries for every month
+return $allMonths;
+
     }
 }
