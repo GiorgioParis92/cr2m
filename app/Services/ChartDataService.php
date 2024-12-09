@@ -212,6 +212,7 @@ class ChartDataService
         $dossiers = Dossier::join('forms_data', function ($join) {
             $join->on('dossiers.id', '=', 'forms_data.dossier_id')
                  ->where('forms_data.meta_key', '=', 'date_octroi');
+                 ->where('forms_data.meta_value', '!=', '');
         })
         ->select(
             DB::raw("forms_data.meta_value AS creation_date"),
