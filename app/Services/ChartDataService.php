@@ -218,8 +218,8 @@ class ChartDataService
             DB::raw("COUNT(DISTINCT dossiers.id) AS total_dossiers")
         )
         ->groupBy('creation_date')
-        ->orderBy('creation_date')
-        ->get();
+        ->orderBy('creation_date');
+   
     
     $dossiers = $this->applyFilters($dossiers);
     
