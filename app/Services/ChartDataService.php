@@ -211,7 +211,7 @@ class ChartDataService
         // Retrieve dossiers where associated etape's order_column >= 11 and dossiers_data has meta_key = 'subvention' with meta_value > 0
         $dossiers = Dossier::join('forms_data', function ($join) {
             $join->on('dossiers.id', '=', 'forms_data.dossier_id')
-                 ->where('forms_data.meta_key', '=', 'date_octroi');
+                 ->where('forms_data.meta_key', '=', 'date_octroi')
                  ->where('forms_data.meta_value', '!=', '');
         })
         ->select(
