@@ -56,7 +56,7 @@
                     </a>
                     <ul class="dropdown-menu">
                         @foreach($etapes as $etape)
-                        @if(is_user_allowed($etape->etape_name))
+                        @if(is_user_allowed($etape->etape_name) && $etape->order_column>0)
                         <li>
                             <a class="dropdown-item" href="{{ route('dossiers.index',['etape'=>$etape->id]) }}">
                               <i class="fa-solid fa-users-line"></i>   Dossiers : Etape {{$etape->etape_desc}}
