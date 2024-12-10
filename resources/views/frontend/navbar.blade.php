@@ -70,9 +70,9 @@
                               <i class="fa-solid fa-users-line"></i>   Tous les dossiers
                             </a>
                         </li>
-                        @if(auth()->user()->client_id==0 && is_user_allowed('annules'))
+                        @if(auth()->user()->client_id==0 && is_user_allowed('annulation'))
                         <li>
-                            <a class="dropdown-item" href="{{ route('dossiers.index',['annul'=>1]) }}">
+                            <a class="dropdown-item" href="{{ route('dossiers.index',['annulation'=>1]) }}">
                               <i class="fa-solid fa-users-line"></i>   Dossiers annulés
                             </a>
                         </li>
