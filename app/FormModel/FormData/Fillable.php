@@ -206,7 +206,7 @@ class Fillable extends AbstractFormData
                 $data .= '</div>';
             }
 
-            if(auth()->user()->id==1) {
+            if(auth()->user()->id==1 || is_user_allowed('delete_doc')) {
                 $data .= '<br/><button type="button" class="btn btn-danger btn-view" wire:click="delete_doc(\''.$this->form_id.'\',\''.$this->name.'\')"
                 data-toggle="modal" 
                    data-dossier_id="' . $this->dossier->folder . '"';
