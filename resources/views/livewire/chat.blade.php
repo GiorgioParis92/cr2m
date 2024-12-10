@@ -1,4 +1,4 @@
-<div>
+{{-- <div>
    
     <style>
         .chat-container {
@@ -329,4 +329,4 @@
             setupChat();
         });
     </script>
-@endsection
+@endsection --}}
