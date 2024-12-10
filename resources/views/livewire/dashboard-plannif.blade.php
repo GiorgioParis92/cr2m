@@ -50,7 +50,7 @@
                                             <a target="_blank" href="{{ route('dossiers.show', $dossier->folder) }}">
                                                 <div class="btn btn-{{ $dossier->status->status_style ?? '' }}">
     
-                                                    {{ $dossier->status->status_desc }}
+                                                    {{ $dossier->status->status_desc ?? '' }}
     
                                                 </div>
                                             </a>
