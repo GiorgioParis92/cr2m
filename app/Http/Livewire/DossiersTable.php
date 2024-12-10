@@ -37,6 +37,7 @@ class DossiersTable extends Component
         'clientName' => ['except' => ''],
         'precarite' => ['except' => ''],
         'etape' => ['except' => ''],
+        'annulation' => ['except' => ''],
         'mandataire' => ['except' => ''],
         'installateur' => ['except' => ''],
         'accompagnateur' => ['except' => ''],
@@ -47,7 +48,7 @@ class DossiersTable extends Component
     public function mount()
     {
         $this->time = now()->format('H:i:s');
- 
+       
         // Load data for select options
         $this->etapes = Etape::orderBy('order_column')->get(['id', 'etape_name', 'etape_desc', 'etape_icon', 'etape_style']);
         $this->mars = Client::where('type_client', 1)->get(['id', 'client_title', 'main_logo']);
@@ -64,9 +65,10 @@ class DossiersTable extends Component
             ->get();
 
         // Check if any filters are set via query string
-        $filtersApplied = $this->clientName || $this->precarite || ($this->etape || $this->etape==0) || $this->mandataire || $this->installateur || $this->accompagnateur || $this->statut || $this->dpt || (auth()->user()->client_id > 0);
+        $filtersApplied = $this->annulation || $this->clientName || $this->precarite || ($this->etape || $this->etape==0) || $this->mandataire || $this->installateur || $this->accompagnateur || $this->statut || $this->dpt || (auth()->user()->client_id > 0);
     
         if ($filtersApplied) {
+        
             $this->loadDossiers();
         }
 
@@ -84,7 +86,7 @@ class DossiersTable extends Component
     public function loadDossiers()
     {
         // Check if any filters are applied or if the user is a client
-        $filtersApplied = $this->clientName || $this->precarite || ($this->etape || $this->etape==0) || $this->mandataire || $this->installateur || $this->accompagnateur || $this->statut || $this->dpt || (auth()->user()->client_id > 0);
+        $filtersApplied = $this->annulation || $this->clientName || $this->precarite || ($this->etape || $this->etape==0) || $this->mandataire || $this->installateur || $this->accompagnateur || $this->statut || $this->dpt || (auth()->user()->client_id > 0);
        
         if (!$filtersApplied) {
             // No filters applied and user is not a client, don't query the database
@@ -94,7 +96,7 @@ class DossiersTable extends Component
 
         $user = auth()->user();
         $client = Client::find($user->client_id);
-    
+        
         $dossiersQuery = Dossier::with([
             'beneficiaire',
             'fiche',

@@ -232,4 +232,20 @@ $next = Etape::where('order_column', $current->order_column + 1)->first();
 
     }
 
+
+    public function retablir($id)
+    {
+
+        // $dossier = Dossier::where('id', $id)
+        //     ->with('beneficiaire', 'fiche', 'etape', 'status')
+        //     ->delete();
+       
+        Dossier::where('id', $id)->update(['annulation' => 0, 'status_id' => '0']);
+
+
+          
+        return redirect()->route('dossiers.index');
+
+    }
+
 }

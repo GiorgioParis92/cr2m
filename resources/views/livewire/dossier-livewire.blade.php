@@ -88,8 +88,13 @@
                                     <div class="btn btn-primary">{{ $dossier['fiche']['fiche_name'] }}</div>
                                     @if (auth()->user()->client_id == 0 ||
                                             (auth()->user()->client_id != 3 && auth()->user()->type_id != 7 && auth()->user()->type_id != 4))
+                                        @if($dossier['annulation']!=1)
                                         <a href="{{ route('dossiers.delete', ['id' => $dossier->id]) }}"
                                             class="btn btn-danger">Annuler le dossier</a>
+                                            @else
+                                            <a href="{{ route('dossiers.retablir', ['id' => $dossier->id]) }}"
+                                                class="btn btn-danger">Rétablir le dossier</a>
+                                            @endif
                                         <form class="form-control" method="get">
                                             <label>Installateur</label>
                                             <select wire:ignore class="no_select2  form-control" name="installateur"

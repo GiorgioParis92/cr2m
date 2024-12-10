@@ -158,6 +158,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dossier/show/{id}', [DossierController::class, 'show'])->name('dossiers.show');
     Route::post('dossier/show/{id}', [DossierController::class, 'show'])->name('dossiers.show');
     Route::get('dossier/delete/{id}', [DossierController::class, 'delete'])->name('dossiers.delete');
+    Route::get('dossier/retablir/{id}', [DossierController::class, 'retablir'])->name('dossiers.retablir');
     Route::get('dossier/next_step/{id}', [DossierController::class, 'next_step'])->name('dossiers.next_step');
 
 
