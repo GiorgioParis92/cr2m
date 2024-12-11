@@ -109,6 +109,8 @@
 <!-- Include AgGrid scripts -->
 <script src="https://unpkg.com/ag-grid-community/dist/ag-grid-community.noStyle.js"></script>
 <script src="https://unpkg.com/ag-grid-enterprise/dist/ag-grid-enterprise.min.js"></script>
+<script src="https://unpkg.com/ag-grid-community@29.0.0/dist/ag-grid-community.min.noStyle.js"></script>
+
 
 <style>
 span.badge.badge-danger {
@@ -404,7 +406,7 @@ span.badge.badge-outline-danger {
 
 
         ];
-
+            console.log(@json($dossiers))
         // Define gridOptions in the global scope
         gridOptions = {
             rowData: [], // Start with empty data

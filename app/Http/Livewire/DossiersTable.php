@@ -18,7 +18,7 @@ class DossiersTable extends Component
     public $dossiers = [];
 
     // Public properties for filters
-    public $annulation = false;
+    public $annulation = 0;
     public $clientName = '';
     public $precarite = '';
     public $etape = '';
@@ -37,7 +37,7 @@ class DossiersTable extends Component
         'clientName' => ['except' => ''],
         'precarite' => ['except' => ''],
         'etape' => ['except' => ''],
-        'annulation' => ['except' => ''],
+        'annulation' => ['except' => ''] ,
         'mandataire' => ['except' => ''],
         'installateur' => ['except' => ''],
         'accompagnateur' => ['except' => ''],
@@ -65,7 +65,7 @@ class DossiersTable extends Component
             ->get();
 
         // Check if any filters are set via query string
-        $filtersApplied = $this->annulation || $this->clientName || $this->precarite || ($this->etape || $this->etape==0) || $this->mandataire || $this->installateur || $this->accompagnateur || $this->statut || $this->dpt || (auth()->user()->client_id > 0);
+        $filtersApplied = ($this->annulation==1) || $this->clientName || $this->precarite || ($this->etape || $this->etape==0) || $this->mandataire || $this->installateur || $this->accompagnateur || $this->statut || $this->dpt || (auth()->user()->client_id > 0);
     
         if ($filtersApplied) {
         
@@ -89,8 +89,7 @@ class DossiersTable extends Component
         $filtersApplied = $this->annulation || $this->clientName || $this->precarite || ($this->etape || $this->etape==0) || $this->mandataire || $this->installateur || $this->accompagnateur || $this->statut || $this->dpt || (auth()->user()->client_id > 0);
        
         if (!$filtersApplied) {
-            // No filters applied and user is not a client, don't query the database
-            $this->dossiers = [];
+           $this->dossiers = [];
             return;
         }
 
@@ -145,7 +144,9 @@ class DossiersTable extends Component
                     ->orWhere('telephone', 'like', '%' . $this->clientName . '%');
             });
         }
-        if (!$this->annulation) {
+       
+        if (!$this->annulation || $this->annulation==0) {
+  
             $dossiersQuery->where(function($q) {
                 $q->whereNull('annulation')
                   ->orWhere('annulation', 0);
@@ -197,7 +198,7 @@ class DossiersTable extends Component
 
         // Execute the query and process results
         $dossiers = $dossiersQuery->get();
-
+       
         // Map the dossiers data
         $dossiers = $dossiers->map(function ($dossier) {
             return [
@@ -240,7 +241,6 @@ class DossiersTable extends Component
 
         // Update the component's dossier data
         $this->dossiers = $dossiers->toArray();
-
     }
 
     public function render()
