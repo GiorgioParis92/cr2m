@@ -976,7 +976,7 @@
     </div>
     <div>
 
-        <table style="width:100%">
+        <table style="width:100%;margin-top:-20px">
             <tr>
                 <td style="border:none;width:50%">
                     <p><b>Le bénéficiaire</b></p>
