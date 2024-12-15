@@ -210,7 +210,7 @@
                             @foreach ($etapes as $index => $e)
 
 
-                            @if($e['order_column']<0 && is_user_allowed($e['etape_name']))
+                            @if($e['order_column']<0 && is_user_allowed($e['etape_name']) && auth()->user()->client_id==0)
                             @php
                                 $isActive = false;
                                 $isCurrent = false;
