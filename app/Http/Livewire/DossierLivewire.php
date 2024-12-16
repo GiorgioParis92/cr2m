@@ -180,20 +180,42 @@ class DossierLivewire extends Component
             }
         }
         // dd($this->global_data);
+        // foreach ($this->forms_configs as $formId => $config) {
+
+        //     $config->save();
+
+        //     foreach ($config->formData as $tag => $data_form) {
+        //         if (!isset($this->global_data[$tag])) {
+        //             $this->global_data[$tag] = '';
+        //         }
+        //         if ($this->global_data[$tag] != $data_form->value) {
+        //             $this->global_data[$tag] = $data_form->value;
+        //         }
+        //     }
+        // }
         foreach ($this->forms_configs as $formId => $config) {
-
+            // Save the main configuration for the form
             $config->save();
-
+        
             foreach ($config->formData as $tag => $data_form) {
+                // Check if the data form is valid before updating
                 if (!isset($this->global_data[$tag])) {
-                    $this->global_data[$tag] = '';
+                    $this->global_data[$tag] = [];
                 }
-                if ($this->global_data[$tag] != $data_form->value) {
-                    $this->global_data[$tag] = $data_form->value;
+        
+                // Update global data with the current form's data
+                $this->global_data[$tag][$formId] = $data_form->value ?? null;
+        
+                // Save individual form data
+                try {
+                    $data_form->save_value();
+                } catch (\Exception $e) {
+                    // Log or handle exceptions gracefully
+                    \Log::error("Failed to save value for form $formId, tag $tag: " . $e->getMessage());
                 }
             }
         }
-
+        
         change_status($key, $value,$this->dossier->id);
 
         $card=app(CardCreationService::class)->checkAndCreateCard(
