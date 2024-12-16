@@ -99,6 +99,15 @@
 
     <div class="row">
         <h4><span id="count_total">0</span> Résultats</h4>
+        <div class="col-lg-4">
+        <select class="form-control no_select2 col-lg-4" id="pageSizeSelector">
+            <option value="10">10 lignes</option>
+            <option value="20">20 lignes</option>
+            <option selected value="50">50 lignes</option>
+            <option value="100">100 lignes</option>
+            <option value="99999999">Tout Afficher</option>
+          </select>
+        </div>
     </div>
     <!-- AgGrid Container with wire:ignore -->
     <div id="myGrid" class="ag-theme-alpine" style="height: 80vh; width: 100%;" wire:ignore></div>
@@ -107,9 +116,11 @@
 </div>
 
 <!-- Include AgGrid scripts -->
-<script src="https://unpkg.com/ag-grid-community/dist/ag-grid-community.noStyle.js"></script>
-<script src="https://unpkg.com/ag-grid-enterprise/dist/ag-grid-enterprise.min.js"></script>
-<script src="https://unpkg.com/ag-grid-community@29.0.0/dist/ag-grid-community.min.noStyle.js"></script>
+{{-- <script src="https://unpkg.com/ag-grid-community/dist/ag-grid-community.noStyle.js"></script>
+<script src="https://unpkg.com/ag-grid-enterprise/dist/ag-grid-enterprise.min.js"></script> --}}
+{{-- <script src="https://unpkg.com/ag-grid-community@29.0.0/dist/ag-grid-community.min.noStyle.js"></script> --}}
+<script src="https://unpkg.com/ag-grid-community@29.0.0/dist/ag-grid-community.noStyle.js"></script>
+<script src="https://unpkg.com/ag-grid-enterprise@29.0.0/dist/ag-grid-enterprise.min.js"></script>
 
 
 <style>
@@ -185,6 +196,18 @@ span.badge.badge-outline-danger {
             let value = $(this).val();
             @this.set('dpt', value);
         });
+
+
+        const pageSizeSelector = document.getElementById('pageSizeSelector');
+        // pageSizeSelector.value = gridOptions.paginationPageSize; // e.g., 20
+    pageSizeSelector.addEventListener('change', function(e) {
+        var newPageSize = Number(e.target.value);
+        alert(newPageSize)
+        if (gridApi && !isNaN(newPageSize)) {
+            gridApi.paginationSetPageSize(newPageSize);
+        }
+    });
+
         const columnDefs = [
             {
                 field: "date_update",
@@ -430,7 +453,7 @@ span.badge.badge-outline-danger {
             animateRows: true,
             enableRangeSelection: true,
             pagination: true,
-            paginationPageSize: 25,
+            paginationPageSize: 50,
             overlayLoadingTemplate: '<div class="ag-overlay-loading-center" style="padding: 10px;"><i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><br/>Chargement des données...</div>',
 
             // Custom no rows overlay
@@ -453,7 +476,7 @@ span.badge.badge-outline-danger {
                 isGridInitialized = true;
                 console.log('Grid API initialized:', params);
                 var totalRows = params.api.getDisplayedRowCount();
-                const allColumnIds = params.columnApi.getAllColumns().map(col => col.getColId());
+                const allColumnIds = params.columnApi.getColumns().map(col => col.getColId());
                 params.columnApi.autoSizeColumns(allColumnIds);
                 $('#count_total').html(totalRows);
             },
@@ -465,7 +488,7 @@ span.badge.badge-outline-danger {
             },
             onGridSizeChanged: function(params) {
                 params.api.sizeColumnsToFit();
-                const allColumnIds = params.columnApi.getAllColumns().map(col => col.getColId());
+                const allColumnIds = params.columnApi.getColumns().map(col => col.getColId());
                 params.columnApi.autoSizeColumns(allColumnIds);
             },
             onModelUpdated: function(params) {
@@ -547,7 +570,7 @@ span.badge.badge-outline-danger {
         });
     });
     function onGridSizeChanged(params) {
-        const allColumnIds = params.columnApi.getAllColumns().map(col => col.getColId());
+        const allColumnIds = params.columnApi.getColumns().map(col => col.getColId());
         params.columnApi.autoSizeColumns(allColumnIds);
     }
     //     document.addEventListener('livewire:update', function() {
