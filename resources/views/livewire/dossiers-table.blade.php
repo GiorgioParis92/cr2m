@@ -202,7 +202,7 @@ span.badge.badge-outline-danger {
         // pageSizeSelector.value = gridOptions.paginationPageSize; // e.g., 20
     pageSizeSelector.addEventListener('change', function(e) {
         var newPageSize = Number(e.target.value);
-        alert(newPageSize)
+       
         if (gridApi && !isNaN(newPageSize)) {
             gridApi.paginationSetPageSize(newPageSize);
         }
