@@ -65,6 +65,7 @@ class UserController extends Controller
             'password' => Hash::make($temporaryPassword),
             'client_id' => $request->input('client_id'),
             'type_id' => $request->input('type_id'),
+            'activation' => 1,
             // Add other fields as necessary
         ]);
 
@@ -110,6 +111,9 @@ class UserController extends Controller
         }
         if ($request->has('type_id')) {
             $user->type_id = $request->type_id;
+        }
+        if ($request->has('activation')) {
+            $user->activation = $request->activation;
         }
         if ($request->has('password')) {
             $user->password = Hash::make($request->password);

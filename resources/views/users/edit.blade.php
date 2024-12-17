@@ -36,12 +36,19 @@
             <select class="form-control" id="type_id" name="type_id" >
             <option value="">Choisir un type d'utilisateur</option>
             @foreach($types as $type)
-            @dump($type)
+         
             <option @if($type->id==$user->type_id) selected @endif value="{{$type->id}}">{{$type->type_desc}}</option>
             @endforeach
             </select>
         </div> 
+        @if(auth()->user()->client_id==0)
+        <div class="form-group">
+            <label for="type_id">Activation</label>
 
+            <input name="activation" type="hidden" value="0" >
+            <input name="activation" type="checkbox" value="1" @if($user->activation==1) checked @endif>
+        </div> 
+        @endif
         <button type="submit" class="btn btn-primary">Update User</button>
     </form>
 </div>

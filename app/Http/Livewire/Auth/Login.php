@@ -25,15 +25,27 @@ class Login extends Component
 
     public function login() {
         $credentials = $this->validate();
-        if(auth()->attempt(['email' => $this->email, 'password' => $this->password], $this->remember_me)) {
-            $user = User::where(["email" => $this->email])->first();
+    
+        // Attempt to authenticate with the given credentials
+        if (auth()->attempt(['email' => $this->email, 'password' => $this->password], $this->remember_me)) {
+            $user = User::where('email', $this->email)->first();
+    
+            // Check if user is activated
+            if ($user->activation !== 1) {
+                // If not activated, log out and return an error
+                auth()->logout();
+                return $this->addError('email', 'Your account is not activated.');
+            }
+    
+            // If activated, proceed
             auth()->login($user, $this->remember_me);
-            return redirect()->intended('/dashboard');        
-        }
-        else{
-            return $this->addError('email', trans('auth.failed')); 
+            return redirect()->intended('/dashboard');
+        } else {
+            // If credentials are invalid
+            return $this->addError('email', trans('auth.failed'));
         }
     }
+    
 
     public function render()
     {

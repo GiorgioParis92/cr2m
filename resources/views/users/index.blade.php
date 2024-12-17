@@ -21,6 +21,9 @@
 
                             <th>Téléphone</th>
                             <th>Client</th>
+                            @if(auth()->user()->client_id==0)
+                            <th>Activation</th>
+                            @endif
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -44,6 +47,17 @@
                                 <td data-label="">
                                     {{ isset($user->client->client_title) ? ($user->client->client_title.' ('.$user->client->type->type_desc.')') : ''}}
                                 </td>
+                                @if(auth()->user()->client_id==0)
+                                <td data-label="">
+                                    @if($user->activation==1)
+                                    <div class="btn btn-success">Activé</div>
+                                    @else
+                                    <div class="btn btn-danger">Désactivé</div>
+
+                                    @endif
+
+                                </td>
+                                @endif
                                 <td data-label="Actions">
                                     <a href="{{ route('users.edit', $user->id) }}"
                                         class="btn btn-success"><i class="fa fa-save"></i></a>
