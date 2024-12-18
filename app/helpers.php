@@ -2,6 +2,7 @@
 
 use App\Models\User;
 use App\Models\Dossier;
+use App\Models\FormsData;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
@@ -701,6 +702,41 @@ if (!function_exists('change_status')) {
 
         Dossier::where('id', $dossier_id)->update(['annulation' => 1, 'status_id' => $value]);
     } 
+    }
+}
+
+
+
+if (!function_exists('check_condition')) {
+    function check_condition($options,$dossier_id)
+    {
+        if(!isset($options)) {
+            return true;
+        }
+
+        if(!isset($options['conditions'])) {
+            return true;
+        } else {
+
+            foreach($options['conditions'] as $name=>$condition) {
+                $value = FormsData::where('dossier_id', $dossier_id)
+                ->where('meta_key', $name)
+                ->value('meta_value');
+                $display=false;
+                foreach($condition as $condition_value) {
+                    if($condition_value==$value) {
+                        $display=true;
+                    }
+                }
+
+                return $display;
+            }
+
+
+        }
+
+        return $options['conditions'] ?? '';
+
     }
 }
 
