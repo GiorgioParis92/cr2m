@@ -1,7 +1,7 @@
 <div>
 
-    <div wire:loading wire:target="add_row,remove_row,display_form,setTab" class="loader-overlay">
-        <!-- Your loader content, e.g., a spinner -->
+    <div wire:loading wire:target="add_row,remove_row,display_form,setTab,handleFieldUpdated" class="loader-overlay">
+     
         <div class="spinner"></div>
     </div>
 
