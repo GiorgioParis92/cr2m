@@ -24,10 +24,12 @@ class Phone extends Component
     public $form_id;
     public $dossier_id;
     public $value;
+    public $check_condition=true;
+
 
     protected $frenchPhonePattern = '/^(?:(?:\+|00)33|0)[1-9](?:[\s\.\-]?\d{2}){4}$/';
 
-    protected $listeners = ['fieldUpdated' => 'handleFieldUpdated'];
+    public $listeners = [];
 
     public function mount($conf, $form_id, $dossier_id)
     {
@@ -54,8 +56,11 @@ class Phone extends Component
         }
         $this->options=$optionsArray;
 
-        $check_condition=check_condition($this->options ?? '',$dossier_id);
-        $this->check_condition=$check_condition;
+        if(isset($this->options['conditions'])) {
+            $this->listeners = ['fieldUpdated' => 'handleFieldUpdated'];
+            $check_condition=check_condition($this->options ?? '',$dossier_id);
+            $this->check_condition=$check_condition;
+        }
     }
 
     public function updatedValue($newValue)

@@ -25,8 +25,9 @@ class Db_select extends Component
     public $form_id;
     public $dossier_id;
     public $value;
+    public $check_condition=true;
 
-    protected $listeners = ['fieldUpdated' => 'handleFieldUpdated'];
+    protected $listeners = ['aaaa'=>'handleFieldUpdated'];
 
 
     public function mount($conf, $form_id, $dossier_id)
@@ -62,8 +63,17 @@ class Db_select extends Component
         $this->request=$request;
         $this->value = $existingValue ? $existingValue->meta_value : '';
         $this->validateValue($this->value);
-        $check_condition=check_condition($this->options ?? '',$dossier_id);
-        $this->check_condition=$check_condition;
+        if(isset($this->options['conditions'])) {
+         
+            foreach($this->options['conditions'] as $tag=>$value) {
+              
+                $this->listeners[$tag]='handleFieldUpdated';
+
+            }
+
+            $check_condition=check_condition($this->options ?? '',$dossier_id);
+            $this->check_condition=$check_condition;
+        }
     }
 
 
@@ -91,13 +101,15 @@ class Db_select extends Component
     }
     public function handleFieldUpdated()
     {
+       
         $check_condition=check_condition($this->options ?? '',$this->dossier_id);
-        $this->check_condition=$check_condition;
+        // $this->check_condition='okokokok';
      
 
     }
     public function render()
     {
+
         return view('livewire.forms.db_select');
     }
 }

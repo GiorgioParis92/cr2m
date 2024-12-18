@@ -26,7 +26,9 @@ class Checkbox extends Component
     public $dossier_id;
     public $value;
     public $display=true;
-    protected $listeners = ['fieldUpdated' => 'handleFieldUpdated'];
+    public $check_condition=true;
+
+    public $listeners = [];
 
     public function mount($conf, $form_id, $dossier_id)
     {
@@ -51,8 +53,15 @@ class Checkbox extends Component
         $this->value = $existingValue ? $existingValue->meta_value : '';
         $this->validateValue($this->value);
 
-        $check_condition=check_condition($this->options ?? '',$dossier_id);
-        $this->check_condition=$check_condition;
+        // if(isset($this->options['conditions'])) {
+        //     foreach($this->options['conditions'] as $tag=>$value) {
+        //         $this->listeners[$tag]='handleFieldUpdated';
+
+        //     }
+
+        //     $check_condition=check_condition($this->options ?? '',$dossier_id);
+        //     $this->check_condition=$check_condition;
+        // }
     }
 
 
@@ -77,7 +86,7 @@ class Checkbox extends Component
                 'meta_value' => $newValue
             ]
         );
-        $this->emit('fieldUpdated', $this->conf->name, $newValue);
+        // $this->emit($this->conf->name, $this->conf->name, $newValue);
       
 
     }
@@ -103,7 +112,8 @@ class Checkbox extends Component
                 'meta_value' => $newValue
             ]
         );
-        $this->emit('fieldUpdated', $this->conf->name, $newValue);
+        $this->emit($this->conf->name);
+      
 
     }
     protected function validateValue($value)

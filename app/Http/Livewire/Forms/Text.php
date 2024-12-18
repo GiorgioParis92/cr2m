@@ -24,7 +24,9 @@ class Text extends Component
     public $form_id;
     public $dossier_id;
     public $value;
-    protected $listeners = ['fieldUpdated' => 'handleFieldUpdated'];
+    public $check_condition=true;
+
+    public $listeners = [];
 
     public function mount($conf, $form_id, $dossier_id)
     {
@@ -52,8 +54,15 @@ class Text extends Component
 
         $this->validateValue($this->value);
 
-        $check_condition=check_condition($this->options ?? '',$dossier_id);
-        $this->check_condition=$check_condition;
+        if(isset($this->options['conditions'])) {
+            foreach($this->options['conditions'] as $tag=>$value) {
+                $this->listeners[$tag]='handleFieldUpdated';
+
+            }
+
+            $check_condition=check_condition($this->options ?? '',$dossier_id);
+            $this->check_condition=$check_condition;
+        }
     }
 
     // This will be automatically called whenever $value changes

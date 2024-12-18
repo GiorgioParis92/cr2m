@@ -25,7 +25,8 @@ class Title extends Component
     public $form_id;
     public $dossier_id;
     public $value;
-    protected $listeners = ['fieldUpdated' => 'handleFieldUpdated'];
+    public $check_condition=true;
+    public $listeners = [];
 
 
     public function mount($conf, $form_id, $dossier_id)
@@ -44,9 +45,18 @@ class Title extends Component
             $optionsArray =[]; 
         }
         $this->options=$optionsArray;
+        if(isset($this->options['conditions'])) {
+            $this->listeners=[];
+            foreach($this->options['conditions'] as $tag=>$value) {
 
-        $check_condition=check_condition($this->options ?? '',$dossier_id);
-        $this->check_condition=$check_condition;
+                $this->listeners[$tag]='handleFieldUpdated';
+
+            }
+
+            $check_condition=check_condition($this->options ?? '',$dossier_id);
+            $this->check_condition=$check_condition;
+        }
+
     }
 
 
@@ -69,6 +79,7 @@ class Title extends Component
     }
     public function render()
     {
+
         return view('livewire.forms.title');
     }
 }
