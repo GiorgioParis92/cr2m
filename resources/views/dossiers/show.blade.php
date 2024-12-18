@@ -9,8 +9,13 @@
 
     <div class="container">
 
-        @livewire('dossier-livewire', ['id' => $id])
+      
+        @if(auth()->user()->id==1)
 
+        @livewire('dossier-livewire-new', ['id' => $id])
+        @else 
+        @livewire('dossier-livewire', ['id' => $id])
+        @endif
         @if (!$is_valid)
             <div class="alert alert-danger">
                 Erreur dans le remplissage de votre formulaire
