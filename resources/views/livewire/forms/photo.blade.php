@@ -230,6 +230,8 @@
                 },
                 data: {
                     link: link,
+                    dossier_id: $(this).data('dossier_id'),
+                    tag: $(this).data('tag'),
                 },
                 success: function(response) {
                     console.log('Successfully deleted:', response);
