@@ -1,6 +1,6 @@
 <div>
 
-    <div wire:loading wire:target="add_row,remove_row,display_form,setTab,handleFieldUpdated" class="loader-overlay">
+    <div wire:loading wire:target="add_row,remove_row,display_form,setTab,handleFieldUpdated,set_form" class="loader-overlay">
      
         <div class="spinner"></div>
     </div>
@@ -237,7 +237,7 @@
                                         
                                     
                                         @else
-                                            <p>Component for type "{{ $conf->type }}" not found.</p>
+                                            <p style="background:red">Component for type "{{ $conf->type }}" not found.</p>
                                         @endif
                                     @endforeach
                             
@@ -253,5 +253,134 @@
         </div>
 
     </div>
-
+    <style>
+        .board {
+            display: block;
+            padding: 20px;
+            overflow-x: auto;
+            height: auto;
+            width: 100%
+        }
+    
+        .column {
+            /* background-color: #ebecf0; */
+            border-radius: 3px;
+    
+            margin-right: 1%;
+            padding: 10px;
+            flex-shrink: 0;
+            /* max-height: 280px; */
+            overflow-x: hidden;
+            overflow-y: scroll;
+        }
+    
+        .column-header {
+            font-weight: bold;
+            padding-bottom: 10px;
+        }
+    
+        .ticket {
+            background-color: white;
+            border-radius: 3px;
+            padding: 10px;
+            margin-bottom: 10px;
+            cursor: move;
+            box-shadow: 0 1px 0 rgba(9, 30, 66, .25);
+        }
+    
+        .add-column,
+        .add-ticket {
+            background-color: rgba(9, 30, 66, .04);
+            color: #172b4d;
+            border: none;
+            padding: 10px;
+            border-radius: 3px;
+            cursor: pointer;
+            width: 100%;
+            text-align: left;
+        }
+    
+        .add-column:hover,
+        .add-ticket:hover {
+            background-color: rgba(9, 30, 66, .08);
+        }
+    
+        #new-column {
+            width: 272px;
+            margin-right: 10px;
+        }
+    
+        .column {
+    
+    
+            /* Hide scrollbar for IE, Edge and Firefox */
+            -ms-overflow-style: none;
+            /* IE and Edge */
+            scrollbar-width: none;
+            /* Firefox */
+        }
+    
+        .column::-webkit-scrollbar {
+            display: none;
+        }
+    
+        .col-xl-4.col-sm-4.mb-xl-0.mb-4.column {
+            max-width: 32%;
+        }
+    
+        .loader-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            display: none;
+        }
+    
+        /* CSS for the spinner */
+        .spinner {
+            border: 8px solid rgba(0, 0, 0, 0.1);
+            border-top: 8px solid #3498db;
+            border-radius: 50%;
+            width: 80px;
+            height: 80px;
+            animation: spin 1s linear infinite;
+            margin: auto;
+            top: 46vh;
+            position: relative;
+        }
+    
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+    
+            to {
+                transform: rotate(360deg);
+            }
+        }
+    
+        .thumbnail_hover {
+            display: none;
+            position: absolute;
+            pointer-events: none;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+            box-shadow: 8px 7px 9px;
+            z-index: 9999999999;
+        }
+    
+        .p_thumbnail:hover {
+            cursor: pointer;
+        }
+    
+        .p_thumbnail:hover .thumbnail_hover {
+            display: block;
+        }
+    </style>
 </div>

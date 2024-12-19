@@ -741,3 +741,49 @@ if (!function_exists('check_condition')) {
 }
 
 
+function getValueFromOperation($value, $operation) {
+    $numberValue = filter_var($value, FILTER_VALIDATE_FLOAT);
+    if ($numberValue === false) {
+        // Could not parse as float
+        switch ($operation) {
+            case '+':
+            case '-':
+            case 'count':
+                return 0.0;
+            case 'x':
+            case '/':
+                return 1.0;
+            case '<':
+                return PHP_FLOAT_MAX;
+            case '>':
+                return PHP_FLOAT_MAX;
+            default:
+                throw new InvalidArgumentException("Invalid operation");
+        }
+    }
+    return (float)$numberValue;
+}
+
+function performOperation($a, $b, $operation) {
+    switch ($operation) {
+        case '+':
+            return $a + $b;
+        case '-':
+            return $a - $b;
+        case 'x':
+            return $a * $b;
+        case '/':
+            return ($b != 0) ? ($a / $b) : 0;
+        case 'count':
+            // In the Dart code, if b <= 0, return a, else a+1.
+            return ($b <= 0) ? $a : ($a + 1);
+        case '<':
+            return ($a < $b) ? $a : $b;
+        case '>':
+            return ($a > $b) ? $a : $b;
+        default:
+            throw new InvalidArgumentException("Invalid operation");
+    }
+}
+
+

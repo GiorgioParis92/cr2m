@@ -2,100 +2,58 @@
 
 namespace App\Http\Livewire\Forms;
 
-use Livewire\Component;
-use App\Models\{
-    Dossier,
-    Etape,
-    DossiersActivity,
-    User,
-    Form,
-    Forms,
-    FormConfig,
-    Rdv,
-    RdvStatus,
-    Client,
-    FormsData,
-    Card
-};
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Http;
-class Result extends Component
+
+class Result extends AbstractData
 {
-    public $conf;
-    public $form_id;
-    public $dossier_id;
-    public $value;
-    public $check_condition=true;
-
-    public $listeners = [];
 
 
-    public function mount($conf, $form_id, $dossier_id)
+    public function mount($conf, $form_id, $dossier_id) {
+        parent::mount($conf, $form_id, $dossier_id);
+        $this->calculate_value();
+    }
+
+
+    public function calculate_value()
     {
-        $this->conf = $conf;
-        $this->form_id = $form_id;
-        $this->dossier_id = $dossier_id;
+        $this->value=null;
 
-        $existingValue = FormsData::where('dossier_id', $dossier_id)
-            ->where('form_id', $form_id)
-            ->where('meta_key', $conf->name)
-            ->first();
+        if($this->options && $this->options['operands'] ) {
+            foreach($this->options['operands'] as $operands) {
+                foreach($operands['tags'] as $tag) {
 
-            if(isset($this->conf->options)) {
-                if (!is_array($this->conf->options)) {
-                    $jsonString = str_replace(["\n", '', "\r"], '', $this->conf->options);
-                    $optionsArray = json_decode($jsonString, true);
+                if(is_numeric($tag)) {
+                    $value=$tag;
                 } else {
-                    $optionsArray = $this->conf->options;
+                    $this->listeners[$tag]='calculate_value';
+
+                    $value = \App\Models\FormsData::where('dossier_id', $this->dossier_id)
+                    ->where('meta_key', $tag)
+                    ->value('meta_value');
                 }
-            } else {
-                $optionsArray =[]; 
-            }
-            $this->options=$optionsArray;
 
-        $this->value = $existingValue ? $existingValue->meta_value : '';
-        $this->validateValue($this->value);
+      
 
-        if(isset($this->options['conditions'])) {
-            foreach($this->options['conditions'] as $tag=>$value) {
-                $this->listeners[$tag]='handleFieldUpdated';
+                $a=getValueFromOperation($this->value,$operands['operand']);
+                $b=getValueFromOperation($value,$operands['operand']);
+                $this->value=performOperation($a,$b,$operands['operand']);
 
             }
-
-            $check_condition=check_condition($this->options ?? '',$dossier_id);
-            $this->check_condition=$check_condition;
         }
+
+
+        }
+        $this->value=number_format($this->value, 2, '.', '');
+        $this->updatedValue($this->value);
+
+    }
+    public function getErrorMessage() {
+        return '';
     }
 
 
-    public function updatedValue($newValue)
+    protected function validateValue($value): bool
     {
-        $this->validateValue($newValue);
-        $this->value=$newValue;
-        // Always save, regardless of validity
-        FormsData::updateOrCreate(
-            [
-                'dossier_id' => $this->dossier_id,
-                'form_id' => $this->form_id,
-                'meta_key' => $this->conf->name
-            ],
-            [
-                'meta_value' => $newValue
-            ]
-        );
-    }
-
-    protected function validateValue($value)
-    {
-        // Reset errors first to ensure state is fresh
-
-    }
-    public function handleFieldUpdated()
-    {
-        $check_condition=check_condition($this->options ?? '',$this->dossier_id);
-        $this->check_condition=$check_condition;
-     
-
+        return true;
     }
     public function render()
     {

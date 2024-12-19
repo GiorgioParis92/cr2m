@@ -4,7 +4,7 @@ namespace App\Http\Livewire\Forms;
 
 
 
-class Checkbox extends AbstractData
+class Radio extends AbstractData
 {
     public function mount($conf, $form_id, $dossier_id) {
         parent::mount($conf, $form_id, $dossier_id);
@@ -35,6 +35,6 @@ class Checkbox extends AbstractData
 
     public function render()
     {
-        return view('livewire.forms.checkbox');
+        return view('livewire.forms.radio');
     }
 }
