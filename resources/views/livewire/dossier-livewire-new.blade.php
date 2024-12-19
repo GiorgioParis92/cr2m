@@ -220,7 +220,7 @@
                 @endif
                 <div class="row">
                     <div class="col-12">
-                        <div class="card mt-4" id="basic-info">
+                        <div class="" id="basic-info">
                             <div class="card-header">
                                 <h5>Titre Formulaire</h5>
                             </div>
