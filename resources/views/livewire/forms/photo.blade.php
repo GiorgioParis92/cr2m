@@ -220,32 +220,37 @@
     }
 
     function initializeDeleteButtons() {
-        $('.delete_photo').off('click').on('click', function() {
-            var link = $(this).data('val');
-            $.ajax({
-                url: '/delete_file',
-                method: 'POST',
-                headers: {
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                },
-                data: {
-                    link: link,
-                    dossier_id: $(this).data('dossier_id'),
-                    tag: $(this).data('tag'),
-                },
-                success: function(response) {
-                    console.log('Successfully deleted:', response);
-                },
-                error: function(xhr) {
-                    let errorMessage = 'An error occurred';
-                    if (xhr.responseJSON && xhr.responseJSON.errors) {
-                        errorMessage = Object.values(xhr.responseJSON.errors).join(', ');
-                    }
-                    console.log(errorMessage);
+    $('.delete_photo').off('click').on('click', function() {
+        var _this = $(this); // Store a reference to the clicked element
+        var link = _this.data('val');
+
+        $.ajax({
+            url: '/delete_file',
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            },
+            data: {
+                link: link,
+                dossier_id: _this.data('dossier_id'),
+                tag: _this.data('tag'),
+            },
+            success: function(response) {
+                console.log('Successfully deleted:', response);
+                // Remove the parent block containing the image and delete button
+                _this.closest('div[style="display:inline-block"]').remove();
+            },
+            error: function(xhr) {
+                let errorMessage = 'An error occurred';
+                if (xhr.responseJSON && xhr.responseJSON.errors) {
+                    errorMessage = Object.values(xhr.responseJSON.errors).join(', ');
                 }
-            });
+                console.log(errorMessage);
+            }
         });
-    }
+    });
+}
+
 </script>
 
 
