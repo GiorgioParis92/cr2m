@@ -1,4 +1,4 @@
-<div class=" col-lg-12">
+<div class=" col-lg-12" wire:poll>
     @if ($check_condition)
         <label>{{ $conf['title'] ?? '' }}</label>
         @php
@@ -117,6 +117,47 @@
 
             $data .= '</div>';
             $data .= '</div>';
+
+                  $data .= "<script>
+            Dropzone.autoDiscover = false;
+
+        var dropzoneElementId = '#dropzone-" . str_replace('.', '-', $conf['name']) . "';
+        var dropzoneElement = document.querySelector(dropzoneElementId);
+        
+        if (dropzoneElement && !dropzoneElement.dropzone) {
+
+            console.log(dropzoneElementId);
+                    const dropzoneId = dropzoneElement.id;
+        const key = dropzoneId.replace('dropzone-','');
+        const uploadUrl = dropzoneElement.getAttribute('data-upload-url');
+        const form_id = dropzoneElement.getAttribute('data-form_id');
+
+            var dropzone = new Dropzone(dropzoneElement, {
+                url: '{$uploadUrl}',
+                method: 'post',
+                headers: {
+                    'X-CSRF-TOKEN': '{$csrfToken}'
+                },
+                maxFilesize: 50000,
+                paramName: 'file',
+                sending: function(file, xhr, formData) {
+                    console.log(file);
+                    formData.append('folder', 'dossiers');
+                    formData.append('template', '{$conf['name']}');
+                    formData.append('random_name', 'true');
+                },
+                init: function() {
+                    this.on('success', function(file, response) {
+                        console.log('Successfully uploaded:', response);
+                        // initializeDeleteButtons();
+                    });
+                    this.on('error', function(file, response) {
+                        console.log('Upload error:', response);
+                    });
+                }
+            });
+        }
+    </script>";
             echo $data;
         @endphp
     @endif
