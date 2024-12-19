@@ -153,7 +153,7 @@
     // 'response' now only contains 'url'
 
     // Since we have the other variables from Blade as JS variables:
-    var url = response;
+    var url = "{{ asset('storage') }}/" + response;
     var title = confTitle;  // previously defined from Blade variables
     var name = confName;
     var id = dossierId;
