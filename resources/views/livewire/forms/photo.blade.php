@@ -165,37 +165,38 @@
     var newBlockHtml = '';
 
     if (!isPdf) {
-        // Image block
-        newBlockHtml =
-            '<div style="display:inline-block">' +
-                '<i data-dossier_id="' + id + '" ' +
-                'data-tag="' + name + '" ' +
-                'data-index="" ' +  // if needed, set an actual index if you have one
-                'data-val="' + url + '" ' +
-                'data-img-src="' + url + '" ' +
-                'class="delete_photo btn btn-danger fa fa-trash bg-danger"></i>' +
+    // Use `response` for data-val (the file's relative path)
+    newBlockHtml =
+        '<div style="display:inline-block">' +
+            '<i data-dossier_id="' + id + '" ' +
+            'data-tag="' + name + '" ' +
+            'data-index="" ' +
+            'data-val="' + response + '" ' + // Only the relative path here
+            'data-img-src="' + url + '" ' + // Keep the full URL for preview
+            'class="delete_photo btn btn-danger fa fa-trash bg-danger"></i>' +
 
-                '<button type="button" ' +
-                'class="btn btn-success btn-view imageModal" ' +
-                'data-toggle="modal" data-target="imageModal" ' +
-                'data-img-src="' + url + '" ' +
-                'data-val="' + url + '" ' +
-                'data-name="' + title + '">' +
-                    '<img src="' + url + '">' +
-                    '<i style="display:block" class="fas fa-eye"></i>' + title +
-                '</button>' +
-            '</div>';
-    } else {
-        // PDF block
-        newBlockHtml =
-            '<div class="btn btn-success btn-view pdfModal" ' +
-            'data-toggle="modal" ' +
+            '<button type="button" ' +
+            'class="btn btn-success btn-view imageModal" ' +
+            'data-toggle="modal" data-target="imageModal" ' +
             'data-img-src="' + url + '" ' +
-            'data-val="' + url + '" ' +
+            'data-val="' + response + '" ' + // Also ensure consistency here
             'data-name="' + title + '">' +
-                '<i class="fas fa-eye"></i>' + title +
-            '</div>';
-    }
+                '<img src="' + url + '">' +
+                '<i style="display:block" class="fas fa-eye"></i>' + title +
+            '</button>' +
+        '</div>';
+} else {
+    // Similarly for PDF:
+    newBlockHtml =
+        '<div class="btn btn-success btn-view pdfModal" ' +
+        'data-toggle="modal" ' +
+        'data-img-src="' + url + '" ' +
+        'data-val="' + response + '" ' + // Relative path only
+        'data-name="' + title + '">' +
+            '<i class="fas fa-eye"></i>' + title +
+        '</div>';
+}
+
 
     $(dropzoneElement).closest('.row').find('.col-lg-3').append(newBlockHtml);
     initializeDeleteButtons();
