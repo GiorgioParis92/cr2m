@@ -64,7 +64,7 @@
                             if (end($extension) != 'pdf') {
                                 $data .=
                                     '<div style="display:inline-block">
-                    <i data-dossier_id="{{dossier_id}}" data-tag="' .
+                    <i data-dossier_id="'.$dossier_id.'" data-tag="' .
                                     ($tag ?? $conf['name']) .
                                     '" data-index="' .
                                     ($index ?? '') .
