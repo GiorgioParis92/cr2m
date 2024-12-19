@@ -1,4 +1,4 @@
-<div class="{{ $conf['class'] ?? 'col-lg-12' }}">
+<div class="col-sm-12 {{ $conf['class'] ?? 'col-lg-12' }}">
     @if($check_condition)
     <label>{{ $conf['title'] ?? '' }}</label>
     <textarea
