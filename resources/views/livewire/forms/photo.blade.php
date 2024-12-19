@@ -119,6 +119,7 @@
         @endphp
 
 <script>
+        initializeDeleteButtons();
         var confTitle = @json($conf['title']);
     var confName = @json($conf['name']);
     var dossierId = @json($dossier_id);
@@ -197,6 +198,7 @@
     }
 
     $(dropzoneElement).closest('.row').find('.col-lg-3').append(newBlockHtml);
+    initializeDeleteButtons();
 });
 
 
@@ -217,7 +219,31 @@
         document.addEventListener('livewire:load', initDropzone);
     }
 
-
+    function initializeDeleteButtons() {
+        $('.delete_photo').off('click').on('click', function() {
+            var link = $(this).data('val');
+            $.ajax({
+                url: '/delete_file',
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                data: {
+                    link: link,
+                },
+                success: function(response) {
+                    console.log('Successfully deleted:', response);
+                },
+                error: function(xhr) {
+                    let errorMessage = 'An error occurred';
+                    if (xhr.responseJSON && xhr.responseJSON.errors) {
+                        errorMessage = Object.values(xhr.responseJSON.errors).join(', ');
+                    }
+                    console.log(errorMessage);
+                }
+            });
+        });
+    }
 </script>
 
 
