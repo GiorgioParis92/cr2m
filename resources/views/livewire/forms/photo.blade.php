@@ -1,4 +1,4 @@
-<div class=" col-lg-12" wire:poll>
+<div class=" col-lg-12" >
     @if ($check_condition)
         <label>{{ $conf['title'] ?? '' }}</label>
         @php
@@ -114,66 +114,22 @@
             $data .= '</div>';
             $data .= '</div>';
 
-            // $data .= '<script>
-            //     Dropzone.autoDiscover = false;
-
-            //     var dropzoneElementId = '#dropzone-" . str_replace('.
-            //     ', ' - ', $conf['
-            //     name ']) . "';
-            //     var dropzoneElement = document.querySelector(dropzoneElementId);
-
-            //     if (dropzoneElement && !dropzoneElement.dropzone) {
-
-            //         console.log(dropzoneElementId);
-            //         const dropzoneId = dropzoneElement.id;
-            //         const key = dropzoneId.replace('dropzone-', '');
-            //         const uploadUrl = dropzoneElement.getAttribute('data-upload-url');
-            //         const form_id = dropzoneElement.getAttribute('data-form_id');
-
-            //         var dropzone = new Dropzone(dropzoneElement, {
-            //             url: '{$uploadUrl}',
-            //             method: 'post',
-            //             headers: {
-            //                 'X-CSRF-TOKEN': '{$csrfToken}'
-            //             },
-            //             maxFilesize: 50000,
-            //             paramName: 'file',
-            //             sending: function(file, xhr, formData) {
-            //                 console.log(file);
-            //                 formData.append('folder', 'dossiers');
-            //                 formData.append('template', '{$conf['
-            //                     name ']}');
-            //                 formData.append('random_name', 'true');
-            //             },
-            //             init: function() {
-            //                 this.on('success', function(file, response) {
-            //                     console.log('Successfully uploaded:', response);
-            //                     // initializeDeleteButtons();
-            //                 });
-            //                 this.on('error', function(file, response) {
-            //                     console.log('Upload error:', response);
-            //                 });
-            //             }
-            //         });
-            //     }
-            // </script>';
+          
             echo $data;
         @endphp
-    @endif
 
-    <script>
+<script>
+        var confTitle = @json($conf['title']);
+    var confName = @json($conf['name']);
+    var dossierId = @json($dossier_id);
+    var confId = @json($conf['id']);
+    function initDropzone() {
+        // Put your Dropzone initialization code here
         Dropzone.autoDiscover = false;
-        
-        var dropzoneElementId = '#dropzone-{{ str_replace(".", " - ", $conf["name"]) }}';
+        var dropzoneElementId = '#dropzone-{{ preg_replace('/[^A-Za-z0-9\-]/', '_', $conf["name"]) }}';
         var dropzoneElement = document.querySelector(dropzoneElementId);
-        
+
         if (dropzoneElement && !dropzoneElement.dropzone) {
-            console.log(dropzoneElementId);
-            const dropzoneId = dropzoneElement.id;
-            const key = dropzoneId.replace('dropzone-', '');
-            const uploadUrl = dropzoneElement.getAttribute('data-upload-url');
-            const form_id = dropzoneElement.getAttribute('data-form_id');
-        
             var dropzone = new Dropzone(dropzoneElement, {
                 url: '{{ $uploadUrl }}',
                 method: 'post',
@@ -183,15 +139,124 @@
                 maxFilesize: 50000,
                 paramName: 'file',
                 sending: function(file, xhr, formData) {
-                    console.log(file);
+                    formData.append('dossier_id', '{{ $dossier_id }}');
+                    formData.append('clientId', '{{ $dossier->folder }}');
                     formData.append('folder', 'dossiers');
                     formData.append('template', '{{ $conf["name"] }}');
+                    formData.append('config', '{{ $conf["id"] }}');
                     formData.append('random_name', 'true');
+                    formData.append('form_id', '{{$form_id}}');
+                },
+                init: function() {
+                    this.on('success', function(file, response) {
+    console.log('Successfully uploaded:', response);
+    // 'response' now only contains 'url'
+
+    // Since we have the other variables from Blade as JS variables:
+    var url = response;
+    var title = confTitle;  // previously defined from Blade variables
+    var name = confName;
+    var id = dossierId;
+
+    // Determine if it's PDF by checking the URL extension
+    var isPdf = url.toLowerCase().endsWith('.pdf');
+
+    var newBlockHtml = '';
+
+    if (!isPdf) {
+        // Image block
+        newBlockHtml =
+            '<div style="display:inline-block">' +
+                '<i data-dossier_id="' + id + '" ' +
+                'data-tag="' + name + '" ' +
+                'data-index="" ' +  // if needed, set an actual index if you have one
+                'data-val="' + url + '" ' +
+                'data-img-src="' + url + '" ' +
+                'class="delete_photo btn btn-danger fa fa-trash bg-danger"></i>' +
+
+                '<button type="button" ' +
+                'class="btn btn-success btn-view imageModal" ' +
+                'data-toggle="modal" data-target="imageModal" ' +
+                'data-img-src="' + url + '" ' +
+                'data-val="' + url + '" ' +
+                'data-name="' + title + '">' +
+                    '<img src="' + url + '">' +
+                    '<i style="display:block" class="fas fa-eye"></i>' + title +
+                '</button>' +
+            '</div>';
+    } else {
+        // PDF block
+        newBlockHtml =
+            '<div class="btn btn-success btn-view pdfModal" ' +
+            'data-toggle="modal" ' +
+            'data-img-src="' + url + '" ' +
+            'data-val="' + url + '" ' +
+            'data-name="' + title + '">' +
+                '<i class="fas fa-eye"></i>' + title +
+            '</div>';
+    }
+
+    $(dropzoneElement).closest('.row').find('.col-lg-3').append(newBlockHtml);
+});
+
+
+                    this.on('error', function(file, response) {
+                        console.log('Upload error:', response);
+                    });
+                }
+            });
+        }
+    }
+
+    // Check if Livewire is already available
+    if (window.Livewire) {
+        // Livewire is already loaded, so we can initialize Dropzone now
+        initDropzone();
+    } else {
+        // If not loaded yet, listen for the event
+        document.addEventListener('livewire:load', initDropzone);
+    }
+
+
+</script>
+
+
+    @endif
+
+ 
+    
+        
+
+</div>
+{{-- <script>
+    function initDropzone() {
+        // Your Dropzone initialization code here
+        Dropzone.autoDiscover = false;
+        var dropzoneElementId = '#dropzone-{{ preg_replace('/[^A-Za-z0-9\-]/', '_', $conf["name"]) }}';
+        var dropzoneElement = document.querySelector(dropzoneElementId);
+        
+        if (dropzoneElement && !dropzoneElement.dropzone) {
+            console.log(dropzoneElementId);
+            const uploadUrl = dropzoneElement.getAttribute('data-upload-url');
+            
+            var dropzone = new Dropzone(dropzoneElement, {
+                url: '{{ $uploadUrl }}',
+                method: 'post',
+                headers: { 'X-CSRF-TOKEN': '{{ $csrfToken }}' },
+                maxFilesize: 50000,
+                paramName: 'file',
+                sending: function(file, xhr, formData) {
+                    formData.append('dossier_id', '{{ $dossier_id }}');
+                    formData.append('clientId', '{{ $dossier->folder }}');
+                    formData.append('folder', 'dossiers');
+                    formData.append('template', '{{ $conf["name"] }}');
+                    formData.append('config', '{{ $conf["id"] }}');
+                    formData.append('random_name', 'true');
+                    formData.append('form_id', '{{$form_id}}');
                 },
                 init: function() {
                     this.on('success', function(file, response) {
                         console.log('Successfully uploaded:', response);
-                        // Emit event to Livewire
                         Livewire.emit('fileUploaded', response);
                     });
                     this.on('error', function(file, response) {
@@ -200,7 +265,16 @@
                 }
             });
         }
-        </script>
-        
+    }
 
-</div>
+    // If Livewire is already available, just run initDropzone
+    if (window.Livewire) {
+        initDropzone();
+    } else {
+        // If not, wait for the event
+        document.addEventListener('livewire:load', initDropzone);
+    }
+
+</script>
+ --}}
+

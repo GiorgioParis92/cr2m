@@ -383,4 +383,23 @@
             display: block;
         }
     </style>
+
 </div>
+<script>
+    document.addEventListener('DOMContentLoaded', function(event) {
+   document.addEventListener('livewire:load', () => {
+       console.log('livewire loaded');
+       // ... your dropzone initialization code here
+   });
+});
+
+document.addEventListener('photoComponentUploaded', function(event) {
+    if (window.Livewire && typeof Livewire.emit === 'function') {
+        alert('emit')
+        Livewire.emit('fileUploaded', event.detail);
+    } else {
+        // If Livewire isn't ready, you can store these events and emit later
+        // or handle accordingly
+    }
+});
+</script>

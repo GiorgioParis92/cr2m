@@ -31,7 +31,7 @@ class FileUploadService
     public function storeImage(Request $request, string $folder = null, int $clientId = null, string $inputName = 'file', bool $random_name = false)
     {
 
-
+      
 
         if ($request->folder == 'dossiers') {
 
@@ -45,6 +45,7 @@ class FileUploadService
             $clientId = $request->clientId;
 
             if (isset($request->folder) && $request->folder == 'dossiers') {
+               
                 if (is_numeric($request->clientId)) {
                     $dossier = Dossier::where('id', $request->clientId)->first();
                 } else {
