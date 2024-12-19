@@ -2,7 +2,7 @@
     @if ($check_condition)
         <label>{{ $conf['title'] ?? '' }}</label>
         @php
-     
+
             $data = '';
 
             $uploadUrl = route('upload_file', [
@@ -43,7 +43,6 @@
             if (is_array($values)) {
                 foreach ($values as $val) {
                     if ($val) {
-
                         $extension = explode('.', $val);
 
                         $val_thumbnail = str_replace('.', '_thumbnail.', $val);
@@ -54,7 +53,7 @@
                         }
 
                         $filePath = storage_path('app/public/' . $val); // File system path
-                 
+
                         if (count($extension) > 2) {
                             $first = explode('/', $extension[0]);
                             $tag = $first[2];
@@ -62,9 +61,7 @@
                         }
 
                         if (file_exists($filePath)) {
-                         
                             if (end($extension) != 'pdf') {
-                            
                                 $data .=
                                     '<div style="display:inline-block">
                     <i data-dossier_id="$this->dossier_id" data-tag="' .
@@ -95,7 +92,6 @@
                                     '
                     </button></div>';
                             } else {
-                                
                                 $data .=
                                     '<div class="btn btn-success btn-view pdfModal"
                         data-toggle="modal" 
@@ -118,38 +114,85 @@
             $data .= '</div>';
             $data .= '</div>';
 
-                  $data .= "<script>
-            Dropzone.autoDiscover = false;
+            // $data .= '<script>
+            //     Dropzone.autoDiscover = false;
 
-        var dropzoneElementId = '#dropzone-" . str_replace('.', '-', $conf['name']) . "';
+            //     var dropzoneElementId = '#dropzone-" . str_replace('.
+            //     ', ' - ', $conf['
+            //     name ']) . "';
+            //     var dropzoneElement = document.querySelector(dropzoneElementId);
+
+            //     if (dropzoneElement && !dropzoneElement.dropzone) {
+
+            //         console.log(dropzoneElementId);
+            //         const dropzoneId = dropzoneElement.id;
+            //         const key = dropzoneId.replace('dropzone-', '');
+            //         const uploadUrl = dropzoneElement.getAttribute('data-upload-url');
+            //         const form_id = dropzoneElement.getAttribute('data-form_id');
+
+            //         var dropzone = new Dropzone(dropzoneElement, {
+            //             url: '{$uploadUrl}',
+            //             method: 'post',
+            //             headers: {
+            //                 'X-CSRF-TOKEN': '{$csrfToken}'
+            //             },
+            //             maxFilesize: 50000,
+            //             paramName: 'file',
+            //             sending: function(file, xhr, formData) {
+            //                 console.log(file);
+            //                 formData.append('folder', 'dossiers');
+            //                 formData.append('template', '{$conf['
+            //                     name ']}');
+            //                 formData.append('random_name', 'true');
+            //             },
+            //             init: function() {
+            //                 this.on('success', function(file, response) {
+            //                     console.log('Successfully uploaded:', response);
+            //                     // initializeDeleteButtons();
+            //                 });
+            //                 this.on('error', function(file, response) {
+            //                     console.log('Upload error:', response);
+            //                 });
+            //             }
+            //         });
+            //     }
+            // </script>';
+            echo $data;
+        @endphp
+    @endif
+
+    <script>
+        Dropzone.autoDiscover = false;
+        
+        var dropzoneElementId = '#dropzone-{{ str_replace(".", " - ", $conf["name"]) }}';
         var dropzoneElement = document.querySelector(dropzoneElementId);
         
         if (dropzoneElement && !dropzoneElement.dropzone) {
-
             console.log(dropzoneElementId);
-                    const dropzoneId = dropzoneElement.id;
-        const key = dropzoneId.replace('dropzone-','');
-        const uploadUrl = dropzoneElement.getAttribute('data-upload-url');
-        const form_id = dropzoneElement.getAttribute('data-form_id');
-
+            const dropzoneId = dropzoneElement.id;
+            const key = dropzoneId.replace('dropzone-', '');
+            const uploadUrl = dropzoneElement.getAttribute('data-upload-url');
+            const form_id = dropzoneElement.getAttribute('data-form_id');
+        
             var dropzone = new Dropzone(dropzoneElement, {
-                url: '{$uploadUrl}',
+                url: '{{ $uploadUrl }}',
                 method: 'post',
                 headers: {
-                    'X-CSRF-TOKEN': '{$csrfToken}'
+                    'X-CSRF-TOKEN': '{{ $csrfToken }}'
                 },
                 maxFilesize: 50000,
                 paramName: 'file',
                 sending: function(file, xhr, formData) {
                     console.log(file);
                     formData.append('folder', 'dossiers');
-                    formData.append('template', '{$conf['name']}');
+                    formData.append('template', '{{ $conf["name"] }}');
                     formData.append('random_name', 'true');
                 },
                 init: function() {
                     this.on('success', function(file, response) {
                         console.log('Successfully uploaded:', response);
-                        // initializeDeleteButtons();
+                        // Emit event to Livewire
+                        Livewire.emit('fileUploaded', response);
                     });
                     this.on('error', function(file, response) {
                         console.log('Upload error:', response);
@@ -157,8 +200,7 @@
                 }
             });
         }
-    </script>";
-            echo $data;
-        @endphp
-    @endif
+        </script>
+        
+
 </div>
