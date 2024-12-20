@@ -80,9 +80,15 @@ class YouSign extends Controller
         ]
       ]);
 
+    $test=          ['signer_info' => [
+      'first_name' => trim($dossier->beneficiaire->prenom ?? ''),
+      'last_name' => trim($dossier->beneficiaire->nom ?? ''),
+      'email' => trim($dossier->beneficiaire->email ? str_replace(' ','',$dossier->beneficiaire->email) :  ''),
+      'phone_number' => trim(formatFrenchPhoneNumber($dossier->beneficiaire->telephone) ?? '')
+    ]
+    ];
     
-    
-      
+      dd($test);
       $path = 'storage/dossiers/' . $dossier->folder . '/' . $request->name . '.pdf';
 
       $fullPath = public_path($path);
