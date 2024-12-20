@@ -58,7 +58,10 @@ class YouSign extends Controller
     }
     if ($dossier) {
 
-
+      $dossier->beneficiaire->prenom=str_replace(',',' ',$dossier->beneficiaire->prenom);
+      $dossier->beneficiaire->nom=str_replace(',',' ',$dossier->beneficiaire->nom);
+      $dossier->beneficiaire->prenom=str_replace('.',' ',$dossier->beneficiaire->prenom);
+      $dossier->beneficiaire->nom=str_replace('.',' ',$dossier->beneficiaire->nom);
 
       $data = json_encode([
         'request_type' => 'create_document',
@@ -80,15 +83,7 @@ class YouSign extends Controller
         ]
       ]);
 
-    $test=          ['signer_info' => [
-      'first_name' => trim($dossier->beneficiaire->prenom ?? ''),
-      'last_name' => trim($dossier->beneficiaire->nom ?? ''),
-      'email' => trim($dossier->beneficiaire->email ? str_replace(' ','',$dossier->beneficiaire->email) :  ''),
-      'phone_number' => trim(formatFrenchPhoneNumber($dossier->beneficiaire->telephone) ?? '')
-    ]
-    ];
-    
-      dd($test);
+   
       $path = 'storage/dossiers/' . $dossier->folder . '/' . $request->name . '.pdf';
 
       $fullPath = public_path($path);
