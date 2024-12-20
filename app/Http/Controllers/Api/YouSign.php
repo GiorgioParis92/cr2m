@@ -123,7 +123,7 @@ class YouSign extends Controller
 
     // Extracting UUID
     $responseData = json_decode($response, true);
-
+dd($responseData);
     $uuid = $responseData['request_uuid'];
 
     while (true) {

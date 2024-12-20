@@ -153,7 +153,7 @@
                                     <h6 class="mb-2">Documents du dossier</h6>
                                 </div>
                             </div>
-                            <div class="table-responsive p-4">
+                            <div class="table-responsive">
                                 <x-document-table-component :docs="$docs" :dossier="$dossier" />
 
                             </div>
@@ -220,24 +220,25 @@
                 @endif
                 <div class="row">
                     <div class="col-12">
-                        <div class="" id="basic-info">
-                            <div class="card-header">
+                        <div class="card mt-4 pl-4 pr-4 pb-3" id="basic-info">
+                            {{-- <div class="card-header">
                                 <h5>Titre Formulaire</h5>
-                            </div>
-                            <div class="card-body pt-0">
+                            </div> --}}
+                            <div class="card-body p-0">
                                 <div class="row">
                                 
                                     @if(isset($config))
                                     
                                    
                                     @foreach($config as $conf)
-                                        @if(View::exists('livewire.forms.' . $conf->type))
+           
+                                        @if(View::exists('livewire.forms.' . $conf['type']))
 
-                                        @livewire("forms.{$conf->type}", ['conf' => $conf,'form_id'=>$set_form,'dossier_id'=>$dossier->id], key($conf->id))
+                                        @livewire("forms.{$conf['type']}", ['conf' => $conf,'form_id'=>$set_form,'dossier_id'=>$dossier->id], key($conf['id']))
                                         
-                                    
+                                      
                                         @else
-                                            <p style="background:red">Component for type "{{ $conf->type }}" not found.</p>
+                                            <p style="background:red">Component for type "{{ $conf['type'] }}" not found.</p>
                                         @endif
                                     @endforeach
                             

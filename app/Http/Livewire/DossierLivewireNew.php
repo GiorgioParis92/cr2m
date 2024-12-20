@@ -275,7 +275,7 @@ class DossierLivewireNew extends Component
 
     public function set_form($id) {
         $this->set_form=$id;
-        $this->config=FormConfig::where('form_id',$id)->orderBy('ordering')->get();
+        $this->config=FormConfig::where('form_id',$id)->orderBy('ordering')->get()->toArray();
   
     }
 

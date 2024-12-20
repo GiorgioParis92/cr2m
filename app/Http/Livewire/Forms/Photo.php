@@ -60,9 +60,7 @@ class Photo extends AbstractData
     public function mount($conf, $form_id, $dossier_id) {
         parent::mount($conf, $form_id, $dossier_id);
 
-        if(!is_user_allowed($conf->name)) {
-            return '';
-        }
+
         $this->dossier=Dossier::find($dossier_id);
         $json_value=decode_if_json($this->value);
        

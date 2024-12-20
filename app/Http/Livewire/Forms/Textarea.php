@@ -21,7 +21,7 @@ class Textarea extends AbstractData
     protected function validateValue($value): bool
     {
 
-        return !($this->conf->required==1 && empty($value));
+        return !($this->conf['required']==1 && empty($value));
     }
     public function render()
     {

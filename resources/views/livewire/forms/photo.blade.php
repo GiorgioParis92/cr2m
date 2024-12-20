@@ -123,7 +123,7 @@
         var confTitle = @json($conf['title']);
     var confName = @json($conf['name']);
     var dossierId = @json($dossier_id);
-    var confId = @json($conf['id']);
+    var confId = @json($form_id);
     function initDropzone() {
         // Put your Dropzone initialization code here
         Dropzone.autoDiscover = false;
@@ -144,7 +144,7 @@
                     formData.append('clientId', '{{ $dossier->folder }}');
                     formData.append('folder', 'dossiers');
                     formData.append('template', '{{ $conf["name"] }}');
-                    formData.append('config', '{{ $conf["id"] }}');
+                    formData.append('config', '{{ $form_id }}');
                     formData.append('random_name', 'true');
                     formData.append('form_id', '{{$form_id}}');
                 },

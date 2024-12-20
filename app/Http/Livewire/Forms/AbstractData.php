@@ -36,28 +36,30 @@ abstract class AbstractData extends Component
     public function mount($conf, $form_id, $dossier_id)
     {
         $this->conf = $conf;
+       
+        
         $this->form_id = $form_id;
         $this->dossier_id = $dossier_id;
 
         $this->value = $this->getExistingValue($dossier_id, $form_id, $conf);
         $this->_validateValue($this->value);
         
-        if(!is_array($this->conf->options)) {
-            $jsonString = str_replace(["\n", '', "\r"], '', $this->conf->options);
+        if(!is_array($this->conf['options'])) {
+            $jsonString = str_replace(["\n", '', "\r"], '', $this->conf['options']);
             $optionsArray = json_decode($jsonString, true);
         } else {
-            $optionsArray = $this->conf->options;
+            $optionsArray = $this->conf['options'];
         }
     
      
  
 
-        if(isset($this->conf->options)) {
-            if (!is_array($this->conf->options)) {
-                $jsonString = str_replace(["\n", '', "\r"], '', $this->conf->options);
+        if(isset($this->conf['options'])) {
+            if (!is_array($this->conf['options'])) {
+                $jsonString = str_replace(["\n", '', "\r"], '', $this->conf['options']);
                 $optionsArray = json_decode($jsonString, true);
             } else {
-                $optionsArray = $this->conf->options;
+                $optionsArray = $this->conf['options'];
             }
             if(isset($optionsArray['sql'])) {
                 $sql_command = $optionsArray['sql'];
@@ -99,13 +101,14 @@ abstract class AbstractData extends Component
             $this->readonly=$this->options['readonly'];
         }
 
-        $this->emit($this->conf->name);
+        $this->emit($this->conf['name']);
+       
     }
 
     public function getExistingValue($dossier_id, $form_id, $conf) {
         $existingValue = FormsData::where('dossier_id', $dossier_id)
             ->where('form_id', $form_id)
-            ->where('meta_key', $conf->name)
+            ->where('meta_key', $conf['name'])
             ->first();
 
         return $existingValue ? $existingValue->meta_value : '';
@@ -123,13 +126,13 @@ abstract class AbstractData extends Component
             [
                 'dossier_id' => $this->dossier_id,
                 'form_id' => $this->form_id,
-                'meta_key' => $this->conf->name
+                'meta_key' => $this->conf['name']
             ],
             [
                 'meta_value' => $newValue
             ]
         );
-        $this->emit($this->conf->name);
+        $this->emit($this->conf['name']);
     }
 
     private function _validateValue($value) {
