@@ -279,7 +279,27 @@ class DossierLivewireNew extends Component
   
     }
 
+    public function handleFileUploaded($request)
+    {
 
+
+
+        $this->emit('initializeDropzones', ['forms_configs' => $this->forms_configs]);
+
+    }
+
+    public function delete_doc($form_id, $tag)
+    {
+        
+        $update = DB::table('forms_data')->where(
+            [
+                'dossier_id' => '' . $this->dossier->id . '',
+                'form_id' => '' . $form_id . '',
+            ],
+       
+        )->delete();
+       
+    }
     public function render()
     {
         return view('livewire.dossier-livewire-new', [

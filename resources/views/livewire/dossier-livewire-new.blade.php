@@ -964,7 +964,7 @@ document.addEventListener('photoComponentUploaded', function(event) {
             });
         });
         $(document).on('click', '.generatePdfButton', function(event) {
-            alert('ok')
+           
             var template = $(this).data('template'); // Get the template from data attribute
             var name = $(this).data('name'); // Get the template from data attribute
             var dossier_id = $(this).data('dossier_id'); // Get the dossier ID from data attribute
