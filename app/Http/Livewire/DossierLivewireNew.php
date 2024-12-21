@@ -231,10 +231,7 @@ class DossierLivewireNew extends Component
 
         $this->load_forms($tab);
 
-        // $firstKey = $this->reinitializeFormsConfigs();
-        // $this->display_form($firstKey);
-        // $firstKey = array_key_first($this->forms_configs);
-        // $this->display_form($firstKey);
+      
 
         $this->emit('initializeDropzones', ['forms_configs' => $this->forms_configs]);
         $this->emit('setTab', ['forms_configs' => $this->forms_configs]);
@@ -269,7 +266,14 @@ class DossierLivewireNew extends Component
 
     public function load_forms($etape_id) {
         $this->forms=Forms::where('etape_id',$etape_id)->get();
-     
+
+        foreach($this->forms as $form) {
+            if($form->type=='form') {
+                $this->set_form($form->id);
+                break;
+            }
+        }
+    
     }
 
 

@@ -166,7 +166,7 @@
                 @if ($forms)
 
                     <div class="row">
-                        <div class="col-6">
+                        <div class="col-12">
                             <div class="card mt-4" id="basic-info">
                                 <div class="card-header">
                                     <h5>Formulaires</h5>
@@ -195,7 +195,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-6">
+                        <div class="col-12">
                             <div class="card mt-4" id="basic-info">
                                 <div class="card-header">
                                     <h5>Documents</h5>
