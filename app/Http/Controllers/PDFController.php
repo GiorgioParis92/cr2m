@@ -54,8 +54,12 @@ class PDFController extends Controller
                 ->where('name', $request->name)
                 ->first();
 
-
-            $config = json_decode($form_config->options);
+            if(isset($form_config->options)) {
+                $config = json_decode($form_config->options);
+            } else {
+                $config=[];
+            }
+           
             $validated['generation'] = $config->on_generation ?? [];
             $request->template = $config->template ?? [];
             $validated['template'] = $config->template ?? [];
