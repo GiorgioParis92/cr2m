@@ -164,8 +164,13 @@
                 </div>
 
                 @if ($forms)
-
+                @php
+                // Filter and count forms of type "form" or "rdv".
+                $count_forms = $forms->whereIn('type', ['form', 'rdv'])->count();
+                $count_documents = $forms->whereIn('type', ['document'])->count();
+                @endphp
                     <div class="row">
+                        @if($count_forms>0)
                         <div class="col-12">
                             <div class="card mt-4" id="basic-info">
                                 <div class="card-header">
@@ -177,7 +182,7 @@
                                             <ul class="nav nav-pills nav-fill p-1" role="tablist">
                                         
                                                 @foreach ($forms as $form)
-                                                    @if ($form->type == 'form')
+                                                    @if ($form->type == 'form' || $form->type == 'rdv')
                                                         <li class="nav-item active" wire:click="set_form({{$form->id}})">
                                                             
                                                             <a wire:click="set_form({{$form->id}})"
@@ -195,6 +200,8 @@
                                 </div>
                             </div>
                         </div>
+                        @endif
+                        @if($count_documents>0)
                         <div class="col-12">
                             <div class="card mt-4" id="basic-info">
                                 <div class="card-header">
@@ -230,6 +237,7 @@
                                 </div>
                             </div>
                         </div>
+                        @endif
                     </div>
 
                 @endif
@@ -253,11 +261,13 @@
                                         
                                       
                                         @else
-                                            <p style="background:red">Component for type "{{ $conf['type'] }}" not found.</p>
+                                            {{-- <p style="background:red">Component for type "{{ $conf['type'] }}" not found.</p> --}}
                                         @endif
-                                        @if($conf['type']=='table')
-                           
-                                    @endif
+                                        @if($conf['type']=='close')
+
+                                           <div class="close_card"></div>
+
+                                        @endif
                                     @endforeach
                             
                                     @endif

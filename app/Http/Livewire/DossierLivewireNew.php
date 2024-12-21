@@ -268,7 +268,7 @@ class DossierLivewireNew extends Component
         $this->forms=Forms::where('etape_id',$etape_id)->get();
 
         foreach($this->forms as $form) {
-            if($form->type=='form') {
+            if($form->type=='form' || $form->type=='rdv') {
                 $this->set_form($form->id);
                 break;
             }
