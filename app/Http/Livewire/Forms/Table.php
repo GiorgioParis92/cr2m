@@ -22,49 +22,61 @@ class Table extends AbstractData
 {
 
 
-    public function mount($conf, $form_id, $dossier_id) {
+    public function mount($conf, $form_id, $dossier_id)
+    {
         parent::mount($conf, $form_id, $dossier_id);
-        
-        $data=[];
-        $newvalue=[];
-        $is_old=false;
+
+        $data = [];
+        $newvalue = [];
+        $is_old = false;
         try {
-            $data=json_decode($this->value,true);
-          
-            $is_old=$this->isAssociativeJson($data);
-           
+
+
+            $data = ((!empty($this->value) && $this->value != null && $this->value != "null") ? json_decode($this->value, true) : []);
+
+
 
         } catch (\Throwable $th) {
-            //throw $th;
+
         }
-        if($is_old) {
-            foreach($data as $key=>$values) {
-                $newvalue[]=$key;
-                foreach($values as $tag=>$value) {
-                    FormsData::updateOrCreate(
-                        [
-                            'dossier_id' => $this->dossier_id,
-                            'form_id' => $this->form_id,
-                            'meta_key' => $this->conf['name'].'.'.$key.'.'.$tag
-                        ],
-                        [
-                            'meta_value' => $value['value']
-                        ]
-                    );
+
+        $is_old = $this->isAssociativeJson($data);
+
+        
+        if ($is_old) {
+            if (!empty($data)) {
+              
+                foreach ($data as $key => $values) {
+                    $newvalue[] = $key;
+
+                    foreach ($values as $tag => $value) {
+                        FormsData::updateOrCreate(
+                            [
+                                'dossier_id' => $this->dossier_id,
+                                'form_id' => $this->form_id,
+                                'meta_key' => $this->conf['name'] . '.value.' . $key . '.' . $tag
+                            ],
+                            [
+                                'meta_value' => (is_array($value['value']) ? json_encode($value['value']) : $value['value'])
+                            ]
+                        );
+                    }
+
                 }
-    
             }
-            $this->value=$newvalue;
+            $this->value = $newvalue;
+
             $this->updatedValue($this->value);
         } else {
-            $this->value=$data;
+            $this->value = $data;
+
         }
 
 
     }
     public function updatedValue($newValue)
     {
-    
+
 
         // Always save, regardless of validity
         FormsData::updateOrCreate(
@@ -79,7 +91,8 @@ class Table extends AbstractData
         );
         $this->emit($this->conf['name']);
     }
-    public function getErrorMessage() {
+    public function getErrorMessage()
+    {
         return '';
     }
 
@@ -91,25 +104,70 @@ class Table extends AbstractData
     }
 
 
-    private function isAssociativeJson($json) {
+    private function isAssociativeJson($json)
+    {
         // Check if the input is an array
         if (!is_array($json)) {
             return false;
         }
+
+        if (array_keys($json) !== range(0, count($json) - 1)) {
+            return true;
+        }
     
-        // Loop through the array and check if the keys are strings
-        foreach ($json as $key => $value) {
-            if (is_array($value) && !is_numeric($key)) {
-                // If the value is an array and the key is not numeric, it's associative
+        // Otherwise, we recurse: if *any* sub-array is associative, return true
+        foreach ($json as $value) {
+            if ($this->isAssociativeJson($value)) {
                 return true;
             }
         }
-    
+
         // If none of the conditions match, it's not the associative JSON structure
         return false;
     }
 
 
+    public function add_row() {
+ 
+        $uniqueId = uniqid(); // Generate a unique id for the row
+        $this->value[] = $uniqueId;
+
+        
+
+        foreach(json_decode($this->conf['options']) as $option) {
+            FormsData::updateOrCreate(
+                [
+                    'dossier_id' => $this->dossier_id,
+                    'form_id' => $this->form_id,
+                    'meta_key' => $this->conf['name'] . '.value.' . $uniqueId . '.' . $option->name
+                ],
+                [
+                    'meta_value' => ''
+                ]
+            );
+        }
+        $this->updatedValue($this->value);
+
+    }
+
+    public function remove_row($rowId)
+    {
+        // 1. Remove the rowId from $this->value array
+        $this->value = array_filter($this->value, function($value) use ($rowId) {
+            return $value !== $rowId;
+        });
+
+        // 2. Remove all associated data in the database
+        //    Those entries have meta_key like: "tableName.value.{rowId}.{optionName}"
+        $prefix = $this->conf['name'] . '.value.' . $rowId . '.';
+        FormsData::where('dossier_id', $this->dossier_id)
+            ->where('form_id', $this->form_id)
+            ->where('meta_key', 'LIKE', $prefix . '%')
+            ->delete();
+
+        // 3. Persist the updated array
+        $this->updatedValue($this->value);
+    }
     public function render()
     {
         return view('livewire.forms.table');

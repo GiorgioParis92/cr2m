@@ -456,8 +456,12 @@ class FileUploadService
         $dossier = Dossier::where('id', $request->dossier_id)->first();
 
             $docs=getDocumentStatuses($dossier->id,$dossier->etape_number);
+        try {
+            unlink(storage_path('app/public/' . $request->link));
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
         
-        unlink(storage_path('app/public/' . $request->link));
 
 
     }

@@ -27,7 +27,7 @@ class Date extends AbstractData
    
     public function mount($conf, $form_id, $dossier_id) {
         parent::mount($conf, $form_id, $dossier_id);
-        $this->value=date("d/m/Y",strtotime(str_replace('/','-',$this->value)));
+        // $this->value=date("d/m/Y",strtotime(str_replace('/','-',$this->value)));
     }
 
     public function getErrorMessage() {
