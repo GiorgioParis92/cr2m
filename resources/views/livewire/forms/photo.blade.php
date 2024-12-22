@@ -72,7 +72,7 @@
                         $filePath_thumbnail = storage_path('app/public/' . $val_thumbnail);
 
                         if (file_exists($filePath_thumbnail)) {
-                            $val = $val_thumbnail;
+                            // $val = $val_thumbnail;
                         }
 
                         $filePath = storage_path('app/public/' . $val); // File system path
