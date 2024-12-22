@@ -625,6 +625,8 @@ document.addEventListener('photoComponentUploaded', function(event) {
     });
 
     $(document).ready(function() {
+        initializePdfModals();
+
         $('.isTab').click();
         $('#etape').val($('#current_etape').val()); // Assuming `etape_number` exists
 
@@ -639,6 +641,8 @@ document.addEventListener('photoComponentUploaded', function(event) {
     document.addEventListener('livewire:load', function() {
         // After Livewire component is fully loaded, trigger the fetch
         // Livewire.emit('fetchResponseData');
+        initializePdfModals();
+
     });
 
     function initializeDeleteButtons() {
