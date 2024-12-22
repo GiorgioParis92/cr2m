@@ -14,7 +14,7 @@
         @else
         wire:change="update_value({{$options[1]['value']}})"
         @endif
-        @if($options[1]['value'] == $value || $value!=0) checked @else unchecked @endif
+        @if(!empty($value) && $options[1]['value'] == $value) checked @else unchecked @endif
         @if($value==0) unchecked  @endif
     >
     <label for="{{ $conf['name'] }}">{{$options[1]['label']}}</label>

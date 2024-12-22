@@ -1,7 +1,8 @@
 <div>
 
-    <div wire:loading wire:target="add_row,remove_row,display_form,setTab,handleFieldUpdated,set_form" class="loader-overlay">
-     
+    <div wire:loading wire:target="add_row,remove_row,display_form,setTab,handleFieldUpdated,set_form"
+        class="loader-overlay">
+
         <div class="spinner"></div>
     </div>
 
@@ -14,8 +15,7 @@
         <div class="row mb-5">
             <div class="col-lg-3">
                 <div class="card">
-
-                    <div class="timeline timeline-one-side">
+                    <select class="form-control responsive" wire:change="setTab($event.target.value)">
                         @foreach ($etapes as $index => $e)
                             @php
                                 $isActive = false;
@@ -45,26 +45,63 @@
                                 }
 
                             @endphp
-                            @if($isActive && $isAllowed)
-                            <div class="pe-auto cursor-pointer timeline-block mb-3 p-3 {{ $isCurrent ? 'bg-primary' : '' }} {{ $tab == $e['id'] ? 'bg-secondary' : '' }}"
-                                @if ($isActive && $isAllowed) wire:click="setTab({{ $e['etape_number'] }})" @endif>
-                                <span class="timeline-step">
-                                    <span>{{ $e['etape_icon'] ?? '' }}</span>
-                                </span>
+                            @if ($isActive && $isAllowed)
+                                <option @if ($tab == $e['id']) selected @endif
+                                    value="{{ $e['etape_number'] }}">{{ $e['etape_icon'] ?? '' }}
+                                    {{ strtoupper_extended($e['etape_desc']) }}</option>
+                            @endif
+                        @endforeach
+                    </select>
+                    <div class="timeline timeline-one-side no_responsive">
+                        @foreach ($etapes as $index => $e)
+                            @php
+                                $isActive = false;
+                                $isCurrent = false;
+                                $isTab = false;
+                                if ($e['order_column'] <= $dossier['etape']['order_column']) {
+                                    $isActive = true;
+                                }
+                                if (
+                                    $e['order_column'] == $dossier['etape']['order_column'] &&
+                                    is_user_allowed($e['etape_name']) == true
+                                ) {
+                                    $isCurrent = true;
+                                }
 
-                                <div class="timeline-content">
-                                    <h6
-                                        class="{{ $tab == $e['id'] ? 'text-white' : 'text-dark' }} text-sm font-weight-bold mb-0">
-                                        {{ strtoupper_extended($e['etape_desc']) }}</h6>
-                                    @if (!empty($steps) && isset($steps['step_' . $e['etape_number']]))
-                                        <p
-                                            class="{{ $tab == $e['id'] ? 'text-white' : 'text-secondary' }} font-weight-bold text-xs mt-1 mb-0">
-                                            validée le :
-                                            {{ format_date($steps['step_' . $e['etape_number']]['meta_value']) ?? '' }}
-                                            par {{ $steps['step_' . $e['etape_number']]['user_name'] }}</p>
-                                    @endif
+                                if ($e['id'] == $last_etape) {
+                                    $isTab = true;
+                                }
+                                if (is_user_allowed($e['etape_name']) == false) {
+                                    $isAllowed = false;
+                                } else {
+                                    $isAllowed = true;
+                                }
+                                if (is_user_forbidden($e['etape_name']) == true) {
+                                    $isAllowed = false;
+                                    $isCurrent = false;
+                                }
+
+                            @endphp
+                            @if ($isActive && $isAllowed)
+                                <div class="pe-auto cursor-pointer timeline-block mb-3 p-3 {{ $isCurrent ? 'bg-primary' : '' }} {{ $tab == $e['id'] ? 'bg-secondary' : '' }}"
+                                    @if ($isActive && $isAllowed) wire:click="setTab({{ $e['etape_number'] }})" @endif>
+                                    <span class="timeline-step">
+                                        <span>{{ $e['etape_icon'] ?? '' }}</span>
+                                    </span>
+
+                                    <div class="timeline-content">
+                                        <h6
+                                            class="{{ $tab == $e['id'] ? 'text-white' : 'text-dark' }} text-sm font-weight-bold mb-0">
+                                            {{ strtoupper_extended($e['etape_desc']) }}</h6>
+                                        @if (!empty($steps) && isset($steps['step_' . $e['etape_number']]))
+                                            <p
+                                                class="{{ $tab == $e['id'] ? 'text-white' : 'text-secondary' }} font-weight-bold text-xs mt-1 mb-0">
+                                                validée le :
+                                                {{ format_date($steps['step_' . $e['etape_number']]['meta_value']) ?? '' }}
+                                                par {{ $steps['step_' . $e['etape_number']]['user_name'] }}</p>
+                                        @endif
+                                    </div>
                                 </div>
-                            </div>
                             @endif
                         @endforeach
                     </div>
@@ -164,79 +201,84 @@
                 </div>
 
                 @if ($forms)
-                @php
-                // Filter and count forms of type "form" or "rdv".
-                $count_forms = $forms->whereIn('type', ['form', 'rdv'])->count();
-                $count_documents = $forms->whereIn('type', ['document'])->count();
-                @endphp
+                    @php
+                        // Filter and count forms of type "form" or "rdv".
+                        $count_forms = $forms->whereIn('type', ['form', 'rdv'])->count();
+                        $count_documents = $forms->whereIn('type', ['document'])->count();
+                    @endphp
                     <div class="row">
-                        @if($count_forms>0)
-                        <div class="col-12">
-                            <div class="card mt-4" id="basic-info">
-                                <div class="card-header">
-                                    <h5>Formulaires</h5>
-                                </div>
-                                <div class="card-body pt-0">
-                                    <div class="row">
-                                        <div class="nav-wrapper position-relative end-0">
-                                            <ul class="nav nav-pills nav-fill p-1" role="tablist">
-                                        
-                                                @foreach ($forms as $form)
-                                                    @if ($form->type == 'form' || $form->type == 'rdv')
-                                                        <li class="nav-item active" wire:click="set_form({{$form->id}})">
-                                                            
-                                                            <a wire:click="set_form({{$form->id}})"
-                                                                class="nav-link mb-0 px-0 py-1 {{ $form->id == $set_form ? 'active' : '' }}">
-                                                                {{ $form->form_title }}
+                        @if ($count_forms > 0)
+                            <div class="col-12">
+                                <div class="card mt-4" id="basic-info">
+                                    <div class="card-header">
+                                        <h5>Formulaires</h5>
+                                    </div>
+                                    <div class="card-body pt-0">
+                                        <div class="row">
+                                            <div class="nav-wrapper position-relative end-0">
+                                                <ul class="nav nav-pills nav-fill p-1" role="tablist">
 
-                                      
-                                                            </a>
-                                                        </li>
-                                                    @endif
-                                                @endforeach
-                                            </ul>
+                                                    @foreach ($forms as $form)
+                                                        @if ($form->type == 'form' || $form->type == 'rdv')
+                                                            <li class="nav-item active"
+                                                                wire:click="set_form({{ $form->id }})">
+
+                                                                <a wire:click="set_form({{ $form->id }})"
+                                                                    class="nav-link mb-0 px-0 py-1 {{ $form->id == $set_form ? 'active' : '' }}">
+                                                                    {{ $form->form_title }}
+
+
+                                                                </a>
+                                                            </li>
+                                                        @endif
+                                                    @endforeach
+                                                </ul>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
                         @endif
-                        @if($count_documents>0)
-                        <div class="col-12">
-                            <div class="card mt-4" id="basic-info">
-                                <div class="card-header">
-                                    <h5>Documents</h5>
-                                </div>
-                                <div class="card-body pt-0">
-                                    <div class="row">
-                                        <div class="nav-wrapper position-relative end-0">
-                                            <ul class="nav nav-pills nav-fill p-1" role="tablist">
-                                                @foreach ($forms as $form)
-                                                    @if ($form->type == 'document')
-                                                    <div class="table-responsive" wire:poll>
+                        @if ($count_documents > 0)
+                            <div class="col-12">
+                                <div class="card mt-4" id="basic-info">
+                                    <div class="card-header">
+                                        <h5>Documents</h5>
+                                    </div>
+                                    <div class="card-body pt-0">
+                                        <div class="row">
+                                            <div class="nav-wrapper position-relative end-0">
+                                                <ul class="nav nav-pills nav-fill p-1" role="tablist">
+                                                    @foreach ($forms as $form)
+                                                        @if ($form->type == 'document')
+                                                            <div class="table-responsive" wire:poll>
 
 
-                                                        <table class="table align-items-center">
-                                                            <tbody>
-                                                                @php                 
-                                                                $handler = new App\FormModel\FormConfigHandler($this->dossier, $form);
-                                                                @endphp
-                                                                {{-- @foreach ($forms_configs as $index => $form_handler)
+                                                                <table class="table align-items-center">
+                                                                    <tbody>
+                                                                        @php
+                                                                            $handler = new App\FormModel\FormConfigHandler(
+                                                                                $this->dossier,
+                                                                                $form,
+                                                                            );
+                                                                        @endphp
+                                                                        {{-- @foreach ($forms_configs as $index => $form_handler)
                                                                     @if ($form_handler->form->etape_number == $tab && $form_handler->form->type == 'document') --}}
-                                                                        {!! $handler->render([]) !!} <!-- Render without error array -->
-                                                                    {{-- @endif
+                                                                        {!! $handler->render([]) !!}
+                                                                        <!-- Render without error array -->
+                                                                        {{-- @endif
                                                                 @endforeach --}}
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                    @endif
-                                                @endforeach
-                                            </ul>
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        @endif
+                                                    @endforeach
+                                                </ul>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
                         @endif
                     </div>
 
@@ -249,27 +291,21 @@
                             </div> --}}
                             <div class="card-body p-0">
                                 <div class="row">
-                                
-                                    @if(isset($config))
-                                    
-                                   
-                                    @foreach($config as $conf)
 
-                                        @if(View::exists('livewire.forms.' . $conf['type']))
+                                    @if (isset($config))
 
-                                        @livewire("forms.{$conf['type']}", ['conf' => $conf,'form_id'=>$set_form,'dossier_id'=>$dossier->id], key($conf['id']))
-                                        
-                                      
-                                        @else
-                                            {{-- <p style="background:red">Component for type "{{ $conf['type'] }}" not found.</p> --}}
-                                        @endif
-                                        @if($conf['type']=='close')
 
-                                           <div class="close_card"></div>
+                                        @foreach ($config as $conf)
+                                            @if (View::exists('livewire.forms.' . $conf['type']))
+                                                @livewire("forms.{$conf['type']}", ['conf' => $conf, 'form_id' => $set_form, 'dossier_id' => $dossier->id], key($conf['id']))
+                                            @else
+                                                {{-- <p style="background:red">Component for type "{{ $conf['type'] }}" not found.</p> --}}
+                                            @endif
+                                            @if ($conf['type'] == 'close')
+                                                <div class="close_card"></div>
+                                            @endif
+                                        @endforeach
 
-                                        @endif
-                                    @endforeach
-                            
                                     @endif
                                 </div>
                             </div>
@@ -290,11 +326,11 @@
             height: auto;
             width: 100%
         }
-    
+
         .column {
             /* background-color: #ebecf0; */
             border-radius: 3px;
-    
+
             margin-right: 1%;
             padding: 10px;
             flex-shrink: 0;
@@ -302,12 +338,12 @@
             overflow-x: hidden;
             overflow-y: scroll;
         }
-    
+
         .column-header {
             font-weight: bold;
             padding-bottom: 10px;
         }
-    
+
         .ticket {
             background-color: white;
             border-radius: 3px;
@@ -316,7 +352,7 @@
             cursor: move;
             box-shadow: 0 1px 0 rgba(9, 30, 66, .25);
         }
-    
+
         .add-column,
         .add-ticket {
             background-color: rgba(9, 30, 66, .04);
@@ -328,35 +364,35 @@
             width: 100%;
             text-align: left;
         }
-    
+
         .add-column:hover,
         .add-ticket:hover {
             background-color: rgba(9, 30, 66, .08);
         }
-    
+
         #new-column {
             width: 272px;
             margin-right: 10px;
         }
-    
+
         .column {
-    
-    
+
+
             /* Hide scrollbar for IE, Edge and Firefox */
             -ms-overflow-style: none;
             /* IE and Edge */
             scrollbar-width: none;
             /* Firefox */
         }
-    
+
         .column::-webkit-scrollbar {
             display: none;
         }
-    
+
         .col-xl-4.col-sm-4.mb-xl-0.mb-4.column {
             max-width: 32%;
         }
-    
+
         .loader-overlay {
             position: fixed;
             top: 0;
@@ -370,7 +406,7 @@
             z-index: 9999;
             display: none;
         }
-    
+
         /* CSS for the spinner */
         .spinner {
             border: 8px solid rgba(0, 0, 0, 0.1);
@@ -383,17 +419,17 @@
             top: 46vh;
             position: relative;
         }
-    
+
         @keyframes spin {
             from {
                 transform: rotate(0deg);
             }
-    
+
             to {
                 transform: rotate(360deg);
             }
         }
-    
+
         .thumbnail_hover {
             display: none;
             position: absolute;
@@ -403,34 +439,65 @@
             box-shadow: 8px 7px 9px;
             z-index: 9999999999;
         }
-    
+
         .p_thumbnail:hover {
             cursor: pointer;
         }
-    
+
         .p_thumbnail:hover .thumbnail_hover {
             display: block;
+        }
+
+        @media (max-width: 800px) {
+            .responsive {
+                display: block !important;
+            }
+
+            .no_responsive {
+                display: none !important;
+            }
+
+            .col-sm-auto {
+                text-align: center;
+                margin: auto !important;
+                width: 100%;
+            }
+
+            .container {
+                padding: 0px;
+                margin: 0;
+            }
+        }
+
+        @media (min-width: 800px) {
+            .responsive {
+                display: none !important;
+            }
+
+            .no_responsive {
+                display: block !important;
+            }
         }
     </style>
 
 </div>
 <script>
     document.addEventListener('DOMContentLoaded', function(event) {
-   document.addEventListener('livewire:load', () => {
-       console.log('livewire loaded');
-       // ... your dropzone initialization code here
-   });
-});
+        document.addEventListener('livewire:load', () => {
+            console.log('livewire loaded');
+            // ... your dropzone initialization code here
+        });
+    });
 
-document.addEventListener('photoComponentUploaded', function(event) {
-    if (window.Livewire && typeof Livewire.emit === 'function') {
-        alert('emit')
-        Livewire.emit('fileUploaded', event.detail);
-    } else {
-        // If Livewire isn't ready, you can store these events and emit later
-        // or handle accordingly
-    }
-});
+    document.addEventListener('photoComponentUploaded', function(event) {
+        if (window.Livewire && typeof Livewire.emit === 'function') {
+            alert('emit')
+            Livewire.emit('fileUploaded', event.detail);
+        } else {
+            // If Livewire isn't ready, you can store these events and emit later
+            // or handle accordingly
+        }
+    });
 </script>
 <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.css" rel="stylesheet">
 <!-- jQuery -->
@@ -978,7 +1045,7 @@ document.addEventListener('photoComponentUploaded', function(event) {
             });
         });
         $(document).on('click', '.generatePdfButton', function(event) {
-           
+
             var template = $(this).data('template'); // Get the template from data attribute
             var name = $(this).data('name'); // Get the template from data attribute
             var dossier_id = $(this).data('dossier_id'); // Get the dossier ID from data attribute
