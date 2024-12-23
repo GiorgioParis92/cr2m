@@ -102,8 +102,8 @@
                                 '" data-img-src="' .
                                 asset('storage/' . $val) .
                                 '"';
-                            $data.=' src="'.asset('storage/' . $val).'" style="        height: 30% !important;
-    width: 30% !important;
+                            $data.=' src="'.asset('storage/' . $val).'" style="        height: 90% !important;
+    width: 90% !important;
     display: inline-block;" class="avatar me-2 imageModal cursor-pointer" alt="avatar image">';
 
                                 $data.='</div>';
