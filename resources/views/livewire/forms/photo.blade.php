@@ -287,6 +287,11 @@
 
 
 
-
+<style>
+    .delete_photo {
+    position: absolute;
+    top: -22px;
+}
+</style>
 
 </div>
