@@ -78,8 +78,19 @@
                         }
 
                         if (end($extension) != 'pdf') {
-                            $data='<img ';
-                            $data.=' data-toggle="modal" data-target="imageModal" data-dossier_id="' .$dossier_id .
+                            $data='<div>';
+                                $data .='<i 
+                                data-dossier_id="' . $dossier_id .
+                                '" data-tag="' .
+                                ($tag ?? $conf['name']) .
+                                '" data-index="' .
+                                ($index ?? '') .
+                                '" data-val="' .
+                                $val .
+                                '" data-img-src="' .
+                                asset('storage/' . $val) .
+                                '" class="delete_photo btn btn-danger fa fa-trash bg-danger"></i>';
+                            $data.='<img  data-toggle="modal" data-target="imageModal" data-dossier_id="' .$dossier_id .
                                 '" data-tag="' .
                                 ($tag ?? $conf['name']) .
                                 '" data-index="' .
@@ -90,37 +101,8 @@
                                 asset('storage/' . $val) .
                                 '"';
                             $data.=' src="'.asset('storage/' . $val).'" style="    height: 80px !important; width: 80px !important;" class="avatar me-2 imageModal cursor-pointer" alt="avatar image">';
-                            $data .=
-                                '<div style="display:inline-block">
-        <i data-dossier_id="' .
-                                $dossier_id .
-                                '" data-tag="' .
-                                ($tag ?? $conf['name']) .
-                                '" data-index="' .
-                                ($index ?? '') .
-                                '" data-val="' .
-                                $val .
-                                '" data-img-src="' .
-                                asset('storage/' . $val) .
-                                '" class="delete_photo btn btn-danger fa fa-trash bg-danger"></i>
 
-        <button  type="button" class="btn btn-success btn-view imageModal"
-            data-toggle="modal" data-target="imageModal"
-            data-img-src="' .
-                                asset('storage/' . $val) .
-                                '"
-            data-val="' .
-                                $val .
-                                '"
-            data-name="' .
-                                $conf['title'] .
-                                '">';
-                            $data .= '<img src="' . asset('storage/' . $val) . '">';
-                            $data .=
-                                '<i style="display:block" class="fas fa-eye"></i>' .
-                                $conf['title'] .
-                                '
-        </button></div>';
+                                $data.='</div>';
                         } else {
                             $data .=
                                 '<div class="btn btn-success btn-view pdfModal"
