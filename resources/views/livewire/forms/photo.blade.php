@@ -57,6 +57,7 @@
             if (!is_array($values)) {
                 $values = [$values]; // Transform into array if not already an array
             }
+            @dump($values);
             if (is_array($values)) {
                 foreach ($values as $val) {
                     if ($val) {
