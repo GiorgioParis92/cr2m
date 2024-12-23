@@ -59,9 +59,10 @@
             }
            
             if (is_array($values)) {
+                $data='';
                 foreach ($values as $val) {
                     if ($val) {
-                        @dump($val);
+                     
                         $extension = explode('.', $val);
 
                         $val_thumbnail = str_replace('.', '_thumbnail.', $val);
@@ -78,9 +79,8 @@
                             $tag = $first[2];
                             $index = $extension[2];
                         }
-                        @dump(end($extension));
                         if (end($extension) != 'pdf') {
-                            $data='<div>';
+                            $data.='<div>';
                                 $data .='<i 
                                 data-dossier_id="' . $dossier_id .
                                 '" data-tag="' .
