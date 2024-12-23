@@ -79,7 +79,7 @@
 
                         if (end($extension) != 'pdf') {
                             $data='<img ';
-                            $data.=' data-dossier_id="' .$dossier_id .
+                            $data.=' data-toggle="modal" data-target="imageModal" data-dossier_id="' .$dossier_id .
                                 '" data-tag="' .
                                 ($tag ?? $conf['name']) .
                                 '" data-index="' .
@@ -89,7 +89,7 @@
                                 '" data-img-src="' .
                                 asset('storage/' . $val) .
                                 '"';
-                            $data.=' src="'.asset('storage/' . $val).'" class="avatar avatar-sm me-2" alt="avatar image">';
+                            $data.=' src="'.asset('storage/' . $val).'" class="avatar avatar-sm me-2 imageModal" alt="avatar image">';
                             $data .=
                                 '<div style="display:inline-block">
         <i data-dossier_id="' .
