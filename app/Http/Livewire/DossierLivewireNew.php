@@ -119,7 +119,7 @@ class DossierLivewireNew extends Component
             ];
         }
 
-        // $this->get_docs();
+        $this->get_docs();
     }
 
     public function hydrate()
@@ -128,7 +128,7 @@ class DossierLivewireNew extends Component
        
 
             
-        // $this->get_docs();
+        $this->get_docs();
      
     }
     public function load_etapes()
@@ -199,7 +199,7 @@ class DossierLivewireNew extends Component
                       ->groupBy('name');
             })
             ->orderBy('etapes.order_column')
-            ->get();
+            ->get()->toArray();
     
         $this->docs = [];
     
@@ -288,8 +288,70 @@ class DossierLivewireNew extends Component
 
 
 
-        $this->emit('initializeDropzones', ['forms_configs' => $this->forms_configs]);
+        $this->emit('initializeDropzones');
 
+    }
+    public function delete_signature($form_id, $tag)
+    {
+        // Use $this->dossier->id instead of $this->dossier_id
+        $result = DB::table('forms_data')
+                    ->where('dossier_id', $this->dossier->id) // Corrected dossier_id reference
+                    ->where('form_id', $form_id)
+                    ->where('meta_key', '!=', $tag) // Assuming you want to delete based on meta_key equal to the tag
+                    ->delete();
+        
+        // Optionally, you can return or handle the result here if needed
+        if ($result) {
+            session()->flash('message', 'Signature deleted successfully.');
+        } else {
+            session()->flash('message', 'Failed to delete signature.');
+        }
+    }
+    
+
+    public function mark_signed($form_id, $tag)
+    {
+   
+        
+        $update = DB::table('forms_data')->updateOrInsert(
+            [
+                'dossier_id' => '' . $this->dossier->id . '',
+                'form_id' => '' . $form_id . '',
+                'meta_key' => 'signature_request_id'
+            ],
+            [
+                'meta_value' => 'finish',
+                'created_at' => now(),
+                'updated_at' => now()
+            ]
+        );
+        $update = DB::table('forms_data')->updateOrInsert(
+            [
+                'dossier_id' => '' . $this->dossier->id . '',
+                'form_id' => '' . $form_id . '',
+
+                'meta_key' => 'signature_status'
+            ],
+            [
+                'meta_value' => 'finish',
+                'created_at' => now(),
+                'updated_at' => now()
+            ]
+        );
+        $update = DB::table('forms_data')->updateOrInsert(
+            [
+                'dossier_id' => '' . $this->dossier->id . '',
+                'form_id' => '' . $form_id . '',
+
+                'meta_key' => 'document_id'
+            ],
+            [
+                'meta_value' => 'finish',
+                'created_at' => now(),
+                'updated_at' => now()
+            ]
+        );
+        $this->get_docs();
     }
 
     public function delete_doc($form_id, $tag)
@@ -302,6 +364,7 @@ class DossierLivewireNew extends Component
             ],
        
         )->delete();
+        $this->get_docs();
        
     }
     public function render()

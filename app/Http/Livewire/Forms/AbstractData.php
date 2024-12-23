@@ -15,6 +15,7 @@ use App\Models\{
     RdvStatus,
     Client,
     FormsData,
+    Beneficiaire,
     Card
 };
 use Illuminate\Support\Facades\DB;
@@ -42,6 +43,23 @@ abstract class AbstractData extends Component
         $this->dossier_id = $dossier_id;
 
         $this->value = $this->getExistingValue($dossier_id, $form_id, $conf);
+
+        if($this->form_id==3) {
+            $dossier = Dossier::where('id', $this->dossier_id)->first();
+
+            if ($dossier && isset($dossier->beneficiaire_id)) {
+                $beneficiaireId = $dossier->beneficiaire_id;
+                if (\Schema::hasColumn('beneficiaires', $this->conf['name'])) {
+                $existingValue = Beneficiaire::where('id', $beneficiaireId)
+                ->first();
+                
+                $this->value=$existingValue->{$conf['name']};
+                }
+
+
+            }
+        }
+
         $this->_validateValue($this->value);
         
         if(!is_array($this->conf['options'])) {
@@ -132,6 +150,29 @@ abstract class AbstractData extends Component
                 'meta_value' => $newValue
             ]
         );
+
+
+        if($this->form_id==3) {
+            $dossier = Dossier::where('id', $this->dossier_id)->first();
+
+            if ($dossier && isset($dossier->beneficiaire_id)) {
+                $beneficiaireId = $dossier->beneficiaire_id;
+            
+
+                    // Update only if the key exists in the beneficiaires table columns
+                    if (\Schema::hasColumn('beneficiaires', $this->conf['name'])) {
+                        \DB::table('beneficiaires')->where('id', $beneficiaireId)->update([$this->conf['name'] => $newValue, 'updated_at' => now()]);
+
+                    }
+                
+
+
+            }
+        }
+
+
+        change_status($this->conf['name'], $newValue,$this->dossier_id);
+
         $this->emit($this->conf['name']);
     }
 

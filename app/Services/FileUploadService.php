@@ -144,7 +144,7 @@ class FileUploadService
         $template = $request->input('template');
 
 
-
+            
 
 
         if ($random_name == true) {
@@ -155,7 +155,7 @@ class FileUploadService
         
             if (is_array($explode) && count($explode) > 1) {
                 $array = explode('.', $request->input('template'));
-                $template = $array[0];
+                $template = $request->input('template');
                 $index = $array[2];
                 $field = $array[3];
                 
@@ -184,18 +184,19 @@ class FileUploadService
                     $json_array = json_decode($value->meta_value, true);
                 
                     // Check if 'value' exists and is an array
-                    if (!isset($json_array[$index][$field]['value']) || !is_array($json_array[$index][$field]['value'])) {
+                    if (!isset($json_array) ) {
                         // If 'value' is not set or not an array, initialize it as an array
-                        $currentValue = $json_array[$index][$field]['value'] ?? '';
-                        $json_array[$index][$field]['value'] = $currentValue !== '' ? [$currentValue] : [];
+                        $currentValue = $json_array ?? '';
+                        $json_array = $currentValue !== '' ? [$currentValue] : [];
                     }
                 
                     // Now safely append the file path
-                    $json_array[$index][$field]['value'][] = $filePath;
+                    // $json_array[$index][$field]['value'][] = $filePath;
+                    $json_array[] = $filePath;
                     $updatedJsonString = json_encode($json_array);
                 }
                 
-
+              
 
 
                 $update = DB::table('forms_data')->updateOrInsert(
@@ -210,8 +211,9 @@ class FileUploadService
                         'updated_at' => now()
                     ]
                 );
+           
                 if($update) {
-                    $docs=getDocumentStatuses($dossier->id,$dossier->etape_number);
+                    // $docs=getDocumentStatuses($dossier->id,$dossier->etape_number);
                 }
 
             } else {
@@ -230,8 +232,9 @@ class FileUploadService
                     ]
                 );
                 if($update) {
-                    $docs=getDocumentStatuses($dossier->id,$dossier->etape_number);
+                    // $docs=getDocumentStatuses($dossier->id,$dossier->etape_number);
                 }
+            
             }
         } else {
 
@@ -249,7 +252,7 @@ class FileUploadService
                 ]
             );
             if($update) {
-                $docs=getDocumentStatuses($dossier->id,$dossier->etape_number);
+                // $docs=getDocumentStatuses($dossier->id,$dossier->etape_number);
             }
 
         }
@@ -352,19 +355,19 @@ class FileUploadService
                 ]
             );
             if($update) {
-                $docs=getDocumentStatuses($dossier->id,$dossier->etape_number);
+                // $docs=getDocumentStatuses($dossier->id,$dossier->etape_number);
              }
             return $directory . '/' . $pdfFileName;
         }
 
 
-        $config = \DB::table('forms_config')
-            ->where('form_id', $form_id)
-            ->where('name', $template)
-            ->first();
+        // $config = \DB::table('forms_config')
+        //     ->where('form_id', $form_id)
+        //     ->where('name', $template)
+        //     ->first();
 
-        $table = new Table($config, $template, $form_id, $dossier->id);
-        $table->save_value();
+        // $table = new Table($config, $template, $form_id, $dossier->id);
+        // $table->save_value();
 
         $pdfFileName = $request->input('template') . '.pdf';
         $pdfFilePath = storage_path('app/public/' . $directory . '/' . $pdfFileName);
@@ -456,7 +459,7 @@ class FileUploadService
         if($request->dossier_id) {
             $dossier = Dossier::where('id', $request->dossier_id)->first();
 
-            $docs=getDocumentStatuses($dossier->id,$dossier->etape_number);
+            // $docs=getDocumentStatuses($dossier->id,$dossier->etape_number);
         }
 
         try {

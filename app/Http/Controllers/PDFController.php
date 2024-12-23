@@ -511,7 +511,7 @@ class PDFController extends Controller
      */
     private function insertClientSignature($pdf, $fillDataConfig, $dossier)
     {
-        $client = Client::find(id: $dossier->mar);
+        $client = Client::find($dossier->mar);
         $signaturePath = storage_path('app/public/' . ($client->signature ?? ''));
 
         if (file_exists($signaturePath)) {

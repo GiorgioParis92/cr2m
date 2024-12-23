@@ -193,14 +193,14 @@
                                 </div>
                             </div>
                             <div class="table-responsive">
+                             
                                 <x-document-table-component :docs="$docs" :dossier="$dossier" />
 
                             </div>
                         </div>
                     </div>
                 </div>
-       
-                
+            
             
                 @if ($tab == $dossier->etape_number)
                 @if (is_user_allowed('validate_' . $etape_display['etape_name']) || auth()->user()->type_id==1)
@@ -498,13 +498,13 @@
     document.addEventListener('DOMContentLoaded', function(event) {
         document.addEventListener('livewire:load', () => {
             console.log('livewire loaded');
-            // ... your dropzone initialization code here
+            initAllDropzones();
         });
     });
 
     document.addEventListener('photoComponentUploaded', function(event) {
         if (window.Livewire && typeof Livewire.emit === 'function') {
-            alert('emit')
+           
             Livewire.emit('fileUploaded', event.detail);
         } else {
             // If Livewire isn't ready, you can store these events and emit later
@@ -526,7 +526,7 @@
     document.addEventListener('DOMContentLoaded', function(event) {
 
 
-        // Your code here
+        initAllDropzones();
 
 
         Livewire.on('loadCalendar', function() {
@@ -1236,5 +1236,144 @@
             });
         });
 
+    }
+</script>
+<script>
+    $(document).ready(function() {
+        initializeDeleteButtons();
+        initAllDropzones();
+    });
+    document.addEventListener('livewire:update', function() {
+        initializeDeleteButtons();
+        initAllDropzones();
+
+    });
+    document.addEventListener('livewire:load', function() {
+        console.log('livewire loaded')
+        initializeDeleteButtons();
+        initAllDropzones();
+
+    });
+
+    function initAllDropzones() {
+
+        Dropzone.autoDiscover = false;
+        var dropzoneElements = document.querySelectorAll('.dropzone');
+
+        dropzoneElements.forEach(function(dropzoneElement) {
+            if (dropzoneElement.dropzone) {
+                // Already initialized
+                return;
+            }
+
+            var uploadUrl = dropzoneElement.getAttribute('data-upload-url');
+            var dossierId = dropzoneElement.getAttribute('data-dossier-id');
+            var folder = dropzoneElement.getAttribute('data-folder');
+            var formId = dropzoneElement.getAttribute('data-form-id');
+            var tag = dropzoneElement.getAttribute('data-tag');
+            var title = dropzoneElement.getAttribute('data-title');
+
+            var dz = new Dropzone(dropzoneElement, {
+                url: uploadUrl,
+                method: 'post',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                maxFilesize: 50000,
+                paramName: 'file',
+                sending: function(file, xhr, formData) {
+                    formData.append('dossier_id', dossierId);
+                    formData.append('clientId', folder);
+                    formData.append('folder', 'dossiers');
+                    formData.append('template', tag);
+                    formData.append('config', formId);
+                    formData.append('random_name', 'true');
+                    formData.append('form_id', formId);
+                },
+                init: function() {
+                    this.on('success', function(file, response) {
+                        console.log('Successfully uploaded:', response);
+
+                        var url = "{{ asset('storage') }}/" + response;
+                        var isPdf = url.toLowerCase().endsWith('.pdf');
+
+                        var newBlockHtml = '';
+                        if (!isPdf) {
+                            newBlockHtml =
+                                '<div style="display:inline-block">' +
+                                '<i data-dossier_id="' + dossierId + '" ' +
+                                'data-tag="' + tag + '" ' +
+                                'data-val="' + response + '" ' +
+                                'data-img-src="' + url + '" ' +
+                                'class="delete_photo btn btn-danger fa fa-trash bg-danger"></i>' +
+                                '<button type="button" class="btn btn-success btn-view imageModal" ' +
+                                'data-toggle="modal" data-target="imageModal" ' +
+                                'data-img-src="' + url + '" ' +
+                                'data-val="' + response + '" ' +
+                                'data-name="' + title + '">' +
+                                '<img src="' + url + '">' +
+                                '<i style="display:block" class="fas fa-eye"></i>' + title +
+                                '</button>' +
+                                '</div>';
+                        } else {
+                            newBlockHtml =
+                                '<div class="btn btn-success btn-view pdfModal" ' +
+                                'data-toggle="modal" ' +
+                                'data-img-src="' + url + '" ' +
+                                'data-val="' + response + '" ' +
+                                'data-name="' + title + '">' +
+                                '<i class="fas fa-eye"></i>' + title +
+                                '</div>';
+                        }
+
+                        $(dropzoneElement).closest('.row').find('.col-lg-3').append(
+                            newBlockHtml);
+                        initializeDeleteButtons();
+                    });
+
+                    this.on('error', function(file, response) {
+                        console.log('Upload error:', response);
+                    });
+                }
+            });
+        });
+    }
+
+    function initializeDeleteButtons() {
+        $('.delete_photo').off('click').on('click', function() {
+            var _this = $(this);
+            var link = _this.data('val');
+
+            $.ajax({
+                url: '/delete_file',
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                data: {
+                    link: link,
+                    dossier_id: _this.data('dossier_id'),
+                    tag: _this.data('tag')
+                },
+                success: function(response) {
+                    console.log('Successfully deleted:', response);
+                    // Remove the parent container
+                    _this.closest('div[style="display:inline-block"]').remove();
+                },
+                error: function(xhr) {
+                    let errorMessage = 'An error occurred';
+                    if (xhr.responseJSON && xhr.responseJSON.errors) {
+                        errorMessage = Object.values(xhr.responseJSON.errors).join(', ');
+                    }
+                    console.log(errorMessage);
+                }
+            });
+        });
+    }
+
+    if (window.Livewire) {
+        initAllDropzones();
+    } else {
+        document.addEventListener('livewire:load', initAllDropzones);
     }
 </script>

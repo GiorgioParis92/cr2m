@@ -3,10 +3,7 @@
         <label>{{ $conf['title'] ?? '' }}</label>
         @php
 
-
-
             $csrfToken = csrf_token();
-         
 
             $data = '';
 
@@ -18,24 +15,24 @@
                 'random_name' => 'true',
                 'config' => $conf,
             ]);
-            @endphp
+        @endphp
 
-<div class="row">
-    <div class="col-lg-3">
-        <div class="dropzone photo_button bg-secondary"
-            id="dropzone-{{ preg_replace('/[^A-Za-z0-9\-]/', '_', $conf['name']) }}"
-            data-upload-url="{{ $uploadUrl }}" data-csrf-token="{{ $csrfToken }}"
-            data-dossier-id="{{ $dossier_id }}" data-folder="{{ $dossier->folder }}"
-            data-form-id="{{ $form_id }}" data-tag="{{ $conf['name'] }}" data-title="{{ $conf['title'] }}">
-            {{ csrf_field() }}
-            <div style="color:white" class="dz-message">
-                <i class="fas fa-camera"></i> {{ $conf['title'] }}
+        <div class="row">
+            <div class="col-lg-3">
+                <div class="dropzone photo_button bg-secondary"
+                    id="dropzone-{{ preg_replace('/[^A-Za-z0-9\-]/', '_', $conf['name']) }}"
+                    data-upload-url="{{ $uploadUrl }}" data-csrf-token="{{ $csrfToken }}"
+                    data-dossier-id="{{ $dossier_id }}" data-folder="{{ $dossier->folder }}"
+                    data-form-id="{{ $form_id }}" data-tag="{{ $conf['name'] }}" data-title="{{ $conf['title'] }}">
+                    {{ csrf_field() }}
+                    <div style="color:white" class="dz-message">
+                        <i class="fas fa-camera"></i> {{ $conf['title'] }}
+                    </div>
+                </div>
+                <!-- Existing code to display uploaded files goes here -->
             </div>
         </div>
-        <!-- Existing code to display uploaded files goes here -->
-    </div>
-</div>
-    @php
+        @php
 
             // $data .= "<div class='row'>";
             // $data .= "<div class='col-lg-3'>";
@@ -61,10 +58,7 @@
                 $values = [$values]; // Transform into array if not already an array
             }
             if (is_array($values)) {
-               
-                
                 foreach ($values as $val) {
-                   
                     if ($val) {
                         $extension = explode('.', $val);
 
@@ -83,58 +77,57 @@
                             $index = $extension[2];
                         }
 
-                     
-                            if (end($extension) != 'pdf') {
-                                $data .=
-                                    '<div style="display:inline-block">
+                        if (end($extension) != 'pdf') {
+                            $data='<img src="'.asset('storage/' . $val).'" class="avatar avatar-sm me-2" alt="avatar image">';
+                            $data .=
+                                '<div style="display:inline-block">
         <i data-dossier_id="' .
-                                    $dossier_id .
-                                    '" data-tag="' .
-                                    ($tag ?? $conf['name']) .
-                                    '" data-index="' .
-                                    ($index ?? '') .
-                                    '" data-val="' .
-                                    $val .
-                                    '" data-img-src="' .
-                                    asset('storage/' . $val) .
-                                    '" class="delete_photo btn btn-danger fa fa-trash bg-danger"></i>
+                                $dossier_id .
+                                '" data-tag="' .
+                                ($tag ?? $conf['name']) .
+                                '" data-index="' .
+                                ($index ?? '') .
+                                '" data-val="' .
+                                $val .
+                                '" data-img-src="' .
+                                asset('storage/' . $val) .
+                                '" class="delete_photo btn btn-danger fa fa-trash bg-danger"></i>
 
         <button  type="button" class="btn btn-success btn-view imageModal"
             data-toggle="modal" data-target="imageModal"
             data-img-src="' .
-                                    asset('storage/' . $val) .
-                                    '"
+                                asset('storage/' . $val) .
+                                '"
             data-val="' .
-                                    $val .
-                                    '"
+                                $val .
+                                '"
             data-name="' .
-                                    $conf['title'] .
-                                    '">';
-                                $data .= '<img src="' . asset('storage/' . $val) . '">';
-                                $data .=
-                                    '<i style="display:block" class="fas fa-eye"></i>' .
-                                    $conf['title'] .
-                                    '
+                                $conf['title'] .
+                                '">';
+                            $data .= '<img src="' . asset('storage/' . $val) . '">';
+                            $data .=
+                                '<i style="display:block" class="fas fa-eye"></i>' .
+                                $conf['title'] .
+                                '
         </button></div>';
-                            } else {
-                                $data .=
-                                    '<div class="btn btn-success btn-view pdfModal"
+                        } else {
+                            $data .=
+                                '<div class="btn btn-success btn-view pdfModal"
             data-toggle="modal" 
             data-img-src="' .
-                                    asset('storage/' . $val) .
-                                    '"
+                                asset('storage/' . $val) .
+                                '"
             data-val="' .
-                                    $val .
-                                    '"
+                                $val .
+                                '"
             data-name="' .
-                                    $conf['title'] .
-                                    '">';
-                                $data .= '<i class="fas fa-eye"></i>' . $conf['title'] . '</div>';
-                            }
+                                $conf['title'] .
+                                '">';
+                            $data .= '<i class="fas fa-eye"></i>' . $conf['title'] . '</div>';
                         }
                     }
                 }
-            
+            }
 
             // $data .= '</div>';
             // $data .= '</div>';
@@ -159,8 +152,24 @@
         </div> --}}
 
         <script>
-            initializeDeleteButtons();
+            $(document).ready(function() {
+                initializeDeleteButtons();
+                initAllDropzones();
+            });
+            document.addEventListener('livewire:update', function() {
+                initializeDeleteButtons();
+                initAllDropzones();
+
+            });
+            document.addEventListener('livewire:load', function() {
+                console.log('livewire loaded')
+                initializeDeleteButtons();
+                initAllDropzones();
+
+            });
+
             function initAllDropzones() {
+
                 Dropzone.autoDiscover = false;
                 var dropzoneElements = document.querySelectorAll('.dropzone');
 
