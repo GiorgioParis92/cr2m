@@ -89,7 +89,7 @@
                                 '" data-img-src="' .
                                 asset('storage/' . $val) .
                                 '"';
-                            $data.=' src="'.asset('storage/' . $val).'" class="avatar avatar-sm me-2 imageModal" alt="avatar image">';
+                            $data.=' src="'.asset('storage/' . $val).'" class="avatar avatar-sm me-2 imageModal cursor-pointer" alt="avatar image">';
                             $data .=
                                 '<div style="display:inline-block">
         <i data-dossier_id="' .
