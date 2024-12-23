@@ -78,7 +78,18 @@
                         }
 
                         if (end($extension) != 'pdf') {
-                            $data='<img src="'.asset('storage/' . $val).'" class="avatar avatar-sm me-2" alt="avatar image">';
+                            $data='<img ';
+                            $data.=' data-dossier_id="' .$dossier_id .
+                                '" data-tag="' .
+                                ($tag ?? $conf['name']) .
+                                '" data-index="' .
+                                ($index ?? '') .
+                                '" data-val="' .
+                                $val .
+                                '" data-img-src="' .
+                                asset('storage/' . $val) .
+                                '"';
+                            $data.=' src="'.asset('storage/' . $val).'" class="avatar avatar-sm me-2" alt="avatar image">';
                             $data .=
                                 '<div style="display:inline-block">
         <i data-dossier_id="' .
