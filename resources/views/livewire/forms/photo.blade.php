@@ -100,7 +100,9 @@
                                 '" data-img-src="' .
                                 asset('storage/' . $val) .
                                 '"';
-                            $data.=' src="'.asset('storage/' . $val).'" style="    height: 80px !important; width: 80px !important;" class="avatar me-2 imageModal cursor-pointer" alt="avatar image">';
+                            $data.=' src="'.asset('storage/' . $val).'" style="        height: 30% !important;
+    width: 30% !important;
+    display: inline-block;" class="avatar me-2 imageModal cursor-pointer" alt="avatar image">';
 
                                 $data.='</div>';
                         } else {
