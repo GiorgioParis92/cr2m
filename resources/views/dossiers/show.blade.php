@@ -10,7 +10,7 @@
     <div class="container">
 
       
-        @if(auth()->user()->id>0)
+        @if(auth()->user()->id==1)
 
         @livewire('dossier-livewire-new', ['id' => $id])
         @else 
