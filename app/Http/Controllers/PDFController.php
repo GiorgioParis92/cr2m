@@ -131,19 +131,19 @@ class PDFController extends Controller
             );
 
             if ($update) {
-                if ($dossier && $dossier->etape) {
-                    $orderColumn = $dossier->etape->order_column;
-                } else {
-                    // Handle the case where $dossier or $dossier->etape is null
-                    $orderColumn = null;
-                }
-                $docs = getDocumentStatuses($dossier->id, $orderColumn);
+                // if ($dossier && $dossier->etape) {
+                //     $orderColumn = $dossier->etape->order_column;
+                // } else {
+                //     // Handle the case where $dossier or $dossier->etape is null
+                //     $orderColumn = null;
+                // }
+                // $docs = getDocumentStatuses($dossier->id, $orderColumn);
 
 
-                Dossier::where('id', $dossier->id)->update([
+                // Dossier::where('id', $dossier->id)->update([
 
-                    'updated_at' => now(),
-                ]);
+                //     'updated_at' => now(),
+                // ]);
 
             }
 
