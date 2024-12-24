@@ -166,7 +166,6 @@ class FileUploadService
                 $template = $request->input('template');
                 $index='';
             }
-            dd($template);
             $value = DB::table('forms_data')
                 ->where('meta_key', $template)
                 ->where("form_id", $form_id)
