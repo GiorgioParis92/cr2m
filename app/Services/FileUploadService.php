@@ -454,7 +454,7 @@ class FileUploadService
                 // Update the meta_value in the database
                 DB::table('forms_data')
                     ->where('id', $value->id) // Assuming 'id' is the primary key
-                    ->update(['meta_value' => $new_json_value]);
+                    ->update(['meta_value' => (!empty($new_json_value) ? $new_json_value : '')]);
             } else {
                 DB::table('forms_data')
                     ->where('id', $value->id) // Assuming 'id' is the primary key
