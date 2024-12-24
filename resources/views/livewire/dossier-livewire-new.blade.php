@@ -853,8 +853,8 @@
             initializePdfModals();
 
 
-            var configs = data.forms_configs;
-            initializeDropzones(configs);
+            // var configs = data.forms_configs;
+            // initializeDropzones(configs);
 
 
 
