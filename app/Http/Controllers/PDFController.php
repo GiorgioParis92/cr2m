@@ -575,7 +575,7 @@ class PDFController extends Controller
                     }
                 }
                 } else {
-                    ajout_travaux.value.676029022fa21.description_travaux
+      
 dump($row);
 dump($formId);
 dump($tag);
