@@ -575,7 +575,7 @@ class PDFController extends Controller
                     }
                 }
                 } else {
-
+dump($fillDataConfig['table']['sub_tag']);
                 }
                 $i++;
             }
