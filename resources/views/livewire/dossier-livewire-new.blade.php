@@ -1292,6 +1292,8 @@
                 },
                 init: function() {
                     this.on('success', function(file, response) {
+                        console.log('probleme initialisation', response);
+
                         console.log('Successfully uploaded:', response);
 
                         var url = "{{ asset('storage') }}/" + response;
