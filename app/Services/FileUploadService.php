@@ -171,6 +171,14 @@ class FileUploadService
                 ->where("dossier_id", $dossier->id)
                 ->first();
 
+
+
+
+                dump($request);
+                dump($template);
+                dump($index);
+                dd($value);
+
             if ($value) {
                 $json_value = json_decode($value->meta_value,true);
                 if ($json_value) {
@@ -198,7 +206,7 @@ class FileUploadService
                 }
                 
               
-                dd($updatedJsonString);
+           
            
                 $update = DB::table('forms_data')->updateOrInsert(
                     [
