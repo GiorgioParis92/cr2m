@@ -575,11 +575,11 @@ class PDFController extends Controller
                     }
                 }
                 } else {
-      
+             
 dump($row);
 dump($formId);
 dump($tag);
-dump($allData[$tag.'.value.'.$row.'.'.$fillDataConfig['table']['sub_tag']]);
+dump($allData[$tag.'.value.'.$row.'.'.$fillDataConfig['table']['sub_tag']] ?? '');
 dd($fillDataConfig['table']['sub_tag']);
                 }
                 $i++;
