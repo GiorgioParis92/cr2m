@@ -452,6 +452,10 @@ class FileUploadService
                 // Encode back to JSON
                 $new_json_value = json_encode($json_value);
                 // Update the meta_value in the database
+
+                dump($json_value);
+                dd($new_json_value);
+
                 DB::table('forms_data')
                     ->where('id', $value->id) // Assuming 'id' is the primary key
                     ->update(['meta_value' => (!empty($new_json_value) ? $new_json_value : '')]);
