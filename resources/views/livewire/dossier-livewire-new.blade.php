@@ -168,6 +168,8 @@
                             </div>
                             <br />
                             <div>
+                                @if (auth()->user()->client_id == 0 ||
+                                        (auth()->user()->client_id != 3 && auth()->user()->type_id != 7 && auth()->user()->type_id != 4))
                                 <select class="no_select2 form-control" name="installateur"
                                     wire:change="update_installateur($event.target.value)">
                                     <option value="">Choisir un installateur</option>
@@ -178,6 +180,21 @@
                                         </option>
                                     @endforeach
                                 </select>
+                                <form class="form-control" method="get">
+
+                                    <label>Changer l'étape en cours</label>
+                                    <select onchange="this.form.submit()" class="form-control" name="etape">
+                                        <option>Choisir une étape</option>
+                                        @foreach ($etapes as $index => $e)
+                                            @if ($e['order_column'] <= $dossier['etape']['order_column'])
+                                                <option @if ($e['id'] == $tab) selected @endif
+                                                    value="{{ $e['etape_number'] }}">{{ $e['etape_icon'] }} -
+                                                    {{ strtoupper_extended($e['etape_desc']) }}</option>
+                                            @endif
+                                        @endforeach
+                                    </select>
+                                </form>
+                                @endif
                             </div>
                         </div>
                     </div>
