@@ -575,9 +575,11 @@ class PDFController extends Controller
                     }
                 }
                 } else {
+                    ajout_travaux.value.676029022fa21.description_travaux
 dump($row);
 dump($formId);
 dump($tag);
+dump($allData[$tag.'.value.'.$row.'.'.$fillDataConfig['table']['sub_tag']]);
 dd($fillDataConfig['table']['sub_tag']);
                 }
                 $i++;
