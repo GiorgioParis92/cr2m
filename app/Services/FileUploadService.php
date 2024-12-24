@@ -145,9 +145,7 @@ class FileUploadService
 
 
             
-        dump($request);
-        dump($template);
-        dump($index);
+
   
 
 
@@ -168,7 +166,7 @@ class FileUploadService
                 $template = $request->input('template');
                 $index='';
             }
-
+            dd($template);
             $value = DB::table('forms_data')
                 ->where('meta_key', $template)
                 ->where("form_id", $form_id)
@@ -176,7 +174,6 @@ class FileUploadService
                 ->first();
 
 
-                dd($value);
 
 
             if ($value) {
