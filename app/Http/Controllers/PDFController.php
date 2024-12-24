@@ -576,10 +576,10 @@ class PDFController extends Controller
                 }
                 } else {
              
-dd($allData['form_data'][$formId]);
+dump($allData['form_data'][$formId]);
 dump($formId);
 dump($tag);
-dump($allData[$tag.'.value.'.$row.'.'.$fillDataConfig['table']['sub_tag']] ?? '');
+dump($allData['form_data'][$formId][$tag.'.value.'.$row.'.'.$fillDataConfig['table']['sub_tag']] ?? '');
 dd($fillDataConfig['table']['sub_tag']);
                 }
                 $i++;
