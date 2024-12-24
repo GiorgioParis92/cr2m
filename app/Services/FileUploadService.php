@@ -452,6 +452,9 @@ class FileUploadService
                 // Encode back to JSON
                 $new_json_value = json_encode($json_value);
                 // Update the meta_value in the database
+                if($new_json_value=='[]') {
+                    $new_json_value='';
+                }
 
                 dump($json_value);
                 dd($new_json_value);
