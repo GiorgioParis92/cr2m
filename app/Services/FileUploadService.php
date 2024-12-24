@@ -36,7 +36,7 @@ class FileUploadService
         if ($request->folder == 'dossiers') {
 
         }
-
+        dd($request);
         if (isset($request->folder)) {
             $folder = $request->folder;
 
