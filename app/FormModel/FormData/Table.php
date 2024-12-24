@@ -184,7 +184,7 @@ class Table extends AbstractFormData
         foreach ($this->value as $index => $element_data) {
             $title_content = '';
             $title_content_count = 0;
-
+            dd($element_data);
             foreach ($this->optionsArray as $element_config) {
                 $class = 'App\\FormModel\\FormData\\' . ucfirst($element_config['type']);
                 $configInstance = $element_config;
