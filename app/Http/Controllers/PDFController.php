@@ -756,7 +756,7 @@ class PDFController extends Controller
 
                     $instance = new $class($element, $element->name, $element->form_id, $dossier->id ?? null);
                     $instance->set_dossier($dossier);
-                    dd($instance);
+            
                     $instance_result = $instance->render_pdf();
 
                     // if ($element->type == 'table' && $element->name=='ajout_mur') {
@@ -781,6 +781,7 @@ class PDFController extends Controller
                             if ($element->type != 'table') {
                                 $title_content .= '<tr><td style="width:100%;border:1px solid #ccc;border-collapse: collapse;padding-left:12px;padding-bottom:15px">' . $instance_result . '</td></tr>';
                             } else {
+                                dd($instance);
                                 $title_content .= '</table><div>' . $instance_result . '</div></table>';
                                 ;
                             }
