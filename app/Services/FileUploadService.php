@@ -145,6 +145,10 @@ class FileUploadService
 
 
             
+        dump($request);
+        dump($template);
+        dump($index);
+        dd($value);
 
 
         if ($random_name == true) {
@@ -174,10 +178,6 @@ class FileUploadService
 
 
 
-                dump($request);
-                dump($template);
-                dump($index);
-                dd($value);
 
             if ($value) {
                 $json_value = json_decode($value->meta_value,true);
