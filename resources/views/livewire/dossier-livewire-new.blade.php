@@ -1118,7 +1118,7 @@
             var config_id = $(this).data('config_id'); // Get the dossier ID from data attribute
             var generation = $(this).data('generation'); // Get the dossier ID from data attribute
             var title = $(this).data('title'); // Get the dossier ID from data attribute
-            alert.log(form_id);
+            console.log(form_id);
             $.ajax({
                 url: '/api/generate-config', // Adjust this URL to your actual API endpoint
                 type: 'POST',
