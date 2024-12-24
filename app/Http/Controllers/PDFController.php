@@ -54,12 +54,12 @@ class PDFController extends Controller
                 ->where('name', $request->name)
                 ->first();
 
-            if(isset($form_config->options)) {
+            if (isset($form_config->options)) {
                 $config = json_decode($form_config->options);
             } else {
-                $config=[];
+                $config = [];
             }
-           
+
             $validated['generation'] = $config->on_generation ?? [];
             $request->template = $config->template ?? [];
             $validated['template'] = $config->template ?? [];
@@ -545,7 +545,7 @@ class PDFController extends Controller
      */
     private function processTable($pdf, $fillDataConfig, $allData, $formId, $tag)
     {
-        if(isset($allData[$fillDataConfig['data_origin']][$formId][$tag])) {
+        if (isset($allData[$fillDataConfig['data_origin']][$formId][$tag])) {
             $tableData = json_decode($allData[$fillDataConfig['data_origin']][$formId][$tag]);
             $x = $fillDataConfig['position'][0];
             $y = $fillDataConfig['position'][1];
@@ -554,51 +554,51 @@ class PDFController extends Controller
             $maxwidth = $fillDataConfig['table']['max-width'] ?? 120;
             $newY = $y;
             $i = 1;
-           
+
             foreach ($tableData as $row) {
 
-                if(is_array($row)) {
-                foreach ($row as $k => $v) {
-                    if ($k === $fillDataConfig['table']['sub_tag'] && $i >= $range[0] && $i <= $range[1]) {
-        
-                        $value = $v->value;
+                if (is_array($row)) {
+                    foreach ($row as $k => $v) {
+                        if ($k === $fillDataConfig['table']['sub_tag'] && $i >= $range[0] && $i <= $range[1]) {
+
+                            $value = $v->value;
+                            if (isset($fillDataConfig['table']['operation'])) {
+                                $value = $this->handleOperation($value, $fillDataConfig['table']['operation']['type'], $fillDataConfig['table']['operation']['value']);
+                            }
+
+                            // Write text with MultiCell for left alignment
+                            $pdf->SetXY($x, $newY);
+                            $pdf->MultiCell($maxwidth, $increment, $value, 0, 'L'); // Left-aligned text
+
+                            // Adjust vertical position based on number of lines
+                            $newY += $increment;
+                        }
+                    }
+                } else {
+
+
+                    if ($i >= $range[0] && $i <= $range[1]) {
+                        $value = $allData['form_data'][$formId][$tag . '.value.' . $row . '.' . $fillDataConfig['table']['sub_tag']] ?? '';
                         if (isset($fillDataConfig['table']['operation'])) {
                             $value = $this->handleOperation($value, $fillDataConfig['table']['operation']['type'], $fillDataConfig['table']['operation']['value']);
                         }
-                 
+
                         // Write text with MultiCell for left alignment
                         $pdf->SetXY($x, $newY);
                         $pdf->MultiCell($maxwidth, $increment, $value, 0, 'L'); // Left-aligned text
-        
+
                         // Adjust vertical position based on number of lines
-                        $newY += $increment ;
+                        $newY += $increment;
                     }
                 }
-                } else {
-             
-
-                    if ($i >= $range[0] && $i <= $range[1]) {
-$value = $allData['form_data'][$formId][$tag.'.value.'.$row.'.'.$fillDataConfig['table']['sub_tag']] ?? '';
-if (isset($fillDataConfig['table']['operation'])) {
-    $value = $this->handleOperation($value, $fillDataConfig['table']['operation']['type'], $fillDataConfig['table']['operation']['value']);
-}
-
-// Write text with MultiCell for left alignment
-$pdf->SetXY($x, $newY);
-$pdf->MultiCell($maxwidth, $increment, $value, 0, 'L'); // Left-aligned text
-
-// Adjust vertical position based on number of lines
-$newY += $increment ;
-                }
-            }
                 $i++;
             }
         }
 
     }
-    
-    
-    
+
+
+
 
     /**
      * Update or create FormsData record.
@@ -676,7 +676,7 @@ $newY += $increment ;
                 ->where('name', $request->template ?? $request->name)
                 ->first();
 
-
+            dd($request->form_id);
             $jsonString = str_replace(["\n", '', "\r"], '', $config->options);
             $optionsArray = json_decode($jsonString, true);
             if (!is_array($optionsArray)) {
