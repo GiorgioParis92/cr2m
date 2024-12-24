@@ -786,53 +786,53 @@
 
         })
 
-        Livewire.on('setTab', (data) => {
+        // Livewire.on('setTab', (data) => {
 
 
 
-            const firstKey = Object.keys(data.forms_configs)[0];
+        //     const firstKey = Object.keys(data.forms_configs)[0];
 
-            // Get the first element using that key
-            const firstElement = data.forms_configs[firstKey];
+        //     // Get the first element using that key
+        //     const firstElement = data.forms_configs[firstKey];
 
-            // Log the first element
+        //     // Log the first element
 
-            $('#etape').val(firstElement.form.etape_number); // Assuming `etape_number` exists
+        //     $('#etape').val(firstElement.form.etape_number); // Assuming `etape_number` exists
 
-            // Optionally trigger the change event to notify Livewire or any other event handler
-            $('#etape').trigger('change');
-
-
-            var configs = data.forms_configs;
-            initializeDropzones(configs);
-            $('.delete_photo').click(function() {
-
-                var link = $(this).data('val');
-                $.ajax({
-                    url: '/delete_file',
-                    method: 'POST',
-                    headers: {
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                    },
-                    data: {
-                        link: link,
-
-                    },
-                    success: function(response) {
+        //     // Optionally trigger the change event to notify Livewire or any other event handler
+        //     $('#etape').trigger('change');
 
 
-                    },
-                    error: function(xhr) {
-                        let errorMessage = 'An error occurred';
-                        if (xhr.responseJSON && xhr.responseJSON.errors) {
-                            errorMessage = Object.values(xhr.responseJSON.errors)
-                                .join(', ');
-                        }
+        //     var configs = data.forms_configs;
+        //     initializeDropzones(configs);
+        //     $('.delete_photo').click(function() {
 
-                    }
-                });
-            })
-        });
+        //         var link = $(this).data('val');
+        //         $.ajax({
+        //             url: '/delete_file',
+        //             method: 'POST',
+        //             headers: {
+        //                 'X-CSRF-TOKEN': '{{ csrf_token() }}'
+        //             },
+        //             data: {
+        //                 link: link,
+
+        //             },
+        //             success: function(response) {
+
+
+        //             },
+        //             error: function(xhr) {
+        //                 let errorMessage = 'An error occurred';
+        //                 if (xhr.responseJSON && xhr.responseJSON.errors) {
+        //                     errorMessage = Object.values(xhr.responseJSON.errors)
+        //                         .join(', ');
+        //                 }
+
+        //             }
+        //         });
+        //     })
+        // });
 
 
         Livewire.on('ok_photo', (data) => {

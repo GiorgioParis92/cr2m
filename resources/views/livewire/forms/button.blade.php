@@ -1,4 +1,4 @@
-<div class="col-sm-12 {{ $conf['class'] ?? 'col-lg-12' }}">
+<div wire:poll="refresh" class="col-sm-12 {{ $conf['class'] ?? 'col-lg-12' }}">
 
     @php
 

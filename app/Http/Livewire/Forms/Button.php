@@ -36,7 +36,10 @@ class Button extends AbstractData
     public function getErrorMessage() {
         return 'Mauvais format de date.';
     }
+    public function refresh() {
+        parent::mount($this->conf, $this->form_id, $this->dossier_id);
 
+    }
     protected function validateValue($value): bool
     {
 
