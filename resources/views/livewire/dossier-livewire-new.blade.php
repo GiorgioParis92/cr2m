@@ -80,7 +80,7 @@
                                     $isAllowed = false;
                                     $isCurrent = false;
                                 }
-
+           
                             @endphp
                             @if ($isActive && $isAllowed)
                                 <div class="pe-auto cursor-pointer timeline-block mb-3 p-3 {{ $isCurrent ? 'bg-primary' : '' }} {{ $tab == $e['id'] ? 'bg-secondary' : '' }}"
@@ -201,7 +201,7 @@
                     </div>
                 </div>
             
-            
+       
                 @if ($tab == $dossier->etape_number)
                 @if (is_user_allowed('validate_' . $etape_display['etape_name']) || auth()->user()->type_id==1)
                 @if (auth()->user()->client->type_client != 3)
