@@ -79,6 +79,7 @@ class PDFController extends Controller
         // Generate the PDF using Html2Pdf
         $html2pdf = new Html2Pdf();
 
+        
         $html2pdf->writeHTML($htmlContent);
 
         $pdfOutput = $html2pdf->output('', 'S'); // Output as string
