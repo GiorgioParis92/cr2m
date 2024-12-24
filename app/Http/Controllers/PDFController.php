@@ -575,6 +575,7 @@ class PDFController extends Controller
                     }
                 }
                 } else {
+dump($row);
 dump($formId);
 dump($tag);
 dd($fillDataConfig['table']['sub_tag']);
