@@ -1358,7 +1358,7 @@
                     tag: _this.data('tag')
                 },
                 success: function(response) {
-                    console.log('Successfully deleted:', response);
+                    console.log('Successfully deleted from dossier-livewire:', response);
                     // Remove the parent container
                     _this.closest('div[style="display:inline-block"]').remove();
                 },
