@@ -676,7 +676,7 @@ class PDFController extends Controller
                 ->where('name', $request->template ?? $request->name)
                 ->first();
 
-            dd($request->form_id);
+            dump($request->form_id);
             $jsonString = str_replace(["\n", '', "\r"], '', $config->options);
             $optionsArray = json_decode($jsonString, true);
             if (!is_array($optionsArray)) {
