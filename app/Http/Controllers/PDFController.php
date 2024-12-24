@@ -576,11 +576,19 @@ class PDFController extends Controller
                 }
                 } else {
              
-dump($allData['form_data'][$formId]);
-dump($formId);
-dump($tag);
-dump($allData['form_data'][$formId][$tag.'.value.'.$row.'.'.$fillDataConfig['table']['sub_tag']] ?? '');
-dd($fillDataConfig['table']['sub_tag']);
+
+
+$value = $allData['form_data'][$formId][$tag.'.value.'.$row.'.'.$fillDataConfig['table']['sub_tag']] ?? '';
+if (isset($fillDataConfig['table']['operation'])) {
+    $value = $this->handleOperation($value, $fillDataConfig['table']['operation']['type'], $fillDataConfig['table']['operation']['value']);
+}
+
+// Write text with MultiCell for left alignment
+$pdf->SetXY($x, $newY);
+$pdf->MultiCell($maxwidth, $increment, $value, 0, 'L'); // Left-aligned text
+
+// Adjust vertical position based on number of lines
+$newY += $increment ;
                 }
                 $i++;
             }
