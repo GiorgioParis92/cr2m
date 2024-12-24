@@ -2,7 +2,7 @@
 
     @php
 
-        $data = '11111';
+        $data = '';
         if (!$this->value) {
             $data .= '<div>';
             $data .= '<div  class="btn btn-primary" onclick="sendApiRequest(this)" ';
