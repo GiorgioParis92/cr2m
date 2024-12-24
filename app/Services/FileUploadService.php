@@ -110,7 +110,7 @@ class FileUploadService
 
         // Save the new file
         $filePath = $file->storeAs($directory, $fileName, 'public');
-        dd($filePath);
+
 
             $fullPath = storage_path('app/public/' . $filePath);
 
@@ -198,7 +198,7 @@ class FileUploadService
                 
               
 
-
+                dd($updatedJsonString);
                 $update = DB::table('forms_data')->updateOrInsert(
                     [
                         'dossier_id' => '' . $dossier->id . '',
