@@ -185,7 +185,7 @@ class FileUploadService
                 }
                 $updatedJsonString = json_encode($json_value);
                 if ($index != '') {
-                    dd('ok');
+                
                     $json_array = json_decode($value->meta_value, true);
                 
                     // Check if 'value' exists and is an array
