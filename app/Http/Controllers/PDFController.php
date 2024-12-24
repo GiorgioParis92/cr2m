@@ -554,7 +554,7 @@ class PDFController extends Controller
             $maxwidth = $fillDataConfig['table']['max-width'] ?? 120;
             $newY = $y;
             $i = 1;
-        
+            dd($tableData);
             foreach ($tableData as $row) {
                 foreach ($row as $k => $v) {
                     if ($k === $fillDataConfig['table']['sub_tag'] && $i >= $range[0] && $i <= $range[1]) {
