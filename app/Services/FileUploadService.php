@@ -456,8 +456,7 @@ class FileUploadService
                     $new_json_value='';
                 }
 
-                dump($json_value);
-                dd($new_json_value);
+         
 
                 DB::table('forms_data')
                     ->where('id', $value->id) // Assuming 'id' is the primary key
