@@ -577,7 +577,7 @@ class PDFController extends Controller
                 } else {
              
 
-
+                    if ($i >= $range[0] && $i <= $range[1]) {
 $value = $allData['form_data'][$formId][$tag.'.value.'.$row.'.'.$fillDataConfig['table']['sub_tag']] ?? '';
 if (isset($fillDataConfig['table']['operation'])) {
     $value = $this->handleOperation($value, $fillDataConfig['table']['operation']['type'], $fillDataConfig['table']['operation']['value']);
@@ -590,6 +590,7 @@ $pdf->MultiCell($maxwidth, $increment, $value, 0, 'L'); // Left-aligned text
 // Adjust vertical position based on number of lines
 $newY += $increment ;
                 }
+            }
                 $i++;
             }
         }
