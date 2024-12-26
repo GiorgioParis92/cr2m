@@ -83,6 +83,7 @@ class Upload extends AbstractFormData
         $data .= '<input type="hidden" name="form_id" value="'.$this->form_id.'">';
         $data .= '<input type="hidden" name="clientId" value="'.($this->dossier->folder ?? $this->dossier_id).'">';
         $data .= '<input type="hidden" name="random_name" value="false">';
+        $data .= '<input type="hidden" name="upload_image" value="true">';
         $data .= '<div class="dz-message"><i class="fas fa-arrow-up"></i> Upload';
 
         $data .= '</div>';
