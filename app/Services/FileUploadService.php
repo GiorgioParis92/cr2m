@@ -244,7 +244,106 @@ class FileUploadService
             
             }
         } else {
-
+            if (isset($request->upload_image) && $file->isValid() && in_array(strtolower($extension), ['jpeg', 'jpg', 'png', 'gif', 'bmp'])) {
+                $image = Image::make($file);
+    
+                $exif = @exif_read_data($file->getPathname());
+                if ($exif && isset($exif['Orientation'])) {
+    
+    
+    
+                    switch ($exif['Orientation']) {
+                        case 3:
+                            $image->rotate(180);
+                            break;
+                        case 6:
+                            $image->rotate(-90);
+                            break;
+                        case 8:
+                            $image->rotate(90);
+                            break;
+                        case 4:
+                            $image->rotate(-90);
+                            break;
+                    }
+                }
+    
+                // Get the width and height of the image
+                $width = $image->width();
+                $height = $image->height();
+    
+    
+    
+                // Standardize the image orientation and dimensions
+                if ($width > $height) {
+                    // Rotate the image if it's wider than it is tall (landscape)
+                    $image->rotate(90);
+    
+                }
+    
+                $image = $image->fit(595, 842); // 595x842 pixels corresponds to 210x297mm at 72dpi
+    
+                $tempImagePath = storage_path('app/public/' . $directory . '/temp_image.jpg');
+                $image->save($tempImagePath);
+    
+                // Define the PDF file name and path
+                $pdfFileName = $request->input('template') . '.pdf';
+                $pdfFilePath = storage_path('app/public/' . $directory . '/' . $pdfFileName);
+    
+               
+    
+                if (file_exists($pdfFilePath)) {
+                    // Append to existing PDF
+                    $pdf = new FPDI();
+                    $pageCount = $pdf->setSourceFile($pdfFilePath);
+    
+                    // Import existing pages
+                    for ($pageNo = 1; $pageNo <= $pageCount; $pageNo++) {
+                        $templateId = $pdf->importPage($pageNo);
+                        $size = $pdf->getTemplateSize($templateId);
+                        $pdf->AddPage($size['orientation'], [$size['width'], $size['height']]);
+                        $pdf->useTemplate($templateId);
+                    }
+    
+                    // Add a new page for the new image
+                    $pdf->AddPage('P', 'A4');
+                    $pdf->Image($tempImagePath, 0, 0, 210, 297);
+                } else {
+                    // Create a new PDF
+                    $pdf = new FPDF();
+                    $pdf->AddPage('P', 'A4');
+                    $pdf->Image($tempImagePath, 0, 0, 210, 297);
+    
+    
+                }
+    
+                // Save the updated or new PDF
+                $pdf->Output($pdfFilePath, 'F');
+    
+              
+    
+                // Optionally, delete the temporary image file
+                unlink($tempImagePath);
+    
+    
+    
+                $update = DB::table('forms_data')->updateOrInsert(
+                    [
+                        'dossier_id' => '' . $dossier->id . '',
+                        'form_id' => '' . $form_id . '',
+                        'meta_key' => '' . $template . ''
+                    ],
+                    [
+                        'meta_value' => '' . $directory . '/' . $pdfFileName . '',
+                        'created_at' => now(),
+                        'updated_at' => now()
+                    ]
+                );
+                if($update) {
+                    // $docs=getDocumentStatuses($dossier->id,$dossier->etape_number);
+                 }
+                return $directory . '/' . $pdfFileName;
+            }
 
             $update = DB::table('forms_data')->updateOrInsert(
                 [
@@ -266,106 +365,7 @@ class FileUploadService
 
 
 
-        if (isset($request->upload_image) && $file->isValid() && in_array(strtolower($extension), ['jpeg', 'jpg', 'png', 'gif', 'bmp'])) {
-            $image = Image::make($file);
-
-            $exif = @exif_read_data($file->getPathname());
-            if ($exif && isset($exif['Orientation'])) {
-
-
-
-                switch ($exif['Orientation']) {
-                    case 3:
-                        $image->rotate(180);
-                        break;
-                    case 6:
-                        $image->rotate(-90);
-                        break;
-                    case 8:
-                        $image->rotate(90);
-                        break;
-                    case 4:
-                        $image->rotate(-90);
-                        break;
-                }
-            }
-
-            // Get the width and height of the image
-            $width = $image->width();
-            $height = $image->height();
-
-
-
-            // Standardize the image orientation and dimensions
-            if ($width > $height) {
-                // Rotate the image if it's wider than it is tall (landscape)
-                $image->rotate(90);
-
-            }
-
-            $image = $image->fit(595, 842); // 595x842 pixels corresponds to 210x297mm at 72dpi
-
-            $tempImagePath = storage_path('app/public/' . $directory . '/temp_image.jpg');
-            $image->save($tempImagePath);
-
-            // Define the PDF file name and path
-            $pdfFileName = $request->input('template') . '.pdf';
-            $pdfFilePath = storage_path('app/public/' . $directory . '/' . $pdfFileName);
-
-           
-
-            if (file_exists($pdfFilePath)) {
-                // Append to existing PDF
-                $pdf = new FPDI();
-                $pageCount = $pdf->setSourceFile($pdfFilePath);
-
-                // Import existing pages
-                for ($pageNo = 1; $pageNo <= $pageCount; $pageNo++) {
-                    $templateId = $pdf->importPage($pageNo);
-                    $size = $pdf->getTemplateSize($templateId);
-                    $pdf->AddPage($size['orientation'], [$size['width'], $size['height']]);
-                    $pdf->useTemplate($templateId);
-                }
-
-                // Add a new page for the new image
-                $pdf->AddPage('P', 'A4');
-                $pdf->Image($tempImagePath, 0, 0, 210, 297);
-            } else {
-                // Create a new PDF
-                $pdf = new FPDF();
-                $pdf->AddPage('P', 'A4');
-                $pdf->Image($tempImagePath, 0, 0, 210, 297);
-
-
-            }
-
-            // Save the updated or new PDF
-            $pdf->Output($pdfFilePath, 'F');
-
-            dd($pdfFilePath);
-
-            // Optionally, delete the temporary image file
-            unlink($tempImagePath);
-
-
-
-            $update = DB::table('forms_data')->updateOrInsert(
-                [
-                    'dossier_id' => '' . $dossier->id . '',
-                    'form_id' => '' . $form_id . '',
-                    'meta_key' => '' . $template . ''
-                ],
-                [
-                    'meta_value' => '' . $directory . '/' . $pdfFileName . '',
-                    'created_at' => now(),
-                    'updated_at' => now()
-                ]
-            );
-            if($update) {
-                // $docs=getDocumentStatuses($dossier->id,$dossier->etape_number);
-             }
-            return $directory . '/' . $pdfFileName;
-        }
+      
 
 
         // $config = \DB::table('forms_config')
