@@ -143,7 +143,9 @@ class FileUploadService
 
         $template = $request->input('template');
 
-
+            if(isset($request->random_name) && $request->random_name=='false') {
+                $random_name=false;
+            }
             
 
             dd($random_name == true);
