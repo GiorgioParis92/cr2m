@@ -189,9 +189,9 @@
     @include('pdf.footer')
     <div class="row">
         <div class="col-12" style="max-width:40%;margin:auto;text-align:center;margin-top:-30px">
-            @if(isset($dossier->client->main_logo) && file_exists(storage_path('app/public/' . $dossier->client->main_logo)))
+            @if(isset($dossier->mar_client->main_logo) && file_exists(storage_path('app/public/' . $dossier->mar_client->main_logo)))
 
-            <img src="{{ asset('storage/' . $dossier->client->main_logo) }}" alt="Logo">
+            <img src="{{ asset('storage/' . $dossier->mar_client->main_logo) }}" alt="Logo">
 
             @endif
         </div>
@@ -219,14 +219,14 @@
 
     <div class="my-4">
         <p>
-            Le bureau d'études <b>{{ $dossier->client->client_title }}</b> {{ $dossier->client->type_societe }} ayant
-            pour SIRET {{ $dossier->client->siret }}<br />
+            Le bureau d'études <b>{{ $dossier->mar_client->client_title }}</b> {{ $dossier->mar_client->type_societe }} ayant
+            pour SIRET {{ $dossier->mar_client->siret }}<br />
             dont le siège social est situé<br />
-            au {{ $dossier->client->adresse }} {{ $dossier->client->cp }} {{ $dossier->client->ville }}<br />
-            représenté par {{ $dossier->client->representant ?? '' }}<br />
-            agissant en qualité de {{ $dossier->client->qualite ?? '' }}<br />
+            au {{ $dossier->mar_client->adresse }} {{ $dossier->mar_client->cp }} {{ $dossier->mar_client->ville }}<br />
+            représenté par {{ $dossier->mar_client->representant ?? '' }}<br />
+            agissant en qualité de {{ $dossier->mar_client->qualite ?? '' }}<br />
             Ci-après, désigné <b>« Mon Accompagnateur Rénov »</b><br />
-            Numéro d'agrément numéro : {{ $dossier->client->agrement ?? '' }}</p>
+            Numéro d'agrément numéro : {{ $dossier->mar_client->agrement ?? '' }}</p>
 
     </div>
 
@@ -238,7 +238,7 @@
     </div>
 
     <div class="my-4">
-        <p>L’accompagnateur Rénov {{ $dossier->client->client_title }} effectue des missions de Mon Accompagnateur
+        <p>L’accompagnateur Rénov {{ $dossier->mar_client->client_title }} effectue des missions de Mon Accompagnateur
             Rénov' auprès
             des particuliers visant à faire réaliser des travaux de rénovation énergétique. C'est dans le cadre
             général de ces missions que le bénéficiaire, maître d'ouvrage, conclut le présent contrat pour un
@@ -248,7 +248,7 @@
 
     <div class="my-4">
         <h3>Article 1: Objet du contrat</h3>
-        <p>Le présent contrat a pour objet de confier au bureau d'études {{ $dossier->client->client_title }}
+        <p>Le présent contrat a pour objet de confier au bureau d'études {{ $dossier->mar_client->client_title }}
             des
             prestations obligatoires de
             Mon Accompagnateur Rénov' en vue de la réalisation de travaux de rénovation énergétique conformément à
@@ -625,12 +625,12 @@
         </p>
         <p>
             Dans le cas où le bénéficiaire donne mandat à un mandataire financier pour que ce dernier soit en charge du
-            paiement de la prestation de Mon Accompagnateur Rénov' à {{ $dossier->client->client_title }} en lieu et
+            paiement de la prestation de Mon Accompagnateur Rénov' à {{ $dossier->mar_client->client_title }} en lieu et
             place du bénéficiaire, ce dernier ne peut dans ce cas précis révoquer le mandataire.
         </p>
         <p>
             Si, toutefois, le bénéficiaire décide de révoquer le mandataire financier, il devra régler la totalité du
-            montant de la prestation déjà effectuée dans les 15 jours à {{ $dossier->client->client_title }}.
+            montant de la prestation déjà effectuée dans les 15 jours à {{ $dossier->mar_client->client_title }}.
         </p>
     </div>
 
@@ -645,7 +645,7 @@
         </p>
         <p>
             Pour exercer son droit de rétractation, le Bénéficiaire doit notifier à
-            {{ $dossier->client->client_title }} , sa décision au moyen d'un courrier recommandé avec accusé de
+            {{ $dossier->mar_client->client_title }} , sa décision au moyen d'un courrier recommandé avec accusé de
             réception à l'adresse suivante: .
         </p>
         <p>
@@ -655,8 +655,8 @@
     </div>
     <div class="my-4">
         <p style="max-width:60%;font-style:italic;line-height:22px">
-            « A l'attention de {{ $dossier->client->client_title }} <br />
-            {{ $dossier->client->adresse }}- {{ $dossier->client->cp }} {{ $dossier->client->ville }} <br />
+            « A l'attention de {{ $dossier->mar_client->client_title }} <br />
+            {{ $dossier->mar_client->adresse }}- {{ $dossier->mar_client->cp }} {{ $dossier->mar_client->ville }} <br />
             [Numéro de téléphone de la structure, le cas échéant] <br />
             [Adresse électronique de la structure, le cas échéant] <br />
             Je vous notifie par la présente ma rétractation du contrat portant sur la prestation de services ci-dessous
@@ -867,7 +867,7 @@
             informée.
         </p>
         <p>
-            Pour toute médiation, {{ $dossier->client->client_title }} a désigné comme médiateur AMIDIF {Association de
+            Pour toute médiation, {{ $dossier->mar_client->client_title }} a désigné comme médiateur AMIDIF {Association de
             médiateurs indépendants d'ile de France dont le siège social est 1, place, de Fleurus, 77100, Meaux, Adresse
             mail: co_11tact@a_rni_dif.com)
 
@@ -888,7 +888,7 @@
 
     <div class="my-4">
         <h3>Article 12 : Assurances </h3>
-        <p> {{ $dossier->client->client_title }} est assuré en responsabilité civile d'exploitation et en
+        <p> {{ $dossier->mar_client->client_title }} est assuré en responsabilité civile d'exploitation et en
             responsabilité décennale auprès de MIC INSURANCE COMPANY, entreprise régie par le Code des assurances,
             société anonyme au capital de 50 000 000 € - Immatriculée au RCS de Paris sous le numéro 885 241 208 dont le
             siège social est situé rue de l'Amiral Hamelin- 75016 Paris. Numéro de police AXE230401 O.
@@ -910,9 +910,9 @@
             Conformément au règlement européen n° 2016/679/ UE du 27 avril 2016, le Bénéficiaire bénéficie d'un droit
             d'accès, un droit de limitation, d'un droit de rectification, d'un droit d'opposition, d'un droit à
             l'effacement, un droit à la portabilité aux informations le concernant, qu'il peut exercer en s'adressant
-            par courrier à {{ $dossier->client->client_title }} dont l'adresse est le 45, avenue du Président JF
-            Kennedy-{{ $dossier->client->cp }} {{ $dossier->client->ville }} ou par mail à l'adresse
-            {{ $dossier->client->email }}.
+            par courrier à {{ $dossier->mar_client->client_title }} dont l'adresse est le 45, avenue du Président JF
+            Kennedy-{{ $dossier->mar_client->cp }} {{ $dossier->mar_client->ville }} ou par mail à l'adresse
+            {{ $dossier->mar_client->email }}.
         </p>
         <p>
             Le Bénéficiaire peut également, pour des motifs légitimes, s'opposer au traitement des données le concernant
@@ -991,11 +991,11 @@
 
 
                 <td style="border:none;width:50%;padding-left:45px;">
-                    <p><b>Mon Accompagnateur Rénov'</b> <br />{{ $dossier->client->client_title }}  </p>
-                    <p>{{ $dossier->client->representant ?? '' }} </p>
-                    @if(isset($dossier->client->signature) && file_exists(storage_path('app/public/' . $dossier->client->signature)))
+                    <p><b>Mon Accompagnateur Rénov'</b> <br />{{ $dossier->mar_client->client_title }}  </p>
+                    <p>{{ $dossier->mar_client->representant ?? '' }} </p>
+                    @if(isset($dossier->mar_client->signature) && file_exists(storage_path('app/public/' . $dossier->mar_client->signature)))
 
-                    <img style="max-width:150px;margin-top:-10px" src="{{ asset('storage/' . $dossier->client->signature) }}" alt="Logo">
+                    <img style="max-width:150px;margin-top:-10px" src="{{ asset('storage/' . $dossier->mar_client->signature) }}" alt="Logo">
         
                     @endif
 

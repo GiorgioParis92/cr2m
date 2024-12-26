@@ -190,8 +190,8 @@
     <div class="row">
         <div class="col-12" style="max-width:40%;margin:auto;text-align:center;margin-top:-30px">
 
-            @if (isset($dossier->client->main_logo) && file_exists(storage_path('app/public/' . $dossier->client->main_logo)))
-                <img src="{{ asset('storage/' . $dossier->client->main_logo) }}" alt="Logo">
+            @if (isset($dossier->mar_client->main_logo) && file_exists(storage_path('app/public/' . $dossier->mar_client->main_logo)))
+                <img src="{{ asset('storage/' . $dossier->mar_client->main_logo) }}" alt="Logo">
             @endif
         </div>
     </div>
@@ -303,10 +303,10 @@
 
 
             <td style="border:none;width:50%;padding-left:45px;vertical-align:top">
-                <p><b>Mon Accompagnateur Rénov'</b> <br />{{ $dossier->client->client_title }} </p>
-                @if(isset($dossier->client->signature) && file_exists(storage_path('app/public/' . $dossier->client->signature)))
+                <p><b>Mon Accompagnateur Rénov'</b> <br />{{ $dossier->mar_client->client_title }} </p>
+                @if(isset($dossier->mar_client->signature) && file_exists(storage_path('app/public/' . $dossier->mar_client->signature)))
 
-                <img style="max-width:150px;margin-top:-10px" src="{{ asset('storage/' . $dossier->client->signature) }}" alt="Logo">
+                <img style="max-width:150px;margin-top:-10px" src="{{ asset('storage/' . $dossier->mar_client->signature) }}" alt="Logo">
     
                 @endif
 

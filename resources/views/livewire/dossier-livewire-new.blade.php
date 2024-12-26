@@ -132,6 +132,26 @@
                                 <div
                                     class="btn bg-primary bg-{{ couleur_menage($dossier->beneficiaire->menage_mpr) }}">
                                     {{ strtoupper(texte_menage($dossier['beneficiaire']['menage_mpr'])) }}
+
+
+                                    @if (auth()->user()->client_id == 0)
+                                    <div class="">
+    
+                                        @if (isset($technicien) && !empty($technicien))
+                                            <div class="row">
+                                                Technicien RDV MAR 1 :
+                                                {{ $technicien['user']['name'] ?? '' }}
+                                            </div>
+                                        @endif
+                                        @if (isset($technicien2) && !empty($technicien2))
+                                            <div class="row">
+                                                Technicien RDV MAR 2 :
+                                                {{ $technicien2['user']['name'] ?? '' }}
+                                            </div>
+                                        @endif
+                                    </div>
+                                @endif
+
                                 </div>
                                 </p>
 

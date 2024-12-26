@@ -371,8 +371,8 @@
 
         <tr>
             <td width="25%" colspan="4" style="width:25%;min-width:25%" class="background_td border-bottom">
-                En votre aimable règlement sur le compte <b>{{ $dossier->client->client_title }}</b><br /><br />
-                {{ $dossier->client->bank ?? '' }}
+                En votre aimable règlement sur le compte <b>{{ $dossier->mar_client->client_title }}</b><br /><br />
+                {{ $dossier->mar_client->bank ?? '' }}
             </td>
 
 
