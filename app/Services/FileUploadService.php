@@ -267,7 +267,7 @@ class FileUploadService
 
 
         if (isset($request->upload_image) && $file->isValid() && in_array(strtolower($extension), ['jpeg', 'jpg', 'png', 'gif', 'bmp'])) {
-
+            dd('ok');
             $image = Image::make($file);
 
             $exif = @exif_read_data($file->getPathname());
