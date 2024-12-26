@@ -312,7 +312,7 @@ class FileUploadService
             $pdfFileName = $request->input('template') . '.pdf';
             $pdfFilePath = storage_path('app/public/' . $directory . '/' . $pdfFileName);
 
-            dd($pdfFilePath);
+           
 
             if (file_exists($pdfFilePath)) {
                 // Append to existing PDF
@@ -342,7 +342,7 @@ class FileUploadService
             // Save the updated or new PDF
             $pdf->Output($pdfFilePath, 'F');
 
-
+            dd($pdfFilePath);
 
             // Optionally, delete the temporary image file
             unlink($tempImagePath);
