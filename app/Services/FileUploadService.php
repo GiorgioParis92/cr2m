@@ -267,7 +267,6 @@ class FileUploadService
 
 
         if (isset($request->upload_image) && $file->isValid() && in_array(strtolower($extension), ['jpeg', 'jpg', 'png', 'gif', 'bmp'])) {
-            dd('ok');
             $image = Image::make($file);
 
             $exif = @exif_read_data($file->getPathname());
@@ -313,6 +312,7 @@ class FileUploadService
             $pdfFileName = $request->input('template') . '.pdf';
             $pdfFilePath = storage_path('app/public/' . $directory . '/' . $pdfFileName);
 
+            dd($pdfFilePath);
 
             if (file_exists($pdfFilePath)) {
                 // Append to existing PDF
