@@ -11,6 +11,7 @@ class Upload extends AbstractFormData
     {
 
         $data = '';
+// print_r($this);
 
         $wireModel = "formData.{$this->form_id}.{$this->name}";
 
@@ -75,9 +76,14 @@ class Upload extends AbstractFormData
 
 
         $data .= '<td class="align-middle text-sm">';
-        $data .= '<form action="' . route("upload_file", ["form_id" => $this->form_id, "folder" => "dossiers", "upload_image" => "dossiers", "clientId" => $this->dossier->folder, "template" => $this->name,'config'=>$this]) . '" class="dropzone dropzone_button bg-primary" id="dropzone-' . $this->name . '">';
+        $data .= '<form method="post" action="' . route("upload_file", ["form_id" => $this->form_id, "folder" => "dossiers", "upload_image" => "dossiers", "clientId" => ($this->dossier->folder ?? $this->dossier_id), "template" => $this->name,'config'=>$this]) . '" class="dropzone dropzone_button bg-primary" id="dropzone-' . $this->name . '">';
         $data .= csrf_field(); // This will generate the CSRF token input field
+        $data .= '<input type="hidden" name="template" value="'.$this->name.'">';
+        $data .= '<input type="hidden" name="dossier_id" value="'.$this->dossier_id.'">';
+        $data .= '<input type="hidden" name="form_id" value="'.$this->form_id.'">';
+        $data .= '<input type="hidden" name="clientId" value="'.($this->dossier->folder ?? $this->dossier_id).'">';
         $data .= '<div class="dz-message"><i class="fas fa-arrow-up"></i> Upload';
+
         $data .= '</div>';
         $data .= '</form>';
 

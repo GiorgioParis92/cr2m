@@ -1040,7 +1040,7 @@
             const key = dropzoneId.replace('dropzone-', '');
             const uploadUrl = dropzoneElement.getAttribute('data-upload-url');
             const form_id = dropzoneElement.getAttribute('data-form_id');
-
+            console.log(key)
             if (!dropzoneElement) {
                 return;
             }

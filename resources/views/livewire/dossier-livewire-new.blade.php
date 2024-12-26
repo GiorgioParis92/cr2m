@@ -914,6 +914,7 @@
         const dropzoneElements = document.querySelectorAll('.dropzone');
 
         dropzoneElements.forEach((dropzoneElement) => {
+            console.log(dropzoneElement.id)
             // Extract the unique ID and upload URL from the element
             const dropzoneId = dropzoneElement.id;
             const key = dropzoneId.replace('dropzone-', '');
@@ -1309,7 +1310,7 @@
             var formId = dropzoneElement.getAttribute('data-form-id');
             var tag = dropzoneElement.getAttribute('data-tag');
             var title = dropzoneElement.getAttribute('data-title');
-
+            console.log('dropzone')
             var dz = new Dropzone(dropzoneElement, {
                 url: uploadUrl,
                 method: 'post',
