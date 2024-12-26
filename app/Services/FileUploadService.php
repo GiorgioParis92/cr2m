@@ -146,7 +146,7 @@ class FileUploadService
 
             
 
-            dd($request);
+            dd($random_name == true);
 
 
         if ($random_name == true) {
