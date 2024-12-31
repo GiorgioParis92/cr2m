@@ -147,6 +147,7 @@ class FileUploadService
 
             if(isset($request->random_name) && $request->random_name=='false') {
                 $random_name=false;
+                dd('stop');
             }
             
 
