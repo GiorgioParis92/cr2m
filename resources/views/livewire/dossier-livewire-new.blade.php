@@ -17,7 +17,7 @@
                 <div class="card">
                     <select class="form-control responsive" wire:change="setTab($event.target.value)">
                         @foreach ($etapes as $index => $e)
-                            @if($e['order_column']>0)
+                         
                             @php
                                 $isActive = false;
                                 $isCurrent = false;
@@ -51,7 +51,7 @@
                                     value="{{ $e['etape_number'] }}">{{ $e['etape_icon'] ?? '' }}
                                     {{ strtoupper_extended($e['etape_desc']) }}</option>
                             @endif
-                            @endif
+                 
                         @endforeach
                     </select>
                     <div class="timeline timeline-one-side no_responsive">
@@ -208,7 +208,7 @@
                                     <select onchange="this.form.submit()" class="form-control" name="etape">
                                         <option>Choisir une étape</option>
                                         @foreach ($etapes as $index => $e)
-                                            @if ($e['order_column'] <= $dossier['etape']['order_column'])
+                                            @if ($e['order_column'] <= $dossier['etape']['order_column'] && $e['order_column']>0)
                                                 <option @if ($e['id'] == $tab) selected @endif
                                                     value="{{ $e['etape_number'] }}">{{ $e['etape_icon'] }} -
                                                     {{ strtoupper_extended($e['etape_desc']) }}</option>
