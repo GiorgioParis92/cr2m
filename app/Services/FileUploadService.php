@@ -32,7 +32,7 @@ class FileUploadService
     {
 
       
-
+        $random_name = false;
         if ($request->folder == 'dossiers') {
 
         }
