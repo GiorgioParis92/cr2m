@@ -147,7 +147,7 @@ class FileUploadService
 
             if(isset($request->random_name) && $request->random_name=='false') {
                 $random_name=false;
-                dd('stop');
+              
             }
             
 
@@ -247,6 +247,9 @@ class FileUploadService
             
             }
         } else {
+            dump($request);
+            dump($request->upload_image);
+            dd('stop');
             if (isset($request->upload_image) && $file->isValid() && in_array(strtolower($extension), ['jpeg', 'jpg', 'png', 'gif', 'bmp'])) {
                 $image = Image::make($file);
     
