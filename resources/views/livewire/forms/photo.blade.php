@@ -270,6 +270,7 @@
                             console.log('Successfully deleted from photo', response);
                             // Remove the parent container
                             _this.closest('div[style="display:inline-block"]').remove();
+                            _this.closest('.to_remove"]').remove();
                         },
                         error: function(xhr) {
                             let errorMessage = 'An error occurred';
