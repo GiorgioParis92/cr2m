@@ -17,6 +17,7 @@
                 <div class="card">
                     <select class="form-control responsive" wire:change="setTab($event.target.value)">
                         @foreach ($etapes as $index => $e)
+                            @if($e['order_column']>0)
                             @php
                                 $isActive = false;
                                 $isCurrent = false;
@@ -49,6 +50,7 @@
                                 <option @if ($tab == $e['id']) selected @endif
                                     value="{{ $e['etape_number'] }}">{{ $e['etape_icon'] ?? '' }}
                                     {{ strtoupper_extended($e['etape_desc']) }}</option>
+                            @endif
                             @endif
                         @endforeach
                     </select>
