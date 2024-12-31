@@ -41,7 +41,7 @@ class FileUploadService
             $folder = $request->folder;
 
         }
-        dd($request);
+
         if (isset($request->clientId)) {
             $clientId = $request->clientId;
 
