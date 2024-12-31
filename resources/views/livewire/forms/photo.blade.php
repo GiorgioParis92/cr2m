@@ -212,19 +212,21 @@
                                 if (!isPdf) {
                                     newBlockHtml =
                                     '<div class="to_remove" style="display: inline-block;max-width:20%;">'+
-                                    '<i data-dossier_id="'+dossierId+'"'+
-                                    'data-tag="'+tag+'" data-index="'+($index ?? '')+'" data-val="'+$val+'"'+
-                                    'data-img-src="' + url + '" ' +
-                                    'class="delete_photo btn btn-danger fa fa-trash bg-danger"></i>' +
-                                    '<button type="button" class="btn btn-success btn-view imageModal" ' +
-                                    'data-toggle="modal" data-target="imageModal" ' +
-                                    'data-img-src="' + url + '" ' +
-                                    'data-val="' + response + '" ' +
-                                    'data-name="' + title + '">' +
-                                    '<img src="' + url + '">' +
-                                    '<i style="display:block" class="fas fa-eye"></i>' + title +
-                                    '</button>' +
-                                    '</div>';
+'<i data-dossier_id="'+dossierId+'"'+
+'data-tag="'+tag+'"  data-val="'+$val+'"'+
+'data-img-src="' + url + '" ' +
+'class="delete_photo btn btn-danger fa fa-trash bg-danger"></i>' +
+'<button type="button" class="btn btn-success btn-view imageModal" ' +
+'data-toggle="modal" data-target="imageModal" ' +
+'data-img-src="' + url + '" ' +
+'data-val="' + response + '" ' +
+'data-name="' + title + '">' +
+'<img src="' + url + '">' +
+'<i style="display:block" class="fas fa-eye"></i>' + title +
+'</button>' +
+'</div>';
+
+
                                 } else {
                                     newBlockHtml =
                                         '<div class="btn btn-success btn-view pdfModal" ' +
