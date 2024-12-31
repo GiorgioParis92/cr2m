@@ -61,7 +61,7 @@ class FileUploadService
 
 
 
-        if (isset($request->random_name)) {
+        if (isset($request->random_name) && $request->random_name=='true') {
 
             $random_name = true;
         }
@@ -99,8 +99,8 @@ class FileUploadService
         if ($request->has('template')) {
             $extension = $file->getClientOriginalExtension();
             if ($random_name) {
-                // $fileName = $request->input('template') . time() . '.' . $extension;
-                $fileName = $request->input('template') . '.' . $extension;
+                $fileName = $request->input('template') . time() . '.' . $extension;
+                // $fileName = $request->input('template') . '.' . $extension;
 
             } else {
                 $fileName = $request->input('template') . '.' . $extension;
