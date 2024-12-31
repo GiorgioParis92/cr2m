@@ -115,7 +115,7 @@ $status = Status::selectRaw('MIN(id) as id, status_desc')
             $dossier->installateur = $request->installateur;
             $dossier->save();
         }
-        if(isset($request->etape)) {
+        if(isset($request->etape) && is_numeric($request->etape) && $request->etape>0) {
             $dossier->etape_number = $request->etape;
             $dossier->save();
         }
