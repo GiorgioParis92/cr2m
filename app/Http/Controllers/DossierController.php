@@ -203,7 +203,9 @@ $next = Etape::where('order_column', $current->order_column + 1)->first();
 
     public function set_step($id,$step)
     {
+        if($id>0) {
 
+        
         $dossier = Dossier::where('id', $id)
             ->with('beneficiaire', 'fiche', 'etape', 'status')
             ->first();
@@ -212,8 +214,9 @@ $next = Etape::where('order_column', $current->order_column + 1)->first();
             Dossier::where('id', $id)->update(['etape_number' => $step]);
         
 
-          
+        
         return redirect()->route('dossiers.show', ['id' => $dossier->folder]);
+    }
 
     }
 
