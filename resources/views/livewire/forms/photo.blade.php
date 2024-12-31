@@ -213,7 +213,7 @@
                                     newBlockHtml =
                                     '<div class="to_remove" style="display: inline-block;max-width:20%;">'+
 '<i data-dossier_id="'+dossierId+'"'+
-'data-tag="'+tag+'"  data-val="'+val+'"'+
+'data-tag="'+tag+'"  data-val="'+response+'"'+
 'data-img-src="' + url + '" ' +
 'class="delete_photo btn btn-danger fa fa-trash bg-danger"></i>' +
 '<button type="button" class="btn btn-success btn-view imageModal" ' +
@@ -225,8 +225,6 @@
 '<i style="display:block" class="fas fa-eye"></i>' + title +
 '</button>' +
 '</div>';
-
-
                                 } else {
                                     newBlockHtml =
                                         '<div class="btn btn-success btn-view pdfModal" ' +
