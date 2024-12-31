@@ -1401,6 +1401,8 @@
                     console.log('Successfully deleted from dossier-livewire:', response);
                     // Remove the parent container
                     _this.closest('div[style="display:inline-block"]').remove();
+                    _this.closest('div[style="display:inline-block;max-width:20%"]').remove();
+                    _this.closest('.to_remove"]').remove();
                 },
                 error: function(xhr) {
                     let errorMessage = 'An error occurred';

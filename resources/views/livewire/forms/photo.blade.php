@@ -80,7 +80,7 @@
                             $index = $extension[2];
                         }
                         if (end($extension) != 'pdf') {
-                            $data.='<div style="display: inline-block;max-width:20%;">';
+                            $data.='<div class="to_remove" style="display: inline-block;max-width:20%;">';
                                 $data .='<i 
                                 data-dossier_id="' . $dossier_id .
                                 '" data-tag="' .
