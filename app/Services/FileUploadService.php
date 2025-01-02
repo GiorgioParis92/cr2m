@@ -115,11 +115,13 @@ class FileUploadService
         // Save the new file
         $filePath = $file->storeAs($directory, $fileName, 'public');
 
-
-            $fullPath = storage_path('app/public/' . $filePath);
-
-            // Set the file permissions to 775
-            chmod($fullPath, 0775);
+        $fullPath = storage_path('app/public/' . $filePath);
+        
+        // Set the file permissions to 775
+        chmod($fullPath, 0775);
+        
+        // Convert HEIC to JPG if applicable
+        $filePath = $this->convertHeicToJpg($filePath);
         
         // Save the compressed thumbnail version
         $thumbnailFileName = pathinfo($fileName, PATHINFO_FILENAME) . '_thumbnail.' . $extension;
