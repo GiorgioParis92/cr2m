@@ -81,10 +81,10 @@
                         }
                         if (end($extension) != 'pdf') {
 
-                            if (strtolower(pathinfo($val, PATHINFO_EXTENSION)) === 'heic') {
-    $val = str_replace('.heic', '.jpg', $val); // Assuming you convert HEIC to JPG
-    $val = str_replace('.HEIC', '.jpg', $val); // Assuming you convert HEIC to JPG
-}
+//                             if (strtolower(pathinfo($val, PATHINFO_EXTENSION)) === 'heic') {
+//     $val = str_replace('.heic', '.jpg', $val); // Assuming you convert HEIC to JPG
+//     $val = str_replace('.HEIC', '.jpg', $val); // Assuming you convert HEIC to JPG
+// }
 
                             $data.='<div class="to_remove" style="display: inline-block;max-width:20%;">';
                                 $data .='<i 
