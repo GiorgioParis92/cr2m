@@ -18,6 +18,8 @@ use App\Models\{
     Beneficiaire,
     Card
 };
+use App\Services\CardCreationService;
+
 use Illuminate\Support\Facades\DB;
 
 
@@ -150,8 +152,14 @@ abstract class AbstractData extends Component
                 'meta_value' => $newValue
             ]
         );
+        $dossier = Dossier::where('id', $this->dossier_id)->first();
 
-
+        $card=app(CardCreationService::class)->checkAndCreateCard(
+            $this->conf['name'],
+            $newValue,
+            $dossier,
+            auth()->user()->id
+        );
         if($this->form_id==3) {
             $dossier = Dossier::where('id', $this->dossier_id)->first();
 
@@ -164,7 +172,10 @@ abstract class AbstractData extends Component
                         \DB::table('beneficiaires')->where('id', $beneficiaireId)->update([$this->conf['name'] => $newValue, 'updated_at' => now()]);
 
                     }
-                
+                    if (\Schema::hasColumn('dossiers', $this->conf['name'])) {
+                        \DB::table('dossiers')->where('id', $dossier->id)->update([$this->conf['name'] => $newValue, 'updated_at' => now()]);
+
+                    }                
 
 
             }

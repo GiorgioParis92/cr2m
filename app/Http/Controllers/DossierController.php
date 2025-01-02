@@ -19,6 +19,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use App\Services\CardCreationService;
 
 class DossierController extends Controller
 {
@@ -188,7 +189,12 @@ $next = Etape::where('order_column', $current->order_column + 1)->first();
     ]
 );
 
-       
+            $card=app(CardCreationService::class)->checkAndCreateCard(
+                'validate_' . $current->etape_name,
+                '1',
+                $dossier,
+                auth()->user()->id
+            );
             Dossier::where('id', $id)->update([
                 'etape_number' => $next_etape,
                 'updated_at' => now(),

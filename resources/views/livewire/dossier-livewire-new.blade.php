@@ -82,7 +82,11 @@
                                     $isAllowed = false;
                                     $isCurrent = false;
                                 }
-           
+                                // dump($e['order_column']);
+                                // dump($e['etape_name']);
+                                // dump($isAllowed);
+                                // dump($isCurrent);
+                                // dump($isTab);
                             @endphp
                             @if ($isActive && $isAllowed)
                                 <div class="pe-auto cursor-pointer timeline-block mb-3 p-3 {{ $isCurrent ? 'bg-primary' : '' }} {{ $tab == $e['id'] ? 'bg-secondary' : '' }}"

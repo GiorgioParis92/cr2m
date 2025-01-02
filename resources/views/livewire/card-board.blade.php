@@ -12,14 +12,25 @@
                 <div class="kanban-column">
                     <div class="column-header">{{ $column['name'] }}@if(count($column['tickets'])>0)<span class="badge badge-danger bg-danger">{{count($column['tickets'])}}</span>@endif</div>
                     @foreach ($column['tickets'] as $ticket)
-                    <div  class="task-card ticket" draggable="true" data-id="{{ $ticket['id'] }}" wire:key="ticket-{{ $ticket['id'] }}">
-                        {{ $ticket['title'] }}
-                        @if (isset($ticket['dossier']) && $display_dossier)
-                        <a href="{{ route('dossiers.show', ['id' => $ticket['dossier']['folder']]) }}" target="_blank">
-                            <div class="btn btn-primary">Dossier : {{ $ticket['dossier']['beneficiaire']['nom'] }} {{ $ticket['dossier']['beneficiaire']['prenom'] }}</div>
-                        </a>
-                    @endif
+
+                    <div class="card ticket" draggable="true" data-id="{{ $ticket['id'] }}" wire:key="ticket-{{ $ticket['id'] }}">
+                        <div class="card-header pb-0">
+                          <div class="d-flex">
+                            <p>{{ $ticket['title'] }}</p>
+                            <div class="ms-auto">
+                                @if (isset($ticket['dossier']) && $display_dossier)
+                              <span class="badge badge-primary"><a href="{{ route('dossiers.show', ['id' => $ticket['dossier']['folder']]) }}" target="_blank">{{ $ticket['dossier']['beneficiaire']['nom'] }} {{ $ticket['dossier']['beneficiaire']['prenom'] }}</span></a>
+                                @endif
+                            </div>
+                          </div>
+                        </div>
+                        @if(isset($ticket['comment']))
+                        <div class="card-body pt-0">
+                          <p class="mb-0">What matters is the people who are sparked by it. And the people who are liked.</p>
+                        </div>
+                        @endif
                     </div>
+
                     @endforeach
                     
                 </div>

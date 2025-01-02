@@ -10,14 +10,15 @@ class CardCreationService
 {
     protected $cardCreationRules = [
         [
-            'key' => 'validate_fiche_navette',
+            'key' => 'validate_mar_2',
             'check_not_null' => true,
 
-            'title' => 'Vérification de la fiche navette',
+            'title' => 'RDV MAR 2 effectué',
             'clients' => [],
-            'users' => [],
-            'types_client' => [],
+            'users' => [1],
+            'types_client' => [0],
             'types_user' => [],
+            'user_type' => 1,
 
         ],
         [
@@ -39,6 +40,7 @@ class CardCreationService
     public function checkAndCreateCard($key, $value, $dossier, $authUserId)
     {
     
+       
         foreach ($this->cardCreationRules as $rule) {
             if ($rule['key'] === $key) {
             
