@@ -24,7 +24,46 @@ class Photo extends AbstractData
     public $listeners = [
         'fileUploaded' => 'handleFileUploaded'
     ];
+ 
 
+    function convertHeicToJpg($filePath)
+    {
+        $heicPath = storage_path("app/public/{$filePath}");
+        if (!file_exists($heicPath)) {
+            return $filePath; // Return original if file doesn't exist
+        }
+    
+        $extension = pathinfo($filePath, PATHINFO_EXTENSION);
+        if (strtolower($extension) !== 'heic') {
+            return $filePath; // Return original if not HEIC
+        }
+    
+        try {
+            $image = new Imagick($heicPath);
+            $image->setImageFormat('jpeg');
+    
+            // Generate new file path
+            $jpgFileName = pathinfo($filePath, PATHINFO_FILENAME) . '.jpg';
+            $jpgFilePath = "dossiers/{$jpgFileName}";
+    
+            // Save converted file
+            $outputPath = storage_path("app/public/{$jpgFilePath}");
+            $image->writeImage($outputPath);
+    
+            // Cleanup
+            $image->clear();
+            $image->destroy();
+    
+            // Optionally delete original HEIC file
+            unlink($heicPath);
+    
+            return $jpgFilePath; // Return new file path
+        } catch (\Exception $e) {
+            \Log::error("HEIC to JPG conversion failed: " . $e->getMessage());
+            return $filePath; // Fallback to original file
+        }
+    }
+    
     public function handleFileUploaded($response)
     {
         // Here, $response should contain the file path or filename that was uploaded.
@@ -64,37 +103,37 @@ class Photo extends AbstractData
         }
     }
 
-    private function convertHeicToJpg($heicFilePath)
-    {
-        try {
-            $heicPath = storage_path("app/public/{$heicFilePath}");
-            $image = new Imagick($heicPath);
+    // private function convertHeicToJpg($heicFilePath)
+    // {
+    //     try {
+    //         $heicPath = storage_path("app/public/{$heicFilePath}");
+    //         $image = new Imagick($heicPath);
 
-            // Set the image format to JPG
-            $image->setImageFormat('jpeg');
+    //         // Set the image format to JPG
+    //         $image->setImageFormat('jpeg');
 
-            // Generate a new file name
-            $jpgFileName = pathinfo($heicFilePath, PATHINFO_FILENAME) . '.jpg';
-            $jpgFilePath = "dossiers/{$jpgFileName}";
+    //         // Generate a new file name
+    //         $jpgFileName = pathinfo($heicFilePath, PATHINFO_FILENAME) . '.jpg';
+    //         $jpgFilePath = "dossiers/{$jpgFileName}";
 
-            // Save the converted image to the storage
-            $outputPath = storage_path("app/public/{$jpgFilePath}");
-            $image->writeImage($outputPath);
+    //         // Save the converted image to the storage
+    //         $outputPath = storage_path("app/public/{$jpgFilePath}");
+    //         $image->writeImage($outputPath);
 
-            // Cleanup
-            $image->clear();
-            $image->destroy();
+    //         // Cleanup
+    //         $image->clear();
+    //         $image->destroy();
 
-            // Delete the original HEIC file if needed
-            Storage::delete("public/{$heicFilePath}");
+    //         // Delete the original HEIC file if needed
+    //         Storage::delete("public/{$heicFilePath}");
 
-            return $jpgFilePath; // Return the new JPG file path
-        } catch (\Exception $e) {
-            // Log or handle errors during conversion
-            \Log::error("HEIC to JPG conversion failed: " . $e->getMessage());
-            return null;
-        }
-    }
+    //         return $jpgFilePath; // Return the new JPG file path
+    //     } catch (\Exception $e) {
+    //         // Log or handle errors during conversion
+    //         \Log::error("HEIC to JPG conversion failed: " . $e->getMessage());
+    //         return null;
+    //     }
+    // }
 
     public function mount($conf, $form_id, $dossier_id)
     {
@@ -124,6 +163,9 @@ class Photo extends AbstractData
 
     public function render()
     {
+        $this->values = array_map(function ($value) {
+            return $this->convertHeicToJpg($value);
+        }, $this->values);
         return view('livewire.forms.photo');
     }
 }
