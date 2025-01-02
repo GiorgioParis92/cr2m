@@ -34,7 +34,7 @@ class Photo extends AbstractData
             $extension = pathinfo($filePath, PATHINFO_EXTENSION);
 
             // Check if the file is HEIC and convert it to JPG
-            if (strtolower($extension) === 'heic') {
+            if (strtolower($extension) === 'heic' || strtolower($extension) === 'HEIC') {
                 $convertedFilePath = $this->convertHeicToJpg($filePath);
 
                 if ($convertedFilePath) {
