@@ -163,9 +163,7 @@ class Photo extends AbstractData
 
     public function render()
     {
-        $this->values = array_map(function ($value) {
-            return $this->convertHeicToJpg($value);
-        }, $this->values);
+    
         return view('livewire.forms.photo');
     }
 }
