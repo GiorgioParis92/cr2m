@@ -16,6 +16,7 @@ use Image; // Assuming you have intervention/image installed
 use setasign\Fpdi\Fpdi;
 use FPDF;
 use Spatie\ImageOptimizer\OptimizerChainFactory;
+use Imagick;
 
 class FileUploadService
 {
