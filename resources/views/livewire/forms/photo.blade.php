@@ -302,6 +302,12 @@
     position: absolute;
     top: -22px;
 }
+
+i.delete_photo.btn.btn-danger.fa.fa-trash.bg-danger {
+    position: relative;
+    top: 35px;
+    /* left: -29px; */
+}
 </style>
 
 </div>
