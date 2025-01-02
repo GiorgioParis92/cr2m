@@ -490,7 +490,7 @@ class FileUploadService
 
 
     }
-  function convertHeicToJpg($filePath)
+  private function convertHeicToJpg($filePath)
     {
         $heicPath = storage_path("app/public/{$filePath}");
         if (!file_exists($heicPath)) {
