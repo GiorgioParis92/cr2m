@@ -151,7 +151,7 @@ class Photo extends AbstractData
             // If $this->value is a single string, wrap it in an array
             $values = [$this->value];
         }
-        dd($values);
+  
         // Convert any existing HEIC to JPG
         $updatedValues = [];
         foreach ($values as $originalPath) {
@@ -161,7 +161,7 @@ class Photo extends AbstractData
             }
     
             $extension = pathinfo($originalPath, PATHINFO_EXTENSION);
-            if (strtolower($extension) === 'heic') {
+            if (strtolower($extension) === 'heic' || strtolower($extension) === 'HEIC') {
                 // Convert and store new path
                 $convertedPath = $this->convertHeicToJpg($originalPath);
                 $updatedValues[] = $convertedPath ?: $originalPath;
