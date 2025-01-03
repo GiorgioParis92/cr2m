@@ -36,7 +36,7 @@ class Photo extends AbstractData
         }
        
         $extension = pathinfo($filePath, PATHINFO_EXTENSION);
-        
+        dd($extension);
         if (strtolower($extension) !== 'heic') {
          
             return $filePath; // Return original if not HEIC
