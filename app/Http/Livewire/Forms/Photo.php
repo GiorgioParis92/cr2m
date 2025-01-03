@@ -31,8 +31,7 @@ class Photo extends AbstractData
         $heicPath = storage_path("app/public/{$filePath}");
      
         if (!file_exists($heicPath)) {
-            dump($heicPath);
-            dd('doesnt exist');
+          
             return $filePath; // Return original if file doesn't exist
         }
        
@@ -52,7 +51,7 @@ class Photo extends AbstractData
             $baseName    = pathinfo($filePath, PATHINFO_FILENAME);  // e.g. "originalFilename"
             $jpgFileName = $baseName . '.jpg';
             
-            dump($jpgFileName);
+
             // Construct the NEW path in the SAME folder
             $jpgFilePath = "{$dirName}/{$jpgFileName}";
           
@@ -167,19 +166,25 @@ class Photo extends AbstractData
                 continue;
             }
     
-            $extension = pathinfo($originalPath, PATHINFO_EXTENSION);
-            dump($extension);
-            if (strtolower($extension) === 'heic' || strtolower($extension) === 'HEIC') {
-                // Convert and store new path
+            $extension = strtolower(pathinfo($originalPath, PATHINFO_EXTENSION));
+
+            if ($extension === 'heic') {
+                // Convert from HEIC to JPG
                 $convertedPath = $this->convertHeicToJpg($originalPath);
-                dump($convertedPath);
-                $updatedValues[] = $convertedPath ?: $originalPath;
+                
+                // If conversion was successful and the path changed, store only the converted
+                if ($convertedPath && $convertedPath !== $originalPath) {
+                    $updatedValues[] = $convertedPath;
+                } else {
+                    // If something went wrong or no change, keep the original
+                    $updatedValues[] = $originalPath;
+                }
             } else {
+                // For non-HEIC, just keep the original path
                 $updatedValues[] = $originalPath;
             }
         }
-        dump($updatedValues);
-        dump($values);
+      
         // Persist the updated list to the DB if changes happened
         if ($updatedValues !== $values) {
             FormsData::updateOrCreate(
@@ -198,7 +203,7 @@ class Photo extends AbstractData
         $this->values = $updatedValues;
         $this->value = $updatedValues;
 
-        dd($this->values);
+  
     }
     
 
