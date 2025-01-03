@@ -151,7 +151,7 @@ class Photo extends AbstractData
             // If $this->value is a single string, wrap it in an array
             $values = [$this->value];
         }
-    
+        dd($values);
         // Convert any existing HEIC to JPG
         $updatedValues = [];
         foreach ($values as $originalPath) {
