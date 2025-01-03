@@ -42,9 +42,12 @@ class Photo extends AbstractData
             $image = new Imagick($heicPath);
             $image->setImageFormat('jpeg');
     
-            // Generate new file path
-            $jpgFileName = pathinfo($filePath, PATHINFO_FILENAME) . '.jpg';
-            $jpgFilePath = "dossiers/{$jpgFileName}";
+            $dirName     = pathinfo($filePath, PATHINFO_DIRNAME);   // e.g. "some_folder/12345"
+            $baseName    = pathinfo($filePath, PATHINFO_FILENAME);  // e.g. "originalFilename"
+            $jpgFileName = $baseName . '.jpg';
+    
+            // Construct the NEW path in the SAME folder
+            $jpgFilePath = "{$dirName}/{$jpgFileName}";
     
             // Save converted file
             $outputPath = storage_path("app/public/{$jpgFilePath}");
