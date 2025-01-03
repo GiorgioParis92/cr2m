@@ -31,13 +31,14 @@ class Photo extends AbstractData
         $heicPath = storage_path("app/public/{$filePath}");
      
         if (!file_exists($heicPath)) {
+            dd('doesnt exist');
             return $filePath; // Return original if file doesn't exist
         }
        
         $extension = pathinfo($filePath, PATHINFO_EXTENSION);
         
         if (strtolower($extension) !== 'heic') {
-            dd('ok'.$extension);
+         
             return $filePath; // Return original if not HEIC
         }
         
