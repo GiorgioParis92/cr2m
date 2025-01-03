@@ -32,7 +32,7 @@ class Photo extends AbstractData
         if (!file_exists($heicPath)) {
             return $filePath; // Return original if file doesn't exist
         }
-        dd($heicPath);
+       
         $extension = pathinfo($filePath, PATHINFO_EXTENSION);
         if (strtolower($extension) !== 'heic') {
             return $filePath; // Return original if not HEIC
@@ -48,7 +48,7 @@ class Photo extends AbstractData
     
             // Construct the NEW path in the SAME folder
             $jpgFilePath = "{$dirName}/{$jpgFileName}";
-    
+            dd($jpgFilePath);
             // Save converted file
             $outputPath = storage_path("app/public/{$jpgFilePath}");
             $image->writeImage($outputPath);
