@@ -138,18 +138,54 @@ class Photo extends AbstractData
     public function mount($conf, $form_id, $dossier_id)
     {
         parent::mount($conf, $form_id, $dossier_id);
-
+    
         $this->dossier = Dossier::find($dossier_id);
         $json_value = decode_if_json($this->value);
-
+    
         if ($json_value) {
             $values = $json_value;
         } else {
+            // If $this->value is a single string, wrap it in an array
             $values = [$this->value];
         }
-        $this->value = $values;
-        $this->values = $values;
+    
+        // Convert any existing HEIC to JPG
+        $updatedValues = [];
+        foreach ($values as $originalPath) {
+            // If null or empty, skip
+            if (!$originalPath) {
+                continue;
+            }
+    
+            $extension = pathinfo($originalPath, PATHINFO_EXTENSION);
+            if (strtolower($extension) === 'heic') {
+                // Convert and store new path
+                $convertedPath = $this->convertHeicToJpg($originalPath);
+                $updatedValues[] = $convertedPath ?: $originalPath;
+            } else {
+                $updatedValues[] = $originalPath;
+            }
+        }
+    
+        // Persist the updated list to the DB if changes happened
+        if ($updatedValues !== $values) {
+            FormsData::updateOrCreate(
+                [
+                    'dossier_id' => $this->dossier_id,
+                    'form_id' => $this->form_id,
+                    'meta_key' => $this->conf->name
+                ],
+                [
+                    'meta_value' => json_encode($updatedValues)
+                ]
+            );
+        }
+    
+        // Now update the component properties
+        $this->values = $updatedValues;
+        $this->value = $updatedValues;
     }
+    
 
     public function getErrorMessage()
     {
