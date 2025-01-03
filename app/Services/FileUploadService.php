@@ -493,9 +493,10 @@ class FileUploadService
 
 
     }
-  private function convertHeicToJpg($filePath)
+    private function convertHeicToJpg($filePath)
     {
         $heicPath = storage_path("app/public/{$filePath}");
+    
         if (!file_exists($heicPath)) {
             return $filePath; // Return original if file doesn't exist
         }
@@ -509,9 +510,13 @@ class FileUploadService
             $image = new Imagick($heicPath);
             $image->setImageFormat('jpeg');
     
-            // Generate new file path
-            $jpgFileName = pathinfo($filePath, PATHINFO_FILENAME) . '.jpg';
-            $jpgFilePath = "dossiers/{$jpgFileName}";
+            // Extract the folder, filename, etc.:
+            $dirName     = pathinfo($filePath, PATHINFO_DIRNAME);   // e.g. "some_folder/12345"
+            $baseName    = pathinfo($filePath, PATHINFO_FILENAME);  // e.g. "originalFilename"
+            $jpgFileName = $baseName . '.jpg';
+    
+            // Construct the NEW path in the SAME folder
+            $jpgFilePath = "{$dirName}/{$jpgFileName}";
     
             // Save converted file
             $outputPath = storage_path("app/public/{$jpgFilePath}");
@@ -521,15 +526,16 @@ class FileUploadService
             $image->clear();
             $image->destroy();
     
-            // Optionally delete original HEIC file
+            // Optionally delete the original .heic file
             unlink($heicPath);
     
-            return $jpgFilePath; // Return new file path
+            return $jpgFilePath; // Return the *new* file path in the same directory
         } catch (\Exception $e) {
             \Log::error("HEIC to JPG conversion failed: " . $e->getMessage());
-            return $filePath; // Fallback to original file
+            return $filePath; // Fall back to the original path
         }
     }
+    
 
     public function identify_doc($filePath)
     {
