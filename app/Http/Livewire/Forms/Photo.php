@@ -35,12 +35,13 @@ class Photo extends AbstractData
         }
        
         $extension = pathinfo($filePath, PATHINFO_EXTENSION);
-        dump($extension);
+        
         if (strtolower($extension) !== 'heic') {
             return $filePath; // Return original if not HEIC
         }
     
         try {
+            dump($heicPath);
             $image = new Imagick($heicPath);
             $image->setImageFormat('jpeg');
     
