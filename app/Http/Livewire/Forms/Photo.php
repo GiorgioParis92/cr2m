@@ -170,7 +170,7 @@ class Photo extends AbstractData
             }
         }
         dump($updatedValues);
-        dd($values);
+        dump($values);
         // Persist the updated list to the DB if changes happened
         if ($updatedValues !== $values) {
             FormsData::updateOrCreate(
@@ -188,6 +188,8 @@ class Photo extends AbstractData
         // Now update the component properties
         $this->values = $updatedValues;
         $this->value = $updatedValues;
+
+        dd($this->values);
     }
     
 
