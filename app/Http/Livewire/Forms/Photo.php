@@ -52,14 +52,14 @@ class Photo extends AbstractData
             // Save converted file
             $outputPath = storage_path("app/public/{$jpgFilePath}");
             $image->writeImage($outputPath);
-            dd($image);
+        
             // Cleanup
             $image->clear();
             $image->destroy();
     
             // Optionally delete original HEIC file
             unlink($heicPath);
-    
+            dd($jpgFilePath);
             return $jpgFilePath; // Return new file path
         } catch (\Exception $e) {
             \Log::error("HEIC to JPG conversion failed: " . $e->getMessage());
