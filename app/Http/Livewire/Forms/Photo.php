@@ -59,7 +59,7 @@ class Photo extends AbstractData
     
             // Optionally delete original HEIC file
             unlink($heicPath);
-            dd($jpgFilePath);
+      
             return $jpgFilePath; // Return new file path
         } catch (\Exception $e) {
             \Log::error("HEIC to JPG conversion failed: " . $e->getMessage());
@@ -169,7 +169,8 @@ class Photo extends AbstractData
                 $updatedValues[] = $originalPath;
             }
         }
-    
+        dump($updatedValues);
+        dd($values);
         // Persist the updated list to the DB if changes happened
         if ($updatedValues !== $values) {
             FormsData::updateOrCreate(
