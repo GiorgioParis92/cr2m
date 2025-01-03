@@ -39,12 +39,12 @@ class Photo extends AbstractData
         if (strtolower($extension) !== 'heic') {
             return $filePath; // Return original if not HEIC
         }
-    
+        dd('ok'.$extension);
         try {
           
             $image = new Imagick($heicPath);
             $image->setImageFormat('jpeg');
-            dd($image);
+            
             $dirName     = pathinfo($filePath, PATHINFO_DIRNAME);   // e.g. "some_folder/12345"
             $baseName    = pathinfo($filePath, PATHINFO_FILENAME);  // e.g. "originalFilename"
             $jpgFileName = $baseName . '.jpg';
