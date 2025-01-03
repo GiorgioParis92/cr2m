@@ -161,9 +161,11 @@ class Photo extends AbstractData
             }
     
             $extension = pathinfo($originalPath, PATHINFO_EXTENSION);
+            dump($extension);
             if (strtolower($extension) === 'heic' || strtolower($extension) === 'HEIC') {
                 // Convert and store new path
                 $convertedPath = $this->convertHeicToJpg($originalPath);
+                dump($convertedPath);
                 $updatedValues[] = $convertedPath ?: $originalPath;
             } else {
                 $updatedValues[] = $originalPath;
