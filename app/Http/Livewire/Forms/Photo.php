@@ -29,7 +29,7 @@ class Photo extends AbstractData
     public function convertHeicToJpg($filePath)
     {
         $heicPath = storage_path("app/public/{$filePath}");
-        dd(file_exists($heicPath));
+        dd(($heicPath));
         if (!file_exists($heicPath)) {
           
             return $filePath; // Return original if file doesn't exist
