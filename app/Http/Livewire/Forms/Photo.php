@@ -54,7 +54,7 @@ class Photo extends AbstractData
 
             // Construct the NEW path in the SAME folder
             $jpgFilePath = "{$dirName}/{$jpgFileName}";
-          
+            dd($jpgFilePath);
             // Save converted file
             $outputPath = storage_path("app/public/{$jpgFilePath}");
             $image->writeImage($outputPath);
