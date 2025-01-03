@@ -160,6 +160,7 @@ class Photo extends AbstractData
   
         // Convert any existing HEIC to JPG
         $updatedValues = [];
+        if(isset($values) && !empty($values)) {
         foreach ($values as $originalPath) {
             // If null or empty, skip
             if (!$originalPath) {
@@ -184,9 +185,10 @@ class Photo extends AbstractData
                 $updatedValues[] = $originalPath;
             }
         }
+    }
       
         // Persist the updated list to the DB if changes happened
-        if ($updatedValues !== $values) {
+        if (!empty($updatedValues) && ($updatedValues !== $values)) {
             FormsData::updateOrCreate(
                 [
                     'dossier_id' => $this->dossier_id,
