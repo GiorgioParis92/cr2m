@@ -3,7 +3,7 @@
 @section('content')
 <div>
 
-@livewire('messagerie')
+{{-- @livewire('messagerie') --}}
 
 </div>
 @endsection
