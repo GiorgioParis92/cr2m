@@ -505,6 +505,9 @@ class PDFController extends Controller
         } elseif (isset($fillDataConfig['signature_client'])) {
             $this->insertClientSignature($pdf, $fillDataConfig, $dossier);
         }
+        elseif (isset($fillDataConfig['signature_mandataire'])) {
+            $this->insertMandataireSignature($pdf, $fillDataConfig, $dossier);
+        }
     }
 
     /**
@@ -523,7 +526,19 @@ class PDFController extends Controller
             $pdf->Image($signaturePath, $x, $y, $width);
         }
     }
+    private function insertMandataireSignature($pdf, $fillDataConfig, $dossier)
+    {
+        $client = Client::find($dossier->mar);
+        $signaturePath = storage_path('app/public/' . ($client->signature ?? ''));
 
+        if (file_exists($signaturePath)) {
+            $x = $fillDataConfig['x'] ?? 10;
+            $y = $fillDataConfig['y'] ?? 10;
+            $width = $fillDataConfig['width'] ?? 50;
+
+            $pdf->Image($signaturePath, $x, $y, $width);
+        }
+    }
     /**
      * Insert beneficiary signature into the PDF.
      */
