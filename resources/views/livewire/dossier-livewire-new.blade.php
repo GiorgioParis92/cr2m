@@ -264,13 +264,13 @@
        
                 @if ($tab == $dossier->etape_number)
                 @if (is_user_allowed('validate_' . $etape_display['etape_name']) || auth()->user()->type_id==1)
-                @if (auth()->user()->client->type_client != 3)
+                
                     <div class="col-lg-6">
                         <a class="btn btn-primary"
                             href="{{ route('dossiers.next_step', $dossier->id) }}">Valider
                             l'étape</a>
                     </div>
-                @endif
+               
                 @endif
             @endif
                 @if ($forms)
