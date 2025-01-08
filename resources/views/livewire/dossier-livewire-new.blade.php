@@ -135,6 +135,23 @@
                                 </p>
                                 <p class="mb-0 font-weight-bold text-sm">
                                 <div class="btn btn-primary">{{ $dossier['fiche']['fiche_name'] }}</div>
+                                
+                                @php
+                                 $color='success';
+                                if($dossier['beneficiaire']['occupation']=='proprietaire') {
+                                    $color='success';
+                                }
+                                if($dossier['beneficiaire']['occupation']=='proprietaire_bailleur') {
+                                    $color='primary';
+                                }
+                                if($dossier['beneficiaire']['occupation']=='sci') {
+                                    $color='warning';
+                                }
+
+
+                                @endphp
+                                
+                                <div class="btn btn-{{$color}}">{{ $dossier['beneficiaire']['occupation'] }}</div>
                                 <div
                                     class="btn bg-primary bg-{{ couleur_menage($dossier->beneficiaire->menage_mpr) }}">
                                     {{ strtoupper(texte_menage($dossier['beneficiaire']['menage_mpr'])) }}
