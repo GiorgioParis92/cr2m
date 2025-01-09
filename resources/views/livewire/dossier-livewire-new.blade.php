@@ -140,18 +140,21 @@
                                  $color='success';
                                 if($dossier['beneficiaire']['occupation']=='proprietaire') {
                                     $color='success';
+                                    $text='propriétaire occupant';
                                 }
                                 if($dossier['beneficiaire']['occupation']=='proprietaire_bailleur') {
                                     $color='primary';
+                                    $text='Propriétaire Bailleur';
                                 }
                                 if($dossier['beneficiaire']['occupation']=='sci') {
                                     $color='warning';
+                                    $text=$dossier['beneficiaire']['occupation'];
                                 }
 
 
                                 @endphp
                                 
-                                <div class="btn btn-{{$color}}">{{ $dossier['beneficiaire']['occupation'] }}</div>
+                                <div class="btn btn-{{$color}}">{{ $text }}</div>
                                 <div
                                     class="btn bg-primary bg-{{ couleur_menage($dossier->beneficiaire->menage_mpr) }}">
                                     {{ strtoupper(texte_menage($dossier['beneficiaire']['menage_mpr'])) }}
