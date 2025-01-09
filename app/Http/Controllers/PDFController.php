@@ -528,7 +528,7 @@ class PDFController extends Controller
     }
     private function insertMandataireSignature($pdf, $fillDataConfig, $dossier)
     {
-        $client = Client::find($dossier->mar);
+        $client = Client::find($dossier->mandataire_financier);
         $signaturePath = storage_path('app/public/' . ($client->signature ?? ''));
 
         if (file_exists($signaturePath)) {
