@@ -50,6 +50,7 @@ class Table extends AbstractData
                     $newvalue[] = $key;
 
                     foreach ($values as $tag => $value) {
+                    
                         FormsData::updateOrCreate(
                             [
                                 'dossier_id' => $this->dossier_id,

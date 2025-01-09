@@ -203,7 +203,7 @@ class Photo extends AbstractData
     
         // Now update the component properties
         $this->values = $updatedValues;
-        $this->value = $updatedValues;
+        // $this->value = $updatedValues;
 
   
     }

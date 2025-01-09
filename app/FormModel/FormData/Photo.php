@@ -190,18 +190,19 @@ class Photo extends AbstractFormData
         $text.='<p class="s2" style="padding-top: 5pt;padding-left: 8pt;text-indent: 0pt;text-align: left;">'.$this->config->title.'</p>';
         $text .= "<div class='row'>";
       
-        
+       
         foreach($values as $value) {
-            $value_thumbnail = str_replace('.', '_thumbnail.', $value);
-            $filePath_thumbnail = storage_path('app/public/' . $value_thumbnail);
+            // $value_thumbnail = str_replace('.', '_thumbnail.', $value);
+            // $filePath_thumbnail = storage_path('app/public/' . $value_thumbnail);
         
-            if (file_exists($filePath_thumbnail)) {
-                $value = $value_thumbnail;
-            }
-        
+            // if (file_exists($filePath_thumbnail)) {
+            //     $value = $value_thumbnail;
+            // }
+           
             $filePath = storage_path('app/public/' . $value);
         
             if (!empty($value) && file_exists($filePath)) {
+              
                 // Compress the image and then convert it to Base64
                 $imageData = compressImage($filePath, 70);  // Compress the image with 70% quality for JPEGs
                 $src = 'data:image/' . pathinfo($filePath, PATHINFO_EXTENSION) . ';base64,' . $imageData;
