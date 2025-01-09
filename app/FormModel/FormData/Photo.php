@@ -171,7 +171,7 @@ class Photo extends AbstractFormData
             return false;
         }
         $json_value=decode_if_json($this->value);
-       
+    
         // $json_value=json_decode($this->value);
         
         if($json_value) {
