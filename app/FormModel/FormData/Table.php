@@ -186,9 +186,13 @@ class Table extends AbstractFormData
             $title_content_count = 0;
             
             foreach ($this->optionsArray as $element_config) {
+               
                 $class = 'App\\FormModel\\FormData\\' . ucfirst($element_config['type']);
                 $configInstance = $element_config;
-                $name = $element_config['name'];
+                // $name = $element_config['name'];
+           
+                $name=$this->name . '.value.' . $element_data . '.' . $element_config['name'];
+             
                 $form_id = $this->form_id;
                 $dossier_id = $this->dossier_id ?? null;
 
@@ -198,16 +202,21 @@ class Table extends AbstractFormData
                 } else {
                     $instance = new AbstractFormData($configInstance, $name, $form_id, $dossier_id);
                 }
-                // Handle array data to avoid Array to string conversion error
-                if (isset($element_data[$element_config['name']])) {
-                    // Recursively decode JSON and handle arrays
-                    $instance->value = $element_data[$element_config['name']]['value'];
-                } else {
-                    $instance->value = ''; // Or handle default value here
-                }
+               
+                
+                // // Handle array data to avoid Array to string conversion error
+                // if (isset($element_data[$element_config['name']])) {
+                //     // Recursively decode JSON and handle arrays
+                //     $instance->value = $element_data[$element_config['name']]['value'];
+                    
+                // } else {
+                //     $instance->value = ''; // Or handle default value here
+                // }
 
-
-                $element_render = $instance->render_pdf();
+           
+                    $element_render = $instance->render_pdf();
+                
+             
 
                 if ($element_render) {
                     $data .= '<tr><td style="width:100%;border:1px solid #ccc;border-collapse: collapse;padding-left:12px;padding-bottom:15px">';
@@ -217,6 +226,7 @@ class Table extends AbstractFormData
 
 
             }
+            // dd($this->optionsArray);
         }
         $data .= '</table></div>';
         // print_r($data);
