@@ -35,9 +35,12 @@ class Textarea extends AbstractFormData
     }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 }
 =======
         dd($this->value);
+=======
+>>>>>>> 8d22cca6f2308341b08658a03b4ae5949098190a
 
         if(!$this->value || $this->value=='') {
             return false;
