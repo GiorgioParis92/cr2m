@@ -37,7 +37,6 @@ class Scrapping extends Controller
     }
 
 
-    return response()->json($reference_unique, 200);
 
     $curl = curl_init();
 
