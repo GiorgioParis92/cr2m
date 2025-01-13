@@ -111,7 +111,13 @@
                             @endif
                         @endforeach
                     </div>
-
+                    @if (isset($conversation_id) && $i > 0)
+                        <div class="col-lg-4">
+                            <div class="card form-register container mt-5 pt-5" style="padding:0!important">
+                                @livewire('chat2', ['dossier_id' => $dossier['id'], 'form_id' => $conversation_id])
+                            </div>
+                        </div>
+                    @endif
                 </div>
             </div>
             <div class="col-lg-9 mt-lg-0 mt-4">
