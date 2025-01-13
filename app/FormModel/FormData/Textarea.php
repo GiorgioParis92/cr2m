@@ -37,6 +37,7 @@ class Textarea extends AbstractFormData
     {
 
         dd($this->value);
+
         if(!$this->value || $this->value=='') {
             return false;
         }
