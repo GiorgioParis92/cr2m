@@ -37,7 +37,7 @@ class Scrapping extends Controller
     }
 
 
-    // return response()->json($reference_unique, 200);
+    return response()->json($reference_unique, 200);
 
     $curl = curl_init();
 
@@ -70,7 +70,7 @@ class Scrapping extends Controller
                 "indexes":[
             3
           ],
-        
+
           "name":"content"
         },
 
@@ -113,17 +113,17 @@ class Scrapping extends Controller
       "element_screenshot":true,
       "url":"https://monprojet.anah.gouv.fr/dossiers/' . $reference_unique . '/contacts",
       "data":{
-       
+
         "Demandeur":{
           "type":"class",
              "display_title":"false",
           "split":{
             "split_char":"\n",
             "element_to_keep":[
-      {"index":1,"title":"<i class=\'fa fa-comments-dollar\'></i>Bénéficiaire","tags_to_match":["prenom","nom"]},  
-      {"index":2,"title":"<i class=\'fa fa-envelope\'></i>E-mail","tags_to_match":["email"]},  
-      {"index":3,"title":"<i class=\'fa fa-phone\'></i>Téléphone","tags_to_match":["telephone"]} 
-     
+      {"index":1,"title":"<i class=\'fa fa-comments-dollar\'></i>Bénéficiaire","tags_to_match":["prenom","nom"]},
+      {"index":2,"title":"<i class=\'fa fa-envelope\'></i>E-mail","tags_to_match":["email"]},
+      {"index":3,"title":"<i class=\'fa fa-phone\'></i>Téléphone","tags_to_match":["telephone"]}
+
             ]
           },
           "name":"contact-details-item",
@@ -131,7 +131,7 @@ class Scrapping extends Controller
             0
           ]
         },
-        
+
         "instructeur":{
           "type":"class",
           "display_title":"false",
@@ -148,9 +148,9 @@ class Scrapping extends Controller
                   "split":{
             "split_char":"\n",
             "element_to_keep":[
-      {"index":1,"title":"<i class=\'fa fa-comments-dollar\'></i>Mandataire","tags_to_match":[]} 
+      {"index":1,"title":"<i class=\'fa fa-comments-dollar\'></i>Mandataire","tags_to_match":[]}
 
-     
+
             ]
           },
           "key_words":[
@@ -161,7 +161,7 @@ class Scrapping extends Controller
       }
     },
 
-      
+
     {
       "element_screenshot":true,
       "url":"https://monprojet.anah.gouv.fr/dossiers/' . $reference_unique . '/messages",
@@ -181,7 +181,7 @@ class Scrapping extends Controller
 
     $response = curl_exec($curl);
 
-    
+
     if ($response === false) {
       die('Curl error: ' . curl_error($curl)); // Output cURL error
     }
