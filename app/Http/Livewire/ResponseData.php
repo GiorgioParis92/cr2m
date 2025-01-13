@@ -62,7 +62,7 @@ class ResponseData extends Component
     {
         if($this->responseData) {
             if(auth()->user()->id==1) {
-                dd($this->responseData);
+              //  dd($this->responseData);
             }
 
         foreach ($this->responseData as $tag => $data) {
