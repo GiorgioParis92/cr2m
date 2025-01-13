@@ -61,9 +61,7 @@ class ResponseData extends Component
     public function checkAndUpdateStatus()
     {
         if($this->responseData) {
-            if(auth()->user()->id==1) {
-              //  dd($this->responseData);
-            }
+
 
         foreach ($this->responseData as $tag => $data) {
             if (isset($data['elements']) && !empty($data['elements'])) {
