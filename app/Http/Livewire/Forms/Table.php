@@ -42,11 +42,7 @@ class Table extends AbstractData
 
         $is_old = $this->isAssociativeJson($data);
 
-        if(auth()->user()->id==1) {
-            dump($data);
 
-            dd($is_old);
-        }
         if ($is_old) {
             if (!empty($data)) {
 
