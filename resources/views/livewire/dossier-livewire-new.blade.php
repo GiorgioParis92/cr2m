@@ -111,10 +111,11 @@
                             @endif
                         @endforeach
                     </div>
-                    @if (isset($conversation_id) && $i > 0)
-                        <div class="col-lg-4">
+                    @if (isset($conversations))
+
+                        <div class="col-lg-12">
                             <div class="card form-register container mt-5 pt-5" style="padding:0!important">
-                                @livewire('chat2', ['dossier_id' => $dossier['id'], 'form_id' => $conversation_id])
+                                @livewire('chat2', ['dossier_id' => $dossier['id'], 'form_id' => $conversations->id])
                             </div>
                         </div>
                     @endif
@@ -257,7 +258,9 @@
                                 <h6 class="mb-0">Statut ANAH</h6>
                             </div>
                             <div class="card-body row">
-                                @livewire('response-data', ['dossierId' => $dossier->id])
+                                <!--  @livewire('response-data', ['dossierId' => $dossier->id]) -->
+
+
                             </div>
                         @endif
                     </div>
