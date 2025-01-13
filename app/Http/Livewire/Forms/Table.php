@@ -42,15 +42,19 @@ class Table extends AbstractData
 
         $is_old = $this->isAssociativeJson($data);
 
-        
+        if(auth()->user()->id==1) {
+            dump($data);
+
+            dd($is_old);
+        }
         if ($is_old) {
             if (!empty($data)) {
-              
+
                 foreach ($data as $key => $values) {
                     $newvalue[] = $key;
 
                     foreach ($values as $tag => $value) {
-                    
+
                         FormsData::updateOrCreate(
                             [
                                 'dossier_id' => $this->dossier_id,
@@ -115,7 +119,7 @@ class Table extends AbstractData
         if (array_keys($json) !== range(0, count($json) - 1)) {
             return true;
         }
-    
+
         // Otherwise, we recurse: if *any* sub-array is associative, return true
         foreach ($json as $value) {
             if ($this->isAssociativeJson($value)) {
@@ -129,11 +133,11 @@ class Table extends AbstractData
 
 
     public function add_row() {
- 
+
         $uniqueId = uniqid(); // Generate a unique id for the row
         $this->value[] = $uniqueId;
 
-        
+
 
         foreach(json_decode($this->conf['options']) as $option) {
             FormsData::updateOrCreate(
