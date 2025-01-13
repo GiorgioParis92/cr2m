@@ -67,7 +67,7 @@ class DossierLivewireNew extends Component
         if (!$this->dossier) {
             abort(404, 'Dossier not found');
         }
-
+        $this->conversations=null;
         $this->load_etapes();
 
         $currentEtape = Etape::find($this->dossier->etape_number);
@@ -124,12 +124,12 @@ class DossierLivewireNew extends Component
 
     public function hydrate()
     {
- 
-       
 
-            
+
+
+
         $this->get_docs();
-     
+
     }
     public function load_etapes()
     {
@@ -200,15 +200,15 @@ class DossierLivewireNew extends Component
             })
             ->orderBy('etapes.order_column')
             ->get()->toArray();
-    
+
         $this->docs = [];
-    
+
         foreach ($results as $result) {
             $options = json_decode($result->options, true);
             $doc = (array) $result;
             $doc['options'] = $options;
             $doc['last_etape_order'] = $this->last_etape_order ?? 1;
-    
+
             if (isset($options['signable']) && $options['signable'] === "true") {
                 $doc['additional_data'] = DB::table('forms_data')
                     ->where('dossier_id', $this->dossier->id)
@@ -216,7 +216,7 @@ class DossierLivewireNew extends Component
                     ->get()
                     ->toArray();
             }
-    
+
             $this->docs[] = $doc;
         }
     }
@@ -231,10 +231,12 @@ class DossierLivewireNew extends Component
 
         $this->load_forms($tab);
 
-      
+
 
         $this->emit('initializeDropzones', ['forms_configs' => $this->forms_configs]);
         $this->emit('setTab', ['forms_configs' => $this->forms_configs]);
+
+        $this->conversations=Form::where('etape_number',$tab)->where('type','conversation')->first();
 
         foreach ($this->forms_configs as $key => $config) {
             DB::table('messages_suivi')
@@ -255,7 +257,7 @@ class DossierLivewireNew extends Component
         foreach ($this->etapes as $etape) {
             if (
                 (is_user_allowed($etape['etape_name']) && !is_user_forbidden($etape['etape_name']))
-                
+
                 && $etape['order_column'] <= $this->dossier->etape->order_column) {
                 $this->last_etape = $etape['id'];
                 $this->last_etape_order = $etape['order_column'];
@@ -273,14 +275,14 @@ class DossierLivewireNew extends Component
                 break;
             }
         }
-    
+
     }
 
 
     public function set_form($id) {
         $this->set_form=$id;
         $this->config=FormConfig::where('form_id',$id)->orderBy('ordering')->get()->toArray();
-  
+
     }
 
     public function handleFileUploaded($request)
@@ -299,7 +301,7 @@ class DossierLivewireNew extends Component
                     ->where('form_id', $form_id)
                     ->where('meta_key', '!=', $tag) // Assuming you want to delete based on meta_key equal to the tag
                     ->delete();
-        
+
         // Optionally, you can return or handle the result here if needed
         if ($result) {
             session()->flash('message', 'Signature deleted successfully.');
@@ -307,12 +309,12 @@ class DossierLivewireNew extends Component
             session()->flash('message', 'Failed to delete signature.');
         }
     }
-    
+
 
     public function mark_signed($form_id, $tag)
     {
-   
-        
+
+
         $update = DB::table('forms_data')->updateOrInsert(
             [
                 'dossier_id' => '' . $this->dossier->id . '',
@@ -356,16 +358,16 @@ class DossierLivewireNew extends Component
 
     public function delete_doc($form_id, $tag)
     {
-        
+
         $update = DB::table('forms_data')->where(
             [
                 'dossier_id' => '' . $this->dossier->id . '',
                 'form_id' => '' . $form_id . '',
             ],
-       
+
         )->delete();
         $this->get_docs();
-       
+
     }
     public function render()
     {
