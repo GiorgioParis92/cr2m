@@ -17,7 +17,7 @@
                 <div class="card">
                     <select class="form-control responsive" wire:change="setTab($event.target.value)">
                         @foreach ($etapes as $index => $e)
-                         
+
                             @php
                                 $isActive = false;
                                 $isCurrent = false;
@@ -51,7 +51,7 @@
                                     value="{{ $e['etape_number'] }}">{{ $e['etape_icon'] ?? '' }}
                                     {{ strtoupper_extended($e['etape_desc']) }}</option>
                             @endif
-                 
+
                         @endforeach
                     </select>
                     <div class="timeline timeline-one-side no_responsive">
@@ -135,7 +135,7 @@
                                 </p>
                                 <p class="mb-0 font-weight-bold text-sm">
                                 <div class="btn btn-primary">{{ $dossier['fiche']['fiche_name'] }}</div>
-                                
+
                                 @php
                                  $color='success';
                                 if($dossier['beneficiaire']['occupation']=='proprietaire') {
@@ -153,7 +153,7 @@
 
 
                                 @endphp
-                                
+
                                 <div class="btn btn-{{$color}}">{{ $text }}</div>
                                 <div
                                     class="btn bg-primary bg-{{ couleur_menage($dossier->beneficiaire->menage_mpr) }}">
@@ -162,7 +162,7 @@
 
                                     @if (auth()->user()->client_id == 0)
                                     <div class="">
-    
+
                                         @if (isset($technicien) && !empty($technicien))
                                             <div class="row">
                                                 Technicien RDV MAR 1 :
@@ -179,7 +179,16 @@
                                 @endif
 
                                 </div>
-                                </p>
+                                <div class="col-lg-4 col-sm-12">
+                                    @if (auth()->user()->client_id == 0 && auth()->user()->type_id != 4)
+                                        <div class="card-header pb-0 p-3">
+                                            <h6 class="mb-0">Statut ANAH</h6>
+                                        </div>
+                                        <div class="card-body row">
+                                            @livewire('response-data', ['dossierId' => $dossier->id])
+                                        </div>
+                                    @endif
+                                </div>
 
                             </div>
                         </div>
@@ -256,24 +265,24 @@
                                 </div>
                             </div>
                             <div class="table-responsive">
-                             
+
                                 <x-document-table-component :docs="$docs" :dossier="$dossier" />
 
                             </div>
                         </div>
                     </div>
                 </div>
-            
-       
+
+
                 @if ($tab == $dossier->etape_number)
                 @if (is_user_allowed('validate_' . $etape_display['etape_name']) || auth()->user()->type_id==1)
-                
+
                     <div class="col-lg-6">
                         <a class="btn btn-primary"
                             href="{{ route('dossiers.next_step', $dossier->id) }}">Valider
                             l'étape</a>
                     </div>
-               
+
                 @endif
             @endif
                 @if ($forms)
@@ -567,7 +576,7 @@
 
     document.addEventListener('photoComponentUploaded', function(event) {
         if (window.Livewire && typeof Livewire.emit === 'function') {
-           
+
             Livewire.emit('fileUploaded', event.detail);
         } else {
             // If Livewire isn't ready, you can store these events and emit later
