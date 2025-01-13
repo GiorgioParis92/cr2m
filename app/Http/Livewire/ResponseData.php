@@ -27,7 +27,7 @@ class ResponseData extends Component
     public function loadResponseData()
     {
         $mar=Client::where('id',$this->dossier->mar)->first();
-       
+
         if($mar) {
             $login=$mar->anah_login;
             $password=$mar->anah_password;
@@ -43,7 +43,7 @@ class ResponseData extends Component
                     'login' => $login,
                 'password' => $password,
                 ]);
-             
+
             if ($response->successful()) {
                 $this->responseData = $response->json();
                 $this->checkAndUpdateStatus();  // Call to save the status
@@ -51,13 +51,13 @@ class ResponseData extends Component
             } else {
                 $statusCode = $response->status();
                 $errorBody = $response->body();
-                $this->responseData = "Error ({$statusCode}): {$errorBody}";
+                 $this->responseData = "Error ({$statusCode}): {$errorBody}";
             }
         }
     }
 
 
-    
+
     public function checkAndUpdateStatus()
     {
         if($this->responseData) {
@@ -76,7 +76,7 @@ class ResponseData extends Component
                             'updated_at' => now()
                         ]
                     );
-                   
+
 
                     if (strpos($value, 'accordée') !== false) {
                         preg_match('/\d+/', str_replace(' ', '', $value), $matches);
@@ -109,9 +109,9 @@ class ResponseData extends Component
                         }
                     }
 
-                       
+
                     }
-                
+
             }
         }
     }

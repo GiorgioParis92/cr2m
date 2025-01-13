@@ -19,7 +19,7 @@
             return $concat === $value;
         }
     @endphp
-
+    {{$responseData}}
     @if(isset($responseData) && is_array($responseData))
     @foreach ($responseData as $tag => $data)
         @if (isset($data['elements']) && is_array($data['elements']) && !empty($data['elements']))

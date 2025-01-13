@@ -179,16 +179,7 @@
                                 @endif
 
                                 </div>
-                                <div class="col-lg-4 col-sm-12">
-                                    @if (auth()->user()->client_id == 0 && auth()->user()->type_id != 4)
-                                        <div class="card-header pb-0 p-3">
-                                            <h6 class="mb-0">Statut ANAH</h6>
-                                        </div>
-                                        <div class="card-body row">
-                                            @livewire('response-data', ['dossierId' => $dossier->id])
-                                        </div>
-                                    @endif
-                                </div>
+
 
                             </div>
                         </div>
@@ -253,6 +244,18 @@
                             </div>
                         </div>
                     </div>
+
+                    <div class="col-lg-12 col-sm-12">
+                        @if (auth()->user()->client_id == 0 && auth()->user()->type_id != 4)
+                            <div class="card-header pb-0 p-3">
+                                <h6 class="mb-0">Statut ANAH</h6>
+                            </div>
+                            <div class="card-body row">
+                                @livewire('response-data', ['dossierId' => $dossier->id])
+                            </div>
+                        @endif
+                    </div>
+
                 </div>
 
 
