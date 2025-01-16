@@ -135,7 +135,7 @@ class FileUploadService
         }
         
         $filePath = public_path('storage/' . $directory . '/' . $fileName);
-        dd($filePath);
+        // dd($filePath);
 
         // Convert HEIC to JPG if applicable
         $filePath = $this->convertHeicToJpg($filePath);
