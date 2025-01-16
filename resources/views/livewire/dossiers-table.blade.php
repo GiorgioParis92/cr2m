@@ -79,15 +79,22 @@
                 </select>
             </div>
 
-
+            @php
+            $occupations=['proprietaire'=>"Propriétaire",'proprietaire_bailleur'=>"Propriétaire Bailleur",'sci'=>"SCI"];
+            @endphp
 
             <div class="mb-2 mb-sm-0 col-12 col-md-3">
                 <label class="mr-sm-2">Type de propriétaire</label>
                 <select class="no_select2 form-control" data-column="22" wire:model="occupation" id="occupation">
                     <option value="">Filtrer par type de propriétaire<option>
-                        <option value="proprietaire">Propriétaire<option>
+
+                        @foreach ($occupations as $key=>$value)
+                        <option value="{{ $key }}">{{ $value }}</option>
+                    @endforeach
+
+                        {{-- <option value="proprietaire">Propriétaire<option>
                         <option value="proprietaire_bailleur">Propriétaire Bailleur<option>
-                        <option value="sci">SCI<option>
+                        <option value="sci">SCI<option> --}}
 
                 </select>
             </div>
