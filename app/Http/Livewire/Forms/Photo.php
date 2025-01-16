@@ -186,14 +186,14 @@ class Photo extends AbstractData
             }
         }
     }
-      dd($this->conf);
+     
         // Persist the updated list to the DB if changes happened
         if (!empty($updatedValues) && ($updatedValues !== $values)) {
             FormsData::updateOrCreate(
                 [
                     'dossier_id' => $this->dossier_id,
                     'form_id' => $this->form_id,
-                    'meta_key' => $this->conf->name
+                    'meta_key' => $this->conf->name ?? ''
                 ],
                 [
                     'meta_value' => json_encode($updatedValues)
