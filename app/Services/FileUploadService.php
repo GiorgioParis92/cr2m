@@ -118,7 +118,7 @@ class FileUploadService
 
 
         $fullPath = storage_path('app/public/' . $filePath);
-        dd($fullPath);
+        dd($directory);
         // Set the file permissions to 775
         chmod($fullPath, 0775);
         
