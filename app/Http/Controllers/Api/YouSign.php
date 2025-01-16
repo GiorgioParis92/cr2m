@@ -82,7 +82,7 @@ class YouSign extends Controller
           ]
         ]
       ]);
-      dd($data);
+
    
       $path = 'storage/dossiers/' . $dossier->folder . '/' . $request->name . '.pdf';
 
@@ -184,7 +184,7 @@ class YouSign extends Controller
           $responseData->status === 'error'
         )
       ) {
-   
+        dd($responseData);
         $resultData = $responseData->result->data->result ?? null;
 
         if ($resultData->signature_request_id) {
