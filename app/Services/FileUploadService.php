@@ -91,7 +91,7 @@ class FileUploadService
         $originalFileName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
         // Directory path where files will be stored
         $directoryPath = storage_path('app/public/' . $directory);
-
+        dd($directoryPath);
         // Find all files with the same base name in the directory
         foreach (glob($directoryPath . '/' . $originalFileName . '.*') as $existingFile) {
 
@@ -115,7 +115,7 @@ class FileUploadService
 
         // Save the new file
         $filePath = $file->storeAs($directory, $fileName, 'public');
-dd($filePath);
+
 
         $fullPath = storage_path('app/public/' . $filePath);
         
