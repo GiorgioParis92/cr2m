@@ -80,6 +80,18 @@
             </div>
 
 
+
+            <div class="mb-2 mb-sm-0 col-12 col-md-3">
+                <label class="mr-sm-2">Type de propriétaire</label>
+                <select class="no_select2 form-control" data-column="22" wire:model="occupation" id="occupation">
+                    <option value="">Filtrer par type de propriétaire<option>
+                        <option value="proprietaire">Propriétaire<option>
+                        <option value="proprietaire_bailleur">Propriétaire Bailleur<option>
+                        <option value="sci">SCI<option>
+
+                </select>
+            </div>
+
             <div class="mb-2 mb-sm-0 col-12 col-md-3">
                 <label class="mr-sm-2">Département</label>
                 <select class="no_select2 form-control" data-column="21" wire:model="dpt" id="dpt">
@@ -196,7 +208,10 @@ span.badge.badge-outline-danger {
             let value = $(this).val();
             @this.set('dpt', value);
         });
-
+        $('#occupation').on('change', function(e) {
+            let value = $(this).val();
+            @this.set('occupation', value);
+        });
 
         const pageSizeSelector = document.getElementById('pageSizeSelector');
         // pageSizeSelector.value = gridOptions.paginationPageSize; // e.g., 20
@@ -426,7 +441,17 @@ span.badge.badge-outline-danger {
                 },
                 cellRenderer: render_cell_docs, 
             },
-
+            {
+                field: "beneficiaire.occupation", 
+                headerName: "occupation", 
+                sortable: true,
+                filter: 'agSetColumnFilter',
+                enableRowGroup: true,
+                autoHeight: true,
+                cellStyle: {
+                    textAlign: 'center'
+                },
+            },
 
         ];
             console.log(@json($dossiers))

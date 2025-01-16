@@ -27,6 +27,7 @@ class DossiersTable extends Component
     public $accompagnateur = '';
     public $statut = '';
     public $dpt = '';
+    public $occupation = '';
 
     // Pagination properties
     public $perPage = 50;
@@ -43,6 +44,7 @@ class DossiersTable extends Component
         'accompagnateur' => ['except' => ''],
         'statut' => ['except' => ''],
         'dpt' => ['except' => ''],
+        'occupation' => ['except' => ''],
     ];
 
     public function mount()
@@ -65,7 +67,7 @@ class DossiersTable extends Component
             ->get();
 
         // Check if any filters are set via query string
-        $filtersApplied = ($this->annulation==1) || $this->clientName || $this->precarite || ($this->etape || $this->etape==0) || $this->mandataire || $this->installateur || $this->accompagnateur || $this->statut || $this->dpt || (auth()->user()->client_id > 0);
+        $filtersApplied = ($this->annulation==1) || $this->clientName || $this->precarite || ($this->etape || $this->etape==0) || $this->mandataire || $this->installateur || $this->accompagnateur || $this->statut || $this->dpt || $this->occupation || (auth()->user()->client_id > 0);
     
         if ($filtersApplied) {
         
@@ -86,7 +88,7 @@ class DossiersTable extends Component
     public function loadDossiers()
     {
         // Check if any filters are applied or if the user is a client
-        $filtersApplied = $this->annulation || $this->clientName || $this->precarite || ($this->etape || $this->etape==0) || $this->mandataire || $this->installateur || $this->accompagnateur || $this->statut || $this->dpt || (auth()->user()->client_id > 0);
+        $filtersApplied = $this->annulation || $this->clientName || $this->precarite || ($this->etape || $this->etape==0) || $this->mandataire || $this->installateur || $this->accompagnateur || $this->statut || $this->dpt || $this->occupation || (auth()->user()->client_id > 0);
        
         if (!$filtersApplied) {
            $this->dossiers = [];
@@ -195,7 +197,11 @@ class DossiersTable extends Component
                 $query->where('cp', 'like', $this->dpt . '%');
             });
         }
-
+        if ($this->occupation) {
+            $dossiersQuery->whereHas('beneficiaire', function ($query) {
+                $query->where('occupation',  $this->occupation );
+            });
+        }
         // Execute the query and process results
         $dossiers = $dossiersQuery->get();
        
@@ -216,6 +222,7 @@ class DossiersTable extends Component
                     'ville' => $dossier->beneficiaire->ville ?? '',
                     'telephone' => $dossier->beneficiaire->telephone ?? '',
                     'email' => $dossier->beneficiaire->email ?? '',
+                    'occupation' => $dossier->beneficiaire->occupation ?? '',
                 ],
                 'reference_unique' => $dossier->reference_unique,
                 'etape' => $dossier->etape->etape_icon ?? '',

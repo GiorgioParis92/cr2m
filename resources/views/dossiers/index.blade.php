@@ -102,7 +102,18 @@
                 </div>
 
             @endif
+            <div class="mb-2 mb-sm-0 col-12 col-md-3">
+                <label class="mr-sm-2">Type de propriétaire
+                <select class="form-control" data-column="22">
+                    <option value="">Filtrer par type de propriétaire<option>
+                        <option value="proprietaire">Propriétaire<option>
+                        <option value="proprietaire_bailleur">Propriétaire Bailleur<option>
+                        <option value="sci">SCI<option>
 
+
+
+                </select>
+            </div>
             {{-- 
             <div class="mb-2 mb-sm-0 col-12 col-md-3">
                 <label class="mr-sm-2">Type de dossier</label>
@@ -296,7 +307,11 @@
                                 {{ substr($dossier->beneficiaire->cp,0,2) }}
 
                         </td>
+                        <td>
 
+                            {{ $dossier->beneficiaire->occupation }}
+
+                    </td>
                     </tr>
                 @endforeach
             </tbody>
@@ -309,7 +324,7 @@
             var table = $('#dossiersTable').DataTable({
                 @if (auth()->user()->client_id == 0 && auth()->user()->type_id != 4 && auth()->user()->type_id != 3)
                     columnDefs: [{
-                            targets: [1, 4, 5, 6, 7, 9, 11, 13, 15,17, 19, 20,21],
+                            targets: [1, 4, 5, 6, 7, 9, 11, 13, 15,17, 19, 20,21,22],
                             visible: false
                         },
                         {
@@ -324,7 +339,7 @@
                     ],
                 @else
                     columnDefs: [{
-                            targets: [1, 4, 5, 6, 7, 9, 11, 13, 15,17, 19, 20,21],
+                            targets: [1, 4, 5, 6, 7, 9, 11, 13, 15,17, 19, 20,21,22],
                             visible: false
                         },
                         {
