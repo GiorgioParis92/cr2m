@@ -122,6 +122,21 @@ class FileUploadService
         // Set the file permissions to 775
         chmod($fullPath, 0775);
         
+
+        $absoluteDirectoryPath = storage_path('app/public/' . $directory);
+        if (!file_exists($absoluteDirectoryPath)) {
+            mkdir($absoluteDirectoryPath, 0755, true);
+        }
+        
+        $filePath = $file->move($absoluteDirectoryPath, $fileName);
+        if (!$filePath) {
+            \Log::error('File move failed.');
+            return false;
+        }
+        
+        $filePath = public_path('storage/' . $directory . '/' . $fileName);
+        dd($filePath);
+
         // Convert HEIC to JPG if applicable
         $filePath = $this->convertHeicToJpg($filePath);
         
