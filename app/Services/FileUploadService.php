@@ -112,13 +112,13 @@ class FileUploadService
         } else {
             $fileName = $file->getClientOriginalName();
         }
+        dd($fileName);
 
         // Save the new file
         $filePath = $file->storeAs($directory, $fileName, 'public');
 
 
         $fullPath = storage_path('app/public/' . $filePath);
-        dd($filePath);
         // Set the file permissions to 775
         chmod($fullPath, 0775);
         
