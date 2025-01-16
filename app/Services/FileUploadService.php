@@ -91,7 +91,7 @@ class FileUploadService
         $originalFileName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
         // Directory path where files will be stored
         $directoryPath = storage_path('app/public/' . $directory);
-        dd($directoryPath);
+       
         // Find all files with the same base name in the directory
         foreach (glob($directoryPath . '/' . $originalFileName . '.*') as $existingFile) {
 
@@ -118,7 +118,7 @@ class FileUploadService
 
 
         $fullPath = storage_path('app/public/' . $filePath);
-        
+        dd($fullPath);
         // Set the file permissions to 775
         chmod($fullPath, 0775);
         
