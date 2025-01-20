@@ -772,9 +772,9 @@ class PDFController extends Controller
 
 
                     $instance = new $class($element, $element->name, $element->form_id, $dossier->id ?? null);
-                    if($element->type == 'textarea') {
-                        dd($instance);
-                    }
+                    // if($element->type == 'textarea') {
+                    //     dd($instance);
+                    // }
                     $instance->set_dossier($dossier);
             
                     $instance_result = $instance->render_pdf();
