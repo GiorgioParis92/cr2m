@@ -754,9 +754,7 @@ class PDFController extends Controller
                 }
             
                 $class = 'App\\FormModel\\FormData\\' . ucfirst($element->type);
-                if($element->type == 'textarea') {
-                    dd($class);
-                }
+ 
                 if (!class_exists($class)) {
                     $content .= "Error: Class $class does not exist.";
                     continue;
@@ -777,7 +775,9 @@ class PDFController extends Controller
                     $instance->set_dossier($dossier);
             
                     $instance_result = $instance->render_pdf();
-
+                    if($element->type == 'textarea') {
+                        dd($instance);
+                    }
                     // if ($element->type == 'table' && $element->name=='ajout_mur') {
 
                     //     echo($instance_result);
