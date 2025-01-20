@@ -752,8 +752,9 @@ class PDFController extends Controller
                     $content .= '<p>Error: Configuration element is missing.</p>';
                     continue;
                 }
-
+                dump($element->type);
                 $class = 'App\\FormModel\\FormData\\' . ucfirst($element->type);
+                dump($class)    ;
                 if (!class_exists($class)) {
                     $content .= "Error: Class $class does not exist.";
                     continue;
@@ -816,7 +817,7 @@ class PDFController extends Controller
 
             // Get the HTML content for the template
         }
-
+        dd('ok');
         $htmlContent = $this->getTemplateHtml('config', $dossier->id, $config, $title, $content);
 
         // Generate the PDF using Dompdf
