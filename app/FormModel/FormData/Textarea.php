@@ -36,26 +36,26 @@ class Textarea extends AbstractFormData
 
     public function render_pdf()
     {
-
+        $data='ok';
   
-        if(!$this->value || $this->value=='') {
-            return false;
-        }
+        // if(!$this->value || $this->value=='') {
+        //     return false;
+        // }
 
-        $data = '<div  class="form-group col-sm-12 ' . ($this->config->class ?? "") . '">';
-
-
-        $data .= '<div class="s3" style="display:block;margin-top:15px;margin-bottom:8px">' . $this->config->title . '</div>';
+        // $data = '<div  class="form-group col-sm-12 ' . ($this->config->class ?? "") . '">';
 
 
-
-
-        $data .= '<div style="display:block;margin-bottom:8px">'.$this->value.'</div>';
+        // $data .= '<div class="s3" style="display:block;margin-top:15px;margin-bottom:8px">' . $this->config->title . '</div>';
 
 
 
 
-        $data .= '</div>';
+        // $data .= '<div style="display:block;margin-bottom:8px">'.$this->value.'</div>';
+
+
+
+
+        // $data .= '</div>';
 
 
         return $data;
