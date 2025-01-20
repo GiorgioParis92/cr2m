@@ -47,6 +47,7 @@ class Textarea extends AbstractFormData
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 }
 =======
         dd($this->value);
@@ -56,6 +57,9 @@ class Textarea extends AbstractFormData
 =======
         dd('ok');
 >>>>>>> afcf6c7dd7b1d0ecfd6a1d61f9e4b1d966f1a681
+=======
+  
+>>>>>>> 015a26288aeddd6fbcffd9438c46fddb54ca9ed6
         if(!$this->value || $this->value=='') {
             return false;
         }
