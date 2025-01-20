@@ -754,7 +754,9 @@ class PDFController extends Controller
                 }
             
                 $class = 'App\\FormModel\\FormData\\' . ucfirst($element->type);
-              
+                if($element->type == 'textarea') {
+                    dd($class);
+                }
                 if (!class_exists($class)) {
                     $content .= "Error: Class $class does not exist.";
                     continue;
