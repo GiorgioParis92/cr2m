@@ -33,6 +33,12 @@ class Textarea extends AbstractFormData
 
         return $data;
     }
+<<<<<<< HEAD
+=======
+    
+    public function render_pdf()
+    {
+>>>>>>> f1206c987b9be7d3e29d57b1bb1e7c18b3a81a48
 
 <<<<<<< HEAD
 <<<<<<< HEAD
