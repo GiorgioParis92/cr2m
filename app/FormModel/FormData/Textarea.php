@@ -42,6 +42,7 @@ class Textarea extends AbstractFormData
 >>>>>>> afcf6c7dd7b1d0ecfd6a1d61f9e4b1d966f1a681
     public function render_pdf()
     {
+<<<<<<< HEAD
 >>>>>>> f1206c987b9be7d3e29d57b1bb1e7c18b3a81a48
 
 <<<<<<< HEAD
@@ -63,21 +64,28 @@ class Textarea extends AbstractFormData
         if(!$this->value || $this->value=='') {
             return false;
         }
+=======
+        $data='ok';
+  
+        // if(!$this->value || $this->value=='') {
+        //     return false;
+        // }
+>>>>>>> 13b10b963625ebceefd8fa2bce2baaa948e50651
 
-        $data = '<div  class="form-group col-sm-12 ' . ($this->config->class ?? "") . '">';
-
-
-        $data .= '<div class="s3" style="display:block;margin-top:15px;margin-bottom:8px">' . $this->config->title . '</div>';
-
-
-
-
-        $data .= '<div style="display:block;margin-bottom:8px">'.$this->value.'</div>';
-
+        // $data = '<div  class="form-group col-sm-12 ' . ($this->config->class ?? "") . '">';
 
 
+        // $data .= '<div class="s3" style="display:block;margin-top:15px;margin-bottom:8px">' . $this->config->title . '</div>';
 
-        $data .= '</div>';
+
+
+
+        // $data .= '<div style="display:block;margin-bottom:8px">'.$this->value.'</div>';
+
+
+
+
+        // $data .= '</div>';
 
 
         return $data;
