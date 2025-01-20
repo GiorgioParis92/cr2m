@@ -105,10 +105,11 @@ class DossierLivewireNew extends Component
         $this->financiers = Client::where('type_client', 2)->get()->toArray();
         $this->installateurs = Client::where('type_client', 3)->get()->toArray();
         $stepData = DB::table('dossiers_data')
-            ->join('users', 'dossiers_data.user_id', '=', 'users.id')  // Join with the users table
-            ->where('dossier_id', $id)
-            ->where('meta_key', 'like', '%step_%')
-            ->get(['dossiers_data.meta_key', 'dossiers_data.meta_value', 'dossiers_data.user_id', 'users.name as user_name']);  // Select user name
+        ->leftJoin('users', 'dossiers_data.user_id', '=', 'users.id')  // Left join with the users table
+        ->where('dossier_id', $id)
+        ->where('meta_key', 'like', '%step_%')
+        ->get(['dossiers_data.meta_key', 'dossiers_data.meta_value', 'dossiers_data.user_id', 'users.name as user_name']);  // Select user name
+    
 
         $this->steps = [];
         foreach ($stepData as $item) {
