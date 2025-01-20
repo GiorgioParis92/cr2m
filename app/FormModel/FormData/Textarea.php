@@ -34,12 +34,17 @@ class Textarea extends AbstractFormData
         return $data;
     }
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
     
+=======
+
+>>>>>>> afcf6c7dd7b1d0ecfd6a1d61f9e4b1d966f1a681
     public function render_pdf()
     {
 >>>>>>> f1206c987b9be7d3e29d57b1bb1e7c18b3a81a48
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 }
@@ -48,6 +53,9 @@ class Textarea extends AbstractFormData
 =======
 >>>>>>> 8d22cca6f2308341b08658a03b4ae5949098190a
 
+=======
+        dd('ok');
+>>>>>>> afcf6c7dd7b1d0ecfd6a1d61f9e4b1d966f1a681
         if(!$this->value || $this->value=='') {
             return false;
         }
