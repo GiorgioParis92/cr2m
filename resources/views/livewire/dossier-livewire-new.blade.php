@@ -104,7 +104,7 @@
                                                 class="{{ $tab == $e['id'] ? 'text-white' : 'text-secondary' }} font-weight-bold text-xs mt-1 mb-0">
                                                 validée le :
                                                 {{ format_date($steps['step_' . $e['etape_number']]['meta_value']) ?? '' }}
-                                                par {{ $steps['step_' . $e['etape_number']]['user_name'] }}</p>
+                                               @if($steps['step_' . $e['etape_number']]['user_name']) par {{ $steps['step_' . $e['etape_number']]['user_name'] }} @endif</p>
                                         @endif
                                     </div>
                                 </div>
