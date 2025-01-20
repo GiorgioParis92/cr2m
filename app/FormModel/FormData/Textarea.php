@@ -28,6 +28,7 @@ class Textarea extends AbstractFormData
         return $data;
     }
 
+    
     public function render_pdf()
     {
         if (!$this->value || $this->value == '') {
