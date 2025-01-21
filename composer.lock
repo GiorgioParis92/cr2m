@@ -10903,6 +10903,11 @@
     "platform": {
         "php": "^7.3|^8.0"
     },
+<<<<<<< HEAD
+    "platform-dev": [],
+    "plugin-api-version": "2.2.0"
+=======
     "platform-dev": {},
     "plugin-api-version": "2.6.0"
+>>>>>>> 7c9e42d0c6814d18216931fb933def1110b7485f
 }
