@@ -165,6 +165,7 @@ class DossiersController extends \App\Http\Controllers\Controller
             }
         ]);
 
+        $dossiers->where('annulation','!=',1);
         $dossiers = $dossiers->get();
 
         // foreach ($dossiers as $dossier) {
