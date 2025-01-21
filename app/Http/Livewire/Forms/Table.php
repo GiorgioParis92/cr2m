@@ -42,71 +42,36 @@ class Table extends AbstractData
 
         $is_old = $this->isAssociativeJson($data);
 
+
         if ($is_old) {
-            // Ensure $data is an array and contains elements
-            if (is_array($data) && count($data) > 0) { 
-                $newvalue = []; // Initialize $newvalue as an array
-        
+            if (!empty($data)) {
+
                 foreach ($data as $key => $values) {
-                    // Check if $values is an array or a scalar
-                    if (is_array($values)) {
-                        $newvalue[] = $key;
-        
-                        foreach ($values as $tag => $value) {
-                            // Ensure $value contains the 'value' key and it's an array or scalar
-                            if (isset($value['value'])) {
-                                FormsData::updateOrCreate(
-                                    [
-                                        'dossier_id' => $this->dossier_id,
-                                        'form_id' => $this->form_id,
-                                        'meta_key' => $this->conf['name'] . '.value.' . $key . '.' . $tag
-                                    ],
-                                    [
-                                        'meta_value' => (is_array($value['value']) ? json_encode($value['value']) : $value['value'])
-                                    ]
-                                );
-                            } else {
-                                // Log or handle cases where 'value' key is missing
-                                error_log("Missing 'value' key in tag: $tag, key: $key");
-                            }
-                        }
-                    } elseif (is_string($values) || is_numeric($values)) {
-                        // Handle cases where $values is a scalar (string or number)
-                        $newvalue[] = $key;
-        
+                    $newvalue[] = $key;
+
+                    foreach ($values as $tag => $value) {
+
                         FormsData::updateOrCreate(
                             [
                                 'dossier_id' => $this->dossier_id,
                                 'form_id' => $this->form_id,
-                                'meta_key' => $this->conf['name'] . '.value.' . $key
+                                'meta_key' => $this->conf['name'] . '.value.' . $key . '.' . $tag
                             ],
                             [
-                                'meta_value' => $values
+                                'meta_value' => (is_array($value['value']) ? json_encode($value['value']) : $value['value'])
                             ]
                         );
-                    } else {
-                        // Log or handle unexpected $values structure
-                        throw new \Exception("Unexpected structure for 'values'. Expected array, got: " . gettype($values));
                     }
+
                 }
-        
-                $this->value = $newvalue;
-        
-                // Call the updatedValue method with the new value
-                $this->updatedValue($this->value);
-            } else {
-                // Log or handle cases where $data is an empty array
-                if (empty($data)) {
-                    error_log("Data is an empty array.");
-                }
-                throw new \Exception("Invalid data structure. Expected non-empty array.");
             }
+            $this->value = $newvalue;
+
+            $this->updatedValue($this->value);
         } else {
-            // When $data is not associative JSON
             $this->value = $data;
+
         }
-                
-        
 
 
     }
