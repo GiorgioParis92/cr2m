@@ -3,7 +3,7 @@
     @if($check_condition)
  
     <label>{{ $conf['title'] ?? '' }}</label>
-    <select name="{{ $conf['name'] }}" class="form-control" wire:model.debounce.500ms="value">
+    <select name="{{ $conf['name'] }}" class="form-control no_select2" wire:model.debounce.500ms="value">
         <option value="">Choisir</option>
 
         @foreach($request as $key => $val)
