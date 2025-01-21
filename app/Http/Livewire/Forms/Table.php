@@ -42,36 +42,53 @@ class Table extends AbstractData
 
         $is_old = $this->isAssociativeJson($data);
 
-
         if ($is_old) {
-            if (!empty($data)) {
-
+            // Ensure $data is not empty and is an array
+            if (!empty($data) && is_array($data)) { 
+                $newvalue = []; // Initialize $newvalue as an array
+        
                 foreach ($data as $key => $values) {
-                    $newvalue[] = $key;
-
-                    foreach ($values as $tag => $value) {
-
-                        FormsData::updateOrCreate(
-                            [
-                                'dossier_id' => $this->dossier_id,
-                                'form_id' => $this->form_id,
-                                'meta_key' => $this->conf['name'] . '.value.' . $key . '.' . $tag
-                            ],
-                            [
-                                'meta_value' => (is_array($value['value']) ? json_encode($value['value']) : $value['value'])
-                            ]
-                        );
+                    // Ensure $values is an array before processing
+                    if (is_array($values)) {
+                        $newvalue[] = $key;
+        
+                        foreach ($values as $tag => $value) {
+                            // Ensure $value contains the 'value' key and it's an array or scalar
+                            if (isset($value['value'])) {
+                                FormsData::updateOrCreate(
+                                    [
+                                        'dossier_id' => $this->dossier_id,
+                                        'form_id' => $this->form_id,
+                                        'meta_key' => $this->conf['name'] . '.value.' . $key . '.' . $tag
+                                    ],
+                                    [
+                                        'meta_value' => (is_array($value['value']) ? json_encode($value['value']) : $value['value'])
+                                    ]
+                                );
+                            } else {
+                                // Log or handle cases where 'value' key is missing
+                                error_log("Missing 'value' key in tag: $tag, key: $key");
+                            }
+                        }
+                    } else {
+                        // Log or handle unexpected $values structure
+                        throw new \Exception("Unexpected structure for 'values'. Expected array, got: " . gettype($values));
                     }
-
                 }
+        
+                $this->value = $newvalue;
+        
+                // Call the updatedValue method with the new value
+                $this->updatedValue($this->value);
+            } else {
+                // Handle cases where $data is not a valid array
+                throw new \Exception("Invalid data structure. Expected non-empty array, got: " . gettype($data));
             }
-            $this->value = $newvalue;
-
-            $this->updatedValue($this->value);
         } else {
+            // When $data is not associative JSON
             $this->value = $data;
-
         }
+        
 
 
     }
