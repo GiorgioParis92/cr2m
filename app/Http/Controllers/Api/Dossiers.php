@@ -21,7 +21,7 @@ class Dossiers extends \App\Http\Controllers\Controller
             }
         }
 
-        dd('ok');
+   
 
         // Apply pagination or return all results
         if ($request->has('paginate')) {
