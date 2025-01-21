@@ -48,7 +48,7 @@ class Table extends AbstractData
                 $newvalue = []; // Initialize $newvalue as an array
         
                 foreach ($data as $key => $values) {
-                    // Ensure $values is an array before processing
+                    // Check if $values is an array or a scalar
                     if (is_array($values)) {
                         $newvalue[] = $key;
         
@@ -70,6 +70,20 @@ class Table extends AbstractData
                                 error_log("Missing 'value' key in tag: $tag, key: $key");
                             }
                         }
+                    } elseif (is_string($values) || is_numeric($values)) {
+                        // Handle cases where $values is a scalar (string or number)
+                        $newvalue[] = $key;
+        
+                        FormsData::updateOrCreate(
+                            [
+                                'dossier_id' => $this->dossier_id,
+                                'form_id' => $this->form_id,
+                                'meta_key' => $this->conf['name'] . '.value.' . $key
+                            ],
+                            [
+                                'meta_value' => $values
+                            ]
+                        );
                     } else {
                         // Log or handle unexpected $values structure
                         throw new \Exception("Unexpected structure for 'values'. Expected array, got: " . gettype($values));
@@ -88,6 +102,7 @@ class Table extends AbstractData
             // When $data is not associative JSON
             $this->value = $data;
         }
+        
         
 
 
