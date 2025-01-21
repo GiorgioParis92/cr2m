@@ -43,8 +43,8 @@ class Table extends AbstractData
         $is_old = $this->isAssociativeJson($data);
 
         if ($is_old) {
-            // Ensure $data is not empty and is an array
-            if (!empty($data) && is_array($data)) { 
+            // Ensure $data is an array and contains elements
+            if (is_array($data) && count($data) > 0) { 
                 $newvalue = []; // Initialize $newvalue as an array
         
                 foreach ($data as $key => $values) {
@@ -95,14 +95,17 @@ class Table extends AbstractData
                 // Call the updatedValue method with the new value
                 $this->updatedValue($this->value);
             } else {
-                // Handle cases where $data is not a valid array
-                throw new \Exception("Invalid data structure. Expected non-empty array, got: " . gettype($data));
+                // Log or handle cases where $data is an empty array
+                if (empty($data)) {
+                    error_log("Data is an empty array.");
+                }
+                throw new \Exception("Invalid data structure. Expected non-empty array.");
             }
         } else {
             // When $data is not associative JSON
             $this->value = $data;
         }
-        
+                
         
 
 
