@@ -111,7 +111,8 @@ class DossiersTable extends Component
             $join->on('dossiers.id', '=', 'dossiers_data.dossier_id')
                  ->where('dossiers_data.meta_key', 'docs');
         })
-        ->select('dossiers.*', 'dossiers_data.meta_value');
+        ->select('dossiers.*', 'dossiers_data.meta_value')
+        ->groupBy('dossiers.id');
 
         // Apply client-specific filtering
         $userClientId = auth()->user()->client_id;
