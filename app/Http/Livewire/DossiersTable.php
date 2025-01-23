@@ -249,7 +249,8 @@ class DossiersTable extends Component
         });
 
         // Update the component's dossier data
-        $this->dossiers = $dossiers->toArray();
+        $this->dossiers = $dossiers->values()->toArray();
+
     }
 
     public function render()
