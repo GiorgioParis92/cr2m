@@ -153,11 +153,11 @@ class Table extends AbstractData
 
     public function remove_row($rowId)
     {
-        // 1. Remove the rowId from $this->value array
-        $this->value = array_filter($this->value, function($value) use ($rowId) {
+        // 1. Remove the rowId from $this->value array and reindex it
+        $this->value = array_values(array_filter($this->value, function($value) use ($rowId) {
             return $value !== $rowId;
-        });
-
+        }));
+    
         // 2. Remove all associated data in the database
         //    Those entries have meta_key like: "tableName.value.{rowId}.{optionName}"
         $prefix = $this->conf['name'] . '.value.' . $rowId . '.';
@@ -165,10 +165,11 @@ class Table extends AbstractData
             ->where('form_id', $this->form_id)
             ->where('meta_key', 'LIKE', $prefix . '%')
             ->delete();
-
+    
         // 3. Persist the updated array
         $this->updatedValue($this->value);
     }
+    
     public function render()
     {
         return view('livewire.forms.table');
