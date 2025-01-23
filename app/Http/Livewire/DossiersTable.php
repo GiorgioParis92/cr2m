@@ -112,7 +112,7 @@ class DossiersTable extends Component
                  ->where('dossiers_data.meta_key', 'docs');
         })
         ->select('dossiers.*', 'dossiers_data.meta_value')
-        ->groupBy('dossiers.id', 'dossiers.folder', 'dossiers.created_at', 'dossiers.updated_at', /* other dossier columns */, 'dossiers_data.meta_value');
+        ->groupBy('dossiers.id', 'dossiers.folder');
 
         // Apply client-specific filtering
         $userClientId = auth()->user()->client_id;
