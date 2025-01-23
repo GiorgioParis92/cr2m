@@ -205,7 +205,8 @@ class DossiersTable extends Component
         }
         // Execute the query and process results
         $dossiers = $dossiersQuery->get();
-       
+        $dossiers = $dossiers->unique('id');
+
         // Map the dossiers data
         $dossiers = $dossiers->map(function ($dossier) {
             return [
