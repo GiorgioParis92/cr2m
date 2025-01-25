@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+
 
 class LoginController extends Controller
 {
@@ -39,12 +41,26 @@ class LoginController extends Controller
         $this->middleware('guest')->except('logout');
     }
 
-    protected function credentials(Request $request)
-    {
-        return [
-            $this->username() => $request->input($this->username()),
-            'password'        => $request->input('password'),
-            'activation'      => 1, // <--- On force la condition d'activation
-        ];
+    // protected function credentials(Request $request)
+    // {
+    //     return [
+    //         $this->username() => $request->input($this->username()),
+    //         'password'        => $request->input('password'),
+    //         'activation'      => 1, // <--- On force la condition d'activation
+    //     ];
+    // }
+
+    protected function authenticated(Request $request, $user)
+{
+    if ($user->activation !== 1) {
+        Auth::logout();
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect()->back()->withErrors([
+            $this->username() => __('auth.activation')
+        ]);
     }
+}
 }
