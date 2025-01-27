@@ -44,8 +44,10 @@ class Photo extends AbstractData
         
         try {
           
-            $image = new Imagick($heicPath);
-            $image->setImageFormat('jpeg');
+            // $image = new Imagick($heicPath);
+            $image = imagecreatefromjpeg($heicPath);
+
+            // $image->setImageFormat('jpeg');
             
             $dirName     = pathinfo($filePath, PATHINFO_DIRNAME);   // e.g. "some_folder/12345"
             $baseName    = pathinfo($filePath, PATHINFO_FILENAME);  // e.g. "originalFilename"
@@ -59,9 +61,9 @@ class Photo extends AbstractData
             $outputPath = storage_path("app/public/{$jpgFilePath}");
             $image->writeImage($outputPath);
         
-            // Cleanup
-            $image->clear();
-            $image->destroy();
+            // // Cleanup
+            // $image->clear();
+            // $image->destroy();
     
             // Optionally delete original HEIC file
             unlink($heicPath);
