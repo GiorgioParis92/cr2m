@@ -525,7 +525,7 @@ class FileUploadService
 
  return $jpgFilePath; // Return the new file path
         } catch (\Exception $e) {
-            dump("HEIC to JPG conversion failed: " . $e->getMessage());
+
             return $filePath; // Fallback to the original path
         }
     }
