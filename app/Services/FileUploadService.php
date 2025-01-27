@@ -507,29 +507,23 @@ class FileUploadService
         }
     
         try {
-            // Extract the directory and filename
-            $dirName = pathinfo($filePath, PATHINFO_DIRNAME); // e.g., "some_folder"
-            $baseName = pathinfo($filePath, PATHINFO_FILENAME); // e.g., "originalFilename"
-            $jpgFileName = $baseName . '.jpg'; // e.g., "originalFilename.jpg"
-    
-            // Construct the NEW path in the SAME folder
-            $jpgFilePath = "{$dirName}/{$jpgFileName}";
-            $outputPath = storage_path("app/public/{$jpgFilePath}");
-    
-            // Use ImageMagick CLI to convert HEIC to JPG
-            $command = "magick convert {$heicPath} {$outputPath}";
-            exec($command, $output, $returnCode);
-    
-            // Check if the conversion was successful
-            if ($returnCode !== 0 || !file_exists($outputPath)) {
-                \Log::error("HEIC to JPG conversion failed for file: {$heicPath}");
-                return $filePath; // Fallback to the original path
-            }
-    
-            // Optionally delete the original HEIC file
-            unlink($heicPath);
-    
-            return $jpgFilePath; // Return the new file path in the same directory
+ // Use Intervention Image to open and convert the HEIC file
+ $image = \Image::make($heicPath);
+        
+ // Extract the folder and filename
+ $dirName = pathinfo($filePath, PATHINFO_DIRNAME);
+ $baseName = pathinfo($filePath, PATHINFO_FILENAME);
+ $jpgFileName = $baseName . '.jpg';
+ $jpgFilePath = "{$dirName}/{$jpgFileName}";
+ $outputPath = storage_path("app/public/{$jpgFilePath}");
+
+ // Save as JPEG
+ $image->save($outputPath, 90, 'jpg');
+
+ // Optionally delete the original HEIC file
+ unlink($heicPath);
+
+ return $jpgFilePath; // Return the new file path
         } catch (\Exception $e) {
             dump("HEIC to JPG conversion failed: " . $e->getMessage());
             return $filePath; // Fallback to the original path
