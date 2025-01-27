@@ -507,7 +507,9 @@ class FileUploadService
         }
     
         try {
-            $image = new Imagick($heicPath);
+            // $image = new Imagick($heicPath);
+            $image = imagecreatefromjpeg($heicPath);
+
             $image->setImageFormat('jpeg');
     
             // Extract the folder, filename, etc.:
