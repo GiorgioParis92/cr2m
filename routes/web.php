@@ -30,6 +30,7 @@ use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Livewire\Chat;
 use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\ApiRequestController;
+use App\Http\Controllers\FinancierController;
 
 
 /*
@@ -217,6 +218,7 @@ Route::post('/messagerie', [App\Http\Controllers\Messagerie::class, 'index'])->n
 Route::post('/send-api-request', [ApiRequestController::class, 'sendApiRequest'])->name('send.api.request');
 
 Route::get('/search', [App\Http\Controllers\SearchController::class, 'search'])->name('search');
+Route::get('/financier', [App\Http\Controllers\FinancierController::class, 'index'])->name('financier');
 
 Route::get('/stats', function () {
     return view('stats');
