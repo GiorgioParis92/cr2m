@@ -11,6 +11,7 @@
                     <th>Bénéficiaire</th>
                     <th>Étape</th>
                     <th>Étape</th>
+                    <th>Installateur</th>
                     <th>Date Dépôt</th>
                     <th>Date Octroi</th>
                     <th>Subvention</th>
@@ -35,9 +36,19 @@
                             @endforeach
                         </select>
                     </th>
-
-                    <!-- No filters for the remaining columns -->
                     <th></th>
+                    <!-- No filters for the remaining columns -->
+                    <th>
+                        <select class="form-select form-select-sm" id="select-client">
+                            <option value="">Tous les clients</option>
+                            @foreach ($liste_clients as $client)
+                                <option value="{{ $client->client_title }}">
+                                    {{ $client->client_title }}</option>
+                            @endforeach
+                        </select>
+
+                    </th>
+              
                     <th></th>
                     <th></th>
                     <th></th>
@@ -45,6 +56,7 @@
                 </tr>
                 <tr>
    
+                    <th></th>
                     <th></th>
                     <th></th>
                     <th></th>
@@ -64,6 +76,7 @@
                         </td>
                         <td>{{ $row->etape_icon . ' - ' . $row->etape_desc }}</td>
                         <td>{{ $row->order_column }}</td>
+                        <td>{{ $row->client_title }}</td>
                         <td>{{ $row->date_depot }}</td>
                         <td>{{ $row->date_octroi }}</td>
                         <td>{{ $row->subvention ? number_format((float) $row->subvention, 2) : '' }}</td>
@@ -102,7 +115,11 @@
         table.column(1).search(val ? '^' + val + '$' : '', true, false).draw();
         updateColumnPercentages();
     });
-
+    $('#select-client').on('change', function() {
+        let val = $.fn.dataTable.util.escapeRegex($(this).val());
+        table.column(3).search(val ? '^' + val + '$' : '', true, false).draw();
+        updateColumnPercentages();
+    });
     // Bénéficiaire filter: Text input
     $('#financier-table thead tr:eq(1) th').each(function(i) {
         let headerCell = $(this);
@@ -124,7 +141,7 @@
     // Loop through each visible column
     visibleColumns.forEach(function(visibleIndex, actualIndex) {
         // Skip columns before the 3rd index (adjust based on your column logic)
-        if (visibleIndex < 3) return;
+        if (visibleIndex < 4) return;
 
         // Get filtered data for the visible rows in the column
         let columnData = table.column(visibleIndex, { search: 'applied' }).data();

@@ -3,6 +3,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Dossier;
 use App\Models\Etape;
+use App\Models\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -40,7 +41,10 @@ class FinancierController extends Controller
                 $join->on('DD4.dossier_id', '=', 'dossiers.id')
                      ->where('DD4.meta_key', '=', 'date_paiement_anah');
             })
-
+            ->leftJoin('clients as C', function ($join) {
+                $join->on('C.id', '=', 'dossiers.installateur')
+                     ->where('C.id', '>', '1');
+            })
             // Optionally, specify the columns you want to select.
             // If you need them all, you can keep * but be mindful of collisions.
             ->select([
@@ -55,6 +59,7 @@ class FinancierController extends Controller
                 'DD2.meta_value as date_octroi',
                 'DD3.meta_value as subvention',
                 'DD4.meta_value as date_paiement_anah',
+                'C.client_title as client_title',
             ])
             ->where(function ($query) {
                 $query->where('annulation', 0)
@@ -64,7 +69,8 @@ class FinancierController extends Controller
 
     // Extract unique, sorted etape names without HTML
     $etapeNames = Etape::orderBy('order_column')->get();
+    $liste_clients = Client::where('type_client',3)->orderBy('client_title')->get();
 
-    return view('financier', compact('financier', 'etapeNames'));
+    return view('financier', compact('financier', 'etapeNames','liste_clients'));
         }
 }
