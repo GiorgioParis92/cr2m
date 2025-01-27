@@ -526,7 +526,7 @@ class FileUploadService
  return $jpgFilePath; // Return the new file path
         } catch (\Exception $e) {
 
-            return 'non';
+            return $filePath; // Fallback to the original path
         }
     }
     
