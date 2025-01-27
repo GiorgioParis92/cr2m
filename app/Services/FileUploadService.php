@@ -508,7 +508,7 @@ class FileUploadService
     
         try {
             // Load the HEIC file
-            $image = new \Imagick($heicPath);
+            $image = new Imagick($heicPath);
             $image->setImageFormat('jpeg');
     
             // Extract the folder and filename
