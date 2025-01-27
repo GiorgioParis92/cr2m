@@ -45,6 +45,10 @@ class FinancierController extends Controller
                 $join->on('C.id', '=', 'dossiers.installateur')
                      ->where('C.id', '>', '1');
             })
+            ->leftJoin('clients as C2', function ($join) {
+                $join->on('C2.id', '=', 'dossiers.mandataire_financier')
+                     ->where('C2.id', '>', '1');
+            })
             // Optionally, specify the columns you want to select.
             // If you need them all, you can keep * but be mindful of collisions.
             ->select([
@@ -60,6 +64,7 @@ class FinancierController extends Controller
                 'DD3.meta_value as subvention',
                 'DD4.meta_value as date_paiement_anah',
                 'C.client_title as client_title',
+                'C2.client_title as mandataire_financier',
             ])
             ->where(function ($query) {
                 $query->where('annulation', 0)
@@ -70,7 +75,8 @@ class FinancierController extends Controller
     // Extract unique, sorted etape names without HTML
     $etapeNames = Etape::orderBy('order_column')->get();
     $liste_clients = Client::where('type_client',3)->orderBy('client_title')->get();
+    $liste_mandataire = Client::where('type_client',2)->orderBy('client_title')->get();
 
-    return view('financier', compact('financier', 'etapeNames','liste_clients'));
+    return view('financier', compact('financier', 'etapeNames','liste_clients','liste_mandataire'));
         }
 }

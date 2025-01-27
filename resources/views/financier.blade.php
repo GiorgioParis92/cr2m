@@ -12,6 +12,7 @@
                     <th>Étape</th>
                     <th>Étape</th>
                     <th>Installateur</th>
+                    <th>Mandataire</th>
                     <th>Date Dépôt</th>
                     <th>Date Octroi</th>
                     <th>Subvention</th>
@@ -49,6 +50,18 @@
 
                     </th>
               
+                    <th>
+                        <select class="form-select form-select-sm" id="select-mandataire">
+                            <option value="">Mandataire</option>
+                            @foreach ($liste_mandataire as $client)
+                            @if($client->type_client==2)
+                                <option value="{{ $client->client_title }}">
+                                    {{ $client->client_title }}</option>
+                                    @endif
+                            @endforeach
+                        </select>
+
+                    </th>
                     <th></th>
                     <th></th>
                     <th></th>
@@ -56,6 +69,7 @@
                 </tr>
                 <tr>
    
+                    <th></th>
                     <th></th>
                     <th></th>
                     <th></th>
@@ -77,6 +91,7 @@
                         <td>{{ $row->etape_icon . ' - ' . $row->etape_desc }}</td>
                         <td>{{ $row->order_column }}</td>
                         <td>{{ $row->client_title }}</td>
+                        <td>{{ $row->mandataire_financier }}</td>
                         <td>{{ $row->date_depot }}</td>
                         <td>{{ $row->date_octroi }}</td>
                         <td>{{ $row->subvention ? number_format((float) $row->subvention, 2) : '' }}</td>
@@ -139,13 +154,19 @@
         $('#select-step').on('change', function() {
             let val = $.fn.dataTable.util.escapeRegex($(this).val());
             table.column(1).search(val ? '^' + val + '$' : '', true, false).draw();
+            updateColumnPercentages()
         });
 
         $('#select-client').on('change', function() {
             let val = $.fn.dataTable.util.escapeRegex($(this).val());
             table.column(3).search(val ? '^' + val + '$' : '', true, false).draw();
+            updateColumnPercentages()
         });
-
+        $('#select-mandataire').on('change', function() {
+            let val = $.fn.dataTable.util.escapeRegex($(this).val());
+            table.column(4).search(val ? '^' + val + '$' : '', true, false).draw();
+            updateColumnPercentages()
+        });
         $('#financier-table thead tr:eq(1) th').each(function(i) {
             let headerCell = $(this);
             let input = headerCell.find('input');
@@ -155,7 +176,43 @@
                     table.column(i).search(this.value).draw();
                 });
             }
+            updateColumnPercentages()
         });
+
+        function updateColumnPercentages() {
+    // Get visible column indices
+    var visibleColumns = table.columns(':visible')[0];
+
+    // Loop through each visible column
+    visibleColumns.forEach(function(visibleIndex, actualIndex) {
+        // Skip columns before the 3rd index (adjust based on your column logic)
+        if (visibleIndex < 4) return;
+
+        // Get filtered data for the visible rows in the column
+        let columnData = table.column(visibleIndex, { search: 'applied' }).data();
+
+        // Calculate the percentage of non-empty values
+        let totalRows = columnData.length; // Total rows (visible + filtered)
+        let filledRows = columnData.filter(value => value && value.trim() !== '').length;
+        let percentage = totalRows > 0 ? ((filledRows / totalRows) * 100).toFixed(2) : 0;
+
+        // Find the corresponding header cell in the third row
+        let headerCell = $('#financier-table thead tr:eq(2) th').eq(actualIndex);
+
+        // Update the percentage display
+        headerCell.html(
+            `<span class="percentage-display" style="font-size: 0.9em; color: gray;">${percentage}%</span>`
+        );
+    });
+}
+
+
+    // Update percentages initially and after every table redraw
+    updateColumnPercentages();
+    table.on('draw', function() {
+        updateColumnPercentages();
+    });
+
     });
 </script>
 @endsection
