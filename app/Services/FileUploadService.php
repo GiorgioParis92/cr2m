@@ -496,47 +496,46 @@ class FileUploadService
     private function convertHeicToJpg($filePath)
     {
         $heicPath = storage_path("app/public/{$filePath}");
-    
+        
         if (!file_exists($heicPath)) {
-            return $filePath; // Return original if file doesn't exist
+            return $filePath; // Return the original path if the file doesn't exist
         }
-    
-        $extension = pathinfo($filePath, PATHINFO_EXTENSION);
-        if (strtolower($extension) !== 'heic') {
-            return $filePath; // Return original if not HEIC
+        
+        $extension = strtolower(pathinfo($filePath, PATHINFO_EXTENSION));
+        if ($extension !== 'heic') {
+            return $filePath; // Return the original path if it's not HEIC
         }
     
         try {
-            // $image = new Imagick($heicPath);
-            $image = imagecreatefromjpeg($heicPath);
-
-            $image->setImageFormat('jpeg');
-    
-            // Extract the folder, filename, etc.:
-            $dirName     = pathinfo($filePath, PATHINFO_DIRNAME);   // e.g. "some_folder/12345"
-            $baseName    = pathinfo($filePath, PATHINFO_FILENAME);  // e.g. "originalFilename"
-            $jpgFileName = $baseName . '.jpg';
+            // Extract the directory and filename
+            $dirName = pathinfo($filePath, PATHINFO_DIRNAME); // e.g., "some_folder"
+            $baseName = pathinfo($filePath, PATHINFO_FILENAME); // e.g., "originalFilename"
+            $jpgFileName = $baseName . '.jpg'; // e.g., "originalFilename.jpg"
     
             // Construct the NEW path in the SAME folder
             $jpgFilePath = "{$dirName}/{$jpgFileName}";
-    
-            // Save converted file
             $outputPath = storage_path("app/public/{$jpgFilePath}");
-            $image->writeImage($outputPath);
     
-            // Cleanup
-            $image->clear();
-            $image->destroy();
+            // Use ImageMagick CLI to convert HEIC to JPG
+            $command = "magick convert {$heicPath} {$outputPath}";
+            exec($command, $output, $returnCode);
     
-            // Optionally delete the original .heic file
+            // Check if the conversion was successful
+            if ($returnCode !== 0 || !file_exists($outputPath)) {
+                \Log::error("HEIC to JPG conversion failed for file: {$heicPath}");
+                return $filePath; // Fallback to the original path
+            }
+    
+            // Optionally delete the original HEIC file
             unlink($heicPath);
     
-            return $jpgFilePath; // Return the *new* file path in the same directory
+            return $jpgFilePath; // Return the new file path in the same directory
         } catch (\Exception $e) {
             \Log::error("HEIC to JPG conversion failed: " . $e->getMessage());
-            return $filePath; // Fall back to the original path
+            return $filePath; // Fallback to the original path
         }
     }
+    
     
 
     public function identify_doc($filePath)
