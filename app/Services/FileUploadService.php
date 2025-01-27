@@ -496,39 +496,45 @@ class FileUploadService
     private function convertHeicToJpg($filePath)
     {
         $heicPath = storage_path("app/public/{$filePath}");
-       
-        if (!file_exists($heicPath)) {
-            return $filePath; // Return the original path if the file doesn't exist
-        }
         
+        if (!file_exists($heicPath)) {
+            return $filePath; // Return original path if file doesn't exist
+        }
+    
         $extension = strtolower(pathinfo($filePath, PATHINFO_EXTENSION));
         if ($extension !== 'heic') {
-            return $filePath; // Return the original path if it's not HEIC
+            return $filePath; // Return original path if not HEIC
         }
     
         try {
- // Use Intervention Image to open and convert the HEIC file
- $image = Image::make($heicPath);
-        
- // Extract the folder and filename
- $dirName = pathinfo($filePath, PATHINFO_DIRNAME);
- $baseName = pathinfo($filePath, PATHINFO_FILENAME);
- $jpgFileName = $baseName . '.jpg';
- $jpgFilePath = "{$dirName}/{$jpgFileName}";
- $outputPath = storage_path("app/public/{$jpgFilePath}");
-
- // Save as JPEG
- $image->save($outputPath, 90, 'jpg');
-
- // Optionally delete the original HEIC file
- unlink($heicPath);
-
- return $jpgFilePath; // Return the new file path
+            // Load the HEIC file
+            $image = new \Imagick($heicPath);
+            $image->setImageFormat('jpeg');
+    
+            // Extract the folder and filename
+            $dirName = pathinfo($filePath, PATHINFO_DIRNAME);
+            $baseName = pathinfo($filePath, PATHINFO_FILENAME);
+            $jpgFileName = $baseName . '.jpg';
+            $jpgFilePath = "{$dirName}/{$jpgFileName}";
+            $outputPath = storage_path("app/public/{$jpgFilePath}");
+    
+            // Save the converted file
+            $image->writeImage($outputPath);
+    
+            // Cleanup
+            $image->clear();
+            $image->destroy();
+    
+            // Optionally delete the original HEIC file
+            unlink($heicPath);
+    
+            return $jpgFilePath; // Return the new file path
         } catch (\Exception $e) {
-
+            \Log::error("HEIC to JPG conversion failed: " . $e->getMessage());
             return $filePath; // Fallback to the original path
         }
     }
+    
     
     
 
