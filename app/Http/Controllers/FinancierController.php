@@ -19,13 +19,13 @@ class FinancierController extends Controller
             ->leftJoin('etapes as E', 'E.id', '=', 'dossiers.etape_number')
 
             // Left join with dossiers_data, for meta_key = date_depot
-            ->leftJoin('dossiers_data as DD1', function ($join) {
+            ->leftJoin('forms_data as DD1', function ($join) {
                 $join->on('DD1.dossier_id', '=', 'dossiers.id')
                      ->where('DD1.meta_key', '=', 'date_depot');
             })
 
             // Left join with dossiers_data, for meta_key = date_octroi
-            ->leftJoin('dossiers_data as DD2', function ($join) {
+            ->leftJoin('forms_data as DD2', function ($join) {
                 $join->on('DD2.dossier_id', '=', 'dossiers.id')
                      ->where('DD2.meta_key', '=', 'date_octroi');
             })
@@ -37,7 +37,7 @@ class FinancierController extends Controller
             })
 
             // Left join with dossiers_data, for meta_key = date_paiement_anah
-            ->leftJoin('dossiers_data as DD4', function ($join) {
+            ->leftJoin('forms_data as DD4', function ($join) {
                 $join->on('DD4.dossier_id', '=', 'dossiers.id')
                      ->where('DD4.meta_key', '=', 'date_paiement_anah');
             })

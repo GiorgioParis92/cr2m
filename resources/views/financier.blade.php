@@ -3,7 +3,7 @@
 @section('content')
     <div class="container">
         <h1>Liste des dossiers financiers</h1>
-
+      
         <table id="financier-table" class="table table-bordered table-striped">
             <thead>
                 <!-- Original Header Row -->
