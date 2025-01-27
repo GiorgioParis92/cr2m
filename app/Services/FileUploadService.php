@@ -119,7 +119,7 @@ class FileUploadService
 
         $fullPath = storage_path('app/public/' . $filePath);
         // Set the file permissions to 775
-        chmod($fullPath, 0775);
+        // chmod($fullPath, 0775);
         
         // Convert HEIC to JPG if applicable
         $filePath = $this->convertHeicToJpg($filePath);
@@ -138,7 +138,7 @@ class FileUploadService
                 $resizeCommand = "convert $path -resize 800x600\> $thumbnail_path";
                 exec($resizeCommand, $output, $returnCode);
                 if(file_exists($thumbnail_path)) {
-                    chmod($thumbnail_path, 0775);
+                    // chmod($thumbnail_path, 0775);
                 }
      
             }
