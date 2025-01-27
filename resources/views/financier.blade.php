@@ -70,7 +70,7 @@
                 @foreach ($financier as $row)
                     <tr>
                         <td>
-                            <a href="{{ url('dossier/show/' . $row->folder) }}">
+                            <a target="_blank" href="{{ url('dossier/show/' . $row->folder) }}">
                                 {{ $row->beneficiaire_nom . ' ' . $row->beneficiaire_prenom }}
                             </a>
                         </td>
@@ -88,86 +88,74 @@
     </div>
 @endsection
 @section('scripts')
-    <script>
-      $(document).ready(function() {
-    // Initialize DataTable
-    var table = $('#financier-table').DataTable({
-        orderCellsTop: true,
-        fixedHeader: true,
-        responsive: true,
-        "pageLength": 50,
-        order: [
-            [2, 'desc']
-        ],
-        columnDefs: [{
-            targets: 2,
-            visible: false,
-            searchable: false
-        }],
-        language: {
-            url: "//cdn.datatables.net/plug-ins/1.13.4/i18n/fr-FR.json"
-        }
+<script>
+    $(document).ready(function() {
+        // Initialize DataTable with Buttons
+        var table = $('#financier-table').DataTable({
+            dom: 'Bfrtip', // Include buttons in the DOM
+            buttons: [
+                {
+                    extend: 'excel',
+                    text: 'Exporter Excel',
+                    exportOptions: {
+                        columns: ':visible:not(.no-export)' // Exclude columns with class 'no-export'
+                    }
+                },
+                {
+                    extend: 'csv',
+                    text: 'Exporter CSV',
+                    exportOptions: {
+                        columns: ':visible:not(.no-export)' // Exclude columns with class 'no-export'
+                    }
+                },
+                {
+                    extend: 'pdf',
+                    text: 'Exporter PDF',
+                    exportOptions: {
+                        columns: ':visible:not(.no-export)' // Exclude columns with class 'no-export'
+                    }
+                }
+            ],
+            orderCellsTop: true,
+            fixedHeader: true,
+            responsive: true,
+            "pageLength": 50,
+            order: [
+                [2, 'desc']
+            ],
+            columnDefs: [
+                {
+                    targets: 2,
+                    visible: false,
+                    searchable: false
+                }
+            ],
+            language: {
+                url: "//cdn.datatables.net/plug-ins/1.13.4/i18n/fr-FR.json"
+            }
+        });
+
+        // Append filters and update export buttons dynamically
+        $('#select-step').on('change', function() {
+            let val = $.fn.dataTable.util.escapeRegex($(this).val());
+            table.column(1).search(val ? '^' + val + '$' : '', true, false).draw();
+        });
+
+        $('#select-client').on('change', function() {
+            let val = $.fn.dataTable.util.escapeRegex($(this).val());
+            table.column(3).search(val ? '^' + val + '$' : '', true, false).draw();
+        });
+
+        $('#financier-table thead tr:eq(1) th').each(function(i) {
+            let headerCell = $(this);
+            let input = headerCell.find('input');
+
+            if (input.length > 0) {
+                input.on('keyup change', function() {
+                    table.column(i).search(this.value).draw();
+                });
+            }
+        });
     });
-
-    // Étape filter: Dropdown change event
-    $('#select-step').on('change', function() {
-        let val = $.fn.dataTable.util.escapeRegex($(this).val());
-        table.column(1).search(val ? '^' + val + '$' : '', true, false).draw();
-        updateColumnPercentages();
-    });
-    $('#select-client').on('change', function() {
-        let val = $.fn.dataTable.util.escapeRegex($(this).val());
-        table.column(3).search(val ? '^' + val + '$' : '', true, false).draw();
-        updateColumnPercentages();
-    });
-    // Bénéficiaire filter: Text input
-    $('#financier-table thead tr:eq(1) th').each(function(i) {
-        let headerCell = $(this);
-        let input = headerCell.find('input');
-
-        if (input.length > 0) {
-            input.on('keyup change', function() {
-                let value = this.value;
-                table.column(i).search(value).draw();
-                updateColumnPercentages();
-            });
-        }
-    });
-
-    function updateColumnPercentages() {
-    // Get visible column indices
-    var visibleColumns = table.columns(':visible')[0];
-
-    // Loop through each visible column
-    visibleColumns.forEach(function(visibleIndex, actualIndex) {
-        // Skip columns before the 3rd index (adjust based on your column logic)
-        if (visibleIndex < 4) return;
-
-        // Get filtered data for the visible rows in the column
-        let columnData = table.column(visibleIndex, { search: 'applied' }).data();
-
-        // Calculate the percentage of non-empty values
-        let totalRows = columnData.length; // Total rows (visible + filtered)
-        let filledRows = columnData.filter(value => value && value.trim() !== '').length;
-        let percentage = totalRows > 0 ? ((filledRows / totalRows) * 100).toFixed(2) : 0;
-
-        // Find the corresponding header cell in the third row
-        let headerCell = $('#financier-table thead tr:eq(2) th').eq(actualIndex);
-
-        // Update the percentage display
-        headerCell.html(
-            `<span class="percentage-display" style="font-size: 0.9em; color: gray;">${percentage}%</span>`
-        );
-    });
-}
-
-
-    // Update percentages initially and after every table redraw
-    updateColumnPercentages();
-    table.on('draw', function() {
-        updateColumnPercentages();
-    });
-});
-
-    </script>
+</script>
 @endsection
