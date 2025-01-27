@@ -508,7 +508,7 @@ class FileUploadService
     
         try {
  // Use Intervention Image to open and convert the HEIC file
- $image = \Image::make($heicPath);
+ $image = Image::make($heicPath);
         
  // Extract the folder and filename
  $dirName = pathinfo($filePath, PATHINFO_DIRNAME);
