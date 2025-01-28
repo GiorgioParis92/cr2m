@@ -31,6 +31,7 @@ use App\Http\Livewire\Chat;
 use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\ApiRequestController;
 use App\Http\Controllers\FinancierController;
+use App\Http\Controllers\MailboxController;
 
 
 /*
@@ -96,6 +97,7 @@ Route::get('/chat', function () {
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('logout', [LoginController::class, 'logout']);
+    Route::get('/mailbox', [MailboxController::class, 'index'])->name('mailbox');
 
 
     Route::get('password/reset', [ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request');

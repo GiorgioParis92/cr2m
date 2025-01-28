@@ -65,7 +65,10 @@ class User extends Authenticatable
             $user->api_token = Str::random(60);
         });
     }
-    
+    public function mailSettings()
+{
+    return $this->hasOne(UserMailSetting::class);
+}
 public function cards()
 {
     return $this->belongsToMany(Card::class, 'card_user');
