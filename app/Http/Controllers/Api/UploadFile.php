@@ -98,7 +98,7 @@ class UploadFile extends \App\Http\Controllers\Controller
             return response()->json(['error' => 'Failed to create thumbnail'], 500);
         }
         }
-        $config=FormsConfig::where('meta_key',$request->name)->first();
+        $config=FormsConfig::where('name',$request->name)->first();
         $formId= $config->form_id;
 
 
