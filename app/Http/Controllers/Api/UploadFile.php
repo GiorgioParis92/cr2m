@@ -61,7 +61,7 @@ class UploadFile extends \App\Http\Controllers\Controller
             Storage::disk('public')->makeDirectory($directory);
         }
 
-        $fileName = $request->name;
+        $fileName = $request->name.'.'.$extension;
         $filePath = $file->storeAs($directory, $fileName, 'public');
 
         // Save the compressed thumbnail version with a temporary name
@@ -81,7 +81,7 @@ class UploadFile extends \App\Http\Controllers\Controller
             // Set correct permissions for the temporary thumbnail
             chmod($tempThumbnailPath, 0775);
 
-            
+
             // Rename the temporary thumbnail to the original file name
             $finalThumbnailPath = storage_path('app/public/' . $directory . '/' . $fileName);
             rename($tempThumbnailPath, $finalThumbnailPath);
