@@ -29,7 +29,7 @@
         "spipu/html2pdf": "^5.2",
         "symfony/http-kernel": "5.4",
         "tecnickcom/tcpdf": "^6.7",
-        "webklex/laravel-imap": "^2.0"
+        // "webklex/laravel-imap": "^2.0"
     },
     "require-dev": {
         "facade/ignition": "^2.5",
