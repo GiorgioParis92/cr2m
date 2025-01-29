@@ -79,7 +79,7 @@ class UploadFile extends \App\Http\Controllers\Controller
             $image->save($tempThumbnailPath, 75); // 75 is the quality parameter
 
             // Set correct permissions for the temporary thumbnail
-            // chmod($tempThumbnailPath, 0775);
+            chmod($tempThumbnailPath, 0775);
 
             // Rename the temporary thumbnail to the original file name
             $finalThumbnailPath = storage_path('app/public/' . $directory . '/' . $fileName);
