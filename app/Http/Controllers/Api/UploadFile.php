@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
 use App\Models\Beneficiaire;
+use App\Models\FormsConfig;
+use App\Models\FormsData;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
@@ -88,6 +90,23 @@ class UploadFile extends \App\Http\Controllers\Controller
    
             // Delete the original uploaded file
             // Storage::disk('public')->delete($filePath);
+
+            $config=FormsConfig::where('meta_key',$request->name)->first();
+            $formId= $config->form_id;
+
+
+            $update = FormsData::updateOrCreate(
+                [
+                    'dossier_id' => $dossier->id,
+                    'form_id' => $formId,
+                    'meta_key' => $request->name
+                ],
+                [
+                    'meta_value' => $filePath ?? null,
+                ]
+            );
+
+
         } catch (\Exception $e) {
             // If Intervention Image fails, log the error
             error_log("Thumbnail creation error: " . $e->getMessage());
