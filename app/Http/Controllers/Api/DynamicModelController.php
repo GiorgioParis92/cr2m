@@ -6,7 +6,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Str;
-
+use App\Models\Beneficiaire;
+use App\Models\FormsConfig;
+use App\Models\FormsData;
 class DynamicModelController extends \App\Http\Controllers\Controller
 {
     // Resolve the model name dynamically
@@ -185,6 +187,52 @@ public function updateOrInsert(Request $request, $modelName)
         return response()->json(['error' => $e->getMessage()], 500);
     }
 }
+
+public function updateOrInsertValue(Request $request, $modelName)
+{
+
+
+    
+
+    // Retrieve conditions and update data from the request
+
+
+    $updateData['updated_at'] = now();
+    if (!isset($updateData['created_at'])) {
+        $updateData['created_at'] = now();
+    }
+
+    
+    if(isset($request->form_id)) {
+        $formId=$request->form_id;
+    } else {
+        $config=FormsConfig::where('name',$request->name)->first();
+        $formId= $config->form_id;
+    }
+
+    try {
+        $model = $this->getModelInstance($modelName);
+    
+        $update = $model->updateOrInsert(
+            [
+                'dossier_id' => $request->dossier_id,
+                'form_id' => $formId,
+                'meta_key' => $request->name
+            ],
+            [
+                'meta_value' => $request->value ?? null,
+                'updated_at' => now()
+            ]
+        );
+    
+ 
+
+        return response()->json(['message' => 'Operation successful'], 200);
+    } catch (\Exception $e) {
+        return response()->json(['error' => $e->getMessage()], 500);
+    }
+}
+
 
 }
 

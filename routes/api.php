@@ -193,4 +193,5 @@ Route::delete('/{model}/{id}', [DynamicModelController::class, 'destroy']);
 
 
 Route::post('/{model}/updateOrInsert', [DynamicModelController::class, 'updateOrInsert']);
+Route::post('/{model}/update_value', [DynamicModelController::class, 'updateOrInsertValue']);
 });
