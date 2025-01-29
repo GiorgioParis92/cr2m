@@ -70,11 +70,15 @@
             @else
                 <h5>Emails</h5>
                 <ul class="list-group">
+                     @if($emails)
+                    
                     @foreach($emails as $email)
                         <li class="list-group-item">
-                            <strong>{{ $email->subject }}</strong> - {{ $email->sender }}
+                            <strong>{{ $email['subject'] }}</strong> - {{ $email['from'] ?? '' }}
+                            <strong>{{ $email['plainText'] }}</strong>
                         </li>
                     @endforeach
+                    @endif
                 </ul>
             @endif
         </div>

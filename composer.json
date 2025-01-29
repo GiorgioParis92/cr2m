@@ -21,13 +21,15 @@
         "laravel/ui": "^3.4",
         "league/flysystem": "1.1.4",
         "livewire/livewire": "^2.4",
+        "phpmailer/phpmailer": "^6.9",
         "predis/predis": "^2.2",
         "setasign/fpdi": "^2.6",
         "setasign/fpdi-fpdf": "^2.3",
         "spatie/laravel-permission": "^6.7",
         "spipu/html2pdf": "^5.2",
         "symfony/http-kernel": "5.4",
-        "tecnickcom/tcpdf": "^6.7"
+        "tecnickcom/tcpdf": "^6.7",
+        "webklex/laravel-imap": "^2.0"
     },
     "require-dev": {
         "facade/ignition": "^2.5",

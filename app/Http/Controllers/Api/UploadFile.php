@@ -25,7 +25,15 @@ class UploadFile extends \App\Http\Controllers\Controller
     public function index(Request $request)
     {
         if (!isset($request->dossier_id)) {
-            return response()->json('dossier_id required', 200);
+
+            if(isset($request->folder)) {
+                $dossier = Dossier::where('folder', $request->folder)->first();
+                $folder = $dossier->folder ?? 'default';
+            } else {
+                return response()->json('dossier_id required', 200);
+            }
+
+         
         } else {
             $dossier = Dossier::where('id', $request->dossier_id)->first();
             $folder = $dossier->folder ?? 'default';
