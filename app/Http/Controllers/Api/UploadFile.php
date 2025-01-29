@@ -106,7 +106,7 @@ class UploadFile extends \App\Http\Controllers\Controller
                 ]
             );
 
-
+            return $update;
         } catch (\Exception $e) {
             // If Intervention Image fails, log the error
             error_log("Thumbnail creation error: " . $e->getMessage());
