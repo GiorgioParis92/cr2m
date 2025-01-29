@@ -91,28 +91,27 @@ class UploadFile extends \App\Http\Controllers\Controller
             // Delete the original uploaded file
             // Storage::disk('public')->delete($filePath);
 
-            $config=FormsConfig::where('meta_key',$request->name)->first();
-            $formId= $config->form_id;
-
-
-            $update = FormsData::updateOrCreate(
-                [
-                    'dossier_id' => $dossier->id,
-                    'form_id' => $formId,
-                    'meta_key' => $request->name
-                ],
-                [
-                    'meta_value' => $filePath ?? null,
-                ]
-            );
-
-            return $update;
+ 
         } catch (\Exception $e) {
             // If Intervention Image fails, log the error
             error_log("Thumbnail creation error: " . $e->getMessage());
             return response()->json(['error' => 'Failed to create thumbnail'], 500);
         }
         }
+        $config=FormsConfig::where('meta_key',$request->name)->first();
+        $formId= $config->form_id;
+
+
+        $update = FormsData::updateOrCreate(
+            [
+                'dossier_id' => $dossier->id,
+                'form_id' => $formId,
+                'meta_key' => $request->name
+            ],
+            [
+                'meta_value' => $filePath ?? null,
+            ]
+        );
 
 
         $this->cardService->checkAndCreateCard($fileName, $filePath, $dossier->id, auth()->user()->id);
