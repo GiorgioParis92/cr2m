@@ -14,7 +14,7 @@
                     this.connectionType = 'unsupported';
                 } else {
                     this.connectionType = navigator.connection.effectiveType;
-                    alert('ok')
+            
                 }
                 
                 // Push changes up to Livewire
