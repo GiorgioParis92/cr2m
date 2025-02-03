@@ -191,17 +191,6 @@ public function updateOrInsert(Request $request, $modelName)
 public function updateOrInsertValue(Request $request, $modelName)
 {
 
-
-    
-
-    // Retrieve conditions and update data from the request
-
-
-    $updateData['updated_at'] = now();
-    if (!isset($updateData['created_at'])) {
-        $updateData['created_at'] = now();
-    }
-
     
     if(isset($request->form_id)) {
         $formId=$request->form_id;
