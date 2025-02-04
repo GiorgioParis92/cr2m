@@ -5,9 +5,8 @@
 
         <div class="spinner"></div>
     </div>
-    @if(auth()->user()->id==1)
-    <livewire:connection-status />
-    @endif
+
+    
     <div class="container-fluid my-3 py-3">
         @if (session()->has('message'))
             <div class="alert alert-success" id="flashMessage">
