@@ -1197,7 +1197,7 @@
             });
         });
         $(document).on('click', '.generateConfig', function(event) {
-
+            $('.loader-overlay').show();
             var template = $(this).data('template'); // Get the template from data attribute
             var dossier_id = $(this).data('dossier_id'); // Get the dossier ID from data attribute
             var form_id = $(this).data('form_id'); // Get the dossier ID from data attribute
@@ -1221,6 +1221,7 @@
                         'content') // Include CSRF token if using Laravel's CSRF protection
                 },
                 success: function(response) {
+                    $('.loader-overlay').hide();
                     if (response.file_path) {
                         $('#pdfFrame').attr('src', '');
 
@@ -1245,6 +1246,8 @@
                     }
                 },
                 error: function(xhr, status, error) {
+                    $('.loader-overlay').hide();
+
                     console.error('Error generating PDF:', error);
                 }
             });
