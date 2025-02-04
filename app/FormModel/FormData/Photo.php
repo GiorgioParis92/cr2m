@@ -183,48 +183,55 @@ class Photo extends AbstractFormData
 
         
 
-        $text='';
+  
 
-       
-          
-        $text.='<p class="s2" style="padding-top: 5pt;padding-left: 8pt;text-indent: 0pt;text-align: left;">'.$this->config->title.'</p>';
-        $text .= "<div class='row'>";
-      
-       
-        $counter = 0;
-
+        // On prépare la variable d'affichage
+        $text = '';
+        
+        // Titre
+        $text .= '<p class="s2" style="padding-top: 5pt; padding-left: 8pt; text-indent: 0pt; text-align: left;">'
+               . $this->config->title
+               . '</p>';
+        
+        // Compteur pour suivre l'affichage par lot de 3 images
+        $count = 0;
+        
         foreach ($values as $value) {
+            // On construit le chemin du fichier
             $filePath = storage_path('app/public/' . $value);
         
-            // On vérifie que la valeur n'est pas vide et que le fichier existe
+            // Vérification de l'existence du fichier
             if (!empty($value) && file_exists($filePath)) {
-                // On compresse l'image puis on la convertit en Base64
-                $imageData = compressImage($filePath, 70);
-                $src = 'data:image/' . pathinfo($filePath, PATHINFO_EXTENSION) . ';base64,' . $imageData;
-        
-                // Ouvrir une nouvelle ligne tous les 3 éléments
-                if ($counter % 3 === 0) {
-                    // Si ce n'est pas le premier groupe, on ferme la row précédente
-                    if ($counter > 0) {
-                        $text .= '</div>';
-                    }
+                
+                // On ouvre une row si on est sur une nouvelle série de 3 images
+                if ($count % 3 === 0) {
                     $text .= '<div class="row">';
                 }
         
-                // Génération du bloc de l'image
+                // Compression puis conversion en base64
+                $imageData = compressImage($filePath, 70);
+                $extension = pathinfo($filePath, PATHINFO_EXTENSION);
+                $src = 'data:image/' . $extension . ';base64,' . $imageData;
+        
+                // Affichage de l'image
                 $text .= '<div class="col-lg-3" style="width:32%; display:inline-block; vertical-align:top; margin-bottom:5px; margin-right:1%;">';
                 $text .= '<img src="' . $src . '" style="width:100%; height:auto;">';
                 $text .= '</div>';
         
-                $counter++;
+                $count++;
+        
+                // On ferme la row toutes les 3 images
+                if ($count % 3 === 0) {
+                    $text .= '</div>';
+                }
             }
         }
         
-        // On ferme la dernière « row » si au moins un élément a été ajouté
-        if ($counter > 0) {
+        // Si la dernière row n’a pas été refermée (ex. s’il n’y avait pas un multiple exact de 3 images)
+        if ($count % 3 !== 0) {
             $text .= '</div>';
         }
-        $text.='</div>';
+        
     
         return $text;
     }
