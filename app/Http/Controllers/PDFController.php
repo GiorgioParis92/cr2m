@@ -841,7 +841,7 @@ class PDFController extends Controller
         $dompdf->render();
 
         // Set compression level (optional)
-        $dompdf->getCanvas()->get_cpdf()->setCompression(true);
+        // $dompdf->getCanvas()->get_cpdf()->setCompression(true);
 
         // Output the generated PDF as a string
         $pdfOutput = $dompdf->output();
