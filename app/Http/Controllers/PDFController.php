@@ -862,6 +862,7 @@ class PDFController extends Controller
 
         $timeafterstore = microtime(true) - $startTime;
 
+        $this->compressPdfWithGhostscript($filePath, '/screen');
 
 
 
@@ -921,5 +922,18 @@ class PDFController extends Controller
         return $response;
     }
 
-
+    public function compressPdfWithGhostscript($inputPath, $outputPath, $quality = '/screen')
+    {
+        // Échappe les arguments pour éviter tout problème de chemin contenant des espaces
+        $gsCommand = sprintf(
+            'gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 -dPDFSETTINGS=%s -dNOPAUSE -dQUIET -dBATCH -sOutputFile=%s %s',
+            escapeshellarg($quality),
+            escapeshellarg($outputPath),
+            escapeshellarg($inputPath)
+        );
+    
+        shell_exec($gsCommand);
+    
+        return file_exists($outputPath);
+    }
 }
