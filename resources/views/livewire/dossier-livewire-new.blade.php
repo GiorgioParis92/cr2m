@@ -1221,7 +1221,7 @@
                         'content') // Include CSRF token if using Laravel's CSRF protection
                 },
                 success: function(response) {
-                    $('.loader-overlay').hide();
+                 
                     if (response.file_path) {
                         $('#pdfFrame').attr('src', '');
 
@@ -1231,6 +1231,7 @@
                         // Display the PDF in an iframe
                         $('#pdfFrame').attr('src', filePathWithTimestamp);
                         $('#pdfModal').css('display', 'block');
+                        $('.loader-overlay').hide();
                     } else {
                         // Handle the response where the PDF content is returned directly
                         var blob = new Blob([response], {
