@@ -191,28 +191,39 @@ class Photo extends AbstractFormData
         $text .= "<div class='row'>";
       
        
-        foreach($values as $value) {
-            // $value_thumbnail = str_replace('.', '_thumbnail.', $value);
-            // $filePath_thumbnail = storage_path('app/public/' . $value_thumbnail);
-        
-            // if (file_exists($filePath_thumbnail)) {
-            //     $value = $value_thumbnail;
-            // }
-           
+        $counter = 0;
+
+        foreach ($values as $value) {
             $filePath = storage_path('app/public/' . $value);
         
+            // On vérifie que la valeur n'est pas vide et que le fichier existe
             if (!empty($value) && file_exists($filePath)) {
-              
-                // Compress the image and then convert it to Base64
-                $imageData = compressImage($filePath, 70);  // Compress the image with 70% quality for JPEGs
+                // On compresse l'image puis on la convertit en Base64
+                $imageData = compressImage($filePath, 70);
                 $src = 'data:image/' . pathinfo($filePath, PATHINFO_EXTENSION) . ';base64,' . $imageData;
         
-                $text .= "<div class='col-lg-3' style='width:32%;display:inline-block;vertical-align:top;margin-bottom:5px;margin-right:1%'>";
+                // Ouvrir une nouvelle ligne tous les 3 éléments
+                if ($counter % 3 === 0) {
+                    // Si ce n'est pas le premier groupe, on ferme la row précédente
+                    if ($counter > 0) {
+                        $text .= '</div>';
+                    }
+                    $text .= '<div class="row">';
+                }
+        
+                // Génération du bloc de l'image
+                $text .= '<div class="col-lg-3" style="width:32%; display:inline-block; vertical-align:top; margin-bottom:5px; margin-right:1%;">';
                 $text .= '<img src="' . $src . '" style="width:100%; height:auto;">';
                 $text .= '</div>';
+        
+                $counter++;
             }
         }
         
+        // On ferme la dernière « row » si au moins un élément a été ajouté
+        if ($counter > 0) {
+            $text .= '</div>';
+        }
         $text.='</div>';
     
         return $text;
