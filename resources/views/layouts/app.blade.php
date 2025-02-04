@@ -15,34 +15,31 @@
 
 </script>
     <script src="{{ asset('frontend/assets/js/jquery-3.6.0.min.js') }}"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
+    <script src="{{ asset('frontend/assets/js/moment.min.js') }}"></script>
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
-    <!-- Nucleo Icons -->
     <link href="{{ asset('frontend/assets/css/nucleo-icons.css') }}" rel="stylesheet" />
     <link href="{{ asset('frontend/assets/css/nucleo-svg.css') }}" rel="stylesheet" />
-    <!-- Font Awesome Icons -->
-    <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
+
+    {{-- <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script> --}}
+
     <link href="{{ asset('frontend/assets/css/nucleo-svg.css') }}" rel="stylesheet" />
     <link href="{{ asset('frontend/assets/css/custom_css.css') }}" rel="stylesheet" />
-    <!-- CSS Files -->
 
-    {{-- <link id="pagestyle" href="{{ asset('frontend/assets/css/soft-ui-dashboard.css?v=1.0.7') }}" rel="stylesheet" /> --}}
-    {{-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap-theme.min.css" --}}
-        {{-- integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous"> --}}
+    
         <link id="pagestyle" href="{{ asset('frontend/assets/css/bootstrap.min.css') }}" rel="stylesheet" />
         <link id="pagestyle" href="{{ asset('frontend/assets/css/soft.css') }}" rel="stylesheet" />
-        {{-- <link id="pagestyle" href="{{ asset('frontend/assets/css/argon.css') }}" rel="stylesheet" /> --}}
 
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.2/dropzone.min.css" rel="stylesheet">
+
+    <link href="{{ asset('frontend/assets/css/dropzone.min.css') }}" rel="stylesheet">
     <link id="pagestyle" href="{{ asset('frontend/assets/css/jquery-radiocharm.css') }}" rel="stylesheet" />
     <script src="{{ asset('frontend/assets/js/jquery-radiocharm.js') }}"></script>
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <link href="{{ asset('frontend/assets/css/select2.min.css') }}" rel="stylesheet" />
+    <script src="{{ asset('frontend/assets/js/select2.min.js') }}"></script>
     <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.10.0/css/bootstrap-datepicker.min.css"
+        href="{{ asset('frontend/assets/css/bootstrap-datepicker.min.css') }}"
         integrity="sha512-34s5cpvaNG3BknEWSuOncX28vz97bRI59UnVtEEpFX536A7BtZSJHsDyFoCl8S7Dt2TPzcrCEoHBGeM4SUBDBw=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <script src="https://code.jquery.com/ui/1.13.3/jquery-ui.js"></script>
+    <script src="{{ asset('frontend/assets/js/jquery-ui.js') }}"></script>
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/base/jquery-ui.css">
     <link rel="stylesheet" href="{{ asset('css/fontawesome.css') }}">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
