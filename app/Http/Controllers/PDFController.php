@@ -823,11 +823,14 @@ class PDFController extends Controller
         $htmlContent = $this->getTemplateHtml('config', $dossier->id, $config, $title, $content);
 
         // Generate the PDF using Dompdf
-        $options = new Options();
-        $options->set('defaultFont', 'DejaVu Sans'); // Set a default font to avoid embedding multiple fonts
-        $options->set('isFontSubsettingEnabled', true); // Enable font subsetting to embed only used glyphs
-        $options->set('dpi', 72); // Reduce DPI (default is 96)
-        $options->set('isRemoteEnabled', true); // Enable loading remote images
+        $options = new Options([
+            'defaultFont'             => 'DejaVu Sans',
+            'isFontSubsettingEnabled' => true,
+            'dpi'                     => 72,
+            'isRemoteEnabled'         => true,
+            'enable_compression'      => true, // Active la compression si zlib est présent
+            'pdfBackend'              => 'CPDF', // S'assurer d'utiliser CPDF
+        ]);
 
         // Create new Dompdf instance with the defined options
         $dompdf = new Dompdf($options);
