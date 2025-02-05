@@ -26,12 +26,13 @@ class DynamicModelController extends \App\Http\Controllers\Controller
     // Fetch all records with relations
     public function index(Request $request, $modelName)
     {
+    
         $model = $this->getModelInstance($modelName);
         $query = $model::query();
-    
+   
         // Get all relationships of the model
         $relations = $this->getAllRelations($model);
-    
+   
         // Eager load all relationships if any
         if (!empty($relations)) {
             $query->with($relations);
@@ -41,7 +42,7 @@ class DynamicModelController extends \App\Http\Controllers\Controller
         foreach ($request->all() as $field => $value) {
             $query->where($field, $value);
         }
-        dd($query);
+    
         // Apply pagination or return all results
         if ($request->has('paginate')) {
             return response()->json($query->paginate($request->input('paginate')));
@@ -60,9 +61,10 @@ class DynamicModelController extends \App\Http\Controllers\Controller
     {
         $relations = [];
         $reflection = new \ReflectionClass($model);
-    
+ 
         foreach ($reflection->getMethods(\ReflectionMethod::IS_PUBLIC) as $method) {
             // Skip methods not declared in this class
+            // dump($method);
             if ($method->class != get_class($model)) {
                 continue;
             }
@@ -82,7 +84,7 @@ class DynamicModelController extends \App\Http\Controllers\Controller
                 // Ignore methods that cannot be invoked
             }
         }
-    
+        // dd($reflection);
         return $relations;
     }
     

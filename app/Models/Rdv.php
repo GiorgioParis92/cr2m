@@ -13,7 +13,7 @@ class Rdv extends Model
 
     public function status()
     {
-        return $this->hasOne(RdvStatus::class, 'id','status');
+        return $this->has(RdvStatus::class, 'id','status');
     }
     public function user()
     {

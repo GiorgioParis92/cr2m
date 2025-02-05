@@ -73,6 +73,6 @@ class Users extends Authenticatable
     
 public function cards()
 {
-    return $this->belongsToMany(Card::class, 'card_user');
+    // return $this->belongsToMany(Card::class, 'card_user');
 }
 }
