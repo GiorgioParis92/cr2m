@@ -16,8 +16,7 @@ class Generate extends AbstractFormData
             $optionsArray = [];
         }
 
-        print_r($optionsArray);
-        print_r($this->config);
+        
         if (isset($optionsArray['on_generation'])) {
             $generation = $optionsArray['on_generation'];
         } else {
