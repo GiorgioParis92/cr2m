@@ -43,6 +43,8 @@ class Kernel extends HttpKernel
             \App\Http\Middleware\ShareClientData::class,
             \App\Http\Middleware\LoadUserRelations::class,
             \App\Http\Middleware\SetCssVariables::class,
+            \App\Http\Middleware\DebugModeMiddleware::class,
+
 
 
 

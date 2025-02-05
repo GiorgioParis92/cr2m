@@ -2,6 +2,9 @@
 
 
 @section('content')
+
+
+
 @include('frontend.content')
 
 @endsection
