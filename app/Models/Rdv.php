@@ -13,8 +13,9 @@ class Rdv extends Model
 
     public function status()
     {
-        return $this->has(RdvStatus::class, 'id','status');
+        return $this->belongsTo(RdvStatus::class, 'status');
     }
+    
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
