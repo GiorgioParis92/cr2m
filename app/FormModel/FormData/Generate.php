@@ -16,7 +16,7 @@ class Generate extends AbstractFormData
             $optionsArray = [];
         }
 
-        
+
         if (isset($optionsArray['on_generation'])) {
             $generation = $optionsArray['on_generation'];
         } else {
@@ -50,7 +50,7 @@ class Generate extends AbstractFormData
         $extension = explode('.', $this->value);
 
 
-        if((isset($check_status) && $check_status->meta_value!='finish') || !isset($check_status) && !empty($this->value)) {
+        if((isset($check_status) && $check_status->meta_value!='finish') || !isset($check_status)) {
         $data .= '<button type="button" class="btn btn-secondary btn-view generatePdfButton"
        
   
@@ -72,7 +72,7 @@ class Generate extends AbstractFormData
         $data .= '<td class="w-30" ><div >';
 
 
-        if ($this->value && !empty($this->value)) {
+        if ($this->value) {
             $extension = explode('.', $this->value);
 
 
@@ -206,7 +206,7 @@ class Generate extends AbstractFormData
 
 
         $data .= '<td class="align-middle text-sm">';
-        if((isset($check_status) && $check_status->meta_value!='finish') || !isset($check_status) && !empty($this->value)) {
+        if((isset($check_status) && $check_status->meta_value!='finish') || !isset($check_status)) {
             $data .= '<form method="post" action="' . route("upload_file", ["form_id" => $this->form_id, "folder" => "dossiers", "upload_image" => "dossiers", "clientId" => ($this->dossier->folder ?? $this->dossier_id), "template" => $this->name]) . '" class="dropzone dropzone_button bg-primary" id="dropzone-' . $this->name . '">';
             $data .= csrf_field(); // This will generate the CSRF token input field
             $data .= '<input type="hidden" name="template" value="'.$this->name.'">';
