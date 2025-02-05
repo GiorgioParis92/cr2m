@@ -30,17 +30,25 @@ class DynamicModelController extends \App\Http\Controllers\Controller
         $model = $this->getModelInstance($modelName);
         $query = $model::query();
    
-        // Get all relationships of the model
+
+        if(!(isset($request->relations) || $request->relations==true)) {
+                    // Get all relationships of the model
         $relations = $this->getAllRelations($model);
    
+
+
         // Eager load all relationships if any
         if (!empty($relations)) {
             $query->with($relations);
         }
+        }
+
     
         // Apply filters dynamically based on request
         foreach ($request->all() as $field => $value) {
+            if ($field != 'relations') {
             $query->where($field, $value);
+            }
         }
     
         // Apply pagination or return all results
