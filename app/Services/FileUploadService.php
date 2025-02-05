@@ -102,7 +102,7 @@ class FileUploadService
         if ($request->has('template')) {
             $extension = $file->getClientOriginalExtension();
             if ($random_name) {
-                $fileName = $request->input('template') . time() . '.' . $extension;
+                $fileName = $request->input('template') . time() .uniqid() . '.' . $extension;
                 // $fileName = $request->input('template') . '.' . $extension;
 
             } else {
