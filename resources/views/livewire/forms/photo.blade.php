@@ -89,7 +89,7 @@
                                 $data .='<i 
                                 data-dossier_id="' . $dossier_id .
                                 '" data-tag="' .
-                                ($tag ?? $conf['name']) .
+                                ($conf['name']) .
                                 '" data-index="' .
                                 ($index ?? '') .
                                 '" data-val="' .
