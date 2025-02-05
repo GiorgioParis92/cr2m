@@ -28,6 +28,6 @@ class Forms extends Model
 
     public function formsConfig()
     {
-        return $this->hasMany(FormConfig::class);
+        return $this->hasMany(FormConfig::class, 'form_id');
     }
 }
