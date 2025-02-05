@@ -41,7 +41,7 @@ class DynamicModelController extends \App\Http\Controllers\Controller
         foreach ($request->all() as $field => $value) {
             $query->where($field, $value);
         }
-    
+        dd($query);
         // Apply pagination or return all results
         if ($request->has('paginate')) {
             return response()->json($query->paginate($request->input('paginate')));
