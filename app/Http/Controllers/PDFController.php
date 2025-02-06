@@ -877,7 +877,7 @@ class PDFController extends Controller
         $timeafterstore = microtime(true) - $startTime;
         
         // Compress the PDF
-        $this->compressPdfWithGhostscript($absolutePath, $absolutePath, '/screen');
+        // $this->compressPdfWithGhostscript($absolutePath, $absolutePath, '/screen');
         
 
 
