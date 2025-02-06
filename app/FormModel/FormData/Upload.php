@@ -32,7 +32,7 @@ class Upload extends AbstractFormData
             ->where('meta_key', $this->name.'_identify')
             ->first();
            
-            dump($check_identify);
+            // dump($check_identify);
 
             if($check_identify->meta_value) {
                 
@@ -158,7 +158,7 @@ class Upload extends AbstractFormData
         }
 
 
-        if(empty($identify_array) && $check) {
+        if(empty($identify_array) && $check_identify) {
             $data .= '<tr>';
             $data .= '<td colspan="4" style="text-align:center">';
             $data.='<div class="txt-center alert alert-warning font-weight-bold  text-white " role="alert">
