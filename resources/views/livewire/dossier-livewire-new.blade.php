@@ -1250,7 +1250,7 @@
                     }
                 },
                 error: function(xhr, status, error) {
-                    $('.loader-overlay').hide();
+                    // $('.loader-overlay').hide();
 
                     console.error('Error generating PDF:', error);
                 }
