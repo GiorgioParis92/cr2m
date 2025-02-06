@@ -419,10 +419,12 @@ class FileUploadService
             [
                 'dossier_id' => '' . $dossier->id . '',
                 'form_id' => '' . $form_id . '',
+                // 'meta_key' => '' . $request->input('template') . '_identify'
                 'meta_key' => '' . $request->input('template') . '_identify'
             ],
             [
-                'meta_value' => '' . json_encode($apiResponse) . '',
+                // 'meta_value' => '' . json_encode($apiResponse) . '',
+                'meta_value' => 'ok',
                 'created_at' => now(),
                 'updated_at' => now()
             ]
