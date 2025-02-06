@@ -860,10 +860,13 @@ class PDFController extends Controller
         // $absolutePath = storage_path("app/public/{$directPath}/{$fileName}"); // Absolute path
 
         $fileName = ($template_name ?? 'document') . ".pdf";
+        $outputName = ('xxx'.$template_name ?? 'document') . ".pdf";
         $filePath = "{$folderPath}/{$fileName}";
         // Define storage paths
         $relativePath = "public/{$directPath}/{$fileName}";  // Relative path for Laravel Storage
+        $relativePath_output = "public/{$directPath}/{$outputName}";  // Relative path for Laravel Storage
         $absolutePath = storage_path("app/{$relativePath}"); // Absolute path for Ghostscript
+        $absolutePath_output = storage_path("app/{$relativePath_output}"); // Absolute path for Ghostscript
         
         // Store the PDF file correctly
         Storage::put($relativePath, $pdfOutput);
@@ -877,7 +880,7 @@ class PDFController extends Controller
         $timeafterstore = microtime(true) - $startTime;
         
         // Compress the PDF
-        // $this->compressPdfWithGhostscript($absolutePath, $absolutePath, '/screen');
+        $this->compressPdfWithGhostscript($absolutePath, $absolutePath_output, '/screen');
         
 
 
