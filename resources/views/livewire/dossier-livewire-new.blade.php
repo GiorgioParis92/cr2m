@@ -1,6 +1,6 @@
 <div>
 
-    <div wire:loading wire:target="add_row,remove_row,display_form,setTab,set_form"
+    <div wire:loading wire:target="add_row,remove_row,display_form,setTab,handleFieldUpdated,set_form"
         class="loader-overlay">
 
         <div class="spinner"></div>
@@ -1203,7 +1203,7 @@
             var config_id = $(this).data('config_id'); // Get the dossier ID from data attribute
             var generation = $(this).data('generation'); // Get the dossier ID from data attribute
             var title = $(this).data('title'); // Get the dossier ID from data attribute
-            console.log(form_id);
+            console.log('show');
             $.ajax({
                 url: '/api/generate-config', // Adjust this URL to your actual API endpoint
                 type: 'POST',
@@ -1230,6 +1230,7 @@
                         // Display the PDF in an iframe
                         $('#pdfFrame').attr('src', filePathWithTimestamp);
                         $('#pdfModal').css('display', 'block');
+                        console.log('hide');
                         // $('.loader-overlay').hide();
                     } else {
                         // Handle the response where the PDF content is returned directly
