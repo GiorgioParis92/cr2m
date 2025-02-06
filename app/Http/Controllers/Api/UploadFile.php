@@ -27,7 +27,7 @@ class UploadFile extends \App\Http\Controllers\Controller
     // Fetch all beneficiaires with dynamic filtering
     public function index(Request $request)
     {
-        dd($request);
+       
         if (!isset($request->dossier_id)) {
 
             if(isset($request->folder)) {

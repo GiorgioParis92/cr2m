@@ -87,7 +87,7 @@ class Upload extends AbstractFormData
         $data .= '<div class="dz-message"><i class="fas fa-arrow-up"></i> Upload';
 
         $data .= '</div>';
-        $data .= '</form>';
+        $data .= '</form>11';
 
         $data .= '</td>';
         $data .= '</tr>';
