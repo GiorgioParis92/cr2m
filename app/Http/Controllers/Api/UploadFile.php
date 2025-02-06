@@ -64,6 +64,7 @@ class UploadFile extends \App\Http\Controllers\Controller
             Storage::disk('public')->makeDirectory($directory);
         }
 
+        
         $fileName = $request->name.'.'.$extension;
         $filePath = $file->storeAs($directory, $fileName, 'public');
 
