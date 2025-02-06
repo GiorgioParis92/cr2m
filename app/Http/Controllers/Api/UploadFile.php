@@ -134,7 +134,7 @@ class UploadFile extends \App\Http\Controllers\Controller
     
         return response()->json([
             'file_path' => $directory . '/' . $fileName,
-            'identification_response' => $apiResponse
+            'identification_response' => $apiResponse ?? ''
         ], 200);
     }
 
