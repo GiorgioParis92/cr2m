@@ -415,10 +415,10 @@ class FileUploadService
         $apiResponse = $response->json();
 
 
-    return response()->json([
-        'file_path' => $directory . '/' . $pdfFileName,
-        'identification_response' => $apiResponse ?? ''
-    ], 200);
+    // return response()->json([
+    //     'file_path' => $directory . '/' . $pdfFileName,
+    //     'identification_response' => $apiResponse ?? ''
+    // ], 200);
 
         return $filePath;
 
