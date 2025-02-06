@@ -228,6 +228,11 @@ class Photo extends AbstractFormData
                 // Display image
                 $text .= '<div class="col-lg-3" style="width:32%; display:inline-block; vertical-align:top; margin-bottom:5px; margin-right:1%;">';
                 $text .= '<img src="' . $src . '" style="width:100%; height:auto;">';
+
+                if (Storage::exists('public/' . $thumbnailPath)) {
+                    $text.='..';
+                }
+
                 $text .= '</div>';
     
                 $count++;
@@ -243,9 +248,7 @@ class Photo extends AbstractFormData
         if ($count % 3 !== 0) {
             $text .= '</div>';
         }
-        if (Storage::exists('public/' . $thumbnailPath)) {
-            $text.='..';
-        }
+
         return $text;
     }
     
