@@ -860,7 +860,7 @@ class PDFController extends Controller
         // $absolutePath = storage_path("app/public/{$directPath}/{$fileName}"); // Absolute path
 
         $fileName = ($template_name ?? 'document') . ".pdf";
-
+        $filePath = "{$folderPath}/{$fileName}";
         // Define storage paths
         $relativePath = "public/{$directPath}/{$fileName}";  // Relative path for Laravel Storage
         $absolutePath = storage_path("app/{$relativePath}"); // Absolute path for Ghostscript
