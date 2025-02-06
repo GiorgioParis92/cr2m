@@ -163,37 +163,38 @@ class Photo extends AbstractData
   
         // Convert any existing HEIC to JPG
         $updatedValues = [];
-        if(isset($values) && !empty($values)) {
-        foreach ($values as $originalPath) {
-            // If null or empty, skip
-            if (!$originalPath) {
-                continue;
-            }
-    
-            $extension = strtolower(pathinfo($originalPath, PATHINFO_EXTENSION));
-            $thumbnailFileName = pathinfo($originalPath, PATHINFO_FILENAME) . '_thumbnail.' . $extension;
-            // $thumbnail_path = storage_path('app/public/' . $directory . '/' . $thumbnailFileName);
-            print_r($thumbnailFileName);
-            if(file_exists($thumbnailFileName)) {
-               print_r('ok');
-            }
-            if ($extension === 'heic') {
-                // Convert from HEIC to JPG
-                $convertedPath = $this->convertHeicToJpg($originalPath);
-                
-                // If conversion was successful and the path changed, store only the converted
-                if ($convertedPath && $convertedPath !== $originalPath) {
-                    $updatedValues[] = $convertedPath;
+        if (isset($values) && !empty($values)) {
+            $updatedValues = [];
+        
+            foreach ($values as $originalPath) {
+                // Skip null or empty values
+                if (!$originalPath) {
+                    continue;
+                }
+        
+                $extension = strtolower(pathinfo($originalPath, PATHINFO_EXTENSION));
+                $thumbnailFileName = pathinfo($originalPath, PATHINFO_FILENAME) . '_thumbnail.' . $extension;
+                $thumbnailPath = storage_path("app/public/dossiers/".$this->dossiers->folder."/{$thumbnailFileName}");
+        
+                // Check if thumbnail exists
+                if (file_exists($thumbnailPath)) {
+                    $updatedValues[] = $thumbnailPath;
+                    continue; // Skip further processing
+                }
+        
+                if ($extension === 'heic') {
+                    // Convert HEIC to JPG
+                    $convertedPath = $this->convertHeicToJpg($originalPath);
+        
+                    // If conversion was successful, store the converted path
+                    $updatedValues[] = $convertedPath ?: $originalPath;
                 } else {
-                    // If something went wrong or no change, keep the original
+                    // Keep original path for non-HEIC files
                     $updatedValues[] = $originalPath;
                 }
-            } else {
-                // For non-HEIC, just keep the original path
-                $updatedValues[] = $originalPath;
             }
         }
-    }
+        
      
         // Persist the updated list to the DB if changes happened
         if (!empty($updatedValues) && ($updatedValues !== $values)) {
