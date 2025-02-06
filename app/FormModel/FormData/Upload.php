@@ -32,16 +32,18 @@ class Upload extends AbstractFormData
             ->where('meta_key', $this->name.'_identify')
             ->first();
            
+            dump($check_identify);
+
             if($check_identify->meta_value) {
                 
                 $identify_array=(json_decode($check_identify->meta_value));
             
                 $result_value=$identify_array->document->data->identification_results->results->document_identification->value;
                 $result_score=$identify_array->document->data->identification_results->results->document_identification->score;
-                dump($check_identify->meta_value);
-                if(!empty($check_identify->meta_value)) {
+              
+              
                     $check=true;
-                }
+                
 
             }
 
