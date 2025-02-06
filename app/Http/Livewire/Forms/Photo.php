@@ -182,18 +182,20 @@ class Photo extends AbstractData
                 if (file_exists($thumbnailAbsolutePath)) {
                     $updatedValues[] = $thumbnailPath;
                     continue; // Skip further processing
-                }
-        
-                if ($extension === 'heic') {
-                    // Convert HEIC to JPG
-                    $convertedPath = $this->convertHeicToJpg($originalPath);
-        
-                    // If conversion was successful, store the converted path
-                    $updatedValues[] = $convertedPath ?: $originalPath;
                 } else {
-                    // Keep original path for non-HEIC files
-                    $updatedValues[] = $originalPath;
+                    if ($extension === 'heic') {
+                        // Convert HEIC to JPG
+                        $convertedPath = $this->convertHeicToJpg($originalPath);
+            
+                        // If conversion was successful, store the converted path
+                        $updatedValues[] = $convertedPath ?: $originalPath;
+                    } else {
+                        // Keep original path for non-HEIC files
+                        $updatedValues[] = $originalPath;
+                    }
                 }
+        
+
             }
         }
         
