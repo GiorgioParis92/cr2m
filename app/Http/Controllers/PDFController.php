@@ -859,9 +859,8 @@ class PDFController extends Controller
         $filePath = "{$folderPath}/{$fileName}";
         $absolutePath = storage_path("app/{$directPath}/{$fileName}"); // Absolute path
 
-        if(auth()->user()->id==1) {
             dd($absolutePath);
-        }
+        
         
 
         $directPath = "{$directPath}/{$fileName}";
