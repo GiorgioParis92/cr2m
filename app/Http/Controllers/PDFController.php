@@ -857,12 +857,16 @@ class PDFController extends Controller
         // Save the PDF file to the folder
         $fileName = ($template_name ?? 'document') . ".pdf";
         $filePath = "{$folderPath}/{$fileName}";
+        $absolutePath = storage_path("app/{$directPath}/{$fileName}"); // Absolute path
+
+        
+
         $directPath = "{$directPath}/{$fileName}";
         Storage::put($filePath, $pdfOutput);
 
         $timeafterstore = microtime(true) - $startTime;
 
-        $this->compressPdfWithGhostscript($filePath, 'xx'.$filePath,'/screen');
+        $this->compressPdfWithGhostscript($absolutePath, $absolutePath,'/screen');
 
 
 
