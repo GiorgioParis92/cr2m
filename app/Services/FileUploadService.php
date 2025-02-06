@@ -403,6 +403,23 @@ class FileUploadService
 
 
         if(file_exists(storage_path("app/public/{$directory}/{$pdfFileName}")) ) {
+
+
+            $update = DB::table('forms_data')->updateOrInsert(
+                [
+                    'dossier_id' => '' . $dossier->id . '',
+                    'form_id' => '' . $form_id . '',
+                    // 'meta_key' => '' . $request->input('template') . '_identify'
+                    'meta_key' => '' . $request->input('template') . '_identify'
+                ],
+                [
+                    'meta_value' => '',
+                    // 'meta_value' => 'ok',
+                    'created_at' => now(),
+                    'updated_at' => now()
+                ]
+            );
+
         $fullFilePath = storage_path("app/public/{$directory}/{$pdfFileName}");
     
         $response = Http::withHeaders([
@@ -415,20 +432,23 @@ class FileUploadService
 
         $apiResponse = $response->json();
 
-        $update = DB::table('forms_data')->updateOrInsert(
-            [
-                'dossier_id' => '' . $dossier->id . '',
-                'form_id' => '' . $form_id . '',
-                // 'meta_key' => '' . $request->input('template') . '_identify'
-                'meta_key' => '' . $request->input('template') . '_identify'
-            ],
-            [
-                'meta_value' => '' . json_encode($apiResponse) . '',
-                // 'meta_value' => 'ok',
-                'created_at' => now(),
-                'updated_at' => now()
-            ]
-        );
+        if($apiResponse) {
+            $update = DB::table('forms_data')->updateOrInsert(
+                [
+                    'dossier_id' => '' . $dossier->id . '',
+                    'form_id' => '' . $form_id . '',
+                    // 'meta_key' => '' . $request->input('template') . '_identify'
+                    'meta_key' => '' . $request->input('template') . '_identify'
+                ],
+                [
+                    'meta_value' => '' . json_encode($apiResponse) . '',
+                    // 'meta_value' => 'ok',
+                    'created_at' => now(),
+                    'updated_at' => now()
+                ]
+            );
+        }
+
 
         }
 

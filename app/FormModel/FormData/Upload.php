@@ -15,6 +15,7 @@ class Upload extends AbstractFormData
         $identify_array=[];
         $result_value=false;
         $result_score=false;
+        $check_identify=false;
         $wireModel = "formData.{$this->form_id}.{$this->name}";
 
         // print_r($this->config->options ?? '');
@@ -118,6 +119,7 @@ class Upload extends AbstractFormData
         $data .= '</tr>';
 
 
+        if($check_identify) {
         if(!empty($identify_array) && $result_value==$this->name) {
            
             
@@ -145,7 +147,7 @@ class Upload extends AbstractFormData
             $data .= '</tr>';
         }
 
-
+        }
         return $data;
     }
 
