@@ -857,7 +857,7 @@ class PDFController extends Controller
         // Save the PDF file to the folder
         $fileName = ($template_name ?? 'document') . ".pdf";
         $filePath = "{$folderPath}/{$fileName}";
-        $absolutePath = storage_path("app/{$directPath}/{$fileName}"); // Absolute path
+        $absolutePath = storage_path("app/public/{$directPath}/{$fileName}"); // Absolute path
 
         
         
