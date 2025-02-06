@@ -155,7 +155,7 @@ class Upload extends AbstractFormData
             $data .= '</tr>';
         }
 
-        }
+    
 
 
         if(empty($identify_array) && $check_identify) {
@@ -167,6 +167,7 @@ class Upload extends AbstractFormData
             $data .= '</td>';
             $data .= '</tr>';
         }
+    }
 
         return $data;
     }
