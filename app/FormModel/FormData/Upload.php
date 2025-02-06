@@ -30,7 +30,7 @@ class Upload extends AbstractFormData
             $check_identify =  FormsData::where('dossier_id', $this->dossier_id)
             ->where('meta_key', $this->name.'_identify')
             ->value('meta_value');
-
+            dump($check_identify);
             if($check_identify) {
                 $identify_array=(json_decode($check_identify));
             
