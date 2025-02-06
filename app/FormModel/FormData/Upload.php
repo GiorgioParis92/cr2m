@@ -15,7 +15,7 @@ class Upload extends AbstractFormData
 
         $wireModel = "formData.{$this->form_id}.{$this->name}";
 
-
+        print_r($this->config);
         $data = '<tr>';
 
 
