@@ -38,8 +38,8 @@ class Upload extends AbstractFormData
                 
                 $identify_array=(json_decode($check_identify->meta_value));
             
-                $result_value=$identify_array->document->data->identification_results->results->document_identification->value;
-                $result_score=$identify_array->document->data->identification_results->results->document_identification->score;
+                $result_value=$identify_array->document->data->identification_results->results->document_identification->value ?? '';
+                $result_score=$identify_array->document->data->identification_results->results->document_identification->score ?? '';
               
               
                     $check=true;
