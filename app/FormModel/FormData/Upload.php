@@ -149,7 +149,7 @@ class Upload extends AbstractFormData
             $data .= '<tr>';
             $data .= '<td colspan="4" style="text-align:center">';
             $data.='<div class="txt-center alert alert-danger font-weight-bold  text-white " role="alert">
-              <strong>Le document n\'a pas été identifié par OCEER comme '.$this->name.'</strong>
+              <strong>Le document n\'a pas été identifié par OCEER comme '.$this->config->title.'</strong>
             </div>';
             $data .= '</td>';
             $data .= '</tr>';
