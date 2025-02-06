@@ -968,6 +968,11 @@ class PDFController extends Controller
             throw new \Exception("Ghostscript failed: Output PDF was not generated.");
         }
     
+        // Replace the original file with the compressed version
+        if (!rename($outputPath, $inputPath)) {
+            throw new \Exception("Failed to replace original PDF with compressed version.");
+        }
+    
         return true;
     }
     
