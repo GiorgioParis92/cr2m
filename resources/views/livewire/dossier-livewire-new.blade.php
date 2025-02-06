@@ -5,7 +5,10 @@
 
         <div class="spinner"></div>
     </div>
+    <div id="loader-overlay"  class="loader-overlay" style="display:none">
 
+        <div class="spinner"></div>
+    </div>
     
     <div class="container-fluid my-3 py-3">
         @if (session()->has('message'))
@@ -1196,7 +1199,7 @@
             });
         });
         $(document).on('click', '.generateConfig', function(event) {
-            $('.loader-overlay').show();
+            $('#loader-overlay').show();
             var template = $(this).data('template'); // Get the template from data attribute
             var dossier_id = $(this).data('dossier_id'); // Get the dossier ID from data attribute
             var form_id = $(this).data('form_id'); // Get the dossier ID from data attribute
@@ -1231,7 +1234,7 @@
                         $('#pdfFrame').attr('src', filePathWithTimestamp);
                         $('#pdfModal').css('display', 'block');
                         console.log('hide');
-                        // $('.loader-overlay').hide();
+                        $('#loader-overlay').hide();
                     } else {
                         // Handle the response where the PDF content is returned directly
                         var blob = new Blob([response], {
