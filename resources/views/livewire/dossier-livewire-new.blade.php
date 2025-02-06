@@ -1,6 +1,6 @@
 <div>
 
-    <div wire:loading wire:target="add_row,remove_row,display_form,setTab,handleFieldUpdated,set_form"
+    <div wire:loading wire:target="add_row,remove_row,display_form,setTab,set_form"
         class="loader-overlay">
 
         <div class="spinner"></div>
