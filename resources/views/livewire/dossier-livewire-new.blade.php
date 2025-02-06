@@ -582,7 +582,6 @@
 <script>
     document.addEventListener('DOMContentLoaded', function(event) {
         document.addEventListener('livewire:load', () => {
-            console.log('livewire loaded');
             initAllDropzones();
         });
     });
@@ -1339,7 +1338,6 @@
 
     });
     document.addEventListener('livewire:load', function() {
-        console.log('livewire loaded')
         initializeDeleteButtons();
         initAllDropzones();
 

@@ -164,7 +164,6 @@
 
             });
             document.addEventListener('livewire:load', function() {
-                console.log('livewire loaded')
                 initializeDeleteButtons();
                 initAllDropzones();
 
