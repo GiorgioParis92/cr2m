@@ -893,7 +893,7 @@ class PDFController extends Controller
                 'meta_key' => $request->template
             ],
             [
-                'meta_value' => $directPath
+                'meta_value' => $directPath.'/'.$fileName
             ]
         );
 
