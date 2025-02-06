@@ -193,8 +193,21 @@ class Photo extends AbstractFormData
         foreach ($values as $value) {
             $filePath = storage_path('app/public/' . $value);
     
+            $thumbnailPath = preg_replace('/(\.\w+)$/', '_thumbnail$1', $value); // Append '_thumbnail' before the file extension
+
+            if (Storage::exists('public/' . $thumbnailPath)) {
+                $filePath = storage_path('app/public/' . $thumbnailPath);
+            } else {
+                $filePath = storage_path('app/public/' . $value);
+            }
+
+
             // Check if the file exists
             if (!empty($value) && file_exists($filePath)) {
+
+
+
+
                 $fileSize = filesize($filePath);
     
                 // If file is an image and larger than 1MB, compress it
