@@ -402,7 +402,7 @@ class FileUploadService
         }
 
 
-        if(file_exists($pdfFilePath) && $request->identify) {
+        if(file_exists($pdfFilePath) ) {
         $fullFilePath = storage_path("app/public/{$directory}/{$pdfFileName}");
     
         $response = Http::withHeaders([
@@ -414,7 +414,7 @@ class FileUploadService
           ->post('https://app.oceer.fr/api/pipeline/start/ce082c1e-e940-4b92-b7c8-9ac3effc6602');
 
         $apiResponse = $response->json();
-dd($apiResponse);
+
         $update = DB::table('forms_data')->updateOrInsert(
             [
                 'dossier_id' => '' . $dossier->id . '',
@@ -423,8 +423,8 @@ dd($apiResponse);
                 'meta_key' => '' . $request->input('template') . '_identify'
             ],
             [
-                // 'meta_value' => '' . json_encode($apiResponse) . '',
-                'meta_value' => 'ok',
+                'meta_value' => '' . json_encode($apiResponse) . '',
+                // 'meta_value' => 'ok',
                 'created_at' => now(),
                 'updated_at' => now()
             ]
