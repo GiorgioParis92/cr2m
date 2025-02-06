@@ -1230,7 +1230,7 @@
                         // Display the PDF in an iframe
                         $('#pdfFrame').attr('src', filePathWithTimestamp);
                         $('#pdfModal').css('display', 'block');
-                        $('.loader-overlay').hide();
+                        // $('.loader-overlay').hide();
                     } else {
                         // Handle the response where the PDF content is returned directly
                         var blob = new Blob([response], {
@@ -1360,7 +1360,6 @@
             var formId = dropzoneElement.getAttribute('data-form-id');
             var tag = dropzoneElement.getAttribute('data-tag');
             var title = dropzoneElement.getAttribute('data-title');
-            console.log('dropzone')
             var dz = new Dropzone(dropzoneElement, {
                 url: uploadUrl,
                 method: 'post',
