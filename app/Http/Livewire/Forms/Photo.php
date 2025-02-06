@@ -175,7 +175,7 @@ class Photo extends AbstractData
                 $extension = strtolower(pathinfo($originalPath, PATHINFO_EXTENSION));
                 $thumbnailFileName = pathinfo($originalPath, PATHINFO_FILENAME) . '_thumbnail.' . $extension;
                 $thumbnailAbsolutePath = storage_path("app/public/dossiers/".$this->dossier->folder."/{$thumbnailFileName}");
-                $thumbnailPath = "storage/dossiers/{$this->dossier->folder}/{$thumbnailFileName}";
+                $thumbnailPath = "dossiers/{$this->dossier->folder}/{$thumbnailFileName}";
 
         
                 // Check if thumbnail exists
