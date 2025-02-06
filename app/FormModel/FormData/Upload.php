@@ -124,6 +124,18 @@ class Upload extends AbstractFormData
             $data .= '</tr>';
         }
 
+
+        if(!empty($identify_array) && $result_value!=$this->name) {
+           
+            
+            $data .= '<tr>';
+            $data .= '<td colspan="3">';
+            $data.='Le document n\'a pas été identifié par OCEER comme '.$this->name.' ';
+            $data .= '</td>';
+            $data .= '</tr>';
+        }
+
+
         return $data;
     }
 
