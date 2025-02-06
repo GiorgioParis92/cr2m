@@ -12,8 +12,9 @@ class Upload extends AbstractFormData
     {
 
         $data = '';
-// print_r($this);
-
+        $identify_array=[];
+        $result_value=false;
+        $result_score=false;
         $wireModel = "formData.{$this->form_id}.{$this->name}";
 
         // print_r($this->config->options ?? '');
@@ -29,7 +30,11 @@ class Upload extends AbstractFormData
             ->where('meta_key', $this->name.'_identify')
             ->value('meta_value');
             $identify_array=(json_decode($check_identify));
-            print_r($identify_array);
+            
+            $result_value=$identify_array['document']['data']['identification_results']['results']['document_identification']['value'];
+            $result_score=$identify_array['document']['data']['identification_results']['results']['document_identification']['score'];
+
+
         }
 
         $data = '<tr>';
@@ -107,6 +112,17 @@ class Upload extends AbstractFormData
 
         $data .= '</td>';
         $data .= '</tr>';
+
+
+        if(!empty($identify_array)) {
+           
+            
+            $data .= '<tr>';
+            $data .= '<td colspan="3">';
+            $data.='Document identifié par OCEER : ';
+            $data .= '</td>';
+            $data .= '</tr>';
+        }
 
         return $data;
     }
