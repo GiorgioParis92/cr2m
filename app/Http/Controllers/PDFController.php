@@ -926,11 +926,12 @@ class PDFController extends Controller
     {
         // Échappe les arguments pour éviter tout problème de chemin contenant des espaces
         $gsCommand = sprintf(
-            'gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 -dPDFSETTINGS=%s -dNOPAUSE -dQUIET -dBATCH -sOutputFile=%s %s',
+            'gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 -dPDFSETTINGS=%s -dDownsampleColorImages=true -dColorImageResolution=300 -dNOPAUSE -dQUIET -dBATCH -sOutputFile=%s %s',
             escapeshellarg($quality),
             escapeshellarg($outputPath),
             escapeshellarg($inputPath)
         );
+        
     
         shell_exec($gsCommand);
     
