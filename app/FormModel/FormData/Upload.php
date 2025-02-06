@@ -134,7 +134,7 @@ class Upload extends AbstractFormData
             $data .= '<tr>';
             $data .= '<td colspan="4" style="text-align:center">';
             $data.='<div class="txt-center alert alert-success font-weight-bold  text-white " role="alert">
-            <strong>Document identifié par OCEER à '.number_format($result_score*100,2).'% </strong>
+            <strong>Document identifié par OCEER comme '.$this->config->title.' à '.number_format($result_score*100,2).'% </strong>
           </div>';
           
         
@@ -162,7 +162,7 @@ class Upload extends AbstractFormData
             $data .= '<tr>';
             $data .= '<td colspan="4" style="text-align:center">';
             $data.='<div class="txt-center alert alert-warning font-weight-bold  text-white " role="alert">
-              <strong>Document en cours d\'analyse</strong>
+              <strong>Document en cours d\'analyse par OCEER</strong>
             </div>';
             $data .= '</td>';
             $data .= '</tr>';
