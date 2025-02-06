@@ -40,12 +40,12 @@
         integrity="sha512-34s5cpvaNG3BknEWSuOncX28vz97bRI59UnVtEEpFX536A7BtZSJHsDyFoCl8S7Dt2TPzcrCEoHBGeM4SUBDBw=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script src="{{ asset('frontend/assets/js/jquery-ui.js') }}"></script>
-    <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="{{ asset('frontend/assets/css/jquery-ui.css') }}">
     <link rel="stylesheet" href="{{ asset('css/fontawesome.css') }}">
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
-    <script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/4.2.0/bootstrap/main.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.14.0/Sortable.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="{{ asset('frontend/assets/css/jquery.dataTables.min.css') }}">
+    <script type="text/javascript" charset="utf8" src="{{ asset('frontend/assets/js/jquery.dataTables.min.js') }}"></script>
+    <link href="{{ asset('frontend/assets/css/main.css') }}" rel="stylesheet">
+    <script src="{{ asset('frontend/assets/js/Sortable.min.js') }}"></script>
     <script type="text/javascript" charset="utf8"
         src="https://cdn.datatables.net/buttons/2.2.2/js/dataTables.buttons.min.js"></script>
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.flash.min.js">
@@ -57,7 +57,7 @@
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.print.min.js"></script>
     <script type="text/javascript" charset="utf8" src="https://cdn.jsdelivr.net/npm/bs-stepper/dist/js/bs-stepper.min.js">
     </script>
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bs-stepper/dist/css/bs-stepper.min.css">
+        {{-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bs-stepper/dist/css/bs-stepper.min.css"> --}}
 
       <script src="{{ asset('assets/js/push.min.js') }}"></script>
 
@@ -439,13 +439,13 @@
     {{-- <script src="{{ asset('frontend/assets/js/plugins/perfect-scrollbar.min.js') }}"></script>
     <script src="{{ asset('frontend/assets/js/plugins/smooth-scrollbar.min.js') }}"></script> --}}
     <script src="{{ asset('frontend/assets/js/plugins/chartjs.min.js') }}"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.2/dropzone.min.js"></script>
+    <script src="{{ asset('frontend/assets/js/dropzone.min.js') }}"></script>
     <!-- Bootstrap CSS -->
     <script src="{{ asset('frontend/assets/js/soft-ui-dashboard.min.js?v=1.0.7') }}"></script>
     <!-- Bootstrap Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    {{-- <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script> --}}
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/i18n/datepicker-fr.js"></script>
 
