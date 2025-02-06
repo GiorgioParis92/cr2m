@@ -173,7 +173,7 @@ class Photo extends AbstractData
             $extension = strtolower(pathinfo($originalPath, PATHINFO_EXTENSION));
             $thumbnailFileName = pathinfo($originalPath, PATHINFO_FILENAME) . '_thumbnail.' . $extension;
             // $thumbnail_path = storage_path('app/public/' . $directory . '/' . $thumbnailFileName);
-
+            print_r($thumbnailFileName);
             if(file_exists($thumbnailFileName)) {
                print_r('ok');
             }
