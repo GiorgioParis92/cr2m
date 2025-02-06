@@ -3,6 +3,7 @@ namespace App\FormModel\FormData;
 
 use Illuminate\Support\Facades\DB;
 use App\Models\Dossier;
+use App\Models\FormsData;
 use Illuminate\Support\Facades\Storage;
 
 class Upload extends AbstractFormData
@@ -17,8 +18,18 @@ class Upload extends AbstractFormData
 
         // print_r($this->config->options ?? '');
 
-        if(isset($this->config->options)) {
-            $options=json_decode($this->config->options);
+        if (isset($this->config->options)) {
+            $options = json_decode($this->config->options, true); // Decode as associative array
+        
+            $identify = !empty($options['identify']); // Check if 'identify' exists and is true
+        }
+
+        if($identify) {
+            $check_identify =  FormsData::where('dossier_id', $this->dossier_id)
+            ->where('meta_key', $this->name.'_identify')
+            ->value('meta_value');
+            dump($check_identify);
+
         }
 
         $data = '<tr>';
