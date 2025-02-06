@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\Dossier;
 use Intervention\Image\Facades\Image; // Use Intervention Image
 use App\Services\CardCreationService;
+use Illuminate\Support\Facades\Http;
 
 class UploadFile extends \App\Http\Controllers\Controller
 {
@@ -116,8 +117,24 @@ class UploadFile extends \App\Http\Controllers\Controller
 
         $this->cardService->checkAndCreateCard($fileName, $filePath, $dossier->id, auth()->user()->id);
 
+        // **Call API with cURL using Laravel HTTP Client**
+    
+            $fullFilePath = storage_path("app/public/{$directory}/{$fileName}");
+    
+            $response = Http::withHeaders([
+                'User-Agent' => 'insomnia/10.2.0',
+                'api-key' => 'R3SxEL6mbZ9UO9a',
+                'secret' => '92ed7089d57110113239fb02750be52a',
+                'Authorization' => 'Bearer b4rk74HZa15hfXKyrMI0fkC2sSRjGPBrS9rRxh6NhmjAj5EN7eNvugxTA0a2',
+            ])->attach('document', file_get_contents($fullFilePath), $fileName)
+              ->post('https://app.oceer.fr/api/pipeline/start/ce082c1e-e940-4b92-b7c8-9ac3effc6602');
+    
+            $apiResponse = $response->json();
+   
+    
         return response()->json([
-            'file_path' => $directory . '/' . $fileName
+            'file_path' => $directory . '/' . $fileName,
+            'identification_response' => $apiResponse
         ], 200);
     }
 
