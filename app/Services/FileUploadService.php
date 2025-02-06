@@ -402,7 +402,7 @@ class FileUploadService
         }
 
 
-        if(file_exists($pdfFilePath) ) {
+        if(file_exists(storage_path("app/public/{$directory}/{$pdfFileName}")) ) {
         $fullFilePath = storage_path("app/public/{$directory}/{$pdfFileName}");
     
         $response = Http::withHeaders([
