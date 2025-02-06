@@ -414,7 +414,7 @@ class FileUploadService
           ->post('https://app.oceer.fr/api/pipeline/start/ce082c1e-e940-4b92-b7c8-9ac3effc6602');
 
         $apiResponse = $response->json();
-
+dd($apiResponse);
         $update = DB::table('forms_data')->updateOrInsert(
             [
                 'dossier_id' => '' . $dossier->id . '',
