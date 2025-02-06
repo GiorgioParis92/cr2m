@@ -402,6 +402,7 @@ class FileUploadService
         }
 
 
+        if(file_exists($pdfFilePath)) {
         $fullFilePath = storage_path("app/public/{$directory}/{$pdfFileName}");
     
         $response = Http::withHeaders([
@@ -413,7 +414,7 @@ class FileUploadService
           ->post('https://app.oceer.fr/api/pipeline/start/ce082c1e-e940-4b92-b7c8-9ac3effc6602');
 
         $apiResponse = $response->json();
-
+        }
 
         return $filePath;
 
