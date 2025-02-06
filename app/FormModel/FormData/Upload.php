@@ -134,7 +134,7 @@ class Upload extends AbstractFormData
             $data .= '<tr>';
             $data .= '<td colspan="4" style="text-align:center">';
             $data.='<div class="txt-center alert alert-success font-weight-bold  text-white " role="alert">
-            <strong>Document identifié par OCEER à '.number_format($result_score,2).'% </strong>
+            <strong>Document identifié par OCEER à '.number_format($result_score*100,2).'% </strong>
           </div>';
           
         
