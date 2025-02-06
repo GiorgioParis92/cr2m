@@ -148,6 +148,18 @@ class Upload extends AbstractFormData
         }
 
         }
+
+
+        if($check_identify && empty($result_value)) {
+            $data .= '<tr>';
+            $data .= '<td colspan="4" style="text-align:center">';
+            $data.='<div class="txt-center alert alert-warning font-weight-bold  text-white " role="alert">
+              <strong>Document en cours d\'analyse</strong>
+            </div>';
+            $data .= '</td>';
+            $data .= '</tr>';
+        }
+
         return $data;
     }
 
