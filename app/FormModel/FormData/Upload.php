@@ -30,16 +30,16 @@ class Upload extends AbstractFormData
         if($identify) {
             $check_identify =  FormsData::where('dossier_id', $this->dossier_id)
             ->where('meta_key', $this->name.'_identify')
-            ->value('meta_value');
+            ->first();
            
-            if($check_identify) {
+            if($check_identify->meta_value) {
                 
-                $identify_array=(json_decode($check_identify));
+                $identify_array=(json_decode($check_identify->meta_value));
             
                 $result_value=$identify_array->document->data->identification_results->results->document_identification->value;
                 $result_score=$identify_array->document->data->identification_results->results->document_identification->score;
                 
-                if(!empty($result_value)) {
+                if(!empty($check_identify->meta_value)) {
                     $check=true;
                 }
 
@@ -156,7 +156,7 @@ class Upload extends AbstractFormData
         }
 
 
-        if(($check_identify) && empty($check_identify) && ($result_value=='')) {
+        if(($check)  && ($result_value=='')) {
             $data .= '<tr>';
             $data .= '<td colspan="4" style="text-align:center">';
             $data.='<div class="txt-center alert alert-warning font-weight-bold  text-white " role="alert">
