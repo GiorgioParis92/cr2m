@@ -199,7 +199,7 @@ class Photo extends AbstractFormData
     
                 // If file is an image and larger than 1MB, compress it
                 if ($fileSize > 1 * 1024 * 1024) { // 1MB
-                    $filePath = $this->compressImage($filePath, 1024 * 1024);
+                    // $filePath = $this->compressImage($filePath, 1024 * 1024);
                 }
     
                 // Open a row every 3 images

@@ -83,6 +83,7 @@ class Photo extends AbstractData
         if ($filePath) {
             $extension = pathinfo($filePath, PATHINFO_EXTENSION);
 
+
             // Check if the file is HEIC and convert it to JPG
             if (strtolower($extension) === 'heic' || strtolower($extension) === 'HEIC') {
                 $convertedFilePath = $this->convertHeicToJpg($filePath);
@@ -170,7 +171,12 @@ class Photo extends AbstractData
             }
     
             $extension = strtolower(pathinfo($originalPath, PATHINFO_EXTENSION));
+            $thumbnailFileName = pathinfo($originalPath, PATHINFO_FILENAME) . '_thumbnail.' . $extension;
+            // $thumbnail_path = storage_path('app/public/' . $directory . '/' . $thumbnailFileName);
 
+            if(file_exists($thumbnailFileName)) {
+               print_r('ok');
+            }
             if ($extension === 'heic') {
                 // Convert from HEIC to JPG
                 $convertedPath = $this->convertHeicToJpg($originalPath);

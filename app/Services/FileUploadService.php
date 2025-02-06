@@ -354,6 +354,11 @@ class FileUploadService
                 return $directory . '/' . $pdfFileName;
             }
 
+
+            if(file_exists($thumbnail_path)) {
+                $filePath=$thumbnail_path;
+            }
+
             $update = DB::table('forms_data')->updateOrInsert(
                 [
                     'dossier_id' => '' . $dossier->id . '',
