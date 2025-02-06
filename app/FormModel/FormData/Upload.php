@@ -38,7 +38,7 @@ class Upload extends AbstractFormData
             
                 $result_value=$identify_array->document->data->identification_results->results->document_identification->value;
                 $result_score=$identify_array->document->data->identification_results->results->document_identification->score;
-                
+                dump($check_identify->meta_value);
                 if(!empty($check_identify->meta_value)) {
                     $check=true;
                 }
