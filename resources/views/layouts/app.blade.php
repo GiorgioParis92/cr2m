@@ -47,8 +47,8 @@
     <link href="{{ asset('frontend/assets/css/main.css') }}" rel="stylesheet">
     <script src="{{ asset('frontend/assets/js/Sortable.min.js') }}"></script>
     <script type="text/javascript" charset="utf8"
-        src="https://cdn.datatables.net/buttons/2.2.2/js/dataTables.buttons.min.js"></script>
-    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.flash.min.js">
+        src="{{ asset('frontend/assets/js/dataTables.buttons.min.js') }}"></script>
+    {{-- <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.flash.min.js"> --}}
     </script>
     <script type="text/javascript" charset="utf8" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js">
     </script>
@@ -271,12 +271,12 @@
                         <div>
                             <label for="dateTime" class="form-label">Sélectionner la date du RDV</label>
                             <input type="date" class="form-control" id="dateTime" name="dateTime"
-                                value="auto">
+                                value="">
                         </div>
                         <div>
                             <label for="inspectorSelect" class="form-label">Sélectionner l'Inspecteur</label>
                             <select class="form-select" id="inspectorSelect" name="inspector">
-                                <option value="auto" selected>Automatique</option>
+                                <option value="" selected>Automatique</option>
                                 @if (isset($auditeurs))
                                     @foreach ($auditeurs as $auditeur)
                                         <option value="{{ $auditeur->id }}">{{ $auditeur->name }}</option>
@@ -287,7 +287,7 @@
                         <div>
                             <label for="rdvTime" class="form-label">Heure de Rendez-vous (HH:mm)</label>
                             <input type="time" class="form-control" id="rdvTime" name="rdvTime"
-                                value="auto">
+                                value="">
                             <div class="form-text">Laissez "--:--" pour une attribution automatique de l'heure</div>
                         </div>
                         <div>
@@ -447,7 +447,7 @@
 
     {{-- <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script> --}}
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/i18n/datepicker-fr.js"></script>
+    <script src="{{ asset('frontend/assets/js/jquery.ui.datepicker-fr.js') }}"></script>
 
     @yield('scripts')
     <script>
