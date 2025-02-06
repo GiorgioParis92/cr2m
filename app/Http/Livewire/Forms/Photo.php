@@ -199,7 +199,7 @@ class Photo extends AbstractData
             }
         }
         
-     
+        print_r($updatedValues);
         // Persist the updated list to the DB if changes happened
         if (!empty($updatedValues) && ($updatedValues !== $values)) {
             FormsData::updateOrCreate(
