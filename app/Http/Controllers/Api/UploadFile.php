@@ -27,6 +27,7 @@ class UploadFile extends \App\Http\Controllers\Controller
     // Fetch all beneficiaires with dynamic filtering
     public function index(Request $request)
     {
+        dd($request);
         if (!isset($request->dossier_id)) {
 
             if(isset($request->folder)) {
@@ -64,7 +65,7 @@ class UploadFile extends \App\Http\Controllers\Controller
             Storage::disk('public')->makeDirectory($directory);
         }
 
-        
+
         $fileName = $request->name.'.'.$extension;
         $filePath = $file->storeAs($directory, $fileName, 'public');
 
