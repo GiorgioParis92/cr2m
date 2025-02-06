@@ -34,7 +34,7 @@ class Upload extends AbstractFormData
            
             // dump($check_identify);
 
-            if($check_identify->meta_value) {
+            if($check_identify && $check_identify->meta_value) {
                 
                 $identify_array=(json_decode($check_identify->meta_value));
             
