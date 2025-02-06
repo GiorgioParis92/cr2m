@@ -243,7 +243,9 @@ class Photo extends AbstractFormData
         if ($count % 3 !== 0) {
             $text .= '</div>';
         }
-    
+        if (Storage::exists('public/' . $thumbnailPath)) {
+            $text.='..';
+        }
         return $text;
     }
     
