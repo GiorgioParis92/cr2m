@@ -863,11 +863,14 @@ class PDFController extends Controller
         
 
         $directPath = "{$directPath}/{$fileName}";
-        Storage::put($filePath, $pdfOutput);
+        $storage=Storage::put($filePath, $pdfOutput);
 
         $timeafterstore = microtime(true) - $startTime;
 
-        // $this->compressPdfWithGhostscript($absolutePath, $absolutePath,'/screen');
+        if($storage) {
+            $this->compressPdfWithGhostscript($absolutePath, $absolutePath,'/screen');
+        }
+
 
 
 
