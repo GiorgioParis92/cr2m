@@ -16,6 +16,7 @@ class Upload extends AbstractFormData
         $result_value=false;
         $result_score=false;
         $check_identify=false;
+        $check=false;
         $wireModel = "formData.{$this->form_id}.{$this->name}";
 
         // print_r($this->config->options ?? '');
@@ -32,11 +33,16 @@ class Upload extends AbstractFormData
             ->value('meta_value');
            
             if($check_identify) {
+                
                 $identify_array=(json_decode($check_identify));
             
                 $result_value=$identify_array->document->data->identification_results->results->document_identification->value;
                 $result_score=$identify_array->document->data->identification_results->results->document_identification->score;
-    
+                
+                if(!empty(^$result_value)) {
+                    $check=true;
+                }
+
             }
 
 
