@@ -156,7 +156,7 @@ class Upload extends AbstractFormData
         }
 
 
-        if(empty($identify_array)) {
+        if(empty($identify_array) && $check) {
             $data .= '<tr>';
             $data .= '<td colspan="4" style="text-align:center">';
             $data.='<div class="txt-center alert alert-warning font-weight-bold  text-white " role="alert">
