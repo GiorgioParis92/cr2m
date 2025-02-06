@@ -854,22 +854,31 @@ class PDFController extends Controller
 
         // dump($timeaftergenerate);
 
-        // Save the PDF file to the folder
+        // // Save the PDF file to the folder
+        // $fileName = ($template_name ?? 'document') . ".pdf";
+        // $filePath = "{$folderPath}/{$fileName}";
+        // $absolutePath = storage_path("app/public/{$directPath}/{$fileName}"); // Absolute path
+
         $fileName = ($template_name ?? 'document') . ".pdf";
-        $filePath = "{$folderPath}/{$fileName}";
-        $absolutePath = storage_path("app/public/{$directPath}/{$fileName}"); // Absolute path
 
+        // Define storage paths
+        $relativePath = "public/{$directPath}/{$fileName}";  // Relative path for Laravel Storage
+        $absolutePath = storage_path("app/{$relativePath}"); // Absolute path for Ghostscript
         
+        // Store the PDF file correctly
+        Storage::put($relativePath, $pdfOutput);
         
-
-        $directPath = "{$directPath}/{$fileName}";
-        $storage=Storage::put($filePath, $pdfOutput);
-
-        $timeafterstore = microtime(true) - $startTime;
-
-        if($storage) {
-            // $this->compressPdfWithGhostscript($absolutePath, $absolutePath,'/screen');
+        // Ensure file exists before running compression
+        if (!file_exists($absolutePath)) {
+            throw new \Exception("Stored PDF file does not exist: {$absolutePath}");
         }
+        
+        // Time logging (optional)
+        $timeafterstore = microtime(true) - $startTime;
+        
+        // Compress the PDF
+        $this->compressPdfWithGhostscript($absolutePath, $absolutePath, '/screen');
+        
 
 
 
@@ -932,17 +941,32 @@ class PDFController extends Controller
 
     public function compressPdfWithGhostscript($inputPath, $outputPath, $quality = '/screen')
     {
-        // Échappe les arguments pour éviter tout problème de chemin contenant des espaces
+        // Verify if input file exists before running Ghostscript
+        if (!file_exists($inputPath)) {
+            throw new \Exception("Input PDF file does not exist: {$inputPath}");
+        }
+    
+        // Escape arguments to handle spaces and special characters in paths
         $gsCommand = sprintf(
             'gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 -dPDFSETTINGS=%s -dDownsampleColorImages=true -dColorImageResolution=300 -dNOPAUSE -dQUIET -dBATCH -sOutputFile=%s %s',
             escapeshellarg($quality),
             escapeshellarg($outputPath),
             escapeshellarg($inputPath)
         );
-        
     
-        shell_exec($gsCommand);
+        // Execute Ghostscript and capture any output
+        $output = shell_exec($gsCommand . ' 2>&1');
     
-        return file_exists($outputPath);
+        // Log output for debugging
+        \Log::error("Ghostscript output: " . $output);
+    
+        // Verify if the output file was created
+        if (!file_exists($outputPath)) {
+            throw new \Exception("Ghostscript failed: Output PDF was not generated.");
+        }
+    
+        return true;
     }
+    
+    
 }
