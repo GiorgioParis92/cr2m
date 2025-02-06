@@ -127,7 +127,7 @@ class Upload extends AbstractFormData
         $data .= '</tr>';
 
 
-        if($check_identify) {
+        if($check_identify && $this->value) {
         if(!empty($identify_array) && $result_value==$this->name) {
            
             
