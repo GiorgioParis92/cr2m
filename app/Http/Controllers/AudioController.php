@@ -130,7 +130,7 @@ class AudioController extends Controller
 
 
                     if($oceerResult) {
-                        dd($oceerResult->data);
+                        dd($oceerResult['data']);
                         if (
                             isset($oceerResult->data->results->data->identification_results->results)
                         ) {
