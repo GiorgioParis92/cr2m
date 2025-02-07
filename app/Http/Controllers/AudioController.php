@@ -7,7 +7,8 @@ use Illuminate\Support\Facades\Storage;
 use App\Models\Dossier;
 use App\Models\FormsData;
 use Illuminate\Support\Facades\Http; // Add this line
-
+use PDF; // This alias is typically registered by barryvdh/laravel-dompdf
+use Illuminate\Support\Str;
 class AudioController extends Controller
 {
     public function store(Request $request)
@@ -46,31 +47,27 @@ class AudioController extends Controller
 
     public function analyse(Request $request)
     {
-      
-       
-
-        $audioPath = $request->value; // example path
+        // 1. Extract audio path from the request
+        $audioPath = $request->value; // example path: "recordings/audio1.wav"
         $absolutePath = storage_path('app/public/' . $audioPath);
 
-        
         // 2. Check if the file actually exists
         if (!file_exists($absolutePath)) {
             return response()->json([
-                'message' => 'Audio file not found.'
+                'message' => 'Audio file not found.',
             ], 404);
         }
 
-
-        
-        $apiKey = env('OPENAI_API_KEY'); // store your API key in .env
+        // 3. Retrieve API key
+        $apiKey = env('OPENAI_API_KEY');
         if (!$apiKey) {
             return response()->json([
-                'message' => 'OpenAI API key not set.'
+                'message' => 'OpenAI API key not set.',
             ], 500);
         }
 
         try {
-            // 4. Send request to OpenAI
+            // 4. Send request to OpenAI Whisper
             $response = Http::withToken($apiKey)
                 ->attach(
                     'file',
@@ -78,33 +75,73 @@ class AudioController extends Controller
                     basename($absolutePath)
                 )
                 ->post('https://api.openai.com/v1/audio/transcriptions', [
-                    'model' => 'whisper-1', // OpenAI model name
-                    // Optionally add other parameters like 'prompt', 'language', or 'temperature'
+                    'model' => 'whisper-1',
                     // 'prompt' => 'Custom prompt if needed',
-                    // 'language' => 'fr', // If you know the language is French
+                    // 'language' => 'fr' // if you know the language
                 ]);
 
             if ($response->failed()) {
                 return response()->json([
                     'message' => 'OpenAI Whisper API request failed.',
-                    'error' => $response->json()
+                    'error'   => $response->json(),
                 ], $response->status());
             }
 
             // 5. Extract the transcription text from OpenAI's response
-            //    According to OpenAI docs, the JSON looks like { text: "transcribed text" }
-            $result = $response->json(); 
-            $transcription = $result['text'] ?? '(No transcription)';
+            $result         = $response->json();
+            $transcription  = $result['text'] ?? '';
 
-            // 6. Return the transcription to the frontend
+            // 6. (Optional) Check if transcription is not empty; if so, generate a PDF
+            if (!empty($transcription)) {
+                // Give the PDF a name that matches the audio filename but with .pdf extension
+                
+   
+                $htmlContent = "
+                 
+                    <p>" . e($transcription) . "</p>
+                ";
+
+                // (b) Load your HTML content
+                $pdf = PDF::loadHTML($htmlContent);
+
+ 
+                $dossier = Dossier::where('id', $request->dossier_id)->first();
+
+                $directory = "dossiers/{$dossier->folder}";
+    
+    
+          
+                $pdfName = $request->name.'_pdf_' . time() . '.pdf';
+                $pdfPath = storage_path('app/public/' . $pdfName);
+                $pdf->save($pdfPath);
+                $update = FormsData::updateOrCreate(
+                    [
+                        'dossier_id' => $dossier->id,
+                        'form_id' => $request->form_id,
+                        'meta_key' => $request->name.'_pdf'
+                    ],
+                    [
+                        'meta_value' => $pdfPath
+                    ]
+                );
+
+
+               
+               
+            }
+
+            // 7. Return transcription (and possibly the PDF path) to the frontend
             return response()->json([
-                'message' => 'Audio transcription successful.',
-                'transcription' => $transcription
+                'message'       => 'Audio transcription successful.',
+                'transcription' => $transcription,
+                // 'pdf_path'    => $pdfPath ?? null, // Optionally include the PDF path
             ]);
+
         } catch (\Exception $e) {
+            // 8. Catch any exception and return a JSON error
             return response()->json([
                 'message' => 'Exception when contacting OpenAI Whisper API.',
-                'error' => $e->getMessage(),
+                'error'   => $e->getMessage(),
             ], 500);
         }
     }

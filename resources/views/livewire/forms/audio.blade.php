@@ -139,7 +139,9 @@
                     "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content")
                 },
                 body: JSON.stringify({
-                    value: $('#value').val() // <-- The custom value you want to send
+                    value: $('#value').val(), // <-- The custom value you want to send
+                    dossier_id: {{$dossier_id}}, // <-- The custom value you want to send
+                    form_id: {{$form_id}}, // <-- The custom value you want to send
                 })
             });
 
