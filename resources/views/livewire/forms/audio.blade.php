@@ -28,8 +28,14 @@
             </a>
         </div>
         <div class="mt-3">
-            <audio id="audioPlayback" controls style="display: none;" class="w-100"></audio>
+            {{ public_path($value) }}
+            @if (!empty($value))
+                <audio id="audioPlayback" controls class="w-100" src="{{ public_path($value) }}"></audio>
+            @else
+                <audio id="audioPlayback" controls style="display: none;" class="w-100"></audio>
+            @endif
         </div>
+        
     
         <script>
             let mediaRecorder;
@@ -49,9 +55,9 @@
                         audioBlob = new Blob(audioChunks, { type: "audio/wav" });
                         const audioUrl = URL.createObjectURL(audioBlob);
     
-                        document.getElementById("downloadLink").href = audioUrl;
-                        document.getElementById("downloadLink").download = "recorded-audio.wav";
-                        document.getElementById("downloadLink").style.display = "block";
+                        // document.getElementById("downloadLink").href = audioUrl;
+                        // document.getElementById("downloadLink").download = "recorded-audio.wav";
+                        // document.getElementById("downloadLink").style.display = "block";
     
                         document.getElementById("audioPlayback").src = audioUrl;
                         document.getElementById("audioPlayback").style.display = "block";
