@@ -47,7 +47,7 @@ class AudioController extends Controller
     public function analyse(Request $request)
     {
       
-        dd($request->value);
+        dd($request);
 
         $audioPath = $request->value; // example path
         $absolutePath = Storage::path($audioPath);
