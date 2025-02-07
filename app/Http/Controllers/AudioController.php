@@ -126,9 +126,8 @@ class AudioController extends Controller
                             'meta_value' => 'dossiers/'.$dossier->folder.'/'.$pdfName
                         ]
                     );
-                    $oceer=$this->sendPdfToOceer($pdfPath);
+                    $oceerResult = $this->sendPdfToOceer($pdfPath);
 
-                    return response()->json($oceer);
 
                 }
 
@@ -142,6 +141,8 @@ class AudioController extends Controller
             return response()->json([
                 'message'       => 'Audio transcription successful.',
                 'transcription' => $transcription,
+                'oceer_result'  => $oceerResult,
+
                 // 'pdf_path'    => $pdfPath ?? null, // Optionally include the PDF path
             ]);
 
@@ -180,9 +181,7 @@ class AudioController extends Controller
                 basename($pdfPath)           // filename
             )
             ->post('https://app.oceer.fr/api/pipeline/start/229bdbbf-869a-49c9-83cb-ae069f1137ff');
-        if($response) {
-            return response()->json($response);
-        }
+   
 
         // Optionally, handle success or errors
         if ($response->failed()) {
