@@ -27,7 +27,7 @@
                 <i class="bi bi-download"></i> Download Audio
             </a>
         </div>
-        <div class="mt-3" wire:poll>
+        <div class="mt-3" >
          
             @if (!empty($value))
                 <audio id="audioPlayback" controls class="w-100" src="{{ ($value) }}"></audio>
