@@ -151,7 +151,7 @@
             // data will contain the transcription if everything goes well
             console.log("Transcribed text: ", data.transcription);
 
-            alert(`Texte transcrit : ${data.transcription}`);
+            // alert(`Texte transcrit : ${data.transcription}`);
         } catch (error) {
             console.error(error);
             alert("Failed to transcribe audio.");
