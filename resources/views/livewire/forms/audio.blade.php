@@ -71,8 +71,9 @@
     
                 const formData = new FormData();
                 formData.append("audio", audioBlob, "audio.wav");
-                formData.append("name",  "{{ $conf['name'] }}");
-                formData.append("dossier_id",  "{{ $conf['name'] }}");
+                formData.append("name",  "{{ $conf['name'] ?? '' }}");
+                formData.append("dossier_id",  "{{ $dossier_id ?? '' }}");
+                formData.append("form_id",  "{{ $form_id ?? ''}}");
     
                 const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute("content");
     
