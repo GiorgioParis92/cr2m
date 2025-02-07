@@ -142,8 +142,11 @@ class AudioController extends Controller
                         
 
                             foreach($results as $key=>$result) {
-                                dump($key);
-                                dump($result);
+                                foreach($result as $k=>$v) {
+                                    dump($k);
+                                    dump($v);
+                                }
+                              
                             }
 
                          
