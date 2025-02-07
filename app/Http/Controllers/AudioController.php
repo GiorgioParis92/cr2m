@@ -156,8 +156,13 @@ class AudioController extends Controller
     }
 
 
-    private function sendPdfToOceer(string $pdfPath): void
+    public function sendPdfToOceer(string $pdfPath): void
     {
+        $result = [
+            'success' => false,
+            'data'    => null,
+            'error'   => null,
+        ];
         // Make sure the file exists before sending:
         if (!file_exists($pdfPath)) {
             // You might log an error or throw an exception.
@@ -169,8 +174,6 @@ class AudioController extends Controller
         $headers = [
             'User-Agent'    => 'insomnia/10.2.0',
             'api-key'       => 'R3SxEL6mbZ9UO9a',
-            'secret'        => '92ed7089d57110113239fb02750be52a',
-            'Authorization' => 'Bearer b4rk74HZa15hfXKyrMI0fkC2sSRjGPBrS9rRxh6NhmjAj5EN7eNvugxTA0a2',
         ];
 
         // Make the POST request using Laravel's HTTP Client:
@@ -182,14 +185,15 @@ class AudioController extends Controller
             )
             ->post('https://app.oceer.fr/api/pipeline/start/229bdbbf-869a-49c9-83cb-ae069f1137ff');
    
-
-        // Optionally, handle success or errors
-        if ($response->failed()) {
-            // Log or handle as needed. For example:
-            // Log::error('Failed to send PDF to Oceer', [
-            //     'response' => $response->json(),
-            // ]);
-        }
+            if ($response->successful()) {
+                $result['success'] = true;
+                $result['data']    = $response->json(); // or the entire response object
+            } else {
+                $result['error'] = $response->json() ?: 'Failed to send PDF to Oceer.';
+            }
+    
+            return $result;
+     
     }
 
     public function show() {
