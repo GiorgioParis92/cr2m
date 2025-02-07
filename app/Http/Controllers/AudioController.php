@@ -121,7 +121,7 @@ class AudioController extends Controller
                         'meta_key' => $request->name.'_pdf'
                     ],
                     [
-                        'meta_value' => $pdfPath
+                        'meta_value' => 'dossiers/'.$dossier->folder.'/'.$pdfName
                     ]
                 );
 

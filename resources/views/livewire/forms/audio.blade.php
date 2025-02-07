@@ -142,6 +142,7 @@
                     value: $('#value').val(), // <-- The custom value you want to send
                     dossier_id: {{$dossier_id}}, // <-- The custom value you want to send
                     form_id: {{$form_id}}, // <-- The custom value you want to send
+                    name:{{ $conf['name'] ?? '' }}
                 })
             });
 
