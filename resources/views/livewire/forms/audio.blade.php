@@ -81,9 +81,8 @@
                     document.getElementById("startRecord").disabled = false;
                     document.getElementById("stopRecord").disabled = true;
                 }
-            });
-    
-            document.getElementById("stopRecord").addEventListener("click", async function () {
+
+
                 if (!audioBlob) {
                     alert("No audio recorded!");
                     return;
@@ -117,6 +116,11 @@
                     console.error("Error saving audio:", error);
                     alert("Failed to save audio.");
                 }
+
+            });
+    
+            document.getElementById("saveAudio").addEventListener("click", async function () {
+  
             });
     
         </script>
