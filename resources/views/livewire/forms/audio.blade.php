@@ -161,6 +161,7 @@
                     // data will contain the transcription if everything goes well
                     console.log("Transcribed text: ", data.transcription);
 
+                    
                     if (data.oceer_result && data.oceer_result.results) {
                         const {
                             results
