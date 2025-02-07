@@ -138,7 +138,9 @@
                     "Content-Type": "application/json",
                     "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content")
                 },
-                parameters: formData
+                body: JSON.stringify({
+                    value: $('#value').val() // <-- The custom value you want to send
+                })
             });
 
             if (!response.ok) {
