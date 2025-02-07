@@ -141,7 +141,7 @@ class AudioController extends Controller
                             $results = $oceerResult->results;
                         
                             // Exemple de manipulation : affichage
-                            dd($results);
+                         
                         } else {
                             // Ici, on gère le cas d'erreur où l'on ne trouve pas la clé demandée
                             echo "Les résultats n'existent pas dans la structure JSON.";
