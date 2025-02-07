@@ -127,18 +127,18 @@
 
             document.getElementById("AnalyseAudio").addEventListener("click", async function () {
         try {
+
+            const formData = new FormData();
+                formData.append("value", $('#value').val());
+      
+
             const response = await fetch("{{ route('audio.analyse') }}", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                     "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content")
                 },
-                body: JSON.stringify({
-                    // any additional data you want to send
-                    // for example, an "audio_id" if you have a DB reference
-                    audio: $('#value'),
-                    value: $('#value')
-                })
+                body: formData
             });
 
             if (!response.ok) {
