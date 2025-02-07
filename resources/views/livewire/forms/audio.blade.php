@@ -7,7 +7,7 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
     </head>
 
-    {{ $conf['name'] }}
+    {{ $dossier['id'] }}
     <input type="text"    name="{{ $conf['name'] }}"  class="form-control "  wire:model.debounce.500ms="value"  placeholder="">
 
         <h2>Audio Recorder</h2>
@@ -71,6 +71,8 @@
     
                 const formData = new FormData();
                 formData.append("audio", audioBlob, "audio.wav");
+                formData.append("name",  "{{ $conf['name'] }}");
+                formData.append("dossier_id",  "{{ $conf['name'] }}");
     
                 const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute("content");
     
@@ -85,7 +87,7 @@
     
                     const data = await response.json();
                     if (response.ok) {
-                        alert("Audio saved successfully!");
+                        // alert("Audio saved successfully!");
                         console.log("Saved file path:", data.file_path);
                     } else {
                         alert("Error saving audio: " + data.message);
