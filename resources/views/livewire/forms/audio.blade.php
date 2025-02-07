@@ -18,12 +18,12 @@
             <button id="stopRecord" class="btn btn-danger" disabled>
                 <i class="bi bi-stop-fill"></i> Stop
             </button>
-            <button id="saveAudio" class="btn btn-success" disabled>
-                <i class="bi bi-save-fill"></i> Enregistrer
+            <button id="AnalyseAudio" class="btn btn-success" disabled>
+                <i class="bi bi-save-fill"></i> Analyser l'audio
             </button>
         </div>
         <div>
-            <a id="downloadLink" class="btn btn-secondary" style="display: none;">
+            <a id="analyse_audio" class="btn btn-secondary" style="display: none;">
                 <i class="bi bi-download"></i> Download Audio
             </a>
         </div>
