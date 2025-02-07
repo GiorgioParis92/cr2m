@@ -18,7 +18,7 @@
             <button id="stopRecord" class="btn btn-danger" disabled>
                 <i class="bi bi-stop-fill"></i> Stop
             </button>
-            <button id="AnalyseAudio" class="btn btn-success" disabled style="display:{{$value ? 'block' : 'none'}}">
+            <button id="AnalyseAudio" class="btn btn-success"  style="display:{{$value ? 'block' : 'none'}}">
                 <i class="bi bi-save-fill"></i> Analyser l'audio
             </button>
         </div>
