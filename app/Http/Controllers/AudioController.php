@@ -143,8 +143,7 @@ class AudioController extends Controller
                             // Exemple de manipulation : affichage
                          
                         } else {
-                            // Ici, on gère le cas d'erreur où l'on ne trouve pas la clé demandée
-                            echo "Les résultats n'existent pas dans la structure JSON.";
+                           
                         }
 
                     }
