@@ -61,7 +61,7 @@
                         const audioUrl = URL.createObjectURL(audioBlob);
 
                         // ✅ Display the recorded audio immediately
-                        document.getElementById("audioPlayback").src = audioUrl;
+                        document.getElementById("audioPlayback").src = '../..'+audioUrl;
                         document.getElementById("audioPlayback").style.display = "block";
 
                         audioChunks = []; // Reset chunks
