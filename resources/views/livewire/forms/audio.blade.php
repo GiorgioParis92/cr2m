@@ -8,7 +8,7 @@
     </head>
 
     {{ $value }}
-    <input type="text"    name="{{ $conf['name'] }}"  class="form-control "  wire:model.debounce.500ms="value"  placeholder="">
+    <input id="value" type="text"    name="{{ $conf['name'] }}"  class="form-control "  wire:model.debounce.500ms="value"  placeholder="">
 
         <h2>Audio Recorder</h2>
         <div class="d-flex gap-2 mb-3">
@@ -111,6 +111,7 @@
         
                         // ✅ Update audioPlayback to use the saved file from the server
                         document.getElementById("audioPlayback").src = data.file_path;
+                        $('#value').val(data.file_path)
                     } else {
                         alert("Error saving audio: " + data.message);
                     }
@@ -119,6 +120,38 @@
                     alert("Failed to save audio.");
                 }
             }
+
+
+
+            document.getElementById("AnalyseAudio").addEventListener("click", async function () {
+        try {
+            const response = await fetch("{{ route('audio.analyse') }}", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content")
+                },
+                body: JSON.stringify({
+                    // any additional data you want to send
+                    // for example, an "audio_id" if you have a DB reference
+                    audio: $('#value')
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error("Server error during transcription request.");
+            }
+
+            const data = await response.json();
+            // data will contain the transcription if everything goes well
+            console.log("Transcribed text: ", data.transcription);
+
+            alert(`Texte transcrit : ${data.transcription}`);
+        } catch (error) {
+            console.error(error);
+            alert("Failed to transcribe audio.");
+        }
+    });
         </script>
         
     

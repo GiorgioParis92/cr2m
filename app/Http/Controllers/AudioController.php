@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Dossier;
 use App\Models\FormsData;
+use Illuminate\Support\Facades\Http; // Add this line
 
 class AudioController extends Controller
 {
@@ -36,14 +37,86 @@ class AudioController extends Controller
 
             return response()->json([
                 'message' => 'Audio saved successfully!',
-                'file_path' => Storage::url($path),
+                'file_path' => $path,
             ]);
         }
 
         return response()->json(['message' => 'No audio file received'], 400);
     }
 
+    public function analyse(Request $request)
+    {
+        // 1. Retrieve the audio file path. 
+        //    This could be from the DB or from the request:
+        //    e.g. $audioId = $request->audio_id;
+        //    $audioPath = SomeModel::find($audioId)->audio_path;
+        //    For simplicity, let's assume you have $audioPath:
 
+        $audioPath = $request->value; // example path
+        $absolutePath = Storage::path($audioPath);
+
+        // 2. Check if the file actually exists
+        if (!file_exists($absolutePath)) {
+            return response()->json([
+                'message' => 'Audio file not found.'
+            ], 404);
+        }
+
+        // 3. Prepare file for OpenAI Whisper
+        //    You must send it as multipart/form-data to the Whisper API
+        //    The "file" field name must be "file" (as per the Whisper API docs)
+        
+        //    The OpenAI Whisper endpoint:  POST https://api.openai.com/v1/audio/transcriptions
+        //    Required headers: Authorization: Bearer YOUR_API_KEY
+        //                      Content-Type: multipart/form-data
+        //    Required fields:  file, model, etc.
+        
+        $apiKey = env('OPENAI_API_KEY'); // store your API key in .env
+        if (!$apiKey) {
+            return response()->json([
+                'message' => 'OpenAI API key not set.'
+            ], 500);
+        }
+
+        try {
+            // 4. Send request to OpenAI
+            $response = Http::withToken($apiKey)
+                ->attach(
+                    'file',
+                    file_get_contents($absolutePath),
+                    basename($absolutePath)
+                )
+                ->post('https://api.openai.com/v1/audio/transcriptions', [
+                    'model' => 'whisper-1', // OpenAI model name
+                    // Optionally add other parameters like 'prompt', 'language', or 'temperature'
+                    // 'prompt' => 'Custom prompt if needed',
+                    // 'language' => 'fr', // If you know the language is French
+                ]);
+
+            if ($response->failed()) {
+                return response()->json([
+                    'message' => 'OpenAI Whisper API request failed.',
+                    'error' => $response->json()
+                ], $response->status());
+            }
+
+            // 5. Extract the transcription text from OpenAI's response
+            //    According to OpenAI docs, the JSON looks like { text: "transcribed text" }
+            $result = $response->json(); 
+            $transcription = $result['text'] ?? '(No transcription)';
+
+            // 6. Return the transcription to the frontend
+            return response()->json([
+                'message' => 'Audio transcription successful.',
+                'transcription' => $transcription
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Exception when contacting OpenAI Whisper API.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
 
     public function show() {
         return view('audio.show');

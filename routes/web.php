@@ -113,6 +113,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // })->name('dashboard');
     Route::post('/save-audio', [AudioController::class, 'store'])->name('audio.store');
     Route::get('/audio', [AudioController::class, 'show'])->name('audio.show');
+    Route::post('/audio/analyse', [AudioController::class, 'analyse'])->name('audio.analyse');
 
     Route::get('/users/index', [UserController::class, 'index'])->name('users.index');
     Route::get('/user/create', [UserController::class, 'create'])->name('users.create');
