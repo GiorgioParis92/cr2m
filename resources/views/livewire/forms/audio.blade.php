@@ -18,7 +18,7 @@
             <button id="stopRecord" class="btn btn-danger" disabled>
                 <i class="bi bi-stop-fill"></i> Stop
             </button>
-            <button id="AnalyseAudio" class="btn btn-success" disabled>
+            <button id="AnalyseAudio" class="btn btn-success" disabled style="display:{{$value ? 'block' : 'none'}}">
                 <i class="bi bi-save-fill"></i> Analyser l'audio
             </button>
         </div>
@@ -68,6 +68,7 @@
                     mediaRecorder.start();
                     document.getElementById("startRecord").disabled = true;
                     document.getElementById("stopRecord").disabled = false;
+                    $('#AnalyseAudio').hide();
                 } catch (error) {
                     console.error("Error accessing microphone:", error);
                     alert("Could not access microphone. Please allow microphone access.");
@@ -111,7 +112,8 @@
         
                         // ✅ Update audioPlayback to use the saved file from the server
                         document.getElementById("audioPlayback").src = data.file_path;
-                        $('#value').val(data.file_path)
+                        $('#value').val(data.file_path);
+                        $('#AnalyseAudio').show();
                     } else {
                         alert("Error saving audio: " + data.message);
                     }
