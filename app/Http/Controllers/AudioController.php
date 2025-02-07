@@ -46,11 +46,8 @@ class AudioController extends Controller
 
     public function analyse(Request $request)
     {
-        // 1. Retrieve the audio file path. 
-        //    This could be from the DB or from the request:
-        //    e.g. $audioId = $request->audio_id;
-        //    $audioPath = SomeModel::find($audioId)->audio_path;
-        //    For simplicity, let's assume you have $audioPath:
+      
+        dd($request->value);
 
         $audioPath = $request->value; // example path
         $absolutePath = Storage::path($audioPath);
