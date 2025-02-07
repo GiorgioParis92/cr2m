@@ -11,11 +11,25 @@
     <input type="text"    name="{{ $conf['name'] }}"  class="form-control "  wire:model.debounce.500ms="value"  placeholder="">
 
         <h2>Audio Recorder</h2>
-        <button id="startRecord">🎤 Start Recording</button>
-        <button id="stopRecord" disabled>⏹️ Stop Recording</button>
-        <button id="saveAudio" disabled>💾 Save Audio</button>
-        <a id="downloadLink" style="display: none;">⬇️ Download Audio</a>
-        <audio id="audioPlayback" controls style="display: none;"></audio>
+        <div class="d-flex gap-2 mb-3">
+            <button id="startRecord" class="btn btn-primary">
+                <i class="bi bi-mic-fill"></i> Démarrer l'enregistrement
+            </button>
+            <button id="stopRecord" class="btn btn-danger" disabled>
+                <i class="bi bi-stop-fill"></i> Stop
+            </button>
+            <button id="saveAudio" class="btn btn-success" disabled>
+                <i class="bi bi-save-fill"></i> Enregistrer
+            </button>
+        </div>
+        <div>
+            <a id="downloadLink" class="btn btn-secondary" style="display: none;">
+                <i class="bi bi-download"></i> Download Audio
+            </a>
+        </div>
+        <div class="mt-3">
+            <audio id="audioPlayback" controls style="display: none;" class="w-100"></audio>
+        </div>
     
         <script>
             let mediaRecorder;
