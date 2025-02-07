@@ -136,7 +136,8 @@
                 body: JSON.stringify({
                     // any additional data you want to send
                     // for example, an "audio_id" if you have a DB reference
-                    audio: $('#value')
+                    audio: $('#value'),
+                    value: $('#value')
                 })
             });
 
