@@ -4,12 +4,12 @@
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Audio Recorder</title>
+        
             <meta name="csrf-token" content="{{ csrf_token() }}">
         </head>
 
-        {{ $pdf }}
-        <input id="value" type="text" name="{{ $conf['name'] }}" class="form-control "
+      
+        <input id="value" type="hidden" name="{{ $conf['name'] }}" class="form-control "
             wire:model.debounce.500ms="value" placeholder="">
 
         <h2>Audio Recorder</h2>
@@ -161,7 +161,7 @@
                     // data will contain the transcription if everything goes well
                     console.log("Transcribed text: ", data.transcription);
 
-                    
+
                     if (data.oceer_result && data.oceer_result.results) {
                         const {
                             results
