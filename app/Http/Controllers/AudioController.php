@@ -114,16 +114,24 @@ class AudioController extends Controller
                 $pdfName = $request->name.'_pdf_' . time() . '.pdf';
                 $pdfPath = storage_path('app/public/' . $pdfName);
                 $pdf->save($pdfPath);
-                $update = FormsData::updateOrCreate(
-                    [
-                        'dossier_id' => $dossier->id,
-                        'form_id' => $request->form_id,
-                        'meta_key' => $request->name.'_pdf'
-                    ],
-                    [
-                        'meta_value' => 'dossiers/'.$dossier->folder.'/'.$pdfName
-                    ]
-                );
+                
+                if($pdf) {
+                    $update = FormsData::updateOrCreate(
+                        [
+                            'dossier_id' => $dossier->id,
+                            'form_id' => $request->form_id,
+                            'meta_key' => $request->name.'_pdf'
+                        ],
+                        [
+                            'meta_value' => 'dossiers/'.$dossier->folder.'/'.$pdfName
+                        ]
+                    );
+                    $oceer=$this->sendPdfToOceer($pdfPath);
+
+                    return response()->json($oceer);
+
+                }
+
 
 
                
@@ -143,6 +151,42 @@ class AudioController extends Controller
                 'message' => 'Exception when contacting OpenAI Whisper API.',
                 'error'   => $e->getMessage(),
             ], 500);
+        }
+    }
+
+
+    private function sendPdfToOceer(string $pdfPath): void
+    {
+        // Make sure the file exists before sending:
+        if (!file_exists($pdfPath)) {
+            // You might log an error or throw an exception.
+            // We'll quietly return here for demonstration:
+            return;
+        }
+
+        // Build your headers:
+        $headers = [
+            'User-Agent'    => 'insomnia/10.2.0',
+            'api-key'       => 'R3SxEL6mbZ9UO9a',
+            'secret'        => '92ed7089d57110113239fb02750be52a',
+            'Authorization' => 'Bearer b4rk74HZa15hfXKyrMI0fkC2sSRjGPBrS9rRxh6NhmjAj5EN7eNvugxTA0a2',
+        ];
+
+        // Make the POST request using Laravel's HTTP Client:
+        $response = Http::withHeaders($headers)
+            ->attach(
+                'document',
+                file_get_contents($pdfPath), // file content
+                basename($pdfPath)           // filename
+            )
+            ->post('https://app.oceer.fr/api/pipeline/start/229bdbbf-869a-49c9-83cb-ae069f1137ff');
+
+        // Optionally, handle success or errors
+        if ($response->failed()) {
+            // Log or handle as needed. For example:
+            // Log::error('Failed to send PDF to Oceer', [
+            //     'response' => $response->json(),
+            // ]);
         }
     }
 
