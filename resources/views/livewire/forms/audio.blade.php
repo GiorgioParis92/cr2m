@@ -1,14 +1,16 @@
-<div  class="col-sm-12 {{ $conf['class'] ?? 'col-lg-12' }}">
-    @if(auth()->user()->id==1)
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Audio Recorder</title>
-        <meta name="csrf-token" content="{{ csrf_token() }}">
-    </head>
+<div class="col-sm-12 {{ $conf['class'] ?? 'col-lg-12' }}">
+    @if (auth()->user()->id == 1)
 
-    {{ $pdf }}
-    <input id="value" type="text"    name="{{ $conf['name'] }}"  class="form-control "  wire:model.debounce.500ms="value"  placeholder="">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Audio Recorder</title>
+            <meta name="csrf-token" content="{{ csrf_token() }}">
+        </head>
+
+        {{ $pdf }}
+        <input id="value" type="text" name="{{ $conf['name'] }}" class="form-control "
+            wire:model.debounce.500ms="value" placeholder="">
 
         <h2>Audio Recorder</h2>
         <div class="d-flex gap-2 mb-3">
@@ -18,7 +20,7 @@
             <button id="stopRecord" class="btn btn-danger" disabled>
                 <i class="bi bi-stop-fill"></i> Stop
             </button>
-            <button id="AnalyseAudio" class="btn btn-success"  style="display:{{$value ? 'block' : 'none'}}">
+            <button id="AnalyseAudio" class="btn btn-success" style="display:{{ $value ? 'block' : 'none' }}">
                 <i class="bi bi-save-fill"></i> Analyser l'audio
             </button>
         </div>
@@ -27,44 +29,48 @@
                 <i class="bi bi-download"></i> Download Audio
             </a>
         </div>
-        <div class="mt-3" >
-         
+        <div class="mt-3">
+
             @if (!empty($value))
-                <audio id="audioPlayback" controls class="w-100" src="../../storage/{{ ($value) }}"></audio>
+                <audio id="audioPlayback" controls class="w-100" src="../../storage/{{ $value }}"></audio>
             @else
                 <audio id="audioPlayback" controls style="display: none;" class="w-100"></audio>
             @endif
         </div>
-        
-    
+
+
         <script>
             let mediaRecorder;
             let audioChunks = [];
             let audioBlob;
-        
-            document.getElementById("startRecord").addEventListener("click", async function () {
+
+            document.getElementById("startRecord").addEventListener("click", async function() {
                 try {
-                    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-        
+                    const stream = await navigator.mediaDevices.getUserMedia({
+                        audio: true
+                    });
+
                     mediaRecorder = new MediaRecorder(stream);
                     mediaRecorder.ondataavailable = event => {
                         audioChunks.push(event.data);
                     };
-        
+
                     mediaRecorder.onstop = async () => {
-                        audioBlob = new Blob(audioChunks, { type: "audio/wav" });
+                        audioBlob = new Blob(audioChunks, {
+                            type: "audio/wav"
+                        });
                         const audioUrl = URL.createObjectURL(audioBlob);
-        
+
                         // ✅ Display the recorded audio immediately
                         document.getElementById("audioPlayback").src = audioUrl;
                         document.getElementById("audioPlayback").style.display = "block";
-        
+
                         audioChunks = []; // Reset chunks
-        
+
                         // ✅ Automatically save the audio after stopping the recording
                         await saveAudio(audioBlob);
                     };
-        
+
                     mediaRecorder.start();
                     document.getElementById("startRecord").disabled = true;
                     document.getElementById("stopRecord").disabled = false;
@@ -74,29 +80,29 @@
                     alert("Could not access microphone. Please allow microphone access.");
                 }
             });
-        
-            document.getElementById("stopRecord").addEventListener("click", function () {
+
+            document.getElementById("stopRecord").addEventListener("click", function() {
                 if (mediaRecorder && mediaRecorder.state === "recording") {
                     mediaRecorder.stop();
                     document.getElementById("startRecord").disabled = false;
                     document.getElementById("stopRecord").disabled = true;
                 }
             });
-        
+
             async function saveAudio(audioBlob) {
                 if (!audioBlob) {
                     alert("No audio recorded!");
                     return;
                 }
-        
+
                 const formData = new FormData();
                 formData.append("audio", audioBlob, "audio.wav");
                 formData.append("name", "{{ $conf['name'] ?? '' }}");
                 formData.append("dossier_id", "{{ $dossier_id ?? '' }}");
                 formData.append("form_id", "{{ $form_id ?? '' }}");
-        
+
                 const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute("content");
-        
+
                 try {
                     const response = await fetch("{{ route('audio.store') }}", {
                         method: "POST",
@@ -105,11 +111,11 @@
                         },
                         body: formData
                     });
-        
+
                     const data = await response.json();
                     if (response.ok) {
                         console.log("Saved file path:", data.file_path);
-        
+
                         // ✅ Update audioPlayback to use the saved file from the server
                         document.getElementById("audioPlayback").src = data.file_path;
                         $('#value').val(data.file_path);
@@ -125,44 +131,71 @@
 
 
 
-            document.getElementById("AnalyseAudio").addEventListener("click", async function () {
-        try {
+            document.getElementById("AnalyseAudio").addEventListener("click", async function() {
+                try {
 
-            const formData = new FormData();
-                formData.append("value", $('#value').val());
-      
+                    const formData = new FormData();
+                    formData.append("value", $('#value').val());
 
-            const response = await fetch("{{ route('audio.analyse') }}", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content")
-                },
-                body: JSON.stringify({
-                    value: $('#value').val(), // <-- The custom value you want to send
-                    dossier_id: {{$dossier_id}}, // <-- The custom value you want to send
-                    form_id: {{$form_id}}, // <-- The custom value you want to send
-                    name: '{{ $conf['name'] ?? '' }}'
-                })
+
+                    const response = await fetch("{{ route('audio.analyse') }}", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute(
+                                "content")
+                        },
+                        body: JSON.stringify({
+                            value: $('#value').val(), // <-- The custom value you want to send
+                            dossier_id: {{ $dossier_id }}, // <-- The custom value you want to send
+                            form_id: {{ $form_id }}, // <-- The custom value you want to send
+                            name: '{{ $conf['name'] ?? '' }}'
+                        })
+                    });
+
+                    if (!response.ok) {
+                        throw new Error("Server error during transcription request.");
+                    }
+
+                    const data = await response.json();
+                    // data will contain the transcription if everything goes well
+                    console.log("Transcribed text: ", data.transcription);
+
+                    if (data.oceer_result && data.oceer_result.results) {
+                        const {
+                            results
+                        } = data.oceer_result;
+
+                        // Boucle sur les clés/valeurs dans results
+                        for (const [key, resultItem] of Object.entries(results)) {
+                            console.log(`\n=== Résultat pour : ${key} ===`);
+                            console.log('Value :', resultItem.value);
+                            console.log('Score :', resultItem.score);
+                            console.log('ID    :', resultItem.id);
+
+                            $(`input[name='${resultItem.id}']`).val(resultItem.value);
+
+                            // Si vous souhaitez itérer sur le tableau metadata
+                            if (Array.isArray(resultItem.metadata)) {
+                                resultItem.metadata.forEach((meta, index) => {
+                                    console.log(`Metadata #${index} :`, meta);
+                                });
+                            }
+                        }
+                    } else {
+                        console.warn('Aucun résultat dans oceer_result.');
+                    }
+
+
+                    // alert(`Texte transcrit : ${data.transcription}`);
+                } catch (error) {
+                    console.error(error);
+                    alert("Failed to transcribe audio.");
+                }
             });
-
-            if (!response.ok) {
-                throw new Error("Server error during transcription request.");
-            }
-
-            const data = await response.json();
-            // data will contain the transcription if everything goes well
-            console.log("Transcribed text: ", data.transcription);
-
-            // alert(`Texte transcrit : ${data.transcription}`);
-        } catch (error) {
-            console.error(error);
-            alert("Failed to transcribe audio.");
-        }
-    });
         </script>
-        
-    
- 
+
+
+
     @endif
 </div>
