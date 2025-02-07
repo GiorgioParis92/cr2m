@@ -129,6 +129,27 @@ class AudioController extends Controller
                     $oceerResult = $this->sendPdfToOceer($pdfPath);
 
 
+                    if($oceerResult) {
+                        
+                        if (
+                            isset($oceerResult->data->results->data->identification_results->results)
+                        ) {
+                            // On récupère l'objet qui contient 'results'
+                            $oceerResult = $oceerResult->data->results->data->identification_results;
+                            
+                            // Enfin, on peut extraire les résultats
+                            $results = $oceerResult->results;
+                        
+                            // Exemple de manipulation : affichage
+                            print_r($results);
+                        } else {
+                            // Ici, on gère le cas d'erreur où l'on ne trouve pas la clé demandée
+                            echo "Les résultats n'existent pas dans la structure JSON.";
+                        }
+
+                    }
+
+
                 }
 
 
@@ -140,8 +161,8 @@ class AudioController extends Controller
             // 7. Return transcription (and possibly the PDF path) to the frontend
             return response()->json([
                 'message'       => 'Audio transcription successful.',
-                'transcription' => $transcription,
-                'oceer_result'  => $oceerResult,
+                'transcription' => $transcription ?? '',
+                'oceer_result'  => $oceerResult ?? '',
 
                 // 'pdf_path'    => $pdfPath ?? null, // Optionally include the PDF path
             ]);
