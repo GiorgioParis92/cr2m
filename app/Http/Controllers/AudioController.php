@@ -112,7 +112,7 @@ class AudioController extends Controller
     
           
                 $pdfName = $request->name.'_pdf_' . time() . '.pdf';
-                $pdfPath = storage_path('app/public/' . $pdfName);
+                $pdfPath = storage_path('app/public/dossiers/'.$dossier->folder.'/' . $pdfName);
                 $pdf->save($pdfPath);
                 
                 if($pdf) {
