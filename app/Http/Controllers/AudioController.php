@@ -62,14 +62,7 @@ class AudioController extends Controller
             ], 404);
         }
 
-        // 3. Prepare file for OpenAI Whisper
-        //    You must send it as multipart/form-data to the Whisper API
-        //    The "file" field name must be "file" (as per the Whisper API docs)
-        
-        //    The OpenAI Whisper endpoint:  POST https://api.openai.com/v1/audio/transcriptions
-        //    Required headers: Authorization: Bearer YOUR_API_KEY
-        //                      Content-Type: multipart/form-data
-        //    Required fields:  file, model, etc.
+
         
         $apiKey = env('OPENAI_API_KEY'); // store your API key in .env
         if (!$apiKey) {
