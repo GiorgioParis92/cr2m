@@ -134,20 +134,25 @@ class AudioController extends Controller
                         if (
                             isset($oceerResult->data->results->data->identification_results->results)
                         ) {
-                            // On récupère l'objet qui contient 'results'
+                     
                             $oceerResult = $oceerResult->data->results->data->identification_results;
-                            
-                            // Enfin, on peut extraire les résultats
+                      
                             $results = $oceerResult->results;
                         
-                            // Exemple de manipulation : affichage
+                        
+
+                            foreach($results as $key=>$result) {
+                                dump($key);
+                                dump($result);
+                            }
+
                          
                         } else {
                            
                         }
 
                     }
-
+                    dd('ok');
 
                 }
 
