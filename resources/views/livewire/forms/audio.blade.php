@@ -41,31 +41,30 @@
             let mediaRecorder;
             let audioChunks = [];
             let audioBlob;
-    
+        
             document.getElementById("startRecord").addEventListener("click", async function () {
                 try {
                     const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-    
+        
                     mediaRecorder = new MediaRecorder(stream);
                     mediaRecorder.ondataavailable = event => {
                         audioChunks.push(event.data);
                     };
-    
-                    mediaRecorder.onstop = () => {
+        
+                    mediaRecorder.onstop = async () => {
                         audioBlob = new Blob(audioChunks, { type: "audio/wav" });
                         const audioUrl = URL.createObjectURL(audioBlob);
-    
-                        // document.getElementById("downloadLink").href = audioUrl;
-                        // document.getElementById("downloadLink").download = "recorded-audio.wav";
-                        // document.getElementById("downloadLink").style.display = "block";
-    
+        
+                        // ✅ Display the recorded audio immediately
                         document.getElementById("audioPlayback").src = audioUrl;
                         document.getElementById("audioPlayback").style.display = "block";
-                        document.getElementById("saveAudio").disabled = false;
-    
+        
                         audioChunks = []; // Reset chunks
+        
+                        // ✅ Automatically save the audio after stopping the recording
+                        await saveAudio(audioBlob);
                     };
-    
+        
                     mediaRecorder.start();
                     document.getElementById("startRecord").disabled = true;
                     document.getElementById("stopRecord").disabled = false;
@@ -74,28 +73,29 @@
                     alert("Could not access microphone. Please allow microphone access.");
                 }
             });
-    
-            document.getElementById("stopRecord").addEventListener("click", async function () {
+        
+            document.getElementById("stopRecord").addEventListener("click", function () {
                 if (mediaRecorder && mediaRecorder.state === "recording") {
                     mediaRecorder.stop();
                     document.getElementById("startRecord").disabled = false;
                     document.getElementById("stopRecord").disabled = true;
                 }
-
-
+            });
+        
+            async function saveAudio(audioBlob) {
                 if (!audioBlob) {
                     alert("No audio recorded!");
                     return;
                 }
-    
+        
                 const formData = new FormData();
                 formData.append("audio", audioBlob, "audio.wav");
-                formData.append("name",  "{{ $conf['name'] ?? '' }}");
-                formData.append("dossier_id",  "{{ $dossier_id ?? '' }}");
-                formData.append("form_id",  "{{ $form_id ?? ''}}");
-    
+                formData.append("name", "{{ $conf['name'] ?? '' }}");
+                formData.append("dossier_id", "{{ $dossier_id ?? '' }}");
+                formData.append("form_id", "{{ $form_id ?? '' }}");
+        
                 const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute("content");
-    
+        
                 try {
                     const response = await fetch("{{ route('audio.store') }}", {
                         method: "POST",
@@ -104,11 +104,13 @@
                         },
                         body: formData
                     });
-    
+        
                     const data = await response.json();
                     if (response.ok) {
-                        // alert("Audio saved successfully!");
                         console.log("Saved file path:", data.file_path);
+        
+                        // ✅ Update audioPlayback to use the saved file from the server
+                        document.getElementById("audioPlayback").src = data.file_path;
                     } else {
                         alert("Error saving audio: " + data.message);
                     }
@@ -116,14 +118,9 @@
                     console.error("Error saving audio:", error);
                     alert("Failed to save audio.");
                 }
-
-            });
-    
-            document.getElementById("saveAudio").addEventListener("click", async function () {
-  
-            });
-    
+            }
         </script>
+        
     
  
     @endif
