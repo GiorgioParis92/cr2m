@@ -32,6 +32,8 @@ use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\ApiRequestController;
 use App\Http\Controllers\FinancierController;
 use App\Http\Controllers\MailboxController;
+use App\Http\Controllers\AudioController;
+
 
 
 /*
@@ -109,6 +111,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Route::get('/dashboard', function () {
     //     return view('dashboard');
     // })->name('dashboard');
+    Route::post('/save-audio', [AudioController::class, 'store'])->name('audio.store');
+    Route::get('/audio', [AudioController::class, 'show'])->name('audio.show');
 
     Route::get('/users/index', [UserController::class, 'index'])->name('users.index');
     Route::get('/user/create', [UserController::class, 'create'])->name('users.create');
