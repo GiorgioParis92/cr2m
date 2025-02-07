@@ -12,7 +12,6 @@
         <input id="value" type="hidden" name="{{ $conf['name'] }}" class="form-control "
             wire:model.debounce.500ms="value" placeholder="">
 
-        <h2>Audio Recorder</h2>
         <div class="d-flex gap-2 mb-3">
             <button id="startRecord" class="btn btn-primary">
                 <i class="bi bi-mic-fill"></i> Démarrer l'enregistrement
