@@ -180,6 +180,9 @@ class AudioController extends Controller
                 basename($pdfPath)           // filename
             )
             ->post('https://app.oceer.fr/api/pipeline/start/229bdbbf-869a-49c9-83cb-ae069f1137ff');
+        if($response) {
+            return response()->json($response);
+        }
 
         // Optionally, handle success or errors
         if ($response->failed()) {
