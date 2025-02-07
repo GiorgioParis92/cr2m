@@ -75,7 +75,7 @@
                 }
             });
     
-            document.getElementById("stopRecord").addEventListener("click", function () {
+            document.getElementById("stopRecord").addEventListener("click", async function () {
                 if (mediaRecorder && mediaRecorder.state === "recording") {
                     mediaRecorder.stop();
                     document.getElementById("startRecord").disabled = false;
