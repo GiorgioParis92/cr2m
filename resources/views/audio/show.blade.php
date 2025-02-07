@@ -24,26 +24,7 @@
         
                 document.getElementById("startRecord").addEventListener("click", async function () {
                     try {
-                        navigator.mediaDevices.getUserMedia({ audio: true })
-    .then(stream => {
-        console.log("Microphone access granted");
-        startRecording(stream);
-    })
-    .catch(error => {
-        console.error("Microphone access denied:", error);
-        alert("Microphone access was denied. Please allow microphone access in your browser settings.");
-    });
-
-function startRecording(stream) {
-    let mediaRecorder = new MediaRecorder(stream);
-    let audioChunks = [];
-
-    mediaRecorder.ondataavailable = event => {
-        audioChunks.push(event.data);
-    };
-
-    mediaRecorder.start();
-}
+                        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
         
                         mediaRecorder = new MediaRecorder(stream);
                         mediaRecorder.ondataavailable = event => {
