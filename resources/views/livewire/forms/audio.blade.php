@@ -7,7 +7,7 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
     </head>
 
-    {{ $dossier_id }}
+    {{ $value }}
     <input type="text"    name="{{ $conf['name'] }}"  class="form-control "  wire:model.debounce.500ms="value"  placeholder="">
 
         <h2>Audio Recorder</h2>
