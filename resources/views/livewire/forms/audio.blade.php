@@ -7,7 +7,9 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
     </head>
 
-    
+    {{ $conf['name'] }}
+    <input type="text"    name="{{ $conf['name'] }}"  class="form-control "  wire:model.debounce.500ms="value"  placeholder="">
+
         <h2>Audio Recorder</h2>
         <button id="startRecord">🎤 Start Recording</button>
         <button id="stopRecord" disabled>⏹️ Stop Recording</button>
