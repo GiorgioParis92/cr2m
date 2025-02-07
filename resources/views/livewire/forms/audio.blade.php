@@ -1,4 +1,4 @@
-<div class="col-sm-12 {{ $conf['class'] ?? 'col-lg-12' }}">
+<div wire:poll class="col-sm-12 {{ $conf['class'] ?? 'col-lg-12' }}">
     @if(auth()->user()->id==1)
     <head>
         <meta charset="UTF-8">
