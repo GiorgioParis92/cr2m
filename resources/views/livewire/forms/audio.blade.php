@@ -30,7 +30,7 @@
         <div class="mt-3">
             {{ storage_path($value) }}
             @if (!empty($value))
-                <audio id="audioPlayback" controls class="w-100" src="{{ storage_path($value) }}"></audio>
+                <audio id="audioPlayback" controls class="w-100" src="{{ ($value) }}"></audio>
             @else
                 <audio id="audioPlayback" controls style="display: none;" class="w-100"></audio>
             @endif
