@@ -156,7 +156,7 @@ class AudioController extends Controller
     }
 
 
-    public function sendPdfToOceer(string $pdfPath): void
+    public function sendPdfToOceer(string $pdfPath)
     {
         $result = [
             'success' => false,
