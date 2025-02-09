@@ -46,7 +46,7 @@
 
             @if($pdf)
             <button 
-                data-img-src="{{asset('storage/' . $value)}}"
+                data-img-src="{{asset('storage/' . $pdf)}}"
                 class="btn btn-success pdfmodal" 
                
             >
