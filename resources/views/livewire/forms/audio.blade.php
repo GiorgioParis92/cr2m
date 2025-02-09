@@ -44,12 +44,16 @@
                 <i class="bi bi-save-fill"></i> Analyser l'audio
             </button>
 
-            @php
-                if($conf['name']) {
-                    $pdf = $conf['name'].'_pdf';
-                    echo $pdf;
-                }
-            @endphp
+            @if($pdf)
+            <button 
+                data-img-src="{{asset('storage/' . $value)}}"
+                class="btn btn-success pdfmodal" 
+               
+            >
+                <i class="bi bi-save-fill"></i> PDF
+            </button>
+            @endif
+
         </div>
 
         <div>
