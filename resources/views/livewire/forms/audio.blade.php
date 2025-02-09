@@ -5,32 +5,34 @@
 
 <div class="col-sm-12 {{ $conf['class'] ?? 'col-lg-12' }}">
     @if (auth()->user()->id == 1)
-        
-        {{-- We still keep head here, though typically you'd place <head> in layouts --}}
+
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <meta name="csrf-token" content="{{ csrf_token() }}">
         </head>
 
-        {{-- 
-            ID for the hidden input, appended with $uniqueId 
-            so multiple recorders won't clash 
-        --}}
+        {{-- Use the uniqueId in the input's ID --}}
         <input 
             id="value-{{ $uniqueId }}" 
             type="hidden" 
             name="{{ $conf['name'] }}" 
             class="form-control"
-            wire:model.debounce.500ms="value" 
-            placeholder=""
+            wire:model.debounce.500ms="value"
         >
 
         <div class="d-flex gap-2 mb-3">
-            <button id="startRecord-{{ $uniqueId }}" class="btn btn-primary">
+            <button 
+                id="startRecord-{{ $uniqueId }}" 
+                class="btn btn-primary"
+            >
                 <i class="bi bi-mic-fill"></i> Démarrer l'enregistrement
             </button>
-            <button id="stopRecord-{{ $uniqueId }}" class="btn btn-danger" disabled>
+            <button 
+                id="stopRecord-{{ $uniqueId }}" 
+                class="btn btn-danger" 
+                disabled
+            >
                 <i class="bi bi-stop-fill"></i> Stop
             </button>
             <button 
@@ -78,159 +80,164 @@
         </div>
 
         <script>
-            // Use the uniqueId in variable names to avoid collisions
-            let mediaRecorder_{{ $uniqueId }};
-            let audioChunks_{{ $uniqueId }} = [];
-            let audioBlob_{{ $uniqueId }};
+            // Wrap everything in an IIFE so each instance has its own scope
+            (function() {
+                let mediaRecorder_{{ $uniqueId }};
+                let audioChunks_{{ $uniqueId }} = [];
+                let audioBlob_{{ $uniqueId }};
 
-            // Cache DOM elements by unique ID
-            const startBtn = document.getElementById("startRecord-{{ $uniqueId }}");
-            const stopBtn = document.getElementById("stopRecord-{{ $uniqueId }}");
-            const analyseBtn = document.getElementById("AnalyseAudio-{{ $uniqueId }}");
-            const downloadLink = document.getElementById("analyse_audio-{{ $uniqueId }}");
-            const audioPlayback = document.getElementById("audioPlayback-{{ $uniqueId }}");
-            const hiddenValueInput = document.getElementById("value-{{ $uniqueId }}");
+                // Grab all needed elements by ID, using the uniqueId
+                const startBtn = document.getElementById("startRecord-{{ $uniqueId }}");
+                const stopBtn = document.getElementById("stopRecord-{{ $uniqueId }}");
+                const analyseBtn = document.getElementById("AnalyseAudio-{{ $uniqueId }}");
+                const downloadLink = document.getElementById("analyse_audio-{{ $uniqueId }}");
+                const audioPlayback = document.getElementById("audioPlayback-{{ $uniqueId }}");
+                const hiddenValueInput = document.getElementById("value-{{ $uniqueId }}");
 
-            startBtn.addEventListener("click", async function() {
-                try {
-                    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                startBtn.addEventListener("click", async function() {
+                    try {
+                        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
 
-                    mediaRecorder_{{ $uniqueId }} = new MediaRecorder(stream);
+                        mediaRecorder_{{ $uniqueId }} = new MediaRecorder(stream);
+                        mediaRecorder_{{ $uniqueId }}.ondataavailable = event => {
+                            audioChunks_{{ $uniqueId }}.push(event.data);
+                        };
 
-                    mediaRecorder_{{ $uniqueId }}.ondataavailable = (event) => {
-                        audioChunks_{{ $uniqueId }}.push(event.data);
-                    };
+                        mediaRecorder_{{ $uniqueId }}.onstop = async () => {
+                            audioBlob_{{ $uniqueId }} = new Blob(audioChunks_{{ $uniqueId }}, {
+                                type: "audio/wav"
+                            });
+                            const audioUrl = URL.createObjectURL(audioBlob_{{ $uniqueId }});
 
-                    mediaRecorder_{{ $uniqueId }}.onstop = async () => {
-                        audioBlob_{{ $uniqueId }} = new Blob(audioChunks_{{ $uniqueId }}, {
-                            type: "audio/wav"
+                            // Display the recorded audio immediately
+                            audioPlayback.src = '../..' + audioUrl;
+                            audioPlayback.style.display = "block";
+                            // Reset chunks
+                            audioChunks_{{ $uniqueId }} = [];
+
+                            // Automatically save the audio after stopping
+                            await saveAudio(audioBlob_{{ $uniqueId }});
+                        };
+
+                        mediaRecorder_{{ $uniqueId }}.start();
+                        startBtn.disabled = true;
+                        stopBtn.disabled = false;
+                        analyseBtn.style.display = "none";
+
+                    } catch (error) {
+                        console.error("Error accessing microphone:", error);
+                        alert("Could not access microphone. Please allow microphone access.");
+                    }
+                });
+
+                stopBtn.addEventListener("click", function() {
+                    if (mediaRecorder_{{ $uniqueId }} && mediaRecorder_{{ $uniqueId }}.state === "recording") {
+                        mediaRecorder_{{ $uniqueId }}.stop();
+                        startBtn.disabled = false;
+                        stopBtn.disabled = true;
+                    }
+                });
+
+                async function saveAudio(audioBlob) {
+                    if (!audioBlob) {
+                        alert("No audio recorded!");
+                        return;
+                    }
+
+                    const formData = new FormData();
+                    formData.append("audio", audioBlob, "audio.wav");
+                    formData.append("name", "{{ $conf['name'] ?? '' }}");
+                    formData.append("dossier_id", "{{ $dossier_id ?? '' }}");
+                    formData.append("form_id", "{{ $form_id ?? '' }}");
+
+                    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute("content");
+
+                    try {
+                        const response = await fetch("{{ route('audio.store') }}", {
+                            method: "POST",
+                            headers: {
+                                "X-CSRF-TOKEN": csrfToken
+                            },
+                            body: formData
                         });
-                        const audioUrl = URL.createObjectURL(audioBlob_{{ $uniqueId }});
-                        
-                        // Display the recorded audio immediately
-                        audioPlayback.src = '../..' + audioUrl;
-                        audioPlayback.style.display = "block";
-                        audioChunks_{{ $uniqueId }} = []; // Reset chunks
 
-                        // Automatically save the audio after stopping
-                        await saveAudio(audioBlob_{{ $uniqueId }});
-                    };
+                        const data = await response.json();
+                        if (response.ok) {
+                            console.log("Saved file path:", data.file_path);
 
-                    mediaRecorder_{{ $uniqueId }}.start();
-                    startBtn.disabled = true;
-                    stopBtn.disabled = false;
-                    analyseBtn.style.display = "none";
-                } catch (error) {
-                    console.error("Error accessing microphone:", error);
-                    alert("Could not access microphone. Please allow microphone access.");
-                }
-            });
+                            // Update audioPlayback to use the saved file
+                            audioPlayback.src = data.file_path;
+                            hiddenValueInput.value = data.file_path;
 
-            stopBtn.addEventListener("click", function() {
-                if (mediaRecorder_{{ $uniqueId }} && mediaRecorder_{{ $uniqueId }}.state === "recording") {
-                    mediaRecorder_{{ $uniqueId }}.stop();
-                    startBtn.disabled = false;
-                    stopBtn.disabled = true;
-                }
-            });
-
-            async function saveAudio(audioBlob) {
-                if (!audioBlob) {
-                    alert("No audio recorded!");
-                    return;
-                }
-
-                const formData = new FormData();
-                formData.append("audio", audioBlob, "audio.wav");
-                formData.append("name", "{{ $conf['name'] ?? '' }}");
-                formData.append("dossier_id", "{{ $dossier_id ?? '' }}");
-                formData.append("form_id", "{{ $form_id ?? '' }}");
-
-                const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute("content");
-
-                try {
-                    const response = await fetch("{{ route('audio.store') }}", {
-                        method: "POST",
-                        headers: {
-                            "X-CSRF-TOKEN": csrfToken
-                        },
-                        body: formData
-                    });
-
-                    const data = await response.json();
-                    if (response.ok) {
-                        console.log("Saved file path:", data.file_path);
-
-                        // Update audioPlayback to use the saved file
-                        audioPlayback.src = data.file_path;
-                        hiddenValueInput.value = data.file_path;
-
-                        // Show 'Analyse audio' button
-                        analyseBtn.style.display = "block";
-                    } else {
-                        alert("Error saving audio: " + data.message);
+                            // Show 'Analyser l'audio' button
+                            analyseBtn.style.display = "block";
+                        } else {
+                            alert("Error saving audio: " + data.message);
+                        }
+                    } catch (error) {
+                        console.error("Error saving audio:", error);
+                        alert("Failed to save audio.");
                     }
-                } catch (error) {
-                    console.error("Error saving audio:", error);
-                    alert("Failed to save audio.");
                 }
-            }
 
-            analyseBtn.addEventListener("click", async function() {
-                try {
-                    const response = await fetch("{{ route('audio.analyse') }}", {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json",
-                            "X-CSRF-TOKEN": document
-                                .querySelector('meta[name="csrf-token"]')
-                                .getAttribute("content")
-                        },
-                        body: JSON.stringify({
-                            value: hiddenValueInput.value,
-                            dossier_id: {{ $dossier_id }},
-                            form_id: {{ $form_id }},
-                            name: '{{ $conf['name'] ?? '' }}'
-                        })
-                    });
+                analyseBtn.addEventListener("click", async function() {
+                    try {
+                        const response = await fetch("{{ route('audio.analyse') }}", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                                "X-CSRF-TOKEN": document
+                                    .querySelector('meta[name="csrf-token"]')
+                                    .getAttribute("content")
+                            },
+                            body: JSON.stringify({
+                                value: hiddenValueInput.value,
+                                dossier_id: {{ $dossier_id }},
+                                form_id: {{ $form_id }},
+                                name: '{{ $conf['name'] ?? '' }}'
+                            })
+                        });
 
-                    if (!response.ok) {
-                        throw new Error("Server error during transcription request.");
-                    }
+                        if (!response.ok) {
+                            throw new Error("Server error during transcription request.");
+                        }
 
-                    const data = await response.json();
-                    console.log("Transcribed text: ", data.transcription);
+                        const data = await response.json();
+                        console.log("Transcribed text: ", data.transcription);
 
-                    if (data.oceer_result && data.oceer_result.results) {
-                        const { results } = data.oceer_result;
-                        for (const [key, resultItem] of Object.entries(results)) {
-                            console.log(`\n=== Résultat pour : ${key} ===`);
-                            console.log('Value :', resultItem.value);
-                            console.log('Score :', resultItem.score);
-                            console.log('ID    :', resultItem.id);
+                        if (data.oceer_result && data.oceer_result.results) {
+                            const { results } = data.oceer_result;
 
-                            if (resultItem.value) {
-                                // Fill an input matching the resultItem id
-                                const targetInput = document.querySelector(`input[name='${resultItem.id}']`);
-                                if (targetInput) {
-                                    targetInput.value = resultItem.value;
+                            // Boucle sur les clés/valeurs dans results
+                            for (const [key, resultItem] of Object.entries(results)) {
+                                console.log(`\n=== Résultat pour : ${key} ===`);
+                                console.log('Value :', resultItem.value);
+                                console.log('Score :', resultItem.score);
+                                console.log('ID    :', resultItem.id);
+
+                                if (resultItem.value) {
+                                    const inputToFill = document.querySelector(`input[name='${resultItem.id}']`);
+                                    if (inputToFill) {
+                                        inputToFill.value = resultItem.value;
+                                    }
+                                }
+
+                                if (Array.isArray(resultItem.metadata)) {
+                                    resultItem.metadata.forEach((meta, index) => {
+                                        console.log(`Metadata #${index} :`, meta);
+                                    });
                                 }
                             }
-
-                            if (Array.isArray(resultItem.metadata)) {
-                                resultItem.metadata.forEach((meta, index) => {
-                                    console.log(`Metadata #${index} :`, meta);
-                                });
-                            }
+                        } else {
+                            console.warn('Aucun résultat dans oceer_result.');
                         }
-                    } else {
-                        console.warn('Aucun résultat dans oceer_result.');
+                    } catch (error) {
+                        console.error(error);
+                        alert("Failed to transcribe audio.");
                     }
-                } catch (error) {
-                    console.error(error);
-                    alert("Failed to transcribe audio.");
-                }
-            });
+                });
+
+            })(); // End of IIFE
         </script>
     @endif
 </div>
