@@ -148,10 +148,10 @@ class AudioController extends Controller
                             $request->name= implode('.', $segments);
 
 
-                            $result['id']=($request->name ? $request->name.'.' : ''). $result['id'];
+                        
 
                             foreach($results as $key=>$result) {
-                   
+                                $result['id']=($request->name ? $request->name.'.' : ''). $result['id'];
                                 if($result['score']>=0.8 && $result['value']!='') {
                                     $update = FormsData::updateOrCreate(
                                         [
