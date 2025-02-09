@@ -85,6 +85,15 @@
         </div>
 
         <script>
+                    $(document).on('click', '.pdfModal', function(event) {
+            $('#pdfFrame').attr('src', '');
+
+            var imgSrc = $(this).data('img-src');
+            imgSrc += `?time=${new Date().getTime()}`;
+
+            $('#pdfFrame').attr('src', imgSrc);
+            $('#pdfModal').css('display', 'block');
+        });
             // Wrap everything in an IIFE so each instance has its own scope
             (function() {
                 let mediaRecorder_{{ $uniqueId }};
