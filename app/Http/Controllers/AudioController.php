@@ -115,6 +115,8 @@ class AudioController extends Controller
                 $pdfPath = storage_path('app/public/dossiers/'.$dossier->folder.'/' . $pdfName);
                 $pdf->save($pdfPath);
                 
+                dump($request->api_link);
+                dd($pdfPath);
                 if($pdf) {
                     $update = FormsData::updateOrCreate(
                         [
