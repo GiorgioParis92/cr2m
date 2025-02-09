@@ -203,7 +203,7 @@
                                 dossier_id: {{ $dossier_id }},
                                 form_id: {{ $form_id }},
                                 name: '{{ $conf['name'] ?? '' }}',
-                                name: '{{ $api_link ?? '' }}'
+                                api_link: '{{ $api_link ?? '' }}'
                             })
                         });
 
