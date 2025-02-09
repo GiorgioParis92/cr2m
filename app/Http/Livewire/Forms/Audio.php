@@ -19,7 +19,7 @@ class Audio extends AbstractData
 
         $this->pdf = $pdf->meta_value ?? false;
 
-        if ($this->options['api_link']) {
+        if ($this->options && $this->options['api_link']) {
 
             $this->api_link=$this->options['api_link'];
         
