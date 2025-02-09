@@ -1,96 +1,136 @@
+@php
+    // Generate a unique identifier for this specific recorder instance
+    $uniqueId = uniqid('recorder_');
+@endphp
+
 <div class="col-sm-12 {{ $conf['class'] ?? 'col-lg-12' }}">
     @if (auth()->user()->id == 1)
-
+        
+        {{-- We still keep head here, though typically you'd place <head> in layouts --}}
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        
             <meta name="csrf-token" content="{{ csrf_token() }}">
         </head>
 
-      
-        <input id="value" type="hidden" name="{{ $conf['name'] }}" class="form-control "
-            wire:model.debounce.500ms="value" placeholder="">
+        {{-- 
+            ID for the hidden input, appended with $uniqueId 
+            so multiple recorders won't clash 
+        --}}
+        <input 
+            id="value-{{ $uniqueId }}" 
+            type="hidden" 
+            name="{{ $conf['name'] }}" 
+            class="form-control"
+            wire:model.debounce.500ms="value" 
+            placeholder=""
+        >
 
         <div class="d-flex gap-2 mb-3">
-            <button id="startRecord" class="btn btn-primary">
+            <button id="startRecord-{{ $uniqueId }}" class="btn btn-primary">
                 <i class="bi bi-mic-fill"></i> Démarrer l'enregistrement
             </button>
-            <button id="stopRecord" class="btn btn-danger" disabled>
+            <button id="stopRecord-{{ $uniqueId }}" class="btn btn-danger" disabled>
                 <i class="bi bi-stop-fill"></i> Stop
             </button>
-            <button id="AnalyseAudio" class="btn btn-success" style="display:{{ $value ? 'block' : 'none' }}">
+            <button 
+                id="AnalyseAudio-{{ $uniqueId }}" 
+                class="btn btn-success" 
+                style="display:{{ $value ? 'block' : 'none' }}"
+            >
                 <i class="bi bi-save-fill"></i> Analyser l'audio
             </button>
+
             @php
-            if($conf['name']) {
-                $pdf=str_replace('.wav','_pdf.pdf',$conf['name']);
-                echo $pdf;
-            }
+                if($conf['name']) {
+                    $pdf = $conf['name'].'_pdf';
+                    echo $pdf;
+                }
             @endphp
         </div>
+
         <div>
-            <a id="analyse_audio" class="btn btn-secondary" style="display: none;">
+            <a 
+                id="analyse_audio-{{ $uniqueId }}" 
+                class="btn btn-secondary" 
+                style="display: none;"
+            >
                 <i class="bi bi-download"></i> Download Audio
             </a>
         </div>
-        <div class="mt-3">
 
+        <div class="mt-3">
             @if (!empty($value))
-                <audio id="audioPlayback" controls class="w-100" src="../../storage/{{ $value }}"></audio>
+                <audio 
+                    id="audioPlayback-{{ $uniqueId }}" 
+                    controls 
+                    class="w-100" 
+                    src="../../storage/{{ $value }}"
+                ></audio>
             @else
-                <audio id="audioPlayback" controls style="display: none;" class="w-100"></audio>
+                <audio 
+                    id="audioPlayback-{{ $uniqueId }}" 
+                    controls 
+                    style="display: none;" 
+                    class="w-100"
+                ></audio>
             @endif
         </div>
 
-
         <script>
-            let mediaRecorder;
-            let audioChunks = [];
-            let audioBlob;
+            // Use the uniqueId in variable names to avoid collisions
+            let mediaRecorder_{{ $uniqueId }};
+            let audioChunks_{{ $uniqueId }} = [];
+            let audioBlob_{{ $uniqueId }};
 
-            document.getElementById("startRecord").addEventListener("click", async function() {
+            // Cache DOM elements by unique ID
+            const startBtn = document.getElementById("startRecord-{{ $uniqueId }}");
+            const stopBtn = document.getElementById("stopRecord-{{ $uniqueId }}");
+            const analyseBtn = document.getElementById("AnalyseAudio-{{ $uniqueId }}");
+            const downloadLink = document.getElementById("analyse_audio-{{ $uniqueId }}");
+            const audioPlayback = document.getElementById("audioPlayback-{{ $uniqueId }}");
+            const hiddenValueInput = document.getElementById("value-{{ $uniqueId }}");
+
+            startBtn.addEventListener("click", async function() {
                 try {
-                    const stream = await navigator.mediaDevices.getUserMedia({
-                        audio: true
-                    });
+                    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
 
-                    mediaRecorder = new MediaRecorder(stream);
-                    mediaRecorder.ondataavailable = event => {
-                        audioChunks.push(event.data);
+                    mediaRecorder_{{ $uniqueId }} = new MediaRecorder(stream);
+
+                    mediaRecorder_{{ $uniqueId }}.ondataavailable = (event) => {
+                        audioChunks_{{ $uniqueId }}.push(event.data);
                     };
 
-                    mediaRecorder.onstop = async () => {
-                        audioBlob = new Blob(audioChunks, {
+                    mediaRecorder_{{ $uniqueId }}.onstop = async () => {
+                        audioBlob_{{ $uniqueId }} = new Blob(audioChunks_{{ $uniqueId }}, {
                             type: "audio/wav"
                         });
-                        const audioUrl = URL.createObjectURL(audioBlob);
+                        const audioUrl = URL.createObjectURL(audioBlob_{{ $uniqueId }});
+                        
+                        // Display the recorded audio immediately
+                        audioPlayback.src = '../..' + audioUrl;
+                        audioPlayback.style.display = "block";
+                        audioChunks_{{ $uniqueId }} = []; // Reset chunks
 
-                        // ✅ Display the recorded audio immediately
-                        document.getElementById("audioPlayback").src = '../..'+audioUrl;
-                        document.getElementById("audioPlayback").style.display = "block";
-
-                        audioChunks = []; // Reset chunks
-
-                        // ✅ Automatically save the audio after stopping the recording
-                        await saveAudio(audioBlob);
+                        // Automatically save the audio after stopping
+                        await saveAudio(audioBlob_{{ $uniqueId }});
                     };
 
-                    mediaRecorder.start();
-                    document.getElementById("startRecord").disabled = true;
-                    document.getElementById("stopRecord").disabled = false;
-                    $('#AnalyseAudio').hide();
+                    mediaRecorder_{{ $uniqueId }}.start();
+                    startBtn.disabled = true;
+                    stopBtn.disabled = false;
+                    analyseBtn.style.display = "none";
                 } catch (error) {
                     console.error("Error accessing microphone:", error);
                     alert("Could not access microphone. Please allow microphone access.");
                 }
             });
 
-            document.getElementById("stopRecord").addEventListener("click", function() {
-                if (mediaRecorder && mediaRecorder.state === "recording") {
-                    mediaRecorder.stop();
-                    document.getElementById("startRecord").disabled = false;
-                    document.getElementById("stopRecord").disabled = true;
+            stopBtn.addEventListener("click", function() {
+                if (mediaRecorder_{{ $uniqueId }} && mediaRecorder_{{ $uniqueId }}.state === "recording") {
+                    mediaRecorder_{{ $uniqueId }}.stop();
+                    startBtn.disabled = false;
+                    stopBtn.disabled = true;
                 }
             });
 
@@ -121,10 +161,12 @@
                     if (response.ok) {
                         console.log("Saved file path:", data.file_path);
 
-                        // ✅ Update audioPlayback to use the saved file from the server
-                        document.getElementById("audioPlayback").src = data.file_path;
-                        $('#value').val(data.file_path);
-                        $('#AnalyseAudio').show();
+                        // Update audioPlayback to use the saved file
+                        audioPlayback.src = data.file_path;
+                        hiddenValueInput.value = data.file_path;
+
+                        // Show 'Analyse audio' button
+                        analyseBtn.style.display = "block";
                     } else {
                         alert("Error saving audio: " + data.message);
                     }
@@ -134,26 +176,20 @@
                 }
             }
 
-
-
-            document.getElementById("AnalyseAudio").addEventListener("click", async function() {
+            analyseBtn.addEventListener("click", async function() {
                 try {
-
-                    const formData = new FormData();
-                    formData.append("value", $('#value').val());
-
-
                     const response = await fetch("{{ route('audio.analyse') }}", {
                         method: "POST",
                         headers: {
                             "Content-Type": "application/json",
-                            "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute(
-                                "content")
+                            "X-CSRF-TOKEN": document
+                                .querySelector('meta[name="csrf-token"]')
+                                .getAttribute("content")
                         },
                         body: JSON.stringify({
-                            value: $('#value').val(), // <-- The custom value you want to send
-                            dossier_id: {{ $dossier_id }}, // <-- The custom value you want to send
-                            form_id: {{ $form_id }}, // <-- The custom value you want to send
+                            value: hiddenValueInput.value,
+                            dossier_id: {{ $dossier_id }},
+                            form_id: {{ $form_id }},
                             name: '{{ $conf['name'] ?? '' }}'
                         })
                     });
@@ -163,28 +199,24 @@
                     }
 
                     const data = await response.json();
-                    // data will contain the transcription if everything goes well
                     console.log("Transcribed text: ", data.transcription);
 
-
                     if (data.oceer_result && data.oceer_result.results) {
-                        const {
-                            results
-                        } = data.oceer_result;
-
-                        // Boucle sur les clés/valeurs dans results
+                        const { results } = data.oceer_result;
                         for (const [key, resultItem] of Object.entries(results)) {
                             console.log(`\n=== Résultat pour : ${key} ===`);
                             console.log('Value :', resultItem.value);
                             console.log('Score :', resultItem.score);
                             console.log('ID    :', resultItem.id);
 
-                            if(resultItem.value!='' && resultItem.value!=null) {
-                                $(`input[name='${resultItem.id}']`).val(resultItem.value);
+                            if (resultItem.value) {
+                                // Fill an input matching the resultItem id
+                                const targetInput = document.querySelector(`input[name='${resultItem.id}']`);
+                                if (targetInput) {
+                                    targetInput.value = resultItem.value;
+                                }
                             }
-                           
 
-                            // Si vous souhaitez itérer sur le tableau metadata
                             if (Array.isArray(resultItem.metadata)) {
                                 resultItem.metadata.forEach((meta, index) => {
                                     console.log(`Metadata #${index} :`, meta);
@@ -194,17 +226,11 @@
                     } else {
                         console.warn('Aucun résultat dans oceer_result.');
                     }
-
-
-                    // alert(`Texte transcrit : ${data.transcription}`);
                 } catch (error) {
                     console.error(error);
                     alert("Failed to transcribe audio.");
                 }
             });
         </script>
-
-
-
     @endif
 </div>
