@@ -19,7 +19,7 @@ class Audio extends AbstractData
 
         $this->pdf = $pdf->meta_value ?? false;
 
-        print_r($conf);
+    
     }
 
     public function getErrorMessage() {

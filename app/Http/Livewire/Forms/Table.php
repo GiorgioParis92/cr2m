@@ -41,7 +41,6 @@ class Table extends AbstractData
         }
 
         $is_old = $this->isAssociativeJson($data);
-        $this->conf['original_name']=$this->conf['name'];
 
         if ($is_old) {
             if (!empty($data)) {

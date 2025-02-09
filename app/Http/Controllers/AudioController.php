@@ -180,6 +180,7 @@ class AudioController extends Controller
                 'message'       => 'Audio transcription successful.',
                 'transcription' => $transcription ?? '',
                 'oceer_result'  => $oceerResult ?? '',
+                'request-name'  => $request->name ?? '',
 
                 // 'pdf_path'    => $pdfPath ?? null, // Optionally include the PDF path
             ]);
