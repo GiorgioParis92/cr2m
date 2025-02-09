@@ -126,7 +126,7 @@ class AudioController extends Controller
                             'meta_value' => 'dossiers/'.$dossier->folder.'/'.$pdfName
                         ]
                     );
-                    $oceerResult = $this->sendPdfToOceer($pdfPath);
+                    $oceerResult = $this->sendPdfToOceer($pdfPath,$request->api_link);
 
 
                     if ($oceerResult) {
@@ -194,7 +194,7 @@ class AudioController extends Controller
     }
 
 
-    public function sendPdfToOceer(string $pdfPath)
+    public function sendPdfToOceer(string $pdfPath,$api_link)
     {
         $result = [
             'success' => false,
@@ -214,6 +214,7 @@ class AudioController extends Controller
             'api-key'       => 'R3SxEL6mbZ9UO9a',
         ];
 
+        $api_link=$api_link ?? 'https://app.oceer.fr/api/pipeline/start/229bdbbf-869a-49c9-83cb-ae069f1137ff';
         // Make the POST request using Laravel's HTTP Client:
         $response = Http::withHeaders($headers)
             ->attach(
@@ -221,7 +222,7 @@ class AudioController extends Controller
                 file_get_contents($pdfPath), // file content
                 basename($pdfPath)           // filename
             )
-            ->post('https://app.oceer.fr/api/pipeline/start/229bdbbf-869a-49c9-83cb-ae069f1137ff');
+            ->post($api_link);
    
             if ($response->successful()) {
                 $result['success'] = true;

@@ -19,7 +19,18 @@ class Audio extends AbstractData
 
         $this->pdf = $pdf->meta_value ?? false;
 
-    
+        if ($this->options) {
+            foreach ($this->options as $option) {
+     
+                print_r($option);
+
+
+            }
+        
+
+        }
+
+
     }
 
     public function getErrorMessage() {
