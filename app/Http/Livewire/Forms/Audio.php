@@ -18,6 +18,8 @@ class Audio extends AbstractData
         ->where('meta_key',$conf['name'].'_pdf')->first();
 
         $this->pdf = $pdf->meta_value ?? false;
+
+        print_r($conf);
     }
 
     public function getErrorMessage() {
