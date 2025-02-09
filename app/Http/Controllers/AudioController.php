@@ -129,50 +129,43 @@ class AudioController extends Controller
                     $oceerResult = $this->sendPdfToOceer($pdfPath);
 
 
-                    if($oceerResult) {
-
+                    if ($oceerResult) {
                         if (
                             isset($oceerResult['data']['results']['data']['identification_results']['results'])
                         ) {
-                     
+                            // On récupère la partie qui nous intéresse
                             $oceerResult = $oceerResult['data']['results']['data']['identification_results'];
-                      
-                            $results = $oceerResult['results'];
-                        
-                            $segments = explode('.',$request->name);
-
-                            // Supprime le dernier élément
+                    
+                            // 1. Nettoyer $request->name (suppression du dernier segment)
+                            $segments = explode('.', $request->name);
                             array_pop($segments);
-
-                            // Reconstruit la chaîne sans le dernier segment
-                            $request->name= implode('.', $segments);
-
-
-                        
-
-                            foreach($results as $key=>$result) {
-                                $result['id']=($request->name ? $request->name.'.' : ''). $result['id'];
-                                if($result['score']>=0.8 && $result['value']!='') {
-                                    $update = FormsData::updateOrCreate(
+                            $request->name = implode('.', $segments);
+                    
+                            // 2. Mettre à jour l'ID dans le tableau $results
+                            $results = $oceerResult['results'];
+                            foreach ($results as $key => $result) {
+                                // Construire le nouvel ID
+                                $newId = ($request->name ? $request->name . '.' : '') . $result['id'];
+                                $results[$key]['id'] = $newId;
+                    
+                                // Exemple de filtrage et update en base
+                                if ($result['score'] >= 0.8 && $result['value'] != '') {
+                                    FormsData::updateOrCreate(
                                         [
                                             'dossier_id' => $dossier->id,
-                                            'form_id' => $request->form_id,
-                                            'meta_key' => $result['id']
+                                            'form_id'    => $request->form_id,
+                                            'meta_key'   => $newId // On utilise maintenant $newId
                                         ],
                                         [
                                             'meta_value' => $result['value']
                                         ]
                                     );
                                 }
-
-                              
                             }
-
-                         
-                        } else {
-                           
+                    
+                            // 3. Réaffecter les résultats mis à jour dans $oceerResult
+                            $oceerResult['results'] = $results;
                         }
-
                     }
            
 
@@ -184,14 +177,11 @@ class AudioController extends Controller
                
             }
 
-            // 7. Return transcription (and possibly the PDF path) to the frontend
             return response()->json([
                 'message'       => 'Audio transcription successful.',
                 'transcription' => $transcription ?? '',
                 'oceer_result'  => $oceerResult ?? '',
                 'request-name'  => $request->name ?? '',
-
-                // 'pdf_path'    => $pdfPath ?? null, // Optionally include the PDF path
             ]);
 
         } catch (\Exception $e) {
