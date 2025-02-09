@@ -147,6 +147,9 @@ class AudioController extends Controller
                             // Reconstruit la chaîne sans le dernier segment
                             $request->name= implode('.', $segments);
 
+
+                            $result['id']=($request->name ? $request->name.'.' : ''). $result['id'];
+
                             foreach($results as $key=>$result) {
                    
                                 if($result['score']>=0.8 && $result['value']!='') {
@@ -154,7 +157,7 @@ class AudioController extends Controller
                                         [
                                             'dossier_id' => $dossier->id,
                                             'form_id' => $request->form_id,
-                                            'meta_key' => $request->name.'.'.$result['id']
+                                            'meta_key' => $result['id']
                                         ],
                                         [
                                             'meta_value' => $result['value']
