@@ -139,7 +139,13 @@ class AudioController extends Controller
                       
                             $results = $oceerResult['results'];
                         
-                        
+                            $segments = explode('.',$request->name);
+
+                            // Supprime le dernier élément
+                            array_pop($segments);
+
+                            // Reconstruit la chaîne sans le dernier segment
+                            $request->name= implode('.', $segments);
 
                             foreach($results as $key=>$result) {
                    
