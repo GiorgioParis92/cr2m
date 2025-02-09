@@ -229,6 +229,11 @@
                                     if (inputToFill) {
                                         inputToFill.value = resultItem.value;
                                     }
+
+                                    fillFormField({
+                                        id: resultItem.id,
+                                        value: resultItem.value
+                                    });
                                 }
 
                                 if (Array.isArray(resultItem.metadata)) {
@@ -245,6 +250,64 @@
                         alert("Failed to transcribe audio.");
                     }
                 });
+
+
+
+                function fillFormField(resultItem) {
+    if (!resultItem?.id || resultItem.value === undefined || resultItem.value === null) {
+        return; // Early return if no usable data
+    }
+
+    // Attempt to find the field by name attribute
+    const field = document.querySelector(`[name='${resultItem.id}']`);
+
+    // If nothing is found, no need to proceed
+    if (!field) {
+        return;
+    }
+
+    // Check the type of element we found
+    const tagName = field.tagName.toLowerCase();
+    const type = field.getAttribute('type')?.toLowerCase() || '';
+
+    switch (tagName) {
+        case 'input': {
+            if (type === 'radio' || type === 'checkbox') {
+                // For radio or checkbox, there might be multiple with the same name.
+                const allInputs = document.querySelectorAll(
+                    `input[type='${type}'][name='${resultItem.id}']`
+                );
+
+                allInputs.forEach((input) => {
+                    // If you expect the value to be a single string for radio
+                    // or maybe an array for multiple checkboxes, handle accordingly:
+                    if (Array.isArray(resultItem.value)) {
+                        // Multiple checkboxes case
+                        input.checked = resultItem.value.includes(input.value);
+                    } else {
+                        // Single value (radio or single checkbox)
+                        input.checked = (input.value === String(resultItem.value));
+                    }
+                });
+            } else {
+                // Assume normal text-like input (text, email, number, etc.)
+                field.value = resultItem.value;
+            }
+            break;
+        }
+        case 'select': {
+            field.value = resultItem.value;
+            break;
+        }
+        case 'textarea': {
+            field.value = resultItem.value;
+            break;
+        }
+        default:
+            // Optionally, handle other element types
+            break;
+    }
+}
 
             })(); // End of IIFE
         </script>
