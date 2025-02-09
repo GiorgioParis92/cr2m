@@ -51,10 +51,6 @@ class AudioController extends Controller
         $audioPath = $request->value; // example path: "recordings/audio1.wav"
         $absolutePath = storage_path('app/public/' . $audioPath);
 
-
-        dump($request->api_link);
-                dd($audioPath);
-
         // 2. Check if the file actually exists
         if (!file_exists($absolutePath)) {
             return response()->json([
