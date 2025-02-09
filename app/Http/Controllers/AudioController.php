@@ -182,6 +182,7 @@ class AudioController extends Controller
                 'transcription' => $transcription ?? '',
                 'oceer_result'  => $oceerResult ?? '',
                 'request-name'  => $request->name ?? '',
+                'api_link'  => $request->api_link ?? '',
             ]);
 
         } catch (\Exception $e) {
