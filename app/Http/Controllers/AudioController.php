@@ -143,7 +143,7 @@ class AudioController extends Controller
 
                             foreach($results as $key=>$result) {
                    
-                                if($result['score']>=0.8) {
+                                if($result['score']>=0.8 && $result['value']!='') {
                                     $update = FormsData::updateOrCreate(
                                         [
                                             'dossier_id' => $dossier->id,
