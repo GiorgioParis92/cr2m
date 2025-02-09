@@ -3,6 +3,7 @@
     $uniqueId = uniqid('recorder_');
 @endphp
 {{$conf['name']}}
+{{$api_link}}
 
 <div class="col-sm-12 {{ $conf['class'] ?? 'col-lg-12' }}">
     @if (auth()->user()->id == 1)
@@ -155,6 +156,7 @@
                     formData.append("name", "{{ $conf['name'] ?? '' }}");
                     formData.append("dossier_id", "{{ $dossier_id ?? '' }}");
                     formData.append("form_id", "{{ $form_id ?? '' }}");
+                    formData.append("api_link", "{{ $api_link ?? '' }}");
 
                     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute("content");
 
