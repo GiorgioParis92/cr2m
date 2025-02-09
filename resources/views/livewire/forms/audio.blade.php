@@ -22,6 +22,12 @@
             <button id="AnalyseAudio" class="btn btn-success" style="display:{{ $value ? 'block' : 'none' }}">
                 <i class="bi bi-save-fill"></i> Analyser l'audio
             </button>
+            @php
+            if($conf['name']) {
+                $pdf=str_replace('.wav','_pdf.pdf',$conf['name']);
+                echo $pdf;
+            }
+            @endphp
         </div>
         <div>
             <a id="analyse_audio" class="btn btn-secondary" style="display: none;">
@@ -173,7 +179,10 @@
                             console.log('Score :', resultItem.score);
                             console.log('ID    :', resultItem.id);
 
-                            $(`input[name='${resultItem.id}']`).val(resultItem.value);
+                            if(resultItem.value!='' && resultItem.value!=null) {
+                                $(`input[name='${resultItem.id}']`).val(resultItem.value);
+                            }
+                           
 
                             // Si vous souhaitez itérer sur le tableau metadata
                             if (Array.isArray(resultItem.metadata)) {
