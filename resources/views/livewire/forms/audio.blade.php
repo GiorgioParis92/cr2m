@@ -183,7 +183,7 @@
                             console.log("Saved file path:", data.file_path);
 
                             // Update audioPlayback to use the saved file
-                            audioPlayback.src = '.././storage/'+data.file_path;
+                            audioPlayback.src = '.././../storage/'+data.file_path;
                             hiddenValueInput.value = data.file_path;
 
                             // Show 'Analyser l'audio' button
