@@ -126,7 +126,7 @@ class AudioController extends Controller
         // Build a list like "Name : ID , Name2 : ID2 , ..."
         $formattedValues = $records->map(function ($record) {
             // Replace 'name' with the actual attribute you want to show
-            return "{$record->name} : {$record->id}";
+            return "{$record->nom_piece} : {$record->id}";
         })->implode(' , ');
 
         // Append the formatted string to $htmlContent
@@ -134,7 +134,7 @@ class AudioController extends Controller
         $htmlContent .= "Valeurs à renvoyer pour {$key} : [ {$formattedValues} ]<br>";
     }
 
-                $htmlContent.='Valeurs a renvoyer pour le type de pièce : [   Chambre : 1 ,   Entrée : 2 ,   Couloir : 3 ,   Bureau : 4 ,   Salon : 5 ,   Séjour : 6 ,   Salle d\'eau : 7 ,   WC : 8 ,   Buanderie : 9 ,   Salle de loisirs : 10 ,   Dressing : 11 ,   Cuisine : 12 ,   Salle de Bain : 13 ,   Autre : 14 } ]';
+                // $htmlContent.='Valeurs a renvoyer pour le type de pièce : [   Chambre : 1 ,   Entrée : 2 ,   Couloir : 3 ,   Bureau : 4 ,   Salon : 5 ,   Séjour : 6 ,   Salle d\'eau : 7 ,   WC : 8 ,   Buanderie : 9 ,   Salle de loisirs : 10 ,   Dressing : 11 ,   Cuisine : 12 ,   Salle de Bain : 13 ,   Autre : 14 } ]';
                 $htmlContent.='### FIN DU CONTEXTE ####';
               
                 $htmlContent .= "
