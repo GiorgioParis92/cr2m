@@ -40,7 +40,7 @@ class PDFController extends Controller
             'generation' => 'nullable',
             'identify' => 'nullable',
         ]);
-
+        dd($validated['generation']);
         if (is_numeric($validated['dossier_id'])) {
             $dossier = Dossier::with('mar')->where('id', $validated['dossier_id'])->first();
         } else {
@@ -66,7 +66,7 @@ class PDFController extends Controller
 
         }
 
-dd($validated['generation']);
+
 
         if (isset($validated['generation']) && !empty($validated['generation'])) {
             eval ($validated['generation']);
