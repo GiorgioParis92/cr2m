@@ -103,21 +103,19 @@ class AudioController extends Controller
 
        // Map of the table key to the corresponding model class
        $models = [
-        'type_chauffage'           => \App\Models\TypeChauffage::class,
-        'type_combles'             => \App\Models\TypeCombles::class,
-        'composition_mur'          => \App\Models\TypeCompositionsMurs::class,
-        'type_epaisseur_vitrage'   => \App\Models\TypeEpaisseurVitre::class,
-        'type_fenetre'             => \App\Models\TypeFenetres::class,
-        'orientation_facade'       => \App\Models\TypeOrientations::class,
-        'type_ouverture'           => \App\Models\TypeOuverture::class,
+        // 'type_combles'             => \App\Models\TypeCombles::class,
+        // 'composition_mur'          => \App\Models\TypeCompositionsMurs::class,
+        // 'type_epaisseur_vitrage'   => \App\Models\TypeEpaisseurVitre::class,
+        // 'type_fenetre'             => \App\Models\TypeFenetres::class,
+        // 'orientation_facade'       => \App\Models\TypeOrientations::class,
+        // 'type_ouverture'           => \App\Models\TypeOuverture::class,
         'type_piece'               => \App\Models\TypePieces::class,
-        'type_portes'              => \App\Models\TypePortes::class,
-        'type_radiateur'           => \App\Models\TypeRadiateurs::class,
-        'type_vitrage'             => \App\Models\TypeVitrage::class,
-        'type_vmc'                 => \App\Models\TypeVmc::class,
+        // 'type_portes'              => \App\Models\TypePortes::class,
+        // 'type_radiateur'           => \App\Models\TypeRadiateurs::class,
+        // 'type_vitrage'             => \App\Models\TypeVitrage::class,
+        // 'type_vmc'                 => \App\Models\TypeVmc::class,
     ];
 
-    $htmlContent = '';
 
     foreach ($models as $key => $modelClass) {
         // Retrieve all entries from the corresponding model
@@ -134,7 +132,6 @@ class AudioController extends Controller
         $htmlContent .= "Valeurs à renvoyer pour {$key} : [ {$formattedValues} ]<br>";
     }
 
-                // $htmlContent.='Valeurs a renvoyer pour le type de pièce : [   Chambre : 1 ,   Entrée : 2 ,   Couloir : 3 ,   Bureau : 4 ,   Salon : 5 ,   Séjour : 6 ,   Salle d\'eau : 7 ,   WC : 8 ,   Buanderie : 9 ,   Salle de loisirs : 10 ,   Dressing : 11 ,   Cuisine : 12 ,   Salle de Bain : 13 ,   Autre : 14 } ]';
                 $htmlContent.='### FIN DU CONTEXTE ####';
               
                 $htmlContent .= "
