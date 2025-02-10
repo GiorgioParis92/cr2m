@@ -136,10 +136,7 @@ class AudioController extends Controller
 
                 // $htmlContent.='### FIN DU CONTEXTE ####';
               
-                $htmlContent .= "
-                 
-                    <p>" . e($transcription) . "</p>
-                ";
+                $htmlContent .= $transcription;
 
                 // (b) Load your HTML content
                 $pdf = PDF::loadHTML($htmlContent);
@@ -168,7 +165,7 @@ class AudioController extends Controller
                         ]
                     );
 
-                    
+
                     $oceerResult = $this->sendPdfToOceer($pdfPath,$request->api_link);
 
 
