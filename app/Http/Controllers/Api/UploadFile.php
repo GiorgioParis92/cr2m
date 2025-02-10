@@ -102,19 +102,21 @@ class UploadFile extends \App\Http\Controllers\Controller
         }
         }
         $config=FormsConfig::where('name',$request->name)->first();
-        $formId= $config->form_id;
+        $formId= $config->form_id ?? '';
 
+        if($formId) {
+            $update = FormsData::updateOrCreate(
+                [
+                    'dossier_id' => $dossier->id,
+                    'form_id' => $formId,
+                    'meta_key' => $request->name
+                ],
+                [
+                    'meta_value' => $filePath ?? null,
+                ]
+            );
+        }
 
-        $update = FormsData::updateOrCreate(
-            [
-                'dossier_id' => $dossier->id,
-                'form_id' => $formId,
-                'meta_key' => $request->name
-            ],
-            [
-                'meta_value' => $filePath ?? null,
-            ]
-        );
 
 
         $this->cardService->checkAndCreateCard($fileName, $filePath, $dossier->id, auth()->user()->id);
