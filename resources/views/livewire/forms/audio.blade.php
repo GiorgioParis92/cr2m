@@ -84,6 +84,15 @@
                 ></audio>
             @endif
         </div>
+<style>
+.oceer_focus {
+    color: #495057;
+    background-color: #fff;
+    border-color: #a1ff51;
+    outline: 0;
+    box-shadow: 0 0 0 2px #9cff8b;
+}
+</style>
 
         <script>
 
@@ -254,60 +263,64 @@
 
 
                 function fillFormField(resultItem) {
+    // Vérification des données d'entrée 
     if (!resultItem?.id || resultItem.value === undefined || resultItem.value === null) {
-        return; // Early return if no usable data
+        return; // Early return si aucune donnée exploitable
     }
 
-    // Attempt to find the field by name attribute
+    // Recherche du champ dans le DOM en utilisant l'attribut name
     const field = document.querySelector(`[name='${resultItem.id}']`);
-
-    // If nothing is found, no need to proceed
     if (!field) {
-        return;
+        return; // Early return si le champ n'existe pas
     }
 
-    // Check the type of element we found
+    // Détermination du type d'élément
     const tagName = field.tagName.toLowerCase();
-    const type = field.getAttribute('type')?.toLowerCase() || '';
+    const fieldType = field.getAttribute('type')?.toLowerCase() || '';
 
     switch (tagName) {
         case 'input': {
-            if (type === 'radio' || type === 'checkbox') {
-                // For radio or checkbox, there might be multiple with the same name.
+            if (fieldType === 'radio' || fieldType === 'checkbox') {
+                // Pour radio ou checkbox, il peut y en avoir plusieurs avec le même name
                 const allInputs = document.querySelectorAll(
-                    `input[type='${type}'][name='${resultItem.id}']`
+                    `input[type='${fieldType}'][name='${resultItem.id}']`
                 );
 
                 allInputs.forEach((input) => {
-                    // If you expect the value to be a single string for radio
-                    // or maybe an array for multiple checkboxes, handle accordingly:
+                    // Si la valeur est un tableau, on suppose plusieurs checkbox
+                    // Sinon, c'est un simple radio/checkbox
                     if (Array.isArray(resultItem.value)) {
-                        // Multiple checkboxes case
                         input.checked = resultItem.value.includes(input.value);
                     } else {
-                        // Single value (radio or single checkbox)
                         input.checked = (input.value === String(resultItem.value));
                     }
+
+                    // Ajout d’une classe pour marquer la mise à jour
+                    input.classList.add('oceer_focus');
                 });
             } else {
-                // Assume normal text-like input (text, email, number, etc.)
+                // Cas général (text, email, number, etc.)
                 field.value = resultItem.value;
+                field.classList.add('oceer_focus');
             }
             break;
         }
         case 'select': {
             field.value = resultItem.value;
+            field.classList.add('oceer_focus');
             break;
         }
         case 'textarea': {
             field.value = resultItem.value;
+            field.classList.add('oceer_focus');
             break;
         }
         default:
-            // Optionally, handle other element types
+            // Gérer éventuellement d'autres types d'éléments
             break;
     }
 }
+
 
             })(); // End of IIFE
         </script>
