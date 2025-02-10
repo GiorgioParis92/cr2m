@@ -140,13 +140,15 @@ class AudioController extends Controller
 
                 // (b) Load your HTML content
                 $pdf = Pdf::loadHTML($htmlContent)
-                ->setPaper('A4', 'portrait')
+                ->setPaper('A4', 'landscape')
                 ->setOptions([
-                    // marges en millimètres (ou en points selon la config DomPDF)
-                    'margin-top'    => 20,
-                    'margin-right'  => 20,
-                    'margin-bottom' => 20,
-                    'margin-left'   => 20,
+                    // marges (unités : millimètres)
+                    'margin-top'    => 50,
+                    'margin-right'  => 50,
+                    'margin-bottom' => 50,
+                    'margin-left'   => 50,
+                    // version du PDF
+                    'pdf_version' => '1.5',
                 ]);
  
                 $dossier = Dossier::where('id', $request->dossier_id)->first();
