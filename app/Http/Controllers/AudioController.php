@@ -103,18 +103,18 @@ class AudioController extends Controller
 
        // Map of the table key to the corresponding model class
        $models = [
-        'type_chauffage'           => App\Models\TypeChauffage::class,
-        'type_combles'             => App\Models\TypeCombles::class,
-        'composition_mur'          => App\Models\TypeCompositionsMurs::class,
-        'type_epaisseur_vitrage'   => App\Models\TypeEpaisseurVitre::class,
-        'type_fenetre'             => App\Models\TypeFenetres::class,
-        'orientation_facade'       => App\Models\TypeOrientations::class,
-        'type_ouverture'           => App\Models\TypeOuverture::class,
-        'type_piece'               => App\Models\TypePieces::class,
-        'type_portes'              => App\Models\TypePortes::class,
-        'type_radiateur'           => App\Models\TypeRadiateurs::class,
-        'type_vitrage'             => App\Models\TypeVitrage::class,
-        'type_vmc'                 => App\Models\TypeVmc::class,
+        'type_chauffage'           => \App\Models\TypeChauffage::class,
+        'type_combles'             => \App\Models\TypeCombles::class,
+        'composition_mur'          => \App\Models\TypeCompositionsMurs::class,
+        'type_epaisseur_vitrage'   => \App\Models\TypeEpaisseurVitre::class,
+        'type_fenetre'             => \App\Models\TypeFenetres::class,
+        'orientation_facade'       => \App\Models\TypeOrientations::class,
+        'type_ouverture'           => \App\Models\TypeOuverture::class,
+        'type_piece'               => \App\Models\TypePieces::class,
+        'type_portes'              => \App\Models\TypePortes::class,
+        'type_radiateur'           => \App\Models\TypeRadiateurs::class,
+        'type_vitrage'             => \App\Models\TypeVitrage::class,
+        'type_vmc'                 => \App\Models\TypeVmc::class,
     ];
 
     $htmlContent = '';
