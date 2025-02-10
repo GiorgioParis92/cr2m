@@ -99,9 +99,10 @@ class AudioController extends Controller
 
 
                 $htmlContent='';
-                // $htmlContent='### CONTEXTE ####';
+                $htmlContent='### CONTEXTE ####';
 
-
+                $htmlContent.='Voici la retranscription audio de l\'inspection : ';
+                $htmlContent.='### FIN DU CONTEXTE ####';
        // Map of the table key to the corresponding model class
        $models = [
         // 'type_combles'             => \App\Models\TypeCombles::class,
