@@ -43,6 +43,7 @@ class PDFController extends Controller
 
         if (is_numeric($validated['dossier_id'])) {
             $dossier = Dossier::with('mar')->where('id', $validated['dossier_id'])->first();
+            $request->dossier_id=$dossier->folder;
         } else {
             $dossier = Dossier::with('mar')->where('folder', $validated['dossier_id'])->first();
 
