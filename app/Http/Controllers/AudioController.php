@@ -86,7 +86,10 @@ class AudioController extends Controller
                     'error'   => $response->json(),
                 ], $response->status());
             }
-
+            return response()->json([
+                'message' => 'OpenAI Whisper API request failed.',
+                'error'   => $response->json(),
+            ], $response->status());
             // 5. Extract the transcription text from OpenAI's response
             $result         = $response->json();
             $transcription  = $result['text'] ?? '';
