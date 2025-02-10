@@ -101,21 +101,26 @@ class UploadFile extends \App\Http\Controllers\Controller
             return response()->json(['error' => 'Failed to create thumbnail'], 500);
         }
         }
-        $config=FormsConfig::where('name',$request->name)->first();
-        $formId= $config->form_id ?? '';
 
-        if($formId) {
-            $update = FormsData::updateOrCreate(
-                [
-                    'dossier_id' => $dossier->id,
-                    'form_id' => $formId,
-                    'meta_key' => $request->name
-                ],
-                [
-                    'meta_value' => $filePath ?? null,
-                ]
-            );
+        if(!isset($request->application) || $request->application==false) {
+            $config=FormsConfig::where('name',$request->name)->first();
+            $formId= $config->form_id ?? '';
+    
+            if($formId) {
+                $update = FormsData::updateOrCreate(
+                    [
+                        'dossier_id' => $dossier->id,
+                        'form_id' => $formId,
+                        'meta_key' => $request->name
+                    ],
+                    [
+                        'meta_value' => $filePath ?? null,
+                    ]
+                );
+            }
         }
+
+
 
 
 
