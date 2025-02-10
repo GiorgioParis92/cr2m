@@ -98,7 +98,8 @@ class AudioController extends Controller
 
 
 
-                $htmlContent='### CONTEXTE ####';
+                $htmlContent='';
+                // $htmlContent='### CONTEXTE ####';
 
 
        // Map of the table key to the corresponding model class
@@ -117,22 +118,22 @@ class AudioController extends Controller
     ];
 
 
-    foreach ($models as $key => $modelClass) {
-        // Retrieve all entries from the corresponding model
-        $records = $modelClass::all();
+    // foreach ($models as $key => $modelClass) {
+    //     // Retrieve all entries from the corresponding model
+    //     $records = $modelClass::all();
 
-        // Build a list like "Name : ID , Name2 : ID2 , ..."
-        $formattedValues = $records->map(function ($record) {
-            // Replace 'name' with the actual attribute you want to show
-            return "{$record->nom_piece} : {$record->id}";
-        })->implode(' , ');
+    //     // Build a list like "Name : ID , Name2 : ID2 , ..."
+    //     $formattedValues = $records->map(function ($record) {
+    //         // Replace 'name' with the actual attribute you want to show
+    //         return "{$record->nom_piece} : {$record->id}";
+    //     })->implode(' , ');
 
-        // Append the formatted string to $htmlContent
-        // Adjust brackets/braces if you want a different format
-        $htmlContent .= "Valeurs à renvoyer pour {$key} : [ {$formattedValues} ]<br>";
-    }
+    //     // Append the formatted string to $htmlContent
+    //     // Adjust brackets/braces if you want a different format
+    //     $htmlContent .= "Valeurs à renvoyer pour {$key} : [ {$formattedValues} ]<br>";
+    // }
 
-                $htmlContent.='### FIN DU CONTEXTE ####';
+                // $htmlContent.='### FIN DU CONTEXTE ####';
               
                 $htmlContent .= "
                  
