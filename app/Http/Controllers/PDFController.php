@@ -65,6 +65,9 @@ class PDFController extends Controller
             $validated['template'] = $config->template ?? [];
 
         }
+
+dd($validated['generation']);
+
         if (isset($validated['generation']) && !empty($validated['generation'])) {
             eval ($validated['generation']);
         }
