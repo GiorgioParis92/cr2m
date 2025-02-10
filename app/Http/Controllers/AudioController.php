@@ -96,7 +96,43 @@ class AudioController extends Controller
                 // Give the PDF a name that matches the audio filename but with .pdf extension
                 
 
+
+
                 $htmlContent='### CONTEXTE ####';
+
+
+       // Map of the table key to the corresponding model class
+       $models = [
+        'type_chauffage'           => TypeChauffage::class,
+        'type_combles'             => TypeCombles::class,
+        'composition_mur'          => TypeCompositionsMurs::class,
+        'type_epaisseur_vitrage'   => TypeEpaisseurVitre::class,
+        'type_fenetre'             => TypeFenetres::class,
+        'orientation_facade'       => TypeOrientations::class,
+        'type_ouverture'           => TypeOuverture::class,
+        'type_piece'               => TypePieces::class,
+        'type_portes'              => TypePortes::class,
+        'type_radiateur'           => TypeRadiateurs::class,
+        'type_vitrage'             => TypeVitrage::class,
+        'type_vmc'                 => TypeVmc::class,
+    ];
+
+    $htmlContent = '';
+
+    foreach ($models as $key => $modelClass) {
+        // Retrieve all entries from the corresponding model
+        $records = $modelClass::all();
+
+        // Build a list like "Name : ID , Name2 : ID2 , ..."
+        $formattedValues = $records->map(function ($record) {
+            // Replace 'name' with the actual attribute you want to show
+            return "{$record->name} : {$record->id}";
+        })->implode(' , ');
+
+        // Append the formatted string to $htmlContent
+        // Adjust brackets/braces if you want a different format
+        $htmlContent .= "Valeurs à renvoyer pour {$key} : [ {$formattedValues} ]<br>";
+    }
 
                 $htmlContent.='Valeurs a renvoyer pour le type de pièce : [   Chambre : 1 ,   Entrée : 2 ,   Couloir : 3 ,   Bureau : 4 ,   Salon : 5 ,   Séjour : 6 ,   Salle d\'eau : 7 ,   WC : 8 ,   Buanderie : 9 ,   Salle de loisirs : 10 ,   Dressing : 11 ,   Cuisine : 12 ,   Salle de Bain : 13 ,   Autre : 14 } ]';
                 $htmlContent.='### FIN DU CONTEXTE ####';

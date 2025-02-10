@@ -3,7 +3,7 @@
     $uniqueId = uniqid('recorder_');
 @endphp
 {{$conf['name']}}
-{{$api_link}}
+{{$api_link ?? ''}}
 
 <div class="col-sm-12 {{ $conf['class'] ?? 'col-lg-12' }}">
     @if (auth()->user()->id == 1)
