@@ -95,8 +95,13 @@ class AudioController extends Controller
             if (!empty($transcription)) {
                 // Give the PDF a name that matches the audio filename but with .pdf extension
                 
-   
-                $htmlContent = "
+
+                $htmlContent='### CONTEXTE ####';
+
+                $htmlContent.='Valeurs a renvoyer pour le type de pièce :[   { "Chambre": 1 },   { "Entrée": 2 },   { "Couloir": 3 },   { "Bureau": 4 },   { "Salon": 5 },   { "Séjour": 6 },   { "Salle d\'eau": 7 },   { "WC": 8 },   { "Buanderie": 9 },   { "Salle de loisirs": 10 },   { "Dressing": 11 },   { "Cuisine": 12 },   { "Salle de Bain": 13 },   { "Autre": 14 } ]';
+                $htmlContent.='### FIN DU CONTEXTE ####';
+              
+                $htmlContent .= "
                  
                     <p>" . e($transcription) . "</p>
                 ";
