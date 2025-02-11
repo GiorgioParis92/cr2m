@@ -34,6 +34,7 @@ use App\Http\Controllers\Api\UploadFile;
 use App\Http\Controllers\Api\SubscriptionController;
 
 
+use App\Http\Controllers\AudioController;
 
 
 
@@ -99,6 +100,10 @@ Route::middleware('auth:api')->group(function () {
 
     Route::get('/dossiers-rdv', [DossiersController::class, 'index']);
     Route::post('/dossiers-rdv', [DossiersController::class, 'index']);
+
+
+    Route::post('/audio/analyse', [AudioController::class, 'analyse'])->name('audio.analyse');
+
 
 //     Route::get('/beneficiaires', [BeneficiaireController::class, 'index']);
 //     Route::get('/beneficiaires/{id}', [BeneficiaireController::class, 'show']);
