@@ -263,6 +263,7 @@
 
 
                 function fillFormField(resultItem) {
+                    console.log(resultItem)
     // Vérification des données d'entrée 
     if (!resultItem?.id || resultItem.value === undefined || resultItem.value === null) {
         return; // Early return si aucune donnée exploitable
