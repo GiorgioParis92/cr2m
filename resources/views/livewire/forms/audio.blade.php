@@ -2,8 +2,8 @@
     // Generate a unique identifier for this specific recorder instance
     $uniqueId = uniqid('recorder_');
 @endphp
-{{$conf['name']}}
-{{$api_link ?? ''}}
+{{ $conf['name'] }}
+{{ $api_link ?? '' }}
 
 <div class="col-sm-12 {{ $conf['class'] ?? 'col-lg-12' }}">
     @if (auth()->user()->id == 1)
@@ -15,87 +15,54 @@
         </head>
 
         {{-- Use the uniqueId in the input's ID --}}
-        <input 
-            id="value-{{ $uniqueId }}" 
-            type="hidden" 
-            name="{{ $conf['name'] }}" 
-            class="form-control"
-            wire:model.debounce.500ms="value"
-        >
+        <input id="value-{{ $uniqueId }}" type="hidden" name="{{ $conf['name'] }}" class="form-control"
+            wire:model.debounce.500ms="value">
 
         <div class="d-flex gap-2 mb-3">
-            <button 
-                id="startRecord-{{ $uniqueId }}" 
-                class="btn btn-primary"
-            >
+            <button id="startRecord-{{ $uniqueId }}" class="btn btn-primary">
                 <i class="bi bi-mic-fill"></i> Démarrer l'enregistrement
             </button>
-            <button 
-                id="stopRecord-{{ $uniqueId }}" 
-                class="btn btn-danger" 
-                disabled
-            >
+            <button id="stopRecord-{{ $uniqueId }}" class="btn btn-danger" disabled>
                 <i class="bi bi-stop-fill"></i> Stop
             </button>
-            <button 
-                id="AnalyseAudio-{{ $uniqueId }}" 
-                class="btn btn-success" 
-                style="display:{{ $value ? 'block' : 'none' }}"
-            >
+            <button id="AnalyseAudio-{{ $uniqueId }}" class="btn btn-success"
+                style="display:{{ $value ? 'block' : 'none' }}">
                 <i class="bi bi-save-fill"></i> Analyser l'audio
             </button>
 
-            @if($pdf)
-            <button 
-                data-img-src="{{asset('storage/' . $pdf)}}"
-                class="btn btn-success pdfmodal" 
-               
-            >
-                <i class="bi bi-save-fill"></i> PDF
-            </button>
+            @if ($pdf)
+                <button data-img-src="{{ asset('storage/' . $pdf) }}" class="btn btn-success pdfmodal">
+                    <i class="bi bi-save-fill"></i> PDF
+                </button>
             @endif
 
         </div>
 
         <div>
-            <a 
-                id="analyse_audio-{{ $uniqueId }}" 
-                class="btn btn-secondary" 
-                style="display: none;"
-            >
+            <a id="analyse_audio-{{ $uniqueId }}" class="btn btn-secondary" style="display: none;">
                 <i class="bi bi-download"></i> Download Audio
             </a>
         </div>
 
         <div class="mt-3">
             @if (!empty($value))
-                <audio 
-                    id="audioPlayback-{{ $uniqueId }}" 
-                    controls 
-                    class="w-100" 
-                    src="../../storage/{{ $value }}"
-                ></audio>
+                <audio id="audioPlayback-{{ $uniqueId }}" controls class="w-100"
+                    src="../../storage/{{ $value }}"></audio>
             @else
-                <audio 
-                    id="audioPlayback-{{ $uniqueId }}" 
-                    controls 
-                    style="display: none;" 
-                    class="w-100"
-                ></audio>
+                <audio id="audioPlayback-{{ $uniqueId }}" controls style="display: none;" class="w-100"></audio>
             @endif
         </div>
-<style>
-.oceer_focus {
-    color: #495057;
-    background-color: #fff;
-    border-color: #a1ff51;
-    outline: 0;
-    box-shadow: 0 0 0 2px #9cff8b;
-}
-</style>
+        <style>
+            .oceer_focus {
+                color: #495057;
+                background-color: #fff;
+                border-color: #a1ff51;
+                outline: 0;
+                box-shadow: 0 0 0 2px #9cff8b;
+            }
+        </style>
 
         <script>
-
             // Wrap everything in an IIFE so each instance has its own scope
             (function() {
                 let mediaRecorder_{{ $uniqueId }};
@@ -112,7 +79,9 @@
 
                 startBtn.addEventListener("click", async function() {
                     try {
-                        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                        const stream = await navigator.mediaDevices.getUserMedia({
+                            audio: true
+                        });
 
                         mediaRecorder_{{ $uniqueId }} = new MediaRecorder(stream);
                         mediaRecorder_{{ $uniqueId }}.ondataavailable = event => {
@@ -120,7 +89,8 @@
                         };
 
                         mediaRecorder_{{ $uniqueId }}.onstop = async () => {
-                            audioBlob_{{ $uniqueId }} = new Blob(audioChunks_{{ $uniqueId }}, {
+                            audioBlob_{{ $uniqueId }} = new Blob(
+                            audioChunks_{{ $uniqueId }}, {
                                 type: "audio/wav"
                             });
                             const audioUrl = URL.createObjectURL(audioBlob_{{ $uniqueId }});
@@ -147,7 +117,8 @@
                 });
 
                 stopBtn.addEventListener("click", function() {
-                    if (mediaRecorder_{{ $uniqueId }} && mediaRecorder_{{ $uniqueId }}.state === "recording") {
+                    if (mediaRecorder_{{ $uniqueId }} && mediaRecorder_{{ $uniqueId }}.state ===
+                        "recording") {
                         mediaRecorder_{{ $uniqueId }}.stop();
                         startBtn.disabled = false;
                         stopBtn.disabled = true;
@@ -183,7 +154,7 @@
                             console.log("Saved file path:", data.file_path);
 
                             // Update audioPlayback to use the saved file
-                            audioPlayback.src = '.././../storage/'+data.file_path;
+                            audioPlayback.src = '.././../storage/' + data.file_path;
                             hiddenValueInput.value = data.file_path;
 
                             // Show 'Analyser l'audio' button
@@ -224,7 +195,9 @@
                         console.log("Transcribed text: ", data.transcription);
 
                         if (data.oceer_result && data.oceer_result.results) {
-                            const { results } = data.oceer_result;
+                            const {
+                                results
+                            } = data.oceer_result;
 
                             // Boucle sur les clés/valeurs dans results
                             for (const [key, resultItem] of Object.entries(results)) {
@@ -234,7 +207,8 @@
                                 console.log('ID    :', resultItem.id);
 
                                 if (resultItem.value) {
-                                    const inputToFill = document.querySelector(`input[name='${resultItem.id}']`);
+                                    const inputToFill = document.querySelector(
+                                    `input[name='${resultItem.id}']`);
                                     if (inputToFill) {
                                         inputToFill.value = resultItem.value;
                                     }
@@ -263,66 +237,68 @@
 
 
                 function fillFormField(resultItem) {
-    // Vérification des données d'entrée 
-    if (!resultItem?.id || resultItem.value === undefined || resultItem.value === null) {
-        return; // Early return si aucune donnée exploitable
-    }
-
-    // Recherche du champ dans le DOM en utilisant l'attribut name
-    const field = document.querySelector(`[name='${resultItem.id}']`);
-    if (!field) {
-        return; // Early return si le champ n'existe pas
-    }
-
-    // Détermination du type d'élément
-    const tagName = field.tagName.toLowerCase();
-    const fieldType = field.getAttribute('type')?.toLowerCase() || '';
-
-    switch (tagName) {
-        case 'input': {
-            
-            if (fieldType === 'radio' || fieldType === 'checkbox') {
-                // Pour radio ou checkbox, il peut y en avoir plusieurs avec le même name
-                const allInputs = document.querySelectorAll(
-                    `input[type='${fieldType}'][name='${resultItem.id}']`
-                );
-
-                allInputs.forEach((input) => {
-                    // Si la valeur est un tableau, on suppose plusieurs checkbox
-                    // Sinon, c'est un simple radio/checkbox
-                    if (Array.isArray(resultItem.value)) {
-                        input.checked = resultItem.value.includes(input.value);
-                    } else {
-                        console.log(input.value)
-                        console.log(resultItem.value)
-                        input.checked = (input.value === String(resultItem.value));
+                    // Vérification des données d'entrée 
+                    if (!resultItem?.id || resultItem.value === undefined || resultItem.value === null) {
+                        return; // Early return si aucune donnée exploitable
                     }
 
-                    // Ajout d’une classe pour marquer la mise à jour
-                    input.classList.add('oceer_focus');
-                });
-            } else {
-                // Cas général (text, email, number, etc.)
-                field.value = resultItem.value;
-                field.classList.add('oceer_focus');
-            }
-            break;
-        }
-        case 'select': {
-            field.value = resultItem.value;
-            field.classList.add('oceer_focus');
-            break;
-        }
-        case 'textarea': {
-            field.value = resultItem.value;
-            field.classList.add('oceer_focus');
-            break;
-        }
-        default:
-            // Gérer éventuellement d'autres types d'éléments
-            break;
-    }
-}
+                    // Recherche du champ dans le DOM en utilisant l'attribut name
+                    const field = document.querySelector(`[name='${resultItem.id}']`);
+                    if (!field) {
+                        return; // Early return si le champ n'existe pas
+                    }
+
+                    // Détermination du type d'élément
+                    const tagName = field.tagName.toLowerCase();
+                    const fieldType = field.getAttribute('type')?.toLowerCase() || '';
+
+                    switch (tagName) {
+                        case 'input': {
+
+                            if (fieldType === 'radio' || fieldType === 'checkbox') {
+                                // Pour radio ou checkbox, il peut y en avoir plusieurs avec le même name
+                                const allInputs = document.querySelectorAll(
+                                    `input[type='${fieldType}'][name='${resultItem.id}']`
+                                );
+
+                                allInputs.forEach((input) => {
+                                    // Si la valeur est un tableau, on suppose plusieurs checkbox
+                                    if (Array.isArray(resultItem.value)) {
+                                        input.checked = resultItem.value.includes(input.value);
+                                    } else {
+                                        // Si la valeur est 0, on décoche le checkbox
+                                        if (fieldType === 'checkbox' && resultItem.value == 0) {
+                                            input.checked = false;
+                                        } else {
+                                            input.checked = (input.value === String(resultItem.value));
+                                        }
+                                    }
+
+                                    // Ajout d’une classe pour marquer la mise à jour
+                                    input.classList.add('oceer_focus');
+                                });
+                            } else {
+                                // Cas général (text, email, number, etc.)
+                                field.value = resultItem.value;
+                                field.classList.add('oceer_focus');
+                            }
+                            break;
+                        }
+                        case 'select': {
+                            field.value = resultItem.value;
+                            field.classList.add('oceer_focus');
+                            break;
+                        }
+                        case 'textarea': {
+                            field.value = resultItem.value;
+                            field.classList.add('oceer_focus');
+                            break;
+                        }
+                        default:
+                            // Gérer éventuellement d'autres types d'éléments
+                            break;
+                    }
+                }
 
 
             })(); // End of IIFE
