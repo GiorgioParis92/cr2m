@@ -52,7 +52,7 @@ class UploadFile extends \App\Http\Controllers\Controller
         }
 
         $file = $request->file('file');
-        $allowedExtensions = ['jpeg', 'jpg', 'png', 'gif', 'pdf', 'heic', 'webp'];
+        $allowedExtensions = ['jpeg', 'jpg', 'png', 'gif', 'pdf', 'heic', 'webp','.wav'];
         $imagesExtensions = ['jpeg', 'jpg', 'png', 'gif', 'heic', 'webp'];
         $extension = strtolower($file->getClientOriginalExtension());
 
