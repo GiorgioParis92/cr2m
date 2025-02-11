@@ -263,7 +263,6 @@
 
 
                 function fillFormField(resultItem) {
-                    console.log(resultItem)
     // Vérification des données d'entrée 
     if (!resultItem?.id || resultItem.value === undefined || resultItem.value === null) {
         return; // Early return si aucune donnée exploitable
@@ -281,8 +280,7 @@
 
     switch (tagName) {
         case 'input': {
-    
-            console.log(input)
+            
             if (fieldType === 'radio' || fieldType === 'checkbox') {
                 // Pour radio ou checkbox, il peut y en avoir plusieurs avec le même name
                 const allInputs = document.querySelectorAll(
