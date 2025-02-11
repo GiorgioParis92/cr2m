@@ -292,6 +292,8 @@
                     if (Array.isArray(resultItem.value)) {
                         input.checked = resultItem.value.includes(input.value);
                     } else {
+                        console.log(input.value)
+                        console.log(resultItem.value)
                         input.checked = (input.value === String(resultItem.value));
                     }
 
