@@ -280,6 +280,8 @@
 
     switch (tagName) {
         case 'input': {
+    
+            console.log(input)
             if (fieldType === 'radio' || fieldType === 'checkbox') {
                 // Pour radio ou checkbox, il peut y en avoir plusieurs avec le même name
                 const allInputs = document.querySelectorAll(
