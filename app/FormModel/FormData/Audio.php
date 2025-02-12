@@ -34,9 +34,7 @@ class Audio extends AbstractFormData
  
     public function render_pdf()
     {
-        if(!$this->value) {
-            return false; 
-         }
+  
         $data='';
   
         

@@ -2,8 +2,7 @@
     // Generate a unique identifier for this specific recorder instance
     $uniqueId = uniqid('recorder_');
 @endphp
-{{ $conf['name'] }}
-{{ $api_link ?? '' }}
+
 
 <div class="col-sm-12 {{ $conf['class'] ?? 'col-lg-12' }}">
     @if (auth()->user()->id == 1)
