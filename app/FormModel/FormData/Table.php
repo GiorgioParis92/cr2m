@@ -180,8 +180,8 @@ class Table extends AbstractFormData
    
         // Decode the JSON value if needed
         $this->value = $this->decode_if_json($this->value);
-        dd($this->config);
-        if(!empty($this->optionsArray)) {
+        dd($this->optionsArray);
+        if(!empty($this->value)) {
 
   
         foreach ($this->value as $index => $element_data) {
