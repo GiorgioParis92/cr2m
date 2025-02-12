@@ -205,15 +205,14 @@ class Table extends AbstractFormData
                 } else {
                     $instance = new AbstractFormData($configInstance, $name, $form_id, $dossier_id);
                 }
-                dump($instance);
-                dd($class);
+             
 
            
                     $element_render = $instance->render_pdf();
              
              
 
-                if ($element_render) {
+                if ($element_render && $element_config['type']=='title') {
                     $data .= '<tr><td style="width:100%;border:1px solid #ccc;border-collapse: collapse;padding-left:12px;padding-bottom:15px">';
                     $data .= $element_render;
                     $data .= '</td></tr>';
