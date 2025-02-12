@@ -167,7 +167,7 @@ class Photo extends AbstractFormData
 
     public function render_pdf()
     {
-        if (!$this->value || $this->value == '') {
+        if (!$this->value || $this->value == '' || $this->value == '[]') {
             return false;
         }
     
