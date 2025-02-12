@@ -538,6 +538,10 @@ class FileUploadService
         }
 
         try {
+
+            if($request->link && ($request->link=='' || $request->link=='dossiers' || $request->link=='dossiers/')) {
+                return 'nique ta mere';
+            }
             unlink(storage_path('app/public/' . $request->link));
         } catch (\Throwable $th) {
             //throw $th;

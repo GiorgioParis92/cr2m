@@ -523,7 +523,7 @@ function texte_menage($couleur)
 
 function decode_if_json($value)
 {
-    if ($value == '') {
+    if ($value == '' || $value == '[]') {
         return [];
     }
     if (is_string($value)) {
