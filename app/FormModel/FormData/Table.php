@@ -207,16 +207,20 @@ class Table extends AbstractFormData
                 }
              
 
-           
-                    $element_render = $instance->render_pdf();
+                
+                $element_render = $instance->render_pdf();
              
              
-
-                if ($element_render && $element_config['type']=='title') {
+                try{
                     $data .= '<tr><td style="width:100%;border:1px solid #ccc;border-collapse: collapse;padding-left:12px;padding-bottom:15px">';
                     $data .= $element_render;
                     $data .= '</td></tr>';
+                } catch(Exception $e){
+                    $data.='erreur'.$element_config['type'];
                 }
+                // if ($element_render && $element_config['type']=='title') {
+                    
+                // }
 
 
             }
