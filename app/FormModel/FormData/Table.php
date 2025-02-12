@@ -193,9 +193,9 @@ class Table extends AbstractFormData
                 $class = 'App\\FormModel\\FormData\\' . ucfirst($element_config['type']);
                 $configInstance = $element_config;
                
-                dd($configInstance);
+                
                 $name=$this->name . '.value.' . $element_data . '.' . $element_config['name'];
-             
+                dd($name);
                 $form_id = $this->form_id;
                 $dossier_id = $this->dossier_id ?? null;
 
