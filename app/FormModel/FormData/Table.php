@@ -178,13 +178,13 @@ class Table extends AbstractFormData
         $should_render = false;
         $data = '<div><table style="margin:auto;width:90%;margin-top:20px;border-collapse: collapse;">';
         
+ 
+        // Decode the JSON value if needed
+        $this->value = $this->decode_if_json($this->value);
         if($this->name=='ajout_piece') {
             dd($this->value);
         }
        
-        // Decode the JSON value if needed
-        $this->value = $this->decode_if_json($this->value);
-      
         if(!empty($this->value)) {
 
   
