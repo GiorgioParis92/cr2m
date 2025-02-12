@@ -191,7 +191,7 @@ class Table extends AbstractFormData
                
                 $class = 'App\\FormModel\\FormData\\' . ucfirst($element_config['type']);
                 $configInstance = $element_config;
-                // $name = $element_config['name'];
+               
            
                 $name=$this->name . '.value.' . $element_data . '.' . $element_config['name'];
              
@@ -204,20 +204,12 @@ class Table extends AbstractFormData
                 } else {
                     $instance = new AbstractFormData($configInstance, $name, $form_id, $dossier_id);
                 }
-               
+
                 
-                // // Handle array data to avoid Array to string conversion error
-                // if (isset($element_data[$element_config['name']])) {
-                //     // Recursively decode JSON and handle arrays
-                //     $instance->value = $element_data[$element_config['name']]['value'];
-                    
-                // } else {
-                //     $instance->value = ''; // Or handle default value here
-                // }
 
            
                     $element_render = $instance->render_pdf();
-                
+                dd($element_render);
              
 
                 if ($element_render) {
@@ -228,13 +220,12 @@ class Table extends AbstractFormData
 
 
             }
-            // dd($this->optionsArray);
+         
         }
-        // dd($this->value);
+    
     }
         $data .= '</table></div>';
-        // print_r($data);
-        // return false;
+      
         return $data;
     }
 
