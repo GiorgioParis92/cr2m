@@ -213,7 +213,7 @@ class Table extends AbstractFormData
              
                 try{
                     $data .= '<tr><td style="width:100%;border:1px solid #ccc;border-collapse: collapse;padding-left:12px;padding-bottom:15px">';
-                    $data .= $element_render;
+                    $data .= $instance->value;
                     $data .= '</td></tr>';
                 } catch(Exception $e){
 
