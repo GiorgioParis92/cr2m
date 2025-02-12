@@ -195,7 +195,7 @@ class Table extends AbstractFormData
                
                 
                 $name=$this->name . '.value.' . $element_data . '.' . $element_config['name'];
-                dd($name);
+              
                 $form_id = $this->form_id;
                 $dossier_id = $this->dossier_id ?? null;
 
@@ -205,8 +205,8 @@ class Table extends AbstractFormData
                 } else {
                     $instance = new AbstractFormData($configInstance, $name, $form_id, $dossier_id);
                 }
-
-                
+                dump($instance);
+                dd($class);
 
            
                     $element_render = $instance->render_pdf();
