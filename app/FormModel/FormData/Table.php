@@ -181,9 +181,9 @@ class Table extends AbstractFormData
  
         // Decode the JSON value if needed
         $this->value = $this->decode_if_json($this->value);
-        if($this->name=='ajout_piece') {
-            dd($this->value);
-        }
+        // if($this->name=='ajout_piece') {
+        //     dd($this->value);
+        // }
        
         if(!empty($this->value)) {
 
