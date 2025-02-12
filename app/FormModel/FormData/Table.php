@@ -209,7 +209,7 @@ class Table extends AbstractFormData
 
            
                     $element_render = $instance->render_pdf();
-                dd($element_render);
+             
              
 
                 if ($element_render) {
@@ -225,7 +225,7 @@ class Table extends AbstractFormData
     
     }
         $data .= '</table></div>';
-      
+        dd($data);
         return $data;
     }
 
