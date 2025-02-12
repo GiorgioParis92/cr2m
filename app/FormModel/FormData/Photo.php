@@ -126,27 +126,27 @@ class Photo extends AbstractFormData
             }
             
             if (file_exists($filePath)) {
-                if (end($extension) != 'pdf') {
+                // if (end($extension) != 'pdf') {
                     
-                    $data .= '<div style="display:inline-block">
-                    <i data-dossier_id="$this->dossier_id" data-tag="'.($tag ?? $this->name).'" data-index="'.($index ?? '').'" data-val="' . $value . '" data-img-src="' . asset('storage/' . $value) . '" class="delete_photo btn btn-danger fa fa-trash bg-danger"></i>
+                //     $data .= '<div style="display:inline-block">
+                //     <i data-dossier_id="$this->dossier_id" data-tag="'.($tag ?? $this->name).'" data-index="'.($index ?? '').'" data-val="' . $value . '" data-img-src="' . asset('storage/' . $value) . '" class="delete_photo btn btn-danger fa fa-trash bg-danger"></i>
 
-                    <button  type="button" class="btn btn-success btn-view imageModal"
-                        data-toggle="modal" data-target="imageModal"
-                        data-img-src="' . asset('storage/' . $value) . '"
-                        data-val="' . $value . '"
-                        data-name="' . $this->config->title . '">';
-                    $data .= '<img src="' . asset('storage/' . $value) . '">';
-                    $data .= '<i style="display:block" class="fas fa-eye"></i>' . $this->config->title . '
-                    </button></div>';
-                } else {
-                    $data .= '<div class="btn btn-success btn-view pdfModal"
-                        data-toggle="modal" 
-                        data-img-src="' . asset('storage/' . $value) . '"
-                        data-val="' . $value . '"
-                        data-name="' . $this->config->title . '">';
-                    $data .= '<i class="fas fa-eye"></i>' . $this->config->title . '</div>';
-                }
+                //     <button  type="button" class="btn btn-success btn-view imageModal"
+                //         data-toggle="modal" data-target="imageModal"
+                //         data-img-src="' . asset('storage/' . $value) . '"
+                //         data-val="' . $value . '"
+                //         data-name="' . $this->config->title . '">';
+                //     $data .= '<img src="' . asset('storage/' . $value) . '">';
+                //     $data .= '<i style="display:block" class="fas fa-eye"></i>' . $this->config->title . '
+                //     </button></div>';
+                // } else {
+                //     $data .= '<div class="btn btn-success btn-view pdfModal"
+                //         data-toggle="modal" 
+                //         data-img-src="' . asset('storage/' . $value) . '"
+                //         data-val="' . $value . '"
+                //         data-name="' . $this->config->title . '">';
+                //     $data .= '<i class="fas fa-eye"></i>' . $this->config->title . '</div>';
+                // }
             }
             // $data .= "<script>initializePdfModals()</script>";
         }
