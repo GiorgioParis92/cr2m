@@ -180,7 +180,7 @@ class Table extends AbstractFormData
    
         // Decode the JSON value if needed
         $this->value = $this->decode_if_json($this->value);
-        dd($this->optionsArray);
+      
         if(!empty($this->value)) {
 
   
@@ -193,7 +193,7 @@ class Table extends AbstractFormData
                 $class = 'App\\FormModel\\FormData\\' . ucfirst($element_config['type']);
                 $configInstance = $element_config;
                
-           
+                dd($configInstance);
                 $name=$this->name . '.value.' . $element_data . '.' . $element_config['name'];
              
                 $form_id = $this->form_id;
