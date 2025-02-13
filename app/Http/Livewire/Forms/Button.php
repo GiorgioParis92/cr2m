@@ -34,7 +34,7 @@ class Button extends AbstractData
 
         if($this->value) {
   
-                $rapport=FormsData::where('form_id',$form_id)->where('dossier_id',$dossier_id)->where('meta_key','rapport_cofrac')->first();
+                $rapport=FormsData::where('dossier_id',$dossier_id)->where('meta_key','rapport_cofrac')->first();
                
 
                 if(isset($rapport)) {
