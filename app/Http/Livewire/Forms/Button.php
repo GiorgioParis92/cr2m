@@ -52,11 +52,11 @@ class Button extends AbstractData
                 $response = curl_exec($ch);
                 $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
                 curl_close($ch);
-                $this->rapport=$response;
+                
                 // Handle the response
                 if ($httpCode === 200) {
                     $data = json_decode($response, true);
-
+                    $this->rapport=$data;
                     // $this->rapport=$data;
                   
                     // return response()->json([
