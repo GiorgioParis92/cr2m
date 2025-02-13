@@ -77,9 +77,11 @@
 
             $data .= '</a>';
             $data .= '</div>';
+            print_r($rapport ?? 'no');
         }
         echo $data;
+   
     @endphp
-
+    
 
 </div>
