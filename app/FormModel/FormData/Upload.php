@@ -72,39 +72,52 @@ class Upload extends AbstractFormData
         $data.='<input type="hidden" id="doc-'.$this->form_id.$this->name.'" wire:model="' . $wireModel . '">';
             
 
-        if($this->value) {
-        $extension = explode('.', $this->value);
-
-      
-
-            $filePath = storage_path('app/public/' . $this->value);  // File system path
-
-            // $data.=$filePath;
-      
-            if (file_exists($filePath)) {
-                if (end($extension) != 'pdf') {
-                    $data .= '<button type="button" class="btn btn-success btn-view imageModal"
-            data-toggle="modal" data-target="imageModal"
-            data-img-src="' . asset('storage/' . $this->value).'"
-            data-name="' . $this->config->title . '">
-            <i class="fas fa-eye"></i> Visualiser
-        </button> ';
-                } else {
-                    $data .= '<div class="btn btn-success btn-view pdfModal"
-            data-toggle="modal" 
-             
-            data-img-src="' . asset('storage/' . $this->value) . '"
-            data-name="' . $this->config->title . '">
-            <i class="fas fa-eye"></i> Visualiser</div>';
+        if ($this->value) {
+            $extension = pathinfo($this->value, PATHINFO_EXTENSION);
+            
+            // Check if value is a URL
+            if (filter_var($this->value, FILTER_VALIDATE_URL)) {
+                // Check if remote file exists
+                $headers = @get_headers($this->value);
+                if ($headers && strpos($headers[0], '200') !== false) {
+                    if ($extension !== 'pdf') {
+                        $data .= '<button type="button" class="btn btn-success btn-view imageModal"
+                            data-toggle="modal" data-target="imageModal"
+                            data-img-src="' . $this->value . '"
+                            data-name="' . $this->config->title . '">
+                            <i class="fas fa-eye"></i> Visualiser
+                        </button>';
+                    } else {
+                        $data .= '<div class="btn btn-success btn-view pdfModal"
+                            data-toggle="modal"
+                            data-img-src="' . $this->value . '"
+                            data-name="' . $this->config->title . '">
+                            <i class="fas fa-eye"></i> Visualiser
+                        </div>';
+                    }
+                }
+            } else {
+                // Local file check
+                $filePath = storage_path('app/public/' . $this->value);
+        
+                if (file_exists($filePath)) {
+                    if ($extension !== 'pdf') {
+                        $data .= '<button type="button" class="btn btn-success btn-view imageModal"
+                            data-toggle="modal" data-target="imageModal"
+                            data-img-src="' . asset('storage/' . $this->value) . '"
+                            data-name="' . $this->config->title . '">
+                            <i class="fas fa-eye"></i> Visualiser
+                        </button>';
+                    } else {
+                        $data .= '<div class="btn btn-success btn-view pdfModal"
+                            data-toggle="modal"
+                            data-img-src="' . asset('storage/' . $this->value) . '"
+                            data-name="' . $this->config->title . '">
+                            <i class="fas fa-eye"></i> Visualiser
+                        </div>';
+                    }
                 }
             }
-
-        
-
-
-
-
-        $data .= '</div>';
         }
         $data .= '</td>';
 
