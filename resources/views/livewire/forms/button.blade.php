@@ -77,7 +77,6 @@
 
             $data .= '</a>';
             $data .= '</div>';
-            print_r($rapport_inspection ?? 'no');
         }
         echo $data;
    
