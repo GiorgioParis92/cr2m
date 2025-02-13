@@ -60,6 +60,7 @@ class Button extends AbstractData
 
                     if(isset($data['rapport_id'])) {
                         $this->rapport=$data['rapport_id'];
+                        $this->rapport_inspection='https://crm.elitequalityinspection.fr/storage/rapports/rapport_'.$data['rapport_id'].'/'.$data['rapport_id'].'.pdf';
                     }
                     // $this->rapport=$data;
                   
