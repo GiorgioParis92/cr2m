@@ -69,8 +69,7 @@ class Upload extends AbstractFormData
 
         $data .= '<td class="w-30" ><div >';
    
-        $data.='<input type="text" id="doc-'.$this->form_id.$this->name.'" wire:model="' . $wireModel . '">';
-        $data.='<input type="text" value="'.$this->value.'" >';
+        $data.='<input type="hidden" id="doc-'.$this->form_id.$this->name.'" wire:model="' . $wireModel . '">';
             
 
         if ($this->value) {
