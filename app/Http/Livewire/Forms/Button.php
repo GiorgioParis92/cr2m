@@ -57,6 +57,10 @@ class Button extends AbstractData
                 if ($httpCode === 200) {
                     $data = json_decode($response, true);
                     $this->rapport=$data;
+
+                    if(isset($data['rapport_id'])) {
+                        $this->rapport=$data['rapport_id'];
+                    }
                     // $this->rapport=$data;
                   
                     // return response()->json([
