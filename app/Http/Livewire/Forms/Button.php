@@ -64,6 +64,22 @@ class Button extends AbstractData
     
                         if(isset($data['rapport_id'])) {
                             $this->rapport=$data['rapport_id'];
+
+                            if(isset($data['date_rapport'])) {
+                                $this->rdv_cofrac=date("d/m/Y",strtotime(str_replace('/','-',$data['date_rapport'])));
+                                FormsData::updateOrCreate(
+                                    [
+                                        'dossier_id' => $this->dossier_id,
+                                        'form_id' => '73',
+                                        'meta_key' => 'rdv_cofrac'
+                                    ],
+                                    [
+                                        'meta_value' => $this->rdv_cofrac
+                                    ]
+                                );
+                            }
+                            
+
                             $this->rapport_inspection='https://crm.elitequalityinspection.fr/storage/rapports/rapport_'.$data['rapport_id'].'/'.$data['nom_rapport'].'.pdf';
                        
                             FormsData::updateOrCreate(
