@@ -66,9 +66,9 @@ class YouSign extends Controller
     if ($dossier) {
 
 
-      if($dossier->id==38) {
-        return response()->json($fields, 200);
-      }
+      // if($dossier->id==38) {
+      //   return response()->json($fields, 200);
+      // }
 
       $dossier->beneficiaire->prenom=str_replace(',',' ',$dossier->beneficiaire->prenom);
       $dossier->beneficiaire->nom=str_replace(',',' ',$dossier->beneficiaire->nom);
