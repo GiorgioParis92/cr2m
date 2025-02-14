@@ -31,6 +31,36 @@ class Button extends AbstractData
 
         $this->dossier = Dossier::find($dossier_id);
 
+        $jsonString = str_replace(["\n", ' ', "\r"], '', $this->conf->options);
+        $this->optionsArray = json_decode($jsonString, true);
+        if (!is_array($this->optionsArray)) {
+            $this->optionsArray = [];
+        }
+        if (isset($this->optionsArray['link'])) {
+            $this->form_id = $this->optionsArray['link']['form_id'];
+           
+            $form_config=DB::table('forms_config')->where('form_id',$this->form_id)
+            ->where('id',$this->optionsArray['link']['id'])
+            ->first();
+
+            $this->form_id=$form_config->form_id;
+
+            $this->config=$form_config;
+
+            $config = \DB::table('forms_data')
+            ->where('form_id', $this->form_id)
+            ->where('dossier_id', $dossier_id)
+            ->where('meta_key', $this->conf['name'])
+            ->first();
+
+      
+        $this->value = $config->meta_value ?? '';
+
+            $jsonString = str_replace(["\n", ' ', "\r"], '', $form_config->options);
+            $this->optionsArray = json_decode($jsonString, true);
+           
+        }
+
 
         if($this->value) {
   
