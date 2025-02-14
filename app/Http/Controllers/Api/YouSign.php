@@ -42,8 +42,9 @@ class YouSign extends Controller
     // if(auth()->user()->id==1) {
     //     dd($request);
     //   }
-
+    
     if(isset($request->form_id)) {
+    
    $config = FormConfig::where('form_id', $request->form_id)
     ->where('name', $request->name)
     ->first();
@@ -51,12 +52,23 @@ class YouSign extends Controller
 
       $options=json_decode($config->options);
 
+      $fields=$request->fields ?? null;
+
       if(isset($options->fields)) {
-        $request->fields=$options->fields;
+        $fields=$options->fields;
       }
 
     }
+
+  
+
+
     if ($dossier) {
+
+
+      if($dossier->id==38) {
+        return response()->json($fields, 200);
+      }
 
       $dossier->beneficiaire->prenom=str_replace(',',' ',$dossier->beneficiaire->prenom);
       $dossier->beneficiaire->nom=str_replace(',',' ',$dossier->beneficiaire->nom);
@@ -73,7 +85,7 @@ class YouSign extends Controller
           'signature_name' => $request->name ?? '',
           'delivery_mode' => 'email',
           'signature_level' => 'electronic_signature',
-          'fields' => json_decode(json_encode($request->fields), true),
+          'fields' => json_decode(json_encode($fields), true),
           'signer_info' => [
             'first_name' => trim($dossier->beneficiaire->prenom ?? ''),
             'last_name' => trim($dossier->beneficiaire->nom ?? ''),
