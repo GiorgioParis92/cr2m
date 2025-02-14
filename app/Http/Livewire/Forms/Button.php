@@ -18,6 +18,7 @@ use App\Models\{
     FormsData,
     Card
 };
+use Illuminate\Support\Facades\DB;
 
 class Button extends AbstractData
 {
