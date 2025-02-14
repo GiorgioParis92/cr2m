@@ -46,7 +46,7 @@ class Button extends AbstractData
 
             $this->form_id=$form_config->form_id;
 
-            $this->config=$form_config;
+            $this->conf=$form_config;
 
             $config = \DB::table('forms_data')
             ->where('form_id', $this->form_id)
@@ -57,8 +57,8 @@ class Button extends AbstractData
       
         $this->value = $config->meta_value ?? '';
 
-            $jsonString = str_replace(["\n", ' ', "\r"], '', $form_config->options);
-            $this->optionsArray = json_decode($jsonString, true);
+            // $jsonString = str_replace(["\n", ' ', "\r"], '', $form_config->options);
+            // $this->optionsArray = json_decode($jsonString, true);
            
         }
 
