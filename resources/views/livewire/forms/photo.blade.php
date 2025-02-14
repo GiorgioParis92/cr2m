@@ -61,8 +61,9 @@
             if (is_array($values)) {
                 $data='';
                 foreach ($values as $val) {
-                    if ($val) {
-                     
+                
+                    if ($val  && $val!='[]') {
+                 
                         $extension = explode('.', $val);
 
                         $val_thumbnail = str_replace('.', '_thumbnail.', $val);
@@ -83,7 +84,7 @@
 
 
 
-
+                    
 
                             $data.='<div class="to_remove" style="display: inline-block;max-width:20%;">';
                                 $data .='<i 
