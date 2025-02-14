@@ -237,6 +237,7 @@
                                         </option>
                                     @endforeach
                                 </select>
+                                @if (auth()->user()->client_id == 0 )
                                 <form class="form-control" method="get">
 
                                     <label>Changer l'étape en cours</label>
@@ -251,6 +252,7 @@
                                         @endforeach
                                     </select>
                                 </form>
+                                @endif
                                 @endif
                             </div>
                         </div>
