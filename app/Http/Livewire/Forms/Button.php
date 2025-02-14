@@ -31,7 +31,7 @@ class Button extends AbstractData
 
         $this->dossier = Dossier::find($dossier_id);
 
-        $jsonString = str_replace(["\n", ' ', "\r"], '', $this->conf->options);
+        $jsonString = str_replace(["\n", ' ', "\r"], '', $this->conf['options']);
         $this->optionsArray = json_decode($jsonString, true);
         if (!is_array($this->optionsArray)) {
             $this->optionsArray = [];
