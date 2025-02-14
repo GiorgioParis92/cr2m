@@ -42,7 +42,7 @@ class Button extends AbstractData
            
             $form_config=DB::table('forms_config')->where('form_id',$this->form_id)
             ->where('id',$this->optionsArray['link']['id'])
-            ->first();
+            ->first()->toArray();
 
             $this->form_id=$form_config->form_id;
 
@@ -51,7 +51,7 @@ class Button extends AbstractData
             $config = \DB::table('forms_data')
             ->where('form_id', $this->form_id)
             ->where('dossier_id', $dossier_id)
-            ->where('meta_key', $this->conf->name)
+            ->where('meta_key', $this->conf['name'])
             ->first();
 
       
