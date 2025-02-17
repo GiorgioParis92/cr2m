@@ -1609,7 +1609,7 @@
             
             let elementPosition = accordionElement.getBoundingClientRect().top + window.scrollY;
             window.scrollTo({
-                top: elementPosition - offset, // Adjust for the height of the accordion button
+                top: elementPosition - offset-15, // Adjust for the height of the accordion button
                 behavior: 'smooth'
             });
         }
