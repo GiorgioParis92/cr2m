@@ -415,10 +415,11 @@
                     </div>
                 @else
            
-                    @php
-                        $titleCount = collect($config)->where('type', 'title')->count();
-                    @endphp
+
                     @if(isset($config))
+                    @php
+                    $titleCount = collect($config)->where('type', 'title')->count();
+                    @endphp
                     <div class="row" >
                         <div class="col-12">
 
