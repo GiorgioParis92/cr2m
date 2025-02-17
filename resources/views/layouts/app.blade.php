@@ -632,7 +632,7 @@
                     dayNamesMin: ['Di', 'Lu', 'Ma', 'Me', 'Je', 'Ve', 'Sa'],
                     weekHeader: 'Sm',
                     dateFormat: 'dd-mm-yy',
-                    firstDay: 1,
+                    // firstDay: 1,
                     isRTL: false,
                     showMonthAfterYear: false,
                     yearSuffix: '',
