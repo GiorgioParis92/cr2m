@@ -419,97 +419,101 @@
                 </div>
                 @else
                 @php
-                    // Count how many items in $config are "title"
-                    $titleCount = collect($config)->where('type', 'title')->count();
-                @endphp
-                
+    $titleCount = collect($config)->where('type', 'title')->count();
+@endphp
+
+<div class="row">
+    <div class="col-12">
+        <div class="card mt-4 pl-4 pr-4 pb-3" id="basic-info">
+            <div class="card-body p-0">
                 <div class="row">
-                    <div class="col-12">
-                        <div class="card mt-4 pl-4 pr-4 pb-3" id="basic-info">
-                            <div class="card-body p-0">
-                                <div class="row">
-                
-                                    @if ($titleCount > 1)
-                                        {{-- MORE THAN ONE TITLE => ACCORDION MODE --}}
-                                        <div class="accordion" id="accordionForm">
-                
-                                            @foreach ($config as $conf)
-                                                @php
-                                                    $isTitle     = ($conf['type'] ?? '') === 'title';
-                                                    $confId      = $conf['id'] ?? uniqid();
-                                                    $accordionId = "collapse-{$confId}";
-                                                @endphp
-                
+
+                    @if ($titleCount > 1)
+                        {{-- MORE THAN ONE TITLE => ACCORDION MODE --}}
+                        <div class="accordion" id="accordionForm">
+                            @php
+                                $groupedConfigs = [];
+                                $currentGroup = [];
+
+                                foreach ($config as $conf) {
+                                    if (($conf['type'] ?? '') === 'title' && !empty($currentGroup)) {
+                                        $groupedConfigs[] = $currentGroup;
+                                        $currentGroup = [];
+                                    }
+                                    $currentGroup[] = $conf;
+                                }
+                                if (!empty($currentGroup)) {
+                                    $groupedConfigs[] = $currentGroup;
+                                }
+                            @endphp
+
+                            @foreach ($groupedConfigs as $index => $group)
+                                @php
+                                    $groupId = "group-" . ($group[0]['id'] ?? uniqid());
+                                @endphp
+
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header" id="heading-{{ $groupId }}">
+                                        <button
+                                            class="accordion-button @if($expandedTitleId !== $groupId) collapsed @endif"
+                                            type="button"
+                                            wire:click="toggleTitle('{{ $groupId }}')"
+                                            aria-expanded="{{ $expandedTitleId === $groupId ? 'true' : 'false' }}"
+                                            aria-controls="collapse-{{ $groupId }}"
+                                        >
+                                            {{ $group[0]['title'] ?? 'Untitled' }}
+                                        </button>
+                                    </h2>
+                                    <div
+                                        id="collapse-{{ $groupId }}"
+                                        class="accordion-collapse collapse @if($expandedTitleId === $groupId) show @endif"
+                                        aria-labelledby="heading-{{ $groupId }}"
+                                        data-bs-parent="#accordionForm"
+                                    >
+                                        <div class="accordion-body">
+                                            @foreach ($group as $conf)
+                                                @php $confId = $conf['id'] ?? uniqid(); @endphp
+
                                                 @if (View::exists("livewire.forms.{$conf['type']}"))
-                                                    @if ($isTitle)
-                                                        {{-- Accordion Title --}}
-                                                        <div class="accordion-item">
-                                                            <h2 class="accordion-header" id="heading-{{ $confId }}">
-                                                                <button
-                                                                    class="accordion-button @if($expandedTitleId !== $confId) collapsed @endif"
-                                                                    type="button"
-                                                                    wire:click="toggleTitle({{ $confId }})"
-                                                                    aria-expanded="{{ $expandedTitleId === $confId ? 'true' : 'false' }}"
-                                                                    aria-controls="{{ $accordionId }}"
-                                                                >
-                                                                    {{-- Use title label or a default --}}
-                                                                    {{ $conf['title'] ?? 'Untitled' }}
-                                                                </button>
-                                                            </h2>
-                                                            <div
-                                                                id="{{ $accordionId }}"
-                                                                class="accordion-collapse collapse @if($expandedTitleId === $confId) show @endif"
-                                                                aria-labelledby="heading-{{ $confId }}"
-                                                                data-bs-parent="#accordionForm"
-                                                            >
-                                                                <div class="accordion-body">
-                                                                    @livewire("forms.{$conf['type']}", [
-                                                                        'conf'       => $conf,
-                                                                        'form_id'    => $set_form,
-                                                                        'dossier_id' => $dossier->id
-                                                                    ], key($confId))
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    @else
-                                                        {{-- Not a title => just render component as normal --}}
-                                                        @livewire("forms.{$conf['type']}", [
-                                                            'conf'       => $conf,
-                                                            'form_id'    => $set_form,
-                                                            'dossier_id' => $dossier->id
-                                                        ], key($confId))
-                                                    @endif
+                                                    @livewire("forms.{$conf['type']}", [
+                                                        'conf'       => $conf,
+                                                        'form_id'    => $set_form,
+                                                        'dossier_id' => $dossier->id
+                                                    ], key($confId))
                                                 @endif
-                
-                                                {{-- "Close" type => add whatever is needed --}}
+
                                                 @if (($conf['type'] ?? '') === 'close')
                                                     <div class="close_card"></div>
                                                 @endif
                                             @endforeach
-                
                                         </div>
-                                    @else
-                                        {{-- ONLY ZERO OR ONE TITLE => ORIGINAL LAYOUT --}}
-                                        @foreach ($config as $conf)
-                                            @if (View::exists("livewire.forms.{$conf['type']}"))
-                                                @livewire("forms.{$conf['type']}", [
-                                                    'conf'       => $conf,
-                                                    'form_id'    => $set_form,
-                                                    'dossier_id' => $dossier->id
-                                                ], key($conf['id']))
-                                            @endif
-                
-                                            @if (($conf['type'] ?? '') === 'close')
-                                                <div class="close_card"></div>
-                                            @endif
-                                        @endforeach
-                                    @endif
-                
+                                    </div>
                                 </div>
-                            </div>
+                            @endforeach
                         </div>
-                    </div>
+                    @else
+                        {{-- ONLY ZERO OR ONE TITLE => ORIGINAL LAYOUT --}}
+                        @foreach ($config as $conf)
+                            @if (View::exists("livewire.forms.{$conf['type']}"))
+                                @livewire("forms.{$conf['type']}", [
+                                    'conf'       => $conf,
+                                    'form_id'    => $set_form,
+                                    'dossier_id' => $dossier->id
+                                ], key($conf['id']))
+                            @endif
+
+                            @if (($conf['type'] ?? '') === 'close')
+                                <div class="close_card"></div>
+                            @endif
+                        @endforeach
+                    @endif
+
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+
             
                 @endif
             </div>
