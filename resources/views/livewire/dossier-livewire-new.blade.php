@@ -386,6 +386,7 @@
                     </div>
 
                 @endif
+                @if(auth()->user()->id!=1)
                 <div class="row">
                     <div class="col-12">
                         <div class="card mt-4 pl-4 pr-4 pb-3" id="basic-info">
@@ -416,7 +417,9 @@
                     </div>
 
                 </div>
-
+                @else
+                ok
+                @endif
             </div>
         </div>
 
