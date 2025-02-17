@@ -100,6 +100,6 @@ class Operationtable extends AbstractData
 
     public function render()
     {
-        return view('livewire.forms.operation_table');
+        return view('livewire.forms.operationtable');
     }
 }
