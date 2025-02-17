@@ -349,7 +349,7 @@
                                                 <ul class="nav nav-pills nav-fill p-1" role="tablist">
                                                     @foreach ($forms as $form)
                                                         @if ($form->type == 'document')
-                                                            <div class="table-responsive" wire:poll>
+                                                            <div class="table-responsive" >
 
 
                                                                 <table class="table align-items-center">
@@ -466,7 +466,7 @@
                                                             {{ $group[0]['title'] ?? 'Untitled' }}
                                                         </button>
                                                         </h2>
-                                                        <div  id="collapse-{{ $groupId }}"
+                                                        <div wire:ignore.self id="collapse-{{ $groupId }}"
                                                             class="accordion-collapse collapse @if ($expandedTitleId === $groupId) show @endif"
                                                             aria-labelledby="heading-{{ $groupId }}"
                                                             data-bs-parent="#accordionForm">
