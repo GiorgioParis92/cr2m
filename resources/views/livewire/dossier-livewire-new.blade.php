@@ -421,7 +421,7 @@
                         <div class="col-12">
 
 
-                            @if ($titleCount > 1)
+                            @if ($titleCount > 1 && isset($config))
                                 <div class="" id="basic-info">
                                     <div class="card-body p-0">
                                         <div class="row">
