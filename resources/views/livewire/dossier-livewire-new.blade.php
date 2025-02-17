@@ -425,71 +425,87 @@
                                 <div class="row"  >
                 
                                     @if (isset($config))
-                                        {{-- Add wire:ignore or wire:ignore.self to prevent re-rendering issues --}}
-                                        <div class="accordion" id="accordionExample" >
-                
-                                            @php
-                                                $accordionIndex = 0;
-                                                $accordionOpen = false;
-                                            @endphp
-                
-                                            @foreach ($config as $conf)
-                                                @if ($conf['type'] === 'title')
-                                                    @if ($accordionOpen)
-                                                        </div> <!-- End .accordion-body -->
-                                                    </div>     <!-- End .accordion-collapse -->
-                                                </div>         <!-- End .accordion-item -->
-                                                    @endif
-                
-                                                    @php
-                                                        $accordionIndex++;
-                                                        $accordionOpen = true;
-                                                    @endphp
-                
-                                                    <div class="accordion-item card mt-4 pl-4 pr-4 pb-3" wire:ignore>
-                                                        <h2 class="accordion-header" id="heading{{ $accordionIndex }}">
-                                                            <button class="accordion-button collapsed"
-                                                                    type="button"
-                                                                    data-bs-toggle="collapse"
-                                                                    data-bs-target="#collapse{{ $accordionIndex }}"
-                                                                    aria-expanded="false"
-                                                                    aria-controls="collapse{{ $accordionIndex }}">
-                                                                {{ $conf['title'] ?? 'Section Title' }}
-                                                            </button>
-                                                        </h2>
-                                                        <div id="collapse{{ $accordionIndex }}"
-                                                             class="accordion-collapse collapse"
-                                                             aria-labelledby="heading{{ $accordionIndex }}"
-                                                             data-bs-parent="#accordionExample">
-                                                            <div class="accordion-body row">
-                                                @elseif(View::exists('livewire.forms.' . $conf['type']))
-                                                    @livewire(
-                                                        "forms.{$conf['type']}",
-                                                        [
-                                                            'conf'       => $conf,
-                                                            'form_id'    => $set_form,
-                                                            'dossier_id' => $dossier->id
-                                                        ],
-                                                        key($conf['id'])
-                                                    )
-                                                @endif
-                
-                                                @if($conf['type'] === 'close')
-                                                    <div class="close_card"></div>
-                                                @endif
-                                            @endforeach
-                
-                                            @if($accordionOpen)
-                                                    </div> <!-- End .accordion-body -->
-                                                </div>     <!-- End .accordion-collapse -->
-                                            </div>         <!-- End .accordion-item -->
-                                            @endif
-                
-                                        </div><!-- End accordion -->
 
+    @php
+        // Count how many times 'type' => 'title' occurs
+        $titleCount = collect($config)->filter(fn ($c) => ($c['type'] ?? null) === 'title')->count();
 
-                                        
-                                    @endif
+        $accordionIndex   = 0;
+        $accordionOpen    = false;
+    @endphp
+
+    <div class="accordion" id="accordionExample">
+
+        @foreach ($config as $conf)
+            {{-- If we have a "title" type, start a new accordion-item --}}
+            @if ($conf['type'] === 'title')
+                {{-- If a previous accordion section was open, close it before starting a new one --}}
+                @if ($accordionOpen)
+                            </div>  <!-- End .accordion-body -->
+                        </div>      <!-- End .accordion-collapse -->
+                    </div>          <!-- End .accordion-item -->
+                @endif
+
+                @php
+                    $accordionIndex++;
+                    $accordionOpen = true;
+
+                    // Determine if this section should be opened by default
+                    $shouldOpen = ($titleCount <= 1 && $accordionIndex === 1);
+                @endphp
+
+                <div class="accordion-item card mt-4 pl-4 pr-4 pb-3" wire:ignore>
+                    <h2 class="accordion-header" id="heading{{ $accordionIndex }}">
+                        <button
+                            class="accordion-button @unless($shouldOpen) collapsed @endunless"
+                            type="button"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#collapse{{ $accordionIndex }}"
+                            aria-expanded="{{ $shouldOpen ? 'true' : 'false' }}"
+                            aria-controls="collapse{{ $accordionIndex }}"
+                        >
+                            {{ $conf['title'] ?? 'Section Title' }}
+                        </button>
+                    </h2>
+
+                    <div
+                        id="collapse{{ $accordionIndex }}"
+                        class="accordion-collapse collapse @if($shouldOpen) show @endif"
+                        aria-labelledby="heading{{ $accordionIndex }}"
+                        data-bs-parent="#accordionExample"
+                    >
+                        <div class="accordion-body row">
+
+            {{-- If a Livewire form component exists with the given $conf['type'] --}}
+            @elseif (View::exists('livewire.forms.' . $conf['type']))
+                @livewire(
+                    "forms.{$conf['type']}",
+                    [
+                        'conf'       => $conf,
+                        'form_id'    => $set_form,
+                        'dossier_id' => $dossier->id
+                    ],
+                    key($conf['id'])
+                )
+            @endif
+
+            {{-- Optionally handle "close" type, etc. --}}
+            @if ($conf['type'] === 'close')
+                <div class="close_card"></div>
+            @endif
+        @endforeach
+
+        {{-- Close out the last accordion section if it was opened --}}
+        @if ($accordionOpen)
+                    </div>  <!-- End .accordion-body -->
+                </div>      <!-- End .accordion-collapse -->
+            </div>          <!-- End .accordion-item -->
+        @endif
+
+    </div><!-- End .accordion -->
+
+@endif
+
                 
                                 </div><!-- End .row -->
                             </div><!-- End .card-body -->
