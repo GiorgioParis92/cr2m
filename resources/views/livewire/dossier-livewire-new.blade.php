@@ -455,7 +455,7 @@
                                                     <div class="accordion-item card mt-4 pl-4 pr-4 pb-3" >
                                                         <h2 class="accordion-header"
                                                             id="heading-{{ $groupId }}">
-                                                            <button wire:ignore.self
+                                                            <button 
                                                             class="accordion-button @if($expandedTitleId !== $groupId) collapsed @endif"
                                                             type="button"
                                                             {{-- wire:click="toggleTitle('{{ $groupId }}')" --}}
@@ -466,7 +466,7 @@
                                                             {{ $group[0]['title'] ?? 'Untitled' }}
                                                         </button>
                                                         </h2>
-                                                        <div wire:ignore.self id="collapse-{{ $groupId }}"
+                                                        <div  id="collapse-{{ $groupId }}"
                                                             class="accordion-collapse collapse @if ($expandedTitleId === $groupId) show @endif"
                                                             aria-labelledby="heading-{{ $groupId }}"
                                                             data-bs-parent="#accordionForm">
