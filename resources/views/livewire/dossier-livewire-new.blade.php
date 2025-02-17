@@ -415,7 +415,9 @@
                     </div>
                 @else
            
-
+                    @php
+                    $titleCount = 0;
+                    @endphp
                     @if(isset($config))
                     @php
                     $titleCount = collect($config)->where('type', 'title')->count();
