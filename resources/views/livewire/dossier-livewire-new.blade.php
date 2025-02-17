@@ -423,6 +423,7 @@
                     $titleCount = collect($config)->where('type', 'title')->count();
                     @endphp
                     <div class="row" >
+                        {{$titleCount}}
                         <div class="col-12">
 
 
