@@ -673,6 +673,9 @@
     background: aliceblue;
     border-bottom: 1px solid #ccc;
 }
+button.accordion-button {
+    font-weight: 800;
+}
     </style>
 
 </div>
