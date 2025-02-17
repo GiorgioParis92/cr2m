@@ -441,7 +441,7 @@
 
                                                 @foreach ($config as $conf)
                                                     {{-- If we have a "title" type, start a new accordion-item --}}
-                                                    @if ($conf['type'] === 'title')
+                                                    @if ($conf['type'] === 'title' || $titleCount<=1)
                                                         {{-- If a previous accordion section was open, close it before starting a new one --}}
                                                         @if ($accordionOpen)
                                             </div> <!-- End .accordion-body -->
