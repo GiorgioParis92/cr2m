@@ -417,6 +417,8 @@
            
                     @php
                     $titleCount = 0;
+                    $groupedConfigs = [];
+                    $currentGroup = [];
                     @endphp
                     @if(isset($config))
                     @php
