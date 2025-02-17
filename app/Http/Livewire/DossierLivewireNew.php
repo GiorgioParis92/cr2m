@@ -236,7 +236,7 @@ class DossierLivewireNew extends Component
 
 
         $this->emit('initializeDropzones', ['forms_configs' => $this->forms_configs]);
-        $this->emit('setTab', ['forms_configs' => $this->forms_configs]);
+        // $this->emit('setTab', ['forms_configs' => $this->forms_configs]);
 
         $this->conversations=Form::where('etape_number',$tab)->where('type','conversation')->first();
 

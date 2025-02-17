@@ -526,12 +526,7 @@
                                                         @endforeach
                                                     
                             @endif
-                            @php
-                            $titleCount = 0;
-                            $groupedConfigs = [];
-                            $currentGroup = [];
-                      
-                            @endphp
+
                         </div>
                     </div>
                     @endif
