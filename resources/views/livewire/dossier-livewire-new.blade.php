@@ -427,7 +427,7 @@
                                 <div class="" id="basic-info">
                                     <div class="card-body p-0">
                                         <div class="row">
-                                            <div class="accordion" id="accordionForm" wire:ignore>
+                                            <div class="accordion" id="accordionForm" >
                                                 @php
                                                     $groupedConfigs = [];
                                                     $currentGroup = [];
