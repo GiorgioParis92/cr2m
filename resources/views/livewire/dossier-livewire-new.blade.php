@@ -426,7 +426,7 @@
                 
                                     @if (isset($config))
                                         <!-- Accordion container -->
-                                        <div class="accordion" id="accordionExample">
+                                        <div class="accordion" id="accordionExample" wire:ignore.self>
                 
                                             @php
                                                 $accordionIndex = 0;
