@@ -452,10 +452,10 @@
                                                         $groupId = 'group-' . ($group[0]['id'] ?? uniqid());
                                                     @endphp
 
-                                                    <div class="accordion-item card mt-4 pl-4 pr-4 pb-3" wire.ignore.self>
+                                                    <div class="accordion-item card mt-4 pl-4 pr-4 pb-3" >
                                                         <h2 class="accordion-header"
                                                             id="heading-{{ $groupId }}">
-                                                            <button
+                                                            <button wire.ignore
                                                             class="accordion-button @if($expandedTitleId !== $groupId) collapsed @endif"
                                                             type="button"
                                                             {{-- wire:click="toggleTitle('{{ $groupId }}')" --}}
@@ -466,7 +466,7 @@
                                                             {{ $group[0]['title'] ?? 'Untitled' }}
                                                         </button>
                                                         </h2>
-                                                        <div id="collapse-{{ $groupId }}"
+                                                        <div wire.ignore id="collapse-{{ $groupId }}"
                                                             class="accordion-collapse collapse @if ($expandedTitleId === $groupId) show @endif"
                                                             aria-labelledby="heading-{{ $groupId }}"
                                                             data-bs-parent="#accordionForm">
