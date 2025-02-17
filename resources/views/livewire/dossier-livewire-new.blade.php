@@ -382,7 +382,7 @@
 
                 @endif
                 @if (auth()->user()->id != 1)
-                @php print_r($config) @endphp
+               
                     <div class="row">
                         <div class="col-12">
                             <div class="card mt-4 pl-4 pr-4 pb-3" id="basic-info">
@@ -414,6 +414,7 @@
 
                     </div>
                 @else
+                @php print_r($config) @endphp
                     @php
                         $titleCount = collect($config)->where('type', 'title')->count();
                     @endphp
