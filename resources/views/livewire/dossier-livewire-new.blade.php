@@ -446,7 +446,7 @@
                                                         $accordionOpen = true;
                                                     @endphp
                 
-                                                    <div class="accordion-item" wire:ignore>
+                                                    <div class="accordion-item card mt-4 pl-4 pr-4 pb-3" wire:ignore>
                                                         <h2 class="accordion-header" id="heading{{ $accordionIndex }}">
                                                             <button class="accordion-button collapsed"
                                                                     type="button"
