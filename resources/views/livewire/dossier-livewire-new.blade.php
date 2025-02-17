@@ -418,12 +418,12 @@
                     @php
                         $titleCount = collect($config)->where('type', 'title')->count();
                     @endphp
-
-                    <div class="row" wire:ignore.self>
+                    @if(isset($config))
+                    <div class="row" >
                         <div class="col-12">
 
 
-                            @if ($titleCount > 1 && isset($config))
+                            @if ($titleCount > 1)
                                 <div class="" id="basic-info">
                                     <div class="card-body p-0">
                                         <div class="row">
@@ -499,7 +499,7 @@
                                             <div class="card mt-4 pl-4 pr-4 pb-3" id="">
                                                 <div class="card-body p-0">
                                                     <div class="row">
-                                                        @if(isset($config))
+                                                  
                                                         @foreach ($config as $conf)
                                                             @if (View::exists("livewire.forms.{$conf['type']}"))
                                                                 @livewire(
@@ -517,11 +517,12 @@
                                                                 <div class="close_card"></div>
                                                             @endif
                                                         @endforeach
-                                                        @endif
+                                                    
                             @endif
 
                         </div>
                     </div>
+                    @endif
             </div>
         </div>
     </div>
