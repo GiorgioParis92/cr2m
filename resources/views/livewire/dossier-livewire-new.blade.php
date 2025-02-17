@@ -453,7 +453,7 @@
                                                                     aria-controls="{{ $accordionId }}"
                                                                 >
                                                                     {{-- Use title label or a default --}}
-                                                                    {{ $conf['label'] ?? 'Untitled' }}
+                                                                    {{ $conf['title'] ?? 'Untitled' }}
                                                                 </button>
                                                             </h2>
                                                             <div
