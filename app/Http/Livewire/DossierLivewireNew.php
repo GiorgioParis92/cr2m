@@ -269,6 +269,7 @@ class DossierLivewireNew extends Component
 
 
     public function load_forms($etape_id) {
+        $this->config=[];
         $this->forms=Forms::where('etape_id',$etape_id)->get();
 
         foreach($this->forms as $form) {
@@ -282,6 +283,7 @@ class DossierLivewireNew extends Component
 
 
     public function set_form($id) {
+        $this->config=[];
         $this->set_form=$id;
         $this->config=FormConfig::where('form_id',$id)->orderBy('ordering')->get()->toArray();
 
