@@ -424,7 +424,7 @@
 
 <div class="row">
     <div class="col-12">
-        <div class="" id="">
+        <div class="" id="basic-info">
             <div class="card-body p-0">
                 <div class="row">
 
@@ -452,7 +452,7 @@
                                     $groupId = "group-" . ($group[0]['id'] ?? uniqid());
                                 @endphp
 
-                                <div class="accordion-item card.mt-4.pl-4.pr-4.pb-3">
+                                <div class="accordion-item card mt-4 pl-4 pr-4 pb-3">
                                     <h2 class="accordion-header" id="heading-{{ $groupId }}">
                                         <button
                                             class="accordion-button @if($expandedTitleId !== $groupId) collapsed @endif"
