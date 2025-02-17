@@ -416,7 +416,7 @@
                 @else
            
                     @php
-                        $titleCount = collect($config)->where('type', 'title')->count();
+                        $titleCount = 2;
                     @endphp
 
                     <div class="row" wire:ignore>
