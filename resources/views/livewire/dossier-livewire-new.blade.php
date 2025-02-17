@@ -1,14 +1,15 @@
 <div>
+
     <div wire:loading wire:target="add_row,remove_row,display_form,setTab,handleFieldUpdated,set_form"
         class="loader-overlay">
 
         <div class="spinner"></div>
     </div>
-    <div id="loader-overlay" class="loader-overlay" style="display:none">
+    <div id="loader-overlay"  class="loader-overlay" style="display:none">
 
         <div class="spinner"></div>
     </div>
-
+    
     <div class="container-fluid my-3 py-3">
         @if (session()->has('message'))
             <div class="alert alert-success" id="flashMessage">
@@ -20,6 +21,7 @@
                 <div class="card">
                     <select class="form-control responsive" wire:change="setTab($event.target.value)">
                         @foreach ($etapes as $index => $e)
+
                             @php
                                 $isActive = false;
                                 $isCurrent = false;
@@ -53,6 +55,7 @@
                                     value="{{ $e['etape_number'] }}">{{ $e['etape_icon'] ?? '' }}
                                     {{ strtoupper_extended($e['etape_desc']) }}</option>
                             @endif
+
                         @endforeach
                     </select>
                     <div class="timeline timeline-one-side no_responsive">
@@ -105,10 +108,7 @@
                                                 class="{{ $tab == $e['id'] ? 'text-white' : 'text-secondary' }} font-weight-bold text-xs mt-1 mb-0">
                                                 validée le :
                                                 {{ format_date($steps['step_' . $e['etape_number']]['meta_value']) ?? '' }}
-                                                @if ($steps['step_' . $e['etape_number']]['user_name'])
-                                                    par {{ $steps['step_' . $e['etape_number']]['user_name'] }}
-                                                @endif
-                                            </p>
+                                               @if($steps['step_' . $e['etape_number']]['user_name']) par {{ $steps['step_' . $e['etape_number']]['user_name'] }} @endif</p>
                                         @endif
                                     </div>
                                 </div>
@@ -116,6 +116,7 @@
                         @endforeach
                     </div>
                     @if (isset($conversations))
+
                         <div class="col-lg-12">
                             <div class="card form-register container mt-5 pt-5" style="padding:0!important">
                                 @livewire('chat2', ['dossier_id' => $dossier['id'], 'form_id' => $conversations->id])
@@ -147,45 +148,46 @@
                                 <div class="btn btn-primary">{{ $dossier['fiche']['fiche_name'] }}</div>
 
                                 @php
-                                    $color = 'success';
-                                    if ($dossier['beneficiaire']['occupation'] == 'proprietaire') {
-                                        $color = 'success';
-                                        $text = 'propriétaire occupant';
-                                    }
-                                    if ($dossier['beneficiaire']['occupation'] == 'proprietaire_bailleur') {
-                                        $color = 'primary';
-                                        $text = 'Propriétaire Bailleur';
-                                    }
-                                    if ($dossier['beneficiaire']['occupation'] == 'sci') {
-                                        $color = 'warning';
-                                        $text = $dossier['beneficiaire']['occupation'];
-                                    }
+                                 $color='success';
+                                if($dossier['beneficiaire']['occupation']=='proprietaire') {
+                                    $color='success';
+                                    $text='propriétaire occupant';
+                                }
+                                if($dossier['beneficiaire']['occupation']=='proprietaire_bailleur') {
+                                    $color='primary';
+                                    $text='Propriétaire Bailleur';
+                                }
+                                if($dossier['beneficiaire']['occupation']=='sci') {
+                                    $color='warning';
+                                    $text=$dossier['beneficiaire']['occupation'];
+                                }
+
 
                                 @endphp
 
-                                <div class="btn btn-{{ $color }}">{{ $text }}</div>
+                                <div class="btn btn-{{$color}}">{{ $text }}</div>
                                 <div
                                     class="btn bg-primary bg-{{ couleur_menage($dossier->beneficiaire->menage_mpr) }}">
                                     {{ strtoupper(texte_menage($dossier['beneficiaire']['menage_mpr'])) }}
 
 
                                     @if (auth()->user()->client_id == 0)
-                                        <div class="">
+                                    <div class="">
 
-                                            @if (isset($technicien) && !empty($technicien))
-                                                <div class="row">
-                                                    Technicien RDV MAR 1 :
-                                                    {{ $technicien['user']['name'] ?? '' }}
-                                                </div>
-                                            @endif
-                                            @if (isset($technicien2) && !empty($technicien2))
-                                                <div class="row">
-                                                    Technicien RDV MAR 2 :
-                                                    {{ $technicien2['user']['name'] ?? '' }}
-                                                </div>
-                                            @endif
-                                        </div>
-                                    @endif
+                                        @if (isset($technicien) && !empty($technicien))
+                                            <div class="row">
+                                                Technicien RDV MAR 1 :
+                                                {{ $technicien['user']['name'] ?? '' }}
+                                            </div>
+                                        @endif
+                                        @if (isset($technicien2) && !empty($technicien2))
+                                            <div class="row">
+                                                Technicien RDV MAR 2 :
+                                                {{ $technicien2['user']['name'] ?? '' }}
+                                            </div>
+                                        @endif
+                                    </div>
+                                @endif
 
                                 </div>
 
@@ -225,32 +227,32 @@
                             <div>
                                 @if (auth()->user()->client_id == 0 ||
                                         (auth()->user()->client_id != 3 && auth()->user()->type_id != 7 && auth()->user()->type_id != 4))
-                                    <select class="no_select2 form-control" name="installateur"
-                                        wire:change="update_installateur($event.target.value)">
-                                        <option value="">Choisir un installateur</option>
-                                        @foreach ($installateurs as $installateur)
-                                            <option @if ($dossier['installateur'] == $installateur['id']) selected @endif
-                                                value="{{ $installateur['id'] }}">
-                                                {{ $installateur['client_title'] }}
-                                            </option>
+                                <select class="no_select2 form-control" name="installateur"
+                                    wire:change="update_installateur($event.target.value)">
+                                    <option value="">Choisir un installateur</option>
+                                    @foreach ($installateurs as $installateur)
+                                        <option @if ($dossier['installateur'] == $installateur['id']) selected @endif
+                                            value="{{ $installateur['id'] }}">
+                                            {{ $installateur['client_title'] }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                @if (auth()->user()->client_id == 0 )
+                                <form class="form-control" method="get">
+
+                                    <label>Changer l'étape en cours</label>
+                                    <select onchange="this.form.submit()" class="form-control" name="etape">
+                                        <option>Choisir une étape</option>
+                                        @foreach ($etapes as $index => $e)
+                                            @if ($e['order_column'] <= $dossier['etape']['order_column'] && $e['order_column']>0)
+                                                <option @if ($e['id'] == $tab) selected @endif
+                                                    value="{{ $e['etape_number'] }}">{{ $e['etape_icon'] }} -
+                                                    {{ strtoupper_extended($e['etape_desc']) }}</option>
+                                            @endif
                                         @endforeach
                                     </select>
-                                    @if (auth()->user()->client_id == 0)
-                                        <form class="form-control" method="get">
-
-                                            <label>Changer l'étape en cours</label>
-                                            <select onchange="this.form.submit()" class="form-control" name="etape">
-                                                <option>Choisir une étape</option>
-                                                @foreach ($etapes as $index => $e)
-                                                    @if ($e['order_column'] <= $dossier['etape']['order_column'] && $e['order_column'] > 0)
-                                                        <option @if ($e['id'] == $tab) selected @endif
-                                                            value="{{ $e['etape_number'] }}">{{ $e['etape_icon'] }} -
-                                                            {{ strtoupper_extended($e['etape_desc']) }}</option>
-                                                    @endif
-                                                @endforeach
-                                            </select>
-                                        </form>
-                                    @endif
+                                </form>
+                                @endif
                                 @endif
                             </div>
                         </div>
@@ -291,13 +293,16 @@
 
 
                 @if ($tab == $dossier->etape_number)
-                    @if (is_user_allowed('validate_' . $etape_display['etape_name']) || auth()->user()->type_id == 1)
-                        <div class="col-lg-6">
-                            <a class="btn btn-primary" href="{{ route('dossiers.next_step', $dossier->id) }}">Valider
-                                l'étape</a>
-                        </div>
-                    @endif
+                @if (is_user_allowed('validate_' . $etape_display['etape_name']) || auth()->user()->type_id==1)
+
+                    <div class="col-lg-6">
+                        <a class="btn btn-primary"
+                            href="{{ route('dossiers.next_step', $dossier->id) }}">Valider
+                            l'étape</a>
+                    </div>
+
                 @endif
+            @endif
                 @if ($forms)
                     @php
                         // Filter and count forms of type "form" or "rdv".
@@ -381,255 +386,281 @@
                     </div>
 
                 @endif
-                @if (auth()->user()->id != 1)
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="card mt-4 pl-4 pr-4 pb-3" id="basic-info">
-                                {{-- <div class="card-header">
+                @if(auth()->user()->id!=1)
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card mt-4 pl-4 pr-4 pb-3" id="basic-info">
+                            {{-- <div class="card-header">
                                 <h5>Titre Formulaire</h5>
                             </div> --}}
-                                <div class="card-body p-0">
-                                    <div class="row">
+                            <div class="card-body p-0">
+                                <div class="row">
 
-                                        @if (isset($config))
+                                    @if (isset($config))
 
 
-                                            @foreach ($config as $conf)
-                                                @if (View::exists('livewire.forms.' . $conf['type']))
-                                                    @livewire("forms.{$conf['type']}", ['conf' => $conf, 'form_id' => $set_form, 'dossier_id' => $dossier->id], key($conf['id']))
-                                                @else
-                                                    {{-- <p style="background:red">Component for type "{{ $conf['type'] }}" not found.</p> --}}
-                                                @endif
-                                                @if ($conf['type'] == 'close')
-                                                    <div class="close_card"></div>
-                                                @endif
-                                            @endforeach
+                                        @foreach ($config as $conf)
+                                            @if (View::exists('livewire.forms.' . $conf['type']))
+                                                @livewire("forms.{$conf['type']}", ['conf' => $conf, 'form_id' => $set_form, 'dossier_id' => $dossier->id], key($conf['id']))
+                                            @else
+                                                {{-- <p style="background:red">Component for type "{{ $conf['type'] }}" not found.</p> --}}
+                                            @endif
+                                            @if ($conf['type'] == 'close')
+                                                <div class="close_card"></div>
+                                            @endif
+                                        @endforeach
 
-                                        @endif
-                                    </div>
+                                    @endif
                                 </div>
                             </div>
                         </div>
-
                     </div>
+
+                </div>
                 @else
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="card mt-4 pl-4 pr-4 pb-3" id="basic-info">
-                                <div class="card-body p-0">
-                                    <div class="row">
-
-                                        @if (isset($config))
-                                            {{-- Add wire:ignore or wire:ignore.self to prevent re-rendering issues --}}
-                                            <div class="accordion" id="accordionExample" wire:ignore.self>
-
-                                                @php
-                                                    $accordionIndex = 0;
-                                                    $accordionOpen = false;
-                                                @endphp
-
-                                                @foreach ($config as $conf)
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card mt-4 pl-4 pr-4 pb-3" id="basic-info">
+                            <div class="card-body p-0">
+                                <div class="row">
+                
+                                    @if (isset($config))
+                                        {{-- Add wire:ignore or wire:ignore.self to prevent re-rendering issues --}}
+                                        <div class="accordion" id="accordionExample" wire:ignore.self>
+                
+                                            @php
+                                                $accordionIndex = 0;
+                                                $accordionOpen = false;
+                                            @endphp
+                
+                                            @foreach ($config as $conf)
+                                                @if ($conf['type'] === 'title')
+                                                    @if ($accordionOpen)
+                                                        </div> <!-- End .accordion-body -->
+                                                    </div>     <!-- End .accordion-collapse -->
+                                                </div>         <!-- End .accordion-item -->
+                                                    @endif
+                
+                                                    @php
+                                                        $accordionIndex++;
+                                                        $accordionOpen = true;
+                                                    @endphp
+                
                                                     <div class="accordion-item">
-                                                        <h2 class="accordion-header" id="heading{{ $loop->index }}">
-                                                            <button class="accordion-button"
-                                                                wire:click="$set('activeAccordionId', {{ $loop->index }})"
-                                                                aria-expanded="{{ $activeAccordionId === $loop->index ? 'true' : 'false' }}">
-                                                                {{ $conf['label'] ?? 'Title' }}
+                                                        <h2 class="accordion-header" id="heading{{ $accordionIndex }}">
+                                                            <button class="accordion-button collapsed"
+                                                                    type="button"
+                                                                    data-bs-toggle="collapse"
+                                                                    data-bs-target="#collapse{{ $accordionIndex }}"
+                                                                    aria-expanded="false"
+                                                                    aria-controls="collapse{{ $accordionIndex }}">
+                                                                {{ $conf['label'] ?? 'Section Title' }}
                                                             </button>
                                                         </h2>
-                                                        <div
-                                                            class="accordion-collapse
-                                {{ $activeAccordionId === $loop->index ? 'show' : 'collapse' }}">
+                                                        <div id="collapse{{ $accordionIndex }}"
+                                                             class="accordion-collapse collapse"
+                                                             aria-labelledby="heading{{ $accordionIndex }}"
+                                                             data-bs-parent="#accordionExample">
                                                             <div class="accordion-body">
-                                                                <!-- Child content -->
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                @endforeach
-
-
-                                                @if ($accordionOpen)
-                                            </div> <!-- End .accordion-body -->
-                                    </div> <!-- End .accordion-collapse -->
-                                </div> <!-- End .accordion-item -->
+                                                @elseif(View::exists('livewire.forms.' . $conf['type']))
+                                                    @livewire(
+                                                        "forms.{$conf['type']}",
+                                                        [
+                                                            'conf'       => $conf,
+                                                            'form_id'    => $set_form,
+                                                            'dossier_id' => $dossier->id
+                                                        ],
+                                                        key($conf['id'])
+                                                    )
+                                                @endif
+                
+                                                @if($conf['type'] === 'close')
+                                                    <div class="close_card"></div>
+                                                @endif
+                                            @endforeach
+                
+                                            @if($accordionOpen)
+                                                    </div> <!-- End .accordion-body -->
+                                                </div>     <!-- End .accordion-collapse -->
+                                            </div>         <!-- End .accordion-item -->
+                                            @endif
+                
+                                        </div><!-- End accordion -->
+                                    @endif
+                
+                                </div><!-- End .row -->
+                            </div><!-- End .card-body -->
+                        </div><!-- End .card -->
+                    </div><!-- End .col-12 -->
+                </div>
+                
+                
                 @endif
+            </div>
+        </div>
 
-            </div><!-- End accordion -->
-            @endif
-
-        </div><!-- End .row -->
-    </div><!-- End .card-body -->
-</div><!-- End .card -->
-</div><!-- End .col-12 -->
-</div>
-
-
-@endif
-</div>
-</div>
-
-</div>
-<style>
-    .board {
-        display: block;
-        padding: 20px;
-        overflow-x: auto;
-        height: auto;
-        width: 100%
-    }
-
-    .column {
-        /* background-color: #ebecf0; */
-        border-radius: 3px;
-
-        margin-right: 1%;
-        padding: 10px;
-        flex-shrink: 0;
-        /* max-height: 280px; */
-        overflow-x: hidden;
-        overflow-y: scroll;
-    }
-
-    .column-header {
-        font-weight: bold;
-        padding-bottom: 10px;
-    }
-
-    .ticket {
-        background-color: white;
-        border-radius: 3px;
-        padding: 10px;
-        margin-bottom: 10px;
-        cursor: move;
-        box-shadow: 0 1px 0 rgba(9, 30, 66, .25);
-    }
-
-    .add-column,
-    .add-ticket {
-        background-color: rgba(9, 30, 66, .04);
-        color: #172b4d;
-        border: none;
-        padding: 10px;
-        border-radius: 3px;
-        cursor: pointer;
-        width: 100%;
-        text-align: left;
-    }
-
-    .add-column:hover,
-    .add-ticket:hover {
-        background-color: rgba(9, 30, 66, .08);
-    }
-
-    #new-column {
-        width: 272px;
-        margin-right: 10px;
-    }
-
-    .column {
-
-
-        /* Hide scrollbar for IE, Edge and Firefox */
-        -ms-overflow-style: none;
-        /* IE and Edge */
-        scrollbar-width: none;
-        /* Firefox */
-    }
-
-    .column::-webkit-scrollbar {
-        display: none;
-    }
-
-    .col-xl-4.col-sm-4.mb-xl-0.mb-4.column {
-        max-width: 32%;
-    }
-
-    .loader-overlay {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.5);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        z-index: 9999;
-        display: none;
-    }
-
-    /* CSS for the spinner */
-    .spinner {
-        border: 8px solid rgba(0, 0, 0, 0.1);
-        border-top: 8px solid #3498db;
-        border-radius: 50%;
-        width: 80px;
-        height: 80px;
-        animation: spin 1s linear infinite;
-        margin: auto;
-        top: 46vh;
-        position: relative;
-    }
-
-    @keyframes spin {
-        from {
-            transform: rotate(0deg);
+    </div>
+    <style>
+        .board {
+            display: block;
+            padding: 20px;
+            overflow-x: auto;
+            height: auto;
+            width: 100%
         }
 
-        to {
-            transform: rotate(360deg);
-        }
-    }
+        .column {
+            /* background-color: #ebecf0; */
+            border-radius: 3px;
 
-    .thumbnail_hover {
-        display: none;
-        position: absolute;
-        pointer-events: none;
-        border-radius: 10px;
-        border: 1px solid #ccc;
-        box-shadow: 8px 7px 9px;
-        z-index: 9999999999;
-    }
-
-    .p_thumbnail:hover {
-        cursor: pointer;
-    }
-
-    .p_thumbnail:hover .thumbnail_hover {
-        display: block;
-    }
-
-    @media (max-width: 800px) {
-        .responsive {
-            display: block !important;
+            margin-right: 1%;
+            padding: 10px;
+            flex-shrink: 0;
+            /* max-height: 280px; */
+            overflow-x: hidden;
+            overflow-y: scroll;
         }
 
-        .no_responsive {
-            display: none !important;
+        .column-header {
+            font-weight: bold;
+            padding-bottom: 10px;
         }
 
-        .col-sm-auto {
-            text-align: center;
-            margin: auto !important;
+        .ticket {
+            background-color: white;
+            border-radius: 3px;
+            padding: 10px;
+            margin-bottom: 10px;
+            cursor: move;
+            box-shadow: 0 1px 0 rgba(9, 30, 66, .25);
+        }
+
+        .add-column,
+        .add-ticket {
+            background-color: rgba(9, 30, 66, .04);
+            color: #172b4d;
+            border: none;
+            padding: 10px;
+            border-radius: 3px;
+            cursor: pointer;
             width: 100%;
+            text-align: left;
         }
 
-        .container {
-            padding: 0px;
-            margin: 0;
-        }
-    }
-
-    @media (min-width: 800px) {
-        .responsive {
-            display: none !important;
+        .add-column:hover,
+        .add-ticket:hover {
+            background-color: rgba(9, 30, 66, .08);
         }
 
-        .no_responsive {
-            display: block !important;
+        #new-column {
+            width: 272px;
+            margin-right: 10px;
         }
-    }
-</style>
+
+        .column {
+
+
+            /* Hide scrollbar for IE, Edge and Firefox */
+            -ms-overflow-style: none;
+            /* IE and Edge */
+            scrollbar-width: none;
+            /* Firefox */
+        }
+
+        .column::-webkit-scrollbar {
+            display: none;
+        }
+
+        .col-xl-4.col-sm-4.mb-xl-0.mb-4.column {
+            max-width: 32%;
+        }
+
+        .loader-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            display: none;
+        }
+
+        /* CSS for the spinner */
+        .spinner {
+            border: 8px solid rgba(0, 0, 0, 0.1);
+            border-top: 8px solid #3498db;
+            border-radius: 50%;
+            width: 80px;
+            height: 80px;
+            animation: spin 1s linear infinite;
+            margin: auto;
+            top: 46vh;
+            position: relative;
+        }
+
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .thumbnail_hover {
+            display: none;
+            position: absolute;
+            pointer-events: none;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+            box-shadow: 8px 7px 9px;
+            z-index: 9999999999;
+        }
+
+        .p_thumbnail:hover {
+            cursor: pointer;
+        }
+
+        .p_thumbnail:hover .thumbnail_hover {
+            display: block;
+        }
+
+        @media (max-width: 800px) {
+            .responsive {
+                display: block !important;
+            }
+
+            .no_responsive {
+                display: none !important;
+            }
+
+            .col-sm-auto {
+                text-align: center;
+                margin: auto !important;
+                width: 100%;
+            }
+
+            .container {
+                padding: 0px;
+                margin: 0;
+            }
+        }
+
+        @media (min-width: 800px) {
+            .responsive {
+                display: none !important;
+            }
+
+            .no_responsive {
+                display: block !important;
+            }
+        }
+    </style>
 
 </div>
 <script>
@@ -1273,7 +1304,7 @@
                         'content') // Include CSRF token if using Laravel's CSRF protection
                 },
                 success: function(response) {
-
+                 
                     if (response.file_path) {
                         $('#pdfFrame').attr('src', '');
 
