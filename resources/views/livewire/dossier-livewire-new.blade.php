@@ -1617,9 +1617,7 @@ function toggleAccordion(groupId) {
         target.collapse('toggle');
 
         // Scroll to the accordion smoothly
-        $('html, body').animate({
-            scrollTop: target.offset().top - 100
-        }, 500);
+
     }
     function scrollToAccordion(id) {
     setTimeout(() => {
