@@ -52,7 +52,7 @@ class DossierLivewireNew extends Component
     public $dossier;
     public $set_form;
     public $config;
-    public $openIndex = null;
+    public ?int $expandedTitleId = null;
 
     protected $listeners = ['fileUploaded' => 'handleFileUploaded'];
 
@@ -372,12 +372,10 @@ class DossierLivewireNew extends Component
 
     }
 
-
-    public function toggleAccordion($index)
+    public function toggleTitle(int $titleId): void
     {
-        // If user clicks the same index, close it by setting openIndex to null.
-        // Otherwise, open the new index.
-        $this->openIndex = ($this->openIndex === $index) ? null : $index;
+        // If the title is currently open, close it. Otherwise, open it.
+        $this->expandedTitleId = ($this->expandedTitleId === $titleId) ? null : $titleId;
     }
 
     public function render()
