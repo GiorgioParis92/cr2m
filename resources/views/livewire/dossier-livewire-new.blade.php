@@ -487,41 +487,8 @@
                 
                                         </div><!-- End accordion -->
 
-                                        <div class="accordion" id="accordionExample">
-                                            @foreach($config as $i => $conf)
-                                                <div class="accordion-item">
-                                                    <h2 class="accordion-header" id="heading{{ $i }}">
-                                                        <button
-                                                            class="accordion-button {{ $openIndex === $i ? '' : 'collapsed' }}"
-                                                            type="button"
-                                                            wire:click="toggleAccordion({{ $i }})"
-                                                            aria-expanded="{{ $openIndex === $i ? 'true' : 'false' }}">
-                                                            {{ $conf['label'] ?? "Section $i" }}
-                                                        </button>
-                                                    </h2>
-                                                    <div
-                                                        id="collapse{{ $i }}"
-                                                        class="accordion-collapse {{ $openIndex === $i ? 'show' : 'collapse' }}"
-                                                        aria-labelledby="heading{{ $i }}"
-                                                        data-bs-parent="#accordionExample">
-                                                        <div class="accordion-body">
-                                                            @if(View::exists('livewire.forms.' . $conf['type']))
-                                                    @livewire(
-                                                        "forms.{$conf['type']}",
-                                                        [
-                                                            'conf'       => $conf,
-                                                            'form_id'    => $set_form,
-                                                            'dossier_id' => $dossier->id
-                                                        ],
-                                                        key($conf['id'])
-                                                    )
-                                                @endif
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            @endforeach
-                                        </div>
 
+                                        
                                     @endif
                 
                                 </div><!-- End .row -->
