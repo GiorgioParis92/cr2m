@@ -429,6 +429,7 @@
 
                                                 $accordionIndex = 0;
                                                 $accordionOpen = false;
+                                                $shouldOpen = false;
                                             @endphp
     {{$titleCount}} - 
     {{$shouldOpen}}
