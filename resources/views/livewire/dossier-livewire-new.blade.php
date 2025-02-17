@@ -458,7 +458,7 @@
                                                             type="button"
                                                             wire:click="toggleTitle('{{ $groupId }}')"
                                                             x-data
-                                                            @click="$dispatch('scroll-to-accordion', { id: 'collapse-{{ $groupId }}' })"
+                                                            onclick="$dispatch('scroll-to-accordion', { id: 'collapse-{{ $groupId }}' })"
                                                             aria-expanded="{{ $expandedTitleId === $groupId ? 'true' : 'false' }}"
                                                             aria-controls="collapse-{{ $groupId }}"
                                                         >
