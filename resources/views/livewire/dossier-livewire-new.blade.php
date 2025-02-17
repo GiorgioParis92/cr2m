@@ -454,7 +454,7 @@
                                                                     data-bs-target="#collapse{{ $accordionIndex }}"
                                                                     aria-expanded="false"
                                                                     aria-controls="collapse{{ $accordionIndex }}">
-                                                                {{ $conf['label'] ?? 'Section Title' }}
+                                                                {{ $conf['title'] ?? 'Section Title' }}
                                                             </button>
                                                         </h2>
                                                         <div id="collapse{{ $accordionIndex }}"
