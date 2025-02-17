@@ -1602,11 +1602,18 @@
 
 
     function scrollToAccordion(id) {
-        setTimeout(() => {
-            let accordionElement = document.getElementById(id);
-            if (accordionElement) {
-                accordionElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }
-        }, 300); // Small delay to ensure accordion is fully expanded
-    }
+    setTimeout(() => {
+        let accordionElement = document.getElementById(id);
+        if (accordionElement) {
+            let offset = document.querySelector('.accordion-button')?.offsetHeight || 50; // Default 50px if not found
+            
+            let elementPosition = accordionElement.getBoundingClientRect().top + window.scrollY;
+            window.scrollTo({
+                top: elementPosition - offset, // Adjust for the height of the accordion button
+                behavior: 'smooth'
+            });
+        }
+    }, 300); // Small delay to ensure the accordion is fully expanded
+}
+
 </script>
