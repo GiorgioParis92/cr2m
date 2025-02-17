@@ -228,9 +228,7 @@ class DossierLivewireNew extends Component
         $etape_display = Etape::find($tab);
         $this->etape_display = $etape_display ? $etape_display->toArray() : [];
         
-        // Reset variables before loading new data
-        $this->forms = '';
-        $this->config = [];
+        $this->reset('forms', 'config'); // This resets the properties properly
     
         $this->load_forms($tab);
     
@@ -276,10 +274,17 @@ class DossierLivewireNew extends Component
 
 
     public function set_form($id) {
-        $this->config=[];
-        $this->set_form=$id;
-        $this->config=FormConfig::where('form_id',$id)->orderBy('ordering')->get()->toArray();
-
+        $this->set_form = $id;
+    
+        // Ensure changes are detected
+        $this->config = [];
+        $this->config = FormConfig::where('form_id', $id)
+                        ->orderBy('ordering')
+                        ->get()
+                        ->toArray();
+    
+        // Emit a refresh event to force Livewire to detect changes
+        $this->emitSelf('refreshComponent');
     }
 
     public function handleFileUploaded($request)

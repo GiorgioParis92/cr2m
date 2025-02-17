@@ -425,7 +425,7 @@
                     @php
                     $titleCount = collect($config)->where('type', 'title')->count();
                     @endphp
-                    <div class="row" >
+                    <div class="row" wire:key="form-config-{{ $set_form }}" >
                 
                         <div class="col-12">
 
