@@ -52,7 +52,7 @@ class DossierLivewireNew extends Component
     public $dossier;
     public $set_form;
     public $config;
-    public  $expandedTitleId = null;
+    public  $expandedGroupId  = null;
 
     protected $listeners = ['fileUploaded' => 'handleFileUploaded'];
 
@@ -375,7 +375,7 @@ class DossierLivewireNew extends Component
     public function toggleTitle(int $titleId): void
     {
         // If the title is currently open, close it. Otherwise, open it.
-        $this->expandedTitleId = ($this->expandedTitleId === $titleId) ? null : $titleId;
+        $this->expandedGroupId  = ($this->expandedGroupId  === $titleId) ? null : $titleId;
     }
 
     public function render()
