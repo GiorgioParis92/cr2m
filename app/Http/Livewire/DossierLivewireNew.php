@@ -52,6 +52,7 @@ class DossierLivewireNew extends Component
     public $dossier;
     public $set_form;
     public $config;
+    public $openIndex = null;
 
     protected $listeners = ['fileUploaded' => 'handleFileUploaded'];
 
@@ -370,6 +371,15 @@ class DossierLivewireNew extends Component
         $this->get_docs();
 
     }
+
+
+    public function toggleAccordion($index)
+    {
+        // If user clicks the same index, close it by setting openIndex to null.
+        // Otherwise, open the new index.
+        $this->openIndex = ($this->openIndex === $index) ? null : $index;
+    }
+
     public function render()
     {
         return view('livewire.dossier-livewire-new', [

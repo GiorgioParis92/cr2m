@@ -426,66 +426,33 @@
                 
                                     @if (isset($config))
                                         {{-- Add wire:ignore or wire:ignore.self to prevent re-rendering issues --}}
-                                        <div class="accordion" id="accordionExample" >
-                
-                                            @php
-                                                $accordionIndex = 0;
-                                                $accordionOpen = false;
-                                            @endphp
-                
-                                            @foreach ($config as $conf)
-                                                @if ($conf['type'] === 'title')
-                                                    @if ($accordionOpen)
-                                                        </div> <!-- End .accordion-body -->
-                                                    </div>     <!-- End .accordion-collapse -->
-                                                </div>         <!-- End .accordion-item -->
-                                                    @endif
-                
-                                                    @php
-                                                        $accordionIndex++;
-                                                        $accordionOpen = true;
-                                                    @endphp
-                
-                                                    <div class="accordion-item card mt-4 pl-4 pr-4 pb-3" wire:ignore>
-                                                        <h2 class="accordion-header" id="heading{{ $accordionIndex }}">
-                                                            <button class="accordion-button collapsed"
-                                                                    type="button"
-                                                                    data-bs-toggle="collapse"
-                                                                    data-bs-target="#collapse{{ $accordionIndex }}"
-                                                                    aria-expanded="false"
-                                                                    aria-controls="collapse{{ $accordionIndex }}">
-                                                                {{ $conf['title'] ?? 'Section Title' }}
-                                                            </button>
-                                                        </h2>
-                                                        <div id="collapse{{ $accordionIndex }}"
-                                                             class="accordion-collapse collapse"
-                                                             aria-labelledby="heading{{ $accordionIndex }}"
-                                                             data-bs-parent="#accordionExample">
-                                                            <div class="accordion-body row">
-                                                @elseif(View::exists('livewire.forms.' . $conf['type']))
-                                                    @livewire(
-                                                        "forms.{$conf['type']}",
-                                                        [
-                                                            'conf'       => $conf,
-                                                            'form_id'    => $set_form,
-                                                            'dossier_id' => $dossier->id
-                                                        ],
-                                                        key($conf['id'])
-                                                    )
-                                                @endif
-                
-                                                @if($conf['type'] === 'close')
-                                                    <div class="close_card"></div>
-                                                @endif
-                                            @endforeach
-                
-                                            @if($accordionOpen)
-                                                    </div> <!-- End .accordion-body -->
-                                                </div>     <!-- End .accordion-collapse -->
-                                            </div>         <!-- End .accordion-item -->
-                                            @endif
-                
-                                        </div><!-- End accordion -->
+                                        <!-- livewire/accordion-example.blade.php -->
+
+<div class="accordion" id="accordionExample">
+    @foreach($config as $i => $conf)
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="heading{{ $i }}">
+                <button
+                    class="accordion-button {{ $openIndex === $i ? '' : 'collapsed' }}"
+                    type="button"
+                    wire:click="toggleAccordion({{ $i }})"
+                    aria-expanded="{{ $openIndex === $i ? 'true' : 'false' }}">
+                    {{ $conf['label'] ?? "Section $i" }}
+                </button>
+            </h2>
+            <div
+                id="collapse{{ $i }}"
+                class="accordion-collapse {{ $openIndex === $i ? 'show' : 'collapse' }}"
+                aria-labelledby="heading{{ $i }}"
+                data-bs-parent="#accordionExample">
+                <div class="accordion-body">
+                    {{ $conf['content'] ?? 'No Content' }}
+                </div>
+            </div>
+        </div>
+    @endforeach
+</div>
+
                                     @endif
                 
                                 </div><!-- End .row -->
