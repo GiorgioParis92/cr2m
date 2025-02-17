@@ -470,7 +470,7 @@
                                         aria-labelledby="heading-{{ $groupId }}"
                                         data-bs-parent="#accordionForm"
                                     >
-                                        <div class="accordion-body">
+                                        <div class="accordion-body row">
                                             @foreach ($group as $conf)
                                                 @php $confId = $conf['id'] ?? uniqid(); @endphp
 
