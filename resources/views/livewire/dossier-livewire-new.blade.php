@@ -399,9 +399,9 @@
                                     @if (isset($config))
 
 
-                                        @foreach ($config as $conf)
-                                            @if (View::exists('livewire.forms.' . $conf['type']))
-                                                @livewire("forms.{$conf['type']}", ['conf' => $conf, 'form_id' => $set_form, 'dossier_id' => $dossier->id], key($conf['id']))
+                                        @foreach ($config as $configuration)
+                                            @if (View::exists('livewire.forms.' . $configuration['type']))
+                                                @livewire("forms.{$configuration['type']}", ['conf' => $configuration, 'form_id' => $set_form, 'dossier_id' => $dossier->id], key($configuration['id']))
                                             @else
                                                 {{-- <p style="background:red">Component for type "{{ $conf['type'] }}" not found.</p> --}}
                                             @endif
