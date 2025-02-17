@@ -461,7 +461,7 @@
                                                              class="accordion-collapse collapse"
                                                              aria-labelledby="heading{{ $accordionIndex }}"
                                                              data-bs-parent="#accordionExample">
-                                                            <div class="accordion-body">
+                                                            <div class="accordion-body row">
                                                 @elseif(View::exists('livewire.forms.' . $conf['type']))
                                                     @livewire(
                                                         "forms.{$conf['type']}",
