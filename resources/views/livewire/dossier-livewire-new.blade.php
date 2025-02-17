@@ -423,16 +423,20 @@
 
                                             @php
                                                 // Count how many times 'type' => 'title' occurs
-                                                $titleCount = count(array_filter($config, function ($c) {
-        return isset($c['type']) && $c['type'] === 'title';
-    }));
+                                                $titleCount = count(
+                                                    array_filter($config, function ($c) {
+                                                        return isset($c['type']) && $c['type'] === 'title';
+                                                    }),
+                                                );
 
                                                 $accordionIndex = 0;
                                                 $accordionOpen = false;
-                                                $shouldOpen = false;
+                                           
+                                                if($titleCount<=1) {
+                                                    $accordionOpen = true; 
+                                                }
                                             @endphp
-    {{$titleCount}} - 
-    {{$shouldOpen}}
+                                        
                                             <div class="accordion" id="accordionExample">
 
                                                 @foreach ($config as $conf)
