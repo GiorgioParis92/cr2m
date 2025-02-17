@@ -372,7 +372,7 @@ class DossierLivewireNew extends Component
 
     }
 
-    public function toggleTitle(int $titleId): void
+    public function toggleTitle($titleId): void
     {
         // If the title is currently open, close it. Otherwise, open it.
         $this->expandedTitleId = ($this->expandedTitleId === $titleId) ? null : $titleId;
