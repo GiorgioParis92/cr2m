@@ -456,8 +456,8 @@
                                                             <button
                                                             class="accordion-button @if($expandedTitleId !== $groupId) collapsed @endif"
                                                             type="button"
-                                                            wire:click="toggleTitle('{{ $groupId }}')"
-                                                            onclick="scrollToAccordion('collapse-{{ $groupId }}')"
+                                                            {{-- wire:click="toggleTitle('{{ $groupId }}')" --}}
+                                                            onclick="toggleAccordion('{{ $groupId }}');scrollToAccordion('collapse-{{ $groupId }}')"
                                                             aria-expanded="{{ $expandedTitleId === $groupId ? 'true' : 'false' }}"
                                                             aria-controls="collapse-{{ $groupId }}"
                                                         >
@@ -1601,6 +1601,26 @@
     }
 
 
+
+    function toggleTitle(id) {
+
+        
+
+}
+function toggleAccordion(groupId) {
+        var target = $("#collapse-" + groupId);
+        
+        // Collapse all other accordions
+        $(".accordion-collapse").not(target).collapse('hide');
+
+        // Toggle the clicked accordion
+        target.collapse('toggle');
+
+        // Scroll to the accordion smoothly
+        $('html, body').animate({
+            scrollTop: target.offset().top - 100
+        }, 500);
+    }
     function scrollToAccordion(id) {
     setTimeout(() => {
         let accordionElement = document.getElementById(id);
