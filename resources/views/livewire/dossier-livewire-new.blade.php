@@ -413,101 +413,79 @@
 
                     </div>
                 @else
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="" id="basic-info">
-                                <div class="card-body p-0">
-                                    <div class="row">
-
-                                        @if (isset($config))
-
-                                            @php
-                                                // Count how many times 'type' => 'title' occurs
-                                                $titleCount = count(
-                                                    array_filter($config, function ($c) {
-                                                        return isset($c['type']) && $c['type'] === 'title';
-                                                    }),
-                                                );
-
-                                                $accordionIndex = 0;
-                                                $accordionOpen = false;
-                                           
-                                                if($titleCount<=1) {
-                                                    $accordionOpen = true; 
-                                                }
-                                            @endphp
-                                        
-                                            <div class="accordion @if($titleCount<=1) card mt-4 pl-4 pr-4 pb-3 @endif" id="accordionExample">
-
-                                                @foreach ($config as $conf)
-                                                    {{-- If we have a "title" type, start a new accordion-item --}}
-                                                    @if ($conf['type'] === 'title' )
-                                                        {{-- If a previous accordion section was open, close it before starting a new one --}}
-                                                        @if ($accordionOpen)
-                                            </div> <!-- End .accordion-body -->
+                <div>
+                    @if (!empty($config))
+                        @php
+                            // Prepare the data you need, e.g. count titles, track indices, etc.
+                            $titleCount = count(array_filter($config, fn($c) => $c['type'] ?? '' === 'title'));
+                
+                            $accordionIndex = 0;
+                            $accordionOpen = false;
+                
+                            if ($titleCount <= 1) {
+                                $accordionOpen = true;
+                            }
+                        @endphp
+                
+                        <div class="accordion @if ($titleCount <= 1) card mt-4 pl-4 pr-4 pb-3 @endif" id="accordionExample">
+                            @foreach ($config as $conf)
+                                {{-- If we have a "title" type, start a new accordion-item --}}
+                                @if ($conf['type'] === 'title')
+                                    @if ($accordionOpen)
+                                        </div> <!-- End .accordion-body -->
                                     </div> <!-- End .accordion-collapse -->
                                 </div> <!-- End .accordion-item -->
-                @endif
-
-                @php
-                    $accordionIndex++;
-                    $accordionOpen = true;
-
-                    // Determine if this section should be opened by default
-                    $shouldOpen = $titleCount <= 1 && $accordionIndex === 1;
-                @endphp
-
-                <div class="accordion-item card mt-4 pl-4 pr-4 pb-3" wire:ignore>
-                    <h2 class="accordion-header" id="heading{{ $accordionIndex }}">
-                        <button class="accordion-button @unless ($shouldOpen) collapsed @endunless"
-                            type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ $accordionIndex }}"
-                            aria-expanded="{{ $shouldOpen ? 'true' : 'false' }}"
-                            aria-controls="collapse{{ $accordionIndex }}">
-                            {{ $conf['title'] ?? 'Section Title' }}
-                        </button>
-                    </h2>
-
-                    <div id="collapse{{ $accordionIndex }}"
-                        class="accordion-collapse collapse @if ($shouldOpen) show @endif"
-                        aria-labelledby="heading{{ $accordionIndex }}" data-bs-parent="#accordionExample">
-                        <div class="accordion-body row">
-
-                            {{-- If a Livewire form component exists with the given $conf['type'] --}}
-                        @elseif (View::exists('livewire.forms.' . $conf['type']))
-                            @livewire(
-                                "forms.{$conf['type']}",
-                                [
-                                    'conf' => $conf,
-                                    'form_id' => $set_form,
-                                    'dossier_id' => $dossier->id,
-                                ],
-                                key($conf['id'])
-                            )
-                            @endif
-
-                            {{-- Optionally handle "close" type, etc. --}}
-                            @if ($conf['type'] === 'close')
-                                <div class="close_card"></div>
-                            @endif
+                                    @endif
+                
+                                    @php
+                                        $accordionIndex++;
+                                        $accordionOpen = true;
+                                        $shouldOpen = $titleCount <= 1 && $accordionIndex === 1;
+                                    @endphp
+                
+                                    <div class="accordion-item card mt-4 pl-4 pr-4 pb-3" wire:ignore>
+                                        <h2 class="accordion-header" id="heading{{ $accordionIndex }}">
+                                            <button class="accordion-button @unless ($shouldOpen) collapsed @endunless"
+                                                    type="button" data-bs-toggle="collapse" 
+                                                    data-bs-target="#collapse{{ $accordionIndex }}"
+                                                    aria-expanded="{{ $shouldOpen ? 'true' : 'false' }}"
+                                                    aria-controls="collapse{{ $accordionIndex }}">
+                                                {{ $conf['title'] ?? 'Section Title' }}
+                                            </button>
+                                        </h2>
+                                        <div id="collapse{{ $accordionIndex }}"
+                                             class="accordion-collapse collapse @if ($shouldOpen) show @endif"
+                                             aria-labelledby="heading{{ $accordionIndex }}" 
+                                             data-bs-parent="#accordionExample">
+                                            <div class="accordion-body row">
+                                @elseif (View::exists('livewire.forms.' . $conf['type']))
+                                    @livewire("forms.{$conf['type']}", [
+                                        'conf'       => $conf,
+                                        'form_id'    => '???',  // or however you retrieve
+                                        'dossier_id' => '???',  // or however you retrieve
+                                    ], key($conf['id']))
+                                @endif
+                
+                                @if ($conf['type'] === 'close')
+                                    <div class="close_card"></div>
+                                @endif
                             @endforeach
-
+                
                             {{-- Close out the last accordion section if it was opened --}}
                             @if ($accordionOpen)
-                        </div> <!-- End .accordion-body -->
-                    </div> <!-- End .accordion-collapse -->
-                </div> <!-- End .accordion-item -->
-                @endif
-
-            </div><!-- End .accordion -->
-
-            @endif
-
-
-        </div><!-- End .row -->
-    </div><!-- End .card-body -->
-</div><!-- End .card -->
-</div><!-- End .col-12 -->
-</div>
+                                </div> <!-- End .accordion-body -->
+                            </div> <!-- End .accordion-collapse -->
+                        </div> <!-- End .accordion-item -->
+                            @endif
+                        </div><!-- End .accordion -->
+                    @endif
+                
+                    {{-- Example button to reset config --}}
+                    <button wire:click="resetConfig" class="btn btn-danger">
+                        Reset Config
+                    </button>
+                </div>
+                
 
 
 @endif
