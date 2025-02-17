@@ -437,7 +437,7 @@
                                                 }
                                             @endphp
                                         
-                                            <div class="accordion" id="accordionExample">
+                                            <div class="accordion @if($titleCount<=1) card mt-4 pl-4 pr-4 pb-3 @endif" id="accordionExample">
 
                                                 @foreach ($config as $conf)
                                                     {{-- If we have a "title" type, start a new accordion-item --}}
