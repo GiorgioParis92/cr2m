@@ -38,7 +38,7 @@ class Operationtable extends AbstractData
     protected function validateValue($value): bool
     {
 
-        return !($this->conf['required']==1 && empty($value));
+        return true;
     }
 
 
