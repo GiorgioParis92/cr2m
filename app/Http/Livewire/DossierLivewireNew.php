@@ -274,17 +274,10 @@ class DossierLivewireNew extends Component
 
 
     public function set_form($id) {
-        $this->set_form = $id;
-    
-        // Ensure changes are detected
-        $this->config = [];
-        $this->config = FormConfig::where('form_id', $id)
-                        ->orderBy('ordering')
-                        ->get()
-                        ->toArray();
-    
-        // Emit a refresh event to force Livewire to detect changes
-        $this->emitSelf('refreshComponent');
+        $this->config=[];
+        $this->set_form=$id;
+        $this->config=FormConfig::where('form_id',$id)->orderBy('ordering')->get()->toArray();
+
     }
 
     public function handleFileUploaded($request)
