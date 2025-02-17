@@ -710,17 +710,7 @@
 </div>
 <script>
 
-document.addEventListener('DOMContentLoaded', function () {
-        document.addEventListener('scroll-to-accordion', function (event) {
-            let accordionElement = document.getElementById(event.detail.id);
-            if (accordionElement) {
-                console.log(accordionElement)
-                setTimeout(() => {
-                    accordionElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }, 300); // Delay to ensure the accordion is fully expanded before scrolling
-            }
-        });
-    });
+
 
     document.addEventListener('DOMContentLoaded', function(event) {
         document.addEventListener('livewire:load', () => {
@@ -1610,4 +1600,18 @@ document.addEventListener('DOMContentLoaded', function () {
     } else {
         document.addEventListener('livewire:load', initAllDropzones);
     }
+
+
+    document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('scroll-to-accordion', function (event) {
+            console.log(event)
+            let accordionElement = document.getElementById(event.detail.id);
+            if (accordionElement) {
+                console.log(accordionElement)
+                setTimeout(() => {
+                    accordionElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 300); // Delay to ensure the accordion is fully expanded before scrolling
+            }
+        });
+    });
 </script>
