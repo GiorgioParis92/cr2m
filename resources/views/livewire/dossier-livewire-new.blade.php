@@ -714,6 +714,7 @@ document.addEventListener('DOMContentLoaded', function () {
         document.addEventListener('scroll-to-accordion', function (event) {
             let accordionElement = document.getElementById(event.detail.id);
             if (accordionElement) {
+                console.log(accordionElement)
                 setTimeout(() => {
                     accordionElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 }, 300); // Delay to ensure the accordion is fully expanded before scrolling
