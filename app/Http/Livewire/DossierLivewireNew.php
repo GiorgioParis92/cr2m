@@ -52,7 +52,7 @@ class DossierLivewireNew extends Component
     public $dossier;
     public $set_form;
     public $config;
-    public ?int $expandedTitleId = null;
+    public  $expandedTitleId = null;
 
     protected $listeners = ['fileUploaded' => 'handleFileUploaded'];
 
