@@ -452,7 +452,7 @@
                                                         $groupId = 'group-' . ($group[0]['id'] ?? uniqid());
                                                     @endphp
 
-                                                    <div class="accordion-item card mt-4 pl-4 pr-4 pb-3">
+                                                    <div class="accordion-item card mt-4 pl-4 pr-4 pb-3" wire.ignore.self>
                                                         <h2 class="accordion-header"
                                                             id="heading-{{ $groupId }}">
                                                             <button
