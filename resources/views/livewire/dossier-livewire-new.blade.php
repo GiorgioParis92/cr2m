@@ -452,7 +452,7 @@
                                     $groupId = "group-" . ($group[0]['id'] ?? uniqid());
                                 @endphp
 
-                                <div class="accordion-item">
+                                <div class="accordion-item card.mt-4.pl-4.pr-4.pb-3">
                                     <h2 class="accordion-header" id="heading-{{ $groupId }}">
                                         <button
                                             class="accordion-button @if($expandedTitleId !== $groupId) collapsed @endif"
@@ -680,6 +680,23 @@
                 display: block !important;
             }
         }
+
+
+        .accordion-item {
+        border-radius: 15px;
+        padding: 0 !important;
+    }
+
+    .accordion-header {
+        margin-bottom: 0;
+        background: aliceblue;
+        border-bottom: 1px solid #ccc;
+    }
+
+    accordion-button {
+        font-weight: 800;
+    }
+
     </style>
 
 </div>
