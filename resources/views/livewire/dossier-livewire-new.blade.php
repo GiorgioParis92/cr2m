@@ -668,6 +668,11 @@
     border-radius: 15px;
     padding: 0 !important;
 }
+.accordion-header {
+    margin-bottom: 0;
+    background: aliceblue;
+    border-bottom: 1px solid #ccc;
+}
     </style>
 
 </div>
