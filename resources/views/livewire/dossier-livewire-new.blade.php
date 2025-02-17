@@ -474,7 +474,7 @@
                                             @foreach ($group as $conf)
                                                 @php $confId = $conf['id'] ?? uniqid(); @endphp
 
-                                                @if (View::exists("livewire.forms.{$conf['type']}"))
+                                                @if (View::exists("livewire.forms.{$conf['type']}") && $conf['type']!='title')
                                                     @livewire("forms.{$conf['type']}", [
                                                         'conf'       => $conf,
                                                         'form_id'    => $set_form,
