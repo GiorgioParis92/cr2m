@@ -223,36 +223,29 @@ class DossierLivewireNew extends Component
         }
     }
 
-    public function setTab($tab)
-    {
+    public function setTab($tab) {
         $this->tab = $tab;
         $etape_display = Etape::find($tab);
         $this->etape_display = $etape_display ? $etape_display->toArray() : [];
-        $this->forms='';
-        $this->config=[];
-
+        
+        // Reset variables before loading new data
+        $this->forms = '';
+        $this->config = [];
+    
         $this->load_forms($tab);
-
-
-
+    
+        // Force Livewire to refresh UI
         $this->emit('initializeDropzones', ['forms_configs' => $this->forms_configs]);
-        // $this->emit('setTab', ['forms_configs' => $this->forms_configs]);
-
-        $this->conversations=Form::where('etape_number',$tab)->where('type','conversation')->first();
-
-        foreach ($this->forms_configs as $key => $config) {
-            DB::table('messages_suivi')
-                ->where('user_id', auth()->id())
-                ->whereIn('message_id', function ($query) use ($key) {
-                    $query->select('id')
-                        ->from('messages')
-                        ->where('dossier_id', $this->dossier->id)
-                        ->where('form_id', $key);
-                })
-                ->delete();
-        }
+        $this->emit('setTab', ['forms_configs' => $this->forms_configs]);
+        $this->emitSelf('refreshComponent'); // This will re-render the component
+    
+        $this->conversations = Form::where('etape_number', $tab)->where('type', 'conversation')->first();
     }
-
+    
+    public function refreshComponent()
+    {
+        $this->config = array_values($this->config);
+    }
     private function determineLastEtape()
     {
         $this->last_etape = 1;
