@@ -422,11 +422,11 @@
                     <div class="col-12">
                         <div class="" id="basic-info">
                             <div class="card-body p-0">
-                                <div class="row"  wire:ignore>
+                                <div class="row"  >
                 
                                     @if (isset($config))
                                         {{-- Add wire:ignore or wire:ignore.self to prevent re-rendering issues --}}
-                                        <div class="accordion" id="accordionExample" >
+                                        <div class="accordion" id="accordionExample" wire:ignore>
                 
                                             @php
                                                 $accordionIndex = 0;
