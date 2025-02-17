@@ -25,10 +25,7 @@ class Operationtable extends AbstractData
     public function mount($conf, $form_id, $dossier_id) {
         parent::mount($conf, $form_id, $dossier_id);
    
-        if(auth()->user()->id==1) {
-            $this->listeners[$this->options['table_name']]="loadTableValues";
-            $this->loadTableValues();
-        }
+
 
         
     }
@@ -61,7 +58,6 @@ class Operationtable extends AbstractData
         $this->value=0;
        
         foreach($results as $result) {
-            $this->listeners[$result['meta_key']]="loadTableValues";
             $this->value=$this->calculateValue($this->value,$result['meta_value'],$operation);
 
 
@@ -101,6 +97,7 @@ class Operationtable extends AbstractData
 
     public function render()
     {
+        $this->loadTableValues();
         return view('livewire.forms.operationtable');
     }
 }
