@@ -663,6 +663,11 @@
                 display: block !important;
             }
         }
+
+        .accordion-item.card.mt-4.pl-4.pr-4.pb-3 {
+    border-radius: 15px;
+    padding: 0 !important;
+}
     </style>
 
 </div>
