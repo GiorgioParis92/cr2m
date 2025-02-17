@@ -423,9 +423,9 @@
 
                                             @php
                                                 // Count how many times 'type' => 'title' occurs
-                                                $titleCount = collect($config)
-                                                    ->filter(fn($c) => ($c['type'] ?? null) === 'title')
-                                                    ->count();
+                                                $titleCount = count(array_filter($config, function ($c) {
+        return isset($c['type']) && $c['type'] === 'title';
+    }));
 
                                                 $accordionIndex = 0;
                                                 $accordionOpen = false;
