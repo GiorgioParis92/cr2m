@@ -59,7 +59,7 @@ class Operationtable extends AbstractData
         ->get()->toArray();
 
         $this->value=0;
-        dd($results);
+       
         foreach($results as $result) {
             $this->listeners[$result['meta_key']]="loadTableValues";
             $this->value=$this->calculateValue($this->value,$result['meta_value'],$operation);
