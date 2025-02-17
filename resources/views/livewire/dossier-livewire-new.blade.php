@@ -457,8 +457,7 @@
                                                             class="accordion-button @if($expandedTitleId !== $groupId) collapsed @endif"
                                                             type="button"
                                                             wire:click="toggleTitle('{{ $groupId }}')"
-                                                            x-data
-                                                            onclick="$dispatch('scroll-to-accordion', { id: 'collapse-{{ $groupId }}' })"
+                                                            onclick="scrollToAccordion('collapse-{{ $groupId }}')"
                                                             aria-expanded="{{ $expandedTitleId === $groupId ? 'true' : 'false' }}"
                                                             aria-controls="collapse-{{ $groupId }}"
                                                         >
@@ -1602,16 +1601,12 @@
     }
 
 
-    document.addEventListener('DOMContentLoaded', function () {
-        document.addEventListener('scroll-to-accordion', function (event) {
-            console.log(event)
-            let accordionElement = document.getElementById(event.detail.id);
+    function scrollToAccordion(id) {
+        setTimeout(() => {
+            let accordionElement = document.getElementById(id);
             if (accordionElement) {
-                console.log(accordionElement)
-                setTimeout(() => {
-                    accordionElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }, 300); // Delay to ensure the accordion is fully expanded before scrolling
+                accordionElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }
-        });
-    });
+        }, 300); // Small delay to ensure accordion is fully expanded
+    }
 </script>
