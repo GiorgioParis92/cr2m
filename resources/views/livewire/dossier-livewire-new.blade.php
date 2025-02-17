@@ -424,12 +424,12 @@
 
 <div class="row">
     <div class="col-12">
-        <div class="" id="basic-info">
-            <div class="card-body p-0">
-                <div class="row">
+
 
                     @if ($titleCount > 1)
-                        {{-- MORE THAN ONE TITLE => ACCORDION MODE --}}
+                    <div class="" id="basic-info">
+                        <div class="card-body p-0">
+                            <div class="row">
                         <div class="accordion" id="accordionForm">
                             @php
                                 $groupedConfigs = [];
@@ -492,7 +492,9 @@
                             @endforeach
                         </div>
                     @else
-                        {{-- ONLY ZERO OR ONE TITLE => ORIGINAL LAYOUT --}}
+                    <div class="card mt-4 pl-4 pr-4 pb-3" id="">
+                        <div class="card-body p-0">
+                            <div class="row">
                         @foreach ($config as $conf)
                             @if (View::exists("livewire.forms.{$conf['type']}"))
                                 @livewire("forms.{$conf['type']}", [
