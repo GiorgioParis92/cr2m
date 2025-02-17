@@ -1,14 +1,11 @@
 <div>
     <div wire:loading wire:target="add_row,remove_row,display_form,setTab,handleFieldUpdated,set_form"
         class="loader-overlay">
-
         <div class="spinner"></div>
     </div>
     <div id="loader-overlay" class="loader-overlay" style="display:none">
-
         <div class="spinner"></div>
     </div>
-
     <div class="container-fluid my-3 py-3">
         @if (session()->has('message'))
             <div class="alert alert-success" id="flashMessage">
@@ -33,7 +30,6 @@
                                 ) {
                                     $isCurrent = true;
                                 }
-
                                 if ($e['id'] == $last_etape) {
                                     $isTab = true;
                                 }
@@ -46,7 +42,6 @@
                                     $isAllowed = false;
                                     $isCurrent = false;
                                 }
-
                             @endphp
                             @if ($isActive && $isAllowed)
                                 <option @if ($tab == $e['id']) selected @endif
@@ -70,7 +65,6 @@
                                 ) {
                                     $isCurrent = true;
                                 }
-
                                 if ($e['id'] == $last_etape) {
                                     $isTab = true;
                                 }
@@ -95,11 +89,11 @@
                                     <span class="timeline-step">
                                         <span>{{ $e['etape_icon'] ?? '' }}</span>
                                     </span>
-
                                     <div class="timeline-content">
                                         <h6
                                             class="{{ $tab == $e['id'] ? 'text-white' : 'text-dark' }} text-sm font-weight-bold mb-0">
-                                            {{ strtoupper_extended($e['etape_desc']) }}</h6>
+                                            {{ strtoupper_extended($e['etape_desc']) }}
+                                        </h6>
                                         @if (!empty($steps) && isset($steps['step_' . $e['etape_number']]))
                                             <p
                                                 class="{{ $tab == $e['id'] ? 'text-white' : 'text-secondary' }} font-weight-bold text-xs mt-1 mb-0">
@@ -129,7 +123,6 @@
                 <div class="card card-body" id="profile">
                     <div class="row justify-content-center align-items-center">
                         <div class="col-sm-auto col-4">
-
                         </div>
                         <div class="col-sm-auto col-8 my-auto">
                             <div class="h-100">
@@ -145,7 +138,6 @@
                                 </p>
                                 <p class="mb-0 font-weight-bold text-sm">
                                 <div class="btn btn-primary">{{ $dossier['fiche']['fiche_name'] }}</div>
-
                                 @php
                                     $color = 'success';
                                     if ($dossier['beneficiaire']['occupation'] == 'proprietaire') {
@@ -160,18 +152,13 @@
                                         $color = 'warning';
                                         $text = $dossier['beneficiaire']['occupation'];
                                     }
-
                                 @endphp
-
                                 <div class="btn btn-{{ $color }}">{{ $text }}</div>
                                 <div
                                     class="btn bg-primary bg-{{ couleur_menage($dossier->beneficiaire->menage_mpr) }}">
                                     {{ strtoupper(texte_menage($dossier['beneficiaire']['menage_mpr'])) }}
-
-
                                     @if (auth()->user()->client_id == 0)
                                         <div class="">
-
                                             @if (isset($technicien) && !empty($technicien))
                                                 <div class="row">
                                                     Technicien RDV MAR 1 :
@@ -186,14 +173,10 @@
                                             @endif
                                         </div>
                                     @endif
-
                                 </div>
-
-
                             </div>
                         </div>
                         <div class="col-sm-auto col-4">
-
                         </div>
                         <div class="col-sm-auto col-8 my-auto">
                             <div>
@@ -207,9 +190,7 @@
                             </div>
                         </div>
                         <div class="col-sm-auto ms-sm-auto mt-sm-0 mt-3">
-
                             <div class="">
-
                                 @if (auth()->user()->client_id == 0 ||
                                         (auth()->user()->client_id != 3 && auth()->user()->type_id != 7 && auth()->user()->type_id != 4))
                                     @if ($dossier['annulation'] != 1)
@@ -237,7 +218,6 @@
                                     </select>
                                     @if (auth()->user()->client_id == 0)
                                         <form class="form-control" method="get">
-
                                             <label>Changer l'étape en cours</label>
                                             <select onchange="this.form.submit()" class="form-control" name="etape">
                                                 <option>Choisir une étape</option>
@@ -255,7 +235,6 @@
                             </div>
                         </div>
                     </div>
-
                     <div class="col-lg-12 col-sm-12">
                         @if (auth()->user()->client_id == 0 && auth()->user()->type_id != 4)
                             <div class="card-header pb-0 p-3">
@@ -263,15 +242,10 @@
                             </div>
                             <div class="card-body row">
                                 <!--  @livewire('response-data', ['dossierId' => $dossier->id]) -->
-
-
                             </div>
                         @endif
                     </div>
-
                 </div>
-
-
                 <div class="row mt-4">
                     <div class="col-12 col-lg-12">
                         <div class="card ">
@@ -281,15 +255,11 @@
                                 </div>
                             </div>
                             <div class="table-responsive">
-
                                 <x-document-table-component :docs="$docs" :dossier="$dossier" />
-
                             </div>
                         </div>
                     </div>
                 </div>
-
-
                 @if ($tab == $dossier->etape_number)
                     @if (is_user_allowed('validate_' . $etape_display['etape_name']) || auth()->user()->type_id == 1)
                         <div class="col-lg-6">
@@ -315,17 +285,13 @@
                                         <div class="row">
                                             <div class="nav-wrapper position-relative end-0">
                                                 <ul class="nav nav-pills nav-fill p-1" role="tablist">
-
                                                     @foreach ($forms as $form)
                                                         @if ($form->type == 'form' || $form->type == 'rdv')
                                                             <li class="nav-item active"
                                                                 wire:click="set_form({{ $form->id }})">
-
                                                                 <a wire:click="set_form({{ $form->id }})"
                                                                     class="nav-link mb-0 px-0 py-1 {{ $form->id == $set_form ? 'active' : '' }}">
                                                                     {{ $form->form_title }}
-
-
                                                                 </a>
                                                             </li>
                                                         @endif
@@ -350,8 +316,6 @@
                                                     @foreach ($forms as $form)
                                                         @if ($form->type == 'document')
                                                             <div class="table-responsive" wire:poll>
-
-
                                                                 <table class="table align-items-center">
                                                                     <tbody>
                                                                         @php
@@ -361,11 +325,11 @@
                                                                             );
                                                                         @endphp
                                                                         {{-- @foreach ($forms_configs as $index => $form_handler)
-                                                                    @if ($form_handler->form->etape_number == $tab && $form_handler->form->type == 'document') --}}
+                                        @if ($form_handler->form->etape_number == $tab && $form_handler->form->type == 'document') --}}
                                                                         {!! $handler->render([]) !!}
                                                                         <!-- Render without error array -->
                                                                         {{-- @endif
-                                                                @endforeach --}}
+                                        @endforeach --}}
                                                                     </tbody>
                                                                 </table>
                                                             </div>
@@ -379,38 +343,30 @@
                             </div>
                         @endif
                     </div>
-
                 @endif
                 @if (auth()->user()->id != 1)
                     <div class="row">
                         <div class="col-12">
                             <div class="card mt-4 pl-4 pr-4 pb-3" id="basic-info">
-                                {{-- <div class="card-header">
-                                <h5>Titre Formulaire</h5>
-                            </div> --}}
+                 
                                 <div class="card-body p-0">
                                     <div class="row">
-
                                         @if (isset($config))
-
-
                                             @foreach ($config as $conf)
                                                 @if (View::exists('livewire.forms.' . $conf['type']))
                                                     @livewire("forms.{$conf['type']}", ['conf' => $conf, 'form_id' => $set_form, 'dossier_id' => $dossier->id], key($conf['id']))
                                                 @else
-                                                    {{-- <p style="background:red">Component for type "{{ $conf['type'] }}" not found.</p> --}}
+                              
                                                 @endif
                                                 @if ($conf['type'] == 'close')
                                                     <div class="close_card"></div>
                                                 @endif
                                             @endforeach
-
                                         @endif
                                     </div>
                                 </div>
                             </div>
                         </div>
-
                     </div>
                 @else
                     <div class="row">
@@ -418,9 +374,7 @@
                             <div class="" id="basic-info">
                                 <div class="card-body p-0">
                                     <div class="row">
-
                                         @if (isset($config))
-
                                             @php
                                                 // Count how many times 'type' => 'title' occurs
                                                 $titleCount = count(
@@ -428,36 +382,32 @@
                                                         return isset($c['type']) && $c['type'] === 'title';
                                                     }),
                                                 );
-
                                                 $accordionIndex = 0;
                                                 $accordionOpen = false;
-
                                                 if ($titleCount <= 1) {
                                                     $accordionOpen = true;
                                                 }
                                             @endphp
-
                                             <div class="accordion @if ($titleCount <= 1) card mt-4 pl-4 pr-4 pb-3 @endif"
                                                 id="accordionExample">
-
                                                 @foreach ($config as $conf)
                                                     {{-- If we have a "title" type, start a new accordion-item --}}
                                                     @if ($conf['type'] === 'title')
                                                         {{-- If a previous accordion section was open, close it before starting a new one --}}
                                                         @if ($accordionOpen)
-                                            </div> <!-- End .accordion-body -->
-                                    </div> <!-- End .accordion-collapse -->
-                                </div> <!-- End .accordion-item -->
+                                            </div>
+                                            <!-- End .accordion-body -->
+                                    </div>
+                                    <!-- End .accordion-collapse -->
+                                </div>
+                                <!-- End .accordion-item -->
                 @endif
-
                 @php
                     $accordionIndex++;
                     $accordionOpen = true;
-
                     // Determine if this section should be opened by default
                     $shouldOpen = $titleCount <= 1 && $accordionIndex === 1;
                 @endphp
-
                 <div class="accordion-item card mt-4 pl-4 pr-4 pb-3" wire:ignore>
                     <h2 class="accordion-header" id="heading{{ $accordionIndex }}">
                         <button class="accordion-button @unless ($shouldOpen) collapsed @endunless"
@@ -467,12 +417,10 @@
                             {{ $conf['title'] ?? 'Section Title' }}
                         </button>
                     </h2>
-
                     <div id="collapse{{ $accordionIndex }}"
                         class="accordion-collapse collapse @if ($shouldOpen) show @endif"
                         aria-labelledby="heading{{ $accordionIndex }}" data-bs-parent="#accordionExample">
                         <div class="accordion-body row">
-
                             {{-- If a Livewire form component exists with the given $conf['type'] --}}
                         @elseif (View::exists('livewire.forms.' . $conf['type']))
                             @livewire(
@@ -485,36 +433,35 @@
                                 key($conf['id'])
                             )
                             @endif
-
                             {{-- Optionally handle "close" type, etc. --}}
                             @if ($conf['type'] === 'close')
                                 <div class="close_card"></div>
                             @endif
                             @endforeach
-
                             {{-- Close out the last accordion section if it was opened --}}
                             @if ($accordionOpen)
-                        </div> <!-- End .accordion-body -->
-                    </div> <!-- End .accordion-collapse -->
-                </div> <!-- End .accordion-item -->
+                        </div>
+                        <!-- End .accordion-body -->
+                    </div>
+                    <!-- End .accordion-collapse -->
+                </div>
+                <!-- End .accordion-item -->
                 @endif
-
-            </div><!-- End .accordion -->
-
+            </div>
+            <!-- End .accordion -->
             @endif
-
-
-        </div><!-- End .row -->
-    </div><!-- End .card-body -->
-</div><!-- End .card -->
-</div><!-- End .col-12 -->
+        </div>
+        <!-- End .row -->
+    </div>
+    <!-- End .card-body -->
 </div>
-
-
+<!-- End .card -->
+</div>
+<!-- End .col-12 -->
+</div>
 @endif
 </div>
 </div>
-
 </div>
 <style>
     .board {
@@ -528,7 +475,6 @@
     .column {
         /* background-color: #ebecf0; */
         border-radius: 3px;
-
         margin-right: 1%;
         padding: 10px;
         flex-shrink: 0;
@@ -574,8 +520,6 @@
     }
 
     .column {
-
-
         /* Hide scrollbar for IE, Edge and Firefox */
         -ms-overflow-style: none;
         /* IE and Edge */
@@ -692,7 +636,6 @@
         font-weight: 800;
     }
 </style>
-
 </div>
 <script>
     document.addEventListener('DOMContentLoaded', function(event) {
