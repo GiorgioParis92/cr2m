@@ -414,7 +414,7 @@
 
                     </div>
                 @else
-                @php print_r($config) @endphp
+           
                     @php
                         $titleCount = collect($config)->where('type', 'title')->count();
                     @endphp
@@ -499,6 +499,7 @@
                                             <div class="card mt-4 pl-4 pr-4 pb-3" id="">
                                                 <div class="card-body p-0">
                                                     <div class="row">
+                                                        @if(isset($config))
                                                         @foreach ($config as $conf)
                                                             @if (View::exists("livewire.forms.{$conf['type']}"))
                                                                 @livewire(
@@ -516,6 +517,7 @@
                                                                 <div class="close_card"></div>
                                                             @endif
                                                         @endforeach
+                                                        @endif
                             @endif
 
                         </div>
