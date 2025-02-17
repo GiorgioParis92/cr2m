@@ -426,7 +426,7 @@
                 
                                     @if (isset($config))
                                         {{-- Add wire:ignore or wire:ignore.self to prevent re-rendering issues --}}
-                                        <div class="accordion" id="accordionExample" wire:ignore>
+                                        <div class="accordion" id="accordionExample" >
                 
                                             @php
                                                 $accordionIndex = 0;
@@ -446,7 +446,7 @@
                                                         $accordionOpen = true;
                                                     @endphp
                 
-                                                    <div class="accordion-item" >
+                                                    <div class="accordion-item" wire:ignore>
                                                         <h2 class="accordion-header" id="heading{{ $accordionIndex }}">
                                                             <button class="accordion-button collapsed"
                                                                     type="button"
