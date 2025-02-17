@@ -416,10 +416,10 @@
                 @else
            
                     @php
-                        $titleCount = 2;
+                        $titleCount = collect($config)->where('type', 'title')->count();
                     @endphp
 
-                    <div class="row" wire:ignore>
+                    <div class="row" >
                         <div class="col-12">
 
 
@@ -427,7 +427,7 @@
                                 <div class="" id="basic-info">
                                     <div class="card-body p-0">
                                         <div class="row">
-                                            <div class="accordion" id="accordionForm">
+                                            <div class="accordion" id="accordionForm" wire:ignore>
                                                 @php
                                                     $groupedConfigs = [];
                                                     $currentGroup = [];
