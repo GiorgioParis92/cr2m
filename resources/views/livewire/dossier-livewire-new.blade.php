@@ -422,7 +422,7 @@
                     <div class="col-12">
                         <div class="card mt-4 pl-4 pr-4 pb-3" id="basic-info">
                             <div class="card-body p-0">
-                                <div class="row">
+                                <div class="row"  wire:ignore.self>
                 
                                     @if (isset($config))
                                         {{-- Add wire:ignore or wire:ignore.self to prevent re-rendering issues --}}
@@ -446,7 +446,7 @@
                                                         $accordionOpen = true;
                                                     @endphp
                 
-                                                    <div class="accordion-item">
+                                                    <div class="accordion-item" >
                                                         <h2 class="accordion-header" id="heading{{ $accordionIndex }}">
                                                             <button class="accordion-button collapsed"
                                                                     type="button"
