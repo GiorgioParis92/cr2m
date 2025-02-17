@@ -425,7 +425,7 @@
                                 <div class="row">
                 
                                     @if (isset($config))
-                                        <!-- Accordion container -->
+                                        {{-- Add wire:ignore or wire:ignore.self to prevent re-rendering issues --}}
                                         <div class="accordion" id="accordionExample" wire:ignore.self>
                 
                                             @php
@@ -435,7 +435,6 @@
                 
                                             @foreach ($config as $conf)
                                                 @if ($conf['type'] === 'title')
-                                                    <!-- If an accordion item was already open, close it before starting a new one -->
                                                     @if ($accordionOpen)
                                                         </div> <!-- End .accordion-body -->
                                                     </div>     <!-- End .accordion-collapse -->
@@ -447,10 +446,10 @@
                                                         $accordionOpen = true;
                                                     @endphp
                 
-                                                    <!-- Start a new accordion item -->
                                                     <div class="accordion-item">
                                                         <h2 class="accordion-header" id="heading{{ $accordionIndex }}">
-                                                            <button class="accordion-button collapsed" type="button"
+                                                            <button class="accordion-button collapsed"
+                                                                    type="button"
                                                                     data-bs-toggle="collapse"
                                                                     data-bs-target="#collapse{{ $accordionIndex }}"
                                                                     aria-expanded="false"
@@ -463,28 +462,24 @@
                                                              aria-labelledby="heading{{ $accordionIndex }}"
                                                              data-bs-parent="#accordionExample">
                                                             <div class="accordion-body">
-                                                                <!-- Title doesn't render content itself here, 
-                                                                     it just opens a new accordion item -->
-                                                @elseif (View::exists('livewire.forms.' . $conf['type']))
-                                                    <!-- Normal item: place it inside the current accordion's body -->
+                                                @elseif(View::exists('livewire.forms.' . $conf['type']))
                                                     @livewire(
                                                         "forms.{$conf['type']}",
-                                                        ['conf'       => $conf,
-                                                         'form_id'    => $set_form,
-                                                         'dossier_id' => $dossier->id],
-                                                         key($conf['id'])
+                                                        [
+                                                            'conf'       => $conf,
+                                                            'form_id'    => $set_form,
+                                                            'dossier_id' => $dossier->id
+                                                        ],
+                                                        key($conf['id'])
                                                     )
-                
                                                 @endif
                 
-                                                <!-- Still handle 'close' if needed -->
-                                                @if ($conf['type'] === 'close')
+                                                @if($conf['type'] === 'close')
                                                     <div class="close_card"></div>
                                                 @endif
                                             @endforeach
                 
-                                            <!-- After loop ends, close the last accordion body if it's still open -->
-                                            @if ($accordionOpen)
+                                            @if($accordionOpen)
                                                     </div> <!-- End .accordion-body -->
                                                 </div>     <!-- End .accordion-collapse -->
                                             </div>         <!-- End .accordion-item -->
@@ -497,7 +492,8 @@
                             </div><!-- End .card-body -->
                         </div><!-- End .card -->
                     </div><!-- End .col-12 -->
-                </div><!-- End .row -->
+                </div>
+                
                 
                 @endif
             </div>
