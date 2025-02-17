@@ -430,7 +430,8 @@
                                                 $accordionIndex = 0;
                                                 $accordionOpen = false;
                                             @endphp
-
+    {{$titleCount}} - 
+    {{$shouldOpen}}
                                             <div class="accordion" id="accordionExample">
 
                                                 @foreach ($config as $conf)
@@ -450,8 +451,7 @@
                     // Determine if this section should be opened by default
                     $shouldOpen = $titleCount <= 1 && $accordionIndex === 1;
                 @endphp
-    {{$titleCount}} - 
-    {{$shouldOpen}}
+
                 <div class="accordion-item card mt-4 pl-4 pr-4 pb-3" wire:ignore>
                     <h2 class="accordion-header" id="heading{{ $accordionIndex }}">
                         <button class="accordion-button @unless ($shouldOpen) collapsed @endunless"
