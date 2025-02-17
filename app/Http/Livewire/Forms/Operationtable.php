@@ -55,14 +55,14 @@ class Operationtable extends AbstractData
         ->where('dossier_id',$this->dossier_id)
         ->get()->toArray();
 
-        $this->value=0;
+        $value=0;
        
         foreach($results as $result) {
-            $this->value=$this->calculateValue($this->value,$result['meta_value'],$operation);
+            $value=$this->calculateValue($value,$result['meta_value'],$operation);
 
 
         }
-
+        $this->updatedValue($value);
     }
 
 
