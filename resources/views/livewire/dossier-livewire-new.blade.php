@@ -422,7 +422,7 @@
                     @php
                     $titleCount = collect($config)->where('type', 'title')->count();
                     @endphp
-                    <div class="row" >
+                    <div class="row" wire:ignore.self>
                         {{$titleCount}}
                         <div class="col-12">
 
