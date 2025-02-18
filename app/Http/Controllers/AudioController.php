@@ -55,7 +55,7 @@ class AudioController extends Controller
         $dossier = Dossier::where('id', $request->dossier_id)->first();
 
         // 2. Check if the file actually exists
-        if (!file_exists($absolutePath)) {
+        if (file_exists($absolutePath)) {
         
             dd($absolutePath);
 
