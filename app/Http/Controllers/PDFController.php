@@ -813,7 +813,7 @@ class PDFController extends Controller
                     } 
 
                 } catch (\Throwable $th) {
-                    $title_content .= $element->name . ' Error: ' . $th->getMessage();
+                    // $title_content .= $element->name . ' Error: ' . $th->getMessage();
                 }
             }
 
