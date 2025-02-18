@@ -823,7 +823,7 @@ class PDFController extends Controller
           
             // Get the HTML content for the template
         }
-        file_put_contents(storage_path('app/debug.html'), $content);
+        // file_put_contents(storage_path('app/debug.html'), $content);
 
         $htmlContent = $this->getTemplateHtml('config', $dossier->id, $config, $title, $content);
 
