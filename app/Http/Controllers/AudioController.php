@@ -153,11 +153,10 @@ $filePath = $pdfPath;
 
 
 $response = Http::withHeaders([
-        'api-key' => $api_key,
-    ])
-    ->attach('audio', file_get_contents($filePath), basename($filePath))
-    ->post($api_link);
-
+    'api-key' => $api_key,
+])
+->attach('audio', fopen($filePath, 'r'))
+->post($api_link);
            
             if ($response->successful()) {
                 $result['success'] = true;
