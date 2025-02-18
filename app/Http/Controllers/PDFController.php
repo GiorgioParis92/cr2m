@@ -741,15 +741,15 @@ class PDFController extends Controller
             if ($count == 1) {
 
 
-                $content .= '<div><table style="margin:auto;width:90%;border-collapse: collapse;margin-top:20px"><tr>';
-                $content .= '<td class="s2 form_title" style="width:100%;border:1px solid #ccc;border-collapse: collapse;padding-left:12px;text-align:center">';
-                $content .= '<div>Coordonnées bénéficiaire</div></td></tr><tr>';
-                $content .= '<td style="width:100%;border:1px solid #ccc;border-collapse: collapse;padding-left:12px;padding-bottom:15px;text-align:center"><div>';
-                $content .= '<h5 class="mb-0" style="text-align:center"><b>' . $dossier_data['beneficiaire']['nom'] . ' ' . $dossier_data['beneficiaire']['prenom'] . '</b><br>' . $dossier_data['beneficiaire']['numero_voie'] . ' ' . ($dossier_data['beneficiaire']['adresse'] ?? '') . ' ' . $dossier_data['beneficiaire']['cp'] . ' ' . $dossier_data['beneficiaire']['ville'] . '<br> </h5>';
-                $content .= '<h6 class="mb-0"><b>Tél : ' . $dossier_data['beneficiaire']['telephone'] . '</b> -Email : ' . $dossier_data['beneficiaire']['email'] . '<br></h6>';
-                $content .= '<h6 class="mb-0"><b>N° CLAVIS : ' . ($dossier_data['reference_unique'] ?? '') . '</b></h6>';
-                $content .= '<div class="btn bg-primary bg-Très modestes">' . $dossier_data['beneficiaire']['menage_mpr'] . '</div><div class="">Technicien RDV MAR 1 :' . ($lastRdv ? ($lastRdv->user->name ?? '') : '') . '</div></div></td></tr></table>';
-                $content .= '</div>';
+                // $content .= '<div><table style="margin:auto;width:90%;border-collapse: collapse;margin-top:20px"><tr>';
+                // $content .= '<td class="s2 form_title" style="width:100%;border:1px solid #ccc;border-collapse: collapse;padding-left:12px;text-align:center">';
+                // $content .= '<div>Coordonnées bénéficiaire</div></td></tr><tr>';
+                // $content .= '<td style="width:100%;border:1px solid #ccc;border-collapse: collapse;padding-left:12px;padding-bottom:15px;text-align:center"><div>';
+                // $content .= '<h5 class="mb-0" style="text-align:center"><b>' . $dossier_data['beneficiaire']['nom'] . ' ' . $dossier_data['beneficiaire']['prenom'] . '</b><br>' . $dossier_data['beneficiaire']['numero_voie'] . ' ' . ($dossier_data['beneficiaire']['adresse'] ?? '') . ' ' . $dossier_data['beneficiaire']['cp'] . ' ' . $dossier_data['beneficiaire']['ville'] . '<br> </h5>';
+                // $content .= '<h6 class="mb-0"><b>Tél : ' . $dossier_data['beneficiaire']['telephone'] . '</b> -Email : ' . $dossier_data['beneficiaire']['email'] . '<br></h6>';
+                // $content .= '<h6 class="mb-0"><b>N° CLAVIS : ' . ($dossier_data['reference_unique'] ?? '') . '</b></h6>';
+                // $content .= '<div class="btn bg-primary bg-Très modestes">' . $dossier_data['beneficiaire']['menage_mpr'] . '</div><div class="">Technicien RDV MAR 1 :' . ($lastRdv ? ($lastRdv->user->name ?? '') : '') . '</div></div></td></tr></table>';
+                // $content .= '</div>';
             }
             foreach ($config as $element) {
                 if (empty($element) || empty($element->type)) {
@@ -820,8 +820,7 @@ class PDFController extends Controller
             if ($title_content_count != 0) {
                 $content .= $title_content;
             }
-            echo($content);
-            dd($content);
+          
             // Get the HTML content for the template
         }
    
