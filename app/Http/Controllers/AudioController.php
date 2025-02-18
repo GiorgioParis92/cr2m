@@ -9,6 +9,7 @@ use App\Models\FormsData;
 use Illuminate\Support\Facades\Http; // Add this line
 use PDF; // This alias is typically registered by barryvdh/laravel-dompdf
 use Illuminate\Support\Str;
+use CURLFile;
 class AudioController extends Controller
 {
     public function store(Request $request)
@@ -146,8 +147,10 @@ class AudioController extends Controller
         $filePath = $pdfPath;
 
         $curl = curl_init();
+        $correctMimeType = 'audio/wav';
 
-        $curlFile = curl_file_create($filePath, 'audio/wav', basename($filePath));
+        // Create CURLFile instance with the correct MIME type
+        $curlFile = new CURLFile($filePath, $correctMimeType, basename($filePath));
    
         $postFields = [
             'audio' => $curlFile
