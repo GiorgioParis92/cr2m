@@ -48,7 +48,7 @@ class AudioController extends Controller
     public function analyse(Request $request)
     {
 
-        dd($request);
+    
         // 1. Extract audio path from the request
         $audioPath = $request->value; // example path: "recordings/audio1.wav"
         $absolutePath = storage_path('app/public/' . $audioPath);
@@ -57,7 +57,7 @@ class AudioController extends Controller
         // 2. Check if the file actually exists
         if (!file_exists($absolutePath)) {
         
-           
+            dd($absolutePath);
 
             try {
     
