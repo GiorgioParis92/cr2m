@@ -150,7 +150,9 @@ class AudioController extends Controller
 
 $api_key = 'i1XmSNfkueLu3AE';
 $filePath = $pdfPath;
-
+if (!file_exists($filePath)) {
+    return ['error'=>"Error: File does not exist at {$filePath}"];
+}
 
 $response = Http::withHeaders([
     'api-key' => $api_key,
