@@ -47,6 +47,8 @@ class AudioController extends Controller
 
     public function analyse(Request $request)
     {
+
+        dd($request);
         // 1. Extract audio path from the request
         $audioPath = $request->value; // example path: "recordings/audio1.wav"
         $absolutePath = storage_path('app/public/' . $audioPath);
@@ -157,7 +159,7 @@ class AudioController extends Controller
                 basename($pdfPath)           // filename
             )
             ->post($api_link);
-                dd($response);
+           
             if ($response->successful()) {
                 $result['success'] = true;
                 $result['data']    = $response->json(); // or the entire response object
