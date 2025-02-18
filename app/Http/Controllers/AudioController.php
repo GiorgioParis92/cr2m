@@ -50,132 +50,17 @@ class AudioController extends Controller
         // 1. Extract audio path from the request
         $audioPath = $request->value; // example path: "recordings/audio1.wav"
         $absolutePath = storage_path('app/public/' . $audioPath);
+        $dossier = Dossier::where('id', $request->dossier_id)->first();
 
         // 2. Check if the file actually exists
         if (!file_exists($absolutePath)) {
-            return response()->json([
-                'message' => 'Audio file not found.',
-            ], 404);
-        }
-
-        // 3. Retrieve API key
-        $apiKey = env('OPENAI_API_KEY');
-        if (!$apiKey) {
-            return response()->json([
-                'message' => 'OpenAI API key not set.',
-            ], 500);
-        }
-
-        try {
-            // 4. Send request to OpenAI Whisper
-            $response = Http::withToken($apiKey)
-                ->attach(
-                    'file',
-                    file_get_contents($absolutePath),
-                    basename($absolutePath)
-                )
-                ->post('https://api.openai.com/v1/audio/transcriptions', [
-                    'model' => 'whisper-1',
-                    // 'prompt' => 'Custom prompt if needed',
-                    // 'language' => 'fr' // if you know the language
-                ]);
-
-            if ($response->failed()) {
-                return response()->json([
-                    'message' => 'OpenAI Whisper API request failed.',
-                    'error'   => $response->json(),
-                ], $response->status());
-            }
-
-            // 5. Extract the transcription text from OpenAI's response
-            $result         = $response->json();
-            $transcription  = $result['text'] ?? '';
-
-            // 6. (Optional) Check if transcription is not empty; if so, generate a PDF
-            if (!empty($transcription)) {
-                // Give the PDF a name that matches the audio filename but with .pdf extension
-                
-
-
-
-                $htmlContent='';
-                $htmlContent='### CONTEXTE ####';
-
-                $htmlContent.='Voici la retranscription audio de l\'inspection : ';
-                $htmlContent.='### FIN DU CONTEXTE ####';
-       // Map of the table key to the corresponding model class
-       $models = [
-        // 'type_combles'             => \App\Models\TypeCombles::class,
-        // 'composition_mur'          => \App\Models\TypeCompositionsMurs::class,
-        // 'type_epaisseur_vitrage'   => \App\Models\TypeEpaisseurVitre::class,
-        // 'type_fenetre'             => \App\Models\TypeFenetres::class,
-        // 'orientation_facade'       => \App\Models\TypeOrientations::class,
-        // 'type_ouverture'           => \App\Models\TypeOuverture::class,
-        'type_piece'               => \App\Models\TypePieces::class,
-        // 'type_portes'              => \App\Models\TypePortes::class,
-        // 'type_radiateur'           => \App\Models\TypeRadiateurs::class,
-        // 'type_vitrage'             => \App\Models\TypeVitrage::class,
-        // 'type_vmc'                 => \App\Models\TypeVmc::class,
-    ];
-
-
-    // foreach ($models as $key => $modelClass) {
-    //     // Retrieve all entries from the corresponding model
-    //     $records = $modelClass::all();
-
-    //     // Build a list like "Name : ID , Name2 : ID2 , ..."
-    //     $formattedValues = $records->map(function ($record) {
-    //         // Replace 'name' with the actual attribute you want to show
-    //         return "{$record->nom_piece} : {$record->id}";
-    //     })->implode(' , ');
-
-    //     // Append the formatted string to $htmlContent
-    //     // Adjust brackets/braces if you want a different format
-    //     $htmlContent .= "Valeurs à renvoyer pour {$key} : [ {$formattedValues} ]<br>";
-    // }
-
-                // $htmlContent.='### FIN DU CONTEXTE ####';
-              
-                $htmlContent .= $transcription;
-
-                // (b) Load your HTML content
-                $pdf = Pdf::loadHTML($htmlContent)
-                ->setPaper('A4', 'landscape')
-                ->setOptions([
-                    // marges (unités : millimètres)
-                    'margin-top'    => 50,
-                    'margin-right'  => 50,
-                    'margin-bottom' => 50,
-                    'margin-left'   => 50,
-                    // version du PDF
-                    'pdf_version' => '1.5',
-                ]);
- 
-                $dossier = Dossier::where('id', $request->dossier_id)->first();
-
-                $directory = "dossiers/{$dossier->folder}";
-    
-    
-          
-                $pdfName = $request->name.'_pdf_' . time() . '.pdf';
-                $pdfPath = storage_path('app/public/dossiers/'.$dossier->folder.'/' . $pdfName);
-                $pdf->save($pdfPath);
-                
         
-                if($pdf) {
-                    $update = FormsData::updateOrCreate(
-                        [
-                            'dossier_id' => $dossier->id,
-                            'form_id' => $request->form_id,
-                            'meta_key' => $request->name.'_pdf'
-                        ],
-                        [
-                            'meta_value' => 'dossiers/'.$dossier->folder.'/'.$pdfName
-                        ]
-                    );
+           
 
+            try {
+    
 
-                    $oceerResult = $this->sendPdfToOceer($pdfPath,$request->api_link);
+                    $oceerResult = $this->sendPdfToOceer($absolutePath,$request->api_link);
 
 
                     if ($oceerResult) {
@@ -218,7 +103,13 @@ class AudioController extends Controller
                     }
            
 
-                }
+                    return response()->json([
+                        'message'       => 'Audio transcription successful.',
+                        'transcription' => $transcription ?? '',
+                        'oceer_result'  => $oceerResult ?? '',
+                        'request-name'  => $request->name ?? '',
+                        'api_link'  => $request->api_link ?? '',
+                    ]);
 
 
 
@@ -226,15 +117,9 @@ class AudioController extends Controller
                
             }
 
-            return response()->json([
-                'message'       => 'Audio transcription successful.',
-                'transcription' => $transcription ?? '',
-                'oceer_result'  => $oceerResult ?? '',
-                'request-name'  => $request->name ?? '',
-                'api_link'  => $request->api_link ?? '',
-            ]);
 
-        } catch (\Exception $e) {
+
+         catch (\Exception $e) {
             // 8. Catch any exception and return a JSON error
             return response()->json([
                 'message' => 'Exception when contacting OpenAI Whisper API.',
@@ -242,6 +127,7 @@ class AudioController extends Controller
             ], 500);
         }
     }
+}
 
 
     public function sendPdfToOceer(string $pdfPath,$api_link)
@@ -268,7 +154,7 @@ class AudioController extends Controller
         // Make the POST request using Laravel's HTTP Client:
         $response = Http::withHeaders($headers)
             ->attach(
-                'document',
+                'audio',
                 file_get_contents($pdfPath), // file content
                 basename($pdfPath)           // filename
             )
