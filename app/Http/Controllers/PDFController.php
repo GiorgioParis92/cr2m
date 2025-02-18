@@ -835,8 +835,8 @@ class PDFController extends Controller
             'isRemoteEnabled'         => true,
             'enable_compression'      => true, // Active la compression si zlib est présent
             'pdfBackend'              => 'CPDF', // S'assurer d'utiliser CPDF
-            'debugPng'              => true,
-            'isHtml5ParserEnabled'              => true
+            // 'debugPng'              => true,
+            // 'isHtml5ParserEnabled'              => true
         ]);
   
 
