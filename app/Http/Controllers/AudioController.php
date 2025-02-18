@@ -120,11 +120,7 @@ class AudioController extends Controller
 
 
          catch (\Exception $e) {
-            // 8. Catch any exception and return a JSON error
-            return response()->json([
-                'message' => 'Exception when contacting OpenAI Whisper API.',
-                'error'   => $e->getMessage(),
-            ], 500);
+
         }
     }
 }
