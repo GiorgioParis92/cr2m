@@ -169,7 +169,7 @@ class AudioController extends Controller
         // Execute cURL request
         $response = curl_exec($curl);
 
-        dd($curl);
+     
 
         $http_code = curl_getinfo($curl, CURLINFO_HTTP_CODE);
         
