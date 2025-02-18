@@ -820,6 +820,7 @@ class PDFController extends Controller
             if ($title_content_count != 0) {
                 $content .= $title_content;
             }
+            echo($content);
             dd($content);
             // Get the HTML content for the template
         }
