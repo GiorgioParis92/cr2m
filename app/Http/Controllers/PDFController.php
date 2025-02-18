@@ -810,9 +810,7 @@ class PDFController extends Controller
                                 
                             }
                         }
-                    } else {
-                        $title_content .= '</table><div></div></table>';
-                    }
+                    } 
 
                 } catch (\Throwable $th) {
                     $title_content .= $element->name . ' Error: ' . $th->getMessage();
@@ -836,11 +834,15 @@ class PDFController extends Controller
             'isRemoteEnabled'         => true,
             'enable_compression'      => true, // Active la compression si zlib est présent
             'pdfBackend'              => 'CPDF', // S'assurer d'utiliser CPDF
+            'debugPng'              => true,
+            'isHtml5ParserEnabled'              => true
         ]);
+  
 
+        
         // Create new Dompdf instance with the defined options
         $dompdf = new Dompdf($options);
-        $dompdf = new Dompdf();
+        // $dompdf = new Dompdf();
         $dompdf->setPaper('A4', 'portrait'); // Set paper size and orientation
 
         // Load HTML content into Dompdf
