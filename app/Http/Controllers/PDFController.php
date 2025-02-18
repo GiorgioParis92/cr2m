@@ -807,7 +807,7 @@ class PDFController extends Controller
                             } else {
                              
                                 $title_content .= '</table><div>' . $instance_result . '</div></table>';
-                                ;
+                                
                             }
                         }
                     }
@@ -820,7 +820,7 @@ class PDFController extends Controller
             if ($title_content_count != 0) {
                 $content .= $title_content;
             }
-
+            dd($content);
             // Get the HTML content for the template
         }
    
