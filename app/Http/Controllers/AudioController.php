@@ -128,6 +128,8 @@ class AudioController extends Controller
 
     public function sendPdfToOceer(string $pdfPath,$api_link)
     {
+
+        
         $result = [
             'success' => false,
             'data'    => null,
@@ -155,7 +157,7 @@ class AudioController extends Controller
                 basename($pdfPath)           // filename
             )
             ->post($api_link);
-   
+                dd($response);
             if ($response->successful()) {
                 $result['success'] = true;
                 $result['data']    = $response->json(); // or the entire response object
