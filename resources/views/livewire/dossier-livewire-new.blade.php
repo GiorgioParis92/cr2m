@@ -18,7 +18,7 @@
         <div class="row mb-5">
             <div class="col-lg-3">
                 <div class="card">
-                    <select class="form-control responsive" wire:change="setTab($event.target.value)">
+                    <select class="form-control responsive no_select2" wire:change="setTab($event.target.value)">
                         @foreach ($etapes as $index => $e)
                             @php
                                 $isActive = false;
