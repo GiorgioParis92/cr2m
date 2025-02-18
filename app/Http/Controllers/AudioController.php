@@ -137,35 +137,48 @@ class AudioController extends Controller
             'data'    => null,
             'error'   => null,
         ];
-        // Make sure the file exists before sending:
-        if (!file_exists($pdfPath)) {
-            // You might log an error or throw an exception.
-            // We'll quietly return here for demonstration:
-            return;
-        }
-
+ 
  
 
         $api_link=$api_link ?? 'https://app.oceer.fr/api/pipeline/start/229bdbbf-869a-49c9-83cb-ae069f1137ff';
 
-$api_key = 'i1XmSNfkueLu3AE';
-$filePath = $pdfPath;
-if (!file_exists($filePath)) {
-    return ['error'=>"Error: File does not exist at {$filePath}"];
-}
+        $api_key = 'i1XmSNfkueLu3AE';
+        $filePath = $pdfPath;
 
-$response = Http::withHeaders([
-    'api-key' => $api_key,
-])
-->attach('audio', fopen($filePath, 'r'))
-->post($api_link);
+        $curl = curl_init();
+
+        $curlFile = curl_file_create($filePath, mime_content_type($filePath), basename($filePath));
+        
+        $postFields = [
+            'audio' => $curlFile
+        ];
+        
+        curl_setopt_array($curl, [
+            CURLOPT_URL => $api_link,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_POST => true,
+            CURLOPT_HTTPHEADER => [
+                "api-key: $api_key"
+            ],
+            CURLOPT_POSTFIELDS => $postFields,
+        ]);
+        
+        // Execute cURL request
+        $response = curl_exec($curl);
+        $http_code = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+        
+        // Close cURL session
+        curl_close($curl);
+        
+        // Handle response
+        if ($http_code === 200) {
+            $result['success'] = true;
+            $result['data']    = $response->json(); // or the entire response object
+        } else {
+            $result['error'] = $response->json() ?: 'Failed to send PDF to Oceer.';
+        }
            
-            if ($response->successful()) {
-                $result['success'] = true;
-                $result['data']    = $response->json(); // or the entire response object
-            } else {
-                $result['error'] = $response->json() ?: 'Failed to send PDF to Oceer.';
-            }
+
     
             return $result;
      
