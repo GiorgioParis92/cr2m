@@ -57,7 +57,7 @@ class AudioController extends Controller
         // 2. Check if the file actually exists
         if (file_exists($absolutePath)) {
         
-            dd($absolutePath);
+   
 
             try {
     
@@ -144,21 +144,20 @@ class AudioController extends Controller
             return;
         }
 
-        // Build your headers:
-        $headers = [
-            'User-Agent'    => 'insomnia/10.2.0',
-            'api-key'       => 'i1XmSNfkueLu3AE',
-        ];
+ 
 
         $api_link=$api_link ?? 'https://app.oceer.fr/api/pipeline/start/229bdbbf-869a-49c9-83cb-ae069f1137ff';
-        // Make the POST request using Laravel's HTTP Client:
-        $response = Http::withHeaders($headers)
-            ->attach(
-                'audio',
-                file_get_contents($pdfPath), // file content
-                basename($pdfPath)           // filename
-            )
-            ->post($api_link);
+
+$api_key = 'i1XmSNfkueLu3AE';
+$filePath = $pdfPath;
+
+
+$response = Http::withHeaders([
+        'api-key' => $api_key,
+    ])
+    ->attach('audio', file_get_contents($filePath), basename($filePath))
+    ->post($api_link);
+
            
             if ($response->successful()) {
                 $result['success'] = true;
