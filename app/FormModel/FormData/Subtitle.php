@@ -84,7 +84,7 @@ class Subtitle extends AbstractFormData
     public function render_pdf()
     {
 
-
+        return '';
         // $data= '<div class="col-12 form_title s2">'.($this->config->title ?? '').'</div>';
         $data= '<div>'.$this->config->title ?? ''.'</div>';
 

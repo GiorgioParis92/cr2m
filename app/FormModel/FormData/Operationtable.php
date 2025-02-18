@@ -140,7 +140,7 @@ class Operationtable extends AbstractFormData
     public function render_pdf()
     {
 
-
+        return '';
         if(!$this->value || $this->value=='') {
             return false;
         }
