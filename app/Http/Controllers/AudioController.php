@@ -153,7 +153,7 @@ class AudioController extends Controller
         $curlFile = new CURLFile($filePath, $correctMimeType, basename($filePath));
    
         $postFields = [
-            'audio' => $curlFile
+            'audio' => $filePath
         ];
         
         curl_setopt_array($curl, [
