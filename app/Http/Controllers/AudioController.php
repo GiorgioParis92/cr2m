@@ -147,8 +147,11 @@ class AudioController extends Controller
 
         $curl = curl_init();
 
-        $curlFile = curl_file_create($filePath, mime_content_type($filePath), basename($filePath));
-        dd($curlFile);
+        $correctMimeType = 'audio/wav';
+
+        // Create CURLFile instance with the correct MIME type
+        $curlFile = new CURLFile($filePath, $correctMimeType, basename($filePath));
+   
         $postFields = [
             'audio' => $curlFile
         ];
