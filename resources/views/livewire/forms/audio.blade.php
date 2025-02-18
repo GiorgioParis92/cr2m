@@ -6,17 +6,13 @@
 
 <div class="col-sm-12 {{ $conf['class'] ?? 'col-lg-12' }}">
     @if (auth()->user()->id == 1)
-        <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <meta name="csrf-token" content="{{ csrf_token() }}">
-        </head>
+
 
         {{-- Use the uniqueId in the input's ID --}}
         <input id="value-{{ $uniqueId }}" type="hidden" name="{{ $conf['name'] }}" class="form-control"
             wire:model.debounce.500ms="value">
 
-        <div class="d-flex gap-2 mb-3">
+        <div class="">
             <button id="startRecord-{{ $uniqueId }}" class="btn btn-primary">
                 <i class="bi bi-mic-fill"></i> Démarrer l'enregistrement
             </button>
