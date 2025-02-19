@@ -53,8 +53,8 @@
                 </div>
 
                 <div class="mb-3">
-                    <label for="email" class="form-label">Mail Comptabilité</label>
-                    <input type="email" class="form-control" id="email" name="mail_compta" value="{{ $client->mail_compta }}">
+                    <label for="mail_compta" class="form-label">Mail Comptabilité</label>
+                    <input type="email" class="form-control" id="mail_compta" name="mail_compta" value="{{ $client->mail_compta }}">
                 </div>
 
                 <div class="mb-3">
