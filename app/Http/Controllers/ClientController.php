@@ -155,7 +155,7 @@ class ClientController extends Controller
             'type_client' => 'required|integer|exists:clients_type,id',
             // Add other validation rules as needed
         ]);
-
+        dd($request);
         // Find the client
         $client = Client::findOrFail($id);
 
