@@ -161,8 +161,7 @@ class ClientController extends Controller
 
         // Manually create the client data array, excluding '_token' and 'main_logo'
         $clientData = $request->except('_token', 'main_logo');
-        dump($client);
-        dd($clientData);
+  
         // Update the client data
         $client->update($clientData);
 

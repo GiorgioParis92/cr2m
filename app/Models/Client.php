@@ -20,6 +20,7 @@ class Client extends Model
         'cp',
         'ville',
         'email',
+        'mail_compta',
         'telephone',
         'siret',
         'siren',
