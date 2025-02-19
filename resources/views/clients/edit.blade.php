@@ -51,6 +51,12 @@
                     <label for="email" class="form-label">{{ __('forms.email') }}</label>
                     <input type="email" class="form-control" id="email" name="email" value="{{ $client->email }}">
                 </div>
+
+                <div class="mb-3">
+                    <label for="email" class="form-label">Mail Comptabilité</label>
+                    <input type="email" class="form-control" id="email" name="mail_compta" value="{{ $client->mail_compta }}">
+                </div>
+
                 <div class="mb-3">
                     <label for="telephone" class="form-label">{{ __('forms.telephone') }}</label>
                     <input type="text" class="form-control" id="telephone" name="telephone" value="{{ $client->telephone }}">

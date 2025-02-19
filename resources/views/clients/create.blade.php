@@ -49,6 +49,13 @@
                     <label for="email" class="form-label">{{ __('forms.email') }}</label>
                     <input value="{{ old('email') }}" type="email" class="form-control" id="email" name="email">
                 </div>
+
+                <div class="mb-3">
+                    <label for="mail_compta" class="form-label">Mail Comptabilité</label>
+                    <input value="{{ old('mail_compta') }}" type="email" class="form-control" id="mail_compta" name="mail_compta">
+                </div>
+
+
                 <div class="mb-3">
                     <label for="telephone" class="form-label">{{ __('forms.telephone') }}</label>
                     <input value="{{ old('telephone') }}" type="text" class="form-control" id="telephone" name="telephone">
