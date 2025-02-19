@@ -155,13 +155,14 @@ class ClientController extends Controller
             'type_client' => 'required|integer|exists:clients_type,id',
             // Add other validation rules as needed
         ]);
-        dd($request);
+
         // Find the client
         $client = Client::findOrFail($id);
 
         // Manually create the client data array, excluding '_token' and 'main_logo'
         $clientData = $request->except('_token', 'main_logo');
-
+        dump($client);
+        dd($clientData);
         // Update the client data
         $client->update($clientData);
 
