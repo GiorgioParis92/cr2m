@@ -59,56 +59,66 @@
         <script>
             // Wrap everything in an IIFE so each instance has its own scope
             (function() {
+
+                const convertToWav = async (webmBlob) => {
+    const reader = new FileReader();
+    reader.readAsArrayBuffer(webmBlob);
+    reader.onloadend = async function () {
+        const ffmpeg = await createFFmpeg({ log: true });
+        await ffmpeg.load();
+        
+        ffmpeg.FS('writeFile', 'input.webm', new Uint8Array(reader.result));
+        await ffmpeg.run('-i', 'input.webm', 'output.wav');
+        
+        const wavData = ffmpeg.FS('readFile', 'output.wav');
+        const wavBlob = new Blob([wavData.buffer], { type: 'audio/wav' });
+        
+        return wavBlob;
+    };
+};
+
                 let mediaRecorder_{{ $uniqueId }};
-                let audioChunks_{{ $uniqueId }} = [];
-                let audioBlob_{{ $uniqueId }};
+    let audioChunks_{{ $uniqueId }} = [];
+    let audioBlob_{{ $uniqueId }};
 
-                // Grab all needed elements by ID, using the uniqueId
-                const startBtn = document.getElementById("startRecord-{{ $uniqueId }}");
-                const stopBtn = document.getElementById("stopRecord-{{ $uniqueId }}");
-                const analyseBtn = document.getElementById("AnalyseAudio-{{ $uniqueId }}");
-                const downloadLink = document.getElementById("analyse_audio-{{ $uniqueId }}");
-                const audioPlayback = document.getElementById("audioPlayback-{{ $uniqueId }}");
-                const hiddenValueInput = document.getElementById("value-{{ $uniqueId }}");
+    const startBtn = document.getElementById("startRecord-{{ $uniqueId }}");
+    const stopBtn = document.getElementById("stopRecord-{{ $uniqueId }}");
+    const analyseBtn = document.getElementById("AnalyseAudio-{{ $uniqueId }}");
+    const audioPlayback = document.getElementById("audioPlayback-{{ $uniqueId }}");
 
-                startBtn.addEventListener("click", async function() {
-                    try {
-                        const stream = await navigator.mediaDevices.getUserMedia({
-                            audio: true
-                        });
+    startBtn.addEventListener("click", async function () {
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({
+                audio: { sampleRate: 44100 }
+            });
 
-                        mediaRecorder_{{ $uniqueId }} = new MediaRecorder(stream);
-                        mediaRecorder_{{ $uniqueId }}.ondataavailable = event => {
-                            audioChunks_{{ $uniqueId }}.push(event.data);
-                        };
+            mediaRecorder_{{ $uniqueId }} = new MediaRecorder(stream, { mimeType: "audio/webm" });
+            mediaRecorder_{{ $uniqueId }}.ondataavailable = event => {
+                audioChunks_{{ $uniqueId }}.push(event.data);
+            };
 
-                        mediaRecorder_{{ $uniqueId }}.onstop = async () => {
-                            audioBlob_{{ $uniqueId }} = new Blob(
-                            audioChunks_{{ $uniqueId }}, {
-                                type: "audio/wav"
-                            });
-                            const audioUrl = URL.createObjectURL(audioBlob_{{ $uniqueId }});
+            mediaRecorder_{{ $uniqueId }}.onstop = async () => {
+                audioBlob_{{ $uniqueId }} = new Blob(audioChunks_{{ $uniqueId }}, { type: "audio/webm" });
+                const audioUrl = URL.createObjectURL(audioBlob_{{ $uniqueId }});
+                audioPlayback.src = audioUrl;
+                audioPlayback.style.display = "block";
+                audioChunks_{{ $uniqueId }} = [];
 
-                            // Display the recorded audio immediately
-                            audioPlayback.src = '../..' + audioUrl;
-                            audioPlayback.style.display = "block";
-                            // Reset chunks
-                            audioChunks_{{ $uniqueId }} = [];
+                // Convert to WAV if necessary
+                const wavBlob = await convertToWav(audioBlob_{{ $uniqueId }});
+                saveAudio(wavBlob);
+            };
 
-                            // Automatically save the audio after stopping
-                            await saveAudio(audioBlob_{{ $uniqueId }});
-                        };
+            mediaRecorder_{{ $uniqueId }}.start();
+            startBtn.disabled = true;
+            stopBtn.disabled = false;
+            analyseBtn.style.display = "none";
 
-                        mediaRecorder_{{ $uniqueId }}.start();
-                        startBtn.disabled = true;
-                        stopBtn.disabled = false;
-                        analyseBtn.style.display = "none";
-
-                    } catch (error) {
-                        console.error("Error accessing microphone:", error);
-                        alert("Could not access microphone. Please allow microphone access.");
-                    }
-                });
+        } catch (error) {
+            console.error("Error accessing microphone:", error);
+            alert("Could not access microphone. Please allow microphone access.");
+        }
+    });
 
                 stopBtn.addEventListener("click", function() {
                     if (mediaRecorder_{{ $uniqueId }} && mediaRecorder_{{ $uniqueId }}.state ===
