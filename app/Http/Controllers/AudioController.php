@@ -64,7 +64,7 @@ class AudioController extends Controller
     
 
                     $oceerResult = $this->sendPdfToOceer($absolutePath,$request->api_link);
-
+                    dd($oceerResult);
 
                     if ($oceerResult) {
                         if (
@@ -186,7 +186,7 @@ class AudioController extends Controller
            
 
     
-            return response()->json($result);
+            return $result;
      
     }
 
