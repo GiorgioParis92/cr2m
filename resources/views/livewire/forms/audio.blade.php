@@ -59,7 +59,7 @@
 
 <script>
 (async function () {
-    const { createFFmpeg, fetchFile } = FFmpeg;
+    import { createFFmpeg, fetchFile } from '@ffmpeg/ffmpeg';
     const ffmpeg = createFFmpeg({ log: true });
 
     let mediaRecorder_{{ $uniqueId }};
