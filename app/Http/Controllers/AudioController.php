@@ -108,7 +108,7 @@ class AudioController extends Controller
 
                     return response()->json([
                         'message'       => 'Audio transcription successful.',
-                        'transcription' => $transcription ?? '',
+                        'transcription' => $oceerResult['data']['speech_to_text']['data']['oceer_document'] ?? '',
                         'oceer_result'  => $oceerResult ?? '',
                         'request-name'  => $request->name ?? '',
                         'api_link'  => $request->api_link ?? '',
