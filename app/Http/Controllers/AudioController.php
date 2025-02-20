@@ -179,7 +179,7 @@ class AudioController extends Controller
         // Handle response
         if ($http_code === 200) {
             $result['success'] = true;
-            $result['data']    = $response; // or the entire response object
+            $result['data']    = json_decode($response,true); // or the entire response object
         } else {
             $result['error'] = $response?: 'Failed to send PDF to Oceer.';
         }
