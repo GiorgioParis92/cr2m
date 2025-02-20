@@ -58,7 +58,6 @@
     <script type="text/javascript" charset="utf8" src="https://cdn.jsdelivr.net/npm/bs-stepper/dist/js/bs-stepper.min.js">
     </script>
         {{-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bs-stepper/dist/css/bs-stepper.min.css"> --}}
-        <script src="https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.11.6/dist/ffmpeg.min.js"></script>
 
       <script src="{{ asset('assets/js/push.min.js') }}"></script>
 

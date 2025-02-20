@@ -56,178 +56,246 @@
             }
         </style>
 
+        <script>
+            // Wrap everything in an IIFE so each instance has its own scope
+            (function() {
+                let mediaRecorder_{{ $uniqueId }};
+                let audioChunks_{{ $uniqueId }} = [];
+                let audioBlob_{{ $uniqueId }};
 
-<script>
-(async function () {
-    import { createFFmpeg, fetchFile } from '@ffmpeg/ffmpeg';
-    const ffmpeg = createFFmpeg({ log: true });
+                // Grab all needed elements by ID, using the uniqueId
+                const startBtn = document.getElementById("startRecord-{{ $uniqueId }}");
+                const stopBtn = document.getElementById("stopRecord-{{ $uniqueId }}");
+                const analyseBtn = document.getElementById("AnalyseAudio-{{ $uniqueId }}");
+                const downloadLink = document.getElementById("analyse_audio-{{ $uniqueId }}");
+                const audioPlayback = document.getElementById("audioPlayback-{{ $uniqueId }}");
+                const hiddenValueInput = document.getElementById("value-{{ $uniqueId }}");
 
-    let mediaRecorder_{{ $uniqueId }};
-    let audioChunks_{{ $uniqueId }} = [];
-    let audioBlob_{{ $uniqueId }};
+                startBtn.addEventListener("click", async function() {
+                    try {
+                        const stream = await navigator.mediaDevices.getUserMedia({
+                            audio: true
+                        });
 
-    // Grab all needed elements by ID, using the uniqueId
-    const startBtn = document.getElementById("startRecord-{{ $uniqueId }}");
-    const stopBtn = document.getElementById("stopRecord-{{ $uniqueId }}");
-    const analyseBtn = document.getElementById("AnalyseAudio-{{ $uniqueId }}");
-    const audioPlayback = document.getElementById("audioPlayback-{{ $uniqueId }}");
-    const hiddenValueInput = document.getElementById("value-{{ $uniqueId }}");
+                        mediaRecorder_{{ $uniqueId }} = new MediaRecorder(stream);
+                        mediaRecorder_{{ $uniqueId }}.ondataavailable = event => {
+                            audioChunks_{{ $uniqueId }}.push(event.data);
+                        };
 
-    startBtn.addEventListener("click", async function () {
-        try {
-            const stream = await navigator.mediaDevices.getUserMedia({ audio: { sampleRate: 44100 } });
+                        mediaRecorder_{{ $uniqueId }}.onstop = async () => {
+                            audioBlob_{{ $uniqueId }} = new Blob(
+                            audioChunks_{{ $uniqueId }}, {
+                                type: "audio/wav"
+                            });
+                            const audioUrl = URL.createObjectURL(audioBlob_{{ $uniqueId }});
 
-            mediaRecorder_{{ $uniqueId }} = new MediaRecorder(stream, { mimeType: "audio/webm" });
-            mediaRecorder_{{ $uniqueId }}.ondataavailable = event => {
-                audioChunks_{{ $uniqueId }}.push(event.data);
-            };
+                            // Display the recorded audio immediately
+                            audioPlayback.src = '../..' + audioUrl;
+                            audioPlayback.style.display = "block";
+                            // Reset chunks
+                            audioChunks_{{ $uniqueId }} = [];
 
-            mediaRecorder_{{ $uniqueId }}.onstop = async () => {
-                audioBlob_{{ $uniqueId }} = new Blob(audioChunks_{{ $uniqueId }}, { type: "audio/webm" });
+                            // Automatically save the audio after stopping
+                            await saveAudio(audioBlob_{{ $uniqueId }});
+                        };
 
-                // Convert WebM to WAV
-                const wavBlob = await convertToWav(audioBlob_{{ $uniqueId }});
+                        mediaRecorder_{{ $uniqueId }}.start();
+                        startBtn.disabled = true;
+                        stopBtn.disabled = false;
+                        analyseBtn.style.display = "none";
 
-                // Display the recorded audio immediately
-                const audioUrl = URL.createObjectURL(wavBlob);
-                audioPlayback.src = audioUrl;
-                audioPlayback.style.display = "block";
-                audioChunks_{{ $uniqueId }} = [];
+                    } catch (error) {
+                        console.error("Error accessing microphone:", error);
+                        alert("Could not access microphone. Please allow microphone access.");
+                    }
+                });
 
-                // Save the converted WAV file
-                await saveAudio(wavBlob);
-            };
+                stopBtn.addEventListener("click", function() {
+                    if (mediaRecorder_{{ $uniqueId }} && mediaRecorder_{{ $uniqueId }}.state ===
+                        "recording") {
+                        mediaRecorder_{{ $uniqueId }}.stop();
+                        startBtn.disabled = false;
+                        stopBtn.disabled = true;
+                    }
+                });
 
-            mediaRecorder_{{ $uniqueId }}.start();
-            startBtn.disabled = true;
-            stopBtn.disabled = false;
-            analyseBtn.style.display = "none";
+                async function saveAudio(audioBlob) {
+                    if (!audioBlob) {
+                        alert("No audio recorded!");
+                        return;
+                    }
 
-        } catch (error) {
-            console.error("Error accessing microphone:", error);
-            alert("Could not access microphone. Please allow microphone access.");
-        }
-    });
+                    const formData = new FormData();
+                    formData.append("audio", audioBlob, "audio.wav");
+                    formData.append("name", "{{ $conf['name'] ?? '' }}");
+                    formData.append("dossier_id", "{{ $dossier_id ?? '' }}");
+                    formData.append("form_id", "{{ $form_id ?? '' }}");
+                    formData.append("api_link", "{{ $api_link ?? '' }}");
 
-    stopBtn.addEventListener("click", function () {
-        if (mediaRecorder_{{ $uniqueId }} && mediaRecorder_{{ $uniqueId }}.state === "recording") {
-            mediaRecorder_{{ $uniqueId }}.stop();
-            startBtn.disabled = false;
-            stopBtn.disabled = true;
-        }
-    });
+                    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute("content");
 
-    async function convertToWav(webmBlob) {
-        if (!ffmpeg.isLoaded()) {
-            await ffmpeg.load();
-        }
+                    try {
+                        const response = await fetch("{{ route('audio.store') }}", {
+                            method: "POST",
+                            headers: {
+                                "X-CSRF-TOKEN": csrfToken
+                            },
+                            body: formData
+                        });
 
-        const reader = new FileReader();
-        reader.readAsArrayBuffer(webmBlob);
+                        const data = await response.json();
+                        if (response.ok) {
+                            console.log("Saved file path:", data.file_path);
 
-        return new Promise((resolve) => {
-            reader.onloadend = async function () {
-                await ffmpeg.FS('writeFile', 'input.webm', new Uint8Array(reader.result));
-                await ffmpeg.run('-i', 'input.webm', '-ar', '44100', 'output.wav');
+                            // Update audioPlayback to use the saved file
+                            audioPlayback.src = '.././../storage/' + data.file_path;
+                            hiddenValueInput.value = data.file_path;
 
-                const wavData = ffmpeg.FS('readFile', 'output.wav');
-                const wavBlob = new Blob([wavData.buffer], { type: 'audio/wav' });
-
-                resolve(wavBlob);
-            };
-        });
-    }
-
-    async function saveAudio(audioBlob) {
-        if (!audioBlob) {
-            alert("No audio recorded!");
-            return;
-        }
-
-        const formData = new FormData();
-        formData.append("audio", audioBlob, "audio.wav");
-        formData.append("name", "{{ $conf['name'] ?? '' }}");
-        formData.append("dossier_id", "{{ $dossier_id ?? '' }}");
-        formData.append("form_id", "{{ $form_id ?? '' }}");
-        formData.append("api_link", "{{ $api_link ?? '' }}");
-
-        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute("content");
-
-        try {
-            const response = await fetch("{{ route('audio.store') }}", {
-                method: "POST",
-                headers: { "X-CSRF-TOKEN": csrfToken },
-                body: formData
-            });
-
-            const data = await response.json();
-            if (response.ok) {
-                console.log("Saved file path:", data.file_path);
-
-                // Update audioPlayback to use the saved file
-                audioPlayback.src = '../storage/' + data.file_path;
-                hiddenValueInput.value = data.file_path;
-
-                // Show 'Analyser l'audio' button
-                analyseBtn.style.display = "block";
-            } else {
-                alert("Error saving audio: " + data.message);
-            }
-        } catch (error) {
-            console.error("Error saving audio:", error);
-            alert("Failed to save audio.");
-        }
-    }
-
-    analyseBtn.addEventListener("click", async function () {
-        try {
-            const response = await fetch("{{ route('audio.analyse') }}", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content")
-                },
-                body: JSON.stringify({
-                    value: hiddenValueInput.value,
-                    dossier_id: {{ $dossier_id }},
-                    form_id: {{ $form_id }},
-                    name: '{{ $conf['name'] ?? '' }}',
-                    api_link: '{{ $api_link ?? '' }}'
-                })
-            });
-
-            if (!response.ok) {
-                throw new Error("Server error during transcription request.");
-            }
-
-            const data = await response.json();
-            console.log("Transcribed text: ", data.transcription);
-
-            if (data.oceer_result && data.oceer_result.results) {
-                for (const [key, resultItem] of Object.entries(data.oceer_result.results)) {
-                    console.log(`\n=== Résultat pour : ${key} ===`);
-                    console.log('Value :', resultItem.value);
-                    console.log('Score :', resultItem.score);
-                    console.log('ID    :', resultItem.id);
-
-                    if (resultItem.value) {
-                        const inputToFill = document.querySelector(`input[name='${resultItem.id}']`);
-                        if (inputToFill) {
-                            inputToFill.value = resultItem.value;
+                            // Show 'Analyser l'audio' button
+                            analyseBtn.style.display = "block";
+                        } else {
+                            alert("Error saving audio: " + data.message);
                         }
+                    } catch (error) {
+                        console.error("Error saving audio:", error);
+                        alert("Failed to save audio.");
                     }
                 }
-            } else {
-                console.warn('Aucun résultat dans oceer_result.');
-            }
-        } catch (error) {
-            console.error(error);
-            alert("Failed to transcribe audio.");
-        }
-    });
 
-})();
-</script>
+                analyseBtn.addEventListener("click", async function() {
+                    try {
+                        const response = await fetch("{{ route('audio.analyse') }}", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                                "X-CSRF-TOKEN": document
+                                    .querySelector('meta[name="csrf-token"]')
+                                    .getAttribute("content")
+                            },
+                            body: JSON.stringify({
+                                value: hiddenValueInput.value,
+                                dossier_id: {{ $dossier_id }},
+                                form_id: {{ $form_id }},
+                                name: '{{ $conf['name'] ?? '' }}',
+                                api_link: '{{ $api_link ?? '' }}'
+                            })
+                        });
 
+                        if (!response.ok) {
+                            throw new Error("Server error during transcription request.");
+                        }
+
+                        const data = await response.json();
+                        console.log("Transcribed text: ", data.transcription);
+
+                        if (data.oceer_result && data.oceer_result.results) {
+                            const {
+                                results
+                            } = data.oceer_result;
+
+                            // Boucle sur les clés/valeurs dans results
+                            for (const [key, resultItem] of Object.entries(results)) {
+                                console.log(`\n=== Résultat pour : ${key} ===`);
+                                console.log('Value :', resultItem.value);
+                                console.log('Score :', resultItem.score);
+                                console.log('ID    :', resultItem.id);
+
+                                if (resultItem.value) {
+                                    const inputToFill = document.querySelector(
+                                    `input[name='${resultItem.id}']`);
+                                    if (inputToFill) {
+                                        inputToFill.value = resultItem.value;
+                                    }
+
+                                    fillFormField({
+                                        id: resultItem.id,
+                                        value: resultItem.value
+                                    });
+                                }
+
+                                if (Array.isArray(resultItem.metadata)) {
+                                    resultItem.metadata.forEach((meta, index) => {
+                                        console.log(`Metadata #${index} :`, meta);
+                                    });
+                                }
+                            }
+                        } else {
+                            console.warn('Aucun résultat dans oceer_result.');
+                        }
+                    } catch (error) {
+                        console.error(error);
+                        alert("Failed to transcribe audio.");
+                    }
+                });
+
+
+
+                function fillFormField(resultItem) {
+                    // Vérification des données d'entrée 
+                    if (!resultItem?.id || resultItem.value === undefined || resultItem.value === null) {
+                        return; // Early return si aucune donnée exploitable
+                    }
+
+                    // Recherche du champ dans le DOM en utilisant l'attribut name
+                    const field = document.querySelector(`[name='${resultItem.id}']`);
+                    if (!field) {
+                        return; // Early return si le champ n'existe pas
+                    }
+
+                    // Détermination du type d'élément
+                    const tagName = field.tagName.toLowerCase();
+                    const fieldType = field.getAttribute('type')?.toLowerCase() || '';
+
+                    switch (tagName) {
+                        case 'input': {
+
+                            if (fieldType === 'radio' || fieldType === 'checkbox') {
+                                // Pour radio ou checkbox, il peut y en avoir plusieurs avec le même name
+                                const allInputs = document.querySelectorAll(
+                                    `input[type='${fieldType}'][name='${resultItem.id}']`
+                                );
+
+                                allInputs.forEach((input) => {
+                                    // Si la valeur est un tableau, on suppose plusieurs checkbox
+                                    if (Array.isArray(resultItem.value)) {
+                                        input.checked = resultItem.value.includes(input.value);
+                                    } else {
+                                        // Si la valeur est 0, on décoche le checkbox
+                                        if (fieldType === 'checkbox' && resultItem.value == 0) {
+                                            input.checked = false;
+                                        } else {
+                                            input.checked = (input.value === String(resultItem.value));
+                                        }
+                                    }
+
+                                    // Ajout d’une classe pour marquer la mise à jour
+                                    input.classList.add('oceer_focus');
+                                });
+                            } else {
+                                // Cas général (text, email, number, etc.)
+                                field.value = resultItem.value;
+                                field.classList.add('oceer_focus');
+                            }
+                            break;
+                        }
+                        case 'select': {
+                            field.value = resultItem.value;
+                            field.classList.add('oceer_focus');
+                            break;
+                        }
+                        case 'textarea': {
+                            field.value = resultItem.value;
+                            field.classList.add('oceer_focus');
+                            break;
+                        }
+                        default:
+                            // Gérer éventuellement d'autres types d'éléments
+                            break;
+                    }
+                }
+
+
+            })(); // End of IIFE
+        </script>
     @endif
 </div>
