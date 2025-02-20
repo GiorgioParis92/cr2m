@@ -55,31 +55,36 @@
                 box-shadow: 0 0 0 2px #9cff8b;
             }
         </style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ffmpeg.js/0.11.0/ffmpeg.min.js"></script>
 
         <script>
             // Wrap everything in an IIFE so each instance has its own scope
             (function() {
+                const { createFFmpeg, fetchFile } = FFmpeg;
+                const ffmpeg = createFFmpeg({ log: true });
+                let mediaRecorder;
+    let audioChunks = [];
+    let audioBlob;
 
-                const convertToWav = async (webmBlob) => {
-    const reader = new FileReader();
-    reader.readAsArrayBuffer(webmBlob);
-    reader.onloadend = async function () {
-        const ffmpeg = await createFFmpeg({ log: true });
-        await ffmpeg.load();
-        
-        ffmpeg.FS('writeFile', 'input.webm', new Uint8Array(reader.result));
-        await ffmpeg.run('-i', 'input.webm', 'output.wav');
-        
-        const wavData = ffmpeg.FS('readFile', 'output.wav');
-        const wavBlob = new Blob([wavData.buffer], { type: 'audio/wav' });
-        
-        return wavBlob;
+    const convertToWav = async (webmBlob) => {
+        if (!ffmpeg.isLoaded()) {
+            await ffmpeg.load();
+        }
+
+        const reader = new FileReader();
+        reader.readAsArrayBuffer(webmBlob);
+        return new Promise((resolve) => {
+            reader.onloadend = async function () {
+                await ffmpeg.FS('writeFile', 'input.webm', new Uint8Array(reader.result));
+                await ffmpeg.run('-i', 'input.webm', 'output.wav');
+
+                const wavData = ffmpeg.FS('readFile', 'output.wav');
+                const wavBlob = new Blob([wavData.buffer], { type: 'audio/wav' });
+
+                resolve(wavBlob);
+            };
+        });
     };
-};
-
-                let mediaRecorder_{{ $uniqueId }};
-    let audioChunks_{{ $uniqueId }} = [];
-    let audioBlob_{{ $uniqueId }};
 
     const startBtn = document.getElementById("startRecord-{{ $uniqueId }}");
     const stopBtn = document.getElementById("stopRecord-{{ $uniqueId }}");
