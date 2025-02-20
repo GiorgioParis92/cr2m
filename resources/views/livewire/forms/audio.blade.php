@@ -56,7 +56,7 @@
             }
         </style>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/ffmpeg.js/0.11.0/ffmpeg.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.11.6/dist/ffmpeg.min.js"></script>
 
 <script>
 (async function () {
