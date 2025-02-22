@@ -805,7 +805,7 @@ class PDFController extends Controller
                                
                                 $title_content .= '<tr><td style="width:100%;border:1px solid #ccc;border-collapse: collapse;padding-left:12px;padding-bottom:15px">' . $instance_result . '</td></tr>';
                             } else {
-                                dd($instance_result);
+                            
                                 $title_content .= '</table><div>' . $instance_result . '</div>';
                                 
                             }
