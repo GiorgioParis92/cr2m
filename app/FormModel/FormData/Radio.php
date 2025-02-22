@@ -126,6 +126,7 @@ class Radio extends AbstractFormData
  
     public function render_pdf()
     {
+        return '';
         if(!$this->value) {
             return false; 
          }
