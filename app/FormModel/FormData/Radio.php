@@ -126,7 +126,7 @@ class Radio extends AbstractFormData
  
     public function render_pdf()
     {
-        return '';
+        // return '';
         if(!$this->value) {
             return false; 
          }
@@ -148,7 +148,7 @@ class Radio extends AbstractFormData
             foreach ($optionsArray as $key => $element) {
                 $isChecked = $this->value == $element['value'] ? 'checked="checked"' : '';
            
-                $data.='<div class="">';
+                // $data.='<div class="">';
                 $data .= '<input  type="checkbox" '.$isChecked.'>';
                 $data .= '<label  for="'.$this->name.'_'.$key.'">'.$element['label'].'</label><br>';
            
