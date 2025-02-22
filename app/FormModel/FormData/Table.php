@@ -219,13 +219,11 @@ class Table extends AbstractFormData
                 
                 $element_render = $instance->render_pdf();
           
-                $data .= '<tr><td style="width:100%;border:1px solid #ccc;border-collapse: collapse;padding-left:12px;padding-bottom:15px">';
-                $data .= $element_render;
-                $data .= '</td></tr>';
-
                 if($element_render) {
                     try{
-               
+                        $data .= '<tr><td style="width:100%;border:1px solid #ccc;border-collapse: collapse;padding-left:12px;padding-bottom:15px">';
+                        $data .= $element_render;
+                        $data .= '</td></tr>';
                     } catch(Exception $e){
     
                         // $data .= '<tr><td style="width:100%;border:1px solid #ccc;border-collapse: collapse;padding-left:12px;padding-bottom:15px">';
