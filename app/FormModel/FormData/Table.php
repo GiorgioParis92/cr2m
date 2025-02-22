@@ -224,9 +224,9 @@ class Table extends AbstractFormData
                         $data .= '</td></tr>';
                     } catch(Exception $e){
     
-                        $data .= '<tr><td style="width:100%;border:1px solid #ccc;border-collapse: collapse;padding-left:12px;padding-bottom:15px">';
-                        $data.='erreur'.$element_config['type'];
-                        $data .= '</td></tr>';
+                        // $data .= '<tr><td style="width:100%;border:1px solid #ccc;border-collapse: collapse;padding-left:12px;padding-bottom:15px">';
+                        // $data.='erreur'.$element_config['type'];
+                        // $data .= '</td></tr>';
     
                         
                     }
