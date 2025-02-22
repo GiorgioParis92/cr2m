@@ -175,6 +175,8 @@ class Table extends AbstractFormData
     public function render_pdf()
     {
 
+
+        return '';
         $should_render = false;
         $data = '<div><table style="margin:auto;width:90%;margin-top:20px;border-collapse: collapse;">';
         
