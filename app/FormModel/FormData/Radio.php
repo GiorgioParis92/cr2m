@@ -130,6 +130,7 @@ class Radio extends AbstractFormData
 
         if(auth()->user()->id==1) {
             dd($this->config);
+            return 'ok';
         }
 
         return '';
