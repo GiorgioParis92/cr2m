@@ -129,13 +129,13 @@ class Radio extends AbstractFormData
 
         $jsonString = str_replace(["\n", "\r"], '', $this->config->options);
         $optionsArray = json_decode($jsonString, true);
-        print_r($optionsArray);
-        return $optionsArray;
+        // print_r($optionsArray);
+       
         if(!$this->value) {
             return ''; 
          }
-        $data='';
-        if($this->value) {
+        $data=$this->value;
+        return $data;
         $data = '<div class="form-group col-sm-12 '.($this->config->class ?? "").'">';
         $data .= '<div class="form-group">';
 
@@ -166,7 +166,7 @@ class Radio extends AbstractFormData
 
 
         $data .= '</div>';
-    }
+    
         return $data;
     }
 
