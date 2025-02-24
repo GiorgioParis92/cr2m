@@ -128,13 +128,8 @@ class Radio extends AbstractFormData
     {
 
    
-        // print_r($optionsArray);
-       
-        if(!$this->value) {
-            return ''; 
-         }
-        $data=$this->value;
-        return $data;
+
+ 
         $data = '<div class="form-group col-sm-12 '.($this->config->class ?? "").'">';
         $data .= '<div class="form-group">';
 
@@ -147,17 +142,17 @@ class Radio extends AbstractFormData
         $data .= '<label>'.$this->config->title.'</label>';
         $data .= '<div>';
 
-        // if (is_array($optionsArray)) {
-        //     foreach ($optionsArray as $key => $element) {
-        //         $isChecked = $this->value == $element['value'] ? 'checked="checked"' : '';
+        if (is_array($optionsArray)) {
+            foreach ($optionsArray as $key => $element) {
+                $isChecked = $this->value == $element['value'] ? 'checked="checked"' : '';
            
-        //         // $data.='<div class="">';
-        //         $data .= '<input  type="checkbox" '.$isChecked.'>';
-        //         $data .= '<label  for="'.$this->name.'_'.$key.'">'.$element['label'].'</label><br>';
+                // $data.='<div class="">';
+                $data .= '<input  type="checkbox" '.$isChecked.'>';
+                $data .= '<label  for="'.$this->name.'_'.$key.'">'.$element['label'].'</label><br>';
            
             
-        //     }
-        // }
+            }
+        }
 
         $data .= '</div>';
     
