@@ -127,8 +127,7 @@ class Radio extends AbstractFormData
     public function render_pdf()
     {
 
-        $jsonString = str_replace(["\n", "\r"], '', $this->config->options);
-        $optionsArray = json_decode($jsonString, true);
+   
         // print_r($optionsArray);
        
         if(!$this->value) {
