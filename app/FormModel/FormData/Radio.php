@@ -134,8 +134,8 @@ class Radio extends AbstractFormData
         $data .= '<div class="form-group">';
 
         // Clean and decode the JSON options
-        $jsonString = str_replace(["\n", "\r"], '', $this->config->options);
-        $optionsArray = json_decode($jsonString, true);
+        // $jsonString = str_replace(["\n", "\r"], '', $this->config->options);
+        $optionsArray = json_decode($this->config->options, true);
 
   
         
