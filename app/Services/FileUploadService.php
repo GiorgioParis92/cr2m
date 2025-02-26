@@ -526,9 +526,9 @@ class FileUploadService
                     ->where('id', $value->id) // Assuming 'id' is the primary key
                     ->update(['meta_value' => (!empty($new_json_value) ? $new_json_value : '')]);
             } else {
-                DB::table('forms_data')
-                    ->where('id', $value->id) // Assuming 'id' is the primary key
-                    ->delete();
+                // DB::table('forms_data')
+                //     ->where('id', $value->id) // Assuming 'id' is the primary key
+                //     ->delete();
             }
         }
         if($request->dossier_id) {
