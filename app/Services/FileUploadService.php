@@ -529,7 +529,7 @@ class FileUploadService
                     return 'deleted';
             } else {
         DB::table('forms_data')
-                    ->where('id', $value->id) // Assuming 'id' is the primary key
+                    ->where('id', $value->id)->where('meta_value',$request->link) // Assuming 'id' is the primary key
                     ->delete();
                 return $json_value;
         
