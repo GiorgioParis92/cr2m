@@ -180,7 +180,7 @@ class Photo extends AbstractData
         
                 // Check if thumbnail exists
                 if (file_exists($thumbnailAbsolutePath)) {
-                    $updatedValues[] = $thumbnailPath;
+                    // $updatedValues[] = $thumbnailPath;
                     continue; // Skip further processing
                 } else {
                     if ($extension === 'heic') {
