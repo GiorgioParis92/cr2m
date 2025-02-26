@@ -178,11 +178,7 @@ class Photo extends AbstractData
                 $thumbnailPath = "dossiers/{$this->dossier->folder}/{$thumbnailFileName}";
 
         
-                // Check if thumbnail exists
-                if (file_exists($thumbnailAbsolutePath)) {
-                    // $updatedValues[] = $thumbnailPath;
-                    continue; // Skip further processing
-                } else {
+  
                     if ($extension === 'heic') {
                         // Convert HEIC to JPG
                         $convertedPath = $this->convertHeicToJpg($originalPath);
@@ -193,7 +189,7 @@ class Photo extends AbstractData
                         // Keep original path for non-HEIC files
                         $updatedValues[] = $originalPath;
                     }
-                }
+                
         
 
             }
