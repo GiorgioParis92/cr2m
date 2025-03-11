@@ -1,4 +1,7 @@
 <div>
+
+@livewire('chart-component')
+
     <div class="row">
         <div class="col-xl-4 col-sm-12 mb-xl-0 mb-4">
             <div class="mb-3">
@@ -21,7 +24,9 @@
         </div>
       
     </div>
+    <div class="row">
 
+    </div>
     <div class="row">
         @foreach($charts as $chart)
             <div class="col-xl-4 col-sm-12 mb-xl-0 mb-4">

@@ -1,0 +1,4 @@
+[ZoneTransfer]
+ZoneId=3
+ReferrerUrl=https://192.168.100.41:10000/filemin/?xnavigation=1
+HostUrl=https://192.168.100.41:10000/extensions/file-manager/download.cgi?download=2&filename=%2Eenv&path=%2Fvar%2Fwww%2Fhtml%2Fcr2m&overwrite_efiles=false&follow_symlinks=false

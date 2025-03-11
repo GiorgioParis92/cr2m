@@ -4,6 +4,6 @@
 @section('content')
     <div class="container">
         <h1>Statistics Page1</h1>
-        @livewire('chart-dashboard')
+        @livewire('chart-component')
     </div>
 @endsection
