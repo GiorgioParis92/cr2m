@@ -12,7 +12,7 @@
                 $data.='<div class="radio_line" style="background:#'.$backgroundColor.' ">';
                 $data .= '<input id="'.$conf['name'].'_'.$key.'"
 
-                  wire:change="update_value('.$element['value'].')"
+                  wire:change="update_value(\''.$element['value'].'\')"
                     value="'.$element['value'].'"
                     name="'.$conf['name'].'"
                     class="'.($value == $element['value'] ? 'choice_checked' : '').' "
