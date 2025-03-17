@@ -97,4 +97,9 @@ public function dossiersDataByMetaKey($metaKey)
     return $this->hasMany(DossiersData::class, 'dossier_id')
                 ->where('meta_key', $metaKey);
 }
+
+public function forms_data()
+{
+    return $this->hasMany(FormsData::class, 'dossier_id');
+}
 }

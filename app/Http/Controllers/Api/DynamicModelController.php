@@ -26,28 +26,91 @@ class DynamicModelController extends \App\Http\Controllers\Controller
     // Fetch all records with relations
     public function index(Request $request, $modelName)
     {
-    
         $model = $this->getModelInstance($modelName);
         $query = $model::query();
    
+        // Vérifier si la relation forms_data existe
+        $relations = $this->getAllRelations($model);
+        $hasFormsDataRelation = in_array('forms_data', $relations);
+
+        // Charger la relation forms_data seulement si elle existe
+        if ($hasFormsDataRelation) {
+            $query->with('forms_data');
+        }
 
         if(!(isset($request->relations) || $request->relations==true)) {
-                    // Get all relationships of the model
-        $relations = $this->getAllRelations($model);
-   
-
-
-        // Eager load all relationships if any
-        if (!empty($relations)) {
-            $query->with($relations);
-        }
+            // Eager load all relationships if any
+            if (!empty($relations)) {
+                $query->with($relations);
+            }
         }
 
+        if ($request->has('forms_data')) {
+            if (!$hasFormsDataRelation) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'La relation forms_data n\'existe pas pour ce modèle',
+                    'error' => 'RELATION_ERROR'
+                ], 422);
+            }
+
+            $formsData = json_decode($request->forms_data, true);
+            
+            if (!is_array($formsData)) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Le champ forms_data doit être un tableau JSON valide',
+                    'error' => 'FORMAT_ERROR'
+                ], 422);
+            } else {
+                if (isset($formsData['meta_key'])) {
+                    if (isset($formsData['meta_value']) && !empty($formsData['meta_value'])) {
+                        // Si meta_value est défini et non vide, rechercher la valeur exacte
+                        $query->whereHas('forms_data', function($q) use ($formsData) {
+                            $q->where('meta_key', $formsData['meta_key'])
+                              ->where('meta_value', $formsData['meta_value']);
+                        });
+                    } else {
+                        // Si meta_value n'est pas défini ou est vide
+                        $query->where(function($query) use ($formsData) {
+                            $query->whereHas('forms_data', function($q) use ($formsData) {
+                                $q->where('meta_key', $formsData['meta_key'])
+                                  ->where(function($subQuery) {
+                                      $subQuery->whereNull('meta_value')
+                                              ->orWhere('meta_value', '');
+                                  });
+                            })
+                            ->orWhereDoesntHave('forms_data', function($q) use ($formsData) {
+                                $q->where('meta_key', $formsData['meta_key']);
+                            });
+                        });
+                    }
+                }
+            }
+        }
     
+
+        if ($request->has('etapes')) {
+            $etapesData = json_decode($request->etapes, true);
+            
+            if (!is_array($etapesData)) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Le champ etapes doit être un tableau JSON valide',
+                    'error' => 'FORMAT_ERROR'
+                ], 422);
+            }
+
+            // Vérifier si etape_minimum est spécifié
+            if (isset($etapesData['etape_minimum'])) {
+                $query->where('etape_number', '>=', $etapesData['etape_minimum']);
+            } 
+        }
+
         // Apply filters dynamically based on request
         foreach ($request->all() as $field => $value) {
-            if ($field != 'relations') {
-            $query->where($field, $value);
+            if ($field != 'relations' && $field != 'forms_data' && $field != 'dossiers_data' && $field != 'etapes') {
+                $query->where($field, $value);
             }
         }
     
