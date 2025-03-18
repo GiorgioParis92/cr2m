@@ -40,7 +40,6 @@ abstract class AbstractData extends Component
     {
         $this->conf = $conf;
        
-        
         $this->form_id = $form_id;
         $this->dossier_id = $dossier_id;
 
@@ -119,6 +118,33 @@ abstract class AbstractData extends Component
         }
         if(isset($this->options['readonly']) ) {
             $this->readonly=$this->options['readonly'];
+        }
+
+
+   
+        if (isset($this->options['link'])) {
+            $this->form_id = $this->options['link']['form_id'];
+           
+            $form_config=DB::table('forms_config')->where('form_id',$this->form_id)
+            ->where('id',$this->options['link']['id'])
+            ->first();
+
+            $this->form_id=$form_config->form_id;
+
+          
+
+            $config = FormsData::
+            where('form_id', $this->form_id)
+            ->where('dossier_id', $dossier_id)
+            ->where('meta_key', $this->conf['name'])
+            ->first();
+
+       
+            $this->value = $config->meta_value ?? '';
+
+            $jsonString = str_replace(["\n", ' ', "\r"], '', $form_config->options);
+            $this->optionsArray = json_decode($jsonString, true);
+           
         }
 
         $this->emit($this->conf['name']);

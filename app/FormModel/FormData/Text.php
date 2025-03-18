@@ -6,6 +6,10 @@ class Text extends AbstractFormData
 {
     public function render(bool $is_error)
     {
+
+
+    
+        
         $wireModel = "formData.{$this->form_id}.{$this->name}";
 
         $class_prediction = '';

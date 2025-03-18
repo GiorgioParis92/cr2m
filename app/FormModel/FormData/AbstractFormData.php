@@ -29,7 +29,8 @@ class AbstractFormData
 
         // $this->title=$config->title;
 
-
+   
+  
 
         if ($should_load) {
             $config = FormsData::where('form_id', $form_id)
@@ -65,16 +66,34 @@ class AbstractFormData
         $optionsArray = convertToArray($optionsArray);
         $this->optionsArray = $optionsArray;
     
-        // $this->condition_valid = false;
+ 
+        if (!is_array($this->optionsArray)) {
+            $this->optionsArray = [];
+        }
+        if (isset($this->optionsArray['link'])) {
+            $this->form_id = $this->optionsArray['link']['form_id'];
+           
+            $form_config=DB::table('forms_config')->where('form_id',$this->form_id)
+            ->where('id',$this->optionsArray['link']['id'])
+            ->first();
 
-        // if (isset($optionsArray['conditions'])) {
-        //     if ($this->check_condition($optionsArray['conditions'])) {
-        //         $this->condition_valid = true;
-        //     }  
-          
-        // } else {
-        //     $this->condition_valid = true;
-        // }
+            $this->form_id=$form_config->form_id;
+
+            $this->config=$form_config;
+
+            $config = \DB::table('forms_data')
+            ->where('form_id', $this->form_id)
+            ->where('dossier_id', $dossier_id)
+            ->where('meta_key', $name)
+            ->first();
+
+      
+            $this->value = $config->meta_value ?? '';
+
+            $jsonString = str_replace(["\n", ' ', "\r"], '', $form_config->options);
+            $this->optionsArray = json_decode($jsonString, true);
+           
+        }
 
    
     }
