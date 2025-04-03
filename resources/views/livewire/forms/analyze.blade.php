@@ -1,5 +1,5 @@
 <div>
-
+    @if(isset($invalidGroups) && !empty($invalidGroups))
     <table style="width:100%" class="table  no-footer">
         <thead>
             <th>
@@ -38,6 +38,9 @@
     @endforeach
 
     </table>
+    @else
+        Aucun écart noté dans la comparaison des documents par OCEER
+    @endif
 
 
 </div>

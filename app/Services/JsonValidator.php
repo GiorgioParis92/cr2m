@@ -14,6 +14,8 @@ class JsonValidator
     {
         $decodedData = json_decode($json, true);
 
+
+
         if (!$decodedData || empty($decodedData['output_0']['data']['comparison_results']['grouping'])) {
             return [];
         }

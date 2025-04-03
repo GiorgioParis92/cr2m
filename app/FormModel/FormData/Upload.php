@@ -25,6 +25,7 @@ class Upload extends AbstractFormData
             $options = json_decode($this->config->options, true); // Decode as associative array
         
             $identify = !empty($options['identify']); // Check if 'identify' exists and is true
+            $initialize = !empty($options['initialize']); // Check if 'identify' exists and is true
         }
 
         if($identify) {
@@ -33,6 +34,21 @@ class Upload extends AbstractFormData
             ->first();
            
             // dump($check_identify);
+
+            if($initialize) {
+                dd($initialize);
+                FormsData::updateOrCreate(
+                    [
+                        'dossier_id' => $this->dossier_id,
+                     
+                        'meta_key' => $initialize
+                    ],
+                    [
+                        'meta_value' =>  ''
+                    ]
+                );
+            }
+
 
             if($check_identify && $check_identify->meta_value) {
                 
