@@ -202,10 +202,17 @@ class DossierLivewireNew extends Component
 
     public function get_agence($dossier)
     {
+
+
         $dpt=substr($dossier->beneficiaire->cp,0,2);
    
         $agence=DB::table('agences')->where('client_id',$dossier->mar_client->id)->where('departement',$dpt)->first();
        
+
+        if($dossier->id==38) {
+            dd($agence);
+        }
+
         if(!$agence) {
             return [];
         } else {
