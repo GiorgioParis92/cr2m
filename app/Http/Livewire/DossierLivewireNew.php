@@ -67,11 +67,9 @@ class DossierLivewireNew extends Component
 
         $this->dossier = Dossier::with('beneficiaire', 'fiche', 'etape', 'status', 'mar_client')->find($id);
        
-        $agence_check=FormsData::where('form_id',3)->where('meta_key','agence')->first();
+        $agence_check=FormsData::where('form_id',3)->where('meta_key','agence')->where('dossier_id',$this->dossier->id)->first();
 
-        if($this->dossier->id==38) {
-            dd($agence_check);
-        }
+
 
 
         if(!$agence_check) {
@@ -214,9 +212,7 @@ class DossierLivewireNew extends Component
         $agence=DB::table('agences')->where('client_id',$dossier->mar_client->id)->where('departement',$dpt)->first();
        
 
-        if($dossier->id==38) {
-            dd($agence);
-        }
+    
 
         if(!$agence) {
             return [];
