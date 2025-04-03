@@ -69,6 +69,11 @@ class DossierLivewireNew extends Component
        
         $agence_check=FormsData::where('form_id',3)->where('meta_key','agence')->first();
 
+        if($this->dossier->id==38) {
+            dd($agence_check);
+        }
+
+
         if(!$agence_check) {
           
             $agence=$this->get_agence($this->dossier);
