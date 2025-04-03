@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire;
 
+use App\Models\FormsConfig;
 use Livewire\Component;
 use App\Models\{
     Dossier,
@@ -11,6 +12,7 @@ use App\Models\{
     Form,
     Forms,
     FormConfig,
+    FormsData,
     Rdv,
     RdvStatus,
     Client,
@@ -64,7 +66,18 @@ class DossierLivewireNew extends Component
         $this->time = now()->format('H:i:s');
 
         $this->dossier = Dossier::with('beneficiaire', 'fiche', 'etape', 'status', 'mar_client')->find($id);
+       
+        $agence_check=FormsData::where('form_id',3)->where('meta_key','agence')->first();
 
+        if(!$agence_check) {
+          
+            $agence=$this->get_agence($this->dossier);
+            $this->dossier->agence = $agence;
+        } else {
+            $this->dossier->agence = $agence_check;
+          
+        }
+ 
         if (!$this->dossier) {
             abort(404, 'Dossier not found');
         }
@@ -185,6 +198,76 @@ class DossierLivewireNew extends Component
         $this->emit('showFlashMessage');  // Emit event to show flash message
 
     }
+
+
+    public function get_agence($dossier)
+    {
+        $dpt=substr($dossier->beneficiaire->cp,0,2);
+   
+        $agence=DB::table('agences')->where('client_id',$dossier->mar_client->id)->where('departement',$dpt)->first();
+       
+        if(!$agence) {
+            return [];
+        } else {
+
+            DB::table('forms_data')->updateOrInsert(
+                [
+                    'dossier_id' => '' . $dossier->id . '',
+                    'form_id' => '3',
+                    'meta_key' => 'agence'
+                ],
+                [
+                    'meta_value' => $agence->agence,
+                    'created_at' => now(),
+                    'updated_at' => now()
+                ]
+            );
+            DB::table('forms_data')->updateOrInsert(
+                [
+                    'dossier_id' => '' . $dossier->id . '',
+                    'form_id' => '3',
+                    'meta_key' => 'agence_adresse'
+                ],
+                [
+                    'meta_value' => $agence->adresse,
+                    'created_at' => now(),
+                    'updated_at' => now()
+                ]
+            );
+
+            DB::table('forms_data')->updateOrInsert(
+                [
+                    'dossier_id' => '' . $dossier->id . '',
+                    'form_id' => '3',
+                    'meta_key' => 'agence_cp'
+                ],
+                [
+                    'meta_value' => $agence->cp,
+                    'created_at' => now(),
+                    'updated_at' => now()
+                ]
+            );
+            DB::table('forms_data')->updateOrInsert(
+                [
+                    'dossier_id' => '' . $dossier->id . '',
+                    'form_id' => '3',
+                    'meta_key' => 'agence_ville'
+                ],
+                [
+                    'meta_value' => $agence->ville,
+                    'created_at' => now(),
+                    'updated_at' => now()
+                ]
+            );
+            return $agence;
+        }
+
+
+        $this->dossier->agence = $dossier->agence;
+        return 'ok';
+
+    }
+
     public function get_docs()
     {
         $results = DB::table('forms_config')

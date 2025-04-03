@@ -371,7 +371,7 @@
 
         <tr>
             <td width="25%" colspan="4" style="width:25%;min-width:25%" class="background_td border-bottom">
-                En votre aimable règlement sur le compte <b>{{ $dossier->mar_client->client_title }}</b><br /><br />
+                En votre aimable règlement sur le compte <b>{{ $dossier->mar_client->client_title }} {{ isset($all_data['form_data'][3]['agence']) ?  'Agence '.$all_data['form_data'][3]['agence'] : '' }} {{ $all_data['form_data'][3]['agence_adresse'] ?? '' }} {{ $all_data['form_data'][3]['agence_cp'] ?? '' }} {{ $all_data['form_data'][3]['agence_ville'] ?? '' }}</b><br /><br />
                 {{ $dossier->mar_client->bank ?? '' }}
             </td>
 

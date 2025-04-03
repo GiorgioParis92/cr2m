@@ -57,7 +57,7 @@ abstract class AbstractData extends Component
                 $this->value=$existingValue->{$conf['name']};
                 }
 
-
+            
             }
         }
 

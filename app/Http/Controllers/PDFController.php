@@ -232,39 +232,60 @@ class PDFController extends Controller
     }
     public function fillPdf(Request $request)
     {
-        // Validate the request
+        // -------------------------------------------------
+        // Step 1: Validate input and retrieve the dossier
+        // -------------------------------------------------
         $validated = $request->validate([
             'dossier_id' => 'nullable',
         ]);
 
-        // Retrieve the dossier
         $dossier = $this->getDossier($validated['dossier_id']);
         if (!$dossier) {
             return response()->json(['message' => 'Dossier not found'], 404);
         }
 
-        // Set up folder paths
+        // Prepare folder paths
         $folderPath = "public/dossiers/{$dossier->folder}";
         $directPath = "dossiers/{$dossier->folder}";
         $this->ensureDirectoryExists($folderPath);
 
-        // Process form configuration if dossier_id is provided
+        // -------------------------------------------------
+        // Step 2: Retrieve form config and dossier data
+        // -------------------------------------------------
+        $optionsArray = [];
+        $allData      = [];
         if (isset($validated['dossier_id'])) {
+            // Retrieve the form config
             $config = $this->getFormConfig($request->form_id, $request->name);
             if (!$config) {
                 return response()->json(['message' => 'FormConfig not found'], 404);
             }
-
+            // Parse the JSON config into array
             $optionsArray = $this->parseConfigOptions($config->options);
+
+            // Load all dossier-related data from wherever you store it
             $allData = $this->loadAllDossierData($dossier);
         }
 
-        // Initialize PDF
+        // -------------------------------------------------
+        // Step 3: Validate that all tags have values
+        // -------------------------------------------------
+        $missingFields = $this->ensureAllTagsHaveValues($optionsArray, $allData);
+        if (!empty($missingFields)) {
+            // If anything is missing, return a 422 with details
+            // return response()->json([
+            //     'message' => 'Some fields are missing.',
+            //     'missing_fields' => $missingFields
+            // ], 422);
+        }
+
+        // -------------------------------------------------
+        // Step 4: Generate the PDF
+        // -------------------------------------------------
         $pdf = new Fpdi();
         $templatePath = public_path($optionsArray['template'] . '.pdf');
-        $pageCount = $pdf->setSourceFile($templatePath);
+        $pageCount    = $pdf->setSourceFile($templatePath);
 
-        // Process each page of the PDF
         for ($pageNo = 1; $pageNo <= $pageCount; $pageNo++) {
             $pdf->AddPage();
             $templateId = $pdf->importPage($pageNo);
@@ -276,12 +297,13 @@ class PDFController extends Controller
 
             if (isset($optionsArray['config'][$pageNo])) {
                 foreach ($optionsArray['config'][$pageNo] as $fillDataConfig) {
+                    // Fill data
                     $this->processFillDataConfig($pdf, $fillDataConfig, $allData, $dossier);
                 }
             }
         }
 
-        // Save the PDF
+        // Save PDF
         $fileName = "{$request->name}.pdf";
         $filePath = "{$folderPath}/{$fileName}";
         $this->ensureDirectoryExists($folderPath);
@@ -289,18 +311,16 @@ class PDFController extends Controller
         $pdfContent = $pdf->output('', 'S');
         Storage::put($filePath, $pdfContent);
 
-        // Update forms data and dossier timestamp
+        // -------------------------------------------------
+        // Step 5: Update forms/dossier and return success
+        // -------------------------------------------------
         $this->updateFormsData($dossier->id, $request->form_id, $request->name, "{$directPath}/{$fileName}");
         $this->updateDossierTimestamp($dossier->id);
 
-        // Get document statuses
-        $orderColumn = $dossier->etape->order_column ?? null;
-        $docs = getDocumentStatuses($dossier->id, $orderColumn);
-
         return response()->json([
-            'message' => 'PDF generated and saved successfully',
+            'message'   => 'PDF generated and saved successfully',
             'file_path' => Storage::url($filePath),
-            'path' => "{$directPath}/{$fileName}",
+            'path'      => "{$directPath}/{$fileName}",
         ], 200);
     }
 
@@ -985,5 +1005,118 @@ class PDFController extends Controller
         return true;
     }
     
-    
+    /**
+     * ...
+     */
+
+    /**
+     * Check that each *required* tag in the config is present and non-empty
+     * in the provided dossier data (under allData['form_data'][form_id]).
+     *
+     * Returns an array of missing fields (if any).
+     *
+     * @param  array  $optionsArray
+     * @param  array  $allData
+     * @return array
+     */
+    protected function ensureAllTagsHaveValues(array $optionsArray, array $allData): array
+    {
+        $missingFields = [];
+
+        // If no "config" or it's not an array, nothing to validate.
+        if (!isset($optionsArray['config']) || !is_array($optionsArray['config'])) {
+            return $missingFields;
+        }
+
+        // We also must ensure 'form_data' exists to check tags
+        if (!isset($allData['form_data']) || !is_array($allData['form_data'])) {
+            // Optionally you can return everything as missing
+            // or simply return an empty array as you see fit.
+            return $missingFields;
+        }
+
+        // Loop each page in the config
+        foreach ($optionsArray['config'] as $pageNo => $fieldsConfigs) {
+            foreach ($fieldsConfigs as $fillDataConfig) {
+                // Only check if data_origin is 'form_data'
+                if (($fillDataConfig['data_origin'] ?? null) !== 'form_data') {
+                    continue;
+                }
+
+                // If there's no form_id, skip
+                $formId = $fillDataConfig['form_id'] ?? null;
+                if (!$formId) {
+                    continue;
+                }
+
+                // If there are no tags or not an array, skip
+                $tags = $fillDataConfig['tags'] ?? [];
+                if (!is_array($tags) || empty($tags)) {
+                    continue;
+                }
+
+                // Fetch only required fields for these tags
+                $requiredFields = $this->getRequiredFieldsForForm($formId, $tags);
+           
+                // Validate only the tags that are required=1
+                foreach ($requiredFields as $requiredTag) {
+                    // Check if $requiredTag is missing or empty in $allData
+                    if (
+                        !isset($allData['form_data'][$formId][$requiredTag]) ||
+                        empty($allData['form_data'][$formId][$requiredTag])
+                    ) {
+                        $missingFields[] = [
+                            'form_id' => $formId,
+                            'tag'     => $requiredTag
+                        ];
+                    }
+                }
+            }
+        }
+
+        // Optionally remove duplicates
+        $missingFields = $this->uniqueMissingFields($missingFields);
+
+        return $missingFields;
+    }
+
+    /**
+     * Fetch the subset of tags that are actually required=1
+     * for a given form_id. We match by "form_id" and "name".
+     *
+     * @param  int   $formId
+     * @param  array $tags
+     * @return array
+     */
+    protected function getRequiredFieldsForForm(int $formId, array $tags): array
+    {
+        // Pull only rows that match form_id, name in $tags, and required=1
+        return FormConfig::where('form_id', $formId)
+            ->whereIn('name', $tags)
+            ->where('required', 1)
+            ->pluck('name')
+            ->toArray();
+    }
+
+    /**
+     * (Optional) Remove duplicates from missing fields.
+     *
+     * @param  array $missingFields
+     * @return array
+     */
+    protected function uniqueMissingFields(array $missingFields): array
+    {
+        $uniqueMap = [];
+        foreach ($missingFields as $field) {
+            // Example key: "3:nom"
+            $key = $field['form_id'] . ':' . $field['tag'];
+            $uniqueMap[$key] = $field;
+        }
+        return array_values($uniqueMap);
+    }
+
+
+
+  
+
 }

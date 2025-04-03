@@ -52,7 +52,7 @@ class DossierLivewire extends Component
         if (!$this->dossier) {
             abort(404, 'Dossier not found');
         }
-
+     
         $currentEtape = Etape::find($this->dossier->etape_number);
         $this->dossier->order_column = $currentEtape ? $currentEtape->order_column : null;
 

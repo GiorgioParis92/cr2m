@@ -223,6 +223,11 @@
             pour SIRET {{ $dossier->mar_client->siret }}<br />
             dont le siège social est situé<br />
             au {{ $dossier->mar_client->adresse }} {{ $dossier->mar_client->cp }} {{ $dossier->mar_client->ville }}<br />
+
+            @if(isset($all_data['form_data'][3]['agence']))
+            {{ isset($all_data['form_data'][3]['agence']) ?  'Agence '.$all_data['form_data'][3]['agence'] : '' }} {{ $all_data['form_data'][3]['agence_adresse'] ?? '' }} {{ $all_data['form_data'][3]['agence_cp'] ?? '' }} {{ $all_data['form_data'][3]['agence_ville'] ?? '' }}
+            <br/>
+            @endif
             représenté par {{ $dossier->mar_client->representant ?? '' }}<br />
             agissant en qualité de {{ $dossier->mar_client->qualite ?? '' }}<br />
             Ci-après, désigné <b>« Mon Accompagnateur Rénov »</b><br />
@@ -657,6 +662,13 @@
         <p style="max-width:60%;font-style:italic;line-height:22px">
             « A l'attention de {{ $dossier->mar_client->client_title }} <br />
             {{ $dossier->mar_client->adresse }}- {{ $dossier->mar_client->cp }} {{ $dossier->mar_client->ville }} <br />
+
+
+            @if(isset($all_data['form_data'][3]['agence']))
+            {{ isset($all_data['form_data'][3]['agence']) ?  'Agence '.$all_data['form_data'][3]['agence'] : '' }} {{ $all_data['form_data'][3]['agence_adresse'] ?? '' }} {{ $all_data['form_data'][3]['agence_cp'] ?? '' }} {{ $all_data['form_data'][3]['agence_ville'] ?? '' }}
+            <br/>
+            @endif
+
             [Numéro de téléphone de la structure, le cas échéant] <br />
             [Adresse électronique de la structure, le cas échéant] <br />
             Je vous notifie par la présente ma rétractation du contrat portant sur la prestation de services ci-dessous
@@ -991,7 +1003,15 @@
 
 
                 <td style="border:none;width:50%;padding-left:45px;">
-                    <p><b>Mon Accompagnateur Rénov'</b> <br />{{ $dossier->mar_client->client_title }}  </p>
+                    <p><b>Mon Accompagnateur Rénov'</b> <br />{{ $dossier->mar_client->client_title }} 
+                
+                
+            @if(isset($all_data['form_data'][3]['agence']))
+            <br/>
+            {{ isset($all_data['form_data'][3]['agence']) ?  'Agence '.$all_data['form_data'][3]['agence'] : '' }}<br/>{{ $all_data['form_data'][3]['agence_adresse'] ?? '' }} {{ $all_data['form_data'][3]['agence_cp'] ?? '' }} {{ $all_data['form_data'][3]['agence_ville'] ?? '' }}
+            <br/>
+            @endif
+                </p>
                     <p>{{ $dossier->mar_client->representant ?? '' }} </p>
                     @if(isset($dossier->mar_client->signature) && file_exists(storage_path('app/public/' . $dossier->mar_client->signature)))
 

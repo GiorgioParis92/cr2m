@@ -304,6 +304,8 @@
 
             <td style="border:none;width:50%;padding-left:45px;vertical-align:top">
                 <p><b>Mon Accompagnateur Rénov'</b> <br />{{ $dossier->mar_client->client_title }} </p>
+                <br/>
+                {{ isset($all_data['form_data'][3]['agence']) ?  'Agence '.$all_data['form_data'][3]['agence'] : '' }} {{ $all_data['form_data'][3]['agence_adresse'] ?? '' }} {{ $all_data['form_data'][3]['agence_cp'] ?? '' }} {{ $all_data['form_data'][3]['agence_ville'] ?? '' }}
                 @if(isset($dossier->mar_client->signature) && file_exists(storage_path('app/public/' . $dossier->mar_client->signature)))
 
                 <img style="max-width:150px;margin-top:-10px" src="{{ asset('storage/' . $dossier->mar_client->signature) }}" alt="Logo">
