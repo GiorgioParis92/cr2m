@@ -1,4 +1,5 @@
 <div>
+    @if($value)
     @if(isset($invalidGroups) && !empty($invalidGroups))
     <table style="width:100%" class="table  no-footer">
         <thead>
@@ -41,6 +42,6 @@
     @else
         Aucun écart noté dans la comparaison des documents par OCEER
     @endif
-
+    @endif
 
 </div>
