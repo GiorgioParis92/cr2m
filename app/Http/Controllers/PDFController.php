@@ -270,7 +270,8 @@ class PDFController extends Controller
         // -------------------------------------------------
         // Step 3: Validate that all tags have values
         // -------------------------------------------------
-        $missingFields = $this->ensureAllTagsHaveValues($optionsArray, $allData);
+        // $missingFields = $this->ensureAllTagsHaveValues($optionsArray, $allData);
+        $missingFields = [];
         if (!empty($missingFields)) {
             // If anything is missing, return a 422 with details
             // return response()->json([
