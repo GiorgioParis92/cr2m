@@ -69,6 +69,11 @@ class Analyze extends AbstractData
                         'contents' => $value,
                     ];
                 }
+
+
+                if(!empty($data)) {
+
+               
                 $client = new Client();
         
                 $response = $client->post(
@@ -103,11 +108,21 @@ class Analyze extends AbstractData
                     'status' => $response->getStatusCode(),
                     'body'   => json_decode($response->getBody(), true),
                 ]);
+            }
 
             }
            
         } else {
-            $this->invalidGroups = (new JsonValidator())->getInvalidGroups($this->value);
+
+            $json=(json_decode($this->value, true));   
+            if($json['output_0']['success']) {
+                $this->invalidGroups = (new JsonValidator())->getInvalidGroups($this->value);
+            } else {
+                $this->updatedValue('');
+                $this->invalidGroups = [];
+            }
+
+          
          
         }
    
