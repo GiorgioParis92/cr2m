@@ -72,7 +72,7 @@ class Analyze extends AbstractData
                 }
 
 
-                if(!empty($data)) {
+                if(!empty($data) && count($options['values_check'])==count($data)) {
 
                
                 $client = new Client();
