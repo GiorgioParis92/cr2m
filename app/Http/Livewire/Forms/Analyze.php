@@ -59,6 +59,7 @@ class Analyze extends AbstractData
                     }
 
                 }
+                dd($data);
                 $multipartData = [];
 
                 // Build the multipart array where each key => value 
