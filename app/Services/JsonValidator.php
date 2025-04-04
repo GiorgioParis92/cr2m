@@ -36,4 +36,33 @@ class JsonValidator
 
         return $invalidGroups;
     }
+
+
+    public function getValidGroups(string $json): array
+    {
+        $decodedData = json_decode($json, true);
+
+
+
+        if (!$decodedData || empty($decodedData['output_0']['data']['comparison_results']['grouping'])) {
+            return [];
+        }
+
+        $grouping = $decodedData['output_0']['data']['comparison_results']['grouping'];
+        $ValidGroups = [];
+
+        foreach ($grouping as $groupId => $groupDetails) {
+            if (isset($groupDetails['valid']) && $groupDetails['valid']) {
+                $ValidGroups[] = [
+                    'id' => $groupId,
+                    'display_name' => $groupDetails['display_name'],
+                    'error' => $groupDetails['display_name'] ?? 'Erreur inconnue',
+                    'groups' => $groupDetails['groups']
+                ];
+            }
+        }
+
+        return $ValidGroups;
+    }
+
 }

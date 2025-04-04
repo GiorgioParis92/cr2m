@@ -78,7 +78,7 @@ class Analyze extends AbstractData
                 $client = new Client();
         
                 $response = $client->post(
-                    'https://app.oceer.fr/api/pipeline/start/9cb3b523-539f-4ff2-b6ac-d1bc2fa81af0',
+                    $options['api_url'],
                     [
                         'headers' => [
                             'api-key' => 'SkjQxOoh3BT6bgU', // Use env() or config() instead of hardcoding in real apps
@@ -118,9 +118,11 @@ class Analyze extends AbstractData
             $json=(json_decode($this->value, true));   
             if($json['output_0']['success']) {
                 $this->invalidGroups = (new JsonValidator())->getInvalidGroups($this->value);
+                $this->ValidGroups = (new JsonValidator())->getValidGroups($this->value);
             } else {
                 $this->updatedValue('');
                 $this->invalidGroups = [];
+                $this->ValidGroups = [];
             }
 
           
