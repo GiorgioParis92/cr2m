@@ -35,19 +35,17 @@ class Upload extends AbstractFormData
            
             // dump($check_identify);
 
-            if($initialize) {
-                dd($initialize);
-                FormsData::updateOrCreate(
-                    [
-                        'dossier_id' => $this->dossier_id,
-                     
-                        'meta_key' => $initialize
-                    ],
-                    [
-                        'meta_value' =>  ''
-                    ]
-                );
-            }
+            // if ($initialize) {
+            //     $formData = FormsData::where('dossier_id', $this->dossier_id)
+            //         ->where('meta_key', $initialize)
+            //         ->first();
+            
+            //     if ($formData) {
+            //         $formData->update([
+            //             'meta_value' => '',
+            //         ]);
+            //     }
+            // }
 
 
             if($check_identify && $check_identify->meta_value) {
@@ -147,6 +145,11 @@ class Upload extends AbstractFormData
         $data .= '<input type="hidden" name="clientId" value="'.($this->dossier->folder ?? $this->dossier_id).'">';
         $data .= '<input type="hidden" name="random_name" value="false">';
         $data .= '<input type="hidden" name="upload_image" value="true">';
+
+        if($identify) {
+        $data .= '<input type="hidden" name="identify" value="true">';
+        }
+
         $data .= '<div class="dz-message"><i class="fas fa-arrow-up"></i> Upload';
 
         $data .= '</div>';

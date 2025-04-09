@@ -1,4 +1,27 @@
 <div>
+
+
+    @php
+    use App\Services\JsonValidator;
+
+        $json=json_decode($value ?? '{}', true);   
+            if($json) {
+                if($json['output_0']['success']) {
+                $invalidGroups = (new JsonValidator())->getInvalidGroups($value);
+                $ValidGroups = (new JsonValidator())->getValidGroups($value);
+            } else {
+                $updatedValue('');
+                $invalidGroups = [];
+                $ValidGroups = [];
+            }
+            }
+
+  
+
+
+    @endphp
+
+
     @if($value)
     @if(isset($invalidGroups) && !empty($invalidGroups))
     <table style="width:100%" class="table datatable table-bordered responsive-table dataTable no-footer">

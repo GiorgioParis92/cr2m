@@ -104,7 +104,7 @@ abstract class AbstractData extends Component
 
         
         $this->options=$optionsArray;
-
+        $this->listeners[$conf['name']]='handleFieldUpdated';
         if(isset($this->options['conditions'])) {
             foreach($this->options['conditions'] as $tag=>$value) {
                 $this->listeners[$tag]='handleFieldUpdated';
@@ -160,11 +160,34 @@ abstract class AbstractData extends Component
         return $existingValue ? $existingValue->meta_value : '';
     }
 
+    public function updatedJson($newValue)
+    {
+        FormsData::updateOrCreate(
+            [
+                'dossier_id' => $this->dossier_id,
+                'form_id' => $this->form_id,
+                'meta_key' => $this->conf['name']
+            ],
+            [
+                'meta_value' => $newValue
+            ]
+        );
+        $this->_validateValue($newValue);
+        $this->value=$newValue;
 
+        // Always save, regardless of validity
+      
+        $this->emit($this->conf['name']);
+    }
     public function updatedValue($newValue)
     {
-        $newValue=str_replace(',','.',$newValue);
-        $this->_validateValue($newValue);
+
+
+   
+        $newValue = str_replace(',', '.', $newValue);
+
+    
+    $this->_validateValue($newValue);
         $this->value=$newValue;
 
         // Always save, regardless of validity
@@ -229,7 +252,11 @@ abstract class AbstractData extends Component
     {
         $check_condition=check_condition($this->options ?? '',$this->dossier_id);
         $this->check_condition=$check_condition;
+
+        
     }
+
+
 
     // La view a render
 

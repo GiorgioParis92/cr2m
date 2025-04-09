@@ -56,7 +56,7 @@ class DossierLivewireNew extends Component
     public $config;
     public  $expandedTitleId = null;
 
-    protected $listeners = ['fileUploaded' => 'handleFileUploaded'];
+    protected $listeners = ['fileUploaded' => 'handleFileUploaded','uploaded_success' => 'handleFileUpload'];
 
 
 
@@ -142,9 +142,6 @@ class DossierLivewireNew extends Component
 
     public function hydrate()
     {
-
-
-
 
         $this->get_docs();
 
@@ -387,6 +384,36 @@ class DossierLivewireNew extends Component
         $this->emit('initializeDropzones');
 
     }
+
+
+    public function handleFileUpload($formId, $dossierId, $template, $filePath)
+    {
+        if($template) {
+            $this->emit($template);
+
+            $formconfig=FormsConfig::where('name', $template)->first();
+            if($formconfig && $formconfig->options) {
+                $options=json_decode($formconfig->options,true);
+                if(isset($options['initialize'])) {
+                    $formData = FormsData::where('dossier_id', $this->dossier->id)
+                    ->where('meta_key', $options['initialize'])
+                    ->first();
+            
+                if ($formData) {
+                    $formData->update([
+                        'meta_value' => '',
+                    ]);
+                }
+                $this->emit($options['initialize']);
+                }
+            }
+            $this->emit($template);
+        }
+
+   
+
+    }
+
     public function delete_signature($form_id, $tag)
     {
         // Use $this->dossier->id instead of $this->dossier_id

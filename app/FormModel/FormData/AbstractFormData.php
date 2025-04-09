@@ -20,6 +20,7 @@ class AbstractFormData
     public $updating = false;
     public $condition_valid = false;
 
+    public $listeners = [];
     public function __construct($config, $name, $form_id, $dossier_id, $should_load = true)
     {
         $this->form_id = $form_id;
@@ -30,7 +31,7 @@ class AbstractFormData
         // $this->title=$config->title;
 
    
-  
+        $this->listeners[$name]='handleFieldUpdated';
 
         if ($should_load) {
             $config = FormsData::where('form_id', $form_id)
@@ -317,4 +318,11 @@ class AbstractFormData
         // Assuming $this->config is an object or array
         return is_object($this->config) ? (array) $this->config : $this->config;
     }
+
+
+    public function handleFieldUpdated()
+    {
+        // dd($this);
+    }
+
 }

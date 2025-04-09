@@ -754,6 +754,14 @@ class PDFController extends Controller
                 ->orderBy('created_at', 'desc')
                 ->first();
 
+                $rdv2 = Rdv::with('user')
+                ->where('dossier_id', $dossier->id)
+                ->where('type_rdv', 2)
+                ->where('status', '!=', 2)
+                ->orderBy('created_at', 'desc')
+                ->first();
+
+
             $content .= '<table style="margin:auto;width:90%;border-collapse: collapse;margin-top:20px">
             <tr><td class="s1 form_title" style="font-size:18px">' . ($form->form_title ?? '') . '</td></tr>
         </table>';
@@ -768,8 +776,20 @@ class PDFController extends Controller
                 $content .= '<td style="width:100%;border:1px solid #ccc;border-collapse: collapse;padding-left:12px;padding-bottom:15px;text-align:center"><div>';
                 $content .= '<h5 class="mb-0" style="text-align:center"><b>' . $dossier_data['beneficiaire']['nom'] . ' ' . $dossier_data['beneficiaire']['prenom'] . '</b><br>' . $dossier_data['beneficiaire']['numero_voie'] . ' ' . ($dossier_data['beneficiaire']['adresse'] ?? '') . ' ' . $dossier_data['beneficiaire']['cp'] . ' ' . $dossier_data['beneficiaire']['ville'] . '<br> </h5>';
                 $content .= '<h6 class="mb-0"><b>Tél : ' . $dossier_data['beneficiaire']['telephone'] . '</b> -Email : ' . $dossier_data['beneficiaire']['email'] . '<br></h6>';
+               
                 $content .= '<h6 class="mb-0"><b>N° CLAVIS : ' . ($dossier_data['reference_unique'] ?? '') . '</b></h6>';
-                $content .= '<div class="btn bg-primary bg-Très modestes">' . $dossier_data['beneficiaire']['menage_mpr'] . '</div><div class="">Technicien RDV MAR 1 :' . ($lastRdv ? ($lastRdv->user->name ?? '') : '') . '</div></div></td></tr></table>';
+                
+
+                if($lastRdv) {
+                    $content .= '<div class="btn bg-primary bg-Très modestes">' . $dossier_data['beneficiaire']['menage_mpr'] . '</div><div class="">Technicien RDV MAR 1 :' . ($lastRdv ? ($lastRdv->user->name ?? '') : '') . '</div></div></td></tr></table>';
+
+                }
+               
+                if($rdv2) {
+                    $content .= '<div class="btn bg-primary bg-Très modestes">' . $dossier_data['beneficiaire']['menage_mpr'] . '</div><div class="">Technicien RDV MAR 2 :' . ($rdv2 ? ($rdv2->user->name.' le '.date('d/m/Y',strtotime($rdv2->date_rdv)) ?? '') : '') . '</div></div></td></tr></table>';
+
+                }
+
                 $content .= '</div>';
             }
             foreach ($config as $element) {

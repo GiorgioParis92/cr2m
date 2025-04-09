@@ -1138,7 +1138,7 @@
                         $('#doc-' + dropzoneId).blur();
 
                         Livewire.emit('fileUploaded', [form_id, key, response]);
-
+                        alert('uploaded');
                     });
                     this.on("error", function(file, response) {
 
@@ -1504,6 +1504,19 @@
             var formId = dropzoneElement.getAttribute('data-form-id');
             var tag = dropzoneElement.getAttribute('data-tag');
             var title = dropzoneElement.getAttribute('data-title');
+
+            const config = {
+            url: dropzoneElement.dataset.uploadUrl,
+            dossierId: dropzoneElement.dataset.dossierId,
+            folder: dropzoneElement.dataset.folder,
+            formId: dropzoneElement.dataset.formId,
+            tag: dropzoneElement.dataset.tag,
+            title: dropzoneElement.dataset.title
+        };
+        const templateInput = dropzoneElement.querySelector('input[name="template"]');
+        const template = templateInput ? templateInput.value : null;
+
+          
             var dz = new Dropzone(dropzoneElement, {
                 url: uploadUrl,
                 method: 'post',
@@ -1520,9 +1533,13 @@
                     formData.append('config', formId);
                     formData.append('random_name', 'true');
                     formData.append('form_id', formId);
+
+
+             
                 },
                 init: function() {
                     this.on('success', function(file, response) {
+                       
                         console.log('probleme initialisation', response);
 
                         console.log('Successfully uploaded:', response);
@@ -1562,6 +1579,26 @@
                         $(dropzoneElement).closest('.row').find('.col-lg-3').append(
                             newBlockHtml);
                         initializeDeleteButtons();
+                        if (window.Livewire) {
+        if (typeof window.Livewire.dispatch === 'function') {
+       
+            window.Livewire.dispatch('uploaded_success', {
+                formId: formId,
+                dossierId: dossierId,
+                template: template,
+                filePath: response
+            });
+        } else if (typeof window.Livewire.emit === 'function') {
+   
+            window.Livewire.emit('uploaded_success', 
+                formId, 
+                dossierId, 
+                template, 
+                response
+            );
+        }
+    }
+
                     });
 
                     this.on('error', function(file, response) {

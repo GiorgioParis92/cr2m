@@ -330,6 +330,33 @@ class RdvController extends \App\Http\Controllers\Controller
                     'updated_at' => now()
                 ]);
         }
+
+
+        if ($request->type_rdv == 2) {
+            DB::table('dossiers_data')->updateOrInsert(
+                [
+                    'dossier_id' => $request->dossier_id,
+                    'meta_key' => 'date_2eme_visite'
+                ],
+                [
+                    'meta_value' => date('d/m/Y', strtotime(str_replace('/', '-', $request->date_rdv))) ?? '2024-01-01 00:00:00',
+                    'created_at' => now(),
+                    'updated_at' => now()
+                ]
+            );
+
+
+            DB::table('forms_data')
+                ->where([
+                    ['dossier_id', '=', $request->dossier_id],
+                    ['meta_key', '=', 'date_2eme_visite']
+                ])
+                ->update([
+                    'meta_value' => date('d/m/Y', strtotime(str_replace('/', '-', $request->date_rdv))) ?? '2024-01-01 00:00:00',
+                    'updated_at' => now()
+                ]);
+        }
+
         $updateData = [];
         
 

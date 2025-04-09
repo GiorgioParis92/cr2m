@@ -15,12 +15,12 @@ class Analyze extends AbstractData
 {
     public $invalidGroups = [];
 
+ 
     public function mount($conf, $form_id, $dossier_id)
     {
         parent::mount($conf, $form_id, $dossier_id);
 
 
-    
 
         if(!($this->value)) {
 
@@ -90,18 +90,32 @@ class Analyze extends AbstractData
 
                 if($response->getStatusCode()==200) {
 
-                    // $this->value=$response->getBody();
-                    FormsData::updateOrCreate(
-                        [
-                            'dossier_id' => $this->dossier_id,
-                            'form_id' => $this->form_id,
-                            'meta_key' => $this->conf['name']
-                        ],
-                        [
-                            'meta_value' =>  $response->getBody()
-                        ]
-                    );
-                    $this->emit($this->conf['name']);
+                    $responseBody = $response->getBody()->getContents();
+    
+                    // Decode JSON to associative array
+                    $responseData = json_decode($responseBody, true);
+                
+                    // Optional: check if decoding was successful
+                    if (json_last_error() === JSON_ERROR_NONE) {
+                        $result=(json_encode($responseData)); // Or use it as needed
+
+                        FormsData::updateOrCreate(
+                            [
+                                'dossier_id' => $this->dossier_id,
+                                'form_id' => $this->form_id,
+                                'meta_key' => $this->conf['name']
+                            ],
+                            [
+                                'meta_value' => ''.$result.''
+                            ]
+                        );
+                        $this->updatedJson(''.$result.'');
+                        $this->emit($this->conf['name']);
+                    } else {
+                        dd('Invalid JSON response', $responseBody);
+                    }
+                
+                 
                 }
 
                 // Return or process the response as needed
@@ -114,7 +128,7 @@ class Analyze extends AbstractData
             }
            
         } else {
-
+      
             $json=(json_decode($this->value, true));   
             if($json['output_0']['success']) {
                 $this->invalidGroups = (new JsonValidator())->getInvalidGroups($this->value);
@@ -125,7 +139,7 @@ class Analyze extends AbstractData
                 $this->ValidGroups = [];
             }
 
-          
+            $this->emit($this->conf['name']);
          
         }
    
@@ -138,7 +152,7 @@ class Analyze extends AbstractData
 
     protected function validateValue($value): bool
     {
-        return !($this->conf['required'] == 1 && empty($value));
+        return true;
     }
 
     public function render()

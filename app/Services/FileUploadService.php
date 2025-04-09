@@ -393,13 +393,17 @@ class FileUploadService
         $pdfFileName = $request->input('template') . '.pdf';
         $pdfFilePath = storage_path('app/public/' . $directory . '/' . $pdfFileName);
 
-        if ($request->identify) {
-            $identify = json_decode($this->identify_doc($pdfFilePath), true);
 
-            $final_result = $identify['result']['data']['results'];
-            $filename = str_replace('.pdf', '', $pdfFileName);
-            $bestMatch = $this->getBestMatch($final_result, $filename);
-        }
+
+ 
+
+        if ($request->identify) {
+        //     $identify = json_decode($this->identify_doc($pdfFilePath), true);
+        //     dd($identify);
+        //     $final_result = $identify['result']['data']['results'];
+        //     $filename = str_replace('.pdf', '', $pdfFileName);
+        //     $bestMatch = $this->getBestMatch($final_result, $filename);
+   
 
 
         if(file_exists(storage_path("app/public/{$directory}/{$pdfFileName}")) ) {
@@ -451,6 +455,9 @@ class FileUploadService
 
 
         }
+    }
+        // dd($request->input('template'));
+        // $this->emit($request->input('template'));
 
         return $filePath;
 

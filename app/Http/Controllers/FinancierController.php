@@ -7,6 +7,7 @@ use App\Models\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
+
 class FinancierController extends Controller
 {
     public function index(Request $request)
