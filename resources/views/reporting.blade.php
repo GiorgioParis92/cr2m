@@ -1,9 +1,51 @@
 @extends('layouts.app')
 
 @section('content')
+
 <div class="container">
     <h2 class="mb-4">📊 Reporting</h2>
+    <form method="GET" action="{{ route('reporting') }}" class="row g-3 mb-4">
 
+        <div class="col-md-3">
+            <label for="mandataire_financier" class="form-label text-capitalize">Mandataire</label>
+            <select class="form-select select2" name="mandataire_financier" id="mandataire_financier" onchange=""this.form.submit()>
+                <option value="">Choisir un mandataire</option>
+                @foreach ($mandataires as $val => $label)
+                    <option value="{{ $label->id }}" {{ request('mandataire_financier') == $label->id ? 'selected' : '' }}>
+                        {{ $label->client_title }}
+                    </option>
+                @endforeach
+            </select>
+        </div>
+
+        <div class="col-md-3">
+            <label for="mar" class="form-label text-capitalize">MAR</label>
+            <select class="form-select select2" name="mar" id="mar" onchange=""this.form.submit()>
+                <option value="">Choisir un mar</option>
+                @foreach ($mar as $val => $label)
+                    <option value="{{ $label->id }}" {{ request('mar') == $label->id ? 'selected' : '' }}>
+                        {{ $label->client_title }}
+                    </option>
+                @endforeach
+            </select>
+        </div>
+
+        <div class="col-md-3">
+            <label for="installateur" class="form-label text-capitalize">Apporteurs</label>
+            <select class="form-select select2" name="installateur" id="installateur" onchange=""this.form.submit()>
+                <option value="">Choisir un apporteur</option>
+                @foreach ($installateurs as $val => $label)
+                    <option value="{{ $label->id }}" {{ request('installateur') == $label->id ? 'selected' : '' }}>
+                        {{ $label->client_title }}
+                    </option>
+                @endforeach
+            </select>
+        </div>
+
+    <div class="col-md-3 d-flex align-items-end">
+        <!-- <button type="submit" class="btn btn-primary w-100">Filtrer</button> -->
+    </div>
+</form>
     <div class="table-responsive">
         <table class="table table-bordered table-striped table-hover align-middle">
             <thead class="table-dark text-center">
@@ -60,4 +102,23 @@
         </table>
     </div>
 </div>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const dropdowns = document.querySelectorAll('.select2');
+
+        // For each dropdown, initialize Select2 and set up change event
+        dropdowns.forEach(function(dropdown) {
+            // Initialize Select2
+            $(dropdown).select2();
+
+            // Listen for changes
+            $(dropdown).on('change', function () {
+                // Submit the form that this dropdown is inside of
+                dropdown.form.submit();
+            });
+        });
+    });
+</script>
 @endsection
