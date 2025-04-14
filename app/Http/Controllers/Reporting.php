@@ -120,6 +120,7 @@ class Reporting extends Controller
             'audit'            => 'Audits déposés',
             'date_1ere_visite' => 'RDV MAR 1',
             'step_17' => 'Etape 14.1 validée',
+            'step_18' => 'Solde payé',
         ];
 
         // Only allow filtering on columns that actually exist in 'dossiers' table
