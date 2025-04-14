@@ -140,7 +140,53 @@ class Analyze extends AbstractData
             }
 
             $this->emit($this->conf['name']);
-         
+          
+            $options=json_decode($conf['options'],true);
+
+            if(isset($options['fill_values'])) {
+              
+    
+           
+                    foreach($options['fill_values'] as $key => $value) {
+                        $values_to_fill[$key] = $value;
+                    }
+    
+    
+                
+               
+            }
+        
+            foreach($this->ValidGroups as $group) {
+                foreach($group['groups'] as $values) {
+                     
+                    foreach($values['tags'] as $tag) {
+                
+                        if( in_array($tag,$values_to_fill)) {
+                            $key = array_search($tag, $values_to_fill);
+                            if ($key !== false && is_numeric( $key )) {
+                                
+                                FormsData::updateOrCreate(
+                                    [
+                                        'dossier_id' => $this->dossier_id,
+                                        'form_id' => $key,
+                                        'meta_key' => $tag
+                                    ],
+                                    [
+                                        'meta_value' => ''.$values['value'].''
+                                    ]
+                                );
+                             
+                                $this->emit($key);
+                            }
+                        }
+
+                    }
+
+                }
+            }
+
+
+            // dd('ok');
         }
    
     }

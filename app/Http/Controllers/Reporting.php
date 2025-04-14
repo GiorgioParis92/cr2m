@@ -116,8 +116,10 @@ class Reporting extends Controller
         // The meta keys we want to count in our tables
         $metaKeys = [
             'step_1'           => 'Etape 1',
+            'step_5'           => 'Etape 4',
             'audit'            => 'Audits déposés',
             'date_1ere_visite' => 'RDV MAR 1',
+            'step_17' => 'Etape 14.1 validée',
         ];
 
         // Only allow filtering on columns that actually exist in 'dossiers' table

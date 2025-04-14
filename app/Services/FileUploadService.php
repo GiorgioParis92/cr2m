@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http; // Add this line
 use App\Http\Controllers\Api\OcrAnalyze; // Import the OcrAnalyze controller
 use App\Models\Dossier;
+use App\Models\FormsConfig;
 use App\FormModel\FormData\Photo;
 use App\FormModel\FormData\Table;
 use Livewire\Livewire; // Import the Livewire facade
@@ -398,13 +399,26 @@ class FileUploadService
  
 
         if ($request->identify) {
-        //     $identify = json_decode($this->identify_doc($pdfFilePath), true);
-        //     dd($identify);
-        //     $final_result = $identify['result']['data']['results'];
-        //     $filename = str_replace('.pdf', '', $pdfFileName);
-        //     $bestMatch = $this->getBestMatch($final_result, $filename);
-   
+     
+            
+            
+        if($request->fill_values) {
+            $config=FormsConfig::where('form_id',$form_id)->where('name',$request->input('template'))->first();
+            if($config) {
+                $options=json_decode($config->options,true);
 
+            }
+
+            if($options) {
+       
+                foreach($options['fill_values'] as $key => $value) {
+                    $values_to_fill[$key] = $value;
+                }
+
+
+            }
+           
+        }
 
         if(file_exists(storage_path("app/public/{$directory}/{$pdfFileName}")) ) {
 
@@ -452,9 +466,16 @@ class FileUploadService
                 ]
             );
         }
+   
 
 
         }
+
+     
+
+
+
+
     }
         // dd($request->input('template'));
         // $this->emit($request->input('template'));

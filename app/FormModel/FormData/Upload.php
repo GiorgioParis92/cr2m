@@ -26,6 +26,7 @@ class Upload extends AbstractFormData
         
             $identify = !empty($options['identify']); // Check if 'identify' exists and is true
             $initialize = !empty($options['initialize']); // Check if 'identify' exists and is true
+            $fill_values = !empty($options['fill_values']); // Check if 'identify' exists and is true
         }
 
         if($identify) {
@@ -148,6 +149,14 @@ class Upload extends AbstractFormData
 
         if($identify) {
         $data .= '<input type="hidden" name="identify" value="true">';
+                if($fill_values) {
+                    $data .= '<input type="hidden" name="fill_values" value="true">';
+            
+            
+                    
+                }
+
+
         }
 
         $data .= '<div class="dz-message"><i class="fas fa-arrow-up"></i> Upload';
