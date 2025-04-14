@@ -54,9 +54,9 @@
                     <th>Total</th>
                     <th>Année en cours</th>
                     <th>Mois dernier</th>
-                    <th>Mois en cours<br><small>Évolution</small></th>
+                    <th>Mois en cours</th>
                     <th>Semaine dernière</th>
-                    <th>Semaine en cours<br><small>Évolution</small></th>
+                    <th>Semaine en cours</th>
                 </tr>
             </thead>
             <tbody class="text-center">
@@ -82,14 +82,14 @@
                         <td>
                             {{ $stat['current_month'] }}
                             <div class="{{ $monthClass }}">
-                                ({{ number_format($monthChange, 1) }}%)
+                                <!-- ({{ number_format($monthChange, 1) }}%) -->
                             </div>
                         </td>
                         <td>{{ $stat['past_week'] }}</td>
                         <td>
                             {{ $stat['current_week'] }}
                             <div class="{{ $weekClass }}">
-                                ({{ number_format($weekChange, 1) }}%)
+                                <!-- ({{ number_format($weekChange, 1) }}%) -->
                             </div>
                         </td>
                     </tr>
