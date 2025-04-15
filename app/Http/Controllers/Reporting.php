@@ -118,8 +118,9 @@ class Reporting extends Controller
     
             'date_1ere_visite' => 'RDV MAR 1',
             'step_23' => 'Pré-audit (Etape 5 validée)',
-            'step_8' => 'Audits (Etape 6 validée)',
             'step_12' => 'Devis déposés (Etape 5.1 validée)',
+
+            'step_8' => 'Audits (Etape 6 validée)',
             'step_11' => 'Dépôt ANAH (Etape 7.1 validée)',
             'attestation_rapprochement' => 'Attestation de rapprochement',
             'espace_conseil' => 'Informations transmises à l\'espace conseil',
