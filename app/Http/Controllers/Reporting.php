@@ -115,12 +115,23 @@ class Reporting extends Controller
     {
         // The meta keys we want to count in our tables
         $metaKeys = [
-            'step_1'           => 'Etape 1',
-            'step_5'           => 'Etape 4',
-            'audit'            => 'Audits déposés',
+    
             'date_1ere_visite' => 'RDV MAR 1',
-            'step_17' => 'Etape 14.1 validée',
-            'step_18' => 'Solde payé',
+            'step_23' => 'Pré-audit (Etape 5 validée)',
+            'step_8' => 'Audits (Etape 6 validée)',
+            'step_12' => 'Devis déposés (Etape 5.1 validée)',
+            'step_11' => 'Dépôt ANAH (Etape 7.1 validée)',
+            'attestation_rapprochement' => 'Attestation de rapprochement',
+            'espace_conseil' => 'Informations transmises à l\'espace conseil',
+            'courrier_confirmation' => 'Courrier de confirmation envoyé',
+            'step_13' => 'MPR Octroyés',
+            'montant_aide_locale' => 'Aides locales obtenues',
+            'refus_anah' => 'MPR refusés',
+            'step_15' => 'RDV MAR 2 (Etape 11 validée)',
+            'rapport_cofrac'=>'Rapport d\'inspection effectué',
+            'step_16'=>'Règlements déposés (étape 14 validée)',
+            'date_paiement_anah'=>'Règlement obtenu',
+            'date_paiement_aides'=>'Aides locales reçues',
         ];
 
         // Only allow filtering on columns that actually exist in 'dossiers' table
