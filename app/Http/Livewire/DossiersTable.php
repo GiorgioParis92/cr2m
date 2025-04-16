@@ -213,7 +213,7 @@ class DossiersTable extends Component
         $dossiers = $dossiers->map(function ($dossier) {
           
             if($dossier->id==3510 && auth()->user()->id==1) {
-                dd($dossier->beneficiaire['created_at']);
+                // dd($dossier->beneficiaire['created_at']);
             }
        
           
@@ -221,7 +221,7 @@ class DossiersTable extends Component
             return [
                 'id' => $dossier->id,
                 'docs' => ($dossier->meta_value),
-                'date_creation' => $dossier->beneficiaire->created_at ? $dossier->created_at : '',
+                'date_creation' => $dossier->beneficiaire['created_at'],
                 'date_update' => $dossier->updated_at,
                 'dossier_url' => route('dossiers.show', $dossier->folder),
                 'beneficiaire' => [
