@@ -207,12 +207,14 @@ class DossiersTable extends Component
         $dossiers = $dossiersQuery->get();
         $dossiers = $dossiers->unique('id');
 
+
+
         // Map the dossiers data
         $dossiers = $dossiers->map(function ($dossier) {
             return [
                 'id' => $dossier->id,
                 'docs' => ($dossier->meta_value),
-                'date_creation' => $dossier->created_at,
+                'date_creation' => $dossier->beneficiaire->created_at ? $dossier->created_at : '',
                 'date_update' => $dossier->updated_at,
                 'dossier_url' => route('dossiers.show', $dossier->folder),
                 'beneficiaire' => [
