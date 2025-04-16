@@ -251,7 +251,7 @@ class Photo extends AbstractFormData
         //     $text .= '</div>';
         // }
 
-            $text .=$value;
+            // $text .=$value;
 
         return $text;
     }
