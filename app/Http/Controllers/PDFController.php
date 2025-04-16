@@ -795,7 +795,6 @@ class PDFController extends Controller
                 $content .= '</div>';
             }
 
-            dd($config);
 
             foreach ($config as $element) {
                 if (empty($element) || empty($element->type)) {
