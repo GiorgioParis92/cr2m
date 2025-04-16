@@ -170,12 +170,10 @@ class Photo extends AbstractFormData
         if (!$this->value || $this->value == '' || $this->value == '[]') {
             return false;
         }
-    
+        return 'ok';
         $json_value = decode_if_json($this->value);
         
-        if(auth()->user()->id==1) {
-            dd($json_value);
-        }
+   
 
         if ($json_value) {
             $values = $json_value;
@@ -184,7 +182,74 @@ class Photo extends AbstractFormData
         }
     
         // Prepare display variable
-      $text='ok';
+        $text = '';
+    
+        // Title
+        $text .= '<p class="s2" style="padding-top: 5pt; padding-left: 8pt; text-indent: 0pt; text-align: left;">'
+               . $this->config->title
+               . '</p>';
+    
+        // Counter for batch display (3 images per row)
+        $count = 0;
+    
+        foreach ($values as $value) {
+            $filePath = storage_path('app/public/' . $value);
+    
+            $pathInfo = pathinfo($value);
+            $thumbnailPath = $pathInfo['dirname'] . '/' . $pathInfo['filename'] . '_thumbnail.' . $pathInfo['extension'];
+            
+            if (Storage::exists('public/' . $thumbnailPath)) {
+                $filePath = storage_path('app/public/' . $thumbnailPath);
+            } else {
+                $filePath = storage_path('app/public/' . $value);
+            }
+
+
+            // Check if the file exists
+            if (!empty($value) && file_exists($filePath)) {
+
+
+
+
+                $fileSize = filesize($filePath);
+    
+                // If file is an image and larger than 1MB, compress it
+                if ($fileSize > 1 * 1024 * 1024) { // 1MB
+                    // $filePath = $this->compressImage($filePath, 1024 * 1024);
+                }
+    
+                // Open a row every 3 images
+                if ($count % 3 === 0) {
+                    $text .= '<div class="row">';
+                }
+    
+                // Convert to base64
+                $imageData = base64_encode(file_get_contents($filePath));
+                $extension = pathinfo($filePath, PATHINFO_EXTENSION);
+                $src = 'data:image/' . $extension . ';base64,' . $imageData;
+    
+                // Display image
+                $text .= '<div class="col-lg-3" style="width:32%; display:inline-block; vertical-align:top; margin-bottom:5px; margin-right:1%;">';
+      
+                    $text .= '<img src="' . $src . '" style="width:100%; height:auto;">';
+                    // $text .= $thumbnailPath;
+                
+
+                $text .= '</div>';
+    
+                $count++;
+    
+                // Close row every 3 images
+                if ($count % 3 === 0) {
+                    $text .= '</div>';
+                }
+            }
+        }
+    
+        // If the last row isn't closed (not an exact multiple of 3 images)
+        if ($count % 3 !== 0) {
+            $text .= '</div>';
+        }
 
         return $text;
     }
