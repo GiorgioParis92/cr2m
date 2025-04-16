@@ -808,10 +808,7 @@ class PDFController extends Controller
                     $content .= "Error: Class $class does not exist.";
                     continue;
                 }
-                if($element->type=='photo') {
-                    dd($class);
-
-                }
+             
                 try {
                     if ($element->type == 'title') {
                         if ($title_content_count > 1) {
@@ -825,7 +822,10 @@ class PDFController extends Controller
 
                     $instance = new $class($element, $element->name, $element->form_id, $dossier->id ?? null);
              
-                    
+                    if($element->type=='photo') {
+                        dd($instance);
+    
+                    }
                     $instance->set_dossier($dossier);
             
                     $instance_result = $instance->render_pdf();
