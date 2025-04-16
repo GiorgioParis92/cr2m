@@ -211,6 +211,13 @@ class DossiersTable extends Component
 
         // Map the dossiers data
         $dossiers = $dossiers->map(function ($dossier) {
+          
+            if($dossier->id==3510 && auth()->user()->id==1) {
+                dd($dossier);
+            }
+       
+          
+          
             return [
                 'id' => $dossier->id,
                 'docs' => ($dossier->meta_value),
