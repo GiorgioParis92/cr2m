@@ -728,7 +728,7 @@ class PDFController extends Controller
             $template_name = $optionsArray['template'];
 
         }
-            dd($configs);
+        
        
         // dump($timeAfterDossier);
         foreach ($configs as $config_id) {
@@ -794,6 +794,9 @@ class PDFController extends Controller
 
                 $content .= '</div>';
             }
+
+            dd($config);
+
             foreach ($config as $element) {
                 if (empty($element) || empty($element->type)) {
                     $content .= '<p>Error: Configuration element is missing.</p>';
