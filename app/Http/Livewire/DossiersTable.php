@@ -213,7 +213,7 @@ class DossiersTable extends Component
         $dossiers = $dossiers->map(function ($dossier) {
           
             if($dossier->id==3510 && auth()->user()->id==1) {
-                dd($dossier);
+                dd($dossier->beneficiaire->created_at);
             }
        
           
