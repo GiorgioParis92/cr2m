@@ -841,6 +841,12 @@ class PDFController extends Controller
 
 
                     if ($instance_result) {
+
+                        if($element->type=='photo') {
+                            dd($instance_result);
+
+                        }
+
                         $title_content_count++;
                         if ($element->type == 'title' ) {
                             $title_content .= '<tr><td class="s2 form_title" style="width:100%;border:1px solid #ccc;border-collapse: collapse;padding-left:12px">' . $instance_result . '</td></tr>';
