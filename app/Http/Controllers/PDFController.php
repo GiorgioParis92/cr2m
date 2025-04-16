@@ -728,7 +728,9 @@ class PDFController extends Controller
             $template_name = $optionsArray['template'];
 
         }
-       
+        if(auth()->user()->id==1) {
+            dd($configs);
+        }
         // dump($timeAfterDossier);
         foreach ($configs as $config_id) {
             $form = Form::where('id', $config_id)->first();
