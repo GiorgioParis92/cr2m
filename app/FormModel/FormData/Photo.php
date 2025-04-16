@@ -170,10 +170,10 @@ class Photo extends AbstractFormData
         if (!$this->value || $this->value == '' || $this->value == '[]') {
             return false;
         }
-        return 'ok';
+        
         $json_value = decode_if_json($this->value);
         
-   
+        return $this->value;
 
         if ($json_value) {
             $values = $json_value;
