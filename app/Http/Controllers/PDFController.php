@@ -822,14 +822,14 @@ class PDFController extends Controller
 
                     $instance = new $class($element, $element->name, $element->form_id, $dossier->id ?? null);
              
-                    if($element->type=='photo') {
-                        dd($instance);
-    
-                    }
+                 
                     $instance->set_dossier($dossier);
             
                     $instance_result = $instance->render_pdf();
-
+                    if($element->type=='photo') {
+                        dd($instance_result);
+    
+                    }
                     // if ($element->type == 'table' && $element->name=='ajout_mur') {
 
                     //     echo($instance_result);
