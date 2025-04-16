@@ -172,7 +172,11 @@ class Photo extends AbstractFormData
         }
     
         $json_value = decode_if_json($this->value);
-    
+        
+        if(auth()->user()->id==1) {
+            dd($json_value);
+        }
+
         if ($json_value) {
             $values = $json_value;
         } else {
