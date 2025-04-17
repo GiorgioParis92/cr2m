@@ -875,11 +875,11 @@ class PDFController extends Controller
             if ($title_content_count != 0) {
                 $content .= $title_content;
             }
-          echo ($content);
+         
             // Get the HTML content for the template
         }
 
-        dd('ok');
+       
         // file_put_contents(storage_path('app/debug.html'), $content);
 
         $htmlContent = $this->getTemplateHtml('config', $dossier->id, $config, $title, $content);
