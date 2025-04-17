@@ -221,9 +221,7 @@ class Photo extends AbstractFormData
                 if ($fileSize > 1 * 1024 * 1024) { // 1MB
                     // $filePath = $this->compressImage($filePath, 1024 * 1024);
                 }
-                if ($count % 12 === 0) {
-                    $text .= '</table></div><div><table style="margin:auto;width:90%;border-collapse: collapse;margin-top:20px">';
-                }
+            
                 // Open a row every 3 images
                 if ($count % 3 === 0) {
                     $text .= '<div class="row">';
@@ -250,11 +248,13 @@ class Photo extends AbstractFormData
                     $text .= '</div>';
                 }
 
-          
+           
 
             }
         } 
-    
+        if ($count % 12 === 0) {
+            $text .= '</table></div><div><table style="margin:auto;width:90%;border-collapse: collapse;margin-top:20px">';
+        }
         // If the last row isn't closed (not an exact multiple of 3 images)
         if ($count % 3 !== 0) {
             $text .= '</div>';
