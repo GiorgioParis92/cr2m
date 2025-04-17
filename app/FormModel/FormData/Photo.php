@@ -249,6 +249,11 @@ class Photo extends AbstractFormData
                 if ($count % 3 === 0) {
                     $text .= '</div>';
                 }
+
+                if ($count % 15 === 0) {
+                    $text .= '</table></div>';
+                }
+
             }
         } 
     
