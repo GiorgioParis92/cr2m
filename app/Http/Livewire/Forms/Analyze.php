@@ -21,7 +21,7 @@ class Analyze extends AbstractData
         parent::mount($conf, $form_id, $dossier_id);
 
 
-
+        $values_to_fill=[];
         if(!($this->value)) {
 
             $options=json_decode($conf['options'],true);
