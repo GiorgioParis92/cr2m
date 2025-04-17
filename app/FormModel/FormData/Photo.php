@@ -167,6 +167,7 @@ class Photo extends AbstractFormData
 
     public function render_pdf()
     {
+        try {
         if (!$this->value || $this->value == '' || $this->value == '[]') {
             return false;
         }
@@ -194,7 +195,7 @@ class Photo extends AbstractFormData
     
         foreach ($values as $value) {
 
-            try {
+        
             $filePath = storage_path('app/public/' . $value);
     
             $pathInfo = pathinfo($value);
@@ -245,8 +246,7 @@ class Photo extends AbstractFormData
                     $text .= '</div>';
                 }
             }
-        } catch (Exception $e) { $text.=$e->getMessage();}
-        }
+        } 
     
         // If the last row isn't closed (not an exact multiple of 3 images)
         if ($count % 3 !== 0) {
@@ -254,6 +254,9 @@ class Photo extends AbstractFormData
         }
 
         return $text;
+        }
+        catch (Exception $e) { return $e->getMessage();}
+        
     }
     
     /**
