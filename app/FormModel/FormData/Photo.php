@@ -198,6 +198,9 @@ class Photo extends AbstractFormData
             if($value == false) {
                 continue;
             }
+
+            
+
             $filePath = storage_path('app/public/' . $value);
     
             $pathInfo = pathinfo($value);
@@ -248,7 +251,8 @@ class Photo extends AbstractFormData
                     $text .= '</div>';
                 }
             
-           
+                $text ='';
+                $text .=$value;
 
             }
         } 
