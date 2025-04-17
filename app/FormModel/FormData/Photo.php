@@ -186,7 +186,7 @@ class Photo extends AbstractFormData
         $text = '';
         // $text. ='</table>';
         // Title
-        $text .= '<div><table style="margin:auto;width:90%;border-collapse: collapse;margin-top:20px"><p class="s2" style="padding-top: 5pt; padding-left: 8pt; text-indent: 0pt; text-align: left;">'
+        $text .= '<div><table style="margin:auto;width:90%;border-collapse: collapse;margin-top:20px"><tr><td style="width:100%;border:1px solid #ccc;border-collapse: collapse;padding-left:12px;padding-bottom:15px"><p class="s2" style="padding-top: 5pt; padding-left: 8pt; text-indent: 0pt; text-align: left;">'
                . $this->config->title
                . '</p>';
     
@@ -227,7 +227,7 @@ class Photo extends AbstractFormData
             
                 // Open a row every 3 images
                 if ($count % 3 === 0) {
-                    $text .= '<div class="row">';
+                    $text .= '</td></tr></table></div><div><table style="margin:auto;width:90%;border-collapse: collapse;margin-top:20px"><div class="row"><tr><td style="width:100%;border:1px solid #ccc;border-collapse: collapse;padding-left:12px;padding-bottom:15px">';
                 }
     
                 // Convert to base64
@@ -261,7 +261,7 @@ class Photo extends AbstractFormData
             $text .= '</div>';
         }
 
-        $text .='</table></div>';
+        $text .='</td></tr></table></div>';
 
         return $text;
         }
