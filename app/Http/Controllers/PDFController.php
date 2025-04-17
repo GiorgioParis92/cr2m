@@ -852,7 +852,7 @@ class PDFController extends Controller
                             if ($element->type != 'table') {
                                 if ($element->type == 'photo') {
 
-                                    echo( $instance_result);
+                                    $title_content .= '<tr><td style="width:100%;border:1px solid #ccc;border-collapse: collapse;padding-left:12px;padding-bottom:15px">Photos' . $instance_result . '</td></tr>';
 
                                 } else {
                                     $title_content .= '<tr><td style="width:100%;border:1px solid #ccc;border-collapse: collapse;padding-left:12px;padding-bottom:15px">' . $instance_result . '</td></tr>';
