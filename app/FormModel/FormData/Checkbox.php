@@ -101,7 +101,7 @@ class Checkbox extends AbstractFormData
             $value=$optionsArray[0]['value'];
         }
 
-        $data.=$optionsArray;
+       
         if (is_array($optionsArray)) {
             $data .= '<label class="switch" >';
            
