@@ -174,7 +174,7 @@ class Photo extends AbstractFormData
         
         $json_value = decode_if_json($this->value);
         
-        return $this->value;
+       
 
         if ($json_value) {
             $values = $json_value;
@@ -195,7 +195,9 @@ class Photo extends AbstractFormData
     
         foreach ($values as $value) {
 
-        
+            if($value == false) {
+                continue;
+            }
             $filePath = storage_path('app/public/' . $value);
     
             $pathInfo = pathinfo($value);
