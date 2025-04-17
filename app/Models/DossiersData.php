@@ -12,7 +12,7 @@ class DossiersData extends Model
     protected $table = 'dossiers_data';
 
     // Allow mass assignment on these attributes
-    protected $fillable = ['dossier_id', 'meta_key', 'meta_value'];
+    protected $fillable = ['dossier_id', 'meta_key', 'meta_value','user_id'];
 
     // Optionally, cast attributes to appropriate data types
     protected $casts = [

@@ -180,11 +180,11 @@ $next = Etape::where('order_column', $current->order_column + 1)->first();
     [
         'dossier_id' => $dossier->id,
         'meta_key' => 'step_' . $dossier->etape_number,
-        'user_id' => auth()->user()->id ?? 0,
     ],
     [
+        'user_id' => auth()->user()->id ?? 0,
+
         'meta_value' => now(),
-        'created_at' => now(),
         'updated_at' => now(),
     ]
 );
