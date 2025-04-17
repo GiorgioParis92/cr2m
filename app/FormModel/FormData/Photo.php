@@ -250,9 +250,7 @@ class Photo extends AbstractFormData
                     $text .= '</div>';
                 }
 
-                if ($count % 12 === 0) {
-                    $text .= '</table></div>';
-                }
+          
 
             }
         } 
