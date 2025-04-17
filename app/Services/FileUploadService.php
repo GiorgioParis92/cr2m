@@ -208,7 +208,11 @@ class FileUploadService
                 
                     // Now safely append the file path
                     // $json_array[$index][$field]['value'][] = $filePath;
-                    $json_array[] = $filePath;
+
+                    if($filePath!= false) {
+                        $json_array[] = $filePath;
+
+                    }
                     $updatedJsonString = json_encode($json_array);
                 }
                 
@@ -234,7 +238,9 @@ class FileUploadService
 
             } else {
                 $json_value = [];
+                if($filePath!= false) {
                 array_push($json_value, $filePath);
+                }
                 $update = DB::table('forms_data')->updateOrInsert(
                     [
                         'dossier_id' => '' . $dossier->id . '',
