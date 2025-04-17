@@ -184,7 +184,7 @@ class Photo extends AbstractFormData
     
         // Prepare display variable
         $text = '';
-    
+        // $text. ='</table>';
         // Title
         $text .= '<p class="s2" style="padding-top: 5pt; padding-left: 8pt; text-indent: 0pt; text-align: left;">'
                . $this->config->title
@@ -247,9 +247,7 @@ class Photo extends AbstractFormData
                 if ($count % 3 === 0) {
                     $text .= '</div>';
                 }
-                if ($count % 12 === 0) {
-                    $text .= '</table></div><div><table style="margin:auto;width:90%;border-collapse: collapse;margin-top:20px">';
-                }
+            
            
 
             }
