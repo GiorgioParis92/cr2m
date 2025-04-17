@@ -143,7 +143,7 @@ class Radio extends AbstractFormData
         $data .= '<div>';
 
         if (is_array(json_decode($this->config->options,true))) {
-            foreach ($this->config->options as $key => $element) {
+            foreach (json_decode($this->config->options,true) as $key => $element) {
                 $isChecked = $this->value == $element['value'] ? 'checked="checked"' : '';
            
                 // $data.='<div class="">';
