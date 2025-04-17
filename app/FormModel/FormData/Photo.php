@@ -193,6 +193,8 @@ class Photo extends AbstractFormData
         $count = 0;
     
         foreach ($values as $value) {
+
+            try {
             $filePath = storage_path('app/public/' . $value);
     
             $pathInfo = pathinfo($value);
@@ -243,6 +245,7 @@ class Photo extends AbstractFormData
                     $text .= '</div>';
                 }
             }
+        } catch (Exception $e) { $text.=$e->getMessage();}
         }
     
         // If the last row isn't closed (not an exact multiple of 3 images)
