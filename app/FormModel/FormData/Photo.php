@@ -186,7 +186,7 @@ class Photo extends AbstractFormData
         $text = '';
         // $text. ='</table>';
         // Title
-        $text .= '<p class="s2" style="padding-top: 5pt; padding-left: 8pt; text-indent: 0pt; text-align: left;">'
+        $text .= '<div><table style="margin:auto;width:90%;border-collapse: collapse;margin-top:20px"><p class="s2" style="padding-top: 5pt; padding-left: 8pt; text-indent: 0pt; text-align: left;">'
                . $this->config->title
                . '</p>';
     
@@ -260,6 +260,8 @@ class Photo extends AbstractFormData
         if ($count % 3 !== 0) {
             $text .= '</div>';
         }
+
+        $text .='</table></div>';
 
         return $text;
         }
