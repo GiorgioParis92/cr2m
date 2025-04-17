@@ -200,6 +200,10 @@ $next = Etape::where('order_column', $current->order_column + 1)->first();
                 'updated_at' => now(),
             ]);
         
+
+            Dossier::where('id', $id)->update([ 'status_id' => '1']);
+
+
         }
 
           
