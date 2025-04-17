@@ -851,7 +851,9 @@ class PDFController extends Controller
                         } else {
                             if ($element->type != 'table') {
                                 if ($element->type == 'photo') {
-                                    $title_content .= '<tr><td style="width:100%;border:1px solid #ccc;border-collapse: collapse;padding-left:12px;padding-bottom:15px">Photos</td></tr></table></div>';
+
+                                    dump( $instance_result);
+
                                 } else {
                                     $title_content .= '<tr><td style="width:100%;border:1px solid #ccc;border-collapse: collapse;padding-left:12px;padding-bottom:15px">' . $instance_result . '</td></tr>';
 
@@ -873,7 +875,7 @@ class PDFController extends Controller
             if ($title_content_count != 0) {
                 $content .= $title_content;
             }
-          
+          dd($content);
             // Get the HTML content for the template
         }
         // file_put_contents(storage_path('app/debug.html'), $content);
