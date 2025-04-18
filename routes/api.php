@@ -56,9 +56,10 @@ use App\Http\Controllers\Api\CallBack;
 */
 Route::post('/login', [LoginController::class, 'login']);
 
-Route::post('/server-callback', CallBack::class)
+Route::get('/server-callback', CallBack::class)
      ->name('server-callback');
-
+     Route::post('/server-callback', CallBack::class)
+     ->name('server-callback');
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });

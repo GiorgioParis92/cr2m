@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\DB;
     public function __invoke(Request $request): Response
     {
 
-        dd(Response::HTTP_OK);
+    
         // 1️⃣  Headers (replacement for getallheaders())
         $headers = $this->collectHeaders($request);
 
