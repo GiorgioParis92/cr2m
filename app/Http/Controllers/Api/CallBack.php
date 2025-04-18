@@ -16,6 +16,8 @@ use Illuminate\Support\Facades\DB;
      */
     public function __invoke(Request $request): Response
     {
+
+        dd(Response::HTTP_OK);
         // 1️⃣  Headers (replacement for getallheaders())
         $headers = $this->collectHeaders($request);
 
@@ -26,7 +28,7 @@ use Illuminate\Support\Facades\DB;
         $this->storeCallback($headers, $payload);
 
         // 4️⃣  Acknowledge
-        return response()->json($payload);
+        return response()->noContent(Response::HTTP_OK);
     }
 
     // ────────────────────────────────────────────────────────────
