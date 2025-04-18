@@ -41,7 +41,7 @@ use Illuminate\Support\Facades\DB;
 
 
     
-    private function decodeJson(string $rawBody): array
+    private function decodeJson(string $rawBody)
     {
         return json_decode($rawBody, true) ?? [];
     }
