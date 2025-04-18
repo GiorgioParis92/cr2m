@@ -49,9 +49,9 @@ use Illuminate\Support\Facades\DB;
     private function storeCallback(Collection $headers, array $payload): void
     {
         DB::table('server_callbacks')->insert([
-            'signature'  => $headers->get('x-custom-signature'), // optional
-            'headers'    => $headers,     // Laravel casts Collection → JSON
-            'payload'    => $payload,
+            'signature'  => $headers->get('x-custom-signature'),
+            'headers'    => json_encode($headers->all(),  JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE),
+            'payload'    => json_encode($payload,        JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE),
             'created_at' => now(),
             'updated_at' => now(),
         ]);
