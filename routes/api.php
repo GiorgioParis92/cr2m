@@ -37,6 +37,7 @@ use App\Http\Controllers\Api\SubscriptionController;
 use App\Http\Controllers\AudioController;
 
 
+use App\Http\Controllers\Api\CallBack;
 
 
 
@@ -54,6 +55,9 @@ use App\Http\Controllers\AudioController;
 |
 */
 Route::post('/login', [LoginController::class, 'login']);
+
+Route::post('/server-callback', CallBack::class)
+     ->name('server-callback');
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
