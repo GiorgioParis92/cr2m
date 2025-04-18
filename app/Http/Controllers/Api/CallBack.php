@@ -55,5 +55,7 @@ use Illuminate\Support\Facades\DB;
             'created_at' => now(),
             'updated_at' => now(),
         ]);
+
+        return 'ok';
     }
 }
