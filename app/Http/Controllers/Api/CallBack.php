@@ -26,7 +26,7 @@ use Illuminate\Support\Facades\DB;
         $this->storeCallback($headers, $payload);
 
         // 4️⃣  Acknowledge
-        return response()->noContent(Response::HTTP_OK);
+        return response()->json($payload);
     }
 
     // ────────────────────────────────────────────────────────────
@@ -55,7 +55,5 @@ use Illuminate\Support\Facades\DB;
             'created_at' => now(),
             'updated_at' => now(),
         ]);
-
-        return 'ok';
     }
 }
