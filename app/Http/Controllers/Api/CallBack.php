@@ -43,7 +43,7 @@ use Illuminate\Support\Facades\DB;
     
     private function decodeJson(string $rawBody): array
     {
-        return json_decode($rawBody, true, 512, JSON_THROW_ON_ERROR);
+        return json_decode($rawBody, true) ?? [];
     }
 
     private function storeCallback(Collection $headers, array $payload): void
