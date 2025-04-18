@@ -1,6 +1,5 @@
 <?php
 
-declare(strict_types=1);
 
 namespace App\Http\Controllers\Api;
 
@@ -10,7 +9,7 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
-final class CallBack extends Controller
+ class CallBack extends Controller
 {
     /**
      * Handle the incoming server callback.
@@ -40,9 +39,8 @@ final class CallBack extends Controller
             ->mapWithKeys(fn (array $values, string $name) => [$name => $values[0] ?? '']);
     }
 
-    /**
-     * @throws \JsonException on invalid JSON (fail fast)
-     */
+
+    
     private function decodeJson(string $rawBody): array
     {
         return json_decode($rawBody, true, 512, JSON_THROW_ON_ERROR);
