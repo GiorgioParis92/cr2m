@@ -26,7 +26,7 @@ final class ServerCallbackController
     {
   
         $payload = $request->getContent();
-
+        dd($payload);
         // If it's already parsed somehow (injected), use directly
         if (is_string($payload)) {
             $payload = json_decode(
@@ -35,7 +35,7 @@ final class ServerCallbackController
              
             );
         }
-        dd($payload);
+      
         // Persist raw call for audit/debug
         $this->persistRaw($request, $payload);
     
