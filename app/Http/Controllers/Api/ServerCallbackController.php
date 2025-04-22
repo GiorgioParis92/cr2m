@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
+use Illuminate\Http\Client\RequestException;
+
 final class ServerCallbackController
 {
     /** CORS headers that accept any origin, method, and header. */
@@ -93,25 +95,36 @@ final class ServerCallbackController
 
     private function downloadAndStore(string $url, ?string $secret): string
     {
-
+        try {
+            $response = Http::withHeaders([
+                    'X-CEERTIF-SECRET' => $secret
+                ])
+                ->withoutVerifying()
+                ->timeout(15)
+                ->accept('*/*')
+                ->get($url);
     
-        $body = Http::withHeaders(['X-CEERTIF-SECRET' => $secret])
-            ->withoutVerifying()   // accept any TLS certificate
-            ->timeout(15)
-            ->accept('*/*')        // accept any MIME type
-            ->get($url)
-            ->throw()
-            ->body();
-            dd($body);
-        $ext   = pathinfo(parse_url($url, PHP_URL_PATH) ?: '', PATHINFO_EXTENSION) ?: 'bin';
-        $name  = Str::uuid() . '.' . $ext;
-        $path  = "webhooks/{$name}";
-
-        Storage::put($path, $body);
-
-        return $path;
+            $response->throw();
+    
+            $fileContents = $response->body();
+            $extension    = $this->getFileExtensionFromUrl($url);
+            $fileName     = Str::uuid() . '.' . $extension;
+            $filePath     = "webhooks/{$fileName}";
+    
+            Storage::put($filePath, $fileContents);
+    
+            return $filePath;
+        } catch (RequestException $e) {
+            // Optional: Log error or throw custom exception
+            throw new \RuntimeException("Failed to download file from URL: {$url}", 0, $e);
+        }
     }
-
+    
+    private function getFileExtensionFromUrl(string $url): string
+    {
+        $path = parse_url($url, PHP_URL_PATH) ?? '';
+        return pathinfo($path, PATHINFO_EXTENSION) ?: 'bin';
+    }
     // ---------------------------------------------------------------- traits
     private function ok(string|array $body): JsonResponse
     {
