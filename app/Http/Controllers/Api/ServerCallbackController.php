@@ -28,8 +28,8 @@ final class ServerCallbackController
    
         if (is_string($payload)) {
             $decoded = json_decode($payload, true);
-
-            dd($decoded);
+            $payload=json_decode($decoded,true);
+            dd($payload);
             
  
             
