@@ -16,7 +16,6 @@ final class ServerCallbackController
     private const CORS = [
         'Access-Control-Allow-Origin'      => '*',
         'Access-Control-Allow-Methods'     => 'GET, POST, PUT, PATCH, DELETE, OPTIONS',
-       'Access-Control-Allow-Headers'     => '*',
       'Access-Control-Allow-Headers'     => 'Content-Type, X-Requested-With, X-CEERTIF-SECRET, X-Signature',
         'Access-Control-Allow-Credentials' => 'true',
       'Content-Type'                     => 'application/json; charset=UTF-8',
@@ -27,13 +26,17 @@ final class ServerCallbackController
   
         $payload = $request->getContent();
    
-        // If it's already parsed somehow (injected), use directly
         if (is_string($payload)) {
-            $payload = json_decode(
-                $payload,
-                true
-             
-            );
+            $decoded = json_decode($payload, true);
+        
+            if (json_last_error() !== JSON_ERROR_NONE) {
+                return $this->error(
+                    'Invalid JSON payload: ' . json_last_error_msg(),
+                    JsonResponse::HTTP_BAD_REQUEST
+                );
+            }
+        
+            $payload = $decoded;
         }
         dd($payload);
         // Persist raw call for audit/debug
