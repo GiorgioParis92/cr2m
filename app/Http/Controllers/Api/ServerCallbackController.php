@@ -36,12 +36,7 @@ final class ServerCallbackController
                 );
             }
             
-            dd([
-                'is_array'       => is_array($decoded),
-                'has_data_key'   => isset($decoded['data']),
-                'eidas_receipt'  => $decoded['data']['eidas_receipt'] ?? 'missing',
-                'is_receipt_json'=> json_decode($decoded['data']['eidas_receipt'] ?? '', true)
-            ]);
+ 
             
         }
         dd($payload);
