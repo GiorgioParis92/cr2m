@@ -32,8 +32,7 @@ final class ServerCallbackController
             $payload = json_decode(
                 $payload,
                 true,
-                512,
-                JSON_THROW_ON_ERROR
+             
             );
         }
         dd($payload);
