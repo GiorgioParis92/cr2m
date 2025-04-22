@@ -11,6 +11,44 @@ use Illuminate\Support\Facades\DB;
 
  class CallBack extends Controller
 {
+
+
+    public function index(Request $request): Response
+    {
+        http_response_code(200);
+        $headers = getallheaders();
+        $posted_data = json_decode(file_get_contents('php://input'), true);
+        echo "<h1>Post Data</h1>";
+        echo "<pre>";
+        print_r($posted_data);
+        echo "</pre>";
+        echo "<hr>";
+        echo "<h1>Headers</h1>";
+        echo "<pre>";
+        print_r($headers);
+        echo "</pre>";
+
+
+
+        $download_url = "";
+        if($post_data->event == "WatermarkedFileAvailable"){
+        // download the processed file:
+        $download_url = $post_data->processed_file_download_url;
+        }else if($post_data->event == "EIDASCertificateAvailable"){
+        $download_url = $post_data->edias_certificate_download_url;
+        }else if($post_data->event == "BlockchainCertificateAvailable"){
+        $download_url = $post_data->blockchain_certificate_download_url;
+        }
+        // write the download code based on the download
+        if(!empty($download_url)){
+        // write the download code here.
+        }
+
+
+    }
+
+
+
     /**
      * Handle the incoming server callback.
      */
