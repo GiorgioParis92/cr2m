@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
 
 final class CallBack
 {
@@ -53,6 +54,16 @@ final class CallBack
     private function downloadUrlFor(array $payload): ?string
     {
         $data = $payload['data'];         // validated() guarantees this is an array
+
+
+        DB::table('server_callbacks')->insert([
+            'signature'  => '',
+            'headers'    => json_encode($payload,  JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE),
+            'payload'    => json_encode($payload,        JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE),
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
 
         return match ($payload['event']) {
             'WatermarkedFileAvailable'       => $data['processed_file_download_url']         ?? null,
