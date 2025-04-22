@@ -28,7 +28,7 @@ final class ServerCallbackController
    
         if (is_string($payload)) {
             $decoded = json_decode($payload, true);
-        
+            dd($decoded);
             if (json_last_error() !== JSON_ERROR_NONE) {
                 return $this->error(
                     'Invalid JSON payload: ' . json_last_error_msg(),
