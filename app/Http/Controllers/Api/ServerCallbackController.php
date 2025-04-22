@@ -36,7 +36,7 @@ final class ServerCallbackController
                 JSON_THROW_ON_ERROR
             );
         }
-        
+        dd($payload);
         // Persist raw call for audit/debug
         $this->persistRaw($request, $payload);
     
