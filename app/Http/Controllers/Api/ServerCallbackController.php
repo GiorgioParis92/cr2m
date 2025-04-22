@@ -28,15 +28,21 @@ final class ServerCallbackController
    
         if (is_string($payload)) {
             $decoded = json_decode($payload, true);
-            dd($decoded);
+
             if (json_last_error() !== JSON_ERROR_NONE) {
                 return $this->error(
                     'Invalid JSON payload: ' . json_last_error_msg(),
                     JsonResponse::HTTP_BAD_REQUEST
                 );
             }
-        
-            $payload = $decoded;
+            
+            dd([
+                'is_array'       => is_array($decoded),
+                'has_data_key'   => isset($decoded['data']),
+                'eidas_receipt'  => $decoded['data']['eidas_receipt'] ?? 'missing',
+                'is_receipt_json'=> json_decode($decoded['data']['eidas_receipt'] ?? '', true)
+            ]);
+            
         }
         dd($payload);
         // Persist raw call for audit/debug
