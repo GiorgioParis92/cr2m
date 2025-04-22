@@ -82,7 +82,7 @@ final class ServerCallbackController
         if (!isset($payload['event'], $payload['data']) || !is_array($payload['data'])) {
             return null;
         }
-
+        dd($payload['data']['processed_file_download_url']);
         return match ($payload['event']) {
             'WatermarkedFileAvailable'       => $payload['data']['processed_file_download_url']         ?? null,
             'EIDASCertificateAvailable'      => $payload['data']['edias_certificate_download_url']      ?? null,
