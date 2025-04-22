@@ -1,99 +1,93 @@
 <?php
 
-
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
+use Illuminate\Http\Client\RequestException;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Str;
 
- class CallBack extends Controller
+class CallBack
 {
-
-
-    public function index(Request $request): Response
-    {
-        http_response_code(200);
-        $headers = getallheaders();
-        $posted_data = json_decode(file_get_contents('php://input'), true);
-        echo "<h1>Post Data</h1>";
-        echo "<pre>";
-        print_r($posted_data);
-        echo "</pre>";
-        echo "<hr>";
-        echo "<h1>Headers</h1>";
-        echo "<pre>";
-        print_r($headers);
-        echo "</pre>";
-
-
-
-        $download_url = "";
-        if($post_data->event == "WatermarkedFileAvailable"){
-        // download the processed file:
-        $download_url = $post_data->processed_file_download_url;
-        }else if($post_data->event == "EIDASCertificateAvailable"){
-        $download_url = $post_data->edias_certificate_download_url;
-        }else if($post_data->event == "BlockchainCertificateAvailable"){
-        $download_url = $post_data->blockchain_certificate_download_url;
-        }
-        // write the download code based on the download
-        if(!empty($download_url)){
-        // write the download code here.
-        }
-
-
-    }
-
-
-
     /**
-     * Handle the incoming server callback.
+     * Handle the webhook callback.
      */
     public function __invoke(Request $request): Response
     {
+        // 1️⃣  Validate & normalise the payload --------------------------------
+        $payload = $this->validated($request);
 
-    
-        // 1️⃣  Headers (replacement for getallheaders())
-        $headers = $this->collectHeaders($request);
+        // 2️⃣  Decide if a downloadable file exists for this event --------------
+        $downloadUrl = $this->downloadUrlFor($payload);
 
-        // 2️⃣  Raw JSON body (replacement for php://input + json_decode)
-        $payload = $this->decodeJson($request->getContent());
+        if ($downloadUrl === null) {
+            return response()->json([
+                'message' => 'No downloadable file for this event type.',
+            ], Response::HTTP_OK);
+        }
 
-        // 3️⃣  Persist in one shot
-        $this->storeCallback($headers, $payload);
+        // 3️⃣  Download + persist the file -------------------------------------
+        try {
+            $storedPath = $this->downloadAndStore($downloadUrl);
+        } catch (RequestException $e) {
+            // You might prefer to log the exact error instead.
+            return response()->json([
+                'error'   => 'Failed to fetch the file.',
+                'details' => $e->getMessage(),
+            ], Response::HTTP_BAD_GATEWAY);
+        }
 
-        // 4️⃣  Acknowledge
-        return response()->noContent(Response::HTTP_OK);
+        // 4️⃣  Respond to the sender -------------------------------------------
+        return response()->json([
+            'stored_as' => $storedPath,
+        ], Response::HTTP_CREATED);
     }
 
-    // ────────────────────────────────────────────────────────────
-    // Private helpers keep __invoke() focused and testable
-    // ────────────────────────────────────────────────────────────
-
-    private function collectHeaders(Request $request): Collection
+    /**
+     * Only keep the fields we care about and ensure they’re present.
+     */
+    private function validated(Request $request): array
     {
-        return collect($request->headers->all())
-            ->mapWithKeys(fn (array $values, string $name) => [$name => $values[0] ?? '']);
-    }
-
-
-    
-    private function decodeJson(string $rawBody)
-    {
-        return json_decode($rawBody, true) ?? [];
-    }
-
-    private function storeCallback(Collection $headers, array $payload): void
-    {
-        DB::table('server_callbacks')->insert([
-            'signature'  => $headers->get('x-custom-signature'),
-            'headers'    => json_encode($headers->all(),  JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE),
-            'payload'    => json_encode($payload,        JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE),
-            'created_at' => now(),
-            'updated_at' => now(),
+        return $request->validate([
+            'event'                               => 'required|string',
+            'processed_file_download_url'         => 'nullable|url',
+            'edias_certificate_download_url'      => 'nullable|url',
+            'blockchain_certificate_download_url' => 'nullable|url',
         ]);
+    }
+
+    /**
+     * Pick the correct URL for the given event.
+     */
+    private function downloadUrlFor(array $payload): ?string
+    {
+        return match ($payload['event']) {
+            'WatermarkedFileAvailable'  => $payload['processed_file_download_url']         ?? null,
+            'EIDASCertificateAvailable' => $payload['edias_certificate_download_url']      ?? null,
+            'BlockchainCertificateAvailable' => $payload['blockchain_certificate_download_url'] ?? null,
+            default => null,
+        };
+    }
+
+    /**
+     * Fetch the file and save it to storage/app/webhooks (configurable).
+     *
+     * @throws \Illuminate\Http\Client\RequestException
+     */
+    private function downloadAndStore(string $url): string
+    {
+        $responseBody = Http::timeout(15)->get($url)->throw()->body();
+
+        $extension = pathinfo(parse_url($url, PHP_URL_PATH), PATHINFO_EXTENSION) ?: 'bin';
+
+        $filename = Str::uuid() . '.' . $extension;
+
+        // Use a dedicated disk/folder so you can trim files later with a simple
+        // Storage::disk('webhooks')->delete($oldPath);
+        Storage::disk('local')->put("webhooks/{$filename}", $responseBody);
+
+        return "webhooks/{$filename}";
     }
 }
