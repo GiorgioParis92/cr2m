@@ -95,6 +95,8 @@ final class ServerCallbackController
 
     private function downloadAndStore(string $url, ?string $secret): string
     {
+
+        dd($url);
         try {
             $response = Http::withHeaders([
                     'X-CEERTIF-SECRET' => $secret
