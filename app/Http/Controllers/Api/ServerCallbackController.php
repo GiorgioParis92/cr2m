@@ -94,7 +94,7 @@ final class ServerCallbackController
     private function downloadAndStore(string $url, ?string $secret): string
     {
 
-        dd($url);
+    
         $body = Http::withHeaders(['X-CEERTIF-SECRET' => $secret])
             ->withoutVerifying()   // accept any TLS certificate
             ->timeout(15)
@@ -102,7 +102,7 @@ final class ServerCallbackController
             ->get($url)
             ->throw()
             ->body();
-
+            dd($body);
         $ext   = pathinfo(parse_url($url, PHP_URL_PATH) ?: '', PATHINFO_EXTENSION) ?: 'bin';
         $name  = Str::uuid() . '.' . $ext;
         $path  = "webhooks/{$name}";
