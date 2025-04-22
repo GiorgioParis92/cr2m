@@ -76,7 +76,7 @@ final class CallBack
     {
         return match ($payload['event']) {
             'WatermarkedFileAvailable'       => $payload['data']['processed_file_download_url']         ?? null,
-            'EIDASCertificateAvailable'      => $payload['data']['eidas_certificate_download_url']      ?? null,
+            'EIDASCertificateAvailable'      => $payload['data']['edias_certificate_download_url']      ?? null,
             'BlockchainCertificateAvailable' => $payload['data']['blockchain_certificate_download_url'] ?? null,
             default                          => null,
         };
