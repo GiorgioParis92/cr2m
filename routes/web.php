@@ -33,6 +33,8 @@ use App\Http\Controllers\ApiRequestController;
 use App\Http\Controllers\FinancierController;
 use App\Http\Controllers\MailboxController;
 use App\Http\Controllers\AudioController;
+use App\Http\Controllers\Api\ServerCallbackController;
+
 
 
 
@@ -56,6 +58,14 @@ use App\Http\Controllers\AudioController;
 // Route::get('/login', function () {
 //     return view('url-change-notification');
 // });
+// routes/web.php
+
+Route::post('/server-callback', ServerCallbackController::class)
+     ->name('server-callback')
+     ->withoutMiddleware([
+         \App\Http\Middleware\VerifyCsrfToken::class,           // ←‑ disable CSRF
+         \Illuminate\Auth\Middleware\Authenticate::class,       // ←‑ disable web auth (optional)
+     ]);
 
 
 if (request()->getHost() === 'crm-atlas.fr' || env('APP_ENV') === 'local') {
@@ -68,6 +78,10 @@ if (request()->getHost() === 'crm-atlas.fr' || env('APP_ENV') === 'local') {
     Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
     Route::post('login', [LoginController::class, 'login']);
 }
+
+
+
+
 
 Route::middleware('auth')->group(function () {
     Route::get('/', 'App\Http\Controllers\DashboardController@index')->name('dashboard');
