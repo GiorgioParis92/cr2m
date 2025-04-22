@@ -31,14 +31,14 @@ final class ServerCallbackController
             if (is_string($decoded)) {
            
             $payload=json_decode($decoded,true);
-            dd($payload);
+       
             }
             
             
  
             
         }
-        dd($payload);
+ 
         // Persist raw call for audit/debug
         $this->persistRaw($request, $payload);
     
