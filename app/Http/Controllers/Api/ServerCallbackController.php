@@ -96,7 +96,7 @@ final class ServerCallbackController
     private function downloadAndStore(string $url, ?string $secret): string
     {
 
-        dd($url);
+ 
         try {
             $response = Http::withHeaders([
                     'X-CEERTIF-SECRET' => $secret
@@ -124,6 +124,15 @@ final class ServerCallbackController
     
     private function getFileExtensionFromUrl(string $url): string
     {
+        $query = parse_url($url, PHP_URL_QUERY);
+        parse_str($query, $queryParams);
+    
+        if (isset($queryParams['path'])) {
+            $filePath = urldecode($queryParams['path']);
+            return pathinfo($filePath, PATHINFO_EXTENSION) ?: 'bin';
+        }
+    
+        // Fallback if 'path' param doesn't exist
         $path = parse_url($url, PHP_URL_PATH) ?? '';
         return pathinfo($path, PATHINFO_EXTENSION) ?: 'bin';
     }
