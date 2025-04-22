@@ -24,16 +24,20 @@ final class ServerCallbackController
 
     public function __invoke(Request $request): JsonResponse
     {
-        // $payload = $this->payloadFromRequest($request);
-        // $payload = $this->payloadFromRequest($request);
-        $payload = json_decode(
-            $request->getContent(),      // raw body
-            true,                        // ← associative array, not objects
-            512,                         // recursion depth
-            JSON_THROW_ON_ERROR          // fail fast on bad JSON
-        );      
-   
-        // 2. Persist raw call for audit / debug --------------------------------
+  
+        $payload = $request->getContent();
+
+        // If it's already parsed somehow (injected), use directly
+        if (is_string($payload)) {
+            $payload = json_decode(
+                $payload,
+                true,
+                512,
+                JSON_THROW_ON_ERROR
+            );
+        }
+        
+        // Persist raw call for audit/debug
         $this->persistRaw($request, $payload);
     
         // 3. Work out whether we need to download a file -----------------------
@@ -132,25 +136,5 @@ final class ServerCallbackController
     }
 
 
-    private function payloadFromRequest(Request $request): array
-{
-    $raw = $request->getContent();
 
-    // 1 Keep only the part between the first { and the matching last }
-    $start = strpos($raw, '{');
-    $end   = strrpos($raw, '}');
-
-    if ($start === false || $end === false || $end <= $start) {
-        throw new \RuntimeException('No JSON object found in request body.');
-    }
- 
-    $json = substr($raw, $start, $end - $start + 1);
- 
-    // 2 Remove "\t", "\n" and "\r" that appear OUTSIDE strings
-    //    (preg_replace treats \\ as a single literal back‑slash)
-    $json = str_replace(['\\t', '\\n', '\\r'], '', $json);
- 
-    // 3 Decode (throws JsonException on failure – Laravel will return 500)
-    return json_decode($json, true, 512, JSON_THROW_ON_ERROR);
-}
 }
