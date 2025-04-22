@@ -112,7 +112,7 @@ final class ServerCallbackController
 
     private function created(array $body): JsonResponse
     {
-        return $this->json($body, JsonResponse::HTTP_CREATED);
+        return $this->json($body, JsonResponse::HTTP_OK);
     }
 
     private function error(string $message, int $status): JsonResponse
