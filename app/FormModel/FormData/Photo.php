@@ -186,7 +186,7 @@ class Photo extends AbstractFormData
         $text = '';
         // $text. ='</table>';
         // Title
-        $text .= '<p class="s2" style="padding-top: 5pt; padding-left: 8pt; text-indent: 0pt; text-align: left;">'
+        $text .= '<p class="s2" style="padding-top: 5pt; padding-left: 8pt; text-indent: 0pt; text-align: left;margin:auto;width:90%;">'
                . $this->config->title
                . '</p>';
     
