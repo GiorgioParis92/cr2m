@@ -779,15 +779,15 @@ class PDFController extends Controller
                 $content .= '<h6 class="mb-0"><b>Tél : ' . $dossier_data['beneficiaire']['telephone'] . '</b> -Email : ' . $dossier_data['beneficiaire']['email'] . '<br></h6>';
                
                 $content .= '<h6 class="mb-0"><b>N° CLAVIS : ' . ($dossier_data['reference_unique'] ?? '') . '</b></h6>';
-                
+                $content.='<div class="btn bg-primary bg-Très modestes">' . $dossier_data['beneficiaire']['menage_mpr'] . '</div>';
 
                 if($lastRdv) {
-                    $content .= '<div class="btn bg-primary bg-Très modestes">' . $dossier_data['beneficiaire']['menage_mpr'] . '</div><div class="">Technicien RDV MAR 1 :' . ($rdv2 ? ($lastRdv->user->name.' le '.date('d/m/Y',strtotime($lastRdv->date_rdv)) ?? '') : '') . '</div></div>';
+                    $content .= '<div class="">Technicien RDV MAR 1 :' . ($rdv2 ? ($lastRdv->user->name.' le '.date('d/m/Y',strtotime($lastRdv->date_rdv)) ?? '') : '') . '</div></div>';
 
                 }
                
                 if($rdv2) {
-                    $content .= '<div class="btn bg-primary bg-Très modestes">' . $dossier_data['beneficiaire']['menage_mpr'] . '</div><div class="">Technicien RDV MAR 2 :' . ($rdv2 ? ($rdv2->user->name.' le '.date('d/m/Y',strtotime($rdv2->date_rdv)) ?? '') : '') . '</div></div>';
+                    $content .= '<div class="btn bg-primary bg-Très modestes"></div><div class="">Technicien RDV MAR 2 :' . ($rdv2 ? ($rdv2->user->name.' le '.date('d/m/Y',strtotime($rdv2->date_rdv)) ?? '') : '') . '</div></div>';
 
                 }
                 $content .= '</td></tr></table>';
