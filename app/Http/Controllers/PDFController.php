@@ -782,7 +782,7 @@ class PDFController extends Controller
                 
 
                 if($lastRdv) {
-                    $content .= '<div class="btn bg-primary bg-Très modestes">' . $dossier_data['beneficiaire']['menage_mpr'] . '</div><div class="">Technicien RDV MAR 1 :' . ($lastRdv ? ($lastRdv->user->name ?? '') : '') . '</div></div>';
+                    $content .= '<div class="btn bg-primary bg-Très modestes">' . $dossier_data['beneficiaire']['menage_mpr'] . '</div><div class="">Technicien RDV MAR 1 :' . ($rdv2 ? ($lastRdv->user->name.' le '.date('d/m/Y',strtotime($lastRdv->date_rdv)) ?? '') : '') . '</div></div>';
 
                 }
                
