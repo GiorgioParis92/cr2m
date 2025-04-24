@@ -192,7 +192,8 @@ class Photo extends AbstractFormData
     
         // Counter for batch display (3 images per row)
         $count = 0;
-    
+        $text = '<div><table style="margin:auto;width:90%;border-collapse: collapse;margin-top:20px">';
+
         foreach ($values as $value) {
 
             if($value == false) {
@@ -259,6 +260,7 @@ class Photo extends AbstractFormData
         if ($count % 3 !== 0) {
             $text .= '</div>';
         }
+        $text .= '</table></div>';
 
         return $text;
         }
