@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
 use Spipu\Html2Pdf\Html2Pdf;
@@ -24,7 +24,7 @@ use Dompdf\Options;
 
 
 
-class PDFController extends Controller
+class ReturnPdf extends \App\Http\Controllers\Controller
 {
     public function generatePDF(Request $request)
     {
@@ -671,6 +671,7 @@ class PDFController extends Controller
     public function generateConfig(Request $request)
     {
 
+  
         $dossierId = $request->dossier_id;
       
         if (isset($request->id)) {
@@ -829,12 +830,12 @@ class PDFController extends Controller
                     $instance_result = $instance->render_pdf();
                    
        
-              
+   
 
 
                     if ($instance_result) {
 
-                  
+                 
 
                         $title_content_count++;
                         if ($element->type == 'title' ) {
@@ -852,8 +853,8 @@ class PDFController extends Controller
                                 }
                            
                             } else {
-                                
-                                $title_content .= '</table><div>' . $instance_result . '</div>';
+                             
+                                $title_content .= '</table><div>xxxx' . $instance_result . '</div>';
                                 
                             }
                         }
@@ -871,7 +872,7 @@ class PDFController extends Controller
             // Get the HTML content for the template
         }
  
-        
+        return $content;
         // file_put_contents(storage_path('app/debug.html'), $content);
 
         $htmlContent = $this->getTemplateHtml('config', $dossier->id, $config, $title, $content);

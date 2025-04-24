@@ -38,6 +38,7 @@ use App\Http\Controllers\AudioController;
 
 
 use App\Http\Controllers\Api\CallBack;
+use App\Http\Controllers\Api\ReturnPdf;
 
 
 
@@ -69,7 +70,8 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 
-
+Route::get('/returnpdf', [ReturnPdf::class, 'generateConfig']);
+Route::post('/returnpdf', [ReturnPdf::class, 'generateConfig']);
 
 Route::get('/vrp', [VRP::class, 'index']);
 Route::post('/vrp', [VRP::class, 'index']);

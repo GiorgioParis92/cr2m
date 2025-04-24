@@ -61,9 +61,9 @@ class Table extends AbstractFormData
         if ($this->condition_valid == false) {
             return '';
         }
-    
+
         $this->value = $this->decode_if_json($this->value);
-    
+
         return view('components.table', [
             'optionsArray' => $this->optionsArray,
             'value' => $this->value,
@@ -74,8 +74,8 @@ class Table extends AbstractFormData
             'dossier' => $this->dossier, // Make sure you pass any necessary data
         ])->render();
     }
-    
-    
+
+
 
     public function init_element()
     {
@@ -107,32 +107,32 @@ class Table extends AbstractFormData
         if (!is_array($this->value)) {
             $this->value = [];
         }
-    
+
         $element = $this->init_element();
         $element_values = [];
-    
+
         foreach ($element as $key => $field) {
             $element_values[$key] = ['value' => $field->value ?? ''];
         }
-    
+
         $uniqueId = uniqid(); // Generate a unique id for the row
         $this->value[$uniqueId] = $element_values;
-    
+
         $this->save_value();
     }
-    
-    
+
+
     public function remove_element($uniqueId)
     {
         $this->value = $this->decode_if_json($this->value);
-    
+
         unset($this->value[$uniqueId]);
-    
+
         // Do not reindex the array
         $this->save_value();
     }
 
-    
+
     public function init_value()
     {
         if (is_array($this->value)) {
@@ -171,81 +171,102 @@ class Table extends AbstractFormData
         }
         return $value;
     }
-    
+
     public function render_pdf()
     {
 
 
-   
+        $val=[];
         $should_render = false;
-        $data = '<div><table style="margin:auto;width:90%;margin-top:20px;border-collapse: collapse;">';
-        
- 
+        $data = '<div><table style="margin:auto;width:90%;border-collapse: collapse;margin-top:20px">';
+
+
         // Decode the JSON value if needed
-        $this->value = $this->decode_if_json($this->value);
+        if($this->value && !empty($this->value)) {
+            $val = json_decode($this->value, true);
+        }
+    
         // if($this->name=='ajout_piece') {
         //     dd($this->value);
         // }
-       
-        if(!empty($this->value)) {
-
-  
-        foreach ($this->value as $index => $element_data) {
-            $title_content = '';
-            $title_content_count = 0;
-            
-            foreach ($this->optionsArray as $element_config) {
-               
-                $class = 'App\\FormModel\\FormData\\' . ucfirst($element_config['type']);
-                $configInstance = $element_config;
-               
-                
-                $name=$this->name . '.value.' . $element_data . '.' . $element_config['name'];
-              
-                $form_id = $this->form_id;
-                $dossier_id = $this->dossier_id ?? null;
-
-                // Instantiate the form element class
-                if (class_exists($class)) {
-                    $instance = new $class($configInstance, $name, $form_id, $dossier_id);
-                } else {
-                    $instance = new AbstractFormData($configInstance, $name, $form_id, $dossier_id);
-                }
-             
-                if($element_config['type']!='title') {
-                    // dump($name);
-                    // dd($instance);
-                }
-                
-                $element_render = $instance->render_pdf();
+        if (!empty($val)) {
           
-                if($element_render) {
-                    try{
-                        $data .= '<tr><td style="width:100%;border:1px solid #ccc;border-collapse: collapse;padding-left:12px;padding-bottom:15px">';
-                        $data .= $element_render;
-                        $data .= '</td></tr>';
-                    } catch(Exception $e){
-    
-                        // $data .= '<tr><td style="width:100%;border:1px solid #ccc;border-collapse: collapse;padding-left:12px;padding-bottom:15px">';
-                        // $data.='erreur'.$element_config['type'];
-                        // $data .= '</td></tr>';
-    
-                        
-                    }
-                }
-  
-                // if ($element_render && $element_config['type']=='title') {
-                    
-                // }
 
+            foreach ($val as $index => $element_data) {
+                $title_content = '';
+                $title_content_count = 0;
+
+
+              
+
+                foreach ($this->optionsArray as $element_config) {
+
+                    $class = 'App\\FormModel\\FormData\\' . ucfirst($element_config['type']);
+                    $configInstance = $element_config;
+
+
+                    $name = $this->name . '.value.' . $element_data . '.' . $element_config['name'];
+
+                    $form_id = $this->form_id;
+                    $dossier_id = $this->dossier_id ?? null;
+
+                  
+                    try {
+
+                    
+                    // Instantiate the form element class
+                    if (class_exists($class)) {
+                        $instance = new $class($configInstance, $name, $form_id, $dossier_id);
+                    } else {
+                        $instance = new AbstractFormData($configInstance, $name, $form_id, $dossier_id);
+                    }
+                   
+                    if ($element_config['type'] != 'title') {
+                        // dump($name);
+                        // dd($instance);
+                    }
+                } catch (Exception $e) {
+                    return 'erreur';
+                }
+                    try {
+                        $element_render = $instance->render_pdf();
+                     
+                        if ($element_render && $element_render!="" && $element_config['type'] != 'title') {
+
+                         
+                        
+                            $data .= '<tr><td style="width:100%;border:1px solid #ccc;border-collapse: collapse;padding-left:12px;padding-bottom:15px">';
+                            $data .= $element_render;
+                            $data .= '</td></tr>';
+                           
+
+                            // $data .= '<tr><td style="width:100%;border:1px solid #ccc;border-collapse: collapse;padding-left:12px;padding-bottom:15px">';
+                            // $data.='erreur'.$element_config['type'];
+                            // $data .= '</td></tr>';
+
+
+                        } else {
+                            $data .= '<tr><td style="width:100%;border:1px solid #ccc;border-collapse: collapse;padding-left:12px;padding-bottom:15px">';
+                            $data .= $element_render;
+                            $data .= '</td></tr>';
+                        }
+                    } catch (Exception $e) {
+
+                        $data.='erreur';
+                    }
+                  
+                    // if ($element_render && $element_config['type']=='title') {
+
+                    // }
+
+
+                }
 
             }
-         
+
         }
-    
-    }
         $data .= '</table></div>';
-      
+       
         return $data;
     }
 
