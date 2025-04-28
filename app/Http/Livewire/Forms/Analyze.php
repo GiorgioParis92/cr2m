@@ -42,9 +42,7 @@ class Analyze extends AbstractData
                 }
 
             }
-            if(auth()->user()->id==1) {
-                dump($result_values);
-            }
+       
            if(empty($result_values)) {
            
             $value='{"errors":"Inserer un document"}';
@@ -55,7 +53,9 @@ class Analyze extends AbstractData
             } else {
                 $data=[];
                 foreach($result_values as $k=>$v) {
-               
+                    if(auth()->user()->id==1) {
+                        dump($v);
+                    }
                     if(isset($v->ocr->data->oceer_document)) {
                         $data[$k]=json_encode($v->ocr->data->oceer_document,true);
                     }
