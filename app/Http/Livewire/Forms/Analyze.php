@@ -42,7 +42,9 @@ class Analyze extends AbstractData
                 }
 
             }
-         
+            if(auth()->user()->id==1) {
+                dump($result_values);
+            }
            if(empty($result_values)) {
            
             $value='{"errors":"Inserer un document"}';
