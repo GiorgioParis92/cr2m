@@ -70,7 +70,9 @@ class Analyze extends AbstractData
                         'contents' => $value,
                     ];
                 }
-
+                if(auth()->user()->id==1) {
+                    print_r($data);
+                }
 
                 if(!empty($data) && count($options['values_check'])==count($data)) {
 
@@ -86,9 +88,7 @@ class Analyze extends AbstractData
                         'multipart' => $multipartData
                     ]
                 );
-                if(auth()->user()->id==1) {
-                    print_r($response);
-                }
+          
 
                 if($response->getStatusCode()==200) {
 
