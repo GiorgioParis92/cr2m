@@ -54,7 +54,7 @@ class Analyze extends AbstractData
                 $data=[];
                 foreach($result_values as $k=>$v) {
                     if(auth()->user()->id==1) {
-                        dump($v);
+                        print_r($v);
                     }
                     if(isset($v->ocr->data->oceer_document)) {
                         $data[$k]=json_encode($v->ocr->data->oceer_document,true);
