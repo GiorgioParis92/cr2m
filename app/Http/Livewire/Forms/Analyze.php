@@ -70,9 +70,7 @@ class Analyze extends AbstractData
                         'contents' => $value,
                     ];
                 }
-                if(auth()->user()->id==1) {
-                    print_r($data);
-                }
+          
 
                 if(!empty($data) && count($options['values_check'])==count($data)) {
 
@@ -132,9 +130,7 @@ class Analyze extends AbstractData
         } else {
       
 
-            if(auth()->user()->id==1) {
-                dump($this->value);
-            }
+       
 
             $json=(json_decode($this->value, true));   
             if($json['output_0']['success']) {
