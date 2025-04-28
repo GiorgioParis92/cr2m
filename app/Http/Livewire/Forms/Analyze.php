@@ -129,6 +129,11 @@ class Analyze extends AbstractData
            
         } else {
       
+
+            if(auth()->user()->id==1) {
+                dump($this->value);
+            }
+
             $json=(json_decode($this->value, true));   
             if($json['output_0']['success']) {
                 $this->invalidGroups = (new JsonValidator())->getInvalidGroups($this->value);
