@@ -53,9 +53,7 @@ class Analyze extends AbstractData
             } else {
                 $data=[];
                 foreach($result_values as $k=>$v) {
-                    if(auth()->user()->id==1) {
-                        print_r($v);
-                    }
+             
                     if(isset($v->ocr->data->oceer_document)) {
                         $data[$k]=json_encode($v->ocr->data->oceer_document,true);
                     }
@@ -88,7 +86,9 @@ class Analyze extends AbstractData
                         'multipart' => $multipartData
                     ]
                 );
-               
+                if(auth()->user()->id==1) {
+                    print_r($response);
+                }
 
                 if($response->getStatusCode()==200) {
 
