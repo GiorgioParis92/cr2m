@@ -51,7 +51,7 @@ final class ServerCallbackController
             return $this->ok('No downloadable file for this event type.');
         }
     
-        return $payload;
+        return json_encode($payload);
         // 4. Download & store --------------------------------------------------
         try {
             $storedPath = $this->downloadAndStore(
