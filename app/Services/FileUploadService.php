@@ -486,7 +486,7 @@ class FileUploadService
         // dd($request->input('template'));
         // $this->emit($request->input('template'));
 
-        if (in_array($extension, $allowedExtensions) && auth()->user()->id==1) {
+        if (in_array($extension, $allowedExtensions) ) {
         $response = Http::withHeaders([
             'User-Agent'      => 'laravel-app',
             'X-CEERTIF-KEY'   => '430324fb959d9a45790c03d7d4338c57',
@@ -508,6 +508,8 @@ class FileUploadService
 
         if (!$response->successful()) {
             throw new \Exception('Ceertif API error: ' . $response->body());
+        } else {
+            return $response;
         }
         }
 
