@@ -25,34 +25,43 @@ final class ServerCallbackController
 
     public function __invoke(Request $request): JsonResponse
     {
+  
         $payload = $request->getContent();
-    
+   
         if (is_string($payload)) {
             $decoded = json_decode($payload, true);
             if (is_string($decoded)) {
-                $payload = json_decode($decoded, true);
+           
+            $payload=json_decode($decoded,true);
+       
             }
+            
         }
-    
+
+        // Persist raw call for audit/debug
         $this->persistRaw($request, $payload);
     
-        $event = $payload['event'] ?? null;
+        // 3. Work out whether we need to download a file -----------------------
         $downloadUrl = $this->downloadUrlFor($payload);
     
-        if ($downloadUrl === null || $event === null) {
+        if ($downloadUrl === null) {
             return $this->ok('No downloadable file for this event type.');
         }
     
+      
+        // 4. Download & store --------------------------------------------------
         try {
             $storedPath = $this->downloadAndStore(
                 $downloadUrl,
                 $request->header('X-CEERTIF-SECRET'),
-                $event
+                $payload['data']['file_display_name'] ?? null
             );
+            
         } catch (\Throwable $e) {
             return $this->error('Failed to fetch the file.', JsonResponse::HTTP_BAD_GATEWAY);
         }
-    
+
+        // 5. Reply to Ceertif ---------------------------------------------------
         return $this->created(['stored_as' => $storedPath]);
     }
 
@@ -84,7 +93,7 @@ final class ServerCallbackController
         };
     }
 
-    private function downloadAndStore(string $url, ?string $secret, string $event): string
+    private function downloadAndStore(string $url, ?string $secret, ?string $fileDisplayName = null): string
     {
         try {
             $response = Http::withHeaders([
@@ -98,8 +107,9 @@ final class ServerCallbackController
             $response->throw();
     
             $fileContents = $response->body();
-            $originalName = $this->getOriginalFileNameFromUrl($url);
-            $fileName     = $this->buildFileName($originalName, $event);
+            $extension    = $this->getFileExtensionFromUrl($url);
+            $baseName     = $this->sanitizeFileName($fileDisplayName ?? Str::uuid());
+            $fileName     = "{$baseName}.{$extension}";
             $filePath     = "webhooks/{$fileName}";
     
             Storage::put($filePath, $fileContents);
@@ -109,6 +119,7 @@ final class ServerCallbackController
             throw new \RuntimeException("Failed to download file from URL: {$url}", 0, $e);
         }
     }
+    
     
     private function getFileExtensionFromUrl(string $url): string
     {
@@ -126,25 +137,8 @@ final class ServerCallbackController
     }
 
 
-    private function getOriginalFileNameFromUrl(string $url): string
-    {
-        $path = parse_url($url, PHP_URL_PATH) ?? '';
-        return basename($path);
-    }
-    
-    private function buildFileName(string $originalName, string $event): string
-    {
-        $extension = pathinfo($originalName, PATHINFO_EXTENSION);
-        $nameWithoutExt = pathinfo($originalName, PATHINFO_FILENAME);
-    
-        return match ($event) {
-            'WatermarkedFileAvailable' => $originalName,
-            'EIDASCertificateAvailable' => "{$nameWithoutExt}_eidas.{$extension}",
-            'BlockchainCertificateAvailable' => "{$nameWithoutExt}_blockchain.{$extension}",
-            default => Str::uuid() . '.' . ($extension ?: 'bin'),
-        };
-    }
 
+    
     // ---------------------------------------------------------------- traits
     private function ok(string|array $body): JsonResponse
     {
@@ -173,5 +167,14 @@ final class ServerCallbackController
     }
 
 
-
+    private function sanitizeFileName(string $name): string
+    {
+        // Remove accents, convert to ASCII, replace non-alphanumeric characters with underscores
+        $name = iconv('UTF-8', 'ASCII//TRANSLIT', $name);
+        $name = preg_replace('/[^A-Za-z0-9_-]/', '_', $name);
+        $name = trim($name, '_');
+    
+        return $name ?: 'file';
+    }
+    
 }
