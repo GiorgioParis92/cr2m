@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use App\Models\Dossier;
 
 use Illuminate\Http\Client\RequestException;
 
@@ -97,6 +98,8 @@ final class ServerCallbackController
     private function downloadAndStore(string $url, ?string $secret, ?string $fileDisplayName = null,, ?string $dossier_id = null): string
     {
         try {
+            $dossier = Dossier::where('id',$dossier_id)->first();
+
             $response = Http::withHeaders([
                     'X-CEERTIF-SECRET' => $secret
                 ])
@@ -111,7 +114,7 @@ final class ServerCallbackController
             $extension    = $this->getFileExtensionFromUrl($url);
             $baseName     = $this->sanitizeFileName($fileDisplayName ?? Str::uuid());
             $fileName     = "{$baseName}.{$extension}";
-            $filePath     = "public/dossiers/{$dossier_id}/{$fileName}";
+            $filePath     = "public/dossiers/{$dossier->folder}/{$fileName}";
     
             Storage::put($filePath, $fileContents);
     
