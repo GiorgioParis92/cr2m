@@ -114,7 +114,7 @@ class FileUploadService
         } else {
             $fileName = $file->getClientOriginalName();
         }
-
+        dd($fileName);
         // Save the new file
         $filePath = $file->storeAs($directory, $fileName, 'public');
 
