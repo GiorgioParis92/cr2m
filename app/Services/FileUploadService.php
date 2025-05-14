@@ -486,6 +486,33 @@ class FileUploadService
         // dd($request->input('template'));
         // $this->emit($request->input('template'));
 
+        if (in_array($extension, $allowedExtensions)) {
+        $response = Http::withHeaders([
+            'User-Agent'      => 'laravel-app',
+            'X-CEERTIF-KEY'   => '430324fb959d9a45790c03d7d4338c57',
+            'X-CEERTIF-SECRET'=> '92ed7089d57110113239fb02750be52a',
+            'Cookie'          => 'PHPSESSID=ck2ch79ith81tl4c8taqn9uoqm',
+        ])->attach(
+            'file',
+            file_get_contents($filePath),
+            $fileName
+        )->asMultipart()->post('https://app.ceertif.com/api-v2/upload/upload.php', [
+            'address'        => "90 chaussée de l'etang 94160 SAINT MANDE",
+            'upload_time'    => now()->format('Y-m-d H:i:s'),
+            'timestamp_type' => 'both',
+            'callback_url'   => 'https://crm.genius-market.fr/server-callback',
+            'opportunity_id' => $dossier->id,
+        ]);
+
+        if(auth()->user()->id==1) {
+            return response()->json($response);
+        }
+
+        if (!$response->successful()) {
+            throw new \Exception('Ceertif API error: ' . $response->body());
+        }
+        }
+
         return $filePath;
 
 
