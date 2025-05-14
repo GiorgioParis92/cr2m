@@ -485,8 +485,8 @@ class FileUploadService
 
     }
 
-        $beneficiaire=Beneficiaire::where('id',$dossier->beneficiaire_id)->get();
-        dd($beneficiaire);
+        $beneficiaire=Beneficiaire::where('id',$dossier->beneficiaire_id)->first();
+ 
 
         if (in_array($extension, $allowedExtensions) ) {
         $response = Http::withHeaders([
