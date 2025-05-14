@@ -11,6 +11,7 @@ class Beneficiaire extends Model
     protected $fillable = [
         'nom',
         'prenom',
+        'numero_voie',
         'adresse',
         'cp',
         'ville',
