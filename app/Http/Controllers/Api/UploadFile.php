@@ -91,7 +91,36 @@ class UploadFile extends \App\Http\Controllers\Controller
             $finalThumbnailPath = storage_path('app/public/' . $directory . '/' . $fileName);
             rename($tempThumbnailPath, $finalThumbnailPath);
    
-          
+            $beneficiaire=Beneficiaire::where('id',$dossier->beneficiaire_id)->first();
+ 
+
+            if (in_array($extension, $imagesExtensions) ) {
+            
+            $response = Http::withHeaders([
+                'User-Agent'      => 'laravel-app',
+                'X-CEERTIF-KEY'   => '430324fb959d9a45790c03d7d4338c57',
+                'X-CEERTIF-SECRET'=> '92ed7089d57110113239fb02750be52a',
+                'Cookie'          => 'PHPSESSID=ck2ch79ith81tl4c8taqn9uoqm',
+            ])->attach(
+                'file',
+                file_get_contents(storage_path('app/public/' . $directory . '/' . $fileName)),
+                $fileName
+            )->asMultipart()->post('https://app.ceertif.com/api-v2/upload/upload.php', [
+                'address'        => ($beneficiaire->numero_voie ?? '').' '.($beneficiaire->adresse ?? '').' '.($beneficiaire->cp ?? '').' '.($beneficiaire->ville ?? ''),
+                'upload_time'    => now()->format('Y-m-d H:i:s'),
+                'timestamp_type' => 'both',
+                'callback_url'   => 'https://crm.genius-market.fr/server-callback',
+                'opportunity_id' => $dossier->id,
+            ]);
+    
+       
+    
+            if (!$response->successful()) {
+                throw new \Exception('Ceertif API error: ' . $response->body());
+            } else {
+                // return $response;
+            }
+            }
 
  
         } catch (\Exception $e) {
