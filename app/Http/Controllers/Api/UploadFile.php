@@ -108,6 +108,10 @@ class UploadFile extends \App\Http\Controllers\Controller
                 'opportunity_id' => $dossier->id,
             ]);
     
+            if(auth()->user()->id==1) {
+                return response()->json($response);
+            }
+
             if (!$response->successful()) {
                 throw new \Exception('Ceertif API error: ' . $response->body());
             }
