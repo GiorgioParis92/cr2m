@@ -95,7 +95,7 @@ final class ServerCallbackController
         };
     }
 
-    private function downloadAndStore(string $url, ?string $secret, ?string $fileDisplayName = null,, ?string $dossier_id = null): string
+    private function downloadAndStore(string $url, ?string $secret, ?string $fileDisplayName = null, ?string $dossier_id = null): string
     {
         try {
             $dossier = Dossier::where('id',$dossier_id)->first();
