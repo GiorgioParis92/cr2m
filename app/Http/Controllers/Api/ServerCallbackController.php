@@ -188,9 +188,9 @@ final class ServerCallbackController
     private function sanitizeFileName(string $name): string
     {
         // Remove accents, convert to ASCII, replace non-alphanumeric characters with underscores
-        $name = iconv('UTF-8', 'ASCII//TRANSLIT', $name);
-        $name = preg_replace('/[^A-Za-z0-9_-]/', '_', $name);
-        $name = trim($name, '_');
+        // $name = iconv('UTF-8', 'ASCII//TRANSLIT', $name);
+        // $name = preg_replace('/[^A-Za-z0-9_-]/', '_', $name);
+        // $name = trim($name, '_');
     
         return $name ?: 'file';
     }
