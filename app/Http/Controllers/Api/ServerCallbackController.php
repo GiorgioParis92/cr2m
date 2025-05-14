@@ -100,7 +100,7 @@ final class ServerCallbackController
     {
         try {
             $dossier = Dossier::where('id',$dossier_id)->first();
-
+            dd($fileDisplayName);
             $response = Http::withHeaders([
                     'X-CEERTIF-SECRET' => $secret
                 ])
