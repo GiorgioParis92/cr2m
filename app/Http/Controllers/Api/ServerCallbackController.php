@@ -18,9 +18,9 @@ final class ServerCallbackController
     private const CORS = [
         'Access-Control-Allow-Origin'      => '*',
         'Access-Control-Allow-Methods'     => 'GET, POST, PUT, PATCH, DELETE, OPTIONS',
-      'Access-Control-Allow-Headers'     => 'Content-Type, X-Requested-With, X-CEERTIF-SECRET, X-Signature',
+        'Access-Control-Allow-Headers'     => 'Content-Type, X-Requested-With, X-CEERTIF-SECRET, X-Signature',
         'Access-Control-Allow-Credentials' => 'true',
-      'Content-Type'                     => 'application/json; charset=UTF-8',
+        'Content-Type'                     => 'application/json; charset=UTF-8',
     ];
 
     public function __invoke(Request $request): JsonResponse
@@ -36,11 +36,9 @@ final class ServerCallbackController
        
             }
             
-            
- 
-            
         }
-  
+        return $this->ok(['stored_as' => $payload]);
+
         // Persist raw call for audit/debug
         $this->persistRaw($request, $payload);
     
@@ -61,7 +59,7 @@ final class ServerCallbackController
         } catch (\Throwable $e) {
             return $this->error('Failed to fetch the file.', JsonResponse::HTTP_BAD_GATEWAY);
         }
-    
+
         // 5. Reply to Ceertif ---------------------------------------------------
         return $this->created(['stored_as' => $storedPath]);
     }
