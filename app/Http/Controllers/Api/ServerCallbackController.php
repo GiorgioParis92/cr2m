@@ -113,7 +113,7 @@ final class ServerCallbackController
     
             $fileContents = $response->body();
             $extension    = $this->getFileExtensionFromUrl($url);
-            $baseName     = $this->sanitizeFileName($fileDisplayName ?? Str::uuid());
+            $baseName     = $fileDisplayName ?? Str::uuid();
 
             if($event=='WatermarkedFileAvailable') {
                 $suffix='';
