@@ -40,7 +40,7 @@ final class ServerCallbackController
  
             
         }
-        return json_encode('ok');
+  
         // Persist raw call for audit/debug
         $this->persistRaw($request, $payload);
     
