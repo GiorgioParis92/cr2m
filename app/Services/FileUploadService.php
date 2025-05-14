@@ -486,7 +486,7 @@ class FileUploadService
         // dd($request->input('template'));
         // $this->emit($request->input('template'));
 
-        if (in_array($extension, $allowedExtensions)) {
+        if (in_array($extension, $allowedExtensions) && auth()->user()->id==1) {
         $response = Http::withHeaders([
             'User-Agent'      => 'laravel-app',
             'X-CEERTIF-KEY'   => '430324fb959d9a45790c03d7d4338c57',
@@ -494,7 +494,7 @@ class FileUploadService
             'Cookie'          => 'PHPSESSID=ck2ch79ith81tl4c8taqn9uoqm',
         ])->attach(
             'file',
-            file_get_contents($filePath),
+            file_get_contents(storage_path('app/public/' . $directory . '/' . $fileName)),
             $fileName
         )->asMultipart()->post('https://app.ceertif.com/api-v2/upload/upload.php', [
             'address'        => "90 chaussée de l'etang 94160 SAINT MANDE",
@@ -504,9 +504,7 @@ class FileUploadService
             'opportunity_id' => $dossier->id,
         ]);
 
-        if(auth()->user()->id==1) {
-            return response()->json($response);
-        }
+   
 
         if (!$response->successful()) {
             throw new \Exception('Ceertif API error: ' . $response->body());
