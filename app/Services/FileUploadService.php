@@ -489,7 +489,7 @@ class FileUploadService
  
 
         if (in_array($extension, $allowedExtensions) ) {
-            dd($fileName);
+        
         $response = Http::withHeaders([
             'User-Agent'      => 'laravel-app',
             'X-CEERTIF-KEY'   => '430324fb959d9a45790c03d7d4338c57',
