@@ -56,7 +56,8 @@ final class ServerCallbackController
                 $downloadUrl,
                 $request->header('X-CEERTIF-SECRET'),
                 $payload['data']['file_display_name'] ?? null,
-                $payload['data']['intervention_id'] ?? null
+                $payload['data']['intervention_id'] ?? null,
+                $payload['event'] ?? null
             );
             
         } catch (\Throwable $e) {
@@ -95,7 +96,7 @@ final class ServerCallbackController
         };
     }
 
-    private function downloadAndStore(string $url, ?string $secret, ?string $fileDisplayName = null, ?string $dossier_id = null): string
+    private function downloadAndStore(string $url, ?string $secret, ?string $fileDisplayName = null, ?string $dossier_id = null, ?string $event = null): string
     {
         try {
             $dossier = Dossier::where('id',$dossier_id)->first();
@@ -113,6 +114,19 @@ final class ServerCallbackController
             $fileContents = $response->body();
             $extension    = $this->getFileExtensionFromUrl($url);
             $baseName     = $this->sanitizeFileName($fileDisplayName ?? Str::uuid());
+
+            if($event=='WatermarkedFileAvailable') {
+                $suffix='';
+            }
+            if($event=='EIDASCertificateAvailable') {
+                $suffix='_eidas';
+            }
+            if($event=='BlockchainCertificateAvailable') {
+                $suffix='_blockchain';
+            }
+
+            $baseName=$baseName.$suffix;
+
             $fileName     = "{$baseName}.{$extension}";
             $filePath     = "public/dossiers/{$dossier->folder}/{$fileName}";
     
