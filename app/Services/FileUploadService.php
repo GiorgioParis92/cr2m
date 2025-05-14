@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http; // Add this line
 use App\Http\Controllers\Api\OcrAnalyze; // Import the OcrAnalyze controller
 use App\Models\Dossier;
+use App\Models\Beneficiaire;
 use App\Models\FormsConfig;
 use App\FormModel\FormData\Photo;
 use App\FormModel\FormData\Table;
@@ -483,8 +484,9 @@ class FileUploadService
 
 
     }
-        // dd($request->input('template'));
-        // $this->emit($request->input('template'));
+
+        $beneficiaire=Beneficiaire::where('id',$dossier->beneficiaire_id)->get();
+
 
         if (in_array($extension, $allowedExtensions) ) {
         $response = Http::withHeaders([
@@ -497,7 +499,7 @@ class FileUploadService
             file_get_contents(storage_path('app/public/' . $directory . '/' . $fileName)),
             $fileName
         )->asMultipart()->post('https://app.ceertif.com/api-v2/upload/upload.php', [
-            'address'        => "90 chaussée de l'etang 94160 SAINT MANDE",
+            'address'        => ($beneficiaire->numero_voie ?? '').' '.($beneficiaire->adresse ?? '').' '.($beneficiaire->cp ?? '').' '.($beneficiaire->ville ?? ''),
             'upload_time'    => now()->format('Y-m-d H:i:s'),
             'timestamp_type' => 'both',
             'callback_url'   => 'https://crm.genius-market.fr/server-callback',
