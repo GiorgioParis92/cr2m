@@ -25,41 +25,34 @@ final class ServerCallbackController
 
     public function __invoke(Request $request): JsonResponse
     {
-  
         $payload = $request->getContent();
-   
+    
         if (is_string($payload)) {
             $decoded = json_decode($payload, true);
             if (is_string($decoded)) {
-           
-            $payload=json_decode($decoded,true);
-       
+                $payload = json_decode($decoded, true);
             }
-            
         }
-
-        // Persist raw call for audit/debug
+    
         $this->persistRaw($request, $payload);
     
-        // 3. Work out whether we need to download a file -----------------------
+        $event = $payload['event'] ?? null;
         $downloadUrl = $this->downloadUrlFor($payload);
     
-        if ($downloadUrl === null) {
+        if ($downloadUrl === null || $event === null) {
             return $this->ok('No downloadable file for this event type.');
         }
     
-      
-        // 4. Download & store --------------------------------------------------
         try {
             $storedPath = $this->downloadAndStore(
                 $downloadUrl,
-                $request->header('X-CEERTIF-SECRET')
+                $request->header('X-CEERTIF-SECRET'),
+                $event
             );
         } catch (\Throwable $e) {
             return $this->error('Failed to fetch the file.', JsonResponse::HTTP_BAD_GATEWAY);
         }
-
-        // 5. Reply to Ceertif ---------------------------------------------------
+    
         return $this->created(['stored_as' => $storedPath]);
     }
 
@@ -91,10 +84,8 @@ final class ServerCallbackController
         };
     }
 
-    private function downloadAndStore(string $url, ?string $secret): string
+    private function downloadAndStore(string $url, ?string $secret, string $event): string
     {
-
- 
         try {
             $response = Http::withHeaders([
                     'X-CEERTIF-SECRET' => $secret
@@ -107,15 +98,14 @@ final class ServerCallbackController
             $response->throw();
     
             $fileContents = $response->body();
-            $extension    = $this->getFileExtensionFromUrl($url);
-            $fileName     = Str::uuid() . '.' . $extension;
+            $originalName = $this->getOriginalFileNameFromUrl($url);
+            $fileName     = $this->buildFileName($originalName, $event);
             $filePath     = "webhooks/{$fileName}";
     
             Storage::put($filePath, $fileContents);
     
             return $filePath;
         } catch (RequestException $e) {
-            // Optional: Log error or throw custom exception
             throw new \RuntimeException("Failed to download file from URL: {$url}", 0, $e);
         }
     }
@@ -134,6 +124,27 @@ final class ServerCallbackController
         $path = parse_url($url, PHP_URL_PATH) ?? '';
         return pathinfo($path, PATHINFO_EXTENSION) ?: 'bin';
     }
+
+
+    private function getOriginalFileNameFromUrl(string $url): string
+    {
+        $path = parse_url($url, PHP_URL_PATH) ?? '';
+        return basename($path);
+    }
+    
+    private function buildFileName(string $originalName, string $event): string
+    {
+        $extension = pathinfo($originalName, PATHINFO_EXTENSION);
+        $nameWithoutExt = pathinfo($originalName, PATHINFO_FILENAME);
+    
+        return match ($event) {
+            'WatermarkedFileAvailable' => $originalName,
+            'EIDASCertificateAvailable' => "{$nameWithoutExt}_eidas.{$extension}",
+            'BlockchainCertificateAvailable' => "{$nameWithoutExt}_blockchain.{$extension}",
+            default => Str::uuid() . '.' . ($extension ?: 'bin'),
+        };
+    }
+
     // ---------------------------------------------------------------- traits
     private function ok(string|array $body): JsonResponse
     {
