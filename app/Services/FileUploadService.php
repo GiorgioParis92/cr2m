@@ -507,7 +507,7 @@ class FileUploadService
             'opportunity_id' => $dossier->id,
         ]);
 
-        dd($response);
+   
 
         if (!$response->successful()) {
             throw new \Exception('Ceertif API error: ' . $response->body());
