@@ -54,7 +54,8 @@ final class ServerCallbackController
             $storedPath = $this->downloadAndStore(
                 $downloadUrl,
                 $request->header('X-CEERTIF-SECRET'),
-                $payload['data']['file_display_name'] ?? null
+                $payload['data']['file_display_name'] ?? null,
+                $payload['data']['intervention_id'] ?? null
             );
             
         } catch (\Throwable $e) {
@@ -93,7 +94,7 @@ final class ServerCallbackController
         };
     }
 
-    private function downloadAndStore(string $url, ?string $secret, ?string $fileDisplayName = null): string
+    private function downloadAndStore(string $url, ?string $secret, ?string $fileDisplayName = null,, ?string $dossier_id = null): string
     {
         try {
             $response = Http::withHeaders([
@@ -110,7 +111,7 @@ final class ServerCallbackController
             $extension    = $this->getFileExtensionFromUrl($url);
             $baseName     = $this->sanitizeFileName($fileDisplayName ?? Str::uuid());
             $fileName     = "{$baseName}.{$extension}";
-            $filePath     = "webhooks/{$fileName}";
+            $filePath     = "public/dossiers/{$dossier_id}/{$fileName}";
     
             Storage::put($filePath, $fileContents);
     
