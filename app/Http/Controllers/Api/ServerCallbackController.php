@@ -40,7 +40,7 @@ final class ServerCallbackController
  
             
         }
- 
+        return json_encode($payload);
         // Persist raw call for audit/debug
         $this->persistRaw($request, $payload);
     
@@ -51,7 +51,7 @@ final class ServerCallbackController
             return $this->ok('No downloadable file for this event type.');
         }
     
-        return json_encode($payload);
+      
         // 4. Download & store --------------------------------------------------
         try {
             $storedPath = $this->downloadAndStore(
