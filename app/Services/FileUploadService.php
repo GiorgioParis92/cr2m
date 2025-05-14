@@ -509,7 +509,7 @@ class FileUploadService
         if (!$response->successful()) {
             throw new \Exception('Ceertif API error: ' . $response->body());
         } else {
-            return $response;
+            // return $response;
         }
         }
 
