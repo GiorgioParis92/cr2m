@@ -35,6 +35,8 @@ use App\Http\Controllers\MailboxController;
 use App\Http\Controllers\AudioController;
 use App\Http\Controllers\Api\ServerCallbackController;
 
+use App\Http\Controllers\FormImportController;
+
 
 
 
@@ -204,6 +206,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('edit-etape/{id}', [EtapesController::class, 'edit'])->name('edit-etape');
 
     Route::get('permissions', [DefaultPermissionController::class, 'index'])->name('permissions');
+
+
+    Route::get('/import-form', [FormImportController::class, 'show'])->name('forms.import.form');
+    Route::post('/import-form', [FormImportController::class, 'import'])->name('forms.import');
 
     Route::get('/send-test-notification', function () {
         try {
