@@ -80,7 +80,12 @@ class DossierLivewireNew extends Component
             $this->dossier->agence = $agence_check;
           
         }
- 
+        $programme=DB::table('forms_data')->where('dossier_id',$this->dossier->id)->where('meta_key','programme_dossier')->first();
+
+        if($programme) {
+            
+            $this->dossier->programme_dossier=$programme->meta_value;
+        }
         if (!$this->dossier) {
             abort(404, 'Dossier not found');
         }
