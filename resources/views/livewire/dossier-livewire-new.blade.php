@@ -262,6 +262,12 @@
                                 <h6 class="mb-0">Statut ANAH</h6>
                             </div>
                             <div class="card-body row">
+
+                                    @if(isset($dossier['programme_dossier']))
+                                    <h6 class="mb-0">Programme : {{ $dossier['programme_dossier'] }}</h6>
+                                    @endif
+
+
                                 <!--  @livewire('response-data', ['dossierId' => $dossier->id]) -->
 
 
