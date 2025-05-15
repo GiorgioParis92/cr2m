@@ -326,6 +326,14 @@ class DossierLivewireNew extends Component
         $this->configs=[];
         $this->load_forms($tab);
     
+
+        $programme=DB::table('forms_data')->where('dossier_id',$this->dossier->id)->where('meta_key','programme_dossier')->first();
+
+        if($programme) {
+            
+            $this->dossier->programme_dossier=$programme->meta_value;
+        }
+
         // Force Livewire to refresh UI
         $this->emit('initializeDropzones', ['forms_configs' => $this->forms_configs]);
         $this->emit('setTab', ['forms_configs' => $this->forms_configs]);
