@@ -68,6 +68,14 @@ class DossierLivewire extends Component
             ->get()
             ->toArray();
 
+
+            $programme=DB::table('forms_data')->where(dossier_id,$this->dossier->id)->where('meta_key','programme_dossier')->first();
+
+            if($programme) {
+                $this->dossier['programme_dossier']=$programme->meta_value;
+            }
+
+
         // Initialize validators for each etape
         foreach ($this->etapes as $etape) {
             $this->validators[$etape['etape_id']] = new EtapeValidator($etape['etape_id']);
