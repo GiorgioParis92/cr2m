@@ -76,6 +76,8 @@ class FileUploadService
         $file = $request->file('file');
 
         $allowedExtensions = ['jpeg', 'jpg', 'png', 'gif', 'pdf', 'heic', 'webp'];
+        $imagesExtensions = ['jpeg', 'jpg', 'png', 'gif', 'heic', 'webp'];
+
         $extension = strtolower($file->getClientOriginalExtension());
 
 
@@ -134,7 +136,7 @@ class FileUploadService
         //  convert $fileName -resize 800x600\> $thumbnailFileName
 
  
-            if (in_array($extension, $allowedExtensions)) {
+            if (in_array($extension, $imagesExtensions)) {
                 $path = storage_path('app/public/' . $filePath);
                 $thumbnail_path = storage_path('app/public/' . $directory . '/' . $thumbnailFileName);
                 $resizeCommand = "convert $path -resize 800x600\> $thumbnail_path";
