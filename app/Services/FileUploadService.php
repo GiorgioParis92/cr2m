@@ -135,7 +135,7 @@ class FileUploadService
 
         //  convert $fileName -resize 800x600\> $thumbnailFileName
 
- 
+        $thumbnail_path='';
             if (in_array($extension, $imagesExtensions)) {
                 $path = storage_path('app/public/' . $filePath);
                 $thumbnail_path = storage_path('app/public/' . $directory . '/' . $thumbnailFileName);
