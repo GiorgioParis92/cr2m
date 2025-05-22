@@ -445,7 +445,37 @@
         </tr>
     </table>
 
+    <table>
+        <tr>
+            <td class="background_td border-bottom text-center">
+                <b style="font-size:13px;">Accompagnement social </b>
+            </td>
 
+        </tr>
+
+
+        <tr>
+
+            <td class=" border-bottom">
+                <ul>
+                    <li>
+                    Dans le cadre de notre mission d’accompagnement à la rénovation énergétique, si, lors de la première visite, une situation manifeste d’habitat indigne, d’indécence, de non-adaptation du logement à une perte d’autonomie, ou une inadéquation entre les ressources du ménage et les conditions d’existence est constatée, nous serons dans l’obligation de saisir le Pôle départemental de l’habitat compétent ainsi que les autorités régionales de santé.
+
+                    </li>
+                    <li>
+                    Par ailleurs, conformément à nos obligations, nous signalerons cette situation à l’ANAH. Si le projet de rénovation énergétique ne peut être mené à bien dans ces conditions, nous orienterons le ménage vers les structures compétentes susceptibles de proposer un accompagnement renforcé et adapté à leurs besoins.
+
+
+                    </li>
+                    <li>
+                    Dans ce contexte, notre entreprise sera formellement dégagée de tout engagement contractuel relatif au projet en cours.
+                    </li>
+             
+                </ul>
+            </td>
+        </tr>
+
+    </table>
     <table>
         <tr>
             <td class="background_td border-bottom text-center">
