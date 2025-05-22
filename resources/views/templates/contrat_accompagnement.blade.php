@@ -980,7 +980,10 @@
 
     </div>
 
-
+    </page>
+<page backtop="25mm" backleft="10mm" backright="10mm" backimg="" backbottom="10mm">
+    @include('pdf.header')
+    @include('pdf.footer')
     <div class="my-4">
         <h3> Article 14: Signature électronique </h3>
 
