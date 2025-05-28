@@ -115,7 +115,11 @@ class YouSignStatus extends Controller
       }
       // Process response
       $responseData = json_decode($response);
-
+      if(!isset($request->signature) || (isset($request->signature) && $request->signature!=2)) {
+        $suffix='';
+      } else {
+        $suffix=2;
+      }
 
       if (
         isset($responseData->status) && (
@@ -128,17 +132,20 @@ class YouSignStatus extends Controller
      
         if ($responseData->result->data->document->status == 'ongoing') {
 
- $update = FormsData::updateOrCreate(
-    [
-        'dossier_id' => (string) $dossier->id,
-        'form_id' => (string) $request->form_id,
-        'meta_key' => 'signature_status',
-    ],
-    [
-        'meta_value' => 'ongoing',
-        'updated_at' => now(),
-    ]
-);
+
+
+
+              $update = FormsData::updateOrCreate(
+              [
+                  'dossier_id' => (string) $dossier->id,
+                  'form_id' => (string) $request->form_id,
+                  'meta_key' => 'signature_status'.$suffix,
+              ],
+              [
+                  'meta_value' => 'ongoing',
+                  'updated_at' => now(),
+              ]
+              );
 
           if ($dossier && $dossier->etape) {
             $orderColumn = $dossier->etape->order_column;
@@ -159,7 +166,7 @@ class YouSignStatus extends Controller
     [
         'dossier_id' => (string) $dossier->id,
         'form_id' => (string) $request->form_id,
-        'meta_key' => 'signature_status',
+        'meta_key' => 'signature_status'.$suffix,
     ],
     [
         'meta_value' => 'done',
@@ -303,7 +310,7 @@ class YouSignStatus extends Controller
     [
         'dossier_id' => (string) $dossier->id,
         'form_id' => (string) $request->form_id,
-        'meta_key' => 'signature_status',
+        'meta_key' => 'signature_status'.$suffix,
     ],
     [
         'meta_value' => 'finish',

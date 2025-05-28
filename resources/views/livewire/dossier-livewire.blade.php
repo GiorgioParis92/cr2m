@@ -1326,6 +1326,7 @@
             var dossier_id = $(this).data('dossier_id'); // Get the dossier ID from data attribute
             var form_id = $(this).data('form_id'); // Get the dossier ID from data attribute
             var generation = $(this).data('generation'); // Get the dossier ID from data attribute
+            var signature = $(this).data('signature'); // Get the dossier ID from data attribute
             var signature_request_id = $(this).data(
                 'signature_request_id'); // Get the dossier ID from data attribute
             var document_id = $(this).data('document_id'); // Get the dossier ID from data attribute
@@ -1336,6 +1337,7 @@
                 data: {
                     dossier_id: dossier_id,
                     generation: generation,
+                    signature: signature,
                     form_id: form_id,
                     signature_request_id: signature_request_id,
                     document_id: document_id,
@@ -1368,6 +1370,7 @@
             var form_id = $(this).data('form_id'); // Get the dossier ID from data attribute
             var generation = $(this).data('generation'); // Get the dossier ID from data attribute
             var fields = $(this).data('fields'); // Get the dossier ID from data attribute
+            var fields2 = $(this).data('fields2'); // Get the dossier ID from data attribute
             var name = $(this).data('name'); // Get the dossier ID from data attribute
 
             $.ajax({
@@ -1378,6 +1381,7 @@
                     generation: generation,
                     form_id: form_id,
                     fields: fields,
+                    fields2: field2s,
                     name: name,
                     template: template
                 },

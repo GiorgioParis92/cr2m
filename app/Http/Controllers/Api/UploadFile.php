@@ -74,22 +74,22 @@ class UploadFile extends \App\Http\Controllers\Controller
        
         if (in_array($extension, $imagesExtensions)) {
         try {
-            $image = Image::make($file);
-            $image->resize(800, 600, function ($constraint) {
-                $constraint->aspectRatio();
-                $constraint->upsize();
-            });
+            // $image = Image::make($file);
+            // $image->resize(800, 600, function ($constraint) {
+            //     $constraint->aspectRatio();
+            //     $constraint->upsize();
+            // });
 
-            $tempThumbnailPath = storage_path('app/public/' . $directory . '/' . $tempThumbnailFileName);
-            $image->save($tempThumbnailPath, 75); // 75 is the quality parameter
+            // $tempThumbnailPath = storage_path('app/public/' . $directory . '/' . $tempThumbnailFileName);
+            // $image->save($tempThumbnailPath, 75); // 75 is the quality parameter
 
-            // Set correct permissions for the temporary thumbnail
-            chmod($tempThumbnailPath, 0775);
+            // // Set correct permissions for the temporary thumbnail
+            // chmod($tempThumbnailPath, 0775);
 
 
-            // Rename the temporary thumbnail to the original file name
-            $finalThumbnailPath = storage_path('app/public/' . $directory . '/' . $fileName);
-            rename($tempThumbnailPath, $finalThumbnailPath);
+            // // Rename the temporary thumbnail to the original file name
+            // $finalThumbnailPath = storage_path('app/public/' . $directory . '/' . $fileName);
+            // rename($tempThumbnailPath, $finalThumbnailPath);
    
             $beneficiaire=Beneficiaire::where('id',$dossier->beneficiaire_id)->first();
  

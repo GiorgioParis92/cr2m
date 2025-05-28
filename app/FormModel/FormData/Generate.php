@@ -28,7 +28,11 @@ class Generate extends AbstractFormData
             $check_status=DB::table('forms_data')->where('form_id',$this->form_id)->where('dossier_id',$this->dossier_id)->where('meta_key','signature_status')->first();
             $check_document=DB::table('forms_data')->where('form_id',$this->form_id)->where('dossier_id',$this->dossier_id)->where('meta_key','document_id')->first();
         }
-
+        if (isset($optionsArray['signable2']) && $optionsArray['signable2'] == 'true' ) {
+            $check_signature2=DB::table('forms_data')->where('form_id',$this->form_id)->where('dossier_id',$this->dossier_id)->where('meta_key','signature_request_id2')->first();
+            $check_status2=DB::table('forms_data')->where('form_id',$this->form_id)->where('dossier_id',$this->dossier_id)->where('meta_key','signature_status2')->first();
+            $check_document2=DB::table('forms_data')->where('form_id',$this->form_id)->where('dossier_id',$this->dossier_id)->where('meta_key','document_id2')->first();
+        }
 
         $data = '';
 
@@ -69,7 +73,7 @@ class Generate extends AbstractFormData
         $data .= '</td>';
 
 
-        $data .= '<td class="w-30" ><div >';
+        $data .= '<td class="w-30" ><div wire:poll>';
 
 
         if ($this->value) {
@@ -184,6 +188,57 @@ class Generate extends AbstractFormData
                     $data.='<div id="message_' . $optionsArray['template'] . '">';
                     $data.='Document signé';
                     $data.='</div>';
+                 
+                    if (isset($optionsArray['signable2']) && $optionsArray['signable2'] == 'true' ) {
+                        if((isset($check_status2) && $check_status2->meta_value!='finish') || !isset($check_status2)) {
+                        if(!$check_signature2)
+                        {
+                            $data .= '<button type="button" class="btn btn-warning btn-view signable"
+                            data-toggle="modal" 
+                            data-dossier_id="' . $this->dossier->folder . '"';
+                            $data .= "data-generation='" . $generation . "'";
+                            $data .= "data-form_id='" . $this->form_id . "'";
+                            $data .= "data-fields2='" . json_encode($optionsArray['fields2']) . "'";
+                            $data .= "data-name='" . $this->name . "'";
+                            $data .= 'data-template="' . $optionsArray['template'] . '"
+                            data-name="' . $this->config->title . '">
+                            <i class="fas fa-eye"></i> Faire signer par l\'artisan
+                        </button> ';
+                        } else {
+                            $data .= '<button type="button" class="btn btn-warning btn-view check_signature"
+                            data-toggle="modal" 
+                               data-dossier_id="' . $this->dossier->folder . '"';
+                            $data .= "data-generation='" . $generation . "'";
+                            $data .= "data-form_id='" . $this->form_id . "'";
+                            $data .= "data-signature_request_id='" . $check_signature2->meta_value . "'";
+                            $data .= "data-document_id='" . $check_document2->meta_value . "'";
+                            $data .= "data-signature='2'";
+        
+                            $data .= 'data-template="' . $optionsArray['template'] . '"
+                            data-name="' . $this->config->title . '">
+                            <i class="fas fa-eye"></i> Télécharger le document signé
+                        </button> '; 
+                        $data.='<div id="message_' . $optionsArray['template'] . '">';
+                        
+                            if($check_status2) {
+                                if($check_status2->meta_value=='ongoing') {
+                                    $data.='<div>Le document est en cours de signature</div>';
+                                }
+        
+                                if($check_status2->meta_value=='done') {
+                                    $data.='<div>Le document a été signé</div>';
+                                }
+                                if($check_status2->meta_value=='finish') {
+                                    $data.='<div>Le document a été signé</div>';
+                                }
+                            }
+                        }
+                    }
+                }
+
+
+
+
                 }
                 if(auth()->user()->id==1 || is_user_allowed('delete_doc')) {
                     $data .= '<br/><button type="button" class="btn btn-danger btn-view" wire:click="delete_doc(\''.$this->form_id.'\',\''.$this->name.'\')"

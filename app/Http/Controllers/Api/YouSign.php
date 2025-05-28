@@ -36,7 +36,7 @@ class YouSign extends Controller
       $dossier = Dossier::where('folder', $request->dossier_id);
     }
 
-   
+ 
     $dossier = $dossier->with('beneficiaire', 'fiche', 'etape', 'status', 'get_rdv')->first();
 
     // if(auth()->user()->id==1) {
@@ -57,13 +57,15 @@ class YouSign extends Controller
       if(isset($options->fields)) {
         $fields=$options->fields;
       }
-
+      if(isset($options->fields2)) {
+        $fields2=$options->fields2;
+      }
     }
 
   
 
 
-    if ($dossier) {
+    if ($dossier && !isset($request->fields2)) {
 
 
       // if($dossier->id==38) {
@@ -90,6 +92,42 @@ class YouSign extends Controller
             'first_name' => trim($dossier->beneficiaire->prenom ?? ''),
             'last_name' => trim($dossier->beneficiaire->nom ?? ''),
             'email' => trim($dossier->beneficiaire->email ? str_replace(' ','',$dossier->beneficiaire->email) :  ''),
+            'phone_number' => trim(formatFrenchPhoneNumber($dossier->beneficiaire->telephone) ?? '')
+          ]
+        ]
+      ]);
+
+   
+      $path = 'storage/dossiers/' . $dossier->folder . '/' . $request->name . '.pdf';
+
+      $fullPath = public_path($path);
+
+  
+
+    }
+
+
+
+    if ($dossier && isset($request->fields2)) {
+
+
+
+
+      $data = json_encode([
+        'request_type' => 'create_document',
+        'service' => 'yousign', // Add the service field
+
+        'request_data' => [
+          'service' => 'yousign', // Add the service field
+
+          'signature_name' => 'Georges KALFON' ?? '',
+          'delivery_mode' => 'email',
+          'signature_level' => 'electronic_signature',
+          'fields' => json_decode(json_encode($fields2), true),
+          'signer_info' => [
+            'first_name' => trim($dossier->beneficiaire->prenom ?? ''),
+            'last_name' => trim(''),
+            'email' => trim('genius.market.fr@gmail.com' ? str_replace(' ','','genius.market.fr@gmail.com') :  ''),
             'phone_number' => trim(formatFrenchPhoneNumber($dossier->beneficiaire->telephone) ?? '')
           ]
         ]
@@ -203,12 +241,18 @@ class YouSign extends Controller
           $signatureRequestId = $resultData->signature_request_id ?? '';
           $documentId = $resultData->document_id ?? '';
 
+          if(!isset($request->fields2)) {
+            $suffix='';
+          } else {
+            $suffix=2;
+          }
+
 
       $update = FormsData::updateOrCreate(
     [
         'dossier_id' => (string) $dossier->id,
         'form_id' => (string) $request->form_id,
-        'meta_key' => 'signature_request_id',
+        'meta_key' => 'signature_request_id'.$suffix,
     ],
     [
         'meta_value' => $signatureRequestId,
@@ -222,7 +266,7 @@ class YouSign extends Controller
     [
         'dossier_id' => (string) $dossier->id,
         'form_id' => (string) $request->form_id,
-        'meta_key' => 'document_id',
+        'meta_key' => 'document_id'.$suffix,
     ],
     [
         'meta_value' => $documentId,
@@ -240,6 +284,9 @@ class YouSign extends Controller
           $docs=getDocumentStatuses($dossier->id,$orderColumn);
           return response()->json($resultData, 200);
         }
+
+
+
       }
 
 
