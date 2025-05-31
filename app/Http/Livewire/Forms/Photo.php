@@ -29,51 +29,41 @@ class Photo extends AbstractData
     public function convertHeicToJpg($filePath)
     {
         $heicPath = storage_path("app/public/{$filePath}");
-        // dd(($heicPath));
-        if (!file_exists($heicPath)) {
-          
-            return $filePath; // Return original if file doesn't exist
-        }
-       
-        $extension = pathinfo($filePath, PATHINFO_EXTENSION);
-     
-        if (strtolower($extension) !== 'heic') {
-         
-            return $filePath; // Return original if not HEIC
-        }
-        
-        try {
-          
-            // $image = new Imagick($heicPath);
-            $image = imagecreatefromjpeg($heicPath);
-
-            // $image->setImageFormat('jpeg');
-            
-            $dirName     = pathinfo($filePath, PATHINFO_DIRNAME);   // e.g. "some_folder/12345"
-            $baseName    = pathinfo($filePath, PATHINFO_FILENAME);  // e.g. "originalFilename"
-            $jpgFileName = $baseName . '.jpg';
-            
-
-            // Construct the NEW path in the SAME folder
-            $jpgFilePath = "{$dirName}/{$jpgFileName}";
-            // dd($jpgFilePath);
-            // Save converted file
-            $outputPath = storage_path("app/public/{$jpgFilePath}");
-            $image->writeImage($outputPath);
-        
-            // // Cleanup
-            // $image->clear();
-            // $image->destroy();
     
-            // Optionally delete original HEIC file
+        if (!file_exists($heicPath)) {
+            return $filePath;
+        }
+    
+        $extension = pathinfo($filePath, PATHINFO_EXTENSION);
+    
+        if (strtolower($extension) !== 'heic') {
+            return $filePath;
+        }
+    
+        try {
+            $image = new Imagick($heicPath);
+            $image->setImageFormat('jpeg');
+    
+            $dirName     = pathinfo($filePath, PATHINFO_DIRNAME);
+            $baseName    = pathinfo($filePath, PATHINFO_FILENAME);
+            $jpgFileName = "{$baseName}.jpg";
+            $jpgFilePath = "{$dirName}/{$jpgFileName}";
+            $outputPath  = storage_path("app/public/{$jpgFilePath}");
+    
+            $image->writeImage($outputPath);
+            $image->clear();
+            $image->destroy();
+    
+            // Supprime l’ancien fichier HEIC
             unlink($heicPath);
-      
-            return $jpgFilePath; // Return new file path
+    
+            return $jpgFilePath;
         } catch (\Exception $e) {
             \Log::error("HEIC to JPG conversion failed: " . $e->getMessage());
-            return $filePath; // Fallback to original file
+            return $filePath;
         }
     }
+    
     
     public function handleFileUploaded($response)
     {
