@@ -112,12 +112,7 @@
                         <span class="nav-link-text ms-1"><i class="fa fa-users"></i>  Statistiques</span>
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link  " href="{{ route('reporting') }}">
-
-                        <span class="nav-link-text ms-1"><i class="fa fa-users"></i>  Reporting</span>
-                    </a>
-                </li>
+      
                     <li class="nav-item">
                         <a class="nav-link  " href="{{ route('users.index') }}">
 
@@ -159,6 +154,12 @@
                         </li>
 
                     </ul>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link  " href="{{ route('reporting') }}">
+
+                        <span class="nav-link-text ms-1"><i class="fa fa-users"></i>  Reporting</span>
+                    </a>
                 </li>
                 @endif
             </ul>
