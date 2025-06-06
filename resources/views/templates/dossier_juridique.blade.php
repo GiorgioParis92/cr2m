@@ -446,12 +446,12 @@ Document rédigé à titre confidentiel et interne.<br/>
                         @endif -->
                     <!-- </p> -->
                     <p><b>L'Artisan</b></p>
-                    @if(isset($dossier->mar_client->signature) && file_exists(storage_path('app/public/' . $dossier->mar_client->signature)))
+                    <!-- @if(isset($dossier->mar_client->signature) && file_exists(storage_path('app/public/' . $dossier->mar_client->signature)))
 
                         <img style="max-width:150px;margin-top:-10px"
                             src="{{ asset('storage/' . $dossier->mar_client->signature) }}" alt="Logo">
 
-                    @endif
+                    @endif -->
 
 
                 </td>
