@@ -98,7 +98,7 @@ class YouSign extends Controller
         ]
       ]);
 
-      dd($data);
+
       $path = 'storage/dossiers/' . $dossier->folder . '/' . $request->name . '.pdf';
 
       $fullPath = public_path($path);
@@ -119,13 +119,13 @@ class YouSign extends Controller
         'service' => 'yousign',
         'request_data' => [
           'service' => 'yousign',
-          'signature_name' => $installateur->client_title ?? '',
+          'signature_name' => $request->name ?? '',
           'delivery_mode' => 'email',
           'signature_level' => 'electronic_signature',
           'fields' => json_decode(json_encode($fields2), true), // ✅ Remis ici
           'signer_info' => [
             'first_name' => trim($installateur->client_title ?? ''),
-            'last_name' => '',
+            'last_name' => trim($installateur->client_title ?? ''),
             'email' => trim(str_replace(' ', '', $installateur->email ?? '')),
             'phone_number' => trim(formatFrenchPhoneNumber($installateur->telephone ?? ''))
           ]
