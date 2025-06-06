@@ -172,7 +172,7 @@ class YouSign extends Controller
 
     $response = curl_exec($curl);
 
-
+    dump($response);
 
     if ($response === false) {
       die('Curl error: ' . curl_error($curl)); // Output cURL error
