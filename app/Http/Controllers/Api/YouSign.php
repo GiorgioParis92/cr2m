@@ -114,41 +114,25 @@ class YouSign extends Controller
 
       $installateur=Client::where('id',$dossier->installateur)->first();
     
-      $fields2 = [[
-        'type' => 'signature',
-        'page' => 2,
-        'x' => 190.0,
-        'y' => 640.0,
-        'width' => 200.0,
-        'height' => 40.0,
-    ]];
-    
-    $data = json_encode([
-      'request_type' => 'create_document',
-      'service' => 'yousign',
-      'request_data' => [
+      $data = json_encode([
+        'request_type' => 'create_document',
+        'service' => 'yousign',
+        'request_data' => [
           'service' => 'yousign',
-          'signature_name' => 'ECO ENERGIE GREEN',
+          'signature_name' => $installateur->client_title ?? '',
           'delivery_mode' => 'email',
           'signature_level' => 'electronic_signature',
-          'fields' => [[
-              'type' => 'signature',
-              'page' => 1,
-              'x' => 190.0,
-              'y' => 640.0,
-              'width' => 200.0,
-              'height' => 40.0
-          ]],
+          'fields' => json_decode(json_encode($fields2), true), // ✅ Remis ici
           'signer_info' => [
-              'first_name' => 'ECO ENERGIE GREEN',
-              'last_name' => '',
-              'email' => 'genius.market.fr@gmail.com',
-              'phone_number' => '+33616858848'
+            'first_name' => trim($installateur->client_title ?? ''),
+            'last_name' => '',
+            'email' => trim(str_replace(' ', '', $installateur->email ?? '')),
+            'phone_number' => trim(formatFrenchPhoneNumber($installateur->telephone ?? ''))
           ]
-      ]
-  ]);
-  
-    
+        ]
+      ]);
+      
+
       $path = 'storage/dossiers/' . $dossier->folder . '/' . $request->name . '.pdf';
 
       $fullPath = public_path($path);
@@ -181,7 +165,7 @@ class YouSign extends Controller
         'service' => 'yousign'
       ],
     ]);
-
+    dd($curl);
     $response = curl_exec($curl);
 
     if(!isset($request->fields2)) {
