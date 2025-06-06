@@ -122,15 +122,16 @@ class YouSign extends Controller
           'signature_name' => $installateur->client_title ?? '',
           'delivery_mode' => 'email',
           'signature_level' => 'electronic_signature',
+          'fields' => json_decode(json_encode($fields2), true), // ✅ Remis ici
           'signer_info' => [
             'first_name' => trim($installateur->client_title ?? ''),
             'last_name' => '',
             'email' => trim(str_replace(' ', '', $installateur->email ?? '')),
-            'phone_number' => trim(formatFrenchPhoneNumber($installateur->telephone ?? '')),
-            'fields' => json_decode(json_encode($fields2), true) // ✅ Déplacé ici
+            'phone_number' => trim(formatFrenchPhoneNumber($installateur->telephone ?? ''))
           ]
         ]
       ]);
+      
      
       $path = 'storage/dossiers/' . $dossier->folder . '/' . $request->name . '.pdf';
 
