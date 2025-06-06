@@ -124,22 +124,30 @@ class YouSign extends Controller
     ]];
     
     $data = json_encode([
-        'request_type' => 'create_document',
-        'service' => 'yousign',
-        'request_data' => [
-            'service' => 'yousign',
-            'signature_name' => 'ECO ENERGIE GREEN',
-            'delivery_mode' => 'email',
-            'signature_level' => 'electronic_signature',
-            'fields' => $fields2,
-            'signer_info' => [
-                'first_name' => 'ECO ENERGIE GREEN',
-                'last_name' => '',
-                'email' => 'genius.market.fr@gmail.com',
-                'phone_number' => '+33616858848',
-            ]
-        ]
-    ]);
+      'request_type' => 'create_document',
+      'service' => 'yousign',
+      'request_data' => [
+          'service' => 'yousign',
+          'signature_name' => 'ECO ENERGIE GREEN',
+          'delivery_mode' => 'email',
+          'signature_level' => 'electronic_signature',
+          'fields' => [[
+              'type' => 'signature',
+              'page' => 1,
+              'x' => 190.0,
+              'y' => 640.0,
+              'width' => 200.0,
+              'height' => 40.0
+          ]],
+          'signer_info' => [
+              'first_name' => 'ECO ENERGIE GREEN',
+              'last_name' => '',
+              'email' => 'genius.market.fr@gmail.com',
+              'phone_number' => '+33616858848'
+          ]
+      ]
+  ]);
+  
     
       $path = 'storage/dossiers/' . $dossier->folder . '/' . $request->name . '.pdf';
 
