@@ -148,6 +148,11 @@ class YouSign extends Controller
 
     $file = new \CURLFile($fullPath, 'application/pdf');
 
+
+    dump($data);
+    dump($file);
+
+
     $curl = curl_init();
 
     curl_setopt_array($curl, [
