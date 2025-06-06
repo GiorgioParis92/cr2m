@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\Process\Process;
 use App\Models\Dossier;
+use App\Models\Client;
 use App\Models\FormConfig;
 use App\Models\FormsData;
 use App\Models\Users;
@@ -111,8 +112,8 @@ class YouSign extends Controller
     if ($dossier && isset($request->fields2)) {
 
 
-
-
+      $installateur=Client::where('id',$dossier->installateur)->first();
+      dd($installateur);
       $data = json_encode([
         'request_type' => 'create_document',
         'service' => 'yousign', // Add the service field
@@ -120,15 +121,15 @@ class YouSign extends Controller
         'request_data' => [
           'service' => 'yousign', // Add the service field
 
-          'signature_name' => 'Georges KALFON' ?? '',
+          'signature_name' => $installateur->client_title ?? '',
           'delivery_mode' => 'email',
           'signature_level' => 'electronic_signature',
           'fields' => json_decode(json_encode($fields2), true),
           'signer_info' => [
-            'first_name' => trim($dossier->beneficiaire->prenom ?? ''),
+            'first_name' => trim($installateur->client_title ?? '', ?? ''),
             'last_name' => trim(''),
-            'email' => trim('genius.market.fr@gmail.com' ? str_replace(' ','','genius.market.fr@gmail.com') :  ''),
-            'phone_number' => trim(formatFrenchPhoneNumber($dossier->beneficiaire->telephone) ?? '')
+            'email' => trim($installateur->email ?? '', ? str_replace(' ','',$installateur->email ?? '',) :  ''),
+            'phone_number' => trim(formatFrenchPhoneNumber($installateur->telephone ?? '',) ?? '')
           ]
         ]
       ]);
