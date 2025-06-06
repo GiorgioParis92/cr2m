@@ -116,25 +116,22 @@ class YouSign extends Controller
     
       $data = json_encode([
         'request_type' => 'create_document',
-        'service' => 'yousign', // Add the service field
-
+        'service' => 'yousign',
         'request_data' => [
-          'service' => 'yousign', // Add the service field
-
+          'service' => 'yousign',
           'signature_name' => $installateur->client_title ?? '',
           'delivery_mode' => 'email',
           'signature_level' => 'electronic_signature',
-          'fields' => json_decode(json_encode($fields2), true),
           'signer_info' => [
             'first_name' => trim($installateur->client_title ?? ''),
-            'last_name' => trim(''),
-            'email' => trim($installateur->email  ? str_replace(' ','',$installateur->email) :  ''),
-            'phone_number' => trim(formatFrenchPhoneNumber($installateur->telephone ?? ''))
+            'last_name' => '',
+            'email' => trim(str_replace(' ', '', $installateur->email ?? '')),
+            'phone_number' => trim(formatFrenchPhoneNumber($installateur->telephone ?? '')),
+            'fields' => json_decode(json_encode($fields2), true) // ✅ Déplacé ici
           ]
         ]
       ]);
      
-      dd($data);
       $path = 'storage/dossiers/' . $dossier->folder . '/' . $request->name . '.pdf';
 
       $fullPath = public_path($path);
