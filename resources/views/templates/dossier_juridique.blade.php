@@ -314,6 +314,15 @@
 <page backtop="1mm" backleft="10mm" backright="10mm" backimg="" backbottom="10mm">
 
     @include('pdf.footer')
+    <div class="row">
+        <div class="col-12" style="max-width:40%;margin:auto;text-align:center;margin-top:-30px">
+            @if(isset($dossier->mar_client->main_logo) && file_exists(storage_path('app/public/' . $dossier->mar_client->main_logo)))
+
+                <img src="{{ asset('storage/' . $dossier->mar_client->main_logo) }}" alt="Logo">
+
+            @endif
+        </div>
+    </div>
     <div class="my-4">
         <h3>Article 5 Quater: Exclusion de responsabilité du Mandataire </h3>
 
@@ -346,15 +355,7 @@
 
 
 
-    <div class="row">
-        <div class="col-12" style="max-width:40%;margin:auto;text-align:center;margin-top:-30px">
-            @if(isset($dossier->mar_client->main_logo) && file_exists(storage_path('app/public/' . $dossier->mar_client->main_logo)))
 
-                <img src="{{ asset('storage/' . $dossier->mar_client->main_logo) }}" alt="Logo">
-
-            @endif
-        </div>
-    </div>
 
 
 
