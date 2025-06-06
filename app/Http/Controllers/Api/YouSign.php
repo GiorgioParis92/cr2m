@@ -149,9 +149,7 @@ class YouSign extends Controller
     $file = new \CURLFile($fullPath, 'application/pdf');
 
 
-    dump($data);
-    dump($file);
-
+  
 
     $curl = curl_init();
 
@@ -172,7 +170,11 @@ class YouSign extends Controller
 
     $response = curl_exec($curl);
 
-    dump($response);
+    if(!isset($request->fields2)) {
+      $suffix='';
+    } else {
+      $suffix=2;
+    }
 
     if ($response === false) {
       die('Curl error: ' . curl_error($curl)); // Output cURL error
@@ -231,7 +233,7 @@ class YouSign extends Controller
 
       // Process response
       $responseData = json_decode($response);
-      dd($responseData);
+   
 
       if (
         isset($responseData->status) && (
@@ -247,11 +249,7 @@ class YouSign extends Controller
           $signatureRequestId = $resultData->signature_request_id ?? '';
           $documentId = $resultData->document_id ?? '';
 
-          if(!isset($request->fields2)) {
-            $suffix='';
-          } else {
-            $suffix=2;
-          }
+
 
 
       $update = FormsData::updateOrCreate(
