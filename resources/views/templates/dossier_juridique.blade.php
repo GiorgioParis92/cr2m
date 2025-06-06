@@ -264,7 +264,7 @@
 
 
         <p>
-            Le Bénéficiaire reconnaît devoir un reste à charge d’un montant de {{$all_data['reste_a_charge']}} € et s’engage à le régler directement à
+            Le Bénéficiaire reconnaît devoir un reste à charge d’un montant de {{$all_data['reste_a_charge'] ?? ''}} € et s’engage à le régler directement à
             l’Artisan selon les modalités fixées.
         </p>
 
@@ -469,7 +469,7 @@ Document rédigé à titre confidentiel et interne.<br/>
                         @endif -->
                     <!-- </p> -->
                     <p><b>Le mandataire financier</b></p>
-                    @if(isset($dossier->mar_client->signature) && file_exists(storage_path('app/public/' . $dossier->mandataire_financier_client->signature)))
+                    @if(isset($dossier->mandataire_financier_client->signature) && file_exists(storage_path('app/public/' . $dossier->mandataire_financier_client->signature)))
 
                         <img style="max-width:150px;margin-top:-10px"
                             src="{{ asset('storage/' . $dossier->mandataire_financier_client->signature) }}" alt="Logo">
