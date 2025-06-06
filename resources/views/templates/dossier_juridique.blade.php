@@ -363,7 +363,7 @@
         <p>
 
         Je soussigné(e), {{ $dossier->beneficiaire->nom }} {{ $dossier->beneficiaire->prenom }}, demeurant à {{ $dossier->beneficiaire->numero_voie }} {{ $dossier->beneficiaire->adresse }} {{ $dossier->beneficiaire->cp }}
-        {{ $dossier->beneficiaire->ville }}, certifie reconnaître devoir un montant de {{ $all_data['reste_a_charge']}} € au titre du reste à charge des travaux subventionnés dans le cadre du programme Anah.
+        {{ $dossier->beneficiaire->ville }}, certifie reconnaître devoir un montant de {{ $all_data['reste_a_charge'] ?? ''}} € au titre du reste à charge des travaux subventionnés dans le cadre du programme Anah.
 Je m’engage à régler cette somme à l’artisan {{ $dossier->installateur_client->client_title}} dans les conditions prévues dans la convention signée.
 Fait pour valoir ce que de droit,
 <br/><br/><br/><br/><br/>
