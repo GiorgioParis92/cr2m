@@ -226,7 +226,7 @@ class YouSign extends Controller
 
       // Process response
       $responseData = json_decode($response);
-
+      dd($responseData);
 
       if (
         isset($responseData->status) && (
