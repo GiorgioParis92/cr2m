@@ -126,7 +126,7 @@ class YouSign extends Controller
           'signature_level' => 'electronic_signature',
           'fields' => json_decode(json_encode($fields2), true),
           'signer_info' => [
-            'first_name' => trim($installateur->client_title ?? '', ?? ''),
+            'first_name' => trim($installateur->client_title ?? ''),
             'last_name' => trim(''),
             'email' => trim($installateur->email ?? '', ? str_replace(' ','',$installateur->email ?? '',) :  ''),
             'phone_number' => trim(formatFrenchPhoneNumber($installateur->telephone ?? '',) ?? '')
