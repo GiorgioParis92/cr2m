@@ -309,6 +309,11 @@
         </p>
 
     </div>
+
+    </page>
+<page backtop="1mm" backleft="10mm" backright="10mm" backimg="" backbottom="10mm">
+
+    @include('pdf.footer')
     <div class="my-4">
         <h3>Article 5 Quater: Exclusion de responsabilité du Mandataire </h3>
 
@@ -326,10 +331,7 @@
         </p>
 
     </div>
-</page>
-<page backtop="1mm" backleft="10mm" backright="10mm" backimg="" backbottom="10mm">
 
-    @include('pdf.footer')
     <div class="my-4">
         <h3>Article 6: Durée et résiliation </h3>
 
