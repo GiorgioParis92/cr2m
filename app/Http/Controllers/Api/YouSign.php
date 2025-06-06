@@ -113,7 +113,7 @@ class YouSign extends Controller
 
 
       $installateur=Client::where('id',$dossier->installateur)->first();
-      dd($installateur);
+    
       $data = json_encode([
         'request_type' => 'create_document',
         'service' => 'yousign', // Add the service field
