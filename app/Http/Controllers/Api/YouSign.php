@@ -134,7 +134,7 @@ class YouSign extends Controller
         ]
       ]);
      
-   
+      dd($data);
       $path = 'storage/dossiers/' . $dossier->folder . '/' . $request->name . '.pdf';
 
       $fullPath = public_path($path);
