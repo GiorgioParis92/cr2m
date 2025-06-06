@@ -191,7 +191,7 @@
 
 <page backtop="1mm" backleft="10mm" backright="10mm" backimg="" backbottom="10mm">
 
-    @include('pdf.footer')
+    
 
 
     <h1 class="text-center">Dossier juridique – Mandataire financier et administratif Anah</h1>
@@ -305,7 +305,7 @@
     </page>
 <page backtop="1mm" backleft="10mm" backright="10mm" backimg="" backbottom="10mm">
 
-    @include('pdf.footer')
+    
 
     <div class="my-4">
         <h3>Article 5 Quater: Exclusion de responsabilité du Mandataire </h3>
