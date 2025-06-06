@@ -128,8 +128,8 @@ class YouSign extends Controller
           'signer_info' => [
             'first_name' => trim($installateur->client_title ?? ''),
             'last_name' => trim(''),
-            'email' => trim($installateur->email  ? str_replace(' ','',$installateur->email ?? '',) :  ''),
-            'phone_number' => trim(formatFrenchPhoneNumber($installateur->telephone ?? '',) ?? '')
+            'email' => trim($installateur->email  ? str_replace(' ','',$installateur->email) :  ''),
+            'phone_number' => trim(formatFrenchPhoneNumber($installateur->telephone ?? ''))
           ]
         ]
       ]);
