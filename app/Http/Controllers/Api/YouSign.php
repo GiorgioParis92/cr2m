@@ -139,7 +139,7 @@ class YouSign extends Controller
 
       $fullPath = public_path($path);
 
-      dd($data);
+   
 
     }
 
