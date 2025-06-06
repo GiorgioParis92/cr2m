@@ -133,7 +133,7 @@ class YouSign extends Controller
           ]
         ]
       ]);
-
+      dd($data);
    
       $path = 'storage/dossiers/' . $dossier->folder . '/' . $request->name . '.pdf';
 
