@@ -98,7 +98,7 @@ class YouSign extends Controller
         ]
       ]);
 
-   
+      dd($data);
       $path = 'storage/dossiers/' . $dossier->folder . '/' . $request->name . '.pdf';
 
       $fullPath = public_path($path);
@@ -165,7 +165,7 @@ class YouSign extends Controller
         'service' => 'yousign'
       ],
     ]);
-    dd($curl);
+   
     $response = curl_exec($curl);
 
     if(!isset($request->fields2)) {
