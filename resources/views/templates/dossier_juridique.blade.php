@@ -209,7 +209,7 @@
             BOULOGNE-BILLANCOURT, représentée par Jean-René POILLOT,  intervenant en sa qualité de mandataire administratif et titulaire d'une procuration sous seing privé pour la perception des fonds MA PRIME RENOV, (ci-après dénommée « le Mandataire »),<br/><br/>
 
             2. {{ $dossier->installateur_client->client_title}}, entreprise immatriculée au RCS de {{ $dossier->installateur_client->rcs}} sous le numéro {{ $dossier->installateur_client->siren}},
-            dont le siège est situé [adresse], représentée par [nom], (ci-après « l’Artisan »),<br/><br/>
+            dont le siège est situé {{ $dossier->installateur_client->adresse }} {{ $dossier->installateur_client->cp }} {{ $dossier->installateur_client->ville }}, représentée par {{ $dossier->installateur_client->representant }}, (ci-après « l’Artisan »),<br/><br/>
 
             3. {{ $dossier->beneficiaire->nom }} {{ $dossier->beneficiaire->prenom }},  domicilié(e) {{ $dossier->beneficiaire->numero_voie }} {{ $dossier->beneficiaire->adresse }} {{ $dossier->beneficiaire->cp }}
             {{ $dossier->beneficiaire->ville }}, (ci-après « le Bénéficiaire »),<br/><br/>
