@@ -206,8 +206,7 @@
             Entre les soussignés :<br/>
             1. ENERGIA EQC, société par actions simplifiée, au capital de 50000€, immatriculée au RCS de Nanterre sous
             le numéro 840 971 972, dont le siège social est situé 34 AVENUE EDOUARD VAILLANT, 92100
-            BOULOGNE-BILLANCOURT, représentée par Jean-René POILLOT, en qualité de mandataire administratif et financier
-            (ci-après dénommée « le Mandataire »),<br/><br/>
+            BOULOGNE-BILLANCOURT, représentée par Jean-René POILLOT,  intervenant en sa qualité de mandataire administratif et titulaire d'une procuration sous seing privé pour la perception des fonds MA PRIME RENOV, (ci-après dénommée « le Mandataire »),<br/><br/>
 
             2. {{ $dossier->installateur_client->client_title}}, entreprise immatriculée au RCS de {{ $dossier->installateur_client->rcs}} sous le numéro {{ $dossier->installateur_client->siren}},
             dont le siège est situé [adresse], représentée par [nom], (ci-après « l’Artisan »),<br/><br/>
