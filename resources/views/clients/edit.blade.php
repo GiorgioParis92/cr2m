@@ -36,6 +36,10 @@
                     <input type="hidden" name="main_logo" id="main_logo_input" value="{{ $client->main_logo }}">
                 </div>
                 <div class="mb-3">
+                    <label for="adresse" class="form-label">{{ __('forms.representant') }}</label>
+                    <input type="text" class="form-control" id="representant" name="representant" value="{{ $client->representant }}">
+                </div>
+                <div class="mb-3">
                     <label for="adresse" class="form-label">{{ __('forms.address') }}</label>
                     <input type="text" class="form-control" id="adresse" name="adresse" value="{{ $client->adresse }}">
                 </div>

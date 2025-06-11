@@ -16,6 +16,7 @@ class Client extends Model
         'client_title',
         'type_client',
         'main_logo',
+        'representant',
         'adresse',
         'cp',
         'ville',
