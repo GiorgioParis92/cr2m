@@ -161,6 +161,15 @@
                         <span class="nav-link-text ms-1"><i class="fa fa-users"></i>  Reporting</span>
                     </a>
                 </li>
+
+
+                <li class="nav-item">
+                    <a class="nav-link  " href="{{ route('taches.index') }}">
+
+                        <span class="nav-link-text ms-1"><i class="fa fa-users"></i>  Taches</span>
+                    </a>
+                </li>
+
                 @endif
             </ul>
         </div> <!-- navbar-collapse.// -->
