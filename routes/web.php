@@ -37,6 +37,9 @@ use App\Http\Controllers\Api\ServerCallbackController;
 
 use App\Http\Controllers\FormImportController;
 
+// routes/web.php
+use App\Http\Controllers\TacheController;
+
 
 
 
@@ -117,7 +120,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('logout', [LoginController::class, 'logout']);
     Route::get('/mailbox', [MailboxController::class, 'index'])->name('mailbox');
 
-
+    Route::resource('taches', TacheController::class)->parameters([
+        'taches' => 'tache'
+    ]);
+    
     Route::get('password/reset', [ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request');
 
     Route::get('password/reset/{token}', [ResetPasswordController::class, 'showResetForm'])->name('password.reset');
