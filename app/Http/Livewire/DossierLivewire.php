@@ -52,7 +52,7 @@ class DossierLivewire extends Component
         if (!$this->dossier) {
             abort(404, 'Dossier not found');
         }
-     
+     dd($this->dossier);
         $currentEtape = Etape::find($this->dossier->etape_number);
         $this->dossier->order_column = $currentEtape ? $currentEtape->order_column : null;
 
@@ -64,6 +64,7 @@ class DossierLivewire extends Component
                 $join->on('forms.id', '=', 'distinctEtapes.min_id');
             })
             ->join('etapes', 'forms.etape_number', '=', 'etapes.id')
+            ->where('etapes.fiche_id',$this->dossier->fiche_id)
             ->orderBy('etapes.order_column')
             ->get()
             ->toArray();

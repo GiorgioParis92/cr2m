@@ -69,7 +69,7 @@ class DossierController extends Controller
             }
         }
 
-        $etapes = Etape::orderBy('order_column')->get() ;
+        $etapes = Etape::where('fiche_id',$dossier->fiche_id)->orderBy('order_column')->get() ;
         $mars = Client::where('type_client', 1)->get();
         $financiers = Client::where('type_client', 2)->get();
         $installateurs = Client::where('type_client', 3)->get();

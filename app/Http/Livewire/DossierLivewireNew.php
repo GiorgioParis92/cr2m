@@ -70,7 +70,7 @@ class DossierLivewireNew extends Component
         $agence_check=FormsData::where('form_id',3)->where('meta_key','agence')->where('dossier_id',$this->dossier->id)->first();
 
 
-
+      
 
         if(!$agence_check) {
           
@@ -104,6 +104,8 @@ class DossierLivewireNew extends Component
             })
             ->join('etapes', 'forms.etape_number', '=', 'etapes.id')
             ->orderBy('etapes.order_column')
+            ->where('etapes.fiche_id',$this->dossier->fiche_id)
+
             ->get()
             ->toArray();
 
@@ -153,6 +155,7 @@ class DossierLivewireNew extends Component
     }
     public function load_etapes()
     {
+      
         $distinctEtapes = Form::select('etape_number', DB::raw('MIN(id) as min_id'))
             ->groupBy('etape_number');
 
@@ -160,9 +163,12 @@ class DossierLivewireNew extends Component
             $join->on('forms.id', '=', 'distinctEtapes.min_id');
         })
             ->join('etapes', 'forms.etape_number', '=', 'etapes.id')
+            ->where('etapes.fiche_id',$this->dossier->fiche_id)
             ->orderBy('etapes.order_column')
             ->get()
             ->toArray();
+
+          
 
     }
 
