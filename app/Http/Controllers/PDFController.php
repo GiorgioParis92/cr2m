@@ -548,7 +548,6 @@ class PDFController extends Controller
         $storageFullPath = storage_path("app/public/" . ltrim($imageRelativePath, '/'));
     
         if (!file_exists($storageFullPath)) {
-            Log::error("Image file does not exist: $storageFullPath");
             if ($throwOnError) {
                 throw new \Exception("Image file does not exist: $storageFullPath");
             }
@@ -557,7 +556,6 @@ class PDFController extends Controller
     
         // Prevent fatal TCPDF error: check if it's a valid image
         if (!@getimagesize($storageFullPath)) {
-            Log::error("Invalid image file or unreadable by getimagesize: $storageFullPath");
             if ($throwOnError) {
                 throw new \Exception("Invalid image file: $storageFullPath");
             }
