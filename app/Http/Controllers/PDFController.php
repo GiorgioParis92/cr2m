@@ -28,107 +28,155 @@ class PDFController extends Controller
 {
     public function generatePDF(Request $request)
     {
+
+
+
+
+        // Validate the incoming request data
         $validated = $request->validate([
             'template' => 'nullable|string',
             'name' => 'nullable|string',
             'dossier_id' => 'nullable',
+            // 'generation' => 'nullable',
             'identify' => 'nullable',
         ]);
-    
-        try {
-            if (is_numeric($validated['dossier_id'])) {
-                $dossier = Dossier::with('mar')->where('id', $validated['dossier_id'])->firstOrFail();
-                $request->dossier_id = $dossier->folder;
+
+        if (is_numeric($validated['dossier_id'])) {
+            $dossier = Dossier::with('mar')->where('id', $validated['dossier_id'])->first();
+            $request->dossier_id=$dossier->folder;
+        } else {
+            $dossier = Dossier::with('mar')->where('folder', $validated['dossier_id'])->first();
+
+        }
+
+        if (isset($request->form_id)) {
+
+            $form_config = FormConfig::where('form_id', $request->form_id)
+                ->where('name', $request->name)
+                ->first();
+
+            if (isset($form_config->options)) {
+                $config = json_decode($form_config->options);
             } else {
-                $dossier = Dossier::with('mar')->where('folder', $validated['dossier_id'])->firstOrFail();
+                $config = [];
             }
+
+            $validated['generation'] = $config->on_generation ?? [];
+            $request->template = $config->template ?? [];
+            $validated['template'] = $config->template ?? [];
+
+        }
+
+
+
+        if (isset($validated['generation']) && !empty($validated['generation'])) {
+            eval ($validated['generation']);
+        }
+        $title = '';
+        // Determine the HTML content to use
+        if (isset($validated['template'])) {
+            $htmlContent = $this->getTemplateHtml($validated['template'], $dossier->id, $config = null, $title, $content = null, $send_data = true);
     
-            $config = [];
-            if (isset($request->form_id)) {
-                $form_config = FormConfig::where('form_id', $request->form_id)
-                    ->where('name', $request->name)
-                    ->first();
+       
+        } else {
+            $htmlContent = '';
+        }
+        // dd($htmlContent);
+        // Generate the PDF using Html2Pdf
+        $html2pdf = new Html2Pdf();
+
+        
+        $html2pdf->writeHTML($htmlContent);
+
     
-                if (!empty($form_config?->options)) {
-                    $config = json_decode($form_config->options);
-                    $validated['generation'] = $config->on_generation ?? [];
-                    $request->template = $config->template ?? [];
-                    $validated['template'] = $config->template ?? [];
-                }
+
+        $pdfOutput = $html2pdf->output('', 'S'); // Output as string
+
+        if ($request->display) {
+            header('Content-Type: application/pdf');
+            header('Content-Disposition: inline; filename="document.pdf"');
+            header('Cache-Control: private, max-age=0, must-revalidate');
+            header('Pragma: public');
+            echo $pdfOutput;
+        }
+
+
+
+        // Check if dossier_id is provided
+        if (isset($validated['dossier_id'])) {
+            $dossierId = $dossier->id;
+            $folderPath = "public/dossiers/{$dossier->folder}";
+            $directPath = "dossiers/{$dossier->folder}";
+
+
+            // Create the folder if it does not exist
+            if (!Storage::exists($folderPath)) {
+                Storage::makeDirectory($folderPath);
             }
-    
-            if (!empty($validated['generation'])) {
-                eval($validated['generation']); // ⚠️ Make sure this is safe!
+
+            // Save the PDF file to the folder
+            $fileName = ($validated['name'] ?? 'document') . ".pdf";
+            $filePath = "{$folderPath}/{$fileName}";
+            $directPath = "{$directPath}/{$fileName}";
+            $result = Storage::put($filePath, $pdfOutput);
+            if (!$result) {
+                \Log::error("Failed to save file at path: " . $filePath);
+                return response()->json(['error' => 'Failed to save file'], 500);
             }
-    
-            $title = '';
-            $htmlContent = isset($validated['template'])
-                ? $this->getTemplateHtml($validated['template'], $dossier->id, null, $title, null, true)
-                : '';
-    
-            $html2pdf = new Html2Pdf();
-    
-            try {
-                $html2pdf->writeHTML($htmlContent);
-            } catch (Html2PdfException $e) {
-                Log::error('PDF generation failed: ' . $e->getMessage());
-                return response()->json([
-                    'error' => 'PDF generation failed due to a missing image or template error',
-                    'details' => $e->getMessage(),
-                ], 422);
+
+
+
+
+
+            $update = FormsData::updateOrCreate(
+                [
+                    'dossier_id' => $dossier->id,
+                    'form_id' => $request->form_id,
+                    'meta_key' => $request->template
+                ],
+                [
+                    'meta_value' => $directPath
+                ]
+            );
+
+            if ($update) {
+                // if ($dossier && $dossier->etape) {
+                //     $orderColumn = $dossier->etape->order_column;
+                // } else {
+                //     // Handle the case where $dossier or $dossier->etape is null
+                //     $orderColumn = null;
+                // }
+                // $docs = getDocumentStatuses($dossier->id, $orderColumn);
+
+
+                // Dossier::where('id', $dossier->id)->update([
+
+                //     'updated_at' => now(),
+                // ]);
+
             }
-    
-            $pdfOutput = $html2pdf->output('', 'S');
-    
-            if ($request->display) {
-                return response($pdfOutput, 200)
-                    ->header('Content-Type', 'application/pdf')
-                    ->header('Content-Disposition', 'inline; filename="document.pdf"');
-            }
-    
-            if ($dossier?->id) {
-                $folderPath = "public/dossiers/{$dossier->folder}";
-                $directPath = "dossiers/{$dossier->folder}";
-                if (!Storage::exists($folderPath)) {
-                    Storage::makeDirectory($folderPath);
-                }
-    
-                $fileName = ($validated['name'] ?? 'document') . ".pdf";
-                $filePath = "{$folderPath}/{$fileName}";
-                $directPath = "{$directPath}/{$fileName}";
-                $result = Storage::put($filePath, $pdfOutput);
-    
-                if (!$result) {
-                    Log::error("Failed to save file at path: $filePath");
-                    return response()->json(['error' => 'Failed to save file'], 500);
-                }
-    
-                FormsData::updateOrCreate(
-                    [
-                        'dossier_id' => $dossier->id,
-                        'form_id' => $request->form_id,
-                        'meta_key' => $request->template,
-                    ],
-                    ['meta_value' => $directPath]
-                );
-    
-                return response()->json([
-                    'message' => 'PDF generated and saved successfully',
-                    'file_path' => Storage::url($filePath),
-                    'path' => $directPath,
-                    'identify' => '', // Or handle as needed
-                ]);
-            }
-    
+
+            $identify = '';
+
+            // if (isset($validated['identify'])) {
+            //     $fullFilePath = Storage::path($filePath); // This will return the absolute path
+            //     // Call identify_doc with the full path
+            //     $identify = $this->identify_doc($fullFilePath);
+
+            // }
+
+            // Return success response
+            return response()->json([
+                'message' => 'PDF generated and saved successfully',
+                'file_path' => Storage::url($filePath), // Adjusted this line
+                'path' => $directPath, // Adjusted this line
+                'identify' => json_decode($identify) ?? '' // Adjusted this line
+            ], 200);
+        } else {
+            // Return the PDF as a response
             return response($pdfOutput)
                 ->header('Content-Type', 'application/pdf')
                 ->header('Content-Disposition', 'attachment; filename="document.pdf"');
-        } catch (\Throwable $e) {
-            Log::error("Unexpected error in PDF generation: " . $e->getMessage());
-            return response()->json([
-                'error' => 'An unexpected error occurred during PDF generation',
-                'details' => $e->getMessage()
-            ], 500);
         }
     }
 
@@ -194,91 +242,98 @@ class PDFController extends Controller
         $validated = $request->validate([
             'dossier_id' => 'nullable',
         ]);
-
-        $dossier = $this->getDossier($validated['dossier_id']);
-        if (!$dossier) {
-            return response()->json(['message' => 'Dossier not found'], 404);
-        }
-
-        // Prepare folder paths
-        $folderPath = "public/dossiers/{$dossier->folder}";
-        $directPath = "dossiers/{$dossier->folder}";
-        $this->ensureDirectoryExists($folderPath);
-
-        // -------------------------------------------------
-        // Step 2: Retrieve form config and dossier data
-        // -------------------------------------------------
-        $optionsArray = [];
-        $allData      = [];
-        if (isset($validated['dossier_id'])) {
-            // Retrieve the form config
-            $config = $this->getFormConfig($request->form_id, $request->name);
-            if (!$config) {
-                return response()->json(['message' => 'FormConfig not found'], 404);
+    
+        try {
+            $dossier = $this->getDossier($validated['dossier_id']);
+            if (!$dossier) {
+                return response()->json(['message' => 'Dossier not found'], 404);
             }
-            // Parse the JSON config into array
-            $optionsArray = $this->parseConfigOptions($config->options);
-
-            // Load all dossier-related data from wherever you store it
-            $allData = $this->loadAllDossierData($dossier);
-        }
-
-        // -------------------------------------------------
-        // Step 3: Validate that all tags have values
-        // -------------------------------------------------
-        // $missingFields = $this->ensureAllTagsHaveValues($optionsArray, $allData);
-        $missingFields = [];
-        if (!empty($missingFields)) {
-            // If anything is missing, return a 422 with details
-            // return response()->json([
-            //     'message' => 'Some fields are missing.',
-            //     'missing_fields' => $missingFields
-            // ], 422);
-        }
-
-        // -------------------------------------------------
-        // Step 4: Generate the PDF
-        // -------------------------------------------------
-        $pdf = new Fpdi();
-        $templatePath = public_path($optionsArray['template'] . '.pdf');
-        $pageCount    = $pdf->setSourceFile($templatePath);
-
-        for ($pageNo = 1; $pageNo <= $pageCount; $pageNo++) {
-            $pdf->AddPage();
-            $templateId = $pdf->importPage($pageNo);
-            $pdf->useTemplate($templateId);
-
-            $pdf->SetXY(0, 0);
-            $pdf->SetAutoPageBreak(false);
-            $pdf->SetFont('Helvetica');
-
-            if (isset($optionsArray['config'][$pageNo])) {
-                foreach ($optionsArray['config'][$pageNo] as $fillDataConfig) {
-                    // Fill data
-                    $this->processFillDataConfig($pdf, $fillDataConfig, $allData, $dossier);
+    
+            $folderPath = "public/dossiers/{$dossier->folder}";
+            $directPath = "dossiers/{$dossier->folder}";
+            $this->ensureDirectoryExists($folderPath);
+    
+            // -------------------------------------------------
+            // Step 2: Retrieve form config and dossier data
+            // -------------------------------------------------
+            $optionsArray = [];
+            $allData = [];
+    
+            if (isset($validated['dossier_id'])) {
+                $config = $this->getFormConfig($request->form_id, $request->name);
+                if (!$config) {
+                    return response()->json(['message' => 'FormConfig not found'], 404);
+                }
+    
+                $optionsArray = $this->parseConfigOptions($config->options);
+                $allData = $this->loadAllDossierData($dossier);
+            }
+    
+            // -------------------------------------------------
+            // Step 3: Optionally check for missing fields
+            // -------------------------------------------------
+            $missingFields = []; // Replace with real validation logic if needed
+            if (!empty($missingFields)) {
+                return response()->json([
+                    'message' => 'Some fields are missing.',
+                    'missing_fields' => $missingFields
+                ], 422);
+            }
+    
+            // -------------------------------------------------
+            // Step 4: Generate the PDF
+            // -------------------------------------------------
+            $pdf = new Fpdi();
+    
+            $templatePath = public_path($optionsArray['template'] . '.pdf');
+            if (!file_exists($templatePath)) {
+                return response()->json([
+                    'message' => 'Template PDF file not found',
+                    'template' => $optionsArray['template']
+                ], 404);
+            }
+    
+            $pageCount = $pdf->setSourceFile($templatePath);
+    
+            for ($pageNo = 1; $pageNo <= $pageCount; $pageNo++) {
+                $pdf->AddPage();
+                $templateId = $pdf->importPage($pageNo);
+                $pdf->useTemplate($templateId);
+    
+                $pdf->SetXY(0, 0);
+                $pdf->SetAutoPageBreak(false);
+                $pdf->SetFont('Helvetica');
+    
+                if (isset($optionsArray['config'][$pageNo])) {
+                    foreach ($optionsArray['config'][$pageNo] as $fillDataConfig) {
+                        $this->processFillDataConfig($pdf, $fillDataConfig, $allData, $dossier);
+                    }
                 }
             }
+    
+            $fileName = "{$request->name}.pdf";
+            $filePath = "{$folderPath}/{$fileName}";
+            $pdfContent = $pdf->output('', 'S');
+            Storage::put($filePath, $pdfContent);
+    
+            // -------------------------------------------------
+            // Step 5: Update forms/dossier and return success
+            // -------------------------------------------------
+            $this->updateFormsData($dossier->id, $request->form_id, $request->name, "{$directPath}/{$fileName}");
+            $this->updateDossierTimestamp($dossier->id);
+    
+            return response()->json([
+                'message'   => 'PDF generated and saved successfully',
+                'file_path' => Storage::url($filePath),
+                'path'      => "{$directPath}/{$fileName}",
+            ], 200);
+        } catch (\Throwable $e) {
+            Log::error("Error generating filled PDF: " . $e->getMessage());
+            return response()->json([
+                'error' => 'An error occurred while generating the PDF',
+                'details' => $e->getMessage()
+            ], 500);
         }
-
-        // Save PDF
-        $fileName = "{$request->name}.pdf";
-        $filePath = "{$folderPath}/{$fileName}";
-        $this->ensureDirectoryExists($folderPath);
-
-        $pdfContent = $pdf->output('', 'S');
-        Storage::put($filePath, $pdfContent);
-
-        // -------------------------------------------------
-        // Step 5: Update forms/dossier and return success
-        // -------------------------------------------------
-        $this->updateFormsData($dossier->id, $request->form_id, $request->name, "{$directPath}/{$fileName}");
-        $this->updateDossierTimestamp($dossier->id);
-
-        return response()->json([
-            'message'   => 'PDF generated and saved successfully',
-            'file_path' => Storage::url($filePath),
-            'path'      => "{$directPath}/{$fileName}",
-        ], 200);
     }
 
     /**
