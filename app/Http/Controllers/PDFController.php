@@ -535,18 +535,44 @@ class PDFController extends Controller
     /**
      * Process image insertion.
      */
-    private function processImage($pdf, $fillDataConfig, $dossier, $allData, $formId, $tag)
+    private function processImage($pdf, $fillDataConfig, $dossier, $allData, $formId, $tag, $throwOnError = true)
     {
-        if (isset($fillDataConfig['signature'])) {
-            // $this->insertClientSignature($pdf, $fillDataConfig, $dossier);
-            $this->insertBeneficiarySignature($pdf, $fillDataConfig, $allData, $formId, $tag);
-        } elseif (isset($fillDataConfig['signature_client'])) {
-            $this->insertClientSignature($pdf, $fillDataConfig, $dossier);
+        $imageRelativePath = $this->getCurrentValue($fillDataConfig, $allData, $formId, $tag);
+    
+        if (empty($imageRelativePath)) {
+            Log::warning("Empty image path for tag: $tag");
+            return;
         }
-        elseif (isset($fillDataConfig['signature_mandataire'])) {
-            $this->insertMandataireSignature($pdf, $fillDataConfig, $dossier);
+    
+        // Sanitize and build full image path
+        $storageFullPath = storage_path("app/public/" . ltrim($imageRelativePath, '/'));
+    
+        if (!file_exists($storageFullPath)) {
+            Log::error("Image file does not exist: $storageFullPath");
+            if ($throwOnError) {
+                throw new \Exception("Image file does not exist: $storageFullPath");
+            }
+            return;
         }
+    
+        // Prevent fatal TCPDF error: check if it's a valid image
+        if (!@getimagesize($storageFullPath)) {
+            Log::error("Invalid image file or unreadable by getimagesize: $storageFullPath");
+            if ($throwOnError) {
+                throw new \Exception("Invalid image file: $storageFullPath");
+            }
+            return;
+        }
+    
+        // Get PDF coords
+        [$x, $y] = $fillDataConfig['position'];
+        $width  = $fillDataConfig['width'] ?? 30;
+        $height = $fillDataConfig['height'] ?? 0;
+    
+        // Now it's safe to render image
+        $pdf->Image($storageFullPath, $x, $y, $width, $height);
     }
+    
 
     /**
      * Insert client signature into the PDF.
