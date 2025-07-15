@@ -392,40 +392,42 @@ class PDFController extends Controller
     /**
      * Process the fill data configuration for the PDF.
      */
-    private function processFillDataConfig($pdf, $fillDataConfig, $allData, $dossier)
+    private function processFillDataConfig($pdf, $fillDataConfig, $allData, $dossier, $throwOnImageError = true)
     {
-        // Set font properties
         $font = $fillDataConfig['font'] ?? 'Helvetica';
         $fontSize = $fillDataConfig['font-size'] ?? 12;
         $pdf->SetFont($font);
         $pdf->SetFontSize($fontSize);
         $pdf->SetFontSpacing($fillDataConfig['letter-spacing'] ?? 0);
-
+    
         $value = '';
         $formId = $fillDataConfig['form_id'];
-
+    
         foreach ($fillDataConfig['tags'] as $tag) {
             $currentValue = $this->getCurrentValue($fillDataConfig, $allData, $formId, $tag);
             $value .= ' ' . $currentValue;
         }
-
+    
         $xPos = $fillDataConfig['position'][0];
         $yPos = $fillDataConfig['position'][1];
-
-        // Handle images
-        if (isset($fillDataConfig['img'])) {
-            $this->processImage($pdf, $fillDataConfig, $dossier, $allData, $formId, $tag);
-        }
-        // Handle tables
-        elseif (isset($fillDataConfig['table'])) {
-            $this->processTable($pdf, $fillDataConfig, $allData, $formId, $tag);
-        }
-        // Write text
-        else {
-            $pdf->SetXY($xPos, $yPos);
-            $pdf->Write(0, $value);
+    
+        try {
+            if (isset($fillDataConfig['img'])) {
+                $this->processImage($pdf, $fillDataConfig, $dossier, $allData, $formId, $tag, $throwOnImageError);
+            } elseif (isset($fillDataConfig['table'])) {
+                $this->processTable($pdf, $fillDataConfig, $allData, $formId, $tag);
+            } else {
+                $pdf->SetXY($xPos, $yPos);
+                $pdf->Write(0, $value);
+            }
+        } catch (\Throwable $e) {
+            Log::error("Error filling data config: " . $e->getMessage());
+            if ($throwOnImageError) {
+                throw new \Exception("PDF generation failed while processing image: " . $e->getMessage());
+            }
         }
     }
+    
 
     /**
      * Retrieve the current value for a given tag.
