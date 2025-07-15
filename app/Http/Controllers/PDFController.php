@@ -76,6 +76,12 @@ class PDFController extends Controller
         // Determine the HTML content to use
         if (isset($validated['template'])) {
             $htmlContent = $this->getTemplateHtml($validated['template'], $dossier->id, $config = null, $title, $content = null, $send_data = true);
+            if($htmlContent) {
+
+            }     else {
+                dump("erreur");
+            }
+       
         } else {
             $htmlContent = '';
         }
@@ -84,11 +90,9 @@ class PDFController extends Controller
         $html2pdf = new Html2Pdf();
 
         
-        if($html2pdf->writeHTML($htmlContent)) {
+        $html2pdf->writeHTML($htmlContent);
 
-        } else {
-            dump("erreur");
-        }
+    
 
         $pdfOutput = $html2pdf->output('', 'S'); // Output as string
 
