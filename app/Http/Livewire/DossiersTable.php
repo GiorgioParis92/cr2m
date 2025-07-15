@@ -208,7 +208,6 @@ class DossiersTable extends Component
         $dossiers = $dossiers->unique('id');
 
 
-
         // Map the dossiers data
         $dossiers = $dossiers->map(function ($dossier) {
           
@@ -222,6 +221,8 @@ class DossiersTable extends Component
                 'id' => $dossier->id,
                 'docs' => ($dossier->meta_value),
                 'date_creation' => $dossier->beneficiaire['created_at'],
+                'fiche_name' => $dossier->fiche->fiche_name,
+                'fiche_color' => $dossier->fiche->color,
                 'date_update' => $dossier->updated_at,
                 'dossier_url' => route('dossiers.show', $dossier->folder),
                 'beneficiaire' => [
@@ -257,6 +258,7 @@ class DossiersTable extends Component
             ];
         });
 
+        
         // Update the component's dossier data
         $this->dossiers = $dossiers->values()->toArray();
 

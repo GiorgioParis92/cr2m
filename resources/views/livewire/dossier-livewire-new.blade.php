@@ -129,10 +129,12 @@
             </div>
             <div class="col-lg-9 mt-lg-0 mt-4">
                 <!-- Card Profile -->
-                <div class="card card-body" id="profile">
+                <div class="card card-body" id="profile" style="padding:0">
+                <div class="card-header bg-{{ $dossier['fiche']['color'] }}" style="color:white!important">
+                {{ $dossier['fiche']['fiche_name'] }}
+  </div>
                     <div class="row justify-content-center align-items-center">
                         <div class="col-sm-auto col-4">
-
                         </div>
                         <div class="col-sm-auto col-8 my-auto">
                             <div class="h-100">

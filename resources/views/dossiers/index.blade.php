@@ -105,7 +105,7 @@
             <div class="mb-2 mb-sm-0 col-12 col-md-3">
                 <label class="mr-sm-2">Type de propriétaire
                 <select class="form-control" data-column="22">
-                    <option value="">Filtrer par type de propriétaire<option>
+                    <option value="">Filtrer par type de propriétaire1<option>
                         <option value="proprietaire">Propriétaire<option>
                         <option value="proprietaire_bailleur">Propriétaire Bailleur<option>
                         <option value="sci">SCI<option>
@@ -133,6 +133,7 @@
         <table id="dossiersTable" class="table table-bordered responsive-table table-responsive">
             <thead>
                 <tr>
+                    <th style="max-width:10%">Type de dossier</th>
                     <th style="max-width:10%">Date de création du dossier</th>
                     <th style="max-width:10%">Date str</th>
                     <th style="max-width:10%">Client</th>
@@ -165,6 +166,7 @@
             <tbody>
                 @foreach ($dossiers as $dossier)
                     <tr>
+                        <td>{{ $dossier->fiche->fiche_name}}</td>
                         <td>{{ format_date($dossier->created_at) }}</td>
                         <td>{{ strtotime_date($dossier->created_at) }}</td>
                         <td><b><a href="{{ route('dossiers.show', $dossier->folder) }}">{{ $dossier->beneficiaire->nom }}
@@ -324,7 +326,7 @@
             var table = $('#dossiersTable').DataTable({
                 @if (auth()->user()->client_id == 0 && auth()->user()->type_id != 4 && auth()->user()->type_id != 3)
                     columnDefs: [{
-                            targets: [1, 4, 5, 6, 7, 9, 11, 13, 15,17, 19, 20,21,22],
+                            targets: [10],
                             visible: false
                         },
                         {
@@ -339,7 +341,7 @@
                     ],
                 @else
                     columnDefs: [{
-                            targets: [1, 4, 5, 6, 7, 9, 11, 13, 15,17, 19, 20,21,22],
+                            targets: [0,10],
                             visible: false
                         },
                         {

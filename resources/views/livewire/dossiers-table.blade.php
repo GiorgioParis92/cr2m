@@ -232,6 +232,17 @@ span.badge.badge-outline-danger {
 
         const columnDefs = [
             {
+                field: "fiche_name",
+                headerName: "Type de dossier",
+                sortable: true,
+                enableRowGroup: true,
+                sort: 'desc', // or 'desc' for descending order
+                cellRenderer: fiche,
+
+      
+         
+            },
+            {
                 field: "date_update",
                 headerName: "Date de mise à jour",
                 sortable: true,
@@ -722,7 +733,20 @@ span.badge.badge-outline-danger {
             </a>
         `;
     }
-
+    function fiche(params) {
+        const data = params.data;
+        if (!data) {
+            return '';
+        }
+        return `
+            <a style="max-width:80px" target="_blank" href="${data.dossier_url}">
+             
+                <div style="margin-top: 13px; max-width: 80px; text-wrap: wrap; font-size: 9px; padding: 8px !important; background-size: 0; padding-top: 13px !important; width: 100%; max-width: 100%;" class="btn btn-${data.fiche_color}">
+                    ${data.fiche_name}
+                </div>
+            </a>
+        `;
+    }
     function render_cell_status(params) {
         const data = params.data;
         if (!data) {
