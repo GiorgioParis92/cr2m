@@ -328,7 +328,6 @@ class PDFController extends Controller
                 'path'      => "{$directPath}/{$fileName}",
             ], 200);
         } catch (\Throwable $e) {
-            Log::error("Error generating filled PDF: " . $e->getMessage());
             return response()->json([
                 'error' => 'An error occurred while generating the PDF',
                 'details' => $e->getMessage()
@@ -421,7 +420,6 @@ class PDFController extends Controller
                 $pdf->Write(0, $value);
             }
         } catch (\Throwable $e) {
-            Log::error("Error filling data config: " . $e->getMessage());
             if ($throwOnImageError) {
                 throw new \Exception("PDF generation failed while processing image: " . $e->getMessage());
             }
@@ -540,7 +538,6 @@ class PDFController extends Controller
         $imageRelativePath = $this->getCurrentValue($fillDataConfig, $allData, $formId, $tag);
     
         if (empty($imageRelativePath)) {
-            Log::warning("Empty image path for tag: $tag");
             return;
         }
     
@@ -1061,7 +1058,7 @@ class PDFController extends Controller
         $output = shell_exec($gsCommand . ' 2>&1');
     
         // Log output for debugging
-        \Log::error("Ghostscript output: " . $output);
+        // \Log::error("Ghostscript output: " . $output);
     
         // Verify if the output file was created
         if (!file_exists($outputPath)) {
