@@ -110,7 +110,6 @@ class DynamicModelController extends \App\Http\Controllers\Controller
         }
 
 
-
         if ($request->has('etape_minimum')) {
    
 
