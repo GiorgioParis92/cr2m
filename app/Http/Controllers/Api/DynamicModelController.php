@@ -115,10 +115,11 @@ class DynamicModelController extends \App\Http\Controllers\Controller
         if ($request->has('etape_minimum')) {
             $etapeMinimum = $request->etape_minimum;
         
-            $query->whereHas('etape', function($q) use ($etapeMinimum) {
+            $query->whereHas('etape', function ($q) use ($etapeMinimum) {
                 $q->where('etape_icon', '>=', $etapeMinimum);
             });
         }
+        
         
 
 
