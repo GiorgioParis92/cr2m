@@ -103,7 +103,9 @@ class DynamicModelController extends \App\Http\Controllers\Controller
 
             // Vérifier si etape_minimum est spécifié
             if (isset($etapesData['etape_minimum'])) {
-                $query->where('etape_icon', '>=', $etapesData['etape_minimum']);
+                $query->whereHas('etape', function($q) use ($etapesData['etape_minimum']) {
+                    $q->where('etape_icon', '>=', $etapesData['etape_minimum']);
+                });
             } 
         }
 
@@ -114,7 +116,9 @@ class DynamicModelController extends \App\Http\Controllers\Controller
 
             // Vérifier si etape_minimum est spécifié
      
-                $query->where('etape_icon', '>=', $request->etape_minimum);
+                $query->whereHas('etape', function($q) use ($request->etape_minimum) {
+                    $q->where('etape_icon', '>=', $request->etape_minimum);
+                });
             
         }
 
