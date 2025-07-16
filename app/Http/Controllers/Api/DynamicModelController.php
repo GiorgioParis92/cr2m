@@ -113,7 +113,7 @@ class DynamicModelController extends \App\Http\Controllers\Controller
 
 
         if ($request->has('etape_minimum')) {
-            dump($query);
+            dd($query);
 
             // Vérifier si etape_minimum est spécifié
          
