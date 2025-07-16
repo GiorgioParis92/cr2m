@@ -107,6 +107,18 @@ class DynamicModelController extends \App\Http\Controllers\Controller
             } 
         }
 
+
+
+        if ($request->has('etape_minimum')) {
+   
+
+            // Vérifier si etape_minimum est spécifié
+     
+                $query->where('etape_icon', '>=', $request->etape_minimum);
+            
+        }
+
+
         // Apply filters dynamically based on request
         foreach ($request->all() as $field => $value) {
             if ($field != 'relations' && $field != 'forms_data' && $field != 'dossiers_data' && $field != 'etapes') {
